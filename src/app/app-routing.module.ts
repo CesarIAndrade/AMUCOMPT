@@ -22,12 +22,11 @@ const routes: Routes = [
     children: [
       { path: 'personas', component: PersonaComponent },
       { path: 'usuarios', component: UsuarioComponent  },
+      { path: 'inicio', component: InicioComponent }
     ]
   },
   
-  { path: 'inicio', component: InicioComponent },
-  { path: 'usuarios', component: UsuarioComponent },
-  { path: 'personas', component: PersonaComponent },
+  
   { path: 'login', component: LoginComponent },
   { path: '**', component: Page404Component }
 ];
