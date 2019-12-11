@@ -4,7 +4,6 @@ import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { NavComponent } from './nav/nav.component';
 import { LayoutModule } from '@angular/cdk/layout';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
@@ -15,14 +14,17 @@ import { UsuarioComponent } from './components/usuario/usuario.component';
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { LoginComponent } from './components/login/login.component';
 import { PersonaComponent } from './components/persona/persona.component';
+import { Page404Component } from './components/page404/page404.component';
+import { InicioComponent } from './components/inicio/inicio.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    NavComponent,
     UsuarioComponent,
     LoginComponent,
-    PersonaComponent
+    PersonaComponent,
+    Page404Component,
+    InicioComponent
   ],
   imports: [
     BrowserModule,
