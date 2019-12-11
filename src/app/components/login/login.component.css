@@ -6,3 +6,7 @@ img{
     display:block;
     margin:auto;
 }
+.login-container{
+    padding-top: 100px !important;
+    /* padding-block-start: 50px !important; */
+}

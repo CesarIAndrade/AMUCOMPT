@@ -10,6 +10,8 @@ import { map, shareReplay } from 'rxjs/operators';
 })
 export class AppComponent {
 
+  menu:string='true'; 
+
   isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
   .pipe(
     map(result => result.matches),
@@ -17,5 +19,13 @@ export class AppComponent {
   );
   title = 'test-app';
 
-  constructor(private breakpointObserver: BreakpointObserver) {}
+  constructor(private breakpointObserver: BreakpointObserver) { 
+    this.menu  = localStorage.getItem('menu');
+    // if (localStorage.getItem('menu')!=null || localStorage.getItem('menu')=='false') {
+    //   this.menu = localStorage.getItem('menu');
+    //   localStorage.setItem('menu','true');
+    // }
+  }
+
+
 }

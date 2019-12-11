@@ -15,7 +15,7 @@ import { UsuarioComponent } from './components/usuario/usuario.component';
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { LoginComponent } from './components/login/login.component';
 import { PersonaComponent } from './components/persona/persona.component';
-
+// import { LoginModule } from "./components/login/login.module";
 @NgModule({
   declarations: [
     AppComponent,
@@ -34,7 +34,8 @@ import { PersonaComponent } from './components/persona/persona.component';
     MatSidenavModule,
     MatIconModule,
     MatListModule,
-    MatFormFieldModule //
+    MatFormFieldModule, //
+    // LoginModule
   ],
   providers: [],
   bootstrap: [AppComponent]

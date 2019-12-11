@@ -6,18 +6,23 @@ import { NavComponent } from './nav/nav.component';
 import { LoginComponent } from './components/login/login.component';
 import { PersonaComponent } from './components/persona/persona.component';
 
+import { NoMenuGuard } from "./guards/no-menu.guard";
+import { MenuGuard } from "./guards/menu.guard";
+
 
 const routes: Routes = [
   // { path: 'usuarios', component: UsuarioComponent },
   { path: '', pathMatch: 'full', redirectTo: 'login' },
+  { path: 'login', component: LoginComponent },
   {
     path: 'inicio', 
+    component: NavComponent,
     children: [
-      { path: 'usuarios', component: UsuarioComponent },
-      { path: 'personas', component: PersonaComponent }
+      { path: 'personas', component: PersonaComponent },
+      { path: 'usuarios', component: UsuarioComponent  },
     ]
   },
-  { path: 'login', component: LoginComponent },
+  
 ];
 
 @NgModule({
