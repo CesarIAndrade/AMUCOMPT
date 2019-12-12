@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChildren } from '@angular/core';
-import { AppComponent } from "../../app.component";
+
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -7,13 +7,19 @@ import { AppComponent } from "../../app.component";
 })
 export class LoginComponent implements OnInit {
 
+  usuario ="" ;
+  clave ="";
 
-  constructor(private appC: AppComponent) {
+  constructor() {
     //this.appC.nomenu(false);
    }
 
   ngOnInit() {
     //this.appC.nomenu(false);
+  }
+  login(){
+    console.log(this.usuario);
+    
   }
 
 }

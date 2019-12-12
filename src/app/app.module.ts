@@ -19,6 +19,7 @@ import { NavComponent } from "./nav/nav.component";
 import { InventarioComponent } from './components/inventario/inventario.component';
 import { CompraComponent } from './components/compra/compra.component';
 import { VentaComponent } from './components/venta/venta.component';
+import { HttpClientModule } from "@angular/common/http";
 
 @NgModule({
   declarations: [
@@ -43,6 +44,7 @@ import { VentaComponent } from './components/venta/venta.component';
     MatIconModule,
     MatListModule,
     MatFormFieldModule, //
+    HttpClientModule,
     // LoginModule
   ],
   providers: [],
