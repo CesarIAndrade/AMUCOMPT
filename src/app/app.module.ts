@@ -21,6 +21,7 @@ import { CompraComponent } from './components/compra/compra.component';
 import { VentaComponent } from './components/venta/venta.component';
 import { HttpClientModule } from "@angular/common/http";
 
+import { FormsModule } from "@angular/forms";
 @NgModule({
   declarations: [
     AppComponent,
@@ -43,9 +44,10 @@ import { HttpClientModule } from "@angular/common/http";
     MatSidenavModule,
     MatIconModule,
     MatListModule,
-    MatFormFieldModule, //
+    MatFormFieldModule,
     HttpClientModule,
-    // LoginModule
+    MatFormFieldModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
