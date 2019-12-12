@@ -19,7 +19,7 @@ import { NavComponent } from "./nav/nav.component";
 import { InventarioComponent } from './components/inventario/inventario.component';
 import { CompraComponent } from './components/compra/compra.component';
 import { VentaComponent } from './components/venta/venta.component';
-
+import { FormsModule } from "@angular/forms";
 @NgModule({
   declarations: [
     AppComponent,
@@ -42,8 +42,8 @@ import { VentaComponent } from './components/venta/venta.component';
     MatSidenavModule,
     MatIconModule,
     MatListModule,
-    MatFormFieldModule, //
-    // LoginModule
+    MatFormFieldModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

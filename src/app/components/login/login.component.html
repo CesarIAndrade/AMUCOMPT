@@ -1,6 +1,4 @@
-
-
-<div  class="container page-container">
+<div class="container page-container">
     <div class="row justify-content-center">
         <div class="col-md-6 col-xs-12 col-lg-4 col-sm-12">
             <div class="card">
@@ -8,26 +6,18 @@
 
                 <div class="card-body">
                     <img src="../../../assets/img/logo.png" width="100" height="100">
-                    <!-- <div class="alert alert-success" role="alert"> -->
-                            <form>
-                                <div class="form-group">
-                                    <label for="exampleInputEmail1">Usuario</label>
-                                    <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-                                    <!-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> -->
-                                </div>
-                                <div class="form-group">
-                                    <label for="exampleInputPassword1">Clave</label>
-                                    <input type="password" class="form-control" id="exampleInputPassword1">
-                                </div>
-                                <!-- <div class="form-group form-check">
-                                    <input type="checkbox" class="form-check-input" id="exampleCheck1">
-                                    <label class="form-check-label" for="exampleCheck1">Check me out</label>
-                                </div> -->
-                                <br>
-                                <button type="submit" class="btn btn-primary btn-block">Submit</button>
-                            </form>
-                    <!-- </div> -->
-
+                    <form>
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Usuario</label>
+                            <input type="text" class="form-control" name="usuario" [(ngModel)]="usuario" aria-describedby="emailHelp">
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputPassword1">Clave</label>
+                            <input type="text" class="form-control" name="contrasena" [(ngModel)]="contrasena">
+                        </div>
+                        <br>
+                        <button type="button" (click)="test()" class="btn btn-primary btn-block">Submit</button>
+                    </form>
                 </div>
             </div>
         </div>

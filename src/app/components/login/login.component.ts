@@ -12,6 +12,13 @@ export class LoginComponent implements OnInit {
     //this.appC.nomenu(false);
    }
 
+   usuario: string;
+   contrasena: string;
+
+   test(){
+     console.log(this.contrasena);
+   }
+
   ngOnInit() {
     //this.appC.nomenu(false);
   }
