@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { PersonaService } from "../../services/persona.service";
 
 @Component({
   selector: 'app-persona',
@@ -7,9 +8,19 @@ import { Component, OnInit } from '@angular/core';
 })
 export class PersonaComponent implements OnInit {
 
-  constructor() { }
+  constructor(private personaService: PersonaService ) { }
+
+  personas: any;
+  consultarPersonas(){
+    this.personaService.consultarPersonas()
+      .subscribe(
+        data => {console.log(data)},
+        err => {console.log(err)}
+      )
+  }
 
   ngOnInit() {
+    this.consultarPersonas();
   }
 
 }
