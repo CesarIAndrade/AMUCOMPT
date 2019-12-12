@@ -6,9 +6,6 @@ import { UsuarioComponent } from './components/usuario/usuario.component';
 import { LoginComponent } from './components/login/login.component';
 import { PersonaComponent } from './components/persona/persona.component';
 
-import { NoMenuGuard } from "./guards/no-menu.guard";
-import { MenuGuard } from "./guards/menu.guard";
-
 import { Page404Component } from './components/page404/page404.component';
 import { InicioComponent } from "./components/inicio/inicio.component";
 import { NavComponent } from './nav/nav.component';
