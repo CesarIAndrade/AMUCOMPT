@@ -1,15 +1,15 @@
 <mat-sidenav-container class="sidenav-container">
-  <mat-sidenav #drawer class="sidenav bg-secondary" fixedInViewport
+  <mat-sidenav #drawer class="sidenav bg-light" fixedInViewport
       [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
       [mode]="(isHandset$ | async) ? 'over' : 'side'"
       [opened]="(isHandset$ | async) === false">
-    <mat-toolbar class="bg-dark text-white">Menu</mat-toolbar>
+    <mat-toolbar class="bg-dark text-white" routerLink="/inicio">Menu</mat-toolbar>
     <mat-nav-list >
-      <a mat-list-item routerLink="/i/usuarios">Usuarios</a>
-      <a mat-list-item routerLink="/i/personas">Persona</a>
-      <a mat-list-item routerLink="/i/usuarios">Inventario</a>
-      <a mat-list-item routerLink="/i/usuarios">Compra</a>
-      <a mat-list-item routerLink="/i/usuarios">Venta</a>
+      <a mat-list-item routerLink="/inicio/usuarios">Usuarios</a>
+      <a mat-list-item routerLink="/inicio/personas">Persona</a>
+      <a mat-list-item routerLink="/inicio/inventarios">Inventario</a>
+      <a mat-list-item routerLink="/inicio/compras">Compra</a>
+      <a mat-list-item routerLink="/inicio/ventas">Venta</a>
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>

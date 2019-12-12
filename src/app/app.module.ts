@@ -17,6 +17,9 @@ import { PersonaComponent } from './components/persona/persona.component';
 import { Page404Component } from './components/page404/page404.component';
 import { InicioComponent } from './components/inicio/inicio.component';
 import { NavComponent } from "./nav/nav.component";
+import { InventarioComponent } from './components/inventario/inventario.component';
+import { CompraComponent } from './components/compra/compra.component';
+import { VentaComponent } from './components/venta/venta.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -25,7 +28,10 @@ import { NavComponent } from "./nav/nav.component";
     PersonaComponent,
     Page404Component,
     InicioComponent,
-    NavComponent
+    NavComponent,
+    InventarioComponent,
+    CompraComponent,
+    VentaComponent
   ],
   imports: [
     BrowserModule,
