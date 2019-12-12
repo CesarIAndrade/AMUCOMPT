@@ -23,7 +23,7 @@ export class UsuarioService {
     });
 
     // return this.http.get<Usuario>(`${this.apiUrl}login/`,{headers:this._headers,params:_params});  
-    return this.http.get(`${this.apiUrl}login/`,{headers:this._headers,params:_params}  );  
+    return this.http.get(`${this.apiUrl}TalentoHumano/ListaUsuariosSistema`,{headers:this._headers});  
 
                                                 // params:this._params,
                                                   // responseType: 'json'
