@@ -167,7 +167,7 @@
   }
   
   a:hover {
-    color: #1559cf;
+    color: #343a40;
     text-decoration: underline;
   }
   
@@ -2773,35 +2773,35 @@
   .btn-primary {
     color: #fff;
     background-color: #f61cc4;
-    border-color: #f61cc4;
+    border-color: #343a40;
   }
   
   .btn-primary:hover {
     color: #fff;
-    background-color: #226be8;
-    border-color: #1863e6;
+    background-color: #343a40;
+    border-color: #f61cc4;
   }
   
-  .btn-primary:focus, .btn-primary.focus {
+  /* .btn-primary:focus, .btn-primary.focus {
     color: #fff;
     background-color: #226be8;
     border-color: #1863e6;
     -webkit-box-shadow: 0 0 0 0.2rem rgba(97, 149, 239, 0.5);
             box-shadow: 0 0 0 0.2rem rgba(97, 149, 239, 0.5);
-  }
+  } */
   
-  .btn-primary.disabled, .btn-primary:disabled {
+  /* .btn-primary.disabled, .btn-primary:disabled {
     color: #fff;
     background-color: #f61cc4;
     border-color: #f61cc4;
-  }
+  } */
   
-  .btn-primary:not(:disabled):not(.disabled):active, .btn-primary:not(:disabled):not(.disabled).active,
+  /* .btn-primary:not(:disabled):not(.disabled):active, .btn-primary:not(:disabled):not(.disabled).active,
   .show > .btn-primary.dropdown-toggle {
     color: #fff;
     background-color: #1863e6;
     border-color: #165edb;
-  }
+  } */
   
   .btn-primary:not(:disabled):not(.disabled):active:focus, .btn-primary:not(:disabled):not(.disabled).active:focus,
   .show > .btn-primary.dropdown-toggle:focus {
@@ -3361,7 +3361,7 @@
   }
   
   .btn-link:hover {
-    color: #1559cf;
+    color: #343a40;
     text-decoration: underline;
   }
   
@@ -5352,7 +5352,7 @@
   
   .page-link:hover {
     z-index: 2;
-    color: #1559cf;
+    color: #343a40;
     text-decoration: none;
     background-color: #e9ecef;
     border-color: #ddd;
@@ -10568,7 +10568,7 @@
   }
   
   a.text-primary:hover, a.text-primary:focus {
-    color: #1559cf !important;
+    color: #343a40 !important;
   }
   
   .text-secondary {
@@ -10978,3 +10978,10 @@
     font-size: 0.930125rem;
   }
   
+  .separacion-botones{
+    margin-left: 50%;
+    transform: translateX(-50%);
+  }
+   cd {
+     color: pink
+   }
