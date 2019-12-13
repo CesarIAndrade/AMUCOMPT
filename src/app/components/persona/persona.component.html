@@ -53,23 +53,26 @@
                             <th scope="col">Apellidos</th>
                             <th scope="col">Documento</th>
                             <th scope="col">No. Documento</th>
-                            <th scope="col" colspan="2" style="text-align: center;">Acciones</th>
+                            <th scope="col" colspan="3" style="text-align: center;">Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr *ngFor="let item of personas, index as i">
-
                             <th scope="row"> {{ i }} </th>
-                            <td> {{ item.Persona.PrimerNombre }} {{ item.Persona.SegundoNombre }} </td>
-                            <td> {{ item.Persona.ApellidoPaterno }} {{ item.Persona.ApellidoMaterno }} </td>
-                            <td> {{ item.Persona.TipoDocumentos.Documento }} </td>
-                            <td> {{ item.Persona.NumeroDocumento }} </td>
+                            <td> {{ item.PrimerNombre }} {{ item.SegundoNombre }} </td>
+                            <td> {{ item.ApellidoPaterno }} {{ item.ApellidoMaterno }} </td>
+                            <td> {{ item.TipoDocumentos.Documento }} </td>
+                            <td> {{ item.NumeroDocumento }} </td>
                             <td>
-                                <button class="btn btn-sm btn-info separacion-botones"><i class="fa fa-pencil-square-o"
-                                        aria-hidden="true"></i> </button>
+                                <button class="btn btn-sm btn-outline-primary separacion-botones"><i class="fa fa-eye"
+                                        aria-hidden="true"></i></button>
                             </td>
                             <td>
-                                <button class="btn btn-sm btn-danger separacion-botones"><i class="fa fa-trash"
+                                <button class="btn btn-sm btn-outline-info separacion-botones"><i
+                                        class="fa fa-pencil-square-o" aria-hidden="true"></i> </button>
+                            </td>
+                            <td>
+                                <button class="btn btn-sm btn-outline-danger separacion-botones"><i class="fa fa-trash"
                                         aria-hidden="true"></i></button>
                             </td>
                         </tr>

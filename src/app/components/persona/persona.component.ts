@@ -4,8 +4,7 @@ import { Component, OnInit } from '@angular/core';
 import { PersonaService } from "../../services/persona.service";
 
 // Interfaces
-import { Usuario } from "../../interfaces/usuario/usuario";
-import { UsuariosResult } from 'src/app/interfaces/usuario/usuarios-result';
+import { Persona } from "../../interfaces/persona/persona";
 
 @Component({
   selector: 'app-persona',
@@ -16,14 +15,13 @@ export class PersonaComponent implements OnInit {
 
   constructor(private personaService: PersonaService ) { }
 
-  personas: Usuario[] = [];
+  personas: Persona[] = [];
   consultarPersonas(){
     this.personaService.consultarPersonas()
       .subscribe(
         data => {
-          //console.log(data);
           this.personas = data.respuesta;
-          console.log(this.personas);
+          console.log(data.respuesta);
       },
         err => {console.log(err)}
       )
