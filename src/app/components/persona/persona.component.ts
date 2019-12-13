@@ -1,6 +1,12 @@
 import { Component, OnInit } from '@angular/core';
+
+// Services
 import { PersonaService } from "../../services/persona.service";
-import { Persona } from "../../interfaces/persona/persona";
+
+// Interfaces
+import { Usuario } from "../../interfaces/usuario/usuario";
+import { UsuariosResult } from 'src/app/interfaces/usuario/usuarios-result';
+
 @Component({
   selector: 'app-persona',
   templateUrl: './persona.component.html',
@@ -10,12 +16,15 @@ export class PersonaComponent implements OnInit {
 
   constructor(private personaService: PersonaService ) { }
 
-  personas: Persona[] = [];
+  personas: Usuario[] = [];
   consultarPersonas(){
     this.personaService.consultarPersonas()
       .subscribe(
-        data => {this.personas = data.respuesta;
-        console.log(this.personas)},
+        data => {
+          //console.log(data);
+          this.personas = data.respuesta;
+          console.log(this.personas);
+      },
         err => {console.log(err)}
       )
   }
