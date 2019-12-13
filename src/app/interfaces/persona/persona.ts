@@ -1,6 +1,6 @@
-import { tipoDocumento } from "./tipoDocumento";
+import { TipoDocumento } from "../../interfaces/tipo-documento/tipo-documento";
 
-export interface persona {
+export interface Persona {
     IdPersona?: string;
     NumeroDocumento?: string;
     ApellidoPaterno?: string;
@@ -8,6 +8,6 @@ export interface persona {
     PrimerNombre?: string;
     SegundoNombre?: string;
     FechaCreacion?: string;
-    IdTipoDocumento?: tipoDocumento;
+    idTipoDocumento?: TipoDocumento;
     Estado?: string;
 }

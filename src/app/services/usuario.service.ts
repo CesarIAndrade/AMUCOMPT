@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { UsuarioResult } from '../interfaces/usuario/usuario-result';
 
 
 @Injectable({
@@ -10,7 +11,7 @@ export class UsuarioService {
   constructor(private http:HttpClient) { }
   
   private apiUrl:string = "http://192.168.25.15:90/api/"
-  private _headers = new HttpHeaders({'Content-Type':'application/json'});
+  private _headers = new HttpHeaders({'Content-Type':'application/x-www-form-urlencoded'});
   private _params = new HttpParams();
 
   login(_usuario:string,_password:string){
@@ -23,7 +24,7 @@ export class UsuarioService {
     });
 
     // return this.http.get<Usuario>(`${this.apiUrl}login/`,{headers:this._headers,params:_params});  
-    return this.http.get(`${this.apiUrl}TalentoHumano/ListaUsuariosSistema`,{headers:this._headers});  
+    return this.http.post<UsuarioResult>(`${this.apiUrl}TalentoHumano/Login`,_params,{headers:this._headers});  
 
                                                 // params:this._params,
                                                   // responseType: 'json'

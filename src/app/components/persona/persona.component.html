@@ -57,11 +57,8 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr *ngFor="">
-                            <!-- <td> {{ item.IdPersona }} </td>
-                            <td> {{ item.PrimerNombre }} </td>
-                            <td> {{ item.ApellidoPaterno }} </td>
-                            <td> {{ item.IdTipoDocumento }} </td> -->
+                        <tr *ngFor="let item of personas">
+                            <th scope="row"></th>
                             <td>
                                 <button class="btn btn-sm btn-info separacion-botones"><i class="fa fa-pencil-square-o"
                                         aria-hidden="true"></i> </button>

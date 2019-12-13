@@ -24,7 +24,7 @@ export class LoginComponent implements OnInit {
   login(){
     if (this.usuario != "" && this.contrasena != "") {
       this.usuarioService.login(this.usuario,this.contrasena).subscribe(item=>{
-        console.log(item);
+        console.log(item.respuesta);
       },error=>{});
     }
   }
