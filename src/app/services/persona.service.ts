@@ -15,6 +15,6 @@ export class PersonaService {
   
   consultarPersonas(){
     // return this.http.get(`${this.apiUrl}TalentoHumano/ListaUsuariosClientes);
-    return this.http.get<PersonasResult>('http://192.168.25.15:90/api/TalentoHumano/ListaUsuariosClientes');
+    return this.http.get<>('http://192.168.25.15:90/api/TalentoHumano/ListaUsuariosClientes');
   }
 }
