@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { UsuarioResult } from '../interfaces/usuario/usuario-result';
+import { UsuariosResult } from '../interfaces/usuario/usuarios-result';
 
 
 @Injectable({
@@ -15,19 +16,18 @@ export class UsuarioService {
   private _params = new HttpParams();
 
   login(_usuario:string,_password:string){
-
     let _params = new HttpParams({
       fromObject : {
         'UsuarioLogin' : _usuario,
         'Contrasena' : _password
       }
     });
-
     // return this.http.get<Usuario>(`${this.apiUrl}login/`,{headers:this._headers,params:_params});  
     return this.http.post<UsuarioResult>(`${this.apiUrl}TalentoHumano/Login`,_params,{headers:this._headers});  
+  }
 
-                                                // params:this._params,
-                                                  // responseType: 'json'
+  consultarUsuarios(){
+    return this.http.get<UsuariosResult>(`${this.apiUrl}TalentoHumano/ListaUsuariosSistema`)
   }
 
 }

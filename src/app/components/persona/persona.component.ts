@@ -1,6 +1,11 @@
 import { Component, OnInit } from '@angular/core';
+
+// Services
 import { PersonaService } from "../../services/persona.service";
+
+// Interfaces
 import { Persona } from "../../interfaces/persona/persona";
+
 @Component({
   selector: 'app-persona',
   templateUrl: './persona.component.html',
@@ -14,8 +19,10 @@ export class PersonaComponent implements OnInit {
   consultarPersonas(){
     this.personaService.consultarPersonas()
       .subscribe(
-        data => {this.personas = data.respuesta;
-        console.log(this.personas)},
+        data => {
+          this.personas = data.respuesta;
+          console.log(data.respuesta);
+      },
         err => {console.log(err)}
       )
   }

@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+
+// Interfaces
 import { PersonasResult } from "../interfaces/persona/personas-result";
 
 @Injectable({
@@ -14,7 +16,6 @@ export class PersonaService {
   private _params = new HttpParams();
   
   consultarPersonas(){
-    // return this.http.get(`${this.apiUrl}TalentoHumano/ListaUsuariosClientes);
-    return this.http.get<PersonasResult>('http://192.168.25.15:90/api/TalentoHumano/ListaUsuariosClientes');
+    return this.http.get<PersonasResult>(`${this.apiUrl}TalentoHumano/ListaUsuariosClientes`);
   }
 }
