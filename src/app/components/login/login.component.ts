@@ -28,6 +28,7 @@ export class LoginComponent implements OnInit {
       this.usuarioService.login(this.usuario,this.contrasena).subscribe(item=>{
         console.log(item.respuesta);
         if (item.respuesta.Estado==true) {
+          localStorage.setItem('miCuenta.nome_token',item.respuesta.IdUsuario);
           this.router.navigateByUrl('inicio');
         }
       },error=>{});
