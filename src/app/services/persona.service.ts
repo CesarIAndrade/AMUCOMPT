@@ -13,6 +13,6 @@ export class PersonaService {
   private _params = new HttpParams();
   
   consultarPersonas(){
-    return this.http.get(`${this.apiUrl}TalentoHumano/ListaUsuariosClientes`); 
+    return this.http.post(`${this.apiUrl}TalentoHumano/ListaUsuariosClientes`,this._params,{headers:this._headers}); 
   }
 }
