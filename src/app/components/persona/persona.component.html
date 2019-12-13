@@ -1,39 +1,35 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-12">
-          
-
-                <div class="form-group row">
-                    <label for="colFormLabelSm" class="col-sm-2 col-form-label col-form-label-sm">Nombres:</label>
-                    <div class="col-sm-10">
-                        <input type="text" class="form-control form-control-sm" placeholder="Ejem: Juan Carlos">
-                    </div>
+            <div class="form-group row">
+                <label for="colFormLabelSm" class="col-sm-2 col-form-label col-form-label-sm">Nombres:</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control form-control-sm" placeholder="Ejem: Juan Carlos">
                 </div>
-                <div class="form-group row">
-                    <label for="colFormLabelSm" class="col-sm-2 col-form-label col-form-label-sm">Apellidos:</label>
-                    <div class="col-sm-10">
-                        <input type="text" class="form-control form-control-sm" placeholder="Ejem. Zambrano Zambrano">
-                    </div>
+            </div>
+            <div class="form-group row">
+                <label for="colFormLabelSm" class="col-sm-2 col-form-label col-form-label-sm">Apellidos:</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control form-control-sm" placeholder="Ejem. Zambrano Zambrano">
                 </div>
-                <div class="form-group row">
-                    <label for="colFormLabelSm" class="col-sm-2 col-form-label col-form-label-sm">Documento:</label>
-                    <div class="col-sm-5">
-                        <select type="text" class="form-control form-control-sm" placeholder="Ejem. Zambrano Zambrano">
-                            <option>Cedula</option>
-                            <option>Pasaporte</option>
-                        </select>
-                    </div>
-                    <div class="col-sm-5">
-                        <input type="email" class="form-control form-control-sm" placeholder="Ejem. 0000000000">
-                    </div>
+            </div>
+            <div class="form-group row">
+                <label for="colFormLabelSm" class="col-sm-2 col-form-label col-form-label-sm">Documento:</label>
+                <div class="col-sm-5">
+                    <select type="text" class="form-control form-control-sm" placeholder="Ejem. Zambrano Zambrano">
+                        <option>Cedula</option>
+                        <option>Pasaporte</option>
+                    </select>
                 </div>
-                <div class="form-group row">
-                    <!-- <label for="colFormLabelSm" class="col-sm-2 col-form-label col-form-label-sm">Apellidos:</label> -->
-                    <div class="col-sm-12">
-                        <input type="button" class="btn btn-sm btn-block btn-primary" id="colFormLabelSm" value="Guardar">
-                    </div>
+                <div class="col-sm-5">
+                    <input type="email" class="form-control form-control-sm" placeholder="Ejem. 0000000000">
                 </div>
-           
+            </div>
+            <div class="form-group row">
+                <div class="col-sm-12">
+                    <input type="button" class="btn btn-sm btn-block btn-primary" id="colFormLabelSm" value="Guardar">
+                </div>
+            </div>
         </div>
     </div>
     <br>
@@ -42,7 +38,8 @@
             <div class="form-group row">
                 <label for="colFormLabelSm" class="col-sm-2 col-form-label col-form-label-sm">Filtro:</label>
                 <div class="col-sm-10">
-                    <input type="email" class="form-control form-control-sm" id="colFormLabelSm" placeholder="Ejem. Zambrano Zambrano">
+                    <input type="email" class="form-control form-control-sm" id="colFormLabelSm"
+                        placeholder="Ejem. Zambrano Zambrano">
                 </div>
             </div>
         </div>
@@ -56,22 +53,23 @@
                             <th scope="col">Apellidos</th>
                             <th scope="col">Documento</th>
                             <th scope="col">No. Documento</th>
-                            <th scope="col" colspan="2" style="text-align: center;">Acciones</th>      
+                            <th scope="col" colspan="2" style="text-align: center;">Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                        <th scope="row">1</th>
-                        <td>Mark</td>
-                        <td>Otto</td>
-                        <td>cedula</td>
-                        <td>000000000</td>
-                        <td>
-                            <button class="btn btn-sm btn-info separacion-botones"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> </button>
-                        </td>
-                        <td>
-                            <button class="btn btn-sm btn-danger separacion-botones"><i class="fa fa-trash" aria-hidden="true"></i></button>
-                        </td>
+                        <tr *ngFor="">
+                            <!-- <td> {{ item.IdPersona }} </td>
+                            <td> {{ item.PrimerNombre }} </td>
+                            <td> {{ item.ApellidoPaterno }} </td>
+                            <td> {{ item.IdTipoDocumento }} </td> -->
+                            <td>
+                                <button class="btn btn-sm btn-info separacion-botones"><i class="fa fa-pencil-square-o"
+                                        aria-hidden="true"></i> </button>
+                            </td>
+                            <td>
+                                <button class="btn btn-sm btn-danger separacion-botones"><i class="fa fa-trash"
+                                        aria-hidden="true"></i></button>
+                            </td>
                         </tr>
                     </tbody>
                 </table>

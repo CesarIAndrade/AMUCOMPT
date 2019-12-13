@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { persona } from '../interfaces/persona';
 
 @Injectable({
   providedIn: 'root'
@@ -13,6 +14,7 @@ export class PersonaService {
   private _params = new HttpParams();
   
   consultarPersonas(){
-    return this.http.get(`${this.apiUrl}TalentoHumano/ListaUsuariosClientes`); 
+    // return this.http.get(`${this.apiUrl}TalentoHumano/ListaUsuariosClientes);
+    return this.http.get('http://192.168.25.15:90/api/TalentoHumano/ListaUsuariosClientes');
   }
 }
