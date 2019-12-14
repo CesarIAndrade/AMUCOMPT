@@ -30,10 +30,18 @@ export class NavComponent implements OnInit {
     // const menu_cuenta :HTMLElement = document.getElementById('menu-cuenta');
      
     if (document.getElementById("menu-cuenta").hidden==true) {
-    document.getElementById("menu-cuenta").hidden=false;
+      // document.getElementById("menu-cuenta").classList.remove("animated"); //flipInX
+      // document.getElementById("menu-cuenta").classList.remove("flipInX"); //flipInX
+      // document.getElementById("menu-cuenta").classList.add("animated");
+      // document.getElementById("menu-cuenta").classList.add("flipInX");
+      document.getElementById("menu-cuenta").hidden=false;
     }
     else if (document.getElementById("menu-cuenta").hidden==false) {
-    document.getElementById("menu-cuenta").hidden=true;
+      // document.getElementById("menu-cuenta").classList.remove("animated"); //flipInX
+      // document.getElementById("menu-cuenta").classList.remove("flipInX"); //flipInX
+      // document.getElementById("menu-cuenta").classList.add("animated");
+      // document.getElementById("menu-cuenta").classList.add("flipInX");
+      document.getElementById("menu-cuenta").hidden=true;
     }
     //menu_cuenta.hidden = false;
   }
