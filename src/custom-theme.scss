@@ -29,3 +29,7 @@ $test-app-theme: mat-light-theme($test-app-primary, $test-app-accent, $test-app-
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.page-container{
+    margin-top: 100px !important;
+}

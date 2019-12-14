@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterContentInit } from '@angular/core';
 import { UsuarioService } from 'src/app/services/usuario.service';
 import { Router } from '@angular/router';
 
@@ -7,7 +7,7 @@ import { Router } from '@angular/router';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, AfterContentInit {
 
   constructor(private usuarioService:UsuarioService,
               private router:Router) {
@@ -21,6 +21,14 @@ export class LoginComponent implements OnInit {
    }
 
   ngOnInit() {
+    // document.getElementById("loadingPage").hidden=true;
+    setTimeout(() => {
+      document.getElementById("loadingPage").hidden=true;
+    }, 1000);
+  }
+
+  ngAfterContentInit(){
+    //document.getElementById("loadingPage").hidden=true;
   }
 
   login(){

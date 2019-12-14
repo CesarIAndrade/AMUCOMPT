@@ -3,13 +3,40 @@
       [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
       [mode]="(isHandset$ | async) ? 'over' : 'side'"
       [opened]="(isHandset$ | async) === false">
-    <mat-toolbar class="text-white" style=" background-color: #f61cc4;" routerLink="/inicio">Menu</mat-toolbar>
+    <mat-toolbar class="text-white bg-primary" routerLink="/inicio">Menu</mat-toolbar>
     <mat-nav-list>
-      <a mat-list-item routerLink="/inicio/usuarios" style="color: white;">Usuarios</a>
-      <a mat-list-item routerLink="/inicio/personas" style="color: white;">Persona</a>
-      <a mat-list-item routerLink="/inicio/inventarios" style="color: white;">Inventario</a>
-      <a mat-list-item routerLink="/inicio/compras" style="color: white;">Compra</a>
-      <a mat-list-item routerLink="/inicio/ventas" style="color: white;">Venta</a>
+      <a mat-list-item routerLink="/inicio/usuarios" style="color: white;">
+        <i style="margin-right: 10px;" class="fa fa-user" aria-hidden="true"></i>
+        Usuarios
+      </a>
+      <a mat-list-item routerLink="/inicio/personas" style="color: white;">
+        <i style="margin-right: 10px;" class="fa fa-users" aria-hidden="true"></i>
+        Persona
+      </a>
+      <a mat-list-item routerLink="/inicio/inventarios" style="color: white;">
+        <i style="margin-right: 10px;" class="fa fa-check-square" aria-hidden="true"></i>
+        Inventario
+      </a>
+      <a mat-list-item routerLink="/inicio/compras" style="color: white;">
+        <i style="margin-right: 10px;" class="fa fa-truck" aria-hidden="true"></i>
+        Compra
+      </a>
+      <a mat-list-item routerLink="/inicio/ventas" style="color: white;">
+        <i style="margin-right: 10px;" class="fa fa-calculator" aria-hidden="true"></i>
+        Venta
+      </a>
+      <a mat-list-item style="color: white;" (click)="menu_cuenta()">
+        <i style="margin-right: 10px;" class="fa fa-user" aria-hidden="true"></i>
+        Cuenta
+      </a>
+      <div id="menu-cuenta">
+        <a  mat-list-item style="color: white; ">
+          <i style="margin-right: 10px;" class="fa fa-user" aria-hidden="true"></i>
+          Cerrar Sesion
+        </a>
+      </div>
+      
+      
     </mat-nav-list>  
   </mat-sidenav>
   <mat-sidenav-content>
@@ -23,6 +50,7 @@
         <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
       </button>
       <img src="./assets/img/amucomt.png" width="210" height="100" class="amucomt">
+
     </mat-toolbar>
     <br>
     <router-outlet></router-outlet>
