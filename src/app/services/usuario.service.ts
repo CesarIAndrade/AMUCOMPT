@@ -15,7 +15,7 @@ export class UsuarioService {
   private _headers = new HttpHeaders({'Content-Type':'application/x-www-form-urlencoded'});
   private _params = new HttpParams();
 
-  login(_usuario:string,_password:string){
+  login(_usuario:string,_password:string, _token:string){
     let _params = new HttpParams({
       fromObject : {
         'UsuarioLogin' : _usuario,
@@ -23,7 +23,7 @@ export class UsuarioService {
       }
     });
     // return this.http.get<Usuario>(`${this.apiUrl}login/`,{headers:this._headers,params:_params});  
-    return this.http.post<UsuarioResult>(`${this.apiUrl}TalentoHumano/Login`,_params,{headers:this._headers});  
+    return this.http.post<UsuarioResult>(`${this.apiUrl}TalentoHumano/Login/${_usuario}/${_password}/${_token}`,{headers:this._headers});  
   }
 
   consultarUsuarios(){

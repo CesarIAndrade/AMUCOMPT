@@ -1,7 +1,7 @@
-import { TipoDocumento } from "../tipo-documento/tipo-documento";
+import { TipoDocumentos } from "./tipo-documento";
 
 export interface TipoDocumentoResult {
     codigo?: string;
     mensaje?: string;
-    respuesta?: TipoDocumento;
+    respuesta?: TipoDocumentos;
 }

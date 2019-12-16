@@ -39,7 +39,7 @@
       
     </mat-nav-list>  
   </mat-sidenav>
-  <mat-sidenav-content>
+  <mat-sidenav-content class="wall">
     <mat-toolbar class="bg-white">
       <button
         type="button"
@@ -49,10 +49,8 @@
         *ngIf="isHandset$ | async">
         <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
       </button>
-      <img src="./assets/img/amucomt.png" width="210" height="100" class="amucomt">
-
+      <img src="./assets/img/amucomt.png" width="210" height="100" class="amucomt" routerLink="/inicio">
     </mat-toolbar>
-    <br>
     <router-outlet></router-outlet>
   </mat-sidenav-content>
 </mat-sidenav-container>

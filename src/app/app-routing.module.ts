@@ -19,13 +19,23 @@ const routes: Routes = [
   {
     path: 'inicio', 
     component: NavComponent,
-    canActivate: [ValidarUsuarioGuard],
+    // canActivate: [ValidarUsuarioGuard],
     children: [
-      { path: 'usuarios', component: UsuarioComponent ,canActivate: [ValidarUsuarioGuard] },
-      { path: 'personas', component: PersonaComponent ,canActivate: [ValidarUsuarioGuard]},
-      { path: 'inventarios', component: InventarioComponent ,canActivate: [ValidarUsuarioGuard]},
-      { path: 'compras', component: CompraComponent ,canActivate: [ValidarUsuarioGuard]},
-      { path: 'ventas', component: VentaComponent ,canActivate: [ValidarUsuarioGuard]},
+      { path: 'usuarios', component: UsuarioComponent,
+        // canActivate: [ValidarUsuarioGuard] 
+      },
+      { path: 'personas', component: PersonaComponent,
+        // canActivate: [ValidarUsuarioGuard]
+      },
+      { path: 'inventarios', component: InventarioComponent,
+        // canActivate: [ValidarUsuarioGuard]
+      },
+      { path: 'compras', component: CompraComponent,
+        // canActivate: [ValidarUsuarioGuard]
+      },
+      { path: 'ventas', component: VentaComponent,
+        // canActivate: [ValidarUsuarioGuard]
+      },
     ]
   },
   { path: '**', component: Page404Component }

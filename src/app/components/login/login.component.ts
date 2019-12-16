@@ -1,46 +1,57 @@
-import { Component, OnInit, AfterContentInit } from '@angular/core';
-import { UsuarioService } from 'src/app/services/usuario.service';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+
+// Services
+import { UsuarioService } from 'src/app/services/usuario.service';
+import { SeguridadService } from '../../services/seguridad.service'
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
-export class LoginComponent implements OnInit, AfterContentInit {
+export class LoginComponent implements OnInit {
 
   constructor(private usuarioService:UsuarioService,
-              private router:Router) {
+    private router:Router,
+    private seguridadService: SeguridadService) {
    }
 
-   usuario: string;
-   contrasena: string;
-
-   test(){
-     console.log(this.contrasena);
-   }
-
+  usuario: string;
+  contrasena: string;
   ngOnInit() {
-    // document.getElementById("loadingPage").hidden=true;
+    this.consultarTokens();
     setTimeout(() => {
       document.getElementById("loadingPage").hidden=true;
     }, 1000);
   }
 
-  ngAfterContentInit(){
-    //document.getElementById("loadingPage").hidden=true;
+  login(){
+    if (this.usuario != "" && this.contrasena != "" && localStorage.getItem('miCuenta.postToken') != null) {
+      this.usuarioService.login(this.usuario, this.contrasena, localStorage.getItem('miCuenta.postToken'))
+        .subscribe(
+          item => {
+            console.log(item.respuesta);
+            if (item.respuesta.Estado==true) {
+              this.router.navigateByUrl('inicio');
+            }
+          },
+          error => { console.log(error) }
+        );
+    }
   }
 
-  login(){
-    if (this.usuario != "" && this.contrasena != "") {
-      this.usuarioService.login(this.usuario,this.contrasena).subscribe(item=>{
-        console.log(item.respuesta);
-        if (item.respuesta.Estado==true) {
-          localStorage.setItem('miCuenta.nome_token',item.respuesta.IdUsuario);
-          this.router.navigateByUrl('inicio');
-        }
-      },error=>{});
-    }
+  consultarTokens(){
+    this.seguridadService.consultarTokens()
+      .subscribe(
+        data => {
+          localStorage.setItem('miCuenta.getToken', data['respuesta']['ClaveGetEncrip']);
+          localStorage.setItem('miCuenta.postToken', data['respuesta']['ClavePostEncrip']);
+          localStorage.setItem('miCuenta.putToken', data['respuesta']['ClavePutEncrip']);
+          localStorage.setItem('miCuenta.deleteToken', data['respuesta']['ClaveDeleteEncrip']);
+        },
+        err => console.log(err)
+      )
   }
 
 }
