@@ -13,6 +13,6 @@ export class SeguridadService {
   private _params = new HttpParams();
 
   consultarTokens(){
-    return this.http.get(`${this.apiUrl}Seguridad/ConsultarClave`, {headers:this._headers})
+    return this.http.get(`${this.apiUrl}Seguridad/ConsultarClave`)
   }
 }

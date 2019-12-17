@@ -15,7 +15,7 @@ export class TipoDocumentoService {
 
   constructor(private http: HttpClient) { }
 
-  consultatTipoDocumentos(){
-    return this.http.get<TipoDocumentosResult>(`${this.apiUrl}`);
+  consultatTipoDocumentos(_token: string){
+    return this.http.get<TipoDocumentosResult>(`${this.apiUrl}TalentoHumano/ConsultarTipoDocumento/${_token}`);
   }
 }

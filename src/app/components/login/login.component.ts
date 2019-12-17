@@ -20,10 +20,10 @@ export class LoginComponent implements OnInit {
   usuario: string;
   contrasena: string;
   ngOnInit() {
-    this.consultarTokens();
     setTimeout(() => {
       document.getElementById("loadingPage").hidden=true;
     }, 1000);
+    this.consultarTokens();
   }
 
   login(){
@@ -45,6 +45,7 @@ export class LoginComponent implements OnInit {
     this.seguridadService.consultarTokens()
       .subscribe(
         data => {
+          console.log(data);
           localStorage.setItem('miCuenta.getToken', data['respuesta']['ClaveGetEncrip']);
           localStorage.setItem('miCuenta.postToken', data['respuesta']['ClavePostEncrip']);
           localStorage.setItem('miCuenta.putToken', data['respuesta']['ClavePutEncrip']);

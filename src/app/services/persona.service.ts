@@ -15,8 +15,8 @@ export class PersonaService {
   private _headers = new HttpHeaders({'Content-Type':'application/json'});
   private _params = new HttpParams();
   
-  consultarPersonas(){
-    return this.http.get<PersonasResult>(`${this.apiUrl}TalentoHumano/ListaUsuariosClientes`);
+  consultarPersonas(_token: string){
+    return this.http.get<PersonasResult>(`${this.apiUrl}TalentoHumano/ListaUsuariosClientes/${_token}`);
   }
 
   crearPersona(){

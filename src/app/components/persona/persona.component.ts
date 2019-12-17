@@ -17,11 +17,11 @@ export class PersonaComponent implements OnInit {
 
   constructor(
     private personaService: PersonaService,
-    private tipoDocumentosService: TipoDocumentoService ) { }
+    private tipoDocumentoService: TipoDocumentoService ) { }
 
   personas: Persona[] = [];
   consultarPersonas(){
-    this.personaService.consultarPersonas()
+    this.personaService.consultarPersonas(localStorage.getItem('miCuenta.getToken'))
       .subscribe(
         data => {
           this.personas = data.respuesta;
@@ -33,13 +33,13 @@ export class PersonaComponent implements OnInit {
 
   tipoDocumentos: TipoDocumentos[] = [];
   consultarTipoDocumentos(){
-    this.tipoDocumentosService.consultatTipoDocumentos()
+    this.tipoDocumentoService.consultatTipoDocumentos(localStorage.getItem('miCuenta.getToken'))
       .subscribe(
         data => {
           this.tipoDocumentos = data.respuesta;
           console.log(data.respuesta);
         },
-        err => console.log(err)
+        error => console.log(error)
       )
   }
 
@@ -47,8 +47,14 @@ export class PersonaComponent implements OnInit {
   apellidos: string;
   tipoDocumento: string;
   numeroDocumento: string;
+  telefono: string;
+  correo: string;
+  direccion: string;
   crearPersona(){
+    console.log(this.tipoDocumento);
     
+    
+    this.consultarPersonas();
   }
 
   ngOnInit() {

@@ -4,7 +4,7 @@ export interface Usuario {
     IdUsuario?: string;
     Persona?: Persona;
     UsuarioLogin?: string;
-    Contracena?: string;
+    Contrasena?: string;
     FechaCreacion?: string;
     Estado?: boolean;
 }
