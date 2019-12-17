@@ -13,16 +13,29 @@ export class UsuarioService {
   
   private apiUrl:string = "http://192.168.25.15:90/api/"
   private _headers = new HttpHeaders({'Content-Type':'application/x-www-form-urlencoded'});
-  private _params = new HttpParams();
 
+
+debugger
   login(_usuario: string, _password: string, _token: string){
-    let _params = new HttpParams({
-      fromObject : {
-        'UsuarioLogin' : _usuario,
-        'Contrasena' : _password
-      }
-    });
-    return this.http.post<UsuarioResult>(`${this.apiUrl}TalentoHumano/Login/${_usuario}/${_password}/${_token}`,{headers:this._headers});  
+
+    const body = new HttpParams()
+    .set('usuario', _usuario)
+    .set('contrasena', _password)
+    .set('token', _token)
+  
+    return new Promise((resolve, reject) => {
+     this.http.post(this.apiUrl+'TalentoHumano/Login/',body.toString(),
+        { 
+          headers: new HttpHeaders()
+          .set('Content-Type', 'application/x-www-form-urlencoded')}
+        )
+        .subscribe(res => {
+            resolve(res);
+        }, (err) => {
+          reject(err);
+      });
+  });
+
   }
 
   consultarUsuarios(_token: string){

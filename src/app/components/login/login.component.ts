@@ -27,17 +27,17 @@ export class LoginComponent implements OnInit {
   }
 
   login(){
+    debugger
     if (this.usuario != "" && this.contrasena != "" && localStorage.getItem('miCuenta.postToken') != null) {
-      this.usuarioService.login(this.usuario, this.contrasena, localStorage.getItem('miCuenta.postToken'))
-        .subscribe(
-          item => {
-            console.log(item.respuesta);
-            if (item.respuesta.Estado==true) {
-              this.router.navigateByUrl('inicio');
-            }
-          },
-          error => { console.log(error) }
-        );
+      debugger
+      this.usuarioService.login(this.usuario, this.contrasena, localStorage.getItem('miCuenta.postToken')).then(ok=>{
+
+       console.log(ok);
+
+      }).catch(erro=>{
+        console.log(erro);
+
+      })
     }
   }
 
