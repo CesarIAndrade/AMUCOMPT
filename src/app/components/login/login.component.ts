@@ -12,36 +12,36 @@ import { SeguridadService } from '../../services/seguridad.service'
 })
 export class LoginComponent implements OnInit {
 
-  constructor(private usuarioService:UsuarioService,
-    private router:Router,
+  constructor(private usuarioService: UsuarioService,
+    private router: Router,
     private seguridadService: SeguridadService) {
-   }
+  }
 
   usuario: string;
   contrasena: string;
   ngOnInit() {
     setTimeout(() => {
-      document.getElementById("loadingPage").hidden=true;
+      document.getElementById("loadingPage").hidden = true;
     }, 1000);
     this.consultarTokens();
   }
 
-  login(){
-    debugger
+  login() {
     if (this.usuario != "" && this.contrasena != "" && localStorage.getItem('miCuenta.postToken') != null) {
-      debugger
-      this.usuarioService.login(this.usuario, this.contrasena, localStorage.getItem('miCuenta.postToken')).then(ok=>{
-
-       console.log(ok);
-
-      }).catch(erro=>{
-        console.log(erro);
-
-      })
+      this.usuarioService.login(this.usuario, this.contrasena, localStorage.getItem('miCuenta.postToken'))
+        .then(
+          ok => {
+            console.log(ok);
+            this.router.navigateByUrl('inicio');
+          })
+        .catch(
+          erro => {
+            console.log(erro);
+          })
     }
   }
 
-  consultarTokens(){
+  consultarTokens() {
     this.seguridadService.consultarTokens()
       .subscribe(
         data => {

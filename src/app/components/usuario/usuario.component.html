@@ -5,50 +5,51 @@
             <div class="form-group row">
                 <label for="" class="col-sm-2 col-form-label col-form-label-sm">Nombres:</label>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control form-control-sm" placeholder="Ejem: Juan Carlos">
+                    <input type="text" class="form-control form-control-sm" placeholder="Juan Carlos">
                 </div>
             </div>
             <div class="form-group row">
                 <label for="" class="col-sm-2 col-form-label col-form-label-sm">Apellidos:</label>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control form-control-sm" placeholder="Ejem. Zambrano Zambrano">
+                    <input type="text" class="form-control form-control-sm" placeholder="Zambrano Zambrano">
                 </div>
             </div>
             <div class="form-group row">
                 <label for="" class="col-sm-2 col-form-label col-form-label-sm">Documento:</label>
                 <div class="col-sm-5">
-                    <select [(ngModel)]="tipoDocumento" type="text" class="form-control form-control-sm" name="tipoDocumento">
+                    <select [(ngModel)]="tipoDocumento" type="text" class="form-control form-control-sm"
+                        name="tipoDocumento">
+                        <option value="0" disabled>Seleccionar Tipo Documento </option>
                         <option *ngFor="let item of tipoDocumentos" value="{{item.IdTipoDocumento}}">
                             {{ item.Documento }} </option>
                     </select>
                 </div>
                 <div class="col-sm-5">
-                    <input type="email" class="form-control form-control-sm" placeholder="Ejem. 0000000000">
+                    <input type="email" class="form-control form-control-sm" placeholder="ejemplo@ejemplo.com">
                 </div>
             </div>
             <div class="form-group row">
                 <label for="" class="col-sm-2 col-form-label col-form-label-sm">Usuario:</label>
                 <div class="col-sm-4">
-                    <input type="text" class="form-control form-control-sm" placeholder="Ejem: 00000000000">
+                    <input type="text" class="form-control form-control-sm" placeholder="luisc">
                 </div>
                 <label for="" class="col-sm-2 col-form-label col-form-label-sm">Rol:</label>
                 <div class="col-sm-4">
-                    <select type="text" class="form-control form-control-sm" placeholder="Ejem. Zambrano Zambrano">
-                        <option>Administrador</option>
-                        <option>B</option>
-                        <option>C</option>
-                        <option>D</option>
+                    <select [(ngModel)]="privilegio" type="text" class="form-control form-control-sm"
+                        name="tipoDocumento">
+                        <option value="0" disabled>Seleccionar un Privilegio</option>
+                        <option *ngFor="let item of privilegios"> {{ item.Descripcion }} </option>
                     </select>
                 </div>
             </div>
             <div class="form-group row">
-                <label class="col-sm-2 col-form-label col-form-label-sm">clave:</label>
+                <label class="col-sm-2 col-form-label col-form-label-sm">Contraseña:</label>
                 <div class="col-sm-9">
-                    <input type="password" class="form-control form-control-sm" placeholder="Ejem: ***********">
+                    <input [(ngModel)]="contrasena" [type]="inputType" class="form-control form-control-sm">
                 </div>
                 <div class="col-sm-1" style="padding-top: 4px;">
-                    <button type="button" class="btn btn-sm btn-block btn-outline-primary"> <i class="fa fa-eye"
-                            aria-hidden="true"></i>
+                    <button type="button" class="btn btn-sm btn-block btn-outline-primary"
+                        (click)="mostrarContrasena()"> <i class="fa fa-eye" aria-hidden="true"></i>
                     </button>
                 </div>
             </div>
@@ -57,7 +58,6 @@
                     <input type="button" class="btn btn-sm btn-block btn-primary" value="Guardar" (click)="test()">
                 </div>
             </div>
-
         </div>
     </div>
     <br>

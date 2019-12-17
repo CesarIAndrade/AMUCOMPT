@@ -21,7 +21,7 @@
                 <div class="col-sm-5">
                     <select [(ngModel)]="tipoDocumento" type="text" class="form-control form-control-sm"
                         name="tipoDocumento">
-                        <option value="" disabled>Seleccione Tipo Documento</option>
+                        <option value="" disabled selected>Seleccione Tipo Documento</option>
                         <option *ngFor="let item of tipoDocumentos" value="{{item.IdTipoDocumento}}">
                             {{ item.Documento }} </option>
                     </select>

@@ -34,12 +34,16 @@ export class PersonaComponent implements OnInit {
   tipoDocumentos: TipoDocumentos[] = [];
   consultarTipoDocumentos(){
     this.tipoDocumentoService.consultatTipoDocumentos(localStorage.getItem('miCuenta.getToken'))
-      .subscribe(
-        data => {
-          this.tipoDocumentos = data.respuesta;
-          console.log(data.respuesta);
+      .then(
+        ok => {
+          this.tipoDocumentos = ok['respuesta'];
+          console.log(ok['respuesta']);
         },
-        error => console.log(error)
+      )
+      .catch(
+        err => {
+          console.log(err);
+        }
       )
   }
 
