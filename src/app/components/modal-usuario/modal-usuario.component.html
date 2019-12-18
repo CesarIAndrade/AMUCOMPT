@@ -1,32 +1,71 @@
-<h1 mat-dialog-title>Datos de Persona</h1>
+<!-- <h1 mat-dialog-title>Datos de Persona</h1> -->
+<h1 mat-dialog-title> {{ data.name }} </h1>
+
 <mat-dialog-content>
-    <div class="form-group">
-        <input type="text" class="form-control form-control-sm" placeholder="Nombres">
-    </div>
-    <div class="form-group">
-        <input type="text" class="form-control form-control-sm" placeholder="Apellidos">
-    </div>
-    <div class="form-group">
-        <select [(ngModel)]="tipoDocumento" type="text" class="form-control form-control-sm" name="tipoDocumento">
-            <option value="0" disabled>Seleccionar Tipo Documento </option>
-            <option *ngFor="let item of tipoDocumentos" value="{{item.IdTipoDocumento}}">
-                {{ item.Documento }} </option>
-        </select>
-    </div>
-    <div class="form-group">
-        <input type="text" class="form-control form-control-sm" placeholder="Numero Documento">
-    </div>
-    <div class="form-group">
-        <input type="text" class="form-control form-control-sm" placeholder="Telefono">
-    </div>
-    <div class="form-group">
-        <input type="text" class="form-control form-control-sm" placeholder="Correo">
+    <div class="form-group row">
+        <div class="col-sm-6">
+            <input [(ngModel)]="nombres" type="text" class="form-control form-control-sm" placeholder="Ingrese Nombres"
+                required>
+        </div>
+        <div class="col-sm-6">
+            <input [(ngModel)]="apellidos" type="text" class="form-control form-control-sm"
+                placeholder="Ingrese Apellidos" required>
+        </div>
     </div>
 
+    <div class="form-group row">
+        <div class="col-sm-6">
+            <select [(ngModel)]="tipoDocumento" type="text" class="form-control form-control-sm" name="tipoDocumento"
+                required>
+                <option value="0" disabled>Seleccionar Tipo Documento </option>
+                <option *ngFor="let item of tipoDocumentos" value="{{item.IdTipoDocumento}}">
+                    {{ item.Documento }} </option>
+            </select>
+        </div>
+        <div class="col-sm-6">
+            <input [(ngModel)]="numeroDocumento" type="text" class="form-control form-control-sm"
+                placeholder="Ingrese Numero Documento" required>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <div class="col-sm-5">
+            <input [(ngModel)]="telefonoModal1" type="text" class="form-control form-control-sm"
+                placeholder="Ingrese Primer Telefono" required>
+        </div>
+        <div class="col-sm-5">
+            <input [(ngModel)]="telefonoModal2" type="text" class="form-control form-control-sm"
+                placeholder="Ingrese Segundo Telefono" required>
+        </div>
+        <div class="col-sm-2">
+            <button [disabled]="botonAgregarNumero" type="button" class="btn btn-sm" style="background-color: #4582EC; margin-top: 3px;" (click)="agregarTelefono()"><i
+                    class="fa fa-plus" style="color: white" aria-hidden="true"></i>
+            </button>
+        </div>
+    </div>
+
+    <div class="form-group row" [hidden]="numeroExtra">
+        <div class="col-sm-5">
+            <input [(ngModel)]="telefonoModal3" type="text" class="form-control form-control-sm"
+                placeholder="Ingrese Tercer Telefono" required>
+        </div>
+        <div class="col-sm-2" style="margin-top: 3px;">
+            <button type="button" class="btn btn-sm" style="background-color: #d9534f;" (click)="quitarTelefono()"><i
+                    class="fa fa-times" style="color: white" aria-hidden="true"></i>
+            </button>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <div class="col-sm-12">
+            <input [(ngModel)]="correoModal" type="text" class="form-control form-control-sm"
+                placeholder="Ingrese Correo" required>
+        </div>
+    </div>
 
 </mat-dialog-content>
 <mat-dialog-actions>
-    <button mat-button mat-dialog-close mat-dialog-close="true" type="button" class="btn btn-primary">
+    <button mat-button mat-dialog-close="true" type="button" class="btn btn-primary" (click)=guardarDatosPersona()>
         Aceptar
     </button>
     <button mat-button mat-dialog-close mat-dialog-close="false" type="button" class="btn btn-outline-dark">

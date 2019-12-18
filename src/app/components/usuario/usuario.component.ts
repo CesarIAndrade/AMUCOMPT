@@ -76,8 +76,11 @@ export class UsuarioComponent implements OnInit {
 
   abrirModel(){
     let dialogRef = this.dialog.open(ModalUsuarioComponent, {
-      width: '500px',
-      height: '430px'
+      width: '550px',
+      height: '430px',
+      data: {
+        name: "cesar",
+      }
     });
     dialogRef.afterClosed().subscribe(
       ok => {
