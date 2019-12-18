@@ -1,21 +1,21 @@
 <!-- <h1 mat-dialog-title>Datos de Persona</h1> -->
-<h1 mat-dialog-title> {{ data.name }} </h1>
+<h1 mat-dialog-title>Datos de Persona</h1>
 
 <mat-dialog-content>
     <div class="form-group row">
         <div class="col-sm-6">
-            <input [(ngModel)]="nombres" type="text" class="form-control form-control-sm" placeholder="Ingrese Nombres"
+            <input matInput [(ngModel)]="persona.nombres" type="text" class="form-control form-control-sm" placeholder="Ingrese Nombres"
                 required>
         </div>
         <div class="col-sm-6">
-            <input [(ngModel)]="apellidos" type="text" class="form-control form-control-sm"
+            <input matInput [(ngModel)]="persona.apellidos" type="text" class="form-control form-control-sm"
                 placeholder="Ingrese Apellidos" required>
         </div>
     </div>
 
     <div class="form-group row">
         <div class="col-sm-6">
-            <select [(ngModel)]="tipoDocumento" type="text" class="form-control form-control-sm" name="tipoDocumento"
+            <select [(ngModel)]="persona.tipoDocumento" type="text" class="form-control form-control-sm" name="tipoDocumento"
                 required>
                 <option value="0" disabled>Seleccionar Tipo Documento </option>
                 <option *ngFor="let item of tipoDocumentos" value="{{item.IdTipoDocumento}}">
@@ -23,18 +23,18 @@
             </select>
         </div>
         <div class="col-sm-6">
-            <input [(ngModel)]="numeroDocumento" type="text" class="form-control form-control-sm"
+            <input matInput [(ngModel)]="persona.numeroDocumento" type="text" class="form-control form-control-sm"
                 placeholder="Ingrese Numero Documento" required>
         </div>
     </div>
 
     <div class="form-group row">
         <div class="col-sm-5">
-            <input [(ngModel)]="telefonoModal1" type="text" class="form-control form-control-sm"
+            <input matInput [(ngModel)]="persona.telefonoModal1" type="text" class="form-control form-control-sm"
                 placeholder="Ingrese Primer Telefono" required>
         </div>
         <div class="col-sm-5">
-            <input [(ngModel)]="telefonoModal2" type="text" class="form-control form-control-sm"
+            <input matInput [(ngModel)]="persona.telefonoModal2" type="text" class="form-control form-control-sm"
                 placeholder="Ingrese Segundo Telefono" required>
         </div>
         <div class="col-sm-2">
@@ -46,7 +46,7 @@
 
     <div class="form-group row" [hidden]="numeroExtra">
         <div class="col-sm-5">
-            <input [(ngModel)]="telefonoModal3" type="text" class="form-control form-control-sm"
+            <input matInput [(ngModel)]="persona.telefonoModal3" type="text" class="form-control form-control-sm"
                 placeholder="Ingrese Tercer Telefono" required>
         </div>
         <div class="col-sm-2" style="margin-top: 3px;">
@@ -58,17 +58,17 @@
 
     <div class="form-group row">
         <div class="col-sm-12">
-            <input [(ngModel)]="correoModal" type="text" class="form-control form-control-sm"
+            <input matInput [(ngModel)]="persona.correoModal" type="text" class="form-control form-control-sm"
                 placeholder="Ingrese Correo" required>
         </div>
     </div>
 
 </mat-dialog-content>
 <mat-dialog-actions>
-    <button mat-button mat-dialog-close="true" type="button" class="btn btn-primary" (click)=guardarDatosPersona()>
+    <button mat-button [mat-dialog-close]=persona type="button" class="btn btn-primary">
         Aceptar
     </button>
-    <button mat-button mat-dialog-close mat-dialog-close="false" type="button" class="btn btn-outline-dark">
+    <button mat-button (click)="cerrarModal()" type="button" class="btn btn-outline-dark">
         Cerrar
     </button>
 </mat-dialog-actions>

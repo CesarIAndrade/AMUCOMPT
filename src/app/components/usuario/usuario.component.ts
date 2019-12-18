@@ -14,6 +14,18 @@ import { MatDialog } from "@angular/material/dialog";
 // Components
 import { ModalUsuarioComponent } from "../modal-usuario/modal-usuario.component";
 import { Modulo } from 'src/app/interfaces/modulo/modulo';
+import { Persona } from 'src/app/interfaces/persona/persona';
+
+export interface personaModal{
+  nombres: string;
+  apellidos: string;
+  tipoDocumento: string;
+  numeroDocumento: string;
+  telefonoModal1: string;
+  telefonoModal2: string;
+  telefonoModal3: string;
+  correoModal: string;
+}
 
 @Component({
   selector: 'app-usuario',
@@ -22,9 +34,11 @@ import { Modulo } from 'src/app/interfaces/modulo/modulo';
 })
 export class UsuarioComponent implements OnInit {
 
-  constructor(private usuarioService: UsuarioService,
+  constructor(
+    private usuarioService: UsuarioService,
     private privilegiosService: PrivilegiosService,
-    private dialog: MatDialog ) { }
+    private dialog: MatDialog,
+    ) { }
 
   contrasena: string;
   inputType: string = "password";
@@ -33,6 +47,7 @@ export class UsuarioComponent implements OnInit {
   privilegios: Privilegios[] = [];
   privilegio: string = "0";  
   usuarios: Usuario[] = [];
+  persona: personaModal;
 
   consultarUsuarios() {
     this.usuarioService.consultarUsuarios(localStorage.getItem('miCuenta.getToken'))
@@ -74,20 +89,34 @@ export class UsuarioComponent implements OnInit {
     }
   }
 
+  apellidos: string;
+  correoModal: string;
+  nombres: string;
+  numeroDocumento: string;
+  numeroExtra: boolean = true;
+  telefonoModal1: string;
+  telefonoModal2: string;
+  telefonoModal3: string;
+  tipoDocumento: string = "0";
+
   abrirModel(){
     let dialogRef = this.dialog.open(ModalUsuarioComponent, {
       width: '550px',
       height: '430px',
       data: {
-        name: "cesar",
+        nombres: this.nombres,
+        apellidos: this.apellidos,
+        tipoDocumento: this.tipoDocumento,
+        telefono1: this.telefonoModal1,
+        telefono2: this.telefonoModal2,
+        telefono3: this.telefonoModal3,
+        correo: this.correoModal
       }
     });
     dialogRef.afterClosed().subscribe(
       ok => {
         console.log(`Result: ${ok}`);
-        if(ok == "true"){
-          console.log('true');
-        }
+        this.persona = ok;
       }
     )
   }

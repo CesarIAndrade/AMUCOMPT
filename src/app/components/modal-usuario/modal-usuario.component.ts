@@ -1,13 +1,23 @@
-import { Component, OnInit, Inject, Input } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialogRef } from "@angular/material/dialog";
+
+// Services
+import { TipoDocumentoService } from 'src/app/services/tipo-documento.service';
 
 // Interfaces
 import { TipoDocumentos } from "../../interfaces/tipo-documento/tipo-documento";
-import { TipoDocumentoService } from 'src/app/services/tipo-documento.service';
-import { Persona } from 'src/app/interfaces/persona/persona';
-import { Correo } from 'src/app/interfaces/correo/correo';
-import { Telefono } from 'src/app/interfaces/telefono/telefono';
-import { Usuario } from 'src/app/interfaces/usuario/usuario';
+
+export interface personaModal{
+  nombres: string;
+  apellidos: string;
+  tipoDocumento: string;
+  numeroDocumento: string;
+  telefonoModal1: string;
+  telefonoModal2: string;
+  telefonoModal3: string;
+  correoModal: string;
+}
 
 @Component({
   selector: 'app-modal-usuario',
@@ -17,24 +27,22 @@ import { Usuario } from 'src/app/interfaces/usuario/usuario';
 export class ModalUsuarioComponent implements OnInit {
 
   constructor(private tipoDocumentoService: TipoDocumentoService,
-    @Inject(MAT_DIALOG_DATA) public data: any) { }
+    @Inject(MAT_DIALOG_DATA) private data: personaModal,
+    public dialogRef: MatDialogRef<ModalUsuarioComponent>) { }
 
-  @Input() item = {};
-  persona: Persona = {};
-  correo: Correo = {};
-  telefono: Telefono = {}
-  usuario: Usuario = {}
+  persona: personaModal = {
+    nombres: '',
+    apellidos: '',
+    tipoDocumento: '0',
+    numeroDocumento: '',
+    telefonoModal1: '',
+    telefonoModal2: '',
+    telefonoModal3: '',
+    correoModal: '',
+  };
 
-  apellidos: string;
   botonAgregarNumero: boolean = false;
-  correoModal: string;
-  nombres: string;
-  numeroDocumento: string;
   numeroExtra: boolean = true;
-  telefonoModal1: string;
-  telefonoModal2: string;
-  telefonoModal3: string;
-  tipoDocumento: string = "0";
   tipoDocumentos: TipoDocumentos[] = [];
 
   consultarTipoDocumentos() {
@@ -68,17 +76,8 @@ export class ModalUsuarioComponent implements OnInit {
     }
   }
 
-  guardarDatosPersona() {
-    // let arrayNombres = this.nombres.split(' ');
-    // let arrayApellidos = this.apellidos.split(' ');
-    // this.usuario.Persona.ApellidoPaterno = arrayApellidos[0];
-    // this.usuario.Persona.ApellidoMaterno = arrayApellidos[1];
-    // this.usuario.Persona.PrimerNombre = arrayNombres[0];
-    // this.usuario.Persona.SegundoNombre = arrayNombres[1];
-    // this.usuario.Persona.TipoDocumentos.IdTipoDocumento = this.tipoDocumento;
-    // this.usuario.Persona.NumeroDocumento = this.numeroDocumento;
-    // this.correo.CorreoValor = this.correoModal;
-    // this.telefono.Numero = this.telefonoModal;
+  cerrarModal() {
+    this.dialogRef.close();
   }
 
   ngOnInit() {
