@@ -11,6 +11,7 @@ import { CompraComponent } from "./components/compra/compra.component";
 import { VentaComponent } from "./components/venta/venta.component";
 import { Page404Component } from './components/page404/page404.component';
 import { ValidarUsuarioGuard } from './guards/validar-usuario.guard';
+import { ModalUsuarioComponent } from './components/modal-usuario/modal-usuario.component';
 
 
 const routes: Routes = [
@@ -21,7 +22,8 @@ const routes: Routes = [
     component: NavComponent,
     // canActivate: [ValidarUsuarioGuard],
     children: [
-      { path: 'usuarios', component: UsuarioComponent,
+      { 
+        path: 'usuarios', component: UsuarioComponent,
         // canActivate: [ValidarUsuarioGuard] 
       },
       { path: 'personas', component: PersonaComponent,

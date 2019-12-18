@@ -2,16 +2,18 @@ import { Component, OnInit } from '@angular/core';
 
 // Services
 import { UsuarioService } from 'src/app/services/usuario.service';
-import { TipoDocumentoService } from "../../services/tipo-documento.service";
 import { PrivilegiosService } from "../../services/privilegios.service";
 
 // Interfaces
 import { Usuario } from 'src/app/interfaces/usuario/usuario';
-import { TipoDocumentos } from "../../interfaces/tipo-documento/tipo-documento";
 import { Privilegios } from 'src/app/interfaces/privilegios/privilegios';
 
+// Functional Components
+import { MatDialog } from "@angular/material/dialog";
+
 // Components
-import { UsuarioModalComponent } from "../usuario-modal/usuario-modal.component";
+import { ModalUsuarioComponent } from "../modal-usuario/modal-usuario.component";
+import { Modulo } from 'src/app/interfaces/modulo/modulo';
 
 @Component({
   selector: 'app-usuario',
@@ -21,15 +23,15 @@ import { UsuarioModalComponent } from "../usuario-modal/usuario-modal.component"
 export class UsuarioComponent implements OnInit {
 
   constructor(private usuarioService: UsuarioService,
-    private tipoDocumentoService: TipoDocumentoService,
-    private privilegiosService: PrivilegiosService ) { }
+    private privilegiosService: PrivilegiosService,
+    private dialog: MatDialog ) { }
 
   contrasena: string;
   inputType: string = "password";
+  modulos: Modulo[] = [];
+  modulo: string = "0";
   privilegios: Privilegios[] = [];
-  privilegio: string = "0";
-  tipoDocumento: string = "0";
-  tipoDocumentos: TipoDocumentos[] = [];
+  privilegio: string = "0";  
   usuarios: Usuario[] = [];
 
   consultarUsuarios() {
@@ -39,21 +41,6 @@ export class UsuarioComponent implements OnInit {
           console.log(ok);
           this.usuarios = ok['respuesta'];
           console.log(this.usuarios);
-        }
-      )
-      .catch(
-        err => {
-          console.log(err);
-        }
-      )
-  }
-
-  consultarTipoDocumentos() {
-    this.tipoDocumentoService.consultatTipoDocumentos(localStorage.getItem('miCuenta.getToken'))
-      .then(
-        ok => {
-          console.log(ok);
-          this.tipoDocumentos = ok['respuesta'];
         }
       )
       .catch(
@@ -88,7 +75,18 @@ export class UsuarioComponent implements OnInit {
   }
 
   abrirModel(){
-    
+    let dialogRef = this.dialog.open(ModalUsuarioComponent, {
+      width: '500px',
+      height: '430px'
+    });
+    dialogRef.afterClosed().subscribe(
+      ok => {
+        console.log(`Result: ${ok}`);
+        if(ok == "true"){
+          console.log('true');
+        }
+      }
+    )
   }
 
   test() {
@@ -97,7 +95,6 @@ export class UsuarioComponent implements OnInit {
 
   ngOnInit() {
     this.consultarUsuarios();
-    this.consultarTipoDocumentos();
     this.consultarPrivilegios();
   }
 

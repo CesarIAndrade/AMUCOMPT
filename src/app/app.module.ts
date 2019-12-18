@@ -12,6 +12,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatDialogModule } from "@angular/material/dialog";
 
 // Components
 import { UsuarioComponent } from './components/usuario/usuario.component';
@@ -26,6 +27,7 @@ import { VentaComponent } from './components/venta/venta.component';
 // Functional Components
 import { HttpClientModule } from "@angular/common/http";
 import { FormsModule } from "@angular/forms";
+import { ModalUsuarioComponent } from './components/modal-usuario/modal-usuario.component';
 
 @NgModule({
   declarations: [
@@ -37,7 +39,8 @@ import { FormsModule } from "@angular/forms";
     NavComponent,
     InventarioComponent,
     CompraComponent,
-    VentaComponent
+    VentaComponent,
+    ModalUsuarioComponent
   ],
   imports: [
     BrowserModule,
@@ -51,8 +54,11 @@ import { FormsModule } from "@angular/forms";
     MatListModule,
     MatFormFieldModule,
     HttpClientModule,
-    MatFormFieldModule,
-    FormsModule
+    FormsModule,
+    MatDialogModule
+  ],
+  entryComponents: [ 
+    ModalUsuarioComponent 
   ],
   providers: [],
   bootstrap: [AppComponent]
