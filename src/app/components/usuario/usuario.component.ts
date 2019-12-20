@@ -7,6 +7,7 @@ import { PrivilegiosService } from "../../services/privilegios.service";
 // Interfaces
 import { Usuario } from 'src/app/interfaces/usuario/usuario';
 import { Privilegios } from 'src/app/interfaces/privilegios/privilegios';
+import { PersonaModal } from "../../interfaces/persona/persona-modal";
 
 // Functional Components
 import { MatDialog } from "@angular/material/dialog";
@@ -14,18 +15,6 @@ import { MatDialog } from "@angular/material/dialog";
 // Components
 import { ModalUsuarioComponent } from "../modal-usuario/modal-usuario.component";
 import { Modulo } from 'src/app/interfaces/modulo/modulo';
-import { Persona } from 'src/app/interfaces/persona/persona';
-
-export interface personaModal{
-  nombres: string;
-  apellidos: string;
-  tipoDocumento: string;
-  numeroDocumento: string;
-  telefonoModal1: string;
-  telefonoModal2: string;
-  telefonoModal3: string;
-  correoModal: string;
-}
 
 @Component({
   selector: 'app-usuario',
@@ -44,10 +33,10 @@ export class UsuarioComponent implements OnInit {
   inputType: string = "password";
   modulos: Modulo[] = [];
   modulo: string = "0";
+  persona: PersonaModal;
   privilegios: Privilegios[] = [];
   privilegio: string = "0";  
   usuarios: Usuario[] = [];
-  persona: personaModal;
 
   consultarUsuarios() {
     this.usuarioService.consultarUsuarios(localStorage.getItem('miCuenta.getToken'))
@@ -102,7 +91,7 @@ export class UsuarioComponent implements OnInit {
   abrirModel(){
     let dialogRef = this.dialog.open(ModalUsuarioComponent, {
       width: '550px',
-      height: '430px',
+      height: '400px',
       data: {
         nombres: this.nombres,
         apellidos: this.apellidos,
@@ -117,6 +106,7 @@ export class UsuarioComponent implements OnInit {
       ok => {
         console.log(`Result: ${ok}`);
         this.persona = ok;
+        console.log(this.persona);
       }
     )
   }

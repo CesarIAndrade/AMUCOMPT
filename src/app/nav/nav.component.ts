@@ -1,49 +1,28 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Observable } from 'rxjs';
-import { map, shareReplay } from 'rxjs/operators';
+import { map, filter, withLatestFrom } from 'rxjs/operators';
+import { Router, NavigationEnd } from '@angular/router';
+import { MatSidenav } from '@angular/material';
 
 @Component({
   selector: 'app-nav',
   templateUrl: './nav.component.html',
   styleUrls: ['./nav.component.css']
 })
-export class NavComponent implements OnInit {
+export class NavComponent {
+  @ViewChild('drawer', { static: true }) drawer: MatSidenav;
 
   isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
     .pipe(
-      map(result => result.matches),
-      shareReplay()
+      map(result => result.matches)
     );
 
-  ngOnInit(){
-    document.getElementById("menu-cuenta").hidden=true;
+  constructor(private breakpointObserver: BreakpointObserver,
+    router: Router) {
+    router.events.pipe(
+      withLatestFrom(this.isHandset$),
+      filter(([a, b]) => b && a instanceof NavigationEnd)
+    ).subscribe(_ => this.drawer.close());
   }
-
-  constructor(private breakpointObserver: BreakpointObserver) {
-    //document.getElementById("menu-cuenta").hidden=false;
-  }
-
-  menu_cuenta(){
-    //console.log('log');
-    
-    // const menu_cuenta :HTMLElement = document.getElementById('menu-cuenta');
-     
-    if (document.getElementById("menu-cuenta").hidden==true) {
-      // document.getElementById("menu-cuenta").classList.remove("animated"); //flipInX
-      // document.getElementById("menu-cuenta").classList.remove("flipInX"); //flipInX
-      // document.getElementById("menu-cuenta").classList.add("animated");
-      // document.getElementById("menu-cuenta").classList.add("flipInX");
-      document.getElementById("menu-cuenta").hidden=false;
-    }
-    else if (document.getElementById("menu-cuenta").hidden==false) {
-      // document.getElementById("menu-cuenta").classList.remove("animated"); //flipInX
-      // document.getElementById("menu-cuenta").classList.remove("flipInX"); //flipInX
-      // document.getElementById("menu-cuenta").classList.add("animated");
-      // document.getElementById("menu-cuenta").classList.add("flipInX");
-      document.getElementById("menu-cuenta").hidden=true;
-    }
-    //menu_cuenta.hidden = false;
-  }
-
 }

@@ -1,104 +1,84 @@
 <br>
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-12">
-            <div class="form-group row">
-                <label class="col-sm-2 col-form-label col-form-label-sm">Nombres:</label>
-                <div class="col-sm-10">
-                    <input [(ngModel)]="nombres" type="text" class="form-control form-control-sm" name="nombres"
-                        placeholder="Juan Carlos">
-                </div>
-            </div>
-            <div class="form-group row">
-                <label class="col-sm-2 col-form-label col-form-label-sm">Apellidos:</label>
-                <div class="col-sm-10">
-                    <input [(ngModel)]="apellidos" type="text" class="form-control form-control-sm" name="apellidos"
-                        placeholder="Zambrano Zambrano">
-                </div>
-            </div>
-            <div class="form-group row">
-                <label class="col-sm-2 col-form-label col-form-label-sm">Documento:</label>
-                <div class="col-sm-5">
-                    <select [(ngModel)]="tipoDocumento" type="text" class="form-control form-control-sm"
-                        name="tipoDocumento">
-                        <option value="" disabled selected>Seleccione Tipo Documento</option>
-                        <option *ngFor="let item of tipoDocumentos" value="{{item.IdTipoDocumento}}">
-                            {{ item.Documento }} </option>
-                    </select>
-                </div>
-                <div class="col-sm-5">
-                    <input [(ngModel)]="numeroDocumento" type="text" class="form-control form-control-sm"
-                        name="numeroDocumento" placeholder="1316463700">
-                </div>
+<div class="col-lg-4 col-md-5" style="float: left;">
+    <div class="card ">
+        <div class="card-header" style="text-align: center;">
+            Nueva Persona
+        </div>
+        <div class="card-body">
+            <div class="form-group">
+                <input [(ngModel)]="nombres" type="text" class="form-control" placeholder="Ingrese Nombres">
             </div>
 
-            <div class="form-group row">
-                <label class="col-sm-2 col-form-label col-form-label-sm">Telefono:</label>
-                <div class="col-sm-4">
-                    <input [(ngModel)]="telefono" type="text" class="form-control form-control-sm"
-                        name="telefono" placeholder="0995785236">
-                </div>
-                <label class="col-sm-2 col-form-label col-form-label-sm">Correo:</label>
-                <div class="col-sm-4">
-                    <input [(ngModel)]="correo" type="email" class="form-control form-control-sm"
-                        name="correo" placeholder="ejemplo@ejemplo.com">
-                </div>
+            <div class="form-group">
+                <input [(ngModel)]="apellidos" type="text" class="form-control" placeholder="Ingrese Apellidos">
             </div>
-            <div class="form-group row">
-                <div class="col-sm-12">
-                    <input type="button" class="btn btn-sm btn-block btn-primary" (click)="crearPersona()"
-                        value="Guardar">
-                </div>
+
+            <div class="form-group">
+                <select [(ngModel)]="tipoDocumento" type="text" class="form-control">
+                    <option value="0">Seleccione Tipo Documento</option>
+                    <option *ngFor="let item of tipoDocumentos" value="{{item.IdTipoDocumento}}">
+                        {{ item.Documento }} </option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <input [(ngModel)]="numeroDocumento" type="text" class="form-control" name="numeroDocumento"
+                    placeholder="Ingrese Número Documento">
+            </div>
+
+            <div class="form-group">
+                <input [(ngModel)]="telefono" type="text" class="form-control" placeholder="Ingrese Numero Telefono">
+            </div>
+
+            <div class="form-group">
+                <input [(ngModel)]="correo" type="email" class="form-control" placeholder="Ingrese Correo">
+            </div>
+
+            <div class="form-group">
+                <input type="button" class="form-control btn-primary" (click)="crearPersona()" value="Guardar">
             </div>
         </div>
     </div>
-    <br>
-    <div class="row">
-        <div class="col-md-12">
-            <div class="form-group row">
-                <label for="colFormLabelSm" class="col-sm-2 col-form-label col-form-label-sm">Filtro:</label>
-                <div class="col-sm-10">
-                    <input type="email" class="form-control form-control-sm" id="colFormLabelSm"
-                        placeholder="Ejem. Zambrano Zambrano">
-                </div>
-            </div>
-        </div>
-        <div class="col-md-12">
-            <div class="table-responsive-sm">
-                <table class="table table-sm">
-                    <thead class="thead-dark">
-                        <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Nombres</th>
-                            <th scope="col">Apellidos</th>
-                            <th scope="col">Documento</th>
-                            <th scope="col">No. Documento</th>
-                            <th scope="col" colspan="3" style="text-align: center;">Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let item of personas, index as i">
-                            <th scope="row"> {{ i }} </th>
-                            <td> {{ item.PrimerNombre }} {{ item.SegundoNombre }} </td>
-                            <td> {{ item.ApellidoPaterno }} {{ item.ApellidoMaterno }} </td>
-                            <td> {{ item.TipoDocumentos.Documento }} </td>
-                            <td> {{ item.NumeroDocumento }} </td>
-                            <td>
-                                <button class="btn btn-sm btn-outline-primary separacion-botones"><i class="fa fa-eye"
-                                        aria-hidden="true"></i></button>
-                            </td>
-                            <td>
-                                <button class="btn btn-sm btn-outline-info separacion-botones"><i
-                                        class="fa fa-pencil-square-o" aria-hidden="true"></i> </button>
-                            </td>
-                            <td>
-                                <button class="btn btn-sm btn-outline-danger separacion-botones"><i class="fa fa-trash"
-                                        aria-hidden="true"></i></button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
+</div>
+
+<div class="col-lg-8 col-md-7" style="float: right;">
+    <div class="form-group input-container">
+        <i class="fa fa-search icon"></i>
+        <input type="text" class="form-control input-field" placeholder="Ejem. Zambrano Zambrano">
+    </div>
+    <div class="table-responsive-sm">
+        <table class="table table-sm">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Nombres</th>
+                    <th scope="col">Apellidos</th>
+                    <th scope="col">Documento</th>
+                    <th scope="col">No. Documento</th>
+                    <th scope="col" colspan="3" style="text-align: center;">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of personas, index as i">
+                    <th scope="row"> {{ i }} </th>
+                    <td> {{ item.PrimerNombre }} {{ item.SegundoNombre }} </td>
+                    <td> {{ item.ApellidoPaterno }} {{ item.ApellidoMaterno }} </td>
+                    <td> {{ item.TipoDocumentos.Documento }} </td>
+                    <td> {{ item.NumeroDocumento }} </td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-primary separacion-botones"><i class="fa fa-eye"
+                                aria-hidden="true"></i></button>
+                    </td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-info separacion-botones"><i class="fa fa-pencil-square-o"
+                                aria-hidden="true"></i> </button>
+                    </td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-danger separacion-botones"><i class="fa fa-trash"
+                                aria-hidden="true"></i></button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 </div>

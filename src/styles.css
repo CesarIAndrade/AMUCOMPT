@@ -10986,3 +10986,27 @@
   .fondo-color {
     background-color: #f863d5 !important;
   }
+
+
+/* My Styles */
+  * {box-sizing: border-box;}
+
+.input-container {
+  display: flex;
+  width: 100%;
+  margin-bottom: 15px;
+}
+
+.icon {
+  padding: 13px;
+  background: #17a2b8;
+  color: white;
+  min-width: 50px;
+  text-align: center;
+}
+
+.input-field {
+  width: 100%;
+  padding: 10px;
+  outline: none;
+}

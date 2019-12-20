@@ -7,17 +7,7 @@ import { TipoDocumentoService } from 'src/app/services/tipo-documento.service';
 
 // Interfaces
 import { TipoDocumentos } from "../../interfaces/tipo-documento/tipo-documento";
-
-export interface personaModal{
-  nombres: string;
-  apellidos: string;
-  tipoDocumento: string;
-  numeroDocumento: string;
-  telefonoModal1: string;
-  telefonoModal2: string;
-  telefonoModal3: string;
-  correoModal: string;
-}
+import { PersonaModal } from "../../interfaces/persona/persona-modal";
 
 @Component({
   selector: 'app-modal-usuario',
@@ -27,10 +17,12 @@ export interface personaModal{
 export class ModalUsuarioComponent implements OnInit {
 
   constructor(private tipoDocumentoService: TipoDocumentoService,
-    @Inject(MAT_DIALOG_DATA) private data: personaModal,
+    @Inject(MAT_DIALOG_DATA) private data: PersonaModal,
     public dialogRef: MatDialogRef<ModalUsuarioComponent>) { }
 
-  persona: personaModal = {
+  botonAgregarNumero: boolean = false;
+  numeroExtra: boolean = true;
+  persona: PersonaModal = {
     nombres: '',
     apellidos: '',
     tipoDocumento: '0',
@@ -40,9 +32,6 @@ export class ModalUsuarioComponent implements OnInit {
     telefonoModal3: '',
     correoModal: '',
   };
-
-  botonAgregarNumero: boolean = false;
-  numeroExtra: boolean = true;
   tipoDocumentos: TipoDocumentos[] = [];
 
   consultarTipoDocumentos() {

@@ -19,7 +19,15 @@ export class PersonaComponent implements OnInit {
     private personaService: PersonaService,
     private tipoDocumentoService: TipoDocumentoService ) { }
 
+  apellidos: string;
+  correo: string;
+  direccion: string;
+  nombres: string;
+  numeroDocumento: string;
   personas: Persona[] = [];
+  telefono: string;
+  tipoDocumento: string = "0";
+
   consultarPersonas(){
     this.personaService.consultarPersonas(localStorage.getItem('miCuenta.getToken'))
       .subscribe(
@@ -47,13 +55,6 @@ export class PersonaComponent implements OnInit {
       )
   }
 
-  nombres: string;
-  apellidos: string;
-  tipoDocumento: string;
-  numeroDocumento: string;
-  telefono: string;
-  correo: string;
-  direccion: string;
   crearPersona(){
     console.log(this.tipoDocumento);
     

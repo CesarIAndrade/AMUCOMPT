@@ -7,7 +7,7 @@
             <input matInput [(ngModel)]="persona.nombres" type="text" class="form-control form-control-sm" placeholder="Ingrese Nombres"
                 required>
         </div>
-        <div class="col-sm-6">
+        <div class="col-sm-6 screen-size">
             <input matInput [(ngModel)]="persona.apellidos" type="text" class="form-control form-control-sm"
                 placeholder="Ingrese Apellidos" required>
         </div>
@@ -22,7 +22,7 @@
                     {{ item.Documento }} </option>
             </select>
         </div>
-        <div class="col-sm-6">
+        <div class="col-sm-6 screen-size">
             <input matInput [(ngModel)]="persona.numeroDocumento" type="text" class="form-control form-control-sm"
                 placeholder="Ingrese Numero Documento" required>
         </div>
@@ -33,12 +33,12 @@
             <input matInput [(ngModel)]="persona.telefonoModal1" type="text" class="form-control form-control-sm"
                 placeholder="Ingrese Primer Telefono" required>
         </div>
-        <div class="col-sm-5">
+        <div class="col-sm-5 screen-size">
             <input matInput [(ngModel)]="persona.telefonoModal2" type="text" class="form-control form-control-sm"
                 placeholder="Ingrese Segundo Telefono" required>
         </div>
-        <div class="col-sm-2">
-            <button [disabled]="botonAgregarNumero" type="button" class="btn btn-sm" style="background-color: #4582EC; margin-top: 3px;" (click)="agregarTelefono()"><i
+        <div class="col-sm-2 screen-size">
+            <button [disabled]="botonAgregarNumero" type="button" class="form-control form-control-sm" style="background-color: #4582EC;" (click)="agregarTelefono()"><i
                     class="fa fa-plus" style="color: white" aria-hidden="true"></i>
             </button>
         </div>
@@ -49,8 +49,8 @@
             <input matInput [(ngModel)]="persona.telefonoModal3" type="text" class="form-control form-control-sm"
                 placeholder="Ingrese Tercer Telefono" required>
         </div>
-        <div class="col-sm-2" style="margin-top: 3px;">
-            <button type="button" class="btn btn-sm" style="background-color: #d9534f;" (click)="quitarTelefono()"><i
+        <div class="col-sm-2 screen-size">
+            <button type="button" class="form-control form-control-sm" style="background-color: #d9534f;" (click)="quitarTelefono()"><i
                     class="fa fa-times" style="color: white" aria-hidden="true"></i>
             </button>
         </div>
