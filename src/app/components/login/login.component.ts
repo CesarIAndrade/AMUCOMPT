@@ -21,7 +21,7 @@ export class LoginComponent implements OnInit {
   contrasena: string;
   ngOnInit() {
     setTimeout(() => {
-      document.getElementById("loadingPage").hidden = true;
+      document.getElementById('loadingPage').hidden = true;
     }, 1000);
     this.consultarTokens();
   }

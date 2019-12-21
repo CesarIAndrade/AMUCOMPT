@@ -1,7 +1,7 @@
 import { Provincia } from "../provincia/provincia";
 
 export interface Canton {
-    TdCanton?: string;
+    IdCanton?: string;
     Descripcion?: string;
     Provincia?: Provincia;
     FechaCreacion?: string;

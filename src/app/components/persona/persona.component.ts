@@ -1,12 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 
 // Services
 import { PersonaService } from "../../services/persona.service";
-import { TipoDocumentoService } from "../../services/tipo-documento.service";
 
 // Interfaces
 import { Persona } from "../../interfaces/persona/persona";
 import { TipoDocumentos } from "../../interfaces/tipo-documento/tipo-documento";
+
+// Components
+import { TabsUsuarioComponent } from '../tabs-usuario/tabs-usuario.component';
 
 @Component({
   selector: 'app-persona',
@@ -17,35 +19,33 @@ export class PersonaComponent implements OnInit {
 
   constructor(
     private personaService: PersonaService,
-    private tipoDocumentoService: TipoDocumentoService ) { }
+    @Inject(TabsUsuarioComponent) private tabsUsuarioComponent: TabsUsuarioComponent ) { }
 
   apellidos: string;
-  correo: string;
-  direccion: string;
   nombres: string;
   numeroDocumento: string;
+  tipoDocumento: string = '0';
+
   personas: Persona[] = [];
-  telefono: string;
-  tipoDocumento: string = "0";
+  tipoDocumentos: TipoDocumentos[] = [];
 
   consultarPersonas(){
     this.personaService.consultarPersonas(localStorage.getItem('miCuenta.getToken'))
-      .subscribe(
-        data => {
-          this.personas = data.respuesta;
-          console.log(data.respuesta);
+      .then(
+        ok => {
+          this.personas = ok['respuesta'];
+          console.log(this.personas);
         },
         err => console.log(err)
       )
   }
 
-  tipoDocumentos: TipoDocumentos[] = [];
   consultarTipoDocumentos(){
-    this.tipoDocumentoService.consultatTipoDocumentos(localStorage.getItem('miCuenta.getToken'))
+    this.personaService.consultatTipoDocumentos(localStorage.getItem('miCuenta.getToken'))
       .then(
         ok => {
           this.tipoDocumentos = ok['respuesta'];
-          console.log(ok['respuesta']);
+          console.log(this.tipoDocumentos);
         },
       )
       .catch(
@@ -55,16 +55,13 @@ export class PersonaComponent implements OnInit {
       )
   }
 
-  crearPersona(){
-    console.log(this.tipoDocumento);
-    
-    
-    this.consultarPersonas();
+  changeTabIndex(){
+    this.tabsUsuarioComponent.changeTabIndex(1);
   }
 
   ngOnInit() {
-    this.consultarPersonas();
-    this.consultarTipoDocumentos();
+    // this.consultarPersonas();
+    // this.consultarTipoDocumentos();
   }
 
 }

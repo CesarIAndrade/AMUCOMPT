@@ -19,10 +19,16 @@ export class NavComponent {
     );
 
   constructor(private breakpointObserver: BreakpointObserver,
-    router: Router) {
+    private router: Router) {
     router.events.pipe(
       withLatestFrom(this.isHandset$),
       filter(([a, b]) => b && a instanceof NavigationEnd)
     ).subscribe(_ => this.drawer.close());
+  }
+
+  ac(){
+    if(this.router.url === "/inicio/usuarios"){
+      document.getElementById('cu').style.backgroundColor = '#fff'
+    }
   }
 }

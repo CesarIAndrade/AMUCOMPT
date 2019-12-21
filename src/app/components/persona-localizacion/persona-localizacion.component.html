@@ -1,0 +1,94 @@
+<br>
+<div class="container">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header" style="text-align: center;">
+                    Contacto
+                </div>
+                <div class="card-body">
+                    <div class="form-group">
+                        <input [(ngModel)]="telefono1" type="text" class="form-control"
+                            placeholder="Ingrese Primer Telefono" required>
+                    </div>
+                    <div class="form-group">
+                        <input [(ngModel)]="telefono2" type="text" class="form-control"
+                            placeholder="Ingrese Segundo Telefono" required>
+                    </div>
+                    <div class="form-group">
+                        <button [disabled]="botonAgregarNumero" type="button" class="form-control"
+                            style="background-color: #4582EC;" (click)="agregarTelefono()"><i class="fa fa-plus"
+                                style="color: white" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                    <div class="form-group" [hidden]="numeroExtra">
+                        <input [(ngModel)]="telefono3" type="text" class="form-control"
+                            placeholder="Ingrese Tercer Telefono" required>
+                    </div>
+                    <div class="form-group" [hidden]="numeroExtra">
+                        <button type="button" class="form-control" style="background-color: #d9534f;"
+                            (click)="quitarTelefono()"><i class="fa fa-times" style="color: white"
+                                aria-hidden="true"></i>
+                        </button>
+                    </div>
+                    <div class="form-group">
+                        <input [(ngModel)]="correo" type="email" class="form-control" placeholder="Ingrese Correo">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header" style="text-align: center;">
+                    Dirección
+                </div>
+                <div class="card-body">
+                    <div class="form-group">
+                        <select [(ngModel)]="provincia" type="text" class="form-control" required>
+                            <option value="0" disabled>Seleccionar Provincia </option>
+                            <option *ngFor="let item of provincias" value="{{item.IdProvincia}}">
+                                {{ item.Descripcion }}
+                            </option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <select [(ngModel)]="canton" type="text" class="form-control" required>
+                            <option value="0" disabled>Seleccionar Cantón </option>
+                            <option *ngFor="let item of cantones" value="{{item.IdCanton}}">
+                                {{ item.Descripcion }}
+                            </option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <select [(ngModel)]="parroquia" type="text" class="form-control" required>
+                            <option value="0" disabled>Seleccionar Parroquia</option>
+                            <option *ngFor="let item of parroquias" value="{{item.IdParroquia}}">
+                                {{ item.Descripcion }}
+                            </option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <select [(ngModel)]="comunidad" type="text" class="form-control" required>
+                            <option value="0" disabled>Seleccionar Comunidad</option>
+                            <option *ngFor="let item of comunidades" value="{{item.IdComunidad}}">
+                                {{ item.Descripcion }}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <div class="form-group">
+                        <input type="button" [class]="claseIfPersona" [value]="nombreBotonIfPersona" (click)="changeTabIndexAv()">
+                    </div>
+                    <div [hidden]="hideIfPersona" class="form-group" style="display: flex; align-items: flex-end;">
+                        <input type="button" class="form-control btn-success" value="Siguiente Paso" (click)="changeTabIndexRe()">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -11,15 +11,124 @@ export class PersonaService {
 
   constructor(private http: HttpClient) { }
 
-  private apiUrl:string = "http://192.168.25.15:90/api/";
-  private _headers = new HttpHeaders({'Content-Type':'application/json'});
-  private _params = new HttpParams();
-  
-  consultarPersonas(_token: string){
-    return this.http.get<PersonasResult>(`${this.apiUrl}TalentoHumano/ListaUsuariosClientes/${_token}`);
+  private apiUrl: string = "http://192.168.25.15:90/api/";
+
+  consultarPersonas(_token: string) {
+    const body = new HttpParams()
+    .set('encriptada', _token)
+
+    return new Promise((resolve, reject) => {
+
+      this.http.post(this.apiUrl + 'TalentoHumano/ListaUsuariosClientes/', body.toString(),
+      {
+        headers: new HttpHeaders()
+          .set('Content-Type', 'application/x-www-form-urlencoded')
+      }
+    )
+        .subscribe(res => {
+          resolve(res);
+        }, (err) => {
+          reject(err);
+        })
+    })
   }
 
-  crearPersona(){
-    
+  consultatTipoDocumentos(_token: string) {
+    const body = new HttpParams()
+    .set('encriptada', _token)
+
+    return new Promise((resolve, reject) => {
+      this.http.post(this.apiUrl + 'TalentoHumano/ConsultarTipoDocumento/',
+      body.toString(),
+      {
+        headers: new HttpHeaders()
+          .set('Content-Type', 'application/x-www-form-urlencoded')
+      })
+        .subscribe(res => {
+          resolve(res);
+        }, (err) => {
+          reject(err);
+        })
+    });
+  }
+
+  consultarProvincias(_token: string){
+    const body = new HttpParams()
+    .set('encriptada', _token)
+
+    return new Promise((resolve, reject) => {
+      this.http.post(this.apiUrl + 'TalentoHumano/ListaProvincia/', 
+      body.toString(),
+        {
+          headers: new HttpHeaders()
+            .set('Content-Type', 'application/x-www-form-urlencoded')
+        })
+        .subscribe(res => {
+          resolve(res);
+        }, (err) => {
+          reject(err);
+        })
+    })
+  }
+
+  consultarCantones(_token: string){
+    const body = new HttpParams()
+    .set('encriptada', _token)
+
+    return new Promise((resolve, reject) => {
+      this.http.post(this.apiUrl + 'TalentoHumano/ListaCantones/',
+      body.toString(),
+        {
+          headers: new HttpHeaders()
+            .set('Content-Type', 'application/x-www-form-urlencoded')
+        })
+        .subscribe(res => {
+          resolve(res);
+        }, (err) => {
+          reject(err);
+        })
+    })
+  }
+
+  consultarParroquias(_token: string){
+    const body = new HttpParams()
+    .set('encriptada', _token)
+
+    return new Promise((resolve, reject) => {
+      this.http.post(this.apiUrl + 'TalentoHumano/ListaParroquia/',
+      body.toString(),
+        {
+          headers: new HttpHeaders()
+            .set('Content-Type', 'application/x-www-form-urlencoded')
+        })
+        .subscribe(res => {
+          resolve(res);
+        }, (err) => {
+          reject(err);
+        })
+    })
+  }
+
+  consultarComunidades(_token: string){
+    const body = new HttpParams()
+    .set('encriptada', _token)
+
+    return new Promise((resolve, reject) => {
+      this.http.post(this.apiUrl + 'TalentoHumano/ListaComunidad/',
+      body.toString(),
+        {
+          headers: new HttpHeaders()
+            .set('Content-Type', 'application/x-www-form-urlencoded')
+        })
+        .subscribe(res => {
+          resolve(res);
+        }, (err) => {
+          reject(err);
+        })
+    })
+  }
+
+  crearPersona() {
+
   }
 }

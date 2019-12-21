@@ -1,9 +1,11 @@
 <br>
-<div class="col-lg-4 col-md-5" style="float: left;">
+<div class="col-lg-4 col-md-5" style="float: left;" #tabGroup>
     <div class="card ">
+
         <div class="card-header" style="text-align: center;">
             Nueva Persona
         </div>
+
         <div class="card-body">
             <div class="form-group">
                 <input [(ngModel)]="nombres" type="text" class="form-control" placeholder="Ingrese Nombres">
@@ -20,22 +22,14 @@
                         {{ item.Documento }} </option>
                 </select>
             </div>
-
             <div class="form-group">
                 <input [(ngModel)]="numeroDocumento" type="text" class="form-control" name="numeroDocumento"
                     placeholder="Ingrese Número Documento">
             </div>
 
             <div class="form-group">
-                <input [(ngModel)]="telefono" type="text" class="form-control" placeholder="Ingrese Numero Telefono">
-            </div>
-
-            <div class="form-group">
-                <input [(ngModel)]="correo" type="email" class="form-control" placeholder="Ingrese Correo">
-            </div>
-
-            <div class="form-group">
-                <input type="button" class="form-control btn-primary" (click)="crearPersona()" value="Guardar">
+                <input type="button" class="form-control btn-success" 
+                (click)="changeTabIndex()" value="Siguiente Paso">
             </div>
         </div>
     </div>
@@ -48,7 +42,7 @@
     </div>
     <div class="table-responsive-sm">
         <table class="table table-sm">
-            <thead class="thead-dark">
+            <thead class="card-header">
                 <tr>
                     <th scope="col">#</th>
                     <th scope="col">Nombres</th>

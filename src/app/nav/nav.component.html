@@ -4,7 +4,7 @@
     [opened]="(isHandset$ | async) === false">
     <mat-toolbar class="text-white bg-primary" routerLink="/inicio">Menu</mat-toolbar>
     <mat-nav-list>
-      <div class="animated flipInX">
+      <div class="animated flipInX" id="cu">
         <a mat-list-item routerLink="/inicio/usuarios" style="color: white;">
           <i style="margin-right: 10px;" class="fa fa-user" aria-hidden="true"></i>Usuarios
         </a>
@@ -48,7 +48,7 @@
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>
-    <mat-toolbar class="bg-light">
+    <mat-toolbar class="card-header">
       <a type="button" mat-icon-button (click)="drawer.toggle()" *ngIf="isHandset$ | async">
         <mat-icon>menu</mat-icon>
       </a>

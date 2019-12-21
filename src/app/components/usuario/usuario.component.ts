@@ -1,8 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 
 // Services
 import { UsuarioService } from 'src/app/services/usuario.service';
-import { PrivilegiosService } from "../../services/privilegios.service";
 
 // Interfaces
 import { Usuario } from 'src/app/interfaces/usuario/usuario';
@@ -15,6 +14,7 @@ import { MatDialog } from "@angular/material/dialog";
 // Components
 import { ModalUsuarioComponent } from "../modal-usuario/modal-usuario.component";
 import { Modulo } from 'src/app/interfaces/modulo/modulo';
+import { TabsUsuarioComponent } from '../tabs-usuario/tabs-usuario.component';
 
 @Component({
   selector: 'app-usuario',
@@ -25,18 +25,29 @@ export class UsuarioComponent implements OnInit {
 
   constructor(
     private usuarioService: UsuarioService,
-    private privilegiosService: PrivilegiosService,
     private dialog: MatDialog,
+    @Inject(TabsUsuarioComponent) private tabsUsuarioComponent: TabsUsuarioComponent 
     ) { }
 
   contrasena: string;
-  inputType: string = "password";
+  inputType = 'password';
   modulos: Modulo[] = [];
-  modulo: string = "0";
+  modulo = '0';
   persona: PersonaModal;
   privilegios: Privilegios[] = [];
-  privilegio: string = "0";  
+  privilegio = '0';  
   usuarios: Usuario[] = [];
+
+  // Por si se usa modal
+  apellidos: string;
+  correoModal: string;
+  nombres: string;
+  numeroDocumento: string;
+  numeroExtra = true;
+  telefonoModal1: string;
+  telefonoModal2: string;
+  telefonoModal3: string;
+  tipoDocumento = '0';
 
   consultarUsuarios() {
     this.usuarioService.consultarUsuarios(localStorage.getItem('miCuenta.getToken'))
@@ -55,7 +66,7 @@ export class UsuarioComponent implements OnInit {
   }
 
   consultarPrivilegios(){
-    this.privilegiosService.consultarPrivilegios(localStorage.getItem('miCuenta.getToken'))
+    this.usuarioService.consultarPrivilegios(localStorage.getItem('miCuenta.getToken'))
       .then(
         ok => {
           console.log(ok);
@@ -70,24 +81,15 @@ export class UsuarioComponent implements OnInit {
   }
 
   mostrarContrasena(){
-    if(this.inputType == "password"){
-      this.inputType = "text";
+    if(this.inputType == 'password'){
+      this.inputType = 'text';
     }
     else{
-      this.inputType = "password";
+      this.inputType = 'password';
     }
   }
 
-  apellidos: string;
-  correoModal: string;
-  nombres: string;
-  numeroDocumento: string;
-  numeroExtra: boolean = true;
-  telefonoModal1: string;
-  telefonoModal2: string;
-  telefonoModal3: string;
-  tipoDocumento: string = "0";
-
+  // Por si se usa modal
   abrirModel(){
     let dialogRef = this.dialog.open(ModalUsuarioComponent, {
       width: '550px',
@@ -111,13 +113,13 @@ export class UsuarioComponent implements OnInit {
     )
   }
 
-  test() {
-    console.log('worked');
+  changeTabIndex(){
+    this.tabsUsuarioComponent.changeTabIndex(-1);
   }
 
   ngOnInit() {
-    this.consultarUsuarios();
-    this.consultarPrivilegios();
+    // this.consultarUsuarios();
+    // this.consultarPrivilegios();
   }
 
 }

@@ -3,7 +3,7 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatDialogRef } from "@angular/material/dialog";
 
 // Services
-import { TipoDocumentoService } from 'src/app/services/tipo-documento.service';
+import { PersonaService } from "src/app/services/persona.service";
 
 // Interfaces
 import { TipoDocumentos } from "../../interfaces/tipo-documento/tipo-documento";
@@ -16,7 +16,7 @@ import { PersonaModal } from "../../interfaces/persona/persona-modal";
 })
 export class ModalUsuarioComponent implements OnInit {
 
-  constructor(private tipoDocumentoService: TipoDocumentoService,
+  constructor(private personaService: PersonaService,
     @Inject(MAT_DIALOG_DATA) private data: PersonaModal,
     public dialogRef: MatDialogRef<ModalUsuarioComponent>) { }
 
@@ -35,11 +35,11 @@ export class ModalUsuarioComponent implements OnInit {
   tipoDocumentos: TipoDocumentos[] = [];
 
   consultarTipoDocumentos() {
-    this.tipoDocumentoService.consultatTipoDocumentos(localStorage.getItem('miCuenta.getToken'))
+    this.personaService.consultatTipoDocumentos(localStorage.getItem('miCuenta.getToken'))
       .then(
         ok => {
-          console.log(ok);
           this.tipoDocumentos = ok['respuesta'];
+          console.log(this.tipoDocumentos);
         }
       )
       .catch(

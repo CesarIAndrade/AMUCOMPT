@@ -13,6 +13,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatDialogModule } from "@angular/material/dialog";
+import { MatTabsModule } from "@angular/material/tabs";
 
 // Components
 import { UsuarioComponent } from './components/usuario/usuario.component';
@@ -28,6 +29,8 @@ import { VentaComponent } from './components/venta/venta.component';
 import { HttpClientModule } from "@angular/common/http";
 import { FormsModule } from "@angular/forms";
 import { ModalUsuarioComponent } from './components/modal-usuario/modal-usuario.component';
+import { TabsUsuarioComponent } from './components/tabs-usuario/tabs-usuario.component';
+import { PersonaLocalizacionComponent } from './components/persona-localizacion/persona-localizacion.component';
 
 @NgModule({
   declarations: [
@@ -40,7 +43,9 @@ import { ModalUsuarioComponent } from './components/modal-usuario/modal-usuario.
     InventarioComponent,
     CompraComponent,
     VentaComponent,
-    ModalUsuarioComponent
+    ModalUsuarioComponent,
+    TabsUsuarioComponent,
+    PersonaLocalizacionComponent,
   ],
   imports: [
     BrowserModule,
@@ -55,7 +60,8 @@ import { ModalUsuarioComponent } from './components/modal-usuario/modal-usuario.
     MatFormFieldModule,
     HttpClientModule,
     FormsModule,
-    MatDialogModule
+    MatDialogModule,
+    MatTabsModule,
   ],
   entryComponents: [ 
     ModalUsuarioComponent 
