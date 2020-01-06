@@ -25,14 +25,12 @@ export class PersonaLocalizacionComponent implements OnInit {
     private router: Router,
     @Inject(TabsUsuarioComponent) private tabsUsuarioComponent: TabsUsuarioComponent ) { }
 
-  hideIfPersona = false;
-  nombreBotonIfPersona = 'Paso Anterior';
-  claseIfPersona = 'form-control btn-light';
-
   botonAgregarNumero = false;
   canton = '0';
+  claseBotonSiguientePasoIfPersona = "form-control btn-success";
   comunidad = '0';
   correo: string;
+  nombreBotonSiguientePasoIfPersona = "Siguiente Paso";
   parroquia = '0';
   numeroExtra = true;
   provincia = '0';
@@ -122,18 +120,17 @@ export class PersonaLocalizacionComponent implements OnInit {
   }
   
   changeTabIndexAv(){
-    this.tabsUsuarioComponent.changeTabIndex(-1);
+    this.tabsUsuarioComponent.changeTabIndex(1);
   }
 
   changeTabIndexRe(){
-    this.tabsUsuarioComponent.changeTabIndex(1);
+    this.tabsUsuarioComponent.changeTabIndex(-1);
   }
 
   ngOnInit() {
     if (this.router.url == '/inicio/personas') {
-      this.hideIfPersona = true;
-      this.nombreBotonIfPersona = 'Guardar Persona';
-      this.claseIfPersona = 'form-control btn-primary'
+      this.claseBotonSiguientePasoIfPersona = "form-control btn-primary";
+      this.nombreBotonSiguientePasoIfPersona = "Guardar Persona";
     } 
   }
 

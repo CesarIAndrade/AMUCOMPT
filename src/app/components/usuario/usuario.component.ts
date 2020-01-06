@@ -31,14 +31,15 @@ export class UsuarioComponent implements OnInit {
 
   contrasena: string;
   inputType = 'password';
-  modulos: Modulo[] = [];
   modulo = '0';
-  persona: PersonaModal;
-  privilegios: Privilegios[] = [];
   privilegio = '0';  
+
+  modulos: Modulo[] = [];
+  privilegios: Privilegios[] = [];
   usuarios: Usuario[] = [];
 
   // Por si se usa modal
+  persona: PersonaModal;
   apellidos: string;
   correoModal: string;
   nombres: string;

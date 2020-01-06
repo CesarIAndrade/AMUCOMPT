@@ -12,7 +12,8 @@ export class TabsUsuarioComponent implements OnInit {
   ) { }
   
   tabIndex = 0;
-  disabled = false;
+  disabledIfPersona = false;
+  tabModuloUsuario = "Datos de Usuario";
 
   changeTabIndex(index) {
     this.tabIndex += index;
@@ -33,7 +34,8 @@ export class TabsUsuarioComponent implements OnInit {
 
   ngOnInit() {
     if (this.router.url == '/inicio/personas') {
-      this.disabled = true;
+      this.disabledIfPersona = true;
+      this.tabModuloUsuario = "";
     }
   }
 }

@@ -82,10 +82,10 @@
             <div class="card">
                 <div class="card-body">
                     <div class="form-group">
-                        <input type="button" [class]="claseIfPersona" [value]="nombreBotonIfPersona" (click)="changeTabIndexAv()">
+                        <input type="button" class="form-control btn-light" value="Pason Anterior" (click)="changeTabIndexRe()">
                     </div>
-                    <div [hidden]="hideIfPersona" class="form-group" style="display: flex; align-items: flex-end;">
-                        <input type="button" class="form-control btn-success" value="Siguiente Paso" (click)="changeTabIndexRe()">
+                    <div class="form-group">
+                        <input type="button" [class]="claseBotonSiguientePasoIfPersona" [value]="nombreBotonSiguientePasoIfPersona" (click)="changeTabIndexAv()">
                     </div>
                 </div>
             </div>
