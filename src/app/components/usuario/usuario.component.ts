@@ -25,13 +25,12 @@ export class UsuarioComponent implements OnInit {
   constructor(
     private usuarioService: UsuarioService,
     private dialog: MatDialog,
-    // @Inject(TabsUsuarioComponent) private tabsUsuarioComponent: TabsUsuarioComponent 
-    ) { }
+  ) { }
 
   contrasena: string;
   inputType = 'password';
   modulo = '0';
-  privilegio = '0';  
+  privilegio = '0';
 
   modulos: Modulo[] = [];
   privilegios: Privilegios[] = [];
@@ -65,7 +64,7 @@ export class UsuarioComponent implements OnInit {
       )
   }
 
-  consultarPrivilegios(){
+  consultarPrivilegios() {
     this.usuarioService.consultarPrivilegios(localStorage.getItem('miCuenta.getToken'))
       .then(
         ok => {
@@ -80,7 +79,7 @@ export class UsuarioComponent implements OnInit {
       )
   }
 
-  consultarModulos(){
+  consultarModulos() {
     this.usuarioService.consultarModulos(localStorage.getItem('miCuenta.getToken'))
       .then(
         ok => {
@@ -95,17 +94,17 @@ export class UsuarioComponent implements OnInit {
       )
   }
 
-  mostrarContrasena(){
-    if(this.inputType == 'password'){
+  mostrarContrasena() {
+    if (this.inputType == 'password') {
       this.inputType = 'text';
     }
-    else{
+    else {
       this.inputType = 'password';
     }
   }
 
   // Por si se usa modal
-  abrirModel(){
+  abrirModel() {
     let dialogRef = this.dialog.open(ModalUsuarioComponent, {
       width: '550px',
       height: '800px',
@@ -128,7 +127,7 @@ export class UsuarioComponent implements OnInit {
     )
   }
 
-  changeTabIndex(){
+  changeTabIndex() {
     // this.tabsUsuarioComponent.changeTabIndex(-1);
   }
 

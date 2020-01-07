@@ -18,18 +18,18 @@ export class ModalUsuarioComponent implements OnInit {
 
   constructor(private personaService: PersonaService,
     @Inject(MAT_DIALOG_DATA) private data: PersonaModal,
-    public dialogRef: MatDialogRef<ModalUsuarioComponent>) { }
+    public dialogRef: MatDialogRef<ModalUsuarioComponent>
+  ) { }
 
   botonAgregarNumero: boolean = false;
   numeroExtra: boolean = true;
   persona: PersonaModal = {
-    nombres: '',
-    apellidos: '',
-    tipoDocumento: '0',
-    numeroDocumento: '',
+    nombresModal: '',
+    apellidosModal: '',
+    tipoDocumentoModal: '',
+    numeroDocumentoModal: '',
     telefonoModal1: '',
     telefonoModal2: '',
-    telefonoModal3: '',
     correoModal: '',
   };
   tipoDocumentos: TipoDocumento[] = [];

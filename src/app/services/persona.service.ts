@@ -319,6 +319,26 @@ export class PersonaService {
           reject(err);
         })
     })
+  }
 
+  consultarPersonaPorId(
+    idPersona: string,
+    _token: string){
+    const body = new HttpParams()
+    .set('IdPersona', idPersona)
+    .set('encriptada', _token)
+    return new Promise((resolve, reject) => {
+      this.http.post(this.apiUrl + 'TalentoHumano/BuscarPersona', body.toString(),
+      {
+        headers: new HttpHeaders()
+          .set('Content-Type', 'application/x-www-form-urlencoded')
+      }
+    )
+        .subscribe(res => {
+          resolve(res);
+        }, (err) => {
+          reject(err);
+        })
+    })
   }
 }

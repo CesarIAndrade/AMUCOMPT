@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject, ViewChild } from '@angular/core';
 
 // Services
 import { PersonaService } from "../../services/persona.service";
@@ -12,6 +12,13 @@ import { Parroquia } from 'src/app/interfaces/parroquia/parroquia';
 import { Comunidad } from 'src/app/interfaces/comunidad/comunidad';
 import { TipoTelefono } from 'src/app/interfaces/tipo-telefono/tipo-telefono';
 import { Telefono } from 'src/app/interfaces/telefono/telefono';
+import { PersonaModal } from "src/app/interfaces/persona/persona-modal";
+
+// Functional Components
+import { MatDialog } from "@angular/material/dialog";
+
+// Components
+import { ModalDetallePersonaComponent } from "src/app/components/modal-detalle-persona/modal-detalle-persona.component";
 
 @Component({
   selector: 'app-persona',
@@ -21,25 +28,23 @@ import { Telefono } from 'src/app/interfaces/telefono/telefono';
 export class PersonaComponent implements OnInit {
 
   constructor(
-    private personaService: PersonaService
+    private personaService: PersonaService,
+    private dialog: MatDialog
   ) { }
 
   apellidos: string;
   arrayApellidos: any;
   arrayNombres: any;
-  // botonAgregarNumero = false;
   canton = '0';
   comunidad = '0';
   correo: string;
   idPersona: string;
   nombres: string;
   numeroDocumento: string;
-  // numeroExtra = true;
   parroquia = '0';
   provincia = '0';
   telefono1: string;
   telefono2: string;
-  // telefono3: string;
   tipoDocumento = "0";
   tipoTelefono1 = "0";
   tipoTelefono2 = "0";
@@ -47,27 +52,12 @@ export class PersonaComponent implements OnInit {
   cantones: Canton[] = [];
   comunidades: Comunidad[] = [];
   parroquias: Parroquia[] = [];
+  persona: PersonaModal = {};
   personas: Persona[] = [];
   provincias: Provincia[] = [];
   telefonos: Telefono[] = [];
   tipoDocumentos: TipoDocumento[] = [];
   tipoTelefonos: TipoTelefono[] = [];
-
-  // agregarTelefono() {
-  //   console.log('worked');
-  //   if (this.numeroExtra == true) {
-  //     this.numeroExtra = false;
-  //     this.botonAgregarNumero = true;
-  //   }
-  // }
-
-  // quitarTelefono() {
-  //   console.log('worked');
-  //   if (this.numeroExtra == false) {
-  //     this.numeroExtra = true;
-  //     this.botonAgregarNumero = false;
-  //   }
-  // }
 
   consultarProvincias() {
     this.personaService.consultarProvincias(localStorage.getItem('miCuenta.getToken'))
@@ -260,7 +250,7 @@ export class PersonaComponent implements OnInit {
         this.personaService.crearTelefono(
           item.IdPersona,
           item.Numero,
-          item.IdTipoTelefono, 
+          item.IdTipoTelefono,
           localStorage.getItem('miCuenta.postToken'))
           .then(
             ok => {
@@ -293,7 +283,7 @@ export class PersonaComponent implements OnInit {
       )
   }
 
-  crearDireccion(idPersona: string){
+  crearDireccion(idPersona: string) {
     this.personaService.crearDireccion(
       idPersona,
       this.comunidad,
@@ -325,7 +315,7 @@ export class PersonaComponent implements OnInit {
     this.consultarComunidadesDeUnaParroquia(value);
   }
 
-  eliminarPersona(idPersona: string){
+  eliminarPersona(idPersona: string) {
     this.personaService.eliminarPersona(
       idPersona,
       localStorage.getItem('miCuenta.deleteToken'))
@@ -339,7 +329,77 @@ export class PersonaComponent implements OnInit {
           console.log(err);
         }
       )
-      this.consultarPersonas();
+    this.consultarPersonas();
+  }
+
+  consultarPersonaPorId(idPersona: string){
+    this.personaService.consultarPersonaPorId(
+      idPersona,
+      localStorage.getItem('miCuenta.getToken'))
+      .then(
+        ok => {
+          console.log(ok['respuesta']);
+
+          this.persona.primerNombreModal = ok['respuesta']['PrimerNombre'];
+          this.persona.segundoNombreModal = ok['respuesta']['SegundoNombre'];
+          this.persona.apellidoPaternoModal = ok['respuesta']['ApellidoPaterno'];
+          this.persona.apellidoMaternoModal = ok['respuesta']['ApellidoMaterno'];
+          this.persona.tipoDocumentoModal = ok['respuesta']['TipoDocumento'];
+          this.persona.numeroDocumentoModal = ok['respuesta']['NumeroDocumento'];
+          try {
+            this.persona.telefonoModal1 = ok['respuesta']['ListaTelefono'][0]['Numero'];
+            this.persona.telefonoModal2 = ok['respuesta']['ListaTelefono'][1]['Numero'];
+            this.persona.correoModal = ok['respuesta']['ListaCorreo'][0]['CorreoValor'];
+            this.persona.comunidadModal = ok['respuesta']['AsignacionPersonaComunidad'][0]['Comunidad']['Descripcion'];
+            this.persona.parroquiaModal = ok['respuesta']['AsignacionPersonaComunidad'][0]['Comunidad']['Parroquia']['Descripcion'];
+            this.persona.cantonModal = ok['respuesta']['AsignacionPersonaComunidad'][0]['Comunidad']['Parroquia']['Canton']['Descripcion'];
+            this.persona.provinciaModal = ok['respuesta']['AsignacionPersonaComunidad'][0]['Comunidad']['Parroquia']['Canton']['Provincia']['Descripcion'];
+          } catch (error) {
+            this.persona.telefonoModal1 = null;
+            this.persona.telefonoModal2 = null;
+            this.persona.correoModal = null;
+            this.persona.comunidadModal = null;
+            this.persona.parroquiaModal = null;
+            this.persona.cantonModal = null;
+            this.persona.provinciaModal = null;
+          }
+          this.abrirModal(this.persona)
+        },
+      )
+      .catch(
+        err => {
+          console.log(err);
+        }
+      )
+  }
+
+  abrirModal(
+    persona: PersonaModal
+  ) {
+    let dialogRef = this.dialog.open(ModalDetallePersonaComponent, {
+      width: '500px',
+      height: '500px',
+      data: {
+        primerNombreModal: persona.primerNombreModal,
+        segundoNombreModal: persona.segundoNombreModal,
+        apellidoPaternoModal: persona.apellidoPaternoModal,
+        apellidoMaternoModal: persona.apellidoMaternoModal,
+        tipoDocumentoModal: persona.tipoDocumentoModal,
+        numeroDocumentoModal: persona.numeroDocumentoModal,
+        telefonoModal1: this.persona.telefonoModal1,
+        telefonoModal2: this.persona.telefonoModal2,
+        correoModal: this.persona.correoModal,
+        comunidadModal: this.persona.comunidadModal,
+        parroquiaModal: this.persona.parroquiaModal,
+        cantonModal: this.persona.cantonModal,
+        provinciaModal: this.persona.provinciaModal
+      }
+    });
+    dialogRef.afterClosed().subscribe(
+      ok => {
+        console.log(`Result: ${ok}`);
+      }
+    )
   }
 
   ngOnInit() {
