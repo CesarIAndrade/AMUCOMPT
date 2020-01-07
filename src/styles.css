@@ -10997,6 +10997,10 @@
   margin-bottom: 15px;
 }
 
+.input-container > input {
+  margin-right: 1rem;
+}
+
 .icon {
   padding: 13px;
   background: #17a2b8;

@@ -1,78 +1,189 @@
 <br>
-<div class="col-lg-4 col-md-5" style="float: left;" #tabGroup>
-    <div class="card ">
-
-        <div class="card-header" style="text-align: center;">
-            Nueva Persona
+<div class="container">
+    <div class="row">
+        <div class="col-lg-4 col-md-6">
+            <div class="card">
+                <div class="card-header" style="text-align: center;">
+                    Nueva Persona
+                </div>
+                <div class="card-body">
+                    <div class="form-group">
+                        <input [(ngModel)]="nombres" type="text" class="form-control" placeholder="Ingrese Nombres">
+                    </div>
+                    <div class="form-group">
+                        <input [(ngModel)]="apellidos" type="text" class="form-control" placeholder="Ingrese Apellidos">
+                    </div>
+                    <div class="form-group">
+                        <select [(ngModel)]="tipoDocumento" type="text" class="form-control">
+                            <option value="0">Seleccione Tipo Documento</option>
+                            <option *ngFor="let item of tipoDocumentos" value="{{item.IdTipoDocumento}}">
+                                {{ item.Documento }} </option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <input [(ngModel)]="numeroDocumento" type="text" class="form-control"
+                            placeholder="Ingrese Número Documento">
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <div class="card-body">
-            <div class="form-group">
-                <input [(ngModel)]="nombres" type="text" class="form-control" placeholder="Ingrese Nombres">
-            </div>
+        <div class="col-lg-4 col-md-6">
+            <div class="card">
+                <div class="card-header" style="text-align: center;">
+                    Contacto
+                </div>
+                <div class="card-body">
+                    <div class="form-group input-container">
+                        <input [(ngModel)]="telefono1" type="text" class="form-control input-field"
+                            placeholder="Primer Telefono" required>
+                        <select [(ngModel)]="tipoTelefono1" type="text" class="form-control" required>
+                            <option value="0" disabled>Tipo</option>
+                            <option *ngFor="let item of tipoTelefonos" value="{{item.IdTipoTelefono}}">
+                                {{ item.Descripcion }}
+                            </option>
+                        </select>
+                    </div>
+                    <div class="form-group input-container">
+                        <input [(ngModel)]="telefono2" type="text" class="form-control input-field"
+                            placeholder="Segundo Telefono" required>
+                        <select [(ngModel)]="tipoTelefono2" type="text" class="form-control" required>
+                            <option value="0" disabled>Tipo</option>
+                            <option *ngFor="let item of tipoTelefonos" value="{{item.IdTipoTelefono}}">
+                                {{ item.Descripcion }}
+                            </option>
+                        </select>
+                    </div>
 
-            <div class="form-group">
-                <input [(ngModel)]="apellidos" type="text" class="form-control" placeholder="Ingrese Apellidos">
-            </div>
+                    <!-- <div class="form-group">
+                        <button [disabled]="botonAgregarNumero" type="button" class="form-control"
+                            style="background-color: #4582EC;" (click)="agregarTelefono()"><i class="fa fa-plus"
+                                style="color: white" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                    <div class="form-group input-container" [hidden]="numeroExtra">
+                        <input [(ngModel)]="telefono3" type="text" class="form-control input-field"
+                            placeholder="Ingrese Tercer Telefono" required>
+                        <select [(ngModel)]="tipoTelefono" type="text" class="form-control" required>
+                            <option value="0" disabled>Tipo</option>
+                            <option *ngFor="let item of tipoTelefonos" value="{{item.IdTipoTelefono}}">
+                                {{ item.Descripcion }}
+                            </option>
+                        </select>
+                    </div>
 
-            <div class="form-group">
-                <select [(ngModel)]="tipoDocumento" type="text" class="form-control">
-                    <option value="0">Seleccione Tipo Documento</option>
-                    <option *ngFor="let item of tipoDocumentos" value="{{item.IdTipoDocumento}}">
-                        {{ item.Documento }} </option>
-                </select>
-            </div>
-            <div class="form-group">
-                <input [(ngModel)]="numeroDocumento" type="text" class="form-control" name="numeroDocumento"
-                    placeholder="Ingrese Número Documento">
-            </div>
+                    <div class="form-group" [hidden]="numeroExtra">
+                        <button type="button" class="form-control" style="background-color: #d9534f;"
+                            (click)="quitarTelefono()"><i class="fa fa-times" style="color: white"
+                                aria-hidden="true"></i>
+                        </button>
+                    </div> -->
 
-            <div class="form-group">
-                <input type="button" class="form-control btn-success" 
-                (click)="changeTabIndex()" value="Siguiente Paso">
+                    <div class="form-group">
+                        <input [(ngModel)]="correo" type="email" class="form-control" placeholder="Ingrese Correo">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6">
+            <div class="card">
+                <div class="card-header" style="text-align: center;">
+                    Dirección
+                </div>
+                <div class="card-body">
+                    <div class="form-group">
+                        <select [(ngModel)]="provincia" type="text"
+                            (change)="cantonesDeUnaProvincia($event.target.value)" class="form-control" required>
+                            <option value="0" disabled>Seleccionar Provincia </option>
+                            <option *ngFor="let item of provincias" value="{{item.IdProvincia}}">
+                                {{ item.Descripcion }}
+                            </option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <select [(ngModel)]="canton" type="text" (change)="parroquiasDeUnCanton($event.target.value)"
+                            class="form-control" required>
+                            <option value="0" disabled>Seleccionar Cantón </option>
+                            <option *ngFor="let item of cantones" value="{{item.IdCanton}}">
+                                {{ item.Descripcion }}
+                            </option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <select [(ngModel)]="parroquia" type="text"
+                            (change)="comunidadesDeUnaParroquia($event.target.value)" class="form-control" required>
+                            <option value="0" disabled>Seleccionar Parroquia</option>
+                            <option *ngFor="let item of parroquias" value="{{item.IdParroquia}}">
+                                {{ item.Descripcion }}
+                            </option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <select [(ngModel)]="comunidad" type="text" class="form-control" required>
+                            <option value="0" disabled>Seleccionar Comunidad</option>
+                            <option *ngFor="let item of comunidades" value="{{item.IdComunidad}}">
+                                {{ item.Descripcion }}
+                            </option>
+                        </select>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-</div>
-
-<div class="col-lg-8 col-md-7" style="float: right;">
-    <div class="form-group input-container">
-        <i class="fa fa-search icon"></i>
-        <input type="text" class="form-control input-field" placeholder="Ejem. Zambrano Zambrano">
+    <br>
+    <div class="row">
+        <div class="container">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <input type="button" class="form-control btn-success" (click)="crearPersona()" value="Guardar Persona">
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="table-responsive-sm">
-        <table class="table table-sm">
-            <thead class="card-header">
-                <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Nombres</th>
-                    <th scope="col">Apellidos</th>
-                    <th scope="col">Documento</th>
-                    <th scope="col">No. Documento</th>
-                    <th scope="col" colspan="3" style="text-align: center;">Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let item of personas, index as i">
-                    <th scope="row"> {{ i }} </th>
-                    <td> {{ item.PrimerNombre }} {{ item.SegundoNombre }} </td>
-                    <td> {{ item.ApellidoPaterno }} {{ item.ApellidoMaterno }} </td>
-                    <td> {{ item.TipoDocumentos.Documento }} </td>
-                    <td> {{ item.NumeroDocumento }} </td>
-                    <td>
-                        <button class="btn btn-sm btn-outline-primary separacion-botones"><i class="fa fa-eye"
-                                aria-hidden="true"></i></button>
-                    </td>
-                    <td>
-                        <button class="btn btn-sm btn-outline-info separacion-botones"><i class="fa fa-pencil-square-o"
-                                aria-hidden="true"></i> </button>
-                    </td>
-                    <td>
-                        <button class="btn btn-sm btn-outline-danger separacion-botones"><i class="fa fa-trash"
-                                aria-hidden="true"></i></button>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-group input-container">
+                <i class="fa fa-search icon"></i>
+                <input type="text" class="form-control input-field" placeholder="Ejem. Zambrano Zambrano">
+            </div>
+            <div class="table-responsive-sm">
+                <table class="table table-sm">
+                    <thead class="card-header">
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Nombres</th>
+                            <th scope="col">Apellidos</th>
+                            <th scope="col">Documento</th>
+                            <th scope="col">No. Documento</th>
+                            <th scope="col" colspan="3" style="text-align: center;">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of personas, index as i">
+                            <th scope="row"> {{ i }} </th>
+                            <td> {{ item.PrimerNombre }} {{ item.SegundoNombre }} </td>
+                            <td> {{ item.ApellidoPaterno }} {{ item.ApellidoMaterno }} </td>
+                            <td> {{ item.TipoDocumentos.Documento }} </td>
+                            <td> {{ item.NumeroDocumento }} </td>
+                            <td>
+                                <button class="btn btn-sm btn-outline-primary separacion-botones"><i class="fa fa-eye"
+                                        aria-hidden="true"></i></button>
+                            </td>
+                            <td>
+                                <button class="btn btn-sm btn-outline-info separacion-botones"><i
+                                        class="fa fa-pencil-square-o" aria-hidden="true"></i> </button>
+                            </td>
+                            <td>
+                                <button class="btn btn-sm btn-outline-danger separacion-botones" value="{{item.IdPersona}}" (click)="eliminarPersona($event.target.value)">
+                                    <i class="fa fa-trash" aria-hidden="true"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 </div>

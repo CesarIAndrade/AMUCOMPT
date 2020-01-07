@@ -1,9 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 
-// Interfaces
-import { PersonasResult } from "../interfaces/persona/personas-result";
-
 @Injectable({
   providedIn: 'root'
 })
@@ -16,9 +13,7 @@ export class PersonaService {
   consultarPersonas(_token: string) {
     const body = new HttpParams()
     .set('encriptada', _token)
-
     return new Promise((resolve, reject) => {
-
       this.http.post(this.apiUrl + 'TalentoHumano/ListaUsuariosClientes/', body.toString(),
       {
         headers: new HttpHeaders()
@@ -33,12 +28,29 @@ export class PersonaService {
     })
   }
 
-  consultatTipoDocumentos(_token: string) {
+  consultarTipoDocumento(_token: string) {
     const body = new HttpParams()
     .set('encriptada', _token)
-
     return new Promise((resolve, reject) => {
       this.http.post(this.apiUrl + 'TalentoHumano/ConsultarTipoDocumento/',
+      body.toString(),
+      {
+        headers: new HttpHeaders()
+          .set('Content-Type', 'application/x-www-form-urlencoded')
+      })
+        .subscribe(res => {
+          resolve(res);
+        }, (err) => {
+          reject(err);
+        })
+    });
+  }
+
+  consultarTipoTelefono(_token: string){
+    const body = new HttpParams()
+    .set('encriptada', _token)
+    return new Promise((resolve, reject) => {
+      this.http.post(this.apiUrl + 'TalentoHumano/ListaTipoTelefono/',
       body.toString(),
       {
         headers: new HttpHeaders()
@@ -55,7 +67,6 @@ export class PersonaService {
   consultarProvincias(_token: string){
     const body = new HttpParams()
     .set('encriptada', _token)
-
     return new Promise((resolve, reject) => {
       this.http.post(this.apiUrl + 'TalentoHumano/ListaProvincia/', 
       body.toString(),
@@ -74,7 +85,6 @@ export class PersonaService {
   consultarCantones(_token: string){
     const body = new HttpParams()
     .set('encriptada', _token)
-
     return new Promise((resolve, reject) => {
       this.http.post(this.apiUrl + 'TalentoHumano/ListaCantones/',
       body.toString(),
@@ -93,7 +103,6 @@ export class PersonaService {
   consultarParroquias(_token: string){
     const body = new HttpParams()
     .set('encriptada', _token)
-
     return new Promise((resolve, reject) => {
       this.http.post(this.apiUrl + 'TalentoHumano/ListaParroquia/',
       body.toString(),
@@ -112,7 +121,6 @@ export class PersonaService {
   consultarComunidades(_token: string){
     const body = new HttpParams()
     .set('encriptada', _token)
-
     return new Promise((resolve, reject) => {
       this.http.post(this.apiUrl + 'TalentoHumano/ListaComunidad/',
       body.toString(),
@@ -128,7 +136,189 @@ export class PersonaService {
     })
   }
 
-  crearPersona() {
+  consultarCantonesDeUnaProvincia(idProvincia: string, _token: string){
+    const body = new HttpParams()
+    .set('IdProvincia', idProvincia)
+    .set('encriptada', _token)
+    return new Promise((resolve, reject) => {
+      this.http.post(this.apiUrl + 'TalentoHumano/ListaCantonesProvincia/', body.toString(),
+      {
+        headers: new HttpHeaders()
+          .set('Content-Type', 'application/x-www-form-urlencoded')
+      }
+    )
+        .subscribe(res => {
+          resolve(res);
+        }, (err) => {
+          reject(err);
+        })
+    })
+  }
+
+  consultarParroquiasDeUnCanton(idCanton: string, _token: string){
+    const body = new HttpParams()
+    .set('IdCanton', idCanton)
+    .set('encriptada', _token)
+    return new Promise((resolve, reject) => {
+      this.http.post(this.apiUrl + 'TalentoHumano/ListaParroquiaCanton', body.toString(),
+      {
+        headers: new HttpHeaders()
+          .set('Content-Type', 'application/x-www-form-urlencoded')
+      }
+    )
+        .subscribe(res => {
+          resolve(res);
+        }, (err) => {
+          reject(err);
+        })
+    })
+  }
+
+  consultarComunidadesDeUnaParroquia(idParroquia: string, _token: string){
+    const body = new HttpParams()
+    .set('IdParroquia', idParroquia)
+    .set('encriptada', _token)
+    return new Promise((resolve, reject) => {
+      this.http.post(this.apiUrl + 'TalentoHumano/ListaComunidadParroquia/', body.toString(),
+      {
+        headers: new HttpHeaders()
+          .set('Content-Type', 'application/x-www-form-urlencoded')
+      }
+    )
+        .subscribe(res => {
+          resolve(res);
+        }, (err) => {
+          reject(err);
+        })
+    })
+  }
+
+  crearPersona(
+    numeroDocumento: string,
+    apellidoPaterno: string,
+    apellidoMaterno: string,
+    primerNombre: string,
+    segundoNombre: string,
+    idTipoDocumento: string,
+    _token: string
+  ) {
+    const body = new HttpParams()
+    .set('NumeroDocumento', numeroDocumento)
+    .set('ApellidoPaterno', apellidoPaterno)
+    .set('ApellidoMaterno', apellidoMaterno)
+    .set('PrimerNombre', primerNombre)
+    .set('SegundoNombre', segundoNombre)
+    .set('IdTipoDocumento', idTipoDocumento)
+    .set('encriptada', _token)
+    return new Promise((resolve, reject) => {
+      this.http.post(this.apiUrl + 'TalentoHumano/IngresoPersona', body.toString(),
+      {
+        headers: new HttpHeaders()
+          .set('Content-Type', 'application/x-www-form-urlencoded')
+      }
+    )
+        .subscribe(res => {
+          resolve(res);
+        }, (err) => {
+          reject(err);
+        })
+    })
+  }
+
+  crearTelefono(
+    idPersona: string,
+    numero: string,
+    idTipoTelefono: string,	
+    _token: string  
+  ){
+    const body = new HttpParams()
+    .set('IdPersona', idPersona)
+    .set('Numero', numero)
+    .set('IdTipoTelefono', idTipoTelefono)
+    .set('encriptada', _token)
+    return new Promise((resolve, reject) => {
+      this.http.post(this.apiUrl + 'TalentoHumano/IngresoTelefono', body.toString(),
+      {
+        headers: new HttpHeaders()
+          .set('Content-Type', 'application/x-www-form-urlencoded')
+      }
+    )
+        .subscribe(res => {
+          resolve(res);
+        }, (err) => {
+          reject(err);
+        })
+    })
+  }
+
+  crearCorreo(
+    idPersona: string,	
+    correoValor: string,
+    _token: string
+  ){
+    const body = new HttpParams()
+    .set('IdPersona', idPersona)
+    .set('CorreoValor', correoValor)
+    .set('encriptada', _token)
+    return new Promise((resolve, reject) => {
+      this.http.post(this.apiUrl + 'TalentoHumano/IngresoCorreo', body.toString(),
+      {
+        headers: new HttpHeaders()
+          .set('Content-Type', 'application/x-www-form-urlencoded')
+      }
+    )
+        .subscribe(res => {
+          resolve(res);
+        }, (err) => {
+          reject(err);
+        })
+    })
+  }
+
+  crearDireccion(
+    idPersona: string,	
+    idComunidad: string,	
+    _token: string,
+  ){
+    const body = new HttpParams()
+    .set('IdPersona', idPersona)
+    .set('IdComunidad', idComunidad)
+    .set('encriptada', _token)
+    return new Promise((resolve, reject) => {
+      this.http.post(this.apiUrl + 'TalentoHumano/IngresoAsignacionPersonaComunidad', body.toString(),
+      {
+        headers: new HttpHeaders()
+          .set('Content-Type', 'application/x-www-form-urlencoded')
+      }
+    )
+        .subscribe(res => {
+          resolve(res);
+        }, (err) => {
+          reject(err);
+        })
+    })
+  }
+
+  eliminarPersona(
+    idPersona: string,
+    _token: string
+  ){
+    const body = new HttpParams()
+    .set('IdPersona', idPersona)
+    .set('encriptada', _token)
+    return new Promise((resolve, reject) => {
+      this.http.post(this.apiUrl + 'TalentoHumano/EliminarPersona', body.toString(),
+      {
+        headers: new HttpHeaders()
+          .set('Content-Type', 'application/x-www-form-urlencoded')
+      }
+    )
+        .subscribe(res => {
+          resolve(res);
+        }, (err) => {
+          reject(err);
+        })
+    })
 
   }
 }

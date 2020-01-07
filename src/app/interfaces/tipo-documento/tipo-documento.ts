@@ -1,4 +1,4 @@
-export interface TipoDocumentos {
+export interface TipoDocumento {
     IdTipoDocumento?: string;
     Documento?: string;
     Identificador?: string;

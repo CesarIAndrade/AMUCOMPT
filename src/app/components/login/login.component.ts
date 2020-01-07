@@ -19,6 +19,7 @@ export class LoginComponent implements OnInit {
 
   usuario: string;
   contrasena: string;
+
   ngOnInit() {
     setTimeout(() => {
       document.getElementById('loadingPage').hidden = true;
@@ -35,22 +36,22 @@ export class LoginComponent implements OnInit {
             this.router.navigateByUrl('inicio');
           })
         .catch(
-          erro => {
-            console.log(erro);
-          })
+          err => console.log(err)
+        )
     }
   }
 
   consultarTokens() {
     this.seguridadService.consultarTokens()
-      .subscribe(
-        data => {
-          console.log(data);
-          localStorage.setItem('miCuenta.getToken', data['respuesta']['ClaveGetEncrip']);
-          localStorage.setItem('miCuenta.postToken', data['respuesta']['ClavePostEncrip']);
-          localStorage.setItem('miCuenta.putToken', data['respuesta']['ClavePutEncrip']);
-          localStorage.setItem('miCuenta.deleteToken', data['respuesta']['ClaveDeleteEncrip']);
-        },
+      .then(
+        ok => {
+          console.log(ok['respuesta']);
+          localStorage.setItem('miCuenta.getToken', ok['respuesta']['ClaveGetEncrip']);
+          localStorage.setItem('miCuenta.postToken', ok['respuesta']['ClavePostEncrip']);
+          localStorage.setItem('miCuenta.putToken', ok['respuesta']['ClavePutEncrip']);
+          localStorage.setItem('miCuenta.deleteToken', ok['respuesta']['ClaveDeleteEncrip']);
+        })
+      .catch(
         err => console.log(err)
       )
   }

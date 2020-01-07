@@ -14,7 +14,6 @@ import { MatDialog } from "@angular/material/dialog";
 // Components
 import { ModalUsuarioComponent } from "../modal-usuario/modal-usuario.component";
 import { Modulo } from 'src/app/interfaces/modulo/modulo';
-import { TabsUsuarioComponent } from '../tabs-usuario/tabs-usuario.component';
 
 @Component({
   selector: 'app-usuario',
@@ -26,7 +25,7 @@ export class UsuarioComponent implements OnInit {
   constructor(
     private usuarioService: UsuarioService,
     private dialog: MatDialog,
-    @Inject(TabsUsuarioComponent) private tabsUsuarioComponent: TabsUsuarioComponent 
+    // @Inject(TabsUsuarioComponent) private tabsUsuarioComponent: TabsUsuarioComponent 
     ) { }
 
   contrasena: string;
@@ -81,6 +80,21 @@ export class UsuarioComponent implements OnInit {
       )
   }
 
+  consultarModulos(){
+    this.usuarioService.consultarModulos(localStorage.getItem('miCuenta.getToken'))
+      .then(
+        ok => {
+          console.log(ok);
+          this.modulos = ok['respuesta'];
+        }
+      )
+      .catch(
+        err => {
+          console.log(err);
+        }
+      )
+  }
+
   mostrarContrasena(){
     if(this.inputType == 'password'){
       this.inputType = 'text';
@@ -94,7 +108,7 @@ export class UsuarioComponent implements OnInit {
   abrirModel(){
     let dialogRef = this.dialog.open(ModalUsuarioComponent, {
       width: '550px',
-      height: '400px',
+      height: '800px',
       data: {
         nombres: this.nombres,
         apellidos: this.apellidos,
@@ -115,12 +129,13 @@ export class UsuarioComponent implements OnInit {
   }
 
   changeTabIndex(){
-    this.tabsUsuarioComponent.changeTabIndex(-1);
+    // this.tabsUsuarioComponent.changeTabIndex(-1);
   }
 
   ngOnInit() {
-    // this.consultarUsuarios();
-    // this.consultarPrivilegios();
+    this.consultarUsuarios();
+    this.consultarPrivilegios();
+    this.consultarModulos();
   }
 
 }

@@ -10,8 +10,6 @@ import { InventarioComponent } from "./components/inventario/inventario.componen
 import { CompraComponent } from "./components/compra/compra.component";
 import { VentaComponent } from "./components/venta/venta.component";
 import { Page404Component } from './components/page404/page404.component';
-import { ValidarUsuarioGuard } from './guards/validar-usuario.guard';
-import { TabsUsuarioComponent } from './components/tabs-usuario/tabs-usuario.component';
 
 const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'login' },
@@ -22,10 +20,10 @@ const routes: Routes = [
     // canActivate: [ValidarUsuarioGuard],
     children: [
       { 
-        path: 'usuarios', component: TabsUsuarioComponent,
+        path: 'usuarios', component: UsuarioComponent,
         // canActivate: [ValidarUsuarioGuard] 
       },
-      { path: 'personas', component: TabsUsuarioComponent,
+      { path: 'personas', component: PersonaComponent,
         // canActivate: [ValidarUsuarioGuard]
       },
       { path: 'inventarios', component: InventarioComponent,

@@ -33,8 +33,13 @@ export class UsuarioService {
   }
 
   consultarUsuarios(_token: string) {
+
+    const body = new HttpParams()
+    .set('encriptada', _token)
+
     return new Promise((resolve, reject) => {
-      this.http.get(this.apiUrl + `TalentoHumano/ListaUsuariosSistema/${_token}`,
+
+      this.http.post(this.apiUrl + 'TalentoHumano/ListaUsuariosSistema/', body.toString(),
       {
         headers: new HttpHeaders()
           .set('Content-Type', 'application/x-www-form-urlencoded')
@@ -48,12 +53,32 @@ export class UsuarioService {
   }
   
   consultarPrivilegios(_token: string) {
+    
     const body = new HttpParams()
     .set('encriptada', _token)
 
     return new Promise((resolve, reject) => {
       this.http.post(this.apiUrl + 'TalentoHumano/ListaPrivilegio/',
       body.toString(),
+      {
+        headers: new HttpHeaders()
+          .set('Content-Type', 'application/x-www-form-urlencoded')
+      })
+        .subscribe(res => {
+          resolve(res);
+        }, (err) => {
+          reject(err);
+        })
+    });
+  }
+
+  consultarModulos(_token: string) {
+    
+    const body = new HttpParams()
+    .set('encriptada', _token)
+
+    return new Promise((resolve, reject) => {
+      this.http.post(this.apiUrl + 'Usuarios/ListaModulos/', body.toString(),
       {
         headers: new HttpHeaders()
           .set('Content-Type', 'application/x-www-form-urlencoded')

@@ -6,7 +6,7 @@ import { MatDialogRef } from "@angular/material/dialog";
 import { PersonaService } from "src/app/services/persona.service";
 
 // Interfaces
-import { TipoDocumentos } from "../../interfaces/tipo-documento/tipo-documento";
+import { TipoDocumento } from "../../interfaces/tipo-documento/tipo-documento";
 import { PersonaModal } from "../../interfaces/persona/persona-modal";
 
 @Component({
@@ -32,10 +32,10 @@ export class ModalUsuarioComponent implements OnInit {
     telefonoModal3: '',
     correoModal: '',
   };
-  tipoDocumentos: TipoDocumentos[] = [];
+  tipoDocumentos: TipoDocumento[] = [];
 
   consultarTipoDocumentos() {
-    this.personaService.consultatTipoDocumentos(localStorage.getItem('miCuenta.getToken'))
+    this.personaService.consultarTipoDocumento(localStorage.getItem('miCuenta.getToken'))
       .then(
         ok => {
           this.tipoDocumentos = ok['respuesta'];

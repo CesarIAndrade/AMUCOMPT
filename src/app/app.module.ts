@@ -29,8 +29,7 @@ import { VentaComponent } from './components/venta/venta.component';
 import { HttpClientModule } from "@angular/common/http";
 import { FormsModule } from "@angular/forms";
 import { ModalUsuarioComponent } from './components/modal-usuario/modal-usuario.component';
-import { TabsUsuarioComponent } from './components/tabs-usuario/tabs-usuario.component';
-import { PersonaLocalizacionComponent } from './components/persona-localizacion/persona-localizacion.component';
+import { ModelDetallePersonaComponent } from './components/model-detalle-persona/model-detalle-persona.component';
 
 @NgModule({
   declarations: [
@@ -44,8 +43,7 @@ import { PersonaLocalizacionComponent } from './components/persona-localizacion/
     CompraComponent,
     VentaComponent,
     ModalUsuarioComponent,
-    TabsUsuarioComponent,
-    PersonaLocalizacionComponent,
+    ModelDetallePersonaComponent
   ],
   imports: [
     BrowserModule,
