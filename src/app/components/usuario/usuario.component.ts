@@ -12,7 +12,6 @@ import { PersonaModal } from "../../interfaces/persona/persona-modal";
 import { MatDialog } from "@angular/material/dialog";
 
 // Components
-import { ModalUsuarioComponent } from "../modal-usuario/modal-usuario.component";
 import { Modulo } from 'src/app/interfaces/modulo/modulo';
 
 @Component({
@@ -24,7 +23,6 @@ export class UsuarioComponent implements OnInit {
 
   constructor(
     private usuarioService: UsuarioService,
-    private dialog: MatDialog,
   ) { }
 
   contrasena: string;
@@ -35,18 +33,6 @@ export class UsuarioComponent implements OnInit {
   modulos: Modulo[] = [];
   privilegios: Privilegios[] = [];
   usuarios: Usuario[] = [];
-
-  // Por si se usa modal
-  persona: PersonaModal;
-  apellidos: string;
-  correoModal: string;
-  nombres: string;
-  numeroDocumento: string;
-  numeroExtra = true;
-  telefonoModal1: string;
-  telefonoModal2: string;
-  telefonoModal3: string;
-  tipoDocumento = '0';
 
   consultarUsuarios() {
     this.usuarioService.consultarUsuarios(localStorage.getItem('miCuenta.getToken'))
@@ -101,34 +87,6 @@ export class UsuarioComponent implements OnInit {
     else {
       this.inputType = 'password';
     }
-  }
-
-  // Por si se usa modal
-  abrirModel() {
-    let dialogRef = this.dialog.open(ModalUsuarioComponent, {
-      width: '550px',
-      height: '800px',
-      data: {
-        nombres: this.nombres,
-        apellidos: this.apellidos,
-        tipoDocumento: this.tipoDocumento,
-        telefono1: this.telefonoModal1,
-        telefono2: this.telefonoModal2,
-        telefono3: this.telefonoModal3,
-        correo: this.correoModal
-      }
-    });
-    dialogRef.afterClosed().subscribe(
-      ok => {
-        console.log(`Result: ${ok}`);
-        this.persona = ok;
-        console.log(this.persona);
-      }
-    )
-  }
-
-  changeTabIndex() {
-    // this.tabsUsuarioComponent.changeTabIndex(-1);
   }
 
   ngOnInit() {

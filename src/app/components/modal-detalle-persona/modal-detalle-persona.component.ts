@@ -19,11 +19,11 @@ export class ModalDetallePersonaComponent implements OnInit {
     this.data.apellidoPaternoModal + ' '+ 
     this.data.apellidoMaternoModal;
 
+  direccion = this.data.provinciaModal + ' > ' +
+    this.data.cantonModal + ' > ' +
+    this.data.parroquiaModal;
 
-  direccion = this.data.provinciaModal + ' -> ' +
-    this.data.cantonModal + ' -> ' +
-    this.data.parroquiaModal + ' -> ' +
-    this.data.comunidadModal;
+    
     
   sinNumero = 'Sin Numero';
   sinCorreo = 'Sin Correo';

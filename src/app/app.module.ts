@@ -27,8 +27,7 @@ import { VentaComponent } from './components/venta/venta.component';
 
 // Functional Components
 import { HttpClientModule } from "@angular/common/http";
-import { FormsModule } from "@angular/forms";
-import { ModalUsuarioComponent } from './components/modal-usuario/modal-usuario.component';
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { ModalDetallePersonaComponent } from './components/modal-detalle-persona/modal-detalle-persona.component';
 
 @NgModule({
@@ -42,7 +41,6 @@ import { ModalDetallePersonaComponent } from './components/modal-detalle-persona
     InventarioComponent,
     CompraComponent,
     VentaComponent,
-    ModalUsuarioComponent,
     ModalDetallePersonaComponent
   ],
   imports: [
@@ -58,11 +56,11 @@ import { ModalDetallePersonaComponent } from './components/modal-detalle-persona
     MatFormFieldModule,
     HttpClientModule,
     FormsModule,
+    ReactiveFormsModule,
     MatDialogModule,
     MatTabsModule,
   ],
   entryComponents: [ 
-    ModalUsuarioComponent,
     ModalDetallePersonaComponent 
   ],
   providers: [],

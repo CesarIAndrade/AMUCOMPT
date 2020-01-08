@@ -11,6 +11,9 @@ import { CompraComponent } from "./components/compra/compra.component";
 import { VentaComponent } from "./components/venta/venta.component";
 import { Page404Component } from './components/page404/page404.component';
 
+// Guards
+import { ValidarUsuarioGuard } from "src/app/guards/validar-usuario.guard";
+
 const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'login' },
   { path: 'login', component: LoginComponent },

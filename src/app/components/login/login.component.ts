@@ -29,7 +29,11 @@ export class LoginComponent implements OnInit {
 
   login() {
     if (this.usuario != "" && this.contrasena != "" && localStorage.getItem('miCuenta.postToken') != null) {
-      this.usuarioService.login(this.usuario, this.contrasena, localStorage.getItem('miCuenta.postToken'))
+      this.usuarioService.login(
+        this.usuario,
+        this.contrasena,
+        localStorage.getItem('miCuenta.postToken')
+      )
         .then(
           ok => {
             console.log(ok);

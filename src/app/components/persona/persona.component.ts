@@ -1,4 +1,5 @@
-import { Component, OnInit, Inject, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 
 // Services
 import { PersonaService } from "../../services/persona.service";
@@ -27,10 +28,25 @@ import { ModalDetallePersonaComponent } from "src/app/components/modal-detalle-p
 })
 export class PersonaComponent implements OnInit {
 
+  myForm: FormGroup;
+
   constructor(
     private personaService: PersonaService,
-    private dialog: MatDialog
-  ) { }
+    private dialog: MatDialog,
+    public fb: FormBuilder
+  ) {
+    this.myForm = new FormGroup({
+      _nombres: new FormControl('', [Validators.required]),
+      _apellidos: new FormControl('', [Validators.required]),
+      _tipoDocumento: new FormControl('', [Validators.required]),
+      _numeroDocumento: new FormControl('', [Validators.required]),
+      _telefono1: new FormControl('', [Validators.required]),
+      _tipoTelefono1: new FormControl('', [Validators.required]),
+      _telefono2: new FormControl('', [Validators.required]),
+      _tipoTelefono2: new FormControl('', [Validators.required]),
+      _correo: new FormControl('', [Validators.required]),
+    });
+  }
 
   apellidos: string;
   arrayApellidos: any;
@@ -52,7 +68,7 @@ export class PersonaComponent implements OnInit {
   cantones: Canton[] = [];
   comunidades: Comunidad[] = [];
   parroquias: Parroquia[] = [];
-  persona: PersonaModal = {};
+  personaModal: PersonaModal = {};
   personas: Persona[] = [];
   provincias: Provincia[] = [];
   telefonos: Telefono[] = [];
@@ -160,12 +176,19 @@ export class PersonaComponent implements OnInit {
       )
   }
 
-  consultarCantonesDeUnaProvincia(idProvincia: string) {
+  consultarCantonesDeUnaProvincia(idProvincia: string, value: string) {
     this.personaService.consultarCantonesDeUnaProvincia(idProvincia, localStorage.getItem('miCuenta.getToken'))
       .then(
         ok => {
           this.cantones = ok['respuesta'];
           console.log(this.cantones);
+          if (value == 'ingresar') {
+            this.parroquias = null;
+            this.comunidades = null;
+            this.canton = '0';
+            this.parroquia = '0';
+            this.comunidad = '0';
+          }
         },
       )
       .catch(
@@ -175,12 +198,17 @@ export class PersonaComponent implements OnInit {
       )
   }
 
-  consultarParroquiasDeUnCanton(idCanton: string) {
+  consultarParroquiasDeUnCanton(idCanton: string, value: string) {
     this.personaService.consultarParroquiasDeUnCanton(idCanton, localStorage.getItem('miCuenta.getToken'))
       .then(
         ok => {
           this.parroquias = ok['respuesta'];
           console.log(this.parroquias);
+          if (value == 'ingresar') {
+            this.comunidades = null;
+            this.parroquia = '0';
+            this.comunidad = '0';
+          }
         },
       )
       .catch(
@@ -190,12 +218,15 @@ export class PersonaComponent implements OnInit {
       )
   }
 
-  consultarComunidadesDeUnaParroquia(idParroquia: string) {
+  consultarComunidadesDeUnaParroquia(idParroquia: string, value: string) {
     this.personaService.consultarComunidadesDeUnaParroquia(idParroquia, localStorage.getItem('miCuenta.getToken'))
       .then(
         ok => {
           this.comunidades = ok['respuesta'];
           console.log(this.comunidades);
+          if (value == 'ingresar') {
+            this.comunidad = '0';
+          }
         },
       )
       .catch(
@@ -205,31 +236,90 @@ export class PersonaComponent implements OnInit {
       )
   }
 
+  onChange(value) {
+    console.log(value.target.value)
+
+  }
+
+  validarCampos(
+    tipoDocumento: string,
+    tipoTelefono1: string,
+    tipoTelefono2: string,
+    provincia: string,
+    canton: string,
+    parroquia: string,
+    comunidad: string
+  ) {
+    if (tipoDocumento == "0") {
+      console.log("Campo Requerido");
+      this.campoRequerido = false;
+    } else if (tipoTelefono1 == "0") {
+      console.log("Campo Requerido");
+      this.campoRequerido = false;
+    } else if (tipoTelefono2 == "0") {
+      console.log("Campo Requerido");
+      this.campoRequerido = false;
+    } else if (provincia == "0") {
+      console.log("Campo Requerido");
+      this.campoRequerido = false;
+    } else if (canton == "0") {
+      console.log("Campo Requerido");
+      this.campoRequerido = false;
+    } else if (parroquia == "0") {
+      console.log("Campo Requerido");
+      this.campoRequerido = false;
+    } else if (comunidad == "0") {
+      console.log("Campo Requerido");
+      this.campoRequerido = false;
+    }
+  }
+
+  campoRequerido = true;
+
+  validarFormulario() {
+    if (this.myForm.valid) {
+      console.log(this.myForm.value);
+      this.crearPersona();
+    } else {
+      console.log("Algo Salio Mal");
+    }
+  }
+
   crearPersona() {
-    this.arrayNombres = this.nombres.split(" ");
-    this.arrayApellidos = this.apellidos.split(" ");
-    this.personaService.crearPersona(
-      this.numeroDocumento,
-      this.arrayApellidos[0],
-      this.arrayApellidos[1],
-      this.arrayNombres[0],
-      this.arrayNombres[1],
-      this.tipoDocumento,
-      localStorage.getItem('miCuenta.postToken'))
-      .then(
-        ok => {
-          this.idPersona = ok['respuesta'];
-          this.crearTelefono(this.idPersona);
-          this.crearCorreo(this.idPersona);
-          this.crearDireccion(this.idPersona);
-          this.consultarPersonas();
-        },
-      )
-      .catch(
-        err => {
-          console.log(err);
-        }
-      )
+    console.log("Todo Bien");
+    // this.validarCampos(
+    //   this.nombres, this.apellidos,
+    //   this.tipoDocumento, this.numeroDocumento,
+    //   this.telefono1, this.tipoTelefono1,
+    //   this.telefono2, this.tipoTelefono2,
+    //   this.correo, this.provincia, this.canton,
+    //   this.parroquia, this.comunidad
+    // );
+    // this.arrayNombres = this.nombres.split(" ");
+    // this.arrayApellidos = this.apellidos.split(" ");
+    // this.personaService.crearPersona(
+    //   this.numeroDocumento,
+    //   this.arrayApellidos[0],
+    //   this.arrayApellidos[1],
+    //   this.arrayNombres[0],
+    //   this.arrayNombres[1],
+    //   this.tipoDocumento,
+    //   localStorage.getItem('miCuenta.postToken'))
+    //   .then(
+    //     ok => {
+    //       console.log(ok['respuesta']);
+    //       this.idPersona = ok['respuesta'];
+    //       // this.crearTelefono(this.idPersona);
+    //       // this.crearCorreo(this.idPersona);
+    //       // this.crearDireccion(this.idPersona);
+    //       this.consultarPersonas();
+    //     },
+    //   )
+    //   .catch(
+    //     err => {
+    //       console.log(err);
+    //     }
+    //   )
   }
 
   crearTelefono(idPersona: string) {
@@ -302,17 +392,17 @@ export class PersonaComponent implements OnInit {
 
   cantonesDeUnaProvincia(value) {
     console.log(value);
-    this.consultarCantonesDeUnaProvincia(value);
+    this.consultarCantonesDeUnaProvincia(value, 'ingresar');
   }
 
   parroquiasDeUnCanton(value) {
     console.log(value);
-    this.consultarParroquiasDeUnCanton(value);
+    this.consultarParroquiasDeUnCanton(value, 'ingresar');
   }
 
   comunidadesDeUnaParroquia(value) {
     console.log(value);
-    this.consultarComunidadesDeUnaParroquia(value);
+    this.consultarComunidadesDeUnaParroquia(value, 'ingresar');
   }
 
   eliminarPersona(idPersona: string) {
@@ -332,38 +422,53 @@ export class PersonaComponent implements OnInit {
     this.consultarPersonas();
   }
 
-  consultarPersonaPorId(idPersona: string){
+  consultarPersonaPorId(
+    value: string,
+    idPersona: string,
+  ) {
     this.personaService.consultarPersonaPorId(
       idPersona,
       localStorage.getItem('miCuenta.getToken'))
       .then(
         ok => {
           console.log(ok['respuesta']);
-
-          this.persona.primerNombreModal = ok['respuesta']['PrimerNombre'];
-          this.persona.segundoNombreModal = ok['respuesta']['SegundoNombre'];
-          this.persona.apellidoPaternoModal = ok['respuesta']['ApellidoPaterno'];
-          this.persona.apellidoMaternoModal = ok['respuesta']['ApellidoMaterno'];
-          this.persona.tipoDocumentoModal = ok['respuesta']['TipoDocumento'];
-          this.persona.numeroDocumentoModal = ok['respuesta']['NumeroDocumento'];
+          this.personaModal.primerNombreModal = ok['respuesta']['PrimerNombre'];
+          this.personaModal.segundoNombreModal = ok['respuesta']['SegundoNombre'];
+          this.personaModal.apellidoPaternoModal = ok['respuesta']['ApellidoPaterno'];
+          this.personaModal.apellidoMaternoModal = ok['respuesta']['ApellidoMaterno'];
+          this.personaModal.idTipoDocumentoModal = ok['respuesta']['IdTipoDocumento'];
+          this.personaModal.tipoDocumentoModal = ok['respuesta']['TipoDocumento'];
+          this.personaModal.numeroDocumentoModal = ok['respuesta']['NumeroDocumento'];
           try {
-            this.persona.telefonoModal1 = ok['respuesta']['ListaTelefono'][0]['Numero'];
-            this.persona.telefonoModal2 = ok['respuesta']['ListaTelefono'][1]['Numero'];
-            this.persona.correoModal = ok['respuesta']['ListaCorreo'][0]['CorreoValor'];
-            this.persona.comunidadModal = ok['respuesta']['AsignacionPersonaComunidad'][0]['Comunidad']['Descripcion'];
-            this.persona.parroquiaModal = ok['respuesta']['AsignacionPersonaComunidad'][0]['Comunidad']['Parroquia']['Descripcion'];
-            this.persona.cantonModal = ok['respuesta']['AsignacionPersonaComunidad'][0]['Comunidad']['Parroquia']['Canton']['Descripcion'];
-            this.persona.provinciaModal = ok['respuesta']['AsignacionPersonaComunidad'][0]['Comunidad']['Parroquia']['Canton']['Provincia']['Descripcion'];
+            this.personaModal.idTipoTelefonoModal1 = ok['respuesta']['ListaTelefono'][0]['TipoTelefono']['IdTipoTelefono'];
+            this.personaModal.telefonoModal1 = ok['respuesta']['ListaTelefono'][0]['Numero'];
+            this.personaModal.idTipoTelefonoModal2 = ok['respuesta']['ListaTelefono'][1]['TipoTelefono']['IdTipoTelefono'];
+            this.personaModal.telefonoModal2 = ok['respuesta']['ListaTelefono'][1]['Numero'];
+            this.personaModal.correoModal = ok['respuesta']['ListaCorreo'][0]['CorreoValor'];
+
+            this.personaModal.idComunidadModal = ok['respuesta']['AsignacionPersonaComunidad'][0]['Comunidad']['IdComunidad'];
+            this.personaModal.comunidadModal = ok['respuesta']['AsignacionPersonaComunidad'][0]['Comunidad']['Descripcion'];
+            this.personaModal.idParroquiaModal = ok['respuesta']['AsignacionPersonaComunidad'][0]['Comunidad']['Parroquia']['IdParroquia'];
+            this.personaModal.parroquiaModal = ok['respuesta']['AsignacionPersonaComunidad'][0]['Comunidad']['Parroquia']['Descripcion'];
+            this.personaModal.idCantonModal = ok['respuesta']['AsignacionPersonaComunidad'][0]['Comunidad']['Parroquia']['Canton']['IdCanton'];
+            this.personaModal.cantonModal = ok['respuesta']['AsignacionPersonaComunidad'][0]['Comunidad']['Parroquia']['Canton']['Descripcion'];
+            this.personaModal.idProvinciaModal = ok['respuesta']['AsignacionPersonaComunidad'][0]['Comunidad']['Parroquia']['Canton']['Provincia']['IdProvincia'];
+            this.personaModal.provinciaModal = ok['respuesta']['AsignacionPersonaComunidad'][0]['Comunidad']['Parroquia']['Canton']['Provincia']['Descripcion'];
           } catch (error) {
-            this.persona.telefonoModal1 = null;
-            this.persona.telefonoModal2 = null;
-            this.persona.correoModal = null;
-            this.persona.comunidadModal = null;
-            this.persona.parroquiaModal = null;
-            this.persona.cantonModal = null;
-            this.persona.provinciaModal = null;
+            this.personaModal.telefonoModal1 = null;
+            this.personaModal.telefonoModal2 = null;
+            this.personaModal.correoModal = null;
+            this.personaModal.comunidadModal = null;
+            this.personaModal.parroquiaModal = null;
+            this.personaModal.cantonModal = null;
+            this.personaModal.provinciaModal = null;
           }
-          this.abrirModal(this.persona)
+          if (value == 'detalles') {
+            this.abrirModal(this.personaModal)
+          }
+          else if (value == 'modificar') {
+            this.modificarPersona(this.personaModal);
+          }
         },
       )
       .catch(
@@ -386,22 +491,79 @@ export class PersonaComponent implements OnInit {
         apellidoMaternoModal: persona.apellidoMaternoModal,
         tipoDocumentoModal: persona.tipoDocumentoModal,
         numeroDocumentoModal: persona.numeroDocumentoModal,
-        telefonoModal1: this.persona.telefonoModal1,
-        telefonoModal2: this.persona.telefonoModal2,
-        correoModal: this.persona.correoModal,
-        comunidadModal: this.persona.comunidadModal,
-        parroquiaModal: this.persona.parroquiaModal,
-        cantonModal: this.persona.cantonModal,
-        provinciaModal: this.persona.provinciaModal
+        telefonoModal1: this.personaModal.telefonoModal1,
+        telefonoModal2: this.personaModal.telefonoModal2,
+        correoModal: this.personaModal.correoModal,
+        comunidadModal: this.personaModal.comunidadModal,
+        parroquiaModal: this.personaModal.parroquiaModal,
+        cantonModal: this.personaModal.cantonModal,
+        provinciaModal: this.personaModal.provinciaModal
       }
     });
-    dialogRef.afterClosed().subscribe(
-      ok => {
-        console.log(`Result: ${ok}`);
-      }
-    )
   }
 
+  modificarPersona(
+    persona: PersonaModal
+  ) {
+    this.nombres = persona.primerNombreModal + ' ' +
+      persona.segundoNombreModal;
+    this.apellidos = persona.apellidoPaternoModal + ' ' +
+      persona.apellidoMaternoModal;
+    this.tipoDocumento = persona.idTipoDocumentoModal;
+    this.numeroDocumento = persona.numeroDocumentoModal;
+    this.telefono1 = persona.telefonoModal1;
+    this.tipoTelefono1 = persona.idTipoTelefonoModal1;
+    this.telefono2 = persona.telefonoModal2;
+    this.tipoTelefono2 = persona.idTipoTelefonoModal2;
+    this.correo = persona.correoModal;
+    this.provincia = persona.idProvinciaModal;
+    this.consultarCantonesDeUnaProvincia(persona.idProvinciaModal, '');
+    this.canton = persona.idCantonModal;
+    this.consultarParroquiasDeUnCanton(persona.idCantonModal, '');
+    this.parroquia = persona.idParroquiaModal;
+    this.consultarComunidadesDeUnaParroquia(persona.idParroquiaModal, '');
+    this.comunidad = persona.idComunidadModal;
+  }
+
+  limpiarCampos() {
+    this.nombres = '';
+    this.apellidos = '';
+    this.tipoDocumento = '0';
+    this.numeroDocumento = '';
+    this.telefono1 = '';
+    this.tipoTelefono1 = '0';
+    this.telefono2 = '';
+    this.tipoTelefono2 = '0';
+    this.correo = '';
+  }
+
+  get _nombres() {
+    return this.myForm.get('_nombres');
+  }
+  get _apellidos() {
+    return this.myForm.get('_apellidos');
+  }
+  get _tipoDocumento() {
+    return this.myForm.get('_tipoDocumento');
+  }
+  get _numeroDocumento() {
+    return this.myForm.get('_numeroDocumento');
+  }
+  get _telefono1() {
+    return this.myForm.get('_telefono1');
+  }
+  get _tipoTelefono1() {
+    return this.myForm.get('_tipoTelefono1');
+  }
+  get _telefono2() {
+    return this.myForm.get('_telefono2')
+  }
+  get _tipoTelefono2() {
+    return this.myForm.get('_tipoTelefono2')
+  }
+  get _correo() {
+    return this.myForm.get('_correo');
+  }
   ngOnInit() {
     this.consultarPersonas();
     this.consultarTipoDocumento();

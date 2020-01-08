@@ -1,147 +1,167 @@
 <br>
 <div class="container">
-    <div class="row">
-        <div class="col-lg-4 col-md-6">
-            <div class="card">
-                <div class="card-header" style="text-align: center;">
-                    Nueva Persona
+    <form [formGroup]="myForm" (ngSubmit)="validarFormulario()" novalidate>
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="card">
+                    <div class="card-header" style="text-align: center;">
+                        Nueva Persona
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <input type="text" formControlName="_nombres" class="form-control"
+                                placeholder="Ingrese Nombres">
+                            <div class="badge badge-danger mt-3"
+                                *ngIf="_nombres.invalid && (_nombres.dirty || _nombres.touched)">
+                                <div *ngIf="_nombres.errors.required">
+                                    Nombres Requeridos
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" formControlName="_apellidos" class="form-control"
+                                placeholder="Ingrese Apellidos">
+                            <div class="badge badge-danger mt-3"
+                                *ngIf="_apellidos.invalid && (_apellidos.dirty || _apellidos.touched)">
+                                <div *ngIf="_apellidos.errors.required">
+                                    Apellidos Requeridos
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <select type="text" formControlName="_tipoDocumento" (change)="onChange($event)"
+                                class="form-control">
+                                <option value="0">Seleccione Tipo Documento</option>
+                                <option *ngFor="let item of tipoDocumentos" value="{{item.IdTipoDocumento}}">
+                                    {{ item.Documento }}
+                                </option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <input type="number" formControlName="_numeroDocumento" class="form-control"
+                                placeholder="Ingrese Número Documento">
+                            <div class="badge badge-danger mt-3"
+                                *ngIf="_numeroDocumento.invalid && (_numeroDocumento.dirty || _numeroDocumento.touched)">
+                                <div *ngIf="_numeroDocumento.errors.required">
+                                    Numero de Documento Requerido
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="card-body">
-                    <div class="form-group">
-                        <input [(ngModel)]="nombres" type="text" class="form-control" placeholder="Ingrese Nombres">
+            </div>
+            <div class="col-lg-4">
+                <div class="card">
+                    <div class="card-header" style="text-align: center;">
+                        Contacto
                     </div>
-                    <div class="form-group">
-                        <input [(ngModel)]="apellidos" type="text" class="form-control" placeholder="Ingrese Apellidos">
+                    <div class="card-body">
+                        <div class="form-group">
+                            <input type="number" formControlName="_telefono1" class="form-control"
+                                placeholder="Primer Telefono">
+                            <div class="badge badge-danger mt-3"
+                                *ngIf="_telefono1.invalid && (_telefono1.dirty || _telefono1.touched)">
+                                <div *ngIf="_telefono1.errors.required">
+                                    Primer Telefono Requeridos
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <select [(ngModel)]="tipoTelefono1" [ngModelOptions]="{standalone: true}" type="text"
+                                class="form-control">
+                                <option value="0" disabled>Tipo</option>
+                                <option *ngFor="let item of tipoTelefonos" value="{{item.IdTipoTelefono}}">
+                                    {{ item.Descripcion }}
+                                </option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <input type="number" formControlName="_telefono2" class="form-control"
+                                placeholder="Segundo Telefono">
+                            <div class="badge badge-danger mt-3"
+                                *ngIf="_telefono2.invalid && (_telefono2.dirty || _telefono2.touched)">
+                                <div *ngIf="_telefono2.errors.required">
+                                    Segundo Telefono Requeridos
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <select [(ngModel)]="tipoTelefono2" [ngModelOptions]="{standalone: true}" type="text"
+                                class="form-control">
+                                <option value="0" disabled>Tipo</option>
+                                <option *ngFor="let item of tipoTelefonos" value="{{item.IdTipoTelefono}}">
+                                    {{ item.Descripcion }}
+                                </option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <input type="email" formControlName="_correo" class="form-control"
+                                placeholder="Ingrese Correo">
+                            <div class="badge badge-danger mt-3"
+                                *ngIf="_correo.invalid && (_correo.dirty || _correo.touched)">
+                                <div *ngIf="_correo.errors.required">
+                                    Correo Requerido
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <select [(ngModel)]="tipoDocumento" type="text" class="form-control">
-                            <option value="0">Seleccione Tipo Documento</option>
-                            <option *ngFor="let item of tipoDocumentos" value="{{item.IdTipoDocumento}}">
-                                {{ item.Documento }} </option>
-                        </select>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="card">
+                    <div class="card-header" style="text-align: center;">
+                        Dirección
                     </div>
-                    <div class="form-group">
-                        <input [(ngModel)]="numeroDocumento" type="text" class="form-control"
-                            placeholder="Ingrese Número Documento">
+                    <div class="card-body">
+                        <div class="form-group">
+                            <select [(ngModel)]="provincia" [ngModelOptions]="{standalone: true}" type="text"
+                                (change)="cantonesDeUnaProvincia($event.target.value)" class="form-control">
+                                <option value="0" disabled>Seleccionar Provincia </option>
+                                <option *ngFor="let item of provincias" value="{{item.IdProvincia}}">
+                                    {{ item.Descripcion }}
+                                </option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <select [(ngModel)]="canton" [ngModelOptions]="{standalone: true}" type="text"
+                                (change)="parroquiasDeUnCanton($event.target.value)" class="form-control">
+                                <option value="0" disabled>Seleccionar Cantón </option>
+                                <option *ngFor="let item of cantones" value="{{item.IdCanton}}">
+                                    {{ item.Descripcion }}
+                                </option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <select [(ngModel)]="parroquia" [ngModelOptions]="{standalone: true}" type="text"
+                                (change)="comunidadesDeUnaParroquia($event.target.value)" class="form-control">
+                                <option value="0" disabled>Seleccionar Parroquia</option>
+                                <option *ngFor="let item of parroquias" value="{{item.IdParroquia}}">
+                                    {{ item.Descripcion }}
+                                </option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <select [(ngModel)]="comunidad" [ngModelOptions]="{standalone: true}" type="text"
+                                class="form-control">
+                                <option value="0" disabled>Seleccionar Comunidad</option>
+                                <option *ngFor="let item of comunidades" value="{{item.IdComunidad}}">
+                                    {{ item.Descripcion }}
+                                </option>
+                            </select>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-
-        <div class="col-lg-4 col-md-6">
-            <div class="card">
-                <div class="card-header" style="text-align: center;">
-                    Contacto
-                </div>
-                <div class="card-body">
-                    <div class="form-group input-container">
-                        <input [(ngModel)]="telefono1" type="text" class="form-control input-field"
-                            placeholder="Primer Telefono" required>
-                        <select [(ngModel)]="tipoTelefono1" type="text" class="form-control" required>
-                            <option value="0" disabled>Tipo</option>
-                            <option *ngFor="let item of tipoTelefonos" value="{{item.IdTipoTelefono}}">
-                                {{ item.Descripcion }}
-                            </option>
-                        </select>
-                    </div>
-                    <div class="form-group input-container">
-                        <input [(ngModel)]="telefono2" type="text" class="form-control input-field"
-                            placeholder="Segundo Telefono" required>
-                        <select [(ngModel)]="tipoTelefono2" type="text" class="form-control" required>
-                            <option value="0" disabled>Tipo</option>
-                            <option *ngFor="let item of tipoTelefonos" value="{{item.IdTipoTelefono}}">
-                                {{ item.Descripcion }}
-                            </option>
-                        </select>
-                    </div>
-
-                    <!-- <div class="form-group">
-                        <button [disabled]="botonAgregarNumero" type="button" class="form-control"
-                            style="background-color: #4582EC;" (click)="agregarTelefono()"><i class="fa fa-plus"
-                                style="color: white" aria-hidden="true"></i>
-                        </button>
-                    </div>
-                    <div class="form-group input-container" [hidden]="numeroExtra">
-                        <input [(ngModel)]="telefono3" type="text" class="form-control input-field"
-                            placeholder="Ingrese Tercer Telefono" required>
-                        <select [(ngModel)]="tipoTelefono" type="text" class="form-control" required>
-                            <option value="0" disabled>Tipo</option>
-                            <option *ngFor="let item of tipoTelefonos" value="{{item.IdTipoTelefono}}">
-                                {{ item.Descripcion }}
-                            </option>
-                        </select>
-                    </div>
-
-                    <div class="form-group" [hidden]="numeroExtra">
-                        <button type="button" class="form-control" style="background-color: #d9534f;"
-                            (click)="quitarTelefono()"><i class="fa fa-times" style="color: white"
-                                aria-hidden="true"></i>
-                        </button>
-                    </div> -->
-
-                    <div class="form-group">
-                        <input [(ngModel)]="correo" type="email" class="form-control" placeholder="Ingrese Correo">
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-lg-4 col-md-6">
-            <div class="card">
-                <div class="card-header" style="text-align: center;">
-                    Dirección
-                </div>
-                <div class="card-body">
-                    <div class="form-group">
-                        <select [(ngModel)]="provincia" type="text"
-                            (change)="cantonesDeUnaProvincia($event.target.value)" class="form-control" required>
-                            <option value="0" disabled>Seleccionar Provincia </option>
-                            <option *ngFor="let item of provincias" value="{{item.IdProvincia}}">
-                                {{ item.Descripcion }}
-                            </option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <select [(ngModel)]="canton" type="text" (change)="parroquiasDeUnCanton($event.target.value)"
-                            class="form-control" required>
-                            <option value="0" disabled>Seleccionar Cantón </option>
-                            <option *ngFor="let item of cantones" value="{{item.IdCanton}}">
-                                {{ item.Descripcion }}
-                            </option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <select [(ngModel)]="parroquia" type="text"
-                            (change)="comunidadesDeUnaParroquia($event.target.value)" class="form-control" required>
-                            <option value="0" disabled>Seleccionar Parroquia</option>
-                            <option *ngFor="let item of parroquias" value="{{item.IdParroquia}}">
-                                {{ item.Descripcion }}
-                            </option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <select [(ngModel)]="comunidad" type="text" class="form-control" required>
-                            <option value="0" disabled>Seleccionar Comunidad</option>
-                            <option *ngFor="let item of comunidades" value="{{item.IdComunidad}}">
-                                {{ item.Descripcion }}
-                            </option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <br>
-    <div class="row">
-        <div class="container">
-            <div class="col-md-12">
+        <br>
+        <div class="row">
+            <div class="col-lg-12">
                 <div class="form-group">
-                    <input type="button" class="form-control btn-success" (click)="crearPersona()" value="Guardar Persona">
+                    <button type="submit" class="form-control btn-success">Guardar Persona</button>
                 </div>
             </div>
         </div>
-    </div>
-
+    </form>
     <div class="row">
         <div class="col-md-12">
             <div class="form-group input-container">
@@ -168,17 +188,22 @@
                             <td> {{ item.TipoDocumento }} </td>
                             <td> {{ item.NumeroDocumento }} </td>
                             <td>
-                                <button class="btn btn-sm btn-outline-primary separacion-botones" (click)="consultarPersonaPorId(item.IdPersona)" value="{{item.IdPersona}}">
+                                <button class="btn btn-sm btn-outline-primary separacion-botones"
+                                    value="{{item.IdPersona}}"
+                                    (click)="consultarPersonaPorId('detalles', item.IdPersona)">
                                     <i class="fa fa-eye" aria-hidden="true"></i>
                                 </button>
                             </td>
                             <td>
-                                <button class="btn btn-sm btn-outline-info separacion-botones"><i
-                                        class="fa fa-pencil-square-o" aria-hidden="true"></i> </button>
+                                <button class="btn btn-sm btn-outline-info separacion-botones"
+                                    value="{{item.IdPersona}}"
+                                    (click)="consultarPersonaPorId('modificar', item.IdPersona)">
+                                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                </button>
                             </td>
                             <td>
-                                <button class="btn btn-sm btn-outline-danger separacion-botones" value="{{item.IdPersona}}" 
-                                (click)="eliminarPersona(item.IdPersona)">
+                                <button class="btn btn-sm btn-outline-danger separacion-botones"
+                                    value="{{item.IdPersona}}" (click)="eliminarPersona(item.IdPersona)">
                                     <i class="fa fa-trash" aria-hidden="true"></i>
                                 </button>
                             </td>
