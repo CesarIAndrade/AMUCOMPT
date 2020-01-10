@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { FormGroup, Validators, FormControl } from '@angular/forms';
+import { FormGroup, Validators, FormControl, Form } from '@angular/forms';
 
 // Services
 import { PersonaService } from "../../services/persona.service";
@@ -42,7 +42,7 @@ export class PersonaComponent implements OnInit {
       _telefono1: new FormControl('', [Validators.required]),
       _telefono2: new FormControl('', [Validators.required]),
       _correo: new FormControl('', [Validators.required])
-    });
+    }, { updateOn: 'blur' });
   }
 
   tipoDocumento = "0";
@@ -292,13 +292,14 @@ export class PersonaComponent implements OnInit {
   }
 
   validarFormulario() {
-    console.log(this.testButton.nativeElement.value);
     if (this.myForm.valid) {
       if (this.testButton.nativeElement.value == 'insertar') {
+        console.log(this.testButton.nativeElement.value);
         this.crearPersona();
       } else if (this.testButton.nativeElement.value == 'modificar') {
-        this.modificarPersona(this.personaModal, 'modificar');
-        this.testButton.nativeElement.value = 'insertar';
+        console.log(this.testButton.nativeElement.value);
+        this.modificarPersona('modificar', this.personaModal);
+        // this.testButton.nativeElement.value = 'insertar';
       }
     } else {
       console.log("Algo Salio Mal");
@@ -518,7 +519,7 @@ export class PersonaComponent implements OnInit {
       localStorage.getItem('miCuenta.getToken'))
       .then(
         ok => {
-          console.log(ok['respuesta']);
+          // console.log(ok['respuesta']);
           this.personaModal.idPersona = ok['respuesta']['IdPersona'];
           this.personaModal.primerNombreModal = ok['respuesta']['PrimerNombre'];
           this.personaModal.segundoNombreModal = ok['respuesta']['SegundoNombre'];
@@ -529,10 +530,10 @@ export class PersonaComponent implements OnInit {
           this.personaModal.numeroDocumentoModal = ok['respuesta']['NumeroDocumento'];
           try {
             this.personaModal.idTipoTelefonoModal1 = ok['respuesta']['ListaTelefono'][0]['TipoTelefono']['IdTipoTelefono'];
-            this.personaModal.idTelefonoModal1 = ok['respuesta']['ListaTelefono'][0]['TipoTelefono']['IdTelefono'];
+            this.personaModal.idTelefonoModal1 = ok['respuesta']['ListaTelefono'][0]['IdTelefono'];
             this.personaModal.telefonoModal1 = ok['respuesta']['ListaTelefono'][0]['Numero'];
             this.personaModal.idTipoTelefonoModal2 = ok['respuesta']['ListaTelefono'][1]['TipoTelefono']['IdTipoTelefono'];
-            this.personaModal.idTelefonoModal2 = ok['respuesta']['ListaTelefono'][1]['TipoTelefono']['IdTelefono'];
+            this.personaModal.idTelefonoModal2 = ok['respuesta']['ListaTelefono'][1]['IdTelefono'];
             this.personaModal.telefonoModal2 = ok['respuesta']['ListaTelefono'][1]['Numero'];
             this.personaModal.correoModal = ok['respuesta']['ListaCorreo'][0]['CorreoValor'];
             this.personaModal.idCorreoModal = ok['respuesta']['ListaCorreo'][0]['IdCorreo'];
@@ -552,7 +553,7 @@ export class PersonaComponent implements OnInit {
           if (value == 'detalles') {
             this.abrirModal(this.personaModal)
           } else if (value == 'modificar') {
-            this.modificarPersona(this.personaModal);
+            this.modificarPersona('', this.personaModal);
           }
         },
       )
@@ -588,32 +589,36 @@ export class PersonaComponent implements OnInit {
   }
 
   modificarPersona(
-    personaModal: PersonaModal,
-    value?: string
+    value: string,
+    personaModal?: PersonaModal
   ) {
-    this.personaModal = personaModal;
-    var nombres = personaModal.primerNombreModal + ' ' + personaModal.segundoNombreModal;
-    var apellidos = personaModal.apellidoPaternoModal + ' ' + personaModal.apellidoMaternoModal;
-    this.myForm.setValue({
-      _nombres: nombres,
-      _apellidos: apellidos,
-      _numeroDocumento: personaModal.numeroDocumentoModal,
-      _telefono1: personaModal.telefonoModal1,
-      _telefono2: personaModal.telefonoModal2,
-      _correo: personaModal.correoModal,
-    });
-    this.tipoDocumento = personaModal.idTipoDocumentoModal;
-    this.tipoTelefono1 = personaModal.idTipoTelefonoModal1;
-    this.tipoTelefono2 = personaModal.idTipoTelefonoModal2;
-    this.provincia = personaModal.idProvinciaModal;
-    this.consultarCantonesDeUnaProvincia(personaModal.idProvinciaModal, '');
-    this.canton = personaModal.idCantonModal;
-    this.consultarParroquiasDeUnCanton(personaModal.idCantonModal, '');
-    this.parroquia = personaModal.idParroquiaModal;
-    this.consultarComunidadesDeUnaParroquia(personaModal.idParroquiaModal, '');
-    this.comunidad = personaModal.idComunidadModal;
 
-    if (value == 'modificar') {
+    if(value == ''){
+      var nombres = personaModal.primerNombreModal + ' ' + personaModal.segundoNombreModal;
+      var apellidos = personaModal.apellidoPaternoModal + ' ' + personaModal.apellidoMaternoModal;
+      this.myForm.patchValue({
+        _nombres: nombres,
+        _apellidos: apellidos,
+        _numeroDocumento: personaModal.numeroDocumentoModal,
+        _telefono1: personaModal.telefonoModal1,
+        _telefono2: personaModal.telefonoModal2,
+        _correo: personaModal.correoModal,
+      });
+      this.tipoDocumento = personaModal.idTipoDocumentoModal;
+      this.tipoTelefono1 = personaModal.idTipoTelefonoModal1;
+      this.tipoTelefono2 = personaModal.idTipoTelefonoModal2;
+      this.provincia = personaModal.idProvinciaModal;
+      this.consultarCantonesDeUnaProvincia(personaModal.idProvinciaModal, '');
+      this.canton = personaModal.idCantonModal;
+      this.consultarParroquiasDeUnCanton(personaModal.idCantonModal, '');
+      this.parroquia = personaModal.idParroquiaModal;
+      this.consultarComunidadesDeUnaParroquia(personaModal.idParroquiaModal, '');
+      this.comunidad = personaModal.idComunidadModal;
+    } 
+
+
+    if (value == "modificar") {
+
       var dosNombres = false;
       var dosApellidos = false;
       this.validarSelects(
@@ -659,7 +664,7 @@ export class PersonaComponent implements OnInit {
       if (dosNombres == true && dosApellidos == true) {
         this.personaService.actualizarPersona(
           personaModal.idPersona,
-          this.myForm,
+          this.myForm.get('_numeroDocumento').value,
           this.tipoDocumento,
           apellidoPaterno,
           apellidoMaterno,
@@ -669,10 +674,15 @@ export class PersonaComponent implements OnInit {
           .then(
             ok => {
               console.log(ok['respuesta']);
-              // this.actualizarTelefono(personaModal);
-              // this.actualizarCorreo(personaModal);
-              // this.actualizarDireccion(personaModal);
-              // this.consultarPersonas();
+              var idPersona = personaModal.idPersona;
+              var idTelefono1 = personaModal.idTelefonoModal1;
+              var idTelefono2 = personaModal.idTelefonoModal2;
+              this.actualizarTelefono(idPersona, idTelefono1, idTelefono2);
+              var idCorreo = personaModal.idCorreoModal;
+              this.actualizarCorreo(idPersona, idCorreo);
+              var idAsignacionPC = personaModal.idAsignacionPC;
+              this.actualizarDireccion(idPersona, idAsignacionPC);
+              this.consultarPersonas();
             },
           )
           .catch(
@@ -684,22 +694,30 @@ export class PersonaComponent implements OnInit {
     }
   }
 
-  actualizarTelefono(personaModal: PersonaModal) {
+  actualizarTelefono(
+    idPersona: string,
+    idTelefono1: string,
+    idTelefono2: string
+  ) {
     this.telefonos.push(
       {
-        IdTelefono: personaModal.idTelefonoModal1,
+        IdPersona: idPersona,
+        IdTelefono: idTelefono1,
         Numero: this.myForm.get('_telefono1').value,
         IdTipoTelefono: this.tipoTelefono1
       },
       {
-        IdTelefono: personaModal.idTelefonoModal2,
+        IdPersona: idPersona,
+        IdTelefono: idTelefono2,
         Numero: this.myForm.get('_telefono2').value,
         IdTipoTelefono: this.tipoTelefono2
       }
     )
+
     this.telefonos.map(
       item => {
         this.personaService.actualizarTelefono(
+          item.IdPersona,
           item.IdTelefono,
           item.Numero,
           item.IdTipoTelefono,
@@ -718,10 +736,14 @@ export class PersonaComponent implements OnInit {
     )
   }
 
-  actualizarCorreo(personaModal: PersonaModal) {
+  actualizarCorreo(
+    idPersona: string,
+    idCorreo: string
+  ) {
     this.personaService.actualizarCorreo(
-      personaModal.idCorreoModal,
-      this.myForm,
+      idPersona,
+      idCorreo,
+      this.myForm.get('_correo').value,
       localStorage.getItem('miCuenta.putToken'))
       .then(
         ok => {
@@ -735,9 +757,13 @@ export class PersonaComponent implements OnInit {
       )
   }
 
-  actualizarDireccion(personaModal: PersonaModal) {
+  actualizarDireccion(
+    idPersona: string,
+    idAsignacionPC: string
+  ) {
     this.personaService.actualizarDireccion(
-      personaModal.idAsignacionPC,
+      idPersona,
+      idAsignacionPC,
       this.comunidad,
       localStorage.getItem('miCuenta.putToken'))
       .then(

@@ -346,7 +346,7 @@ export class PersonaService {
 
   actualizarPersona(
     idPersona: string,
-    formulario: FormGroup,
+    numeroDocumento: string,
     tipoDocumento: string,
     apellidoPaterno: string,
     apellidoMaterno: string,
@@ -356,7 +356,7 @@ export class PersonaService {
   ) {
     const body = new HttpParams()
       .set('IdPersona', idPersona)
-      .set('NumeroDocumento', formulario.get('_numeroDocumento').value)
+      .set('NumeroDocumento', numeroDocumento)
       .set('ApellidoPaterno', apellidoPaterno)
       .set('ApellidoMaterno', apellidoMaterno)
       .set('PrimerNombre', primerNombre)
@@ -379,12 +379,14 @@ export class PersonaService {
   }
 
   actualizarTelefono(
+    idPersona: string,
     idTelefono: string,
     numero: string,
     tipoTelefono: string,
     _token: string
   ) {
     const body = new HttpParams()
+      .set('IdPersona', idPersona)
       .set('IdTelefono', idTelefono)
       .set('Numero', numero)
       .set('IdTipoTelefono', tipoTelefono)
@@ -406,13 +408,15 @@ export class PersonaService {
   }
 
   actualizarCorreo(
+    idPersona: string,
     idCorreo: string,
-    formulario: FormGroup,
+    correoValor: string,
     _token: string
   ) {
     const body = new HttpParams()
+      .set('IdPersona', idPersona)
       .set('IdCorreo', idCorreo)
-      .set('CorreoValor', formulario.get('_correo').value)
+      .set('CorreoValor', correoValor)
       .set('encriptada', _token)
     return new Promise((resolve, reject) => {
       this.http.post(this.apiUrl + 'TalentoHumano/ActualizarCorreo', body.toString(),
@@ -430,11 +434,13 @@ export class PersonaService {
   }
 
   actualizarDireccion(
+    idPersona: string,
     idAsignacionPC: string,
     comunidad: string,
     _token: string,
   ) {
     const body = new HttpParams()
+      .set('IdPersona', idPersona)
       .set('IdAsignacionPC', idAsignacionPC)
       .set('IdComunidad', comunidad)
       .set('encriptada', _token)
