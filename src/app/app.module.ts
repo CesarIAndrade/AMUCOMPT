@@ -30,6 +30,7 @@ import { HttpClientModule } from "@angular/common/http";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { ModalDetallePersonaComponent } from './components/modal-detalle-persona/modal-detalle-persona.component';
 import { ModalAsignacionUsuarioPersonaComponent } from './components/modal-asignacion-usuario-persona/modal-asignacion-usuario-persona.component';
+import { PipesModule } from './pipes/pipes.module';
 
 @NgModule({
   declarations: [
@@ -61,6 +62,7 @@ import { ModalAsignacionUsuarioPersonaComponent } from './components/modal-asign
     ReactiveFormsModule,
     MatDialogModule,
     MatTabsModule,
+    PipesModule
   ],
   entryComponents: [ 
     ModalDetallePersonaComponent,

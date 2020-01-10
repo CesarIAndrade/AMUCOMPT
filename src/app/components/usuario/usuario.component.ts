@@ -21,6 +21,7 @@ import { Persona } from 'src/app/interfaces/persona/persona';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ModalAsignacionUsuarioPersonaComponent } from '../modal-asignacion-usuario-persona/modal-asignacion-usuario-persona.component';
 
+import { FilterPipe } from "../../pipes/filter.pipe";
 
 export interface DialogData {
   cedula: string;
@@ -59,6 +60,8 @@ export class UsuarioComponent implements OnInit {
   idUsuario: string;
 
   botonInsertar = 'insertar';
+
+  filterUsuario : string = '';
 
   consultarUsuarios() {
     this.usuarioService.consultarUsuarios(localStorage.getItem('miCuenta.getToken'))
