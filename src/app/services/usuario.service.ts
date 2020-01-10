@@ -10,13 +10,15 @@ export class UsuarioService {
 
   private apiUrl: string = "http://192.168.25.15:90/api/"
 
-  login(_usuario: string, _password: string, _token: string) {
-
+  login(
+    usuario: string, 
+    contrasena: string, 
+    _token: string
+  ) {
     const body = new HttpParams()
-      .set('usuario', _usuario)
-      .set('contrasena', _password)
+      .set('usuario', usuario)
+      .set('contrasena', contrasena)
       .set('token', _token)
-
     return new Promise((resolve, reject) => {
       this.http.post(this.apiUrl + 'TalentoHumano/Login/', body.toString(),
         {
@@ -33,13 +35,10 @@ export class UsuarioService {
   }
 
   consultarUsuarios(_token: string) {
-
     const body = new HttpParams()
     .set('encriptada', _token)
-
     return new Promise((resolve, reject) => {
-
-      this.http.post(this.apiUrl + 'TalentoHumano/ListaUsuariosSistema/', body.toString(),
+      this.http.post(this.apiUrl + 'TalentoHumano/ListaUsuariosSistema', body.toString(),
       {
         headers: new HttpHeaders()
           .set('Content-Type', 'application/x-www-form-urlencoded')
@@ -53,10 +52,8 @@ export class UsuarioService {
   }
   
   consultarPrivilegios(_token: string) {
-    
     const body = new HttpParams()
     .set('encriptada', _token)
-
     return new Promise((resolve, reject) => {
       this.http.post(this.apiUrl + 'TalentoHumano/ListaPrivilegio/',
       body.toString(),

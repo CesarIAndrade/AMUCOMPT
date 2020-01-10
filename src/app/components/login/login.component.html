@@ -1,30 +1,50 @@
 <br>
-<!-- <h1 class="text-white animated infinite bounce delay-2s">Example</h1> -->
-<div class="container page-container animated fadeInDown"> <!--flipInX-->
+<div class="container page-container animated fadeInDown">
     <div class="row justify-content-center">
         <div class="col-md-6 col-xs-12 col-lg-4 col-sm-12">
             <div class="card">
-                
                 <div class="card-body card-login">
                     <img src="../../../assets/img/logo.png" width="200" height="100">
-                    <div class="form-group">
-                        <label for="exampleInputEmail1">Usuario</label>
-                        <input [(ngModel)]="usuario" type="text" class="form-control" name="usuario"
-                            aria-describedby="emailHelp">
-                    </div>
-                    <div class="form-group">
-                        <label for="exampleInputPassword1">Clave</label>
-                        <input [(ngModel)]="contrasena" type="password" class="form-control">
-                        
-                    </div>
-                    <br>
-                    <button (click)="login()" type="button" class="btn btn-primary btn-block"
-                        name="contrasena">Ingresar</button>
+                    <form [formGroup]="myForm" (ngSubmit)="login()" novalidate>
+                        <div class="form-group">
+                            <label>Usuario</label>
+                            <input formControlName="_usuario" type="text" class="form-control" 
+                            (keyup)="credendialesIncorrectas()">
+                            <div class="badge badge-danger mt-3 btn-block"
+                                *ngIf="_usuario.invalid && (_usuario.dirty || _usuario.touched)">
+                                <div *ngIf="_usuario.errors.required">
+                                    Usuario Requerido
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Contrasena</label>
+                            <input formControlName="_contrasena" type="password" class="form-control"
+                            (keyup)="credendialesIncorrectas()">
+                            <div class="badge badge-danger mt-3 btn-block"
+                                *ngIf="_contrasena.invalid && (_contrasena.dirty || _contrasena.touched)">
+                                <div *ngIf="_contrasena.errors.required">
+                                    Contrasena Requerido
+                                </div>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="form-group">
+                            <div class="badge badge-danger btn-block" [hidden]="credendialesIncorrectasInput">
+                                Credendiales Incorrectas
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" [disabled]="myForm.invalid" class="form-control btn btn-primary">
+                                Iniciar Sesion
+                            </button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
 </div>
-<div class="padre">
+<!-- <div class="padre">
     <div id="loadingPage" class="lds-roller hijo"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
-</div>
+</div> -->
