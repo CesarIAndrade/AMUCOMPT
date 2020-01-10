@@ -29,6 +29,7 @@ import { VentaComponent } from './components/venta/venta.component';
 import { HttpClientModule } from "@angular/common/http";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { ModalDetallePersonaComponent } from './components/modal-detalle-persona/modal-detalle-persona.component';
+import { ModalAsignacionUsuarioPersonaComponent } from './components/modal-asignacion-usuario-persona/modal-asignacion-usuario-persona.component';
 
 @NgModule({
   declarations: [
@@ -41,7 +42,8 @@ import { ModalDetallePersonaComponent } from './components/modal-detalle-persona
     InventarioComponent,
     CompraComponent,
     VentaComponent,
-    ModalDetallePersonaComponent
+    ModalDetallePersonaComponent,
+    ModalAsignacionUsuarioPersonaComponent
   ],
   imports: [
     BrowserModule,
@@ -61,7 +63,8 @@ import { ModalDetallePersonaComponent } from './components/modal-detalle-persona
     MatTabsModule,
   ],
   entryComponents: [ 
-    ModalDetallePersonaComponent 
+    ModalDetallePersonaComponent,
+    ModalAsignacionUsuarioPersonaComponent 
   ],
   providers: [],
   bootstrap: [AppComponent]

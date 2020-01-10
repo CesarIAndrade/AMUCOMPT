@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 
 // Services
 import { UsuarioService } from 'src/app/services/usuario.service';
@@ -19,7 +19,13 @@ import { Persona } from 'src/app/interfaces/persona/persona';
 
 
 import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { ModalAsignacionUsuarioPersonaComponent } from '../modal-asignacion-usuario-persona/modal-asignacion-usuario-persona.component';
 
+
+export interface DialogData {
+  cedula: string;
+  idPersona: string;
+}
 
 @Component({
   selector: 'app-usuario',
@@ -28,10 +34,14 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 })
 export class UsuarioComponent implements OnInit {
 
+
   constructor(
+    private dialog: MatDialog,
     private usuarioService: UsuarioService,
     private personaService: PersonaService,
   ) { }
+
+  @ViewChild('testButton', { static: false }) testButton: ElementRef;
 
   contrasena: string;
   inputType = 'password';
@@ -42,9 +52,13 @@ export class UsuarioComponent implements OnInit {
   modulos: Modulo[] = [];
   privilegios: Privilegios[] = [];
   usuarios: Usuario[] = [];
-  Cedula : string;
+  cedula : string;
   idPersona : string;
   valorUsuario : string;
+  resultadoModal: DialogData;
+  idUsuario: string;
+
+  botonInsertar = 'insertar';
 
   consultarUsuarios() {
     this.usuarioService.consultarUsuarios(localStorage.getItem('miCuenta.getToken'))
@@ -107,8 +121,6 @@ export class UsuarioComponent implements OnInit {
         ok => {
           this.personas = ok['respuesta'];
           console.log(this.personas);
-          this.consultarUsuarios();
-
         },
         err => console.log(err)
       )
@@ -116,20 +128,59 @@ export class UsuarioComponent implements OnInit {
 
   asignarUsuarioaPersona(idPersona: string,numeroDocumento: string)
   {
-    this.Cedula = numeroDocumento;
+    this.cedula = numeroDocumento;
     this.idPersona = idPersona;
   }
 
   validacionFormulario()
   {
-    if(this.Cedula.length>0 && this.valorUsuario.length>0 && this.contrasena.length>0)
+    if(this.testButton.nativeElement.value == "insertar")
     {
-      this.guardarUsuario();
-    }else
-    {
-      alert("falta algun campo");
+      if(this.cedula.length>0 && this.valorUsuario.length>0 && this.contrasena.length>0)
+      {
+        this.guardarUsuario();
+      }else
+      {
+        console.log("falta algun campo");
+      }
+    }else if(this.testButton.nativeElement.value == "modificar"){
+      console.log(this.valorUsuario+' '+this.contrasena)
+      if(this.contrasena==null){
+        console.log("falta algun campo");
+      }else{
+        if(this.valorUsuario.length>0 && this.contrasena.length>0)
+        {
+          this.modificarUsuario();
+        }else
+        {
+         console.log("falta algun campo");
+        }
+      }
     }
   }
+
+  modificarUsuario()
+  {
+    this.usuarioService.actualizarUsuario(
+      this.idUsuario,
+      this.idPersona,
+      this.valorUsuario,
+      this.contrasena,
+      localStorage.getItem('miCuenta.putToken'))
+      .then(
+        ok => {
+          this.limpiarFormulario();
+          this.consultarUsuarios();
+          this.testButton.nativeElement.value = 'insertar';
+        },
+      )
+      .catch(
+        err => {
+          console.log(err);
+        }
+      )
+  }
+
   guardarUsuario()
   {
     var datosUsuario={
@@ -141,8 +192,8 @@ export class UsuarioComponent implements OnInit {
     this.usuarioService.crearUsuario(datosUsuario)
     .then(
       ok => {
-        console.log(ok['respuesta']);
-        alert("Ingresado Correctamente");
+        this.consultarUsuarios();
+        this.limpiarFormulario();
       }
     )
     .catch(
@@ -150,20 +201,65 @@ export class UsuarioComponent implements OnInit {
         console.log(error);
       }
     )
-    
   }
 
-  modal()
-  {
-    console.log("wds")
+  abrirModal() {
+    let dialogRef = this.dialog.open(ModalAsignacionUsuarioPersonaComponent, {
+      width: '900px',
+      height: '500px',
+      data: {
+        cedula: this.cedula,
+        idPersona: this.idPersona
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+      this.resultadoModal = result;
+      console.log(this.resultadoModal);
+      this.cedula = this.resultadoModal.cedula;
+      this.idPersona = this.resultadoModal.idPersona;
+    });
   }
-  ngOnInit() {
-    this.Cedula="";
+
+  limpiarFormulario()
+  {
+    this.cedula="";
     this.valorUsuario="";
-    this.consultarPersonas();
+    this.contrasena="";
+  }
+
+  eliminarUsuario(idUsuario: string)
+  {
+    this.usuarioService.eliminarUsuario(
+      idUsuario,
+      localStorage.getItem('miCuenta.deleteToken'))
+      .then(
+        ok => {
+          this.consultarUsuarios();
+        },
+      )
+      .catch(
+        err => {
+          console.log(err);
+        }
+      )
+  }
+
+  setUsuario(IdUsuario: string,UsuarioLogin: string,IdPersona: string)
+  {
+    this.idUsuario=IdUsuario;
+    this.idPersona = IdPersona;
+    this.testButton.nativeElement.value = 'modificar';
+    this.valorUsuario = UsuarioLogin;
+  }
+
+  ngOnInit() {
+    this.cedula="";
+    this.valorUsuario="";
+    this.consultarUsuarios();
     this.consultarPrivilegios();
     this.consultarModulos();
-    
   }
 
 }

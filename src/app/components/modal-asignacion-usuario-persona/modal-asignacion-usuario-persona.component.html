@@ -1,0 +1,56 @@
+<h1 mat-dialog-title>Datos de Persona</h1>
+<mat-dialog-content>
+    <div class="card ">
+        <div class="card-header" style="text-align: center;">
+            Lista Personas
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group input-container">
+                        <i class="fa fa-search icon"></i>
+                        <input type="text" class="form-control input-field" placeholder="Ejem. Zambrano Zambrano">
+                    </div>
+                    <input hidden disabled readonly matInput [(ngModel)]="data.cedula">
+                    <input hidden disabled  readonly matInput [(ngModel)]="data.idPersona">
+                    <div class="table-responsive-sm">
+                        <table class="table table-sm">
+                            <thead class="card-header">
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Nombres</th>
+                                    <th scope="col">Apellidos</th>
+                                    <th scope="col">Documento</th>
+                                    <th scope="col">No. Documento</th>
+                                    <th scope="col" colspan="1" style="text-align: center;">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let item of personas, index as i">
+                                    <th scope="row"> {{ i }} </th>
+                                    <td> {{ item.PrimerNombre }} {{ item.SegundoNombre }} </td>
+                                    <td> {{ item.ApellidoPaterno }} {{ item.ApellidoMaterno }} </td>
+                                    <td> {{ item.TipoDocumento }} </td>
+                                    <td> {{ item.NumeroDocumento }} </td>
+                                    <td>
+                                        <button [mat-dialog-close]="data"
+                                            class="btn btn-sm btn-outline-warning separacion-botones"
+                                            value="{{item.IdPersona}}"
+                                            (click)="asignarUsuarioaPersona(item.IdPersona,item.NumeroDocumento)">
+                                            <i class="fa fa-user-plus" aria-hidden="true"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</mat-dialog-content>
+<mat-dialog-actions>
+    <!-- <button mat-button mat-dialog-close type="button" class="btn btn-primary">
+        Aceptar
+    </button> -->
+</mat-dialog-actions>
