@@ -4,6 +4,8 @@ import { Router } from '@angular/router';
 // Services
 import { UsuarioService } from 'src/app/services/usuario.service';
 import { SeguridadService } from '../../services/seguridad.service'
+import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { Usuario } from 'src/app/interfaces/usuario/usuario';
 
 @Component({
   selector: 'app-login',
@@ -12,37 +14,46 @@ import { SeguridadService } from '../../services/seguridad.service'
 })
 export class LoginComponent implements OnInit {
 
+  myForm: FormGroup;
   constructor(private usuarioService: UsuarioService,
     private router: Router,
-    private seguridadService: SeguridadService) {
+    private seguridadService: SeguridadService
+  ) {
+    this.myForm = new FormGroup({
+      _usuario: new FormControl('', [Validators.required]),
+      _contrasena: new FormControl('', [Validators.required]),
+    })
   }
 
-  usuario: string;
-  contrasena: string;
-
-  ngOnInit() {
-    setTimeout(() => {
-      document.getElementById('loadingPage').hidden = true;
-    }, 1000);
-    this.consultarTokens();
-  }
+  usuarios: Usuario[] = [];
+  credendialesIncorrectasInput = true;
 
   login() {
-    if (this.usuario != "" && this.contrasena != "" && localStorage.getItem('miCuenta.postToken') != null) {
+    if (this.myForm.valid) {
+
       this.usuarioService.login(
-        this.usuario,
-        this.contrasena,
+        this.myForm.get('_usuario').value,
+        this.myForm.get('_contrasena').value,
         localStorage.getItem('miCuenta.postToken')
       )
         .then(
           ok => {
-            console.log(ok);
-            this.router.navigateByUrl('inicio');
+            if(ok['codigo'] == '200'){
+              this.router.navigateByUrl('inicio');
+            } else {
+              this.credendialesIncorrectasInput = false;
+            }
           })
         .catch(
           err => console.log(err)
         )
+    } else {
+      console.log('Algo salio mal');
     }
+  }
+
+  credendialesIncorrectas() {
+    this.credendialesIncorrectasInput = true
   }
 
   consultarTokens() {
@@ -58,6 +69,37 @@ export class LoginComponent implements OnInit {
       .catch(
         err => console.log(err)
       )
+  }
+
+  consultarUsuarios(_token: string) {
+    this.usuarioService.consultarUsuarios(
+      _token
+    )
+      .then(
+        ok => {
+          console.log(ok['respuesta']);
+          this.usuarios = ok['respuesta'];
+        }
+      )
+      .catch(
+        error => {
+          console.log(error);
+        }
+      )
+  }
+
+  get _usuario() {
+    return this.myForm.get('_usuario')
+  }
+  get _contrasena() {
+    return this.myForm.get('_contrasena')
+  }
+
+  ngOnInit() {
+    // setTimeout(() => {
+    //   document.getElementById('loadingPage').hidden = true;
+    // }, 1000);
+    this.consultarTokens();
   }
 
 }
