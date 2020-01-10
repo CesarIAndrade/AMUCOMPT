@@ -13,6 +13,13 @@ import { MatDialog } from "@angular/material/dialog";
 
 // Components
 import { Modulo } from 'src/app/interfaces/modulo/modulo';
+import { PersonaService } from 'src/app/services/persona.service';
+import { PersonaComponent } from '../persona/persona.component';
+import { Persona } from 'src/app/interfaces/persona/persona';
+
+
+import { FormGroup, FormControl, Validators } from '@angular/forms';
+
 
 @Component({
   selector: 'app-usuario',
@@ -23,6 +30,7 @@ export class UsuarioComponent implements OnInit {
 
   constructor(
     private usuarioService: UsuarioService,
+    private personaService: PersonaService,
   ) { }
 
   contrasena: string;
@@ -30,9 +38,13 @@ export class UsuarioComponent implements OnInit {
   modulo = '0';
   privilegio = '0';
 
+  personas : Persona[] = [];
   modulos: Modulo[] = [];
   privilegios: Privilegios[] = [];
   usuarios: Usuario[] = [];
+  Cedula : string;
+  idPersona : string;
+  valorUsuario : string;
 
   consultarUsuarios() {
     this.usuarioService.consultarUsuarios(localStorage.getItem('miCuenta.getToken'))
@@ -89,10 +101,69 @@ export class UsuarioComponent implements OnInit {
     }
   }
 
+  consultarPersonas() {
+    this.personaService.consultarPersonas(localStorage.getItem('miCuenta.getToken'))
+      .then(
+        ok => {
+          this.personas = ok['respuesta'];
+          console.log(this.personas);
+          this.consultarUsuarios();
+
+        },
+        err => console.log(err)
+      )
+  }
+
+  asignarUsuarioaPersona(idPersona: string,numeroDocumento: string)
+  {
+    this.Cedula = numeroDocumento;
+    this.idPersona = idPersona;
+  }
+
+  validacionFormulario()
+  {
+    if(this.Cedula.length>0 && this.valorUsuario.length>0 && this.contrasena.length>0)
+    {
+      this.guardarUsuario();
+    }else
+    {
+      alert("falta algun campo");
+    }
+  }
+  guardarUsuario()
+  {
+    var datosUsuario={
+      idPersona: this.idPersona,
+      usuario : this.valorUsuario,
+      contrasena : this.contrasena,
+      token : localStorage.getItem('miCuenta.postToken')
+    }
+    this.usuarioService.crearUsuario(datosUsuario)
+    .then(
+      ok => {
+        console.log(ok['respuesta']);
+        alert("Ingresado Correctamente");
+      }
+    )
+    .catch(
+      error =>{
+        console.log(error);
+      }
+    )
+    
+  }
+
+  modal()
+  {
+    console.log("wds")
+  }
   ngOnInit() {
-    this.consultarUsuarios();
+    this.Cedula="";
+    this.valorUsuario="";
+    this.consultarPersonas();
     this.consultarPrivilegios();
     this.consultarModulos();
+    
   }
 
 }
