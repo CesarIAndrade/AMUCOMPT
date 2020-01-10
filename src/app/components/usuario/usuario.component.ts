@@ -135,6 +135,7 @@ export class UsuarioComponent implements OnInit {
         this.crearUsuario();
       } else if (this.testButton.nativeElement.value == "modificar") {
         this.actualizarUsuario();
+        this.myForm.reset();
         this.testButton.nativeElement.value = "insertar";
       }
     }
