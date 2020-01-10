@@ -5,13 +5,18 @@
             Nuevo Usuario
         </div>
         <div class="card-body">
+            <div class="form-group input-container">
+                <input [value]="cedula" type="text" readonly class="form-control input-field" placeholder="Cedula">
+                <i (click)="abrirModal()" class="fa fa-user-plus icon" style="background-color:#f0ad4e;"
+                    (click)="mostrarContrasena()"></i>
+            </div>
 
             <div class="form-group">
-                <input type="text" class="form-control" placeholder="Ingrese Usuario">
+                <input [(ngModel)]="valorUsuario" type="text" class="form-control" placeholder="Ingrese Usuario">
             </div>
 
             <div class="form-group input-container">
-                <input [(ngModel)]="contrasena" [type]="inputType" class="form-control input-field"
+                <input [(ngModel)]="contrasena" type="password" [type]="inputType" class="form-control input-field"
                     placeholder="Ingrese Contraseña">
                 <i class="fa fa-eye icon" (click)="mostrarContrasena()"></i>
             </div>
@@ -30,56 +35,53 @@
                 </select>
             </div>
 
-            <!-- Por si se usa Modal -->
-            <!-- <div class="form-group">
-                <input type="button" class="form-control btn-secondary" value="Modal" (click)="abrirModel()">
-            </div> -->
-
-            <!-- <div class="form-group">
-                <input type="button" class="form-control btn-warning" value="Localizacion" 
-                (click)="abrirModel()">
-            </div> -->
-
             <div class="form-group">
-                <input type="button" class="form-control btn-primary" value="Guardar Usuario">
+                <button class="form-control btn-primary" (click)="validacionFormulario()" type="submit"
+                    [value]="botonInsertar" #testButton>
+                    Guardar Usuario
+                </button>
             </div>
         </div>
     </div>
 </div>
-
-<div class="col-lg-8 col-md-7" style="float: right;">
-    <div class="form-group input-container">
-        <i class="fa fa-search icon"></i>
-        <input type="text" class="form-control input-field" placeholder="Ejem. Zambrano Zambrano">
+<div class="card ">
+    <div class="card-header" style="text-align: center;">
+        Lista Usuarios
     </div>
-    <div class="table-responsive-sm">
-        <table class="table table-sm">
-            <thead class="card-header">
-                <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Usuario</th>
-                    <th scope="col">Contraseña</th>
-                    <th scope="col" colspan="3" style="text-align: center;">Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let item of usuarios, index as i">
-                    <th scope="row"> {{ i }} </th>
-                    <td> {{ item.UsuarioLogin }} </td>
-                    <td> {{ item.Contrasena }} </td>
-                    <td>
-                        <button class="btn btn-sm btn-outline-primary separacion-botones"><i class="fa fa-eye"
-                                aria-hidden="true"></i></button>
-                    </td>
-                    <td>
-                        <button class="btn btn-sm btn-outline-info separacion-botones"><i class="fa fa-pencil-square-o"
-                                aria-hidden="true"></i> </button>
-                    </td>
-                    <td>
-                        <button class="btn btn-sm btn-outline-danger separacion-botones"><i class="fa fa-trash"
-                                aria-hidden="true"></i></button>
-                    </td>
-            </tbody>
-        </table>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group input-container">
+                    <i class="fa fa-search icon"></i>
+                    <input type="text" class="form-control input-field" placeholder="Ejem. Zambrano Zambrano">
+                </div>
+                <div class="table-responsive-sm">
+                    <table class="table table-sm">
+                        <thead class="card-header">
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Usuario</th>
+                                <th scope="col" colspan="3" style="text-align: center;">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of usuarios, index as i">
+                                <th scope="row"> {{ i }} </th>
+                                <td> {{ item.UsuarioLogin }} </td>
+                                <td>
+                                    <button (click)="setUsuario(item.IdUsuario,item.UsuarioLogin,item.IdPersona)"
+                                        class="btn btn-sm btn-outline-info separacion-botones"><i
+                                            class="fa fa-pencil-square-o" aria-hidden="true"></i> </button>
+                                </td>
+                                <td>
+                                    <button (click)="eliminarUsuario(item.IdUsuario)"
+                                        class="btn btn-sm btn-outline-danger separacion-botones"><i class="fa fa-trash"
+                                            aria-hidden="true"></i></button>
+                                </td>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
     </div>
 </div>

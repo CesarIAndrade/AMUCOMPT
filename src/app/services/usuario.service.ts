@@ -87,4 +87,77 @@ export class UsuarioService {
         })
     });
   }
+
+  crearUsuario(datosUsuario)
+  {
+    const body = new HttpParams()
+      .set('IdPersona', datosUsuario.idPersona)
+      .set('UsuarioLogin', datosUsuario.usuario)
+      .set('Contrasena',datosUsuario.contrasena)
+      .set('encriptada', datosUsuario.token)
+    return new Promise((resolve, reject) => {
+      this.http.post(this.apiUrl + 'TalentoHumano/IngresoCredencial', body.toString(),
+        {
+          headers: new HttpHeaders()
+            .set('Content-Type', 'application/x-www-form-urlencoded')
+        }
+      )
+        .subscribe(res => {
+          resolve(res);
+        }, (err) => {
+          reject(err);
+        })
+    })
+
+
+  }
+
+  eliminarUsuario(idUsuario:string,_token:string)
+  {
+    const body =  new HttpParams()
+      .set('IdUsuario', idUsuario)
+      .set('encriptada', _token)
+    return new Promise((resolve, reject) => {
+      this.http.post(this.apiUrl + 'TalentoHumano/EliminarCredencial', body.toString(),
+        {
+          headers: new HttpHeaders()
+            .set('Content-Type', 'application/x-www-form-urlencoded')
+        }
+      )
+        .subscribe(res => {
+          resolve(res);
+        }, (err) => {
+          reject(err);
+        })
+    })
+  }
+
+  actualizarUsuario(
+    IdUsuario: string,
+    IdPersona: string,
+    UsuarioLogin: string,
+    Contrasena:string,
+    _token: string
+  ) {
+    const body = new HttpParams()
+      .set('IdUsuario', IdUsuario)
+      .set('IdPersona', IdPersona)
+      .set('UsuarioLogin', UsuarioLogin)
+      .set('Contrasena', Contrasena)
+      .set('encriptada', _token)
+    return new Promise((resolve, reject) => {
+      this.http.post(this.apiUrl + 'TalentoHumano/ActualizarCredencial', body.toString(),
+        {
+          headers: new HttpHeaders()
+            .set('Content-Type', 'application/x-www-form-urlencoded')
+        }
+      )
+        .subscribe(res => {
+          resolve(res);
+        }, (err) => {
+          reject(err);
+        })
+    })
+  }
+
 }
