@@ -1,4 +1,5 @@
 export interface PersonaModal {
+    idPersona?: string,
     primerNombreModal?: string;
     segundoNombreModal?: string;
     apellidoPaternoModal?: string;
@@ -7,9 +8,12 @@ export interface PersonaModal {
     tipoDocumentoModal?: string;
     numeroDocumentoModal?: string;
     idTipoTelefonoModal1?: string;
+    idTelefonoModal1?: string;
     telefonoModal1?: string;
     idTipoTelefonoModal2?: string;
+    idTelefonoModal2?: string;
     telefonoModal2?: string;
+    idCorreoModal?: string;
     correoModal?: string;
     idComunidadModal?: string;
     comunidadModal?: string;
@@ -19,4 +23,5 @@ export interface PersonaModal {
     cantonModal?: string;
     idProvinciaModal?: string;
     provinciaModal?: string;
+    idAsignacionPC?: string;
 }

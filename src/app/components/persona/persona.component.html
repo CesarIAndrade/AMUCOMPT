@@ -10,32 +10,41 @@
                     <div class="card-body">
                         <div class="form-group">
                             <input type="text" formControlName="_nombres" class="form-control"
-                                placeholder="Ingrese Nombres">
+                                placeholder="Ingrese Nombres" (keyup)="onChangeInputNombres()">
                             <div class="badge badge-danger mt-3"
                                 *ngIf="_nombres.invalid && (_nombres.dirty || _nombres.touched)">
                                 <div *ngIf="_nombres.errors.required">
                                     Nombres Requeridos
                                 </div>
                             </div>
+                            <div class="badge badge-danger ml-3 mt-3" [hidden]="inputNombres">
+                                Necesita dos Nombres
+                            </div>
                         </div>
                         <div class="form-group">
                             <input type="text" formControlName="_apellidos" class="form-control"
-                                placeholder="Ingrese Apellidos">
+                                placeholder="Ingrese Apellidos" (keyup)="onChangeInputApellidos()">
                             <div class="badge badge-danger mt-3"
                                 *ngIf="_apellidos.invalid && (_apellidos.dirty || _apellidos.touched)">
                                 <div *ngIf="_apellidos.errors.required">
                                     Apellidos Requeridos
                                 </div>
                             </div>
+                            <div class="badge badge-danger ml-3 mt-3" [hidden]="inputApellidos">
+                                Necesita dos Apellidos
+                            </div>
                         </div>
                         <div class="form-group">
-                            <select type="text" formControlName="_tipoDocumento" (change)="onChange($event)"
-                                class="form-control">
+                            <select type="text" [(ngModel)]="tipoDocumento" [ngModelOptions]="{standalone: true}" class="form-control"
+                                (change)="onChangeSelectTipoDocumento($event.target.value)">
                                 <option value="0">Seleccione Tipo Documento</option>
                                 <option *ngFor="let item of tipoDocumentos" value="{{item.IdTipoDocumento}}">
                                     {{ item.Documento }}
                                 </option>
                             </select>
+                            <div class="badge badge-danger mt-3" [hidden]="selectTipoDocumento">
+                                Tipo Documento Requerido
+                            </div>
                         </div>
                         <div class="form-group">
                             <input type="number" formControlName="_numeroDocumento" class="form-control"
@@ -67,13 +76,16 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <select [(ngModel)]="tipoTelefono1" [ngModelOptions]="{standalone: true}" type="text"
-                                class="form-control">
-                                <option value="0" disabled>Tipo</option>
+                            <select type="text" [(ngModel)]="tipoTelefono1" [ngModelOptions]="{standalone: true}" class="form-control"
+                                (change)="onChangeSelectTipoTelefono1($event.target.value)">
+                                <option value="0" disabled>Tipo Telefono</option>
                                 <option *ngFor="let item of tipoTelefonos" value="{{item.IdTipoTelefono}}">
                                     {{ item.Descripcion }}
                                 </option>
                             </select>
+                            <div class="badge badge-danger mt-3" [hidden]="selectTipoTelefono1">
+                                Tipo Telefono Requerido
+                            </div>
                         </div>
                         <div class="form-group">
                             <input type="number" formControlName="_telefono2" class="form-control"
@@ -86,13 +98,16 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <select [(ngModel)]="tipoTelefono2" [ngModelOptions]="{standalone: true}" type="text"
-                                class="form-control">
-                                <option value="0" disabled>Tipo</option>
+                            <select type="text" [(ngModel)]="tipoTelefono2" [ngModelOptions]="{standalone: true}" class="form-control"
+                                (change)="onChangeSelectTipoTelefono2($event.target.value)">
+                                <option value="0" disabled>Tipo Telefono</option>
                                 <option *ngFor="let item of tipoTelefonos" value="{{item.IdTipoTelefono}}">
                                     {{ item.Descripcion }}
                                 </option>
                             </select>
+                            <div class="badge badge-danger mt-3" [hidden]="selectTipoTelefono2">
+                                Tipo Telefono Requerido
+                            </div>
                         </div>
                         <div class="form-group">
                             <input type="email" formControlName="_correo" class="form-control"
@@ -114,40 +129,52 @@
                     </div>
                     <div class="card-body">
                         <div class="form-group">
-                            <select [(ngModel)]="provincia" [ngModelOptions]="{standalone: true}" type="text"
-                                (change)="cantonesDeUnaProvincia($event.target.value)" class="form-control">
+                            <select type="text" [(ngModel)]="provincia" [ngModelOptions]="{standalone: true}" class="form-control"
+                                (change)="cantonesDeUnaProvincia($event.target.value)">
                                 <option value="0" disabled>Seleccionar Provincia </option>
                                 <option *ngFor="let item of provincias" value="{{item.IdProvincia}}">
                                     {{ item.Descripcion }}
                                 </option>
                             </select>
+                            <div class="badge badge-danger mt-3" [hidden]="selectProvincia">
+                                Provincia Requerida
+                            </div>
                         </div>
                         <div class="form-group">
-                            <select [(ngModel)]="canton" [ngModelOptions]="{standalone: true}" type="text"
-                                (change)="parroquiasDeUnCanton($event.target.value)" class="form-control">
+                            <select type="text" [(ngModel)]="canton" [ngModelOptions]="{standalone: true}" class="form-control"
+                                (change)="parroquiasDeUnCanton($event.target.value)">
                                 <option value="0" disabled>Seleccionar Cantón </option>
                                 <option *ngFor="let item of cantones" value="{{item.IdCanton}}">
                                     {{ item.Descripcion }}
                                 </option>
                             </select>
+                            <div class="badge badge-danger mt-3" [hidden]="selectCanton">
+                                Canton Requerida
+                            </div>
                         </div>
                         <div class="form-group">
-                            <select [(ngModel)]="parroquia" [ngModelOptions]="{standalone: true}" type="text"
-                                (change)="comunidadesDeUnaParroquia($event.target.value)" class="form-control">
+                            <select type="text" [(ngModel)]="parroquia" [ngModelOptions]="{standalone: true}" class="form-control"
+                                (change)="comunidadesDeUnaParroquia($event.target.value)">
                                 <option value="0" disabled>Seleccionar Parroquia</option>
                                 <option *ngFor="let item of parroquias" value="{{item.IdParroquia}}">
                                     {{ item.Descripcion }}
                                 </option>
                             </select>
+                            <div class="badge badge-danger mt-3" [hidden]="selectParroquia">
+                                Parroquia Requerida
+                            </div>
                         </div>
                         <div class="form-group">
-                            <select [(ngModel)]="comunidad" [ngModelOptions]="{standalone: true}" type="text"
-                                class="form-control">
+                            <select type="text" [(ngModel)]="comunidad" [ngModelOptions]="{standalone: true}" class="form-control"
+                                (change)="onChangeSelectComunidad($event.target.value)">
                                 <option value="0" disabled>Seleccionar Comunidad</option>
                                 <option *ngFor="let item of comunidades" value="{{item.IdComunidad}}">
                                     {{ item.Descripcion }}
                                 </option>
                             </select>
+                            <div class="badge badge-danger mt-3" [hidden]="selectComunidad">
+                                Comunidad Requerida
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -157,7 +184,8 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="form-group">
-                    <button type="submit" class="form-control btn-success">Guardar Persona</button>
+                    <button type="submit" class="form-control btn-success" [value]="botonInsertar" #testButton>Guardar
+                        Persona</button>
                 </div>
             </div>
         </div>

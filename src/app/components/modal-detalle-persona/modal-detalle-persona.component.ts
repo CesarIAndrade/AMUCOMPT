@@ -12,7 +12,7 @@ export class ModalDetallePersonaComponent implements OnInit {
   constructor(
     public dialogRef: MatDialogRef<ModalDetallePersonaComponent>,
     @Inject(MAT_DIALOG_DATA) public data: PersonaModal
-  ) {}
+  ) { }
 
   nombresCompletos = this.data.primerNombreModal + ' ' + 
     this.data.segundoNombreModal + ' ' +
@@ -27,7 +27,7 @@ export class ModalDetallePersonaComponent implements OnInit {
     
   sinNumero = 'Sin Numero';
   sinCorreo = 'Sin Correo';
-  sinDireccion  = 'Sin Direccion';
+  sinDireccion: string;
 
   ngOnInit() {
     if(this.data.provinciaModal == null || this.data.cantonModal == null ||
