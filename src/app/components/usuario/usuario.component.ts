@@ -34,27 +34,30 @@ export interface DialogData {
 })
 export class UsuarioComponent implements OnInit {
 
-
+  myForm: FormGroup;
   constructor(
     private dialog: MatDialog,
     private usuarioService: UsuarioService,
     private personaService: PersonaService,
-  ) { }
+  ) {
+    this.myForm = new FormGroup({
+      _valorUsuario: new FormControl('', [Validators.required]),
+      _contrasena: new FormControl('', [Validators.required])
+    })
+  }
 
   @ViewChild('testButton', { static: false }) testButton: ElementRef;
 
-  contrasena: string;
   inputType = 'password';
   modulo = '0';
   privilegio = '0';
 
-  personas : Persona[] = [];
+  personas: Persona[] = [];
   modulos: Modulo[] = [];
   privilegios: Privilegios[] = [];
   usuarios: Usuario[] = [];
-  cedula : string;
-  idPersona : string;
-  valorUsuario : string;
+  cedula: string;
+  idPersona: string;
   resultadoModal: DialogData;
   idUsuario: string;
 
@@ -126,140 +129,113 @@ export class UsuarioComponent implements OnInit {
       )
   }
 
-  asignarUsuarioaPersona(idPersona: string,numeroDocumento: string)
-  {
-    this.cedula = numeroDocumento;
-    this.idPersona = idPersona;
-  }
-
-  validacionFormulario()
-  {
-    if(this.testButton.nativeElement.value == "insertar")
-    {
-      if(this.cedula.length>0 && this.valorUsuario.length>0 && this.contrasena.length>0)
-      {
-        this.guardarUsuario();
-      }else
-      {
-        console.log("falta algun campo");
-      }
-    }else if(this.testButton.nativeElement.value == "modificar"){
-      console.log(this.valorUsuario+' '+this.contrasena)
-      if(this.contrasena==null){
-        console.log("falta algun campo");
-      }else{
-        if(this.valorUsuario.length>0 && this.contrasena.length>0)
-        {
-          this.modificarUsuario();
-        }else
-        {
-         console.log("falta algun campo");
-        }
+  validacionFormulario() {
+    if (this.myForm.valid) {
+      if (this.testButton.nativeElement.value == "insertar") {
+        this.crearUsuario();
+      } else if (this.testButton.nativeElement.value == "modificar") {
+        this.actualizarUsuario();
+        this.testButton.nativeElement.value = "insertar";
       }
     }
   }
 
-  modificarUsuario()
-  {
-    this.usuarioService.actualizarUsuario(
-      this.idUsuario,
-      this.idPersona,
-      this.valorUsuario,
-      this.contrasena,
-      localStorage.getItem('miCuenta.putToken'))
-      .then(
-        ok => {
-          this.limpiarFormulario();
-          this.consultarUsuarios();
-          this.testButton.nativeElement.value = 'insertar';
-        },
-      )
-      .catch(
-        err => {
-          console.log(err);
-        }
-      )
-  }
-
-  guardarUsuario()
-  {
-    var datosUsuario={
-      idPersona: this.idPersona,
-      usuario : this.valorUsuario,
-      contrasena : this.contrasena,
-      token : localStorage.getItem('miCuenta.postToken')
-    }
-    this.usuarioService.crearUsuario(datosUsuario)
+actualizarUsuario() {
+  this.usuarioService.actualizarUsuario(
+    this.idUsuario,
+    this.idPersona,
+    this.myForm.get('_valorUsuario').value,
+    this.myForm.get('_contrasena').value,
+    localStorage.getItem('miCuenta.putToken'))
     .then(
       ok => {
+        this.cedula = "";
         this.consultarUsuarios();
-        this.limpiarFormulario();
+        this.testButton.nativeElement.value = 'insertar';
+      },
+    )
+    .catch(
+      err => {
+        console.log(err);
+      }
+    )
+}
+
+crearUsuario() {
+  var datosUsuario = {
+    idPersona: this.idPersona,
+    usuario: this.myForm.get('_valorUsuario').value,
+    contrasena: this.myForm.get('_contrasena').value,
+    token: localStorage.getItem('miCuenta.postToken')
+  }
+  this.usuarioService.crearUsuario(datosUsuario)
+    .then(
+      ok => {
+        this.cedula = "";
+        this.consultarUsuarios();
       }
     )
     .catch(
-      error =>{
+      error => {
         console.log(error);
       }
     )
-  }
+}
 
-  abrirModal() {
-    let dialogRef = this.dialog.open(ModalAsignacionUsuarioPersonaComponent, {
-      width: '900px',
-      height: '500px',
-      data: {
-        cedula: this.cedula,
-        idPersona: this.idPersona
+abrirModal() {
+  let dialogRef = this.dialog.open(ModalAsignacionUsuarioPersonaComponent, {
+    width: '900px',
+    height: '500px',
+    data: {
+      cedula: this.cedula,
+      idPersona: this.idPersona
+    }
+  });
+  dialogRef.afterClosed().subscribe(result => {
+    console.log('The dialog was closed');
+    this.resultadoModal = result;
+    console.log(this.resultadoModal);
+    this.cedula = this.resultadoModal.cedula;
+    this.idPersona = this.resultadoModal.idPersona;
+  });
+}
+
+eliminarUsuario(idUsuario: string) {
+  this.usuarioService.eliminarUsuario(
+    idUsuario,
+    localStorage.getItem('miCuenta.deleteToken'))
+    .then(
+      ok => {
+        this.consultarUsuarios();
+      },
+    )
+    .catch(
+      err => {
+        console.log(err);
       }
-    });
+    )
+}
 
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
-      this.resultadoModal = result;
-      console.log(this.resultadoModal);
-      this.cedula = this.resultadoModal.cedula;
-      this.idPersona = this.resultadoModal.idPersona;
-    });
-  }
+setUsuario(
+  idUsuario: string, 
+  usuarioLogin: string, 
+  idPersona: string,
+  contrasena: string  
+) {
+  this.idUsuario = idUsuario;
+  this.idPersona = idPersona;
+  this.testButton.nativeElement.value = 'modificar';
+  this.myForm.setValue({
+    _valorUsuario: usuarioLogin,
+    _contrasena: contrasena
+  })
+}
 
-  limpiarFormulario()
-  {
-    this.cedula="";
-    this.valorUsuario="";
-    this.contrasena="";
-  }
-
-  eliminarUsuario(idUsuario: string)
-  {
-    this.usuarioService.eliminarUsuario(
-      idUsuario,
-      localStorage.getItem('miCuenta.deleteToken'))
-      .then(
-        ok => {
-          this.consultarUsuarios();
-        },
-      )
-      .catch(
-        err => {
-          console.log(err);
-        }
-      )
-  }
-
-  setUsuario(IdUsuario: string,UsuarioLogin: string,IdPersona: string)
-  {
-    this.idUsuario=IdUsuario;
-    this.idPersona = IdPersona;
-    this.testButton.nativeElement.value = 'modificar';
-    this.valorUsuario = UsuarioLogin;
-  }
-
-  ngOnInit() {
-    this.cedula="";
-    this.valorUsuario="";
-    this.consultarUsuarios();
-    this.consultarPrivilegios();
-    this.consultarModulos();
-  }
+ngOnInit() {
+  this.cedula = "";
+  this.consultarUsuarios();
+  this.consultarPrivilegios();
+  this.consultarModulos();
+}
 
 }

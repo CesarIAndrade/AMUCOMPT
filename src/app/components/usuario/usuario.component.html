@@ -10,37 +10,38 @@
                 <i (click)="abrirModal()" class="fa fa-user-plus icon" style="background-color:#f0ad4e;"
                     (click)="mostrarContrasena()"></i>
             </div>
+            <form [formGroup]="myForm" (ngSubmit)="validacionFormulario()" novalidate>
+                <div class="form-group">
+                    <input formControlName="_valorUsuario" type="text" class="form-control" placeholder="Ingrese Usuario">
+                </div>
 
-            <div class="form-group">
-                <input [(ngModel)]="valorUsuario" type="text" class="form-control" placeholder="Ingrese Usuario">
-            </div>
+                <div class="form-group input-container">
+                    <input formControlName="_contrasena" type="password" [type]="inputType" class="form-control input-field"
+                        placeholder="Ingrese Contraseña">
+                    <i class="fa fa-eye icon" (click)="mostrarContrasena()"></i>
+                </div>
 
-            <div class="form-group input-container">
-                <input [(ngModel)]="contrasena" type="password" [type]="inputType" class="form-control input-field"
-                    placeholder="Ingrese Contraseña">
-                <i class="fa fa-eye icon" (click)="mostrarContrasena()"></i>
-            </div>
+                <div class="form-group">
+                    <select [(ngModel)]="privilegio" [ngModelOptions]="{standalone: true}" type="text" class="form-control">
+                        <option value="0" disabled>Seleccionar un Privilegio</option>
+                        <option *ngFor="let item of privilegios"> {{ item.Descripcion }} </option>
+                    </select>
+                </div>
 
-            <div class="form-group">
-                <select [(ngModel)]="privilegio" type="text" class="form-control">
-                    <option value="0" disabled>Seleccionar un Privilegio</option>
-                    <option *ngFor="let item of privilegios"> {{ item.Descripcion }} </option>
-                </select>
-            </div>
+                <div class="form-group">
+                    <select [(ngModel)]="modulo" [ngModelOptions]="{standalone: true}" type="text" class="form-control">
+                        <option value="0" disabled>Seleccionar un Módulo</option>
+                        <option *ngFor="let item of modulos"> {{ item.Descripcion }} </option>
+                    </select>
+                </div>
 
-            <div class="form-group">
-                <select [(ngModel)]="modulo" type="text" class="form-control">
-                    <option value="0" disabled>Seleccionar un Módulo</option>
-                    <option *ngFor="let item of modulos"> {{ item.Descripcion }} </option>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <button class="form-control btn-primary" (click)="validacionFormulario()" type="submit"
-                    [value]="botonInsertar" #testButton>
-                    Guardar Usuario
-                </button>
-            </div>
+                <div class="form-group">
+                    <button class="form-control btn-primary" (click)="validacionFormulario()" type="submit" [disabled]="myForm.invalid"
+                        [value]="botonInsertar" #testButton>
+                        Guardar Usuario
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 </div>

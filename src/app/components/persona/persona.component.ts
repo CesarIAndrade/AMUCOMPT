@@ -324,6 +324,7 @@ export class PersonaComponent implements OnInit {
     if (this.myForm.valid) {
       if (this.testButton.nativeElement.value == 'insertar') {
         this.crearPersona();
+        this.myForm.reset();
         this.limpiarSelects();
       } else if (this.testButton.nativeElement.value == 'modificar') {
         this.actualizarPersona('modificar', this.personaModal);
