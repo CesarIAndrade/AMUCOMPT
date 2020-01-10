@@ -54,20 +54,18 @@
             <div class="col-md-12">
                 <div class="form-group input-container">
                     <i class="fa fa-search icon"></i>
-                    <input type="text" class="form-control input-field" placeholder="Ejem. Zambrano Zambrano">
+                    <input [(ngModel)]="filterUsuario" type="text" class="form-control input-field" placeholder="Ejem. Zambrano Zambrano">
                 </div>
                 <div class="table-responsive-sm">
                     <table class="table table-sm">
                         <thead class="card-header">
                             <tr>
-                                <th scope="col">#</th>
                                 <th scope="col">Usuario</th>
                                 <th scope="col" colspan="3" style="text-align: center;">Acciones</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr *ngFor="let item of usuarios, index as i">
-                                <th scope="row"> {{ i }} </th>
+                            <tr *ngFor="let item of usuarios | filter: filterUsuario : 'UsuarioLogin'">
                                 <td> {{ item.UsuarioLogin }} </td>
                                 <td>
                                     <button (click)="setUsuario(item.IdUsuario,item.UsuarioLogin,item.IdPersona, item.Contrasena)"
