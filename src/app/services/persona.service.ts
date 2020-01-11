@@ -9,7 +9,9 @@ export class PersonaService {
 
   constructor(private http: HttpClient) { }
 
-  private apiUrl: string = "http://192.168.25.15:90/api/";
+  // private apiUrl: string = "http://192.168.25.15:90/api/";
+  private apiUrl: string = "http://192.168.1.20:9120/api/";
+
 
   consultarPersonas(_token: string) {
     const body = new HttpParams()

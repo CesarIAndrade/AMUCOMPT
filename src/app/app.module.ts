@@ -31,6 +31,7 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { ModalDetallePersonaComponent } from './components/modal-detalle-persona/modal-detalle-persona.component';
 import { ModalAsignacionUsuarioPersonaComponent } from './components/modal-asignacion-usuario-persona/modal-asignacion-usuario-persona.component';
 import { PipesModule } from './pipes/pipes.module';
+import {MatChipsModule} from '@angular/material/chips';
 
 @NgModule({
   declarations: [
@@ -62,7 +63,8 @@ import { PipesModule } from './pipes/pipes.module';
     ReactiveFormsModule,
     MatDialogModule,
     MatTabsModule,
-    PipesModule
+    PipesModule,
+    MatChipsModule,
   ],
   entryComponents: [ 
     ModalDetallePersonaComponent,

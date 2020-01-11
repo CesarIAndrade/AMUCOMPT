@@ -6,7 +6,6 @@ import { UsuarioService } from 'src/app/services/usuario.service';
 // Interfaces
 import { Usuario } from 'src/app/interfaces/usuario/usuario';
 import { Privilegios } from 'src/app/interfaces/privilegios/privilegios';
-import { PersonaModal } from "../../interfaces/persona/persona-modal";
 
 // Functional Components
 import { MatDialog } from "@angular/material/dialog";
@@ -14,18 +13,20 @@ import { MatDialog } from "@angular/material/dialog";
 // Components
 import { Modulo } from 'src/app/interfaces/modulo/modulo';
 import { PersonaService } from 'src/app/services/persona.service';
-import { PersonaComponent } from '../persona/persona.component';
 import { Persona } from 'src/app/interfaces/persona/persona';
 
 
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ModalAsignacionUsuarioPersonaComponent } from '../modal-asignacion-usuario-persona/modal-asignacion-usuario-persona.component';
-
-import { FilterPipe } from "../../pipes/filter.pipe";
+import { TipoDocumento } from 'src/app/interfaces/tipo-documento/tipo-documento';
 
 export interface DialogData {
   cedula: string;
   idPersona: string;
+}
+
+export interface Fruit {
+  name: string;
 }
 
 @Component({
@@ -49,30 +50,35 @@ export class UsuarioComponent implements OnInit {
 
   @ViewChild('testButton', { static: false }) testButton: ElementRef;
 
+  botonInsertar = 'insertar';
+  cedula: string;
+  filterUsuario = '';
+  idPersona: string;
+  idUsuario: string;
   inputType = 'password';
   modulo = '0';
   privilegio = '0';
-
-  personas: Persona[] = [];
-  modulos: Modulo[] = [];
-  privilegios: Privilegios[] = [];
-  usuarios: Usuario[] = [];
-  cedula: string;
-  idPersona: string;
   resultadoModal: DialogData;
-  idUsuario: string;
-
-  botonInsertar = 'insertar';
-
-  filterUsuario : string = '';
+  removableModulo = true;
+  removablePrivilegio = true;
+  selectableModulo = true;
+  selectablePrivilegio = true;
+ 
+  chipsPrivilegios: Privilegios[] = [];
+  chipsModulos: Modulo[] = [];
+  modulos: Modulo[] = [];
+  personas: Persona[] = [];
+  privilegios: Privilegios[] = [];
+  tipoUsuario: TipoDocumento[] = [];
+  usuarios: Usuario[] = [];
 
   consultarUsuarios() {
     this.usuarioService.consultarUsuarios(localStorage.getItem('miCuenta.getToken'))
       .then(
         ok => {
           console.log(ok);
-          this.usuarios = ok['respuesta'];
-          console.log(this.usuarios);
+          this.tipoUsuario = ok['respuesta'];
+          console.log(this.tipoUsuario);
         }
       )
       .catch(
@@ -80,6 +86,23 @@ export class UsuarioComponent implements OnInit {
           console.log(err);
         }
       )
+  }
+
+  consultarTipoUsuario(){
+    this.usuarioService.consultarTipoUsuario(localStorage.getItem('miCuenta.getToken'))
+    .then(
+      ok => {
+        console.log(ok);
+        this.usuarios = ok['respuesta'];
+        console.log(this.usuarios);
+      }
+    )
+    .catch(
+      err => {
+        console.log(err);
+      }
+    )
+
   }
 
   consultarPrivilegios() {
@@ -144,102 +167,132 @@ export class UsuarioComponent implements OnInit {
     }
   }
 
-actualizarUsuario() {
-  this.usuarioService.actualizarUsuario(
-    this.idUsuario,
-    this.idPersona,
-    this.myForm.get('_valorUsuario').value,
-    this.myForm.get('_contrasena').value,
-    localStorage.getItem('miCuenta.putToken'))
-    .then(
-      ok => {
-        this.cedula = "";
-        this.consultarUsuarios();
-        this.testButton.nativeElement.value = 'insertar';
-      },
-    )
-    .catch(
-      err => {
-        console.log(err);
-      }
-    )
-}
-
-crearUsuario() {
-  var datosUsuario = {
-    idPersona: this.idPersona,
-    usuario: this.myForm.get('_valorUsuario').value,
-    contrasena: this.myForm.get('_contrasena').value,
-    token: localStorage.getItem('miCuenta.postToken')
+  actualizarUsuario() {
+    this.usuarioService.actualizarUsuario(
+      this.idUsuario,
+      this.idPersona,
+      this.myForm.get('_valorUsuario').value,
+      this.myForm.get('_contrasena').value,
+      localStorage.getItem('miCuenta.putToken'))
+      .then(
+        ok => {
+          this.cedula = "";
+          this.consultarUsuarios();
+          this.testButton.nativeElement.value = 'insertar';
+        },
+      )
+      .catch(
+        err => {
+          console.log(err);
+        }
+      )
   }
-  this.usuarioService.crearUsuario(datosUsuario)
-    .then(
-      ok => {
-        this.cedula = "";
-        this.consultarUsuarios();
-      }
-    )
-    .catch(
-      error => {
-        console.log(error);
-      }
-    )
-}
 
-abrirModal() {
-  let dialogRef = this.dialog.open(ModalAsignacionUsuarioPersonaComponent, {
-    width: '900px',
-    height: '500px',
-    data: {
-      cedula: this.cedula,
-      idPersona: this.idPersona
+  crearUsuario() {
+    var datosUsuario = {
+      idPersona: this.idPersona,
+      usuario: this.myForm.get('_valorUsuario').value,
+      contrasena: this.myForm.get('_contrasena').value,
+      token: localStorage.getItem('miCuenta.postToken')
     }
-  });
-  dialogRef.afterClosed().subscribe(result => {
-    console.log('The dialog was closed');
-    this.resultadoModal = result;
-    console.log(this.resultadoModal);
-    this.cedula = this.resultadoModal.cedula;
-    this.idPersona = this.resultadoModal.idPersona;
-  });
-}
+    this.usuarioService.crearUsuario(datosUsuario)
+      .then(
+        ok => {
+          this.cedula = "";
+          this.consultarUsuarios();
+        }
+      )
+      .catch(
+        error => {
+          console.log(error);
+        }
+      )
+  }
 
-eliminarUsuario(idUsuario: string) {
-  this.usuarioService.eliminarUsuario(
-    idUsuario,
-    localStorage.getItem('miCuenta.deleteToken'))
-    .then(
-      ok => {
-        this.consultarUsuarios();
-      },
-    )
-    .catch(
-      err => {
-        console.log(err);
+  abrirModal() {
+    let dialogRef = this.dialog.open(ModalAsignacionUsuarioPersonaComponent, {
+      width: '900px',
+      height: '500px',
+      data: {
+        cedula: this.cedula,
+        idPersona: this.idPersona
       }
-    )
-}
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+      this.resultadoModal = result;
+      console.log(this.resultadoModal);
+      this.cedula = this.resultadoModal.cedula;
+      this.idPersona = this.resultadoModal.idPersona;
+    });
+  }
 
-setUsuario(
-  idUsuario: string, 
-  usuarioLogin: string, 
-  idPersona: string,
-  contrasena: string  
-) {
-  this.idUsuario = idUsuario;
-  this.idPersona = idPersona;
-  this.testButton.nativeElement.value = 'modificar';
-  this.myForm.setValue({
-    _valorUsuario: usuarioLogin,
-    _contrasena: contrasena
-  })
-}
+  eliminarUsuario(idUsuario: string) {
+    this.usuarioService.eliminarUsuario(
+      idUsuario,
+      localStorage.getItem('miCuenta.deleteToken'))
+      .then(
+        ok => {
+          this.consultarUsuarios();
+        },
+      )
+      .catch(
+        err => {
+          console.log(err);
+        }
+      )
+  }
 
-ngOnInit() {
-  this.cedula = "";
-  this.consultarUsuarios();
-  this.consultarPrivilegios();
-  this.consultarModulos();
-}
+  setUsuario(
+    idUsuario: string,
+    usuarioLogin: string,
+    idPersona: string,
+    contrasena: string
+  ) {
+    this.idUsuario = idUsuario;
+    this.idPersona = idPersona;
+    this.testButton.nativeElement.value = 'modificar';
+    this.myForm.setValue({
+      _valorUsuario: usuarioLogin,
+      _contrasena: ''
+    })
+  }
 
+  ngOnInit() {
+    this.cedula = "";
+    this.consultarUsuarios();
+    this.consultarTipoUsuario();
+    this.consultarPrivilegios();
+    this.consultarModulos();
+  }
+
+  addPrivilegio(event) {
+    this.chipsPrivilegios.push({
+      IdPrivilegios: event.target.selectedIndex,
+      Descripcion: event.target.value
+    });
+  }
+
+  removePrivilegio(privilegio) {
+    const index = this.chipsPrivilegios.indexOf(privilegio);
+    if (index >= 0) {
+      this.chipsPrivilegios.splice(index, 1);
+      this.privilegio = '0';
+    }
+  }
+
+  addModulo(event) {
+    this.chipsModulos.push({
+      IdModulo: event.target.selectedIndex,
+      Descripcion: event.target.value
+    });
+  }
+
+  removeModulo(modulo) {
+    const index = this.chipsModulos.indexOf(modulo);
+    if (index >= 0) {
+      this.chipsModulos.splice(index, 1);
+      this.modulo = '0';
+    }
+  }
 }
