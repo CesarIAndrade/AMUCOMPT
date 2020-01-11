@@ -10,7 +10,7 @@ export class PersonaService {
   constructor(private http: HttpClient) { }
 
   // private apiUrl: string = "http://192.168.25.15:90/api/";
-  private apiUrl: string = "http://192.168.1.20:9120/api/";
+  private apiUrl: string = "http://localhost:49962/api/";
 
 
   consultarPersonas(_token: string) {
@@ -197,7 +197,7 @@ export class PersonaService {
   }
 
   crearPersona(
-    formulario: FormGroup,
+    numeroDocumento: string,
     tipoDocumento: string,
     apellidoPaterno: string,
     apellidoMaterno: string,
@@ -206,12 +206,12 @@ export class PersonaService {
     _token: string
   ) {
     const body = new HttpParams()
-      .set('NumeroDocumento', formulario.get('_numeroDocumento').value)
+      .set('NumeroDocumento', numeroDocumento)
+      .set('IdTipoDocumento', tipoDocumento)
       .set('ApellidoPaterno', apellidoPaterno)
       .set('ApellidoMaterno', apellidoMaterno)
       .set('PrimerNombre', primerNombre)
       .set('SegundoNombre', segundoNombre)
-      .set('IdTipoDocumento', tipoDocumento)
       .set('encriptada', _token)
     return new Promise((resolve, reject) => {
       this.http.post(this.apiUrl + 'TalentoHumano/IngresoPersona', body.toString(),
@@ -257,12 +257,12 @@ export class PersonaService {
 
   crearCorreo(
     idPersona: string,
-    formulario: FormGroup,
+    correo: string,
     _token: string
   ) {
     const body = new HttpParams()
       .set('IdPersona', idPersona)
-      .set('CorreoValor', formulario.get('_correo').value)
+      .set('CorreoValor', correo)
       .set('encriptada', _token)
     return new Promise((resolve, reject) => {
       this.http.post(this.apiUrl + 'TalentoHumano/IngresoCorreo', body.toString(),

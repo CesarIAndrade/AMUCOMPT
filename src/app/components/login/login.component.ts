@@ -99,7 +99,7 @@ export class LoginComponent implements OnInit {
     // setTimeout(() => {
     //   document.getElementById('loadingPage').hidden = true;
     // }, 1000);
-    //this.consultarTokens();
+    this.consultarTokens();
   }
 
 }

@@ -79,7 +79,8 @@
                             <select type="text" [(ngModel)]="tipoTelefono1" [ngModelOptions]="{standalone: true}" class="form-control"
                                 (change)="onChangeSelectTipoTelefono1($event.target.value)">
                                 <option value="0" disabled>Tipo Telefono</option>
-                                <option *ngFor="let item of tipoTelefonos" value="{{item.IdTipoTelefono}}">
+                                <option *ngFor="let item of tipoTelefonos"
+                                value="{{item.IdTipoTelefono}}">
                                     {{ item.Descripcion }}
                                 </option>
                             </select>
@@ -101,7 +102,8 @@
                             <select type="text" [(ngModel)]="tipoTelefono2" [ngModelOptions]="{standalone: true}" class="form-control"
                                 (change)="onChangeSelectTipoTelefono2($event.target.value)">
                                 <option value="0" disabled>Tipo Telefono</option>
-                                <option *ngFor="let item of tipoTelefonos" value="{{item.IdTipoTelefono}}">
+                                <option *ngFor="let item of tipoTelefonos"
+                                value="{{item.IdTipoTelefono}}">
                                     {{ item.Descripcion }}
                                 </option>
                             </select>

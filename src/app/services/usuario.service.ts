@@ -9,11 +9,11 @@ export class UsuarioService {
   constructor(private http: HttpClient) { }
 
   // private apiUrl: string = "http://192.168.25.15:90/api/"
-  private apiUrl: string = "http://192.168.1.20:9120/api/";
+  private apiUrl: string = "http://localhost:49962/api/";
 
   login(
-    usuario: string, 
-    contrasena: string, 
+    usuario: string,
+    contrasena: string,
     _token: string
   ) {
     const body = new HttpParams()
@@ -69,7 +69,7 @@ export class UsuarioService {
     });
 
   }
-  
+
   consultarPrivilegios(_token: string) {
     const body = new HttpParams()
     .set('encriptada', _token)
@@ -89,7 +89,7 @@ export class UsuarioService {
   }
 
   consultarModulos(_token: string) {
-    
+
     const body = new HttpParams()
     .set('encriptada', _token)
 

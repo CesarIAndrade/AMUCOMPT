@@ -63,7 +63,7 @@ export class UsuarioComponent implements OnInit {
   removablePrivilegio = true;
   selectableModulo = true;
   selectablePrivilegio = true;
- 
+
   chipsPrivilegios: Privilegios[] = [];
   chipsModulos: Modulo[] = [];
   modulos: Modulo[] = [];
@@ -77,8 +77,8 @@ export class UsuarioComponent implements OnInit {
       .then(
         ok => {
           console.log(ok);
-          this.tipoUsuario = ok['respuesta'];
-          console.log(this.tipoUsuario);
+          this.usuarios = ok['respuesta'];
+          console.log(this.usuarios);
         }
       )
       .catch(
@@ -93,8 +93,8 @@ export class UsuarioComponent implements OnInit {
     .then(
       ok => {
         console.log(ok);
-        this.usuarios = ok['respuesta'];
-        console.log(this.usuarios);
+        this.tipoUsuario = ok['respuesta'];
+        console.log(this.tipoUsuario);
       }
     )
     .catch(

@@ -42,7 +42,7 @@ export class PersonaComponent implements OnInit {
       _telefono1: new FormControl('', [Validators.required]),
       _telefono2: new FormControl('', [Validators.required]),
       _correo: new FormControl('', [Validators.required])
-    }, { updateOn: 'blur' });
+    });
   }
 
   tipoDocumento = "0";
@@ -324,12 +324,8 @@ export class PersonaComponent implements OnInit {
     if (this.myForm.valid) {
       if (this.testButton.nativeElement.value == 'insertar') {
         this.crearPersona();
-        this.myForm.reset();
-        this.limpiarSelects();
       } else if (this.testButton.nativeElement.value == 'modificar') {
         this.actualizarPersona('modificar', this.personaModal);
-        this.myForm.reset();
-        this.limpiarSelects();
         this.testButton.nativeElement.value = 'insertar';
       }
     } else {
@@ -370,7 +366,12 @@ export class PersonaComponent implements OnInit {
   }
 
   crearPersona() {
-    var validarNombresOApellidos = {
+    var validarNombres = {
+      primerCampo: '',
+      segundoCampo: '',
+      valido: Boolean
+    }
+    var validarApellidos = {
       primerCampo: '',
       segundoCampo: '',
       valido: Boolean
@@ -384,11 +385,11 @@ export class PersonaComponent implements OnInit {
       this.parroquia,
       this.comunidad
     )
-    var dosNombres = this.validarNombres(validarNombresOApellidos);
-    var dosApellidos = this.validarApellidos(validarNombresOApellidos);
+    var dosNombres = this.validarNombres(validarNombres);
+    var dosApellidos = this.validarApellidos(validarApellidos);
     if (dosNombres.valido == true && dosApellidos.valido == true) {
       this.personaService.crearPersona(
-        this.myForm,
+        this.myForm.get('_numeroDocumento').value,
         this.tipoDocumento,
         dosApellidos.primerCampo,
         dosApellidos.segundoCampo,
@@ -397,11 +398,14 @@ export class PersonaComponent implements OnInit {
         localStorage.getItem('miCuenta.postToken'))
         .then(
           ok => {
-            console.log(ok['respuesta']);
             this.idPersona = ok['respuesta'];
+            console.log(this.tipoTelefono1);
+            console.log(this.tipoTelefono2);
             this.crearTelefono(this.idPersona);
             this.crearCorreo(this.idPersona);
             this.crearDireccion(this.idPersona);
+            this.myForm.reset();
+            this.limpiarSelects();
             this.consultarPersonas();
           },
         )
@@ -426,6 +430,8 @@ export class PersonaComponent implements OnInit {
         IdTipoTelefono: this.tipoTelefono2,
       }
     )
+
+    console.log(this.telefonos);
     this.telefonos.map(
       item => {
         this.personaService.crearTelefono(
@@ -450,7 +456,7 @@ export class PersonaComponent implements OnInit {
   crearCorreo(idPersona: string) {
     this.personaService.crearCorreo(
       idPersona,
-      this.myForm,
+      this.myForm.get('_correo').value,
       localStorage.getItem('miCuenta.postToken'))
       .then(
         ok => {
@@ -619,7 +625,12 @@ export class PersonaComponent implements OnInit {
       this.comunidad = personaModal.idComunidadModal;
     }
     if (value == "modificar") {
-      var validarNombresOApellidos = {
+      var validarNombres = {
+        primerCampo: '',
+        segundoCampo: '',
+        valido: Boolean
+      }
+      var validarApellidos = {
         primerCampo: '',
         segundoCampo: '',
         valido: Boolean
@@ -633,12 +644,9 @@ export class PersonaComponent implements OnInit {
         this.parroquia,
         this.comunidad
       )
-      var dosNombres = this.validarNombres(validarNombresOApellidos);
-      var dosApellidos = this.validarApellidos(validarNombresOApellidos);
-
+      var dosNombres = this.validarNombres(validarNombress);
+      var dosApellidos = this.validarApellidos(validarApellidos);
       if (dosNombres.valido == true && dosApellidos.valido == true) {
-        console.log(dosNombres);
-        console.log(dosApellidos);
         this.personaService.actualizarPersona(
           personaModal.idPersona,
           this.myForm.get('_numeroDocumento').value,
@@ -659,6 +667,8 @@ export class PersonaComponent implements OnInit {
               this.actualizarCorreo(idPersona, idCorreo);
               var idAsignacionPC = personaModal.idAsignacionPC;
               this.actualizarDireccion(idPersona, idAsignacionPC);
+              this.myForm.reset();
+              this.limpiarSelects();
               this.consultarPersonas();
             },
           )
