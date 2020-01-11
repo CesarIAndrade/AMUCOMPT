@@ -30,11 +30,11 @@ export class LoginComponent implements OnInit {
 
   login() {
     if (this.myForm.valid) {
-
+      this.consultarTokens();
       this.usuarioService.login(
         this.myForm.get('_usuario').value,
         this.myForm.get('_contrasena').value,
-        localStorage.getItem('miCuenta.postToken')
+        localStorage.getItem('miCuenta.getToken')
       )
         .then(
           ok => {
@@ -99,7 +99,7 @@ export class LoginComponent implements OnInit {
     // setTimeout(() => {
     //   document.getElementById('loadingPage').hidden = true;
     // }, 1000);
-    this.consultarTokens();
+    //this.consultarTokens();
   }
 
 }
