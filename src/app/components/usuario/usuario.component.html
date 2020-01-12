@@ -29,6 +29,9 @@
                         <option *ngFor="let item of tipoUsuarios" value="{{item.IdTipoUsuario}}">
                             {{ item.Descripcion }}
                         </option>
+                        <div class="badge badge-danger mt-3" [hidden]="selectTipoUsuario">
+                            Tipo Usuario Requerido
+                        </div>
                     </select>
                 </div>
 

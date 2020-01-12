@@ -13,29 +13,38 @@ import { Page404Component } from './components/page404/page404.component';
 
 // Guards
 import { ValidarUsuarioGuard } from "src/app/guards/validar-usuario.guard";
+import { PanelAdministracionComponent } from './components/panel-administracion/panel-administracion.component';
 
 const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'login' },
   { path: 'login', component: LoginComponent },
   {
-    path: 'inicio', 
+    path: 'inicio',
     component: NavComponent,
     // canActivate: [ValidarUsuarioGuard],
     children: [
-      { 
+      {
         path: 'usuarios', component: UsuarioComponent,
         // canActivate: [ValidarUsuarioGuard] 
       },
-      { path: 'personas', component: PersonaComponent,
+      {
+        path: 'personas', component: PersonaComponent,
         // canActivate: [ValidarUsuarioGuard]
       },
-      { path: 'inventarios', component: InventarioComponent,
+      {
+        path: 'inventarios', component: InventarioComponent,
         // canActivate: [ValidarUsuarioGuard]
       },
-      { path: 'compras', component: CompraComponent,
+      {
+        path: 'compras', component: CompraComponent,
         // canActivate: [ValidarUsuarioGuard]
       },
-      { path: 'ventas', component: VentaComponent,
+      {
+        path: 'ventas', component: VentaComponent,
+        // canActivate: [ValidarUsuarioGuard]
+      },
+      {
+        path: 'panel-administracion', component: PanelAdministracionComponent,
         // canActivate: [ValidarUsuarioGuard]
       },
     ]

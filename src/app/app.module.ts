@@ -32,6 +32,11 @@ import { ModalDetallePersonaComponent } from './components/modal-detalle-persona
 import { ModalAsignacionUsuarioPersonaComponent } from './components/modal-asignacion-usuario-persona/modal-asignacion-usuario-persona.component';
 import { PipesModule } from './pipes/pipes.module';
 import {MatChipsModule} from '@angular/material/chips';
+import { PanelAdministracionComponent } from './components/panel-administracion/panel-administracion.component';
+import { CantonComponent } from './components/canton/canton.component';
+import { ComunidadComponent } from './components/comunidad/comunidad.component';
+import { ParroquiaComponent } from './components/parroquia/parroquia.component';
+import { ProvinciaComponent } from './components/provincia/provincia.component';
 
 @NgModule({
   declarations: [
@@ -45,7 +50,12 @@ import {MatChipsModule} from '@angular/material/chips';
     CompraComponent,
     VentaComponent,
     ModalDetallePersonaComponent,
-    ModalAsignacionUsuarioPersonaComponent
+    ModalAsignacionUsuarioPersonaComponent,
+    PanelAdministracionComponent,
+    CantonComponent,
+    ComunidadComponent,
+    ParroquiaComponent,
+    ProvinciaComponent
   ],
   imports: [
     BrowserModule,

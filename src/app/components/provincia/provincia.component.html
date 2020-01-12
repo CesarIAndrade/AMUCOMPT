@@ -1,0 +1,78 @@
+<br>
+<div class="container">
+    <div class="row">
+        <div class="col-lg-4 col-md-5 mr-auto">
+            <div class="card">
+                <div class="card-header" style="text-align: center;">
+                    Nueva Provincia
+                </div>
+                <div class="card-body">
+                    <form [formGroup]="myForm" (ngSubmit)="validarFormulario()" novalidate>
+                        <div class="form-group">
+                            <input formControlName="_provincia" class="form-control" type="text"
+                                placeholder="Ingrese Provincia">
+                            <div class="badge badge-danger mt-3"
+                                *ngIf="_provincia.invalid && (_provincia.dirty || _provincia.touched)">
+                                <div *ngIf="_provincia.errors.required">
+                                    Provincia Requerida
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" [value]="botonIngresar" [disabled]="myForm.invalid"
+                                class="form-control btn-success" #testButton>Guardar
+                                Provincia</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-8 col-md-7">
+            <div class="card">
+                <div class="card-header" style="text-align: center;">
+                    Lista Provincias
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group input-container">
+                                <i class="fa fa-search icon"></i>
+                                <input type="text" class="form-control input-field" placeholder="Ejem. Manabi">
+                            </div>
+                            <div class="table-responsive-sm">
+                                <table class="table table-sm">
+                                    <thead class="card-header">
+                                        <tr>
+                                            <th scope="col">IdProvincia</th>
+                                            <th scope="col">Provincia</th>
+                                            <th scope="col" colspan="2" style="text-align: center;">Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let item of provincias">
+                                            <td> {{ item.IdProvincia }} </td>
+                                            <td> {{ item.Descripcion }} </td>
+                                            <td>
+                                                <button class="btn btn-sm btn-outline-info separacion-botones"
+                                                    value="{{item.IdProvincia}}" 
+                                                    (click)=mostrarProvincia(item)>
+                                                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                                </button>
+                                            </td>
+                                            <td>
+                                                <button class="btn btn-sm btn-outline-danger separacion-botones"
+                                                    value="{{item.IdProvincia}}" 
+                                                    (click)=eliminarProvincia(item.IdProvincia)>
+                                                    <i class="fa fa-trash" aria-hidden="true"></i>
+                                                </button>
+                                            </td>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

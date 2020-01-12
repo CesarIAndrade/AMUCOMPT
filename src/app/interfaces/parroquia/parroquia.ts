@@ -1,9 +1,7 @@
-import { Canton } from "../canton/canton";
-
 export interface Parroquia {
     IdParroquia?: string;
     Descripcion?: string;
-    Canton?: Canton;
+    IdCanton?: string;
     FechaCreacion?: string;
     Estado?: string;
 }
