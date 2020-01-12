@@ -30,7 +30,6 @@ export class LoginComponent implements OnInit {
 
   login() {
     if (this.myForm.valid) {
-      this.consultarTokens();
       this.usuarioService.login(
         this.myForm.get('_usuario').value,
         this.myForm.get('_contrasena').value,
@@ -40,6 +39,7 @@ export class LoginComponent implements OnInit {
           ok => {
             if(ok['codigo'] == '200'){
               this.router.navigateByUrl('inicio');
+              this.consultarTokens();
             } else {
               this.credendialesIncorrectasInput = false;
             }
@@ -99,7 +99,7 @@ export class LoginComponent implements OnInit {
     // setTimeout(() => {
     //   document.getElementById('loadingPage').hidden = true;
     // }, 1000);
-    this.consultarTokens();
+    //this.consultarTokens();
   }
 
 }

@@ -9,7 +9,7 @@
                 <div class="col-md-12">
                     <div class="form-group input-container">
                         <i class="fa fa-search icon"></i>
-                        <input type="text" class="form-control input-field" placeholder="Ejem. Zambrano Zambrano">
+                        <input [(ngModel)]="filterPersona" type="text" class="form-control input-field" placeholder="Ejem. Zambrano Zambrano">
                     </div>
                     <input hidden disabled readonly matInput [(ngModel)]="data.cedula">
                     <input hidden disabled  readonly matInput [(ngModel)]="data.idPersona">
@@ -17,7 +17,6 @@
                         <table class="table table-sm">
                             <thead class="card-header">
                                 <tr>
-                                    <th scope="col">#</th>
                                     <th scope="col">Nombres</th>
                                     <th scope="col">Apellidos</th>
                                     <th scope="col">Documento</th>
@@ -26,8 +25,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr *ngFor="let item of personas, index as i">
-                                    <th scope="row"> {{ i }} </th>
+                                <tr *ngFor="let item of personas | filter: filterPersona : 'NumeroDocumento'">
                                     <td> {{ item.PrimerNombre }} {{ item.SegundoNombre }} </td>
                                     <td> {{ item.ApellidoPaterno }} {{ item.ApellidoMaterno }} </td>
                                     <td> {{ item.TipoDocumento }} </td>

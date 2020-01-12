@@ -23,6 +23,17 @@
                 </div>
 
                 <div class="form-group">
+                    <select [(ngModel)]="tipoUsuario" [ngModelOptions]="{standalone: true}" type="text"
+                        class="form-control">
+                        <option value="0" disabled>Seleccionar tipo de usuario</option>
+                        <option *ngFor="let item of tipoUsuarios" value="{{item.IdTipoUsuario}}">
+                            {{ item.Descripcion }}
+                        </option>
+                    </select>
+                </div>
+
+
+                <div class="form-group">
                     <select [(ngModel)]="privilegio" [ngModelOptions]="{standalone: true}" type="text"
                         class="form-control"  (change)="addPrivilegio($event)">
                         <option value="0" disabled>Seleccionar un Privilegio</option>
@@ -34,7 +45,7 @@
 
                 <mat-form-field class="example-container">
                     <mat-chip-list>
-                        <mat-chip *ngFor="let item of chipsPrivilegios" 
+                        <mat-chip *ngFor="let item of chipsPrivilegios"
                         [selectable]="selectablePrivilegio"
                             [removable]="removablePrivilegio" (removed)="removePrivilegio(item)" value="{{item.IdPrivilegios}}">
                             {{item.Descripcion}}
@@ -52,7 +63,7 @@
 
                 <mat-form-field class="example-container">
                     <mat-chip-list>
-                        <mat-chip *ngFor="let item of chipsModulos" 
+                        <mat-chip *ngFor="let item of chipsModulos"
                         [selectable]="selectableModulo"
                             [removable]="removableModulo" (removed)="removeModulo(item)" value="{{item.IdPrivilegios}}">
                             {{item.Descripcion}}
@@ -62,7 +73,7 @@
                 </mat-form-field>
 
                 <div class="form-group">
-                    <button class="form-control btn-success" (click)="validacionFormulario()" type="submit"
+                    <button class="form-control btn-success" type="submit"
                         [disabled]="myForm.invalid" [value]="botonInsertar" #testButton>
                         Guardar Usuario
                     </button>
@@ -88,15 +99,17 @@
                         <thead class="card-header">
                             <tr>
                                 <th scope="col">Usuario</th>
+                                <th scope="col">Tipo</th>
                                 <th scope="col" colspan="3" style="text-align: center;">Acciones</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr *ngFor="let item of usuarios | filter: filterUsuario : 'UsuarioLogin'">
                                 <td> {{ item.UsuarioLogin }} </td>
+                                <td> {{ item.Descripcion }} </td>
                                 <td>
                                     <button
-                                        (click)="setUsuario(item.IdUsuario,item.UsuarioLogin,item.IdPersona, item.Contrasena)"
+                                        (click)="setUsuario(item.IdUsuario,item.UsuarioLogin,item.IdPersona, item.Contrasena,item.IdTipoUsuario,item.AsignacionTipoUsuarioEntidad)"
                                         class="btn btn-sm btn-outline-info separacion-botones"><i
                                             class="fa fa-pencil-square-o" aria-hidden="true"></i> </button>
                                 </td>

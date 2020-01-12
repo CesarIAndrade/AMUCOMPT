@@ -13,13 +13,13 @@ export class ModalAsignacionUsuarioPersonaComponent implements OnInit {
   constructor(
     private personaService: PersonaService,
     @Inject(MAT_DIALOG_DATA) public data: DialogData
-  ) { 
+  ) {
     console.log(this.data);
   }
   personas : Persona[] = [];
   Cedula : string;
   idPersona : string;
-
+  filterPersona = '';
   asignarUsuarioaPersona(idPersona: string,numeroDocumento: string)
   {
     this.data.cedula = numeroDocumento;

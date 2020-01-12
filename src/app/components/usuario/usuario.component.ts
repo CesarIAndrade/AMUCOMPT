@@ -58,6 +58,7 @@ export class UsuarioComponent implements OnInit {
   inputType = 'password';
   modulo = '0';
   privilegio = '0';
+  tipoUsuario = '0';
   resultadoModal: DialogData;
   removableModulo = true;
   removablePrivilegio = true;
@@ -69,8 +70,11 @@ export class UsuarioComponent implements OnInit {
   modulos: Modulo[] = [];
   personas: Persona[] = [];
   privilegios: Privilegios[] = [];
-  tipoUsuario: TipoDocumento[] = [];
+  tipoUsuarios: TipoDocumento[] = [];
   usuarios: Usuario[] = [];
+
+  idAsignacionTipoUsuario:string;
+  idTipoUsuario:string;
 
   consultarUsuarios() {
     this.usuarioService.consultarUsuarios(localStorage.getItem('miCuenta.getToken'))
@@ -78,6 +82,7 @@ export class UsuarioComponent implements OnInit {
         ok => {
           console.log(ok);
           this.usuarios = ok['respuesta'];
+          console.log("datos tabla =");
           console.log(this.usuarios);
         }
       )
@@ -93,7 +98,7 @@ export class UsuarioComponent implements OnInit {
     .then(
       ok => {
         console.log(ok);
-        this.tipoUsuario = ok['respuesta'];
+        this.tipoUsuarios = ok['respuesta'];
         console.log(this.tipoUsuario);
       }
     )
@@ -160,13 +165,37 @@ export class UsuarioComponent implements OnInit {
       if (this.testButton.nativeElement.value == "insertar") {
         this.crearUsuario();
       } else if (this.testButton.nativeElement.value == "modificar") {
-        this.actualizarUsuario();
+        console.log("BD = "+this.idTipoUsuario)
+        console.log("FORM = "+this.tipoUsuario)
+        if(this.idTipoUsuario == this.tipoUsuario)
+        {
+          this.actualizarUsuario();
+        }else {
+          this.actualizarUsuario();
+          this.eliminarAsignacionTipoUsuario();
+          this.asignarTipoUsuario(this.idUsuario);
+          this.consultarUsuarios();
+        }
         this.myForm.reset();
         this.testButton.nativeElement.value = "insertar";
       }
     }
   }
 
+  asignarTipoUsuario(idUsuario: string)
+  {
+    this.usuarioService.asignacionTipoUsuario(idUsuario,this.tipoUsuario,localStorage.getItem('miCuenta.postToken'))
+      .then(
+        ok => {
+          this.consultarUsuarios();
+        }
+      )
+      .catch(
+        error => {
+          console.log(error);
+        }
+      )
+  }
   actualizarUsuario() {
     this.usuarioService.actualizarUsuario(
       this.idUsuario,
@@ -187,7 +216,6 @@ export class UsuarioComponent implements OnInit {
         }
       )
   }
-
   crearUsuario() {
     var datosUsuario = {
       idPersona: this.idPersona,
@@ -198,8 +226,10 @@ export class UsuarioComponent implements OnInit {
     this.usuarioService.crearUsuario(datosUsuario)
       .then(
         ok => {
+          console.log("datos usuarios nuevo");
+          console.log(ok['respuesta']);
           this.cedula = "";
-          this.consultarUsuarios();
+          this.asignarTipoUsuario(ok['respuesta']);
         }
       )
       .catch(
@@ -208,7 +238,6 @@ export class UsuarioComponent implements OnInit {
         }
       )
   }
-
   abrirModal() {
     let dialogRef = this.dialog.open(ModalAsignacionUsuarioPersonaComponent, {
       width: '900px',
@@ -226,7 +255,22 @@ export class UsuarioComponent implements OnInit {
       this.idPersona = this.resultadoModal.idPersona;
     });
   }
-
+  eliminarAsignacionTipoUsuario()
+  {
+    this.usuarioService.eliminarAsignacionTipoUsuario(
+      this.idAsignacionTipoUsuario,
+      localStorage.getItem('miCuenta.deleteToken'))
+      .then(
+        ok => {
+          this.consultarUsuarios();
+        },
+      )
+      .catch(
+        err => {
+          console.log(err);
+        }
+      )
+  }
   eliminarUsuario(idUsuario: string) {
     this.usuarioService.eliminarUsuario(
       idUsuario,
@@ -247,11 +291,16 @@ export class UsuarioComponent implements OnInit {
     idUsuario: string,
     usuarioLogin: string,
     idPersona: string,
-    contrasena: string
+    contrasena: string,
+    idTipoUsuario: string,
+    asignacionTipoUsuarioEntidad:string
   ) {
+    this.idAsignacionTipoUsuario=asignacionTipoUsuarioEntidad['IdAsignacionTU'];
     this.idUsuario = idUsuario;
     this.idPersona = idPersona;
     this.testButton.nativeElement.value = 'modificar';
+    this.tipoUsuario=idTipoUsuario;
+    this.idTipoUsuario=idTipoUsuario;
     this.myForm.setValue({
       _valorUsuario: usuarioLogin,
       _contrasena: ''

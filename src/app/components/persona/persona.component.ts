@@ -366,7 +366,7 @@ export class PersonaComponent implements OnInit {
   }
 
   crearPersona() {
-    var validarNombres = {
+    var validarNombress = {
       primerCampo: '',
       segundoCampo: '',
       valido: Boolean
@@ -385,7 +385,7 @@ export class PersonaComponent implements OnInit {
       this.parroquia,
       this.comunidad
     )
-    var dosNombres = this.validarNombres(validarNombres);
+    var dosNombres = this.validarNombres(validarNombress);
     var dosApellidos = this.validarApellidos(validarApellidos);
     if (dosNombres.valido == true && dosApellidos.valido == true) {
       this.personaService.crearPersona(
@@ -625,7 +625,7 @@ export class PersonaComponent implements OnInit {
       this.comunidad = personaModal.idComunidadModal;
     }
     if (value == "modificar") {
-      var validarNombres = {
+      var validarNombress = {
         primerCampo: '',
         segundoCampo: '',
         valido: Boolean

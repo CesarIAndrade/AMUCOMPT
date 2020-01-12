@@ -9,7 +9,8 @@ export class FilterPipe implements PipeTransform {
     if (texto=='') {
       return arreglo;
     }
-    texto.toLowerCase();
+    //texto.toLowerCase();
+    //console.log(texto.toLowerCase());
     return arreglo.filter(item=>{
       return item[columna].toLowerCase().includes(texto);
     });
