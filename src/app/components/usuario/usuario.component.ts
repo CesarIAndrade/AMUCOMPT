@@ -301,6 +301,7 @@ export class UsuarioComponent implements OnInit {
     this.testButton.nativeElement.value = 'modificar';
     this.tipoUsuario=idTipoUsuario;
     this.idTipoUsuario=idTipoUsuario;
+    this.cargarModulo(this.idTipoUsuario);
     this.myForm.setValue({
       _valorUsuario: usuarioLogin,
       _contrasena: ''
@@ -311,17 +312,14 @@ export class UsuarioComponent implements OnInit {
     this.cedula = "";
     this.consultarUsuarios();
     this.consultarTipoUsuario();
-    this.consultarPrivilegios();
-    this.consultarModulos();
+    //this.consultarModulos();
   }
-
-  addPrivilegio(event) {
+  addPrivilegio(descripcion:string,idPrivilegios:string) {
     this.chipsPrivilegios.push({
-      IdPrivilegios: event.target.selectedIndex,
-      Descripcion: event.target.value
+      IdPrivilegios:idPrivilegios,
+      Descripcion: descripcion
     });
   }
-
   removePrivilegio(privilegio) {
     const index = this.chipsPrivilegios.indexOf(privilegio);
     if (index >= 0) {
@@ -329,19 +327,67 @@ export class UsuarioComponent implements OnInit {
       this.privilegio = '0';
     }
   }
-
-  addModulo(event) {
-    this.chipsModulos.push({
-      IdModulo: event.target.selectedIndex,
-      Descripcion: event.target.value
-    });
+  privilegiosDeUnModuloTipo(value,event)
+  {
+    this.chipsPrivilegios = [];
+    this.usuarioService.privilegiosDeUnModuloTipo(value,localStorage.getItem('miCuenta.getToken'))
+      .then(
+        ok => {
+          if(ok['respuesta'].length >0)
+          {
+            for (let i of ok['respuesta']) {
+              this.addPrivilegio(i.Descripcion,i.idPrivilegios);
+            }
+          }else{
+          }
+        }
+      )
+      .catch(
+        err => {
+          console.log(err);
+        }
+      )
   }
-
-  removeModulo(modulo) {
-    const index = this.chipsModulos.indexOf(modulo);
-    if (index >= 0) {
-      this.chipsModulos.splice(index, 1);
-      this.modulo = '0';
-    }
+  moduloDeUnTipoDeUsuario(value,event)
+  {
+    this.usuarioService.moduloDeUnTipoDeUsuario(value,localStorage.getItem('miCuenta.getToken'))
+      .then(
+        ok => {
+          if(ok['respuesta'].length >0)
+          {
+            this.modulos = ok['respuesta'];
+          }else{
+            this.modulos = [];
+            this.modulo = '0';
+          }
+          this.chipsPrivilegios = [];
+        }
+      )
+      .catch(
+        err => {
+          console.log(err);
+        }
+      )
+  }
+  cargarModulo(value)
+  {
+    this.usuarioService.moduloDeUnTipoDeUsuario(value,localStorage.getItem('miCuenta.getToken'))
+      .then(
+        ok => {
+          if(ok['respuesta'].length >0)
+          {
+            this.modulos = ok['respuesta'];
+          }else{
+            this.modulos = [];
+            this.modulo = '0';
+          }
+          this.chipsPrivilegios = [];
+        }
+      )
+      .catch(
+        err => {
+          console.log(err);
+        }
+      )
   }
 }
