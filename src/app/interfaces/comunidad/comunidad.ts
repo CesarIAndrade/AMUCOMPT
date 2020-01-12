@@ -1,9 +1,7 @@
-import { Parroquia } from "../parroquia/parroquia";
-
 export interface Comunidad {
     IdComunidad?: string;
     Descripcion?: string;
-    Parroquia?: Parroquia;
+    IdParroquia?: string;
     FechaCreacion?: string;
     Estado?: string;
 }

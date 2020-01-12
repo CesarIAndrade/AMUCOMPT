@@ -64,6 +64,7 @@ export class UsuarioComponent implements OnInit {
   removablePrivilegio = true;
   selectableModulo = true;
   selectablePrivilegio = true;
+  selectTipoUsuario = true;
 
   chipsPrivilegios: Privilegios[] = [];
   chipsModulos: Modulo[] = [];
@@ -107,7 +108,6 @@ export class UsuarioComponent implements OnInit {
         console.log(err);
       }
     )
-
   }
 
   consultarPrivilegios() {
@@ -182,8 +182,7 @@ export class UsuarioComponent implements OnInit {
     }
   }
 
-  asignarTipoUsuario(idUsuario: string)
-  {
+  asignarTipoUsuario(idUsuario: string) {
     this.usuarioService.asignacionTipoUsuario(idUsuario,this.tipoUsuario,localStorage.getItem('miCuenta.postToken'))
       .then(
         ok => {
@@ -196,6 +195,7 @@ export class UsuarioComponent implements OnInit {
         }
       )
   }
+
   actualizarUsuario() {
     this.usuarioService.actualizarUsuario(
       this.idUsuario,
@@ -216,7 +216,23 @@ export class UsuarioComponent implements OnInit {
         }
       )
   }
+
+  validarSelects(
+    tipoUsuario: string
+  ) {
+    if (tipoUsuario == "0") {
+      this.selectTipoUsuario = false;
+    }
+  }
+
+  onChangeSelectTipoUsuario(value) {
+    if (value != "0") {
+      this.selectTipoUsuario = true;
+    }
+  }
+
   crearUsuario() {
+    this.validarSelects(this.tipoUsuario);
     var datosUsuario = {
       idPersona: this.idPersona,
       usuario: this.myForm.get('_valorUsuario').value,
@@ -238,6 +254,7 @@ export class UsuarioComponent implements OnInit {
         }
       )
   }
+
   abrirModal() {
     let dialogRef = this.dialog.open(ModalAsignacionUsuarioPersonaComponent, {
       width: '900px',
@@ -255,6 +272,7 @@ export class UsuarioComponent implements OnInit {
       this.idPersona = this.resultadoModal.idPersona;
     });
   }
+
   eliminarAsignacionTipoUsuario()
   {
     this.usuarioService.eliminarAsignacionTipoUsuario(

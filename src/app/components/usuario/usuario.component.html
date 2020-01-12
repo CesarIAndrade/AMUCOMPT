@@ -23,12 +23,15 @@
                 </div>
 
                 <div class="form-group">
-                    <select [(ngModel)]="tipoUsuario" [ngModelOptions]="{standalone: true}" type="text"
+                    <select [(ngModel)]="tipoUsuario" [ngModelOptions]="{standalone: true}" type="text" (change)="onChangeSelectTipoUsuario($event.target.value)"
                         class="form-control">
-                        <option value="0" disabled>Seleccionar tipo de usuario</option>
+                        <option value="0" disabled>Seleccionar Tipo Usuario</option>
                         <option *ngFor="let item of tipoUsuarios" value="{{item.IdTipoUsuario}}">
                             {{ item.Descripcion }}
                         </option>
+                        <div class="badge badge-danger mt-3" [hidden]="selectTipoUsuario">
+                            Tipo Usuario Requerido
+                        </div>
                     </select>
                 </div>
 

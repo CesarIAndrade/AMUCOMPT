@@ -1,0 +1,120 @@
+<br>
+<div class="container">
+    <div class="row">
+        <div class="col-lg-4 col-md-5 mr-auto">
+            <div class="card">
+                <div class="card-header" style="text-align: center;">
+                    Nueva Comunidad
+                </div>
+                <div class="card-body">
+                    <input [value]="idParroquia" class="form-control" type="number" readonly disabled hidden>
+                    <div class="form-group">
+                        <input [value]="parroquia" type="text" class="form-control" readonly disabled>
+                    </div>
+                    <form [formGroup]="myForm" (ngSubmit)="validarFormulario()" novalidate>
+                        <div class="form-group">
+                            <input formControlName="_comunidad" class="form-control" type="text"
+                                placeholder="Ingrese Comunidad">
+                            <div class="badge badge-danger mt-3" [hidden]="inputIdParroquia">
+                                Parroquia Requerida
+                            </div>
+                            <div class="badge badge-danger mt-3"
+                                *ngIf="_comunidad.invalid && (_comunidad.dirty || _comunidad.touched)">
+                                <div *ngIf="_comunidad.errors.required">
+                                    Comunidad Requerida
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" [value]="botonIngresar" [disabled]="myForm.invalid"
+                                class="form-control btn-success" #testButton>Guardar
+                                Comunidad</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-8 col-md-7">
+            <div class="card">
+                <div class="card-header" style="text-align: center;">
+                    Lista Comunidades
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group input-container">
+                                <i class="fa fa-search icon"></i>
+                                <input type="text" class="form-control input-field" placeholder="Ejem. B1">
+                            </div>
+                            <div class="table-responsive-sm">
+                                <table class="table table-sm">
+                                    <thead class="card-header">
+                                        <tr>
+                                            <th scope="col">IdComunidad</th>
+                                            <th scope="col">Comunidad</th>
+                                            <th scope="col">Parroquia</th>
+                                            <th scope="col" colspan="2" style="text-align: center;">Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let item of comunidades">
+                                            <td> {{ item.IdComunidad }} </td>
+                                            <td> {{ item.Descripcion }} </td>
+                                            <td> {{ item.IdParroquia }} </td>
+                                            <td>
+                                                <button class="btn btn-sm btn-outline-info separacion-botones"
+                                                    value="{{item.IdComunidad}}" 
+                                                    (click)=mostrarComunidad(item)>
+                                                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                                </button>
+                                            </td>
+                                            <td>
+                                                <button class="btn btn-sm btn-outline-danger separacion-botones"
+                                                    value="{{item.IdComunidad}}" 
+                                                    (click)=eliminarComunidad(item.IdComunidad)>
+                                                    <i class="fa fa-trash" aria-hidden="true"></i>
+                                                </button>
+                                            </td>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col-lg-4 col-md-5 mr-auto">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="table-responsive-sm">
+                                <table class="table table-sm">
+                                    <thead class="card-header">
+                                        <tr>
+                                            <th scope="col">Parroquia</th>
+                                            <th scope="col" style="text-align: center;">Seleccionar</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let item of parroquias">
+                                            <td> {{ item.Descripcion }} </td>
+                                            <td>
+                                                <button class="btn btn-sm btn-block btn-outline-warning"
+                                                    (click)="setParroquia(item)">
+                                                    <i class="fa fa-plus" aria-hidden="true"></i>
+                                                </button>
+                                            </td>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
