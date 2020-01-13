@@ -74,8 +74,8 @@ export class UsuarioComponent implements OnInit {
   tipoUsuarios: TipoDocumento[] = [];
   usuarios: Usuario[] = [];
 
-  idAsignacionTipoUsuario:string;
-  idTipoUsuario:string;
+  idAsignacionTipoUsuario: string;
+  idTipoUsuario: string;
 
   consultarUsuarios() {
     console.log('consultando');
@@ -92,18 +92,18 @@ export class UsuarioComponent implements OnInit {
       )
   }
 
-  consultarTipoUsuario(){
+  consultarTipoUsuario() {
     this.usuarioService.consultarTipoUsuario(localStorage.getItem('miCuenta.getToken'))
-    .then(
-      ok => {
-        this.tipoUsuarios = ok['respuesta'];
-      }
-    )
-    .catch(
-      err => {
-        console.log(err);
-      }
-    )
+      .then(
+        ok => {
+          this.tipoUsuarios = ok['respuesta'];
+        }
+      )
+      .catch(
+        err => {
+          console.log(err);
+        }
+      )
   }
 
   consultarPrivilegios() {
@@ -158,11 +158,10 @@ export class UsuarioComponent implements OnInit {
       if (this.testButton.nativeElement.value == "insertar") {
         this.crearUsuario();
       } else if (this.testButton.nativeElement.value == "modificar") {
-        if(this.idTipoUsuario == this.tipoUsuario)
-        {
+        if (this.idTipoUsuario == this.tipoUsuario) {
           this.actualizarUsuario();
           this.consultarUsuarios();
-        }else {
+        } else {
           this.actualizarUsuario();
           this.eliminarAsignacionTipoUsuario();
           this.asignarTipoUsuario(this.idUsuario);
@@ -175,7 +174,7 @@ export class UsuarioComponent implements OnInit {
   }
 
   asignarTipoUsuario(idUsuario: string) {
-    this.usuarioService.asignacionTipoUsuario(idUsuario,this.tipoUsuario,localStorage.getItem('miCuenta.postToken'))
+    this.usuarioService.asignacionTipoUsuario(idUsuario, this.tipoUsuario, localStorage.getItem('miCuenta.postToken'))
       .then(
         ok => {
           this.consultarUsuarios();
@@ -265,8 +264,7 @@ export class UsuarioComponent implements OnInit {
     });
   }
 
-  eliminarAsignacionTipoUsuario()
-  {
+  eliminarAsignacionTipoUsuario() {
     this.usuarioService.eliminarAsignacionTipoUsuario(
       this.idAsignacionTipoUsuario,
       localStorage.getItem('miCuenta.deleteToken'))
@@ -303,15 +301,15 @@ export class UsuarioComponent implements OnInit {
     idPersona: string,
     contrasena: string,
     idTipoUsuario: string,
-    asignacionTipoUsuarioEntidad:string
+    asignacionTipoUsuarioEntidad: string
   ) {
-    this.idAsignacionTipoUsuario=asignacionTipoUsuarioEntidad['IdAsignacionTU'];
+    this.idAsignacionTipoUsuario = asignacionTipoUsuarioEntidad['IdAsignacionTU'];
     this.idUsuario = idUsuario;
     this.idPersona = idPersona;
     this.testButton.nativeElement.value = 'modificar';
-    this.tipoUsuario=idTipoUsuario;
-    this.idTipoUsuario=idTipoUsuario;
-    this.cargarModulo(this.idTipoUsuario);
+    this.tipoUsuario = idTipoUsuario;
+    this.idTipoUsuario = idTipoUsuario;
+    this.moduloDeUnTipoDeUsuario(this.idTipoUsuario);
     this.myForm.setValue({
       _valorUsuario: usuarioLogin,
       _contrasena: ''
@@ -324,12 +322,14 @@ export class UsuarioComponent implements OnInit {
     this.consultarTipoUsuario();
     //this.consultarModulos();
   }
-  addPrivilegio(descripcion:string,idPrivilegios:string) {
+
+  addPrivilegio(descripcion: string, idPrivilegios: string) {
     this.chipsPrivilegios.push({
-      IdPrivilegios:idPrivilegios,
+      IdPrivilegios: idPrivilegios,
       Descripcion: descripcion
     });
   }
+
   removePrivilegio(privilegio) {
     const index = this.chipsPrivilegios.indexOf(privilegio);
     if (index >= 0) {
@@ -337,18 +337,16 @@ export class UsuarioComponent implements OnInit {
       this.privilegio = '0';
     }
   }
-  privilegiosDeUnModuloTipo(value,event)
-  {
+
+  privilegiosDeUnModuloTipo(value) {
     this.chipsPrivilegios = [];
-    this.usuarioService.privilegiosDeUnModuloTipo(value,localStorage.getItem('miCuenta.getToken'))
+    this.usuarioService.privilegiosDeUnModuloTipo(value, localStorage.getItem('miCuenta.getToken'))
       .then(
         ok => {
-          if(ok['respuesta'].length >0)
-          {
+          if (ok['respuesta'].length > 0) {
             for (let i of ok['respuesta']) {
-              this.addPrivilegio(i.Descripcion,i.idPrivilegios);
+              this.addPrivilegio(i.Descripcion, i.idPrivilegios);
             }
-          }else{
           }
         }
       )
@@ -358,36 +356,14 @@ export class UsuarioComponent implements OnInit {
         }
       )
   }
-  moduloDeUnTipoDeUsuario(value,event)
-  {
-    this.usuarioService.moduloDeUnTipoDeUsuario(value,localStorage.getItem('miCuenta.getToken'))
+
+  moduloDeUnTipoDeUsuario(value) {
+    this.usuarioService.moduloDeUnTipoDeUsuario(value, localStorage.getItem('miCuenta.getToken'))
       .then(
         ok => {
-          if(ok['respuesta'].length >0)
-          {
+          if (ok['respuesta'].length > 0) {
             this.modulos = ok['respuesta'];
-          }else{
-            this.modulos = [];
-            this.modulo = '0';
-          }
-          this.chipsPrivilegios = [];
-        }
-      )
-      .catch(
-        err => {
-          console.log(err);
-        }
-      )
-  }
-  cargarModulo(value)
-  {
-    this.usuarioService.moduloDeUnTipoDeUsuario(value,localStorage.getItem('miCuenta.getToken'))
-      .then(
-        ok => {
-          if(ok['respuesta'].length >0)
-          {
-            this.modulos = ok['respuesta'];
-          }else{
+          } else {
             this.modulos = [];
             this.modulo = '0';
           }

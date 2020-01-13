@@ -35,14 +35,14 @@ export class CantonComponent implements OnInit {
 
   filterProvincia = '';
   filterCanton = '';
-  dataProvincias: Provincia[] = [];
+  provincias: Provincia[] = [];
   cantones: Canton[] = [];
 
   consultarProvincias() {
     this.personaService.consultarProvincias(localStorage.getItem('miCuenta.getToken'))
       .then(
         ok => {
-          this.dataProvincias = ok['respuesta'];
+          this.provincias = ok['respuesta'];
         }
       )
       .catch(
@@ -105,7 +105,7 @@ export class CantonComponent implements OnInit {
 
   mostrarCanton(canton) {
     this.idProvincia = canton.Provincia.IdProvincia;
-    this.dataProvincias.map(
+    this.provincias.map(
       item => {
         if(this.idProvincia == item.IdProvincia){
           this.provincia = item.Descripcion;
@@ -170,8 +170,6 @@ export class CantonComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.dataProvincias = [];
     this.consultarCantones();
-    //this.consultarProvincias();
   }
 }

@@ -10,7 +10,6 @@ export class PanelAdministracionComponent implements OnInit {
 
 
   ngOnInit() {
-    console.log("hla");
   }
 
 }

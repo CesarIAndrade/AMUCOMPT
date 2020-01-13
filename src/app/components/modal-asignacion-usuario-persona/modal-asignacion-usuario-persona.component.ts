@@ -25,8 +25,6 @@ export class ModalAsignacionUsuarioPersonaComponent implements OnInit {
     this.data.cedula = numeroDocumento;
     this.data.idPersona= idPersona;
   }
-
-
   consultarPersonas() {
     this.personaService.consultarPersonasSinUsuario(localStorage.getItem('miCuenta.getToken'))
       .then(
