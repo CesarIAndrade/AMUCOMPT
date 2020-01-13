@@ -30,6 +30,25 @@ export class PersonaService {
     })
   }
 
+  consultarPersonasSinUsuario(_token: string) {
+    const body = new HttpParams()
+      .set('encriptada', _token)
+    return new Promise((resolve, reject) => {
+      this.http.post(this.apiUrl + 'TalentoHumano/ListaUsuariosClientesInformacion/', body.toString(),
+        {
+          headers: new HttpHeaders()
+            .set('Content-Type', 'application/x-www-form-urlencoded')
+        }
+      )
+        .subscribe(res => {
+          resolve(res);
+        }, (err) => {
+          reject(err);
+        })
+    })
+  }
+
+
   consultarTipoDocumento(_token: string) {
     const body = new HttpParams()
       .set('encriptada', _token)

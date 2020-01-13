@@ -28,7 +28,7 @@ export class ModalAsignacionUsuarioPersonaComponent implements OnInit {
 
 
   consultarPersonas() {
-    this.personaService.consultarPersonas(localStorage.getItem('miCuenta.getToken'))
+    this.personaService.consultarPersonasSinUsuario(localStorage.getItem('miCuenta.getToken'))
       .then(
         ok => {
           this.personas = ok['respuesta'];

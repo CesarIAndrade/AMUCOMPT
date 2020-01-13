@@ -78,9 +78,10 @@
                                 <i class="fa fa-search icon"></i>
                                 <input [(ngModel)]="filterCanton" type="text" class="form-control input-field" placeholder="Ejem. Tosagua">
                             </div>
-                            <a (click)="consultarCantones()" data-toggle="dropdown" aria-expanded="false">
-                              <i class="fa fa-refresh" aria-hidden="true"></i>
-                            </a>
+                            <button class="btn btn-sm btn-outline-info"
+                                (click)="consultarCantones()">
+                                <i class="fa fa-refresh" aria-hidden="true"></i>
+                            </button>
                             <div class="table-responsive-sm">
                                 <table class="table table-sm">
                                     <thead class="card-header">
