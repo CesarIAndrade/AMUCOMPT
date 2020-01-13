@@ -37,9 +37,10 @@
 
                 <div class="form-group">
                     <select [(ngModel)]="modulo" [ngModelOptions]="{standalone: true}" type="text" class="form-control"
-                    (change)="privilegiosDeUnModuloTipo($event.target.value,$event)">
+                        (change)="privilegiosDeUnModuloTipo($event.target.value,$event)">
                         <option value="0" disabled>Seleccionar un Módulo</option>
-                        <option *ngFor="let item of modulos" value="{{item.IdModuloTipo}}"> {{ item.Descripcion }} </option>
+                        <option *ngFor="let item of modulos" value="{{item.IdModuloTipo}}"> {{ item.Descripcion }}
+                        </option>
                     </select>
                 </div>
 
@@ -47,17 +48,17 @@
                     PRIVILEGIOS
                     <mat-form-field class="example-container">
                         <mat-chip-list>
-                            <mat-chip *ngFor="let item of chipsPrivilegios"
-                            [selectable]="selectablePrivilegio"
-                                [removable]="removablePrivilegio" (removed)="removePrivilegio(item)" value="{{item.IdPrivilegios}}">
+                            <mat-chip *ngFor="let item of chipsPrivilegios" [selectable]="selectablePrivilegio"
+                                [removable]="removablePrivilegio" (removed)="removePrivilegio(item)"
+                                value="{{item.IdPrivilegios}}">
                                 {{item.Descripcion}}
                             </mat-chip>
                         </mat-chip-list>
                     </mat-form-field>
                 </div>
                 <div class="form-group">
-                    <button class="form-control btn-success" type="submit"
-                        [disabled]="myForm.invalid" [value]="botonInsertar" #testButton>
+                    <button class="form-control btn-success" type="submit" [disabled]="myForm.invalid"
+                        [value]="botonInsertar" #testButton>
                         Guardar Usuario
                     </button>
                 </div>
@@ -76,11 +77,9 @@
                     <i class="fa fa-search icon"></i>
                     <input [(ngModel)]="filterUsuario" type="text" class="form-control input-field"
                         placeholder="Ejem. Zambrano Zambrano">
+                    <i class="fa fa-refresh icon" (click)="consultarUsuarios()" aria-hidden="true"></i>
                 </div>
-                  <button class="btn btn-sm btn-outline-info"
-                      (click)="consultarUsuarios()">
-                      <i class="fa fa-refresh" aria-hidden="true"></i>
-                  </button>
+
                 <div class="table-responsive-sm">
                     <table class="table table-sm">
                         <thead class="card-header">
