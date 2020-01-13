@@ -15,6 +15,8 @@ import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatDialogModule } from "@angular/material/dialog";
 import { MatTabsModule } from "@angular/material/tabs";
 
+
+
 // Components
 import { UsuarioComponent } from './components/usuario/usuario.component';
 import { LoginComponent } from './components/login/login.component';
@@ -38,6 +40,8 @@ import { ComunidadComponent } from './components/comunidad/comunidad.component';
 import { ParroquiaComponent } from './components/parroquia/parroquia.component';
 import { ProvinciaComponent } from './components/provincia/provincia.component';
 import { ModalAsignacionUsuarioTiposUsuarioComponent } from './components/modal-asignacion-usuario-tipos-usuario/modal-asignacion-usuario-tipos-usuario.component';
+
+
 
 @NgModule({
   declarations: [

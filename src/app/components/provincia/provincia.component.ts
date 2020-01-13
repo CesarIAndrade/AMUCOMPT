@@ -4,6 +4,7 @@ import { PanelAdministracionService } from 'src/app/services/panel-administracio
 import { PersonaService } from 'src/app/services/persona.service';
 import { Provincia } from 'src/app/interfaces/provincia/provincia';
 
+
 @Component({
   selector: 'app-provincia',
   templateUrl: './provincia.component.html',
@@ -13,6 +14,7 @@ export class ProvinciaComponent implements OnInit {
 
   myForm: FormGroup;
   @ViewChild('testButton', { static: false }) testButton: ElementRef;
+
 
   constructor(private panelAdministracionService: PanelAdministracionService,
     private personaService: PersonaService
@@ -125,6 +127,6 @@ export class ProvinciaComponent implements OnInit {
   ngOnInit() {
     this.provincias = [];
     this.mostrarProvincia();
-  }
 
+  }
 }
