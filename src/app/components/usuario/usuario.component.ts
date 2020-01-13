@@ -37,6 +37,8 @@ export interface Fruit {
 export class UsuarioComponent implements OnInit {
 
   myForm: FormGroup;
+  @ViewChild('testButton', { static: false }) testButton: ElementRef;
+
   constructor(
     private dialog: MatDialog,
     private usuarioService: UsuarioService,
@@ -48,13 +50,12 @@ export class UsuarioComponent implements OnInit {
     })
   }
 
-  @ViewChild('testButton', { static: false }) testButton: ElementRef;
-
   botonInsertar = 'insertar';
-  cedula: string;
+  cedula = 'Cedula';
   filterUsuario = '';
   idPersona: string;
   idUsuario: string;
+  inputPersona = true;
   inputType = 'password';
   modulo = '0';
   privilegio = '0';
@@ -173,10 +174,40 @@ export class UsuarioComponent implements OnInit {
     }
   }
 
+  crearUsuario() {
+    if (this.cedula == 'Cedula') {
+      if (this.tipoUsuario == '0') {
+        this.selectTipoUsuario = false;
+      }
+      this.inputPersona = false;
+    } else {
+      var datosUsuario = {
+        idPersona: this.idPersona,
+        usuario: this.myForm.get('_valorUsuario').value,
+        contrasena: this.myForm.get('_contrasena').value,
+        token: localStorage.getItem('miCuenta.postToken')
+      }
+      this.usuarioService.crearUsuario(datosUsuario)
+        .then(
+          ok => {
+            console.log(ok['respuesta']);
+            this.cedula = 'Cedula';
+            this.asignarTipoUsuario(ok['respuesta']);
+          }
+        )
+        .catch(
+          error => {
+            console.log(error);
+          }
+        )
+    }
+  }
+
   asignarTipoUsuario(idUsuario: string) {
     this.usuarioService.asignacionTipoUsuario(idUsuario, this.tipoUsuario, localStorage.getItem('miCuenta.postToken'))
       .then(
         ok => {
+          this.limpiarCampos();
           this.consultarUsuarios();
         }
       )
@@ -196,7 +227,7 @@ export class UsuarioComponent implements OnInit {
       localStorage.getItem('miCuenta.putToken'))
       .then(
         ok => {
-          this.cedula = "";
+          this.cedula = 'Cedula';
           this.consultarUsuarios();
           this.testButton.nativeElement.value = 'insertar';
         },
@@ -208,43 +239,6 @@ export class UsuarioComponent implements OnInit {
       )
   }
 
-  validarSelects(
-    tipoUsuario: string
-  ) {
-    if (tipoUsuario == "0") {
-      this.selectTipoUsuario = false;
-    }
-  }
-
-  onChangeSelectTipoUsuario(value) {
-    if (value != "0") {
-      this.selectTipoUsuario = true;
-    }
-  }
-
-  crearUsuario() {
-    this.validarSelects(this.tipoUsuario);
-    var datosUsuario = {
-      idPersona: this.idPersona,
-      usuario: this.myForm.get('_valorUsuario').value,
-      contrasena: this.myForm.get('_contrasena').value,
-      token: localStorage.getItem('miCuenta.postToken')
-    }
-    this.usuarioService.crearUsuario(datosUsuario)
-      .then(
-        ok => {
-          console.log("datos usuarios nuevo");
-          console.log(ok['respuesta']);
-          this.cedula = "";
-          this.asignarTipoUsuario(ok['respuesta']);
-        }
-      )
-      .catch(
-        error => {
-          console.log(error);
-        }
-      )
-  }
 
   abrirModal() {
     let dialogRef = this.dialog.open(ModalAsignacionUsuarioPersonaComponent, {
@@ -257,11 +251,34 @@ export class UsuarioComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
-      this.resultadoModal = result;
-      console.log(this.resultadoModal);
-      this.cedula = this.resultadoModal.cedula;
-      this.idPersona = this.resultadoModal.idPersona;
+      if (result != null) {
+        this.inputPersona = true;
+        this.resultadoModal = result;
+        console.log(this.resultadoModal);
+        this.cedula = this.resultadoModal.cedula;
+        this.idPersona = this.resultadoModal.idPersona;
+      } else {
+        this.inputPersona = false;
+      }
     });
+  }
+
+  eliminarUsuario(usuario) {
+    this.idAsignacionTipoUsuario = usuario.AsignacionTipoUsuarioEntidad.IdAsignacionTU;
+    this.usuarioService.eliminarUsuario(
+      usuario.IdUsuario,
+      localStorage.getItem('miCuenta.deleteToken'))
+      .then(
+        ok => {
+          this.eliminarAsignacionTipoUsuario();
+          this.consultarUsuarios();
+        },
+      )
+      .catch(
+        err => {
+          console.log(err);
+        }
+      )
   }
 
   eliminarAsignacionTipoUsuario() {
@@ -279,20 +296,14 @@ export class UsuarioComponent implements OnInit {
         }
       )
   }
-  eliminarUsuario(idUsuario: string) {
-    this.usuarioService.eliminarUsuario(
-      idUsuario,
-      localStorage.getItem('miCuenta.deleteToken'))
-      .then(
-        ok => {
-          this.consultarUsuarios();
-        },
-      )
-      .catch(
-        err => {
-          console.log(err);
-        }
-      )
+
+  limpiarCampos() {
+    this.myForm.reset();
+    this.cedula = 'Cedula';
+    this.idPersona = '';
+    this.tipoUsuario = '0';
+    this.modulo = '0';
+    this.chipsPrivilegios = [];
   }
 
   setUsuario(
@@ -316,8 +327,15 @@ export class UsuarioComponent implements OnInit {
     })
   }
 
+  get _valorUsuario() {
+    return this.myForm.get('_valorUsuario');
+  }
+
+  get _contrasena() {
+    return this.myForm.get('_contrasena');
+  }
+
   ngOnInit() {
-    this.cedula = "";
     this.consultarUsuarios();
     this.consultarTipoUsuario();
     //this.consultarModulos();
@@ -358,6 +376,9 @@ export class UsuarioComponent implements OnInit {
   }
 
   moduloDeUnTipoDeUsuario(value) {
+    if (value != "0") {
+      this.selectTipoUsuario = true;
+    }
     this.usuarioService.moduloDeUnTipoDeUsuario(value, localStorage.getItem('miCuenta.getToken'))
       .then(
         ok => {

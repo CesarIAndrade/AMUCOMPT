@@ -63,6 +63,10 @@ export class PersonaComponent implements OnInit {
   selectParroquia = true;
   selectComunidad = true;
 
+  nuevaPersona = 'Nueva Persona';
+  contacto = 'Contacto ';
+  direccion = 'Direccion';
+
   idPersona: string;
   botonInsertar = "insertar";
 
@@ -563,6 +567,9 @@ export class PersonaComponent implements OnInit {
           if (value == 'detalles') {
             this.abrirModal(this.personaModal)
           } else if (value == 'modificar') {
+            this.nuevaPersona = 'Modificar Persona';
+            this.contacto = 'Modificar Contacto';
+            this.direccion = 'Modificar Direccion';
             this.actualizarPersona('', this.personaModal);
           }
         },
@@ -669,6 +676,9 @@ export class PersonaComponent implements OnInit {
               this.actualizarDireccion(idPersona, idAsignacionPC);
               this.myForm.reset();
               this.limpiarSelects();
+              this.nuevaPersona = 'Nueva Persona';
+              this.contacto = 'Contacto ';
+              this.direccion = 'Direccion';
               this.consultarPersonas();
             },
           )

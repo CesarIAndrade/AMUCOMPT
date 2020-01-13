@@ -15,10 +15,10 @@
                         <div class="form-group">
                             <input formControlName="_comunidad" class="form-control" type="text"
                                 placeholder="Ingrese Comunidad">
-                            <div class="badge badge-danger mt-3" [hidden]="inputIdParroquia">
+                            <div class="badge badge-danger mt-3 btn-block" [hidden]="inputIdParroquia">
                                 Parroquia Requerida
                             </div>
-                            <div class="badge badge-danger mt-3"
+                            <div class="badge badge-danger mt-3 btn-block"
                                 *ngIf="_comunidad.invalid && (_comunidad.dirty || _comunidad.touched)">
                                 <div *ngIf="_comunidad.errors.required">
                                     Comunidad Requerida
