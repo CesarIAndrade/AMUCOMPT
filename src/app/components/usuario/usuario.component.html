@@ -24,7 +24,7 @@
 
                 <div class="form-group">
                     <select [(ngModel)]="tipoUsuario" [ngModelOptions]="{standalone: true}" type="text"
-                        (change)="moduloDeUnTipoDeUsuario($event.target.value,$event)" class="form-control">
+                        (change)="moduloDeUnTipoDeUsuario($event.target.value)" class="form-control">
                         <option value="0" disabled>Seleccionar tipo de usuario</option>
                         <option *ngFor="let item of tipoUsuarios" value="{{item.IdTipoUsuario}}">
                             {{ item.Descripcion }}
@@ -37,7 +37,7 @@
 
                 <div class="form-group">
                     <select [(ngModel)]="modulo" [ngModelOptions]="{standalone: true}" type="text" class="form-control"
-                        (change)="privilegiosDeUnModuloTipo($event.target.value,$event)">
+                        (change)="privilegiosDeUnModuloTipo($event.target.value)">
                         <option value="0" disabled>Seleccionar un Módulo</option>
                         <option *ngFor="let item of modulos" value="{{item.IdModuloTipo}}"> {{ item.Descripcion }}
                         </option>
@@ -79,7 +79,6 @@
                         placeholder="Ejem. Zambrano Zambrano">
                     <i class="fa fa-refresh icon" (click)="consultarUsuarios()" aria-hidden="true"></i>
                 </div>
-
                 <div class="table-responsive-sm">
                     <table class="table table-sm">
                         <thead class="card-header">
