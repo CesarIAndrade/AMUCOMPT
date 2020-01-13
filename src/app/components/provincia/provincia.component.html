@@ -37,7 +37,7 @@
                         <div class="col-md-12">
                             <div class="form-group input-container">
                                 <i class="fa fa-search icon"></i>
-                                <input type="text" class="form-control input-field" placeholder="Ejem. Manabi">
+                                <input [(ngModel)]="filterProvincia" type="text" class="form-control input-field" placeholder="Ejem. Manabi">
                             </div>
                             <div class="table-responsive-sm">
                                 <table class="table table-sm">
@@ -49,19 +49,19 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr *ngFor="let item of provincias">
+                                        <tr *ngFor="let item of provincias | filter: filterProvincia : 'Descripcion'">
                                             <td> {{ item.IdProvincia }} </td>
                                             <td> {{ item.Descripcion }} </td>
                                             <td>
                                                 <button class="btn btn-sm btn-outline-info separacion-botones"
-                                                    value="{{item.IdProvincia}}" 
-                                                    (click)=mostrarProvincia(item)>
+                                                    value="{{item.IdProvincia}}"
+                                                    (click)=setProvincia(item)>
                                                     <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                                                 </button>
                                             </td>
                                             <td>
                                                 <button class="btn btn-sm btn-outline-danger separacion-botones"
-                                                    value="{{item.IdProvincia}}" 
+                                                    value="{{item.IdProvincia}}"
                                                     (click)=eliminarProvincia(item.IdProvincia)>
                                                     <i class="fa fa-trash" aria-hidden="true"></i>
                                                 </button>

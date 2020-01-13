@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-
 @Component({
   selector: 'app-panel-administracion',
   templateUrl: './panel-administracion.component.html',
@@ -9,7 +8,9 @@ export class PanelAdministracionComponent implements OnInit {
 
   constructor() { }
 
+
   ngOnInit() {
+    console.log("hla");
   }
 
 }

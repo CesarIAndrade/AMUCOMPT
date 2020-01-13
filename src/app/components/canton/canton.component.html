@@ -33,6 +33,38 @@
                     </form>
                 </div>
             </div>
+            <br>
+            <div class="card">
+                <div class="card-header" style="text-align: center;">
+                    Lista Provincias
+                </div>
+                <div class="card-body">
+                  <div class="form-group input-container">
+                      <i class="fa fa-search icon"></i>
+                      <input [(ngModel)]="filterProvincia" type="text" class="form-control input-field" placeholder="Ejem. Manabi">
+                  </div>
+                  <div class="table-responsive-sm">
+                      <table class="table table-sm">
+                          <thead class="card-header">
+                              <tr>
+                                  <th scope="col">Provincia</th>
+                                  <th scope="col" style="text-align: center;">Seleccionar</th>
+                              </tr>
+                          </thead>
+                          <tbody>
+                              <tr *ngFor="let item of dataProvincias | filter: filterProvincia : 'Descripcion'">
+                                  <td> {{ item.Descripcion }} </td>
+                                  <td>
+                                      <button class="btn btn-sm btn-block btn-outline-warning"
+                                          (click)="setProvincia(item)">
+                                          <i class="fa fa-plus" aria-hidden="true"></i>
+                                      </button>
+                                  </td>
+                          </tbody>
+                      </table>
+                  </div>
+                </div>
+            </div>
         </div>
         <div class="col-lg-8 col-md-7">
             <div class="card">
@@ -44,7 +76,7 @@
                         <div class="col-md-12">
                             <div class="form-group input-container">
                                 <i class="fa fa-search icon"></i>
-                                <input type="text" class="form-control input-field" placeholder="Ejem. Tosagua">
+                                <input [(ngModel)]="filterCanton" type="text" class="form-control input-field" placeholder="Ejem. Tosagua">
                             </div>
                             <div class="table-responsive-sm">
                                 <table class="table table-sm">
@@ -57,7 +89,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr *ngFor="let item of cantones">
+                                        <tr *ngFor="let item of cantones | filter: filterCanton : 'Descripcion'">
                                             <td> {{ item.IdCanton }} </td>
                                             <td> {{ item.Descripcion }} </td>
                                             <td> {{ item.IdProvincia }} </td>
@@ -71,39 +103,6 @@
                                                 <button class="btn btn-sm btn-outline-danger separacion-botones"
                                                     value="{{item.IdCanton}}" (click)=eliminarCanton(item.IdCanton)>
                                                     <i class="fa fa-trash" aria-hidden="true"></i>
-                                                </button>
-                                            </td>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <br>
-    <div class="row">
-        <div class="col-lg-4 col-md-5 mr-auto">
-            <div class="card">
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="table-responsive-sm">
-                                <table class="table table-sm">
-                                    <thead class="card-header">
-                                        <tr>
-                                            <th scope="col">Provincia</th>
-                                            <th scope="col" style="text-align: center;">Seleccionar</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr *ngFor="let item of provincias">
-                                            <td> {{ item.Descripcion }} </td>
-                                            <td>
-                                                <button class="btn btn-sm btn-block btn-outline-warning"
-                                                    (click)="setProvincia(item)">
-                                                    <i class="fa fa-plus" aria-hidden="true"></i>
                                                 </button>
                                             </td>
                                     </tbody>

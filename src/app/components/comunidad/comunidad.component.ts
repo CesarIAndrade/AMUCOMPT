@@ -29,28 +29,10 @@ export class ComunidadComponent implements OnInit {
   inputIdParroquia = true;
   idComunidad = '0';
 
-  parroquias: Parroquia[] = [
-    {
-      IdParroquia: '1',
-      Descripcion: 'Bachillero'
-    },
-    {
-      IdParroquia: '2',
-      Descripcion: 'La Estancilla'
-    }
-  ]
-  comunidades: Comunidad[] = [
-    {
-      IdComunidad: '1',
-      Descripcion: 'B1',
-      IdParroquia: '1'
-    },
-    {
-      IdComunidad: '2',
-      Descripcion: 'B2',
-      IdParroquia: '1'
-    }
-  ]
+  filterParroquia='';
+  filterComunidad='';
+  parroquias: Parroquia[] = [];
+  comunidades: Comunidad[] = [];
 
   consultarParroquias() {
     this.personaService.consultarParroquias(localStorage.getItem('miCuenta.getToken'))
@@ -71,6 +53,8 @@ export class ComunidadComponent implements OnInit {
       .then(
         ok => {
           this.comunidades = ok['respuesta'];
+          console.log(ok['respuesta']);
+          this.consultarParroquias();
         }
       )
       .catch(
@@ -108,7 +92,7 @@ export class ComunidadComponent implements OnInit {
         ok => {
           console.log(ok['respuesta']);
           this.limpiarCampos();
-          // this.consultarComunidades();
+          this.consultarComunidades();
         }
       )
       .catch(
@@ -119,7 +103,7 @@ export class ComunidadComponent implements OnInit {
   }
 
   mostrarComunidad(comunidad) {
-    this.idParroquia = comunidad.IdParroquia;
+    this.idParroquia = comunidad.Parroquia.IdParroquia;
     this.parroquias.map(
       item => {
         if (this.idParroquia == item.IdParroquia) {
@@ -145,7 +129,7 @@ export class ComunidadComponent implements OnInit {
         ok => {
           console.log(ok['respuesta']);
           this.limpiarCampos();
-          // this.consultarComunidades();
+          this.consultarComunidades();
         }
       )
       .catch(
@@ -162,7 +146,7 @@ export class ComunidadComponent implements OnInit {
       .then(
         ok => {
           console.log(ok['respuesta']);
-          // this.consultarComunidades();
+          this.consultarComunidades();
         }
       )
       .catch(
@@ -173,7 +157,7 @@ export class ComunidadComponent implements OnInit {
   }
 
   setParroquia(parroquia) {
-    this.idParroquia = parroquia.IdProvincia;
+    this.idParroquia = parroquia.IdParroquia;
     this.parroquia = parroquia.Descripcion;
     this.inputIdParroquia = true;
   }
@@ -186,9 +170,8 @@ export class ComunidadComponent implements OnInit {
   get _comunidad() {
     return this.myForm.get('_comunidad')
   }
-  
+
   ngOnInit() {
-    // this.consultarComunidades();
-    // this.consultarParroquias();
+    this.consultarComunidades();
   }
 }

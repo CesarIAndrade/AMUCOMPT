@@ -33,35 +33,16 @@ export class CantonComponent implements OnInit {
   inputIdProvincia = true;
   provincia = 'Seleccione Provincia';
 
-  provincias: Provincia[] = [
-    {
-      IdProvincia: '1',
-      Descripcion: 'Manabi'
-    },
-    {
-      IdProvincia: '2',
-      Descripcion: 'Guayas'
-    }
-  ];
-  cantones: Canton[] = [
-    {
-      IdCanton: '1',
-      Descripcion: 'Tosagua',
-      IdProvincia: '1'
-    },
-    {
-      IdCanton: '2',
-      Descripcion: 'Bolivar',
-      IdProvincia: '1'
-    }
-  ];
+  filterProvincia = '';
+  filterCanton = '';
+  dataProvincias: Provincia[] = [];
+  cantones: Canton[] = [];
 
   consultarProvincias() {
     this.personaService.consultarProvincias(localStorage.getItem('miCuenta.getToken'))
       .then(
         ok => {
-          this.provincias = ok['respuesta'];
-          console.log(this.provincias);
+          this.dataProvincias = ok['respuesta'];
         }
       )
       .catch(
@@ -76,7 +57,7 @@ export class CantonComponent implements OnInit {
       .then(
         ok => {
           this.cantones = ok['respuesta'];
-          console.log(this.cantones);
+          this.consultarProvincias();
         }
       )
       .catch(
@@ -84,7 +65,6 @@ export class CantonComponent implements OnInit {
           console.log(error);
         }
       )
-
   }
 
   validarFormulario() {
@@ -112,9 +92,8 @@ export class CantonComponent implements OnInit {
       localStorage.getItem('miCuenta.postToken'))
       .then(
         ok => {
-          console.log(ok['respuesta']);
           this.limpiarCampos();
-          // this.consultarCantones();
+          this.consultarCantones();
         }
       )
       .catch(
@@ -125,8 +104,8 @@ export class CantonComponent implements OnInit {
   }
 
   mostrarCanton(canton) {
-    this.idProvincia = canton.IdProvincia;
-    this.provincias.map(
+    this.idProvincia = canton.Provincia.IdProvincia;
+    this.dataProvincias.map(
       item => {
         if(this.idProvincia == item.IdProvincia){
           this.provincia = item.Descripcion;
@@ -148,9 +127,8 @@ export class CantonComponent implements OnInit {
       localStorage.getItem('miCuenta.putToken'))
       .then(
         ok => {
-          console.log(ok['respuesta']);
           this.limpiarCampos();
-          // this.consultarCantones();
+          this.consultarCantones();
         }
       )
       .catch(
@@ -166,8 +144,7 @@ export class CantonComponent implements OnInit {
       localStorage.getItem('miCuenta.deleteToken'))
     .then(
       ok => {
-        console.log(ok['respuesta']);
-        // this.consultarCantones();
+        this.consultarCantones();
       }
     )
     .catch(
@@ -193,7 +170,8 @@ export class CantonComponent implements OnInit {
   }
 
   ngOnInit() {
-    // this.consultarCantones();
-    // this.consultarProvincias();
+    this.dataProvincias = [];
+    this.consultarCantones();
+    //this.consultarProvincias();
   }
 }

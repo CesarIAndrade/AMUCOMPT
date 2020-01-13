@@ -25,17 +25,9 @@ export class ProvinciaComponent implements OnInit {
   idProvincia = '0';
   botonIngresar = 'ingresar';
 
-  provincias: Provincia[] = [
-    {
-      IdProvincia: '1',
-      Descripcion: 'Manabi'
-    },
-    {
-      IdProvincia: '2',
-      Descripcion: 'Guayas'
-    }
-  ]
-
+  provincias: Provincia[] = [];
+  filterProvincia = '';
+  valorIdProvincia:string;
   validarFormulario() {
     if (this.myForm.valid) {
       if (this.testButton.nativeElement.value == 'ingresar') {
@@ -55,9 +47,8 @@ export class ProvinciaComponent implements OnInit {
       localStorage.getItem('miCuenta.postToken'))
       .then(
         ok => {
-          console.log(ok['respuesta']);
           this.limpiarCampos();
-          // this.consultarCantones();
+          this.mostrarProvincia();
         }
       )
       .catch(
@@ -67,24 +58,37 @@ export class ProvinciaComponent implements OnInit {
       )
   }
 
-  mostrarProvincia(provincia) {
-    this.idProvincia = provincia.IdProvincia;
+  mostrarProvincia() {
+    this.panelAdministracionService.consultarProvincia(localStorage.getItem('miCuenta.getToken'))
+      .then(
+        ok => {
+          this.provincias = ok['respuesta'];
+        }
+      )
+      .catch(
+        err => {
+          console.log(err);
+        }
+      )
+    //this.testButton.nativeElement.value = 'modificar';
+  }
+  setProvincia(value)
+  {
+    this.valorIdProvincia=value.IdProvincia;
     this.myForm.setValue({
-      _provincia: provincia.Descripcion
+      _provincia: value.Descripcion
     })
     this.testButton.nativeElement.value = 'modificar';
   }
-
   actualizarProvincia() {
     this.panelAdministracionService.actualizarProvincia(
-      this.idProvincia,
+      this.valorIdProvincia,
       this.myForm.get('_provincia').value,
       localStorage.getItem('miCuenta.putToken'))
       .then(
         ok => {
-          console.log(ok['respuesta']);
           this.limpiarCampos();
-          // this.consultarCantones();
+          this.mostrarProvincia();
         }
       )
       .catch(
@@ -100,8 +104,7 @@ export class ProvinciaComponent implements OnInit {
       localStorage.getItem('miCuenta.deleteToken'))
     .then(
       ok => {
-        console.log(ok['respuesta']);
-        // this.consultarCantones();
+        this.mostrarProvincia();
       }
     )
     .catch(
@@ -120,6 +123,8 @@ export class ProvinciaComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.provincias = [];
+    this.mostrarProvincia();
   }
 
 }

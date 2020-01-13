@@ -12,10 +12,10 @@ export class PanelAdministracionService {
 
   crearProvincia(provincia: string, _token: string) {
     const body = new HttpParams()
-      .set('', provincia)
+      .set('Descripcion', provincia)
       .set('encriptada', _token)
     return new Promise((resolve, reject) => {
-      this.http.post(this.apiUrl + '', body.toString(),
+      this.http.post(this.apiUrl + 'TalentoHumano/IngresoProvincia', body.toString(),
         {
           headers: new HttpHeaders()
             .set('Content-Type', 'application/x-www-form-urlencoded')
@@ -28,6 +28,24 @@ export class PanelAdministracionService {
         })
     })
   }
+  consultarProvincia(_token: string) {
+    const body = new HttpParams()
+      .set('encriptada', _token)
+    return new Promise((resolve, reject) => {
+      this.http.post(this.apiUrl + 'TalentoHumano/ListaProvincia',
+        body.toString(),
+        {
+          headers: new HttpHeaders()
+            .set('Content-Type', 'application/x-www-form-urlencoded')
+        })
+        .subscribe(res => {
+          resolve(res);
+        }, (err) => {
+          reject(err);
+        })
+    });
+  }
+
 
   actualizarProvincia(
     idProvincia: string,
@@ -35,11 +53,11 @@ export class PanelAdministracionService {
     _token: string
   ){
     const body = new HttpParams()
-      .set('', idProvincia)
-      .set('', provincia)
+      .set('IdProvincia', idProvincia)
+      .set('Descripcion', provincia)
       .set('encriptada', _token)
     return new Promise((resolve, reject) => {
-      this.http.post(this.apiUrl + '', body.toString(),
+      this.http.post(this.apiUrl + 'TalentoHumano/ActualizarProvincia', body.toString(),
         {
           headers: new HttpHeaders()
             .set('Content-Type', 'application/x-www-form-urlencoded')
@@ -55,10 +73,10 @@ export class PanelAdministracionService {
 
   eliminarProvincia(idProvincia: string, _token: string){
     const body = new HttpParams()
-      .set('', idProvincia)
+      .set('IdProvincia', idProvincia)
       .set('encriptada', _token)
     return new Promise((resolve, reject) => {
-      this.http.post(this.apiUrl + '', body.toString(),
+      this.http.post(this.apiUrl + 'TalentoHumano/EliminarProvincia', body.toString(),
         {
           headers: new HttpHeaders()
             .set('Content-Type', 'application/x-www-form-urlencoded')
@@ -78,11 +96,11 @@ export class PanelAdministracionService {
     _token: string
   ) {
     const body = new HttpParams()
-      .set('', idProvincia)
-      .set('', canton)
+      .set('IdProvincia', idProvincia)
+      .set('Descripcion', canton)
       .set('encriptada', _token)
     return new Promise((resolve, reject) => {
-      this.http.post(this.apiUrl + '', body.toString(),
+      this.http.post(this.apiUrl + 'TalentoHumano/IngresoCanton', body.toString(),
         {
           headers: new HttpHeaders()
             .set('Content-Type', 'application/x-www-form-urlencoded')
@@ -103,12 +121,12 @@ export class PanelAdministracionService {
     _token: string
   ) {
     const body = new HttpParams()
-      .set('', idProvincia)
-      .set('', idCanton)
-      .set('', canton)
+      .set('IdProvincia', idProvincia)
+      .set('IdCanton', idCanton)
+      .set('Descripcion', canton)
       .set('encriptada', _token)
     return new Promise((resolve, reject) => {
-      this.http.post(this.apiUrl + '', body.toString(),
+      this.http.post(this.apiUrl + 'TalentoHumano/ActualizarCanton', body.toString(),
         {
           headers: new HttpHeaders()
             .set('Content-Type', 'application/x-www-form-urlencoded')
@@ -124,10 +142,10 @@ export class PanelAdministracionService {
 
   eliminarCanton(idCanton: string, _token: string) {
     const body = new HttpParams()
-      .set('', idCanton)
+      .set('IdCanton', idCanton)
       .set('encriptada', _token)
     return new Promise((resolve, reject) => {
-      this.http.post(this.apiUrl + '', body.toString(),
+      this.http.post(this.apiUrl + 'TalentoHumano/EliminarCanton', body.toString(),
         {
           headers: new HttpHeaders()
             .set('Content-Type', 'application/x-www-form-urlencoded')
@@ -147,11 +165,11 @@ export class PanelAdministracionService {
     _token: string
   ) {
     const body = new HttpParams()
-      .set('', idCanton)
-      .set('', parroquia)
+      .set('IdCanton', idCanton)
+      .set('Descripcion', parroquia)
       .set('encriptada', _token)
     return new Promise((resolve, reject) => {
-      this.http.post(this.apiUrl + '', body.toString(),
+      this.http.post(this.apiUrl + 'TalentoHumano/IngresoParroquia', body.toString(),
         {
           headers: new HttpHeaders()
             .set('Content-Type', 'application/x-www-form-urlencoded')
@@ -172,12 +190,12 @@ export class PanelAdministracionService {
     _token: string
   ){
     const body = new HttpParams()
-      .set('', idCanton)
-      .set('', idParroquia)
-      .set('', parroquia)
+      .set('IdCanton', idCanton)
+      .set('IdParroquia', idParroquia)
+      .set('Descripcion', parroquia)
       .set('encriptada', _token)
     return new Promise((resolve, reject) => {
-      this.http.post(this.apiUrl + '', body.toString(),
+      this.http.post(this.apiUrl + 'TalentoHumano/ActualizarParroquia', body.toString(),
         {
           headers: new HttpHeaders()
             .set('Content-Type', 'application/x-www-form-urlencoded')
@@ -193,10 +211,10 @@ export class PanelAdministracionService {
 
   eliminarParroquia(idParroquia: string, _token: string){
     const body = new HttpParams()
-      .set('', idParroquia)
+      .set('IdParroquia', idParroquia)
       .set('encriptada', _token)
     return new Promise((resolve, reject) => {
-      this.http.post(this.apiUrl + '', body.toString(),
+      this.http.post(this.apiUrl + 'TalentoHumano/EliminarParroquia', body.toString(),
         {
           headers: new HttpHeaders()
             .set('Content-Type', 'application/x-www-form-urlencoded')
@@ -216,11 +234,11 @@ export class PanelAdministracionService {
     _token: string
   ) {
     const body = new HttpParams()
-      .set('', idParroquia)
-      .set('', comunidad)
+      .set('IdParroquia', idParroquia)
+      .set('Descripcion', comunidad)
       .set('encriptada', _token)
     return new Promise((resolve, reject) => {
-      this.http.post(this.apiUrl + '', body.toString(),
+      this.http.post(this.apiUrl + 'TalentoHumano/IngresoComunidad', body.toString(),
         {
           headers: new HttpHeaders()
             .set('Content-Type', 'application/x-www-form-urlencoded')
@@ -241,12 +259,12 @@ export class PanelAdministracionService {
     _token: string
   ){
     const body = new HttpParams()
-      .set('', idParroquia)
-      .set('', idComunidad)
-      .set('', comunidad)
+      .set('IdParroquia', idParroquia)
+      .set('IdComunidad', idComunidad)
+      .set('Descripcion', comunidad)
       .set('encriptada', _token)
     return new Promise((resolve, reject) => {
-      this.http.post(this.apiUrl + '', body.toString(),
+      this.http.post(this.apiUrl + 'TalentoHumano/ActualizarComunidad', body.toString(),
         {
           headers: new HttpHeaders()
             .set('Content-Type', 'application/x-www-form-urlencoded')
@@ -262,10 +280,10 @@ export class PanelAdministracionService {
 
   eliminarComunidad(idComunidad: string, _token: string){
     const body = new HttpParams()
-      .set('', idComunidad)
+      .set('IdComunidad', idComunidad)
       .set('encriptada', _token)
     return new Promise((resolve, reject) => {
-      this.http.post(this.apiUrl + '', body.toString(),
+      this.http.post(this.apiUrl + 'TalentoHumano/EliminarComunidad', body.toString(),
         {
           headers: new HttpHeaders()
             .set('Content-Type', 'application/x-www-form-urlencoded')
