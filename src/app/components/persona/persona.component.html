@@ -5,13 +5,13 @@
             <div class="col-lg-4">
                 <div class="card">
                     <div class="card-header" style="text-align: center;">
-                        Nueva Persona
+                        {{ nuevaPersona }}
                     </div>
                     <div class="card-body">
                         <div class="form-group">
                             <input type="text" formControlName="_nombres" class="form-control"
                                 placeholder="Ingrese Nombres" (keyup)="onChangeInputNombres()">
-                            <div class="badge badge-danger mt-3"
+                            <div class="badge badge-danger mt-3 btn-block"
                                 *ngIf="_nombres.invalid && (_nombres.dirty || _nombres.touched)">
                                 <div *ngIf="_nombres.errors.required">
                                     Nombres Requeridos
@@ -24,7 +24,7 @@
                         <div class="form-group">
                             <input type="text" formControlName="_apellidos" class="form-control"
                                 placeholder="Ingrese Apellidos" (keyup)="onChangeInputApellidos()">
-                            <div class="badge badge-danger mt-3"
+                            <div class="badge badge-danger mt-3 btn-block"
                                 *ngIf="_apellidos.invalid && (_apellidos.dirty || _apellidos.touched)">
                                 <div *ngIf="_apellidos.errors.required">
                                     Apellidos Requeridos
@@ -42,14 +42,14 @@
                                     {{ item.Documento }}
                                 </option>
                             </select>
-                            <div class="badge badge-danger mt-3" [hidden]="selectTipoDocumento">
+                            <div class="badge badge-danger mt-3 btn-block" [hidden]="selectTipoDocumento">
                                 Tipo Documento Requerido
                             </div>
                         </div>
                         <div class="form-group">
                             <input type="number" formControlName="_numeroDocumento" class="form-control"
                                 placeholder="Ingrese Número Documento">
-                            <div class="badge badge-danger mt-3"
+                            <div class="badge badge-danger mt-3 btn-block"
                                 *ngIf="_numeroDocumento.invalid && (_numeroDocumento.dirty || _numeroDocumento.touched)">
                                 <div *ngIf="_numeroDocumento.errors.required">
                                     Numero de Documento Requerido
@@ -62,13 +62,13 @@
             <div class="col-lg-4">
                 <div class="card">
                     <div class="card-header" style="text-align: center;">
-                        Contacto
+                        {{ contacto }}
                     </div>
                     <div class="card-body">
                         <div class="form-group">
                             <input type="number" formControlName="_telefono1" class="form-control"
                                 placeholder="Primer Telefono">
-                            <div class="badge badge-danger mt-3"
+                            <div class="badge badge-danger mt-3 btn-block"
                                 *ngIf="_telefono1.invalid && (_telefono1.dirty || _telefono1.touched)">
                                 <div *ngIf="_telefono1.errors.required">
                                     Primer Telefono Requeridos
@@ -84,14 +84,14 @@
                                     {{ item.Descripcion }}
                                 </option>
                             </select>
-                            <div class="badge badge-danger mt-3" [hidden]="selectTipoTelefono1">
+                            <div class="badge badge-danger mt-3 btn-block" [hidden]="selectTipoTelefono1">
                                 Tipo Telefono Requerido
                             </div>
                         </div>
                         <div class="form-group">
                             <input type="number" formControlName="_telefono2" class="form-control"
                                 placeholder="Segundo Telefono">
-                            <div class="badge badge-danger mt-3"
+                            <div class="badge badge-danger mt-3 btn-block"
                                 *ngIf="_telefono2.invalid && (_telefono2.dirty || _telefono2.touched)">
                                 <div *ngIf="_telefono2.errors.required">
                                     Segundo Telefono Requeridos
@@ -107,14 +107,14 @@
                                     {{ item.Descripcion }}
                                 </option>
                             </select>
-                            <div class="badge badge-danger mt-3" [hidden]="selectTipoTelefono2">
+                            <div class="badge badge-danger mt-3 btn-block" [hidden]="selectTipoTelefono2">
                                 Tipo Telefono Requerido
                             </div>
                         </div>
                         <div class="form-group">
                             <input type="email" formControlName="_correo" class="form-control"
                                 placeholder="Ingrese Correo">
-                            <div class="badge badge-danger mt-3"
+                            <div class="badge badge-danger mt-3 btn-block"
                                 *ngIf="_correo.invalid && (_correo.dirty || _correo.touched)">
                                 <div *ngIf="_correo.errors.required">
                                     Correo Requerido
@@ -127,7 +127,7 @@
             <div class="col-lg-4">
                 <div class="card">
                     <div class="card-header" style="text-align: center;">
-                        Dirección
+                        {{ direccion }}
                     </div>
                     <div class="card-body">
                         <div class="form-group">
@@ -138,7 +138,7 @@
                                     {{ item.Descripcion }}
                                 </option>
                             </select>
-                            <div class="badge badge-danger mt-3" [hidden]="selectProvincia">
+                            <div class="badge badge-danger mt-3 btn-block" [hidden]="selectProvincia">
                                 Provincia Requerida
                             </div>
                         </div>
@@ -150,7 +150,7 @@
                                     {{ item.Descripcion }}
                                 </option>
                             </select>
-                            <div class="badge badge-danger mt-3" [hidden]="selectCanton">
+                            <div class="badge badge-danger mt-3 btn-block" [hidden]="selectCanton">
                                 Canton Requerida
                             </div>
                         </div>
@@ -162,7 +162,7 @@
                                     {{ item.Descripcion }}
                                 </option>
                             </select>
-                            <div class="badge badge-danger mt-3" [hidden]="selectParroquia">
+                            <div class="badge badge-danger mt-3 btn-block" [hidden]="selectParroquia">
                                 Parroquia Requerida
                             </div>
                         </div>
@@ -174,7 +174,7 @@
                                     {{ item.Descripcion }}
                                 </option>
                             </select>
-                            <div class="badge badge-danger mt-3" [hidden]="selectComunidad">
+                            <div class="badge badge-danger mt-3 btn-block" [hidden]="selectComunidad">
                                 Comunidad Requerida
                             </div>
                         </div>

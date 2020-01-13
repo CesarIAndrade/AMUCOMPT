@@ -15,10 +15,10 @@
                         <div class="form-group">
                             <input formControlName="_canton" class="form-control" type="text"
                                 placeholder="Ingrese Canton">
-                            <div class="badge badge-danger mt-3" [hidden]="inputIdProvincia">
+                            <div class="badge badge-danger mt-3 btn-block" [hidden]="inputIdProvincia">
                                 Provincia Requerido
                             </div>
-                            <div class="badge badge-danger mt-3"
+                            <div class="badge badge-danger mt-3 btn-block"
                                 *ngIf="_canton.invalid && (_canton.dirty || _canton.touched)">
                                 <div *ngIf="_canton.errors.required">
                                     Canton Requerido
