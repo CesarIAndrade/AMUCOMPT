@@ -37,6 +37,7 @@ import { CantonComponent } from './components/canton/canton.component';
 import { ComunidadComponent } from './components/comunidad/comunidad.component';
 import { ParroquiaComponent } from './components/parroquia/parroquia.component';
 import { ProvinciaComponent } from './components/provincia/provincia.component';
+import { ModalAsignacionUsuarioTiposUsuarioComponent } from './components/modal-asignacion-usuario-tipos-usuario/modal-asignacion-usuario-tipos-usuario.component';
 
 @NgModule({
   declarations: [
@@ -55,7 +56,8 @@ import { ProvinciaComponent } from './components/provincia/provincia.component';
     CantonComponent,
     ComunidadComponent,
     ParroquiaComponent,
-    ProvinciaComponent
+    ProvinciaComponent,
+    ModalAsignacionUsuarioTiposUsuarioComponent
   ],
   imports: [
     BrowserModule,
@@ -78,7 +80,8 @@ import { ProvinciaComponent } from './components/provincia/provincia.component';
   ],
   entryComponents: [ 
     ModalDetallePersonaComponent,
-    ModalAsignacionUsuarioPersonaComponent 
+    ModalAsignacionUsuarioPersonaComponent ,
+    ModalAsignacionUsuarioTiposUsuarioComponent
   ],
   providers: [],
   bootstrap: [AppComponent]
