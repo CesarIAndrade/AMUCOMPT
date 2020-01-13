@@ -77,6 +77,9 @@
                     <input [(ngModel)]="filterUsuario" type="text" class="form-control input-field"
                         placeholder="Ejem. Zambrano Zambrano">
                 </div>
+                  <a (click)="consultarUsuarios()" data-toggle="dropdown" aria-expanded="false">
+                    <i class="fa fa-refresh" aria-hidden="true"></i>
+                  </a>
                 <div class="table-responsive-sm">
                     <table class="table table-sm">
                         <thead class="card-header">

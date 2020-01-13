@@ -78,13 +78,11 @@ export class UsuarioComponent implements OnInit {
   idTipoUsuario:string;
 
   consultarUsuarios() {
+    console.log('consultando');
     this.usuarioService.consultarUsuarios(localStorage.getItem('miCuenta.getToken'))
       .then(
         ok => {
-          console.log(ok);
           this.usuarios = ok['respuesta'];
-          console.log("datos tabla =");
-          console.log(this.usuarios);
         }
       )
       .catch(
@@ -98,9 +96,7 @@ export class UsuarioComponent implements OnInit {
     this.usuarioService.consultarTipoUsuario(localStorage.getItem('miCuenta.getToken'))
     .then(
       ok => {
-        console.log(ok);
         this.tipoUsuarios = ok['respuesta'];
-        console.log(this.tipoUsuario);
       }
     )
     .catch(
@@ -114,7 +110,6 @@ export class UsuarioComponent implements OnInit {
     this.usuarioService.consultarPrivilegios(localStorage.getItem('miCuenta.getToken'))
       .then(
         ok => {
-          console.log(ok);
           this.privilegios = ok['respuesta'];
         }
       )
@@ -129,7 +124,6 @@ export class UsuarioComponent implements OnInit {
     this.usuarioService.consultarModulos(localStorage.getItem('miCuenta.getToken'))
       .then(
         ok => {
-          console.log(ok);
           this.modulos = ok['respuesta'];
         }
       )
@@ -154,7 +148,6 @@ export class UsuarioComponent implements OnInit {
       .then(
         ok => {
           this.personas = ok['respuesta'];
-          console.log(this.personas);
         },
         err => console.log(err)
       )
@@ -165,11 +158,10 @@ export class UsuarioComponent implements OnInit {
       if (this.testButton.nativeElement.value == "insertar") {
         this.crearUsuario();
       } else if (this.testButton.nativeElement.value == "modificar") {
-        console.log("BD = "+this.idTipoUsuario)
-        console.log("FORM = "+this.tipoUsuario)
         if(this.idTipoUsuario == this.tipoUsuario)
         {
           this.actualizarUsuario();
+          this.consultarUsuarios();
         }else {
           this.actualizarUsuario();
           this.eliminarAsignacionTipoUsuario();
