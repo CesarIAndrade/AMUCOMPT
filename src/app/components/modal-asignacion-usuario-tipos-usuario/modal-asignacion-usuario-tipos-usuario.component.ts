@@ -2,7 +2,6 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { UsuarioService } from 'src/app/services/usuario.service';
 import { TipoUsuario } from 'src/app/interfaces/tipo-usuario/tipo-usuario';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { TiposUsuario } from '../usuario/usuario.component';
 
 @Component({
   selector: 'app-modal-asignacion-usuario-tipos-usuario',
@@ -13,8 +12,10 @@ export class ModalAsignacionUsuarioTiposUsuarioComponent implements OnInit {
 
   constructor(
     private usuarioService: UsuarioService,
-    @Inject(MAT_DIALOG_DATA) public data: TiposUsuario
-  ) { }
+    @Inject(MAT_DIALOG_DATA) public data: any
+  ) { 
+    console.log(data);
+  }
 
   idUsuario = this.data.idUsuario;
   tablaTiposUsuario: TipoUsuario[] = [];

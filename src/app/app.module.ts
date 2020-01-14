@@ -40,6 +40,7 @@ import { ComunidadComponent } from './components/comunidad/comunidad.component';
 import { ParroquiaComponent } from './components/parroquia/parroquia.component';
 import { ProvinciaComponent } from './components/provincia/provincia.component';
 import { ModalAsignacionUsuarioTiposUsuarioComponent } from './components/modal-asignacion-usuario-tipos-usuario/modal-asignacion-usuario-tipos-usuario.component';
+import { ModalDetalleUsuarioComponent } from './components/modal-detalle-usuario/modal-detalle-usuario.component';
 
 
 
@@ -61,7 +62,8 @@ import { ModalAsignacionUsuarioTiposUsuarioComponent } from './components/modal-
     ComunidadComponent,
     ParroquiaComponent,
     ProvinciaComponent,
-    ModalAsignacionUsuarioTiposUsuarioComponent
+    ModalAsignacionUsuarioTiposUsuarioComponent,
+    ModalDetalleUsuarioComponent
   ],
   imports: [
     BrowserModule,
@@ -85,7 +87,8 @@ import { ModalAsignacionUsuarioTiposUsuarioComponent } from './components/modal-
   entryComponents: [ 
     ModalDetallePersonaComponent,
     ModalAsignacionUsuarioPersonaComponent ,
-    ModalAsignacionUsuarioTiposUsuarioComponent
+    ModalAsignacionUsuarioTiposUsuarioComponent,
+    ModalDetalleUsuarioComponent
   ],
   providers: [],
   bootstrap: [AppComponent]

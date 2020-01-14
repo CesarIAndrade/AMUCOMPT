@@ -17,6 +17,7 @@ import { MatDialog } from "@angular/material/dialog";
 // Components
 import { ModalAsignacionUsuarioPersonaComponent } from '../modal-asignacion-usuario-persona/modal-asignacion-usuario-persona.component';
 import { ModalAsignacionUsuarioTiposUsuarioComponent } from '../modal-asignacion-usuario-tipos-usuario/modal-asignacion-usuario-tipos-usuario.component';
+import { ModalDetalleUsuarioComponent } from '../modal-detalle-usuario/modal-detalle-usuario.component';
 
 export interface DialogData {
   cedula: string;
@@ -24,10 +25,6 @@ export interface DialogData {
   idUsuario: string;
   nombres: string;
   apellidos: string;
-}
-
-export interface TiposUsuario {
-  idUsuario: string;
 }
 
 @Component({
@@ -43,6 +40,7 @@ export class UsuarioComponent implements OnInit {
   constructor(
     private modalAsignacionUsuarioPersona: MatDialog,
     private modalAsignacionUsuarioTiposUsuario: MatDialog,
+    private modalDetalleUsuario: MatDialog,
     private usuarioService: UsuarioService,
     private personaService: PersonaService,
   ) {
@@ -240,9 +238,17 @@ export class UsuarioComponent implements OnInit {
         idUsuario: usuario.IdUsuario
       }
     });
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
-      console.log(result);
+  }
+
+  abrirModalDetalleUsuario(usuario){
+    var listaTipoUsuario = usuario.ListaTipoUsuario;
+    console.log(usuario);
+    let dialogRef = this.modalDetalleUsuario.open(ModalDetalleUsuarioComponent, {
+      width: '500px',
+      height: '300px',
+      data: {
+        listaTipoUsuario: listaTipoUsuario
+      }
     });
   }
 
