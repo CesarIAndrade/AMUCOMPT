@@ -90,8 +90,6 @@ export class UsuarioService {
     })
   }
 
-
-
   consultarTipoUsuario(_token: string){
     const body = new HttpParams()
     .set('encriptada', _token)

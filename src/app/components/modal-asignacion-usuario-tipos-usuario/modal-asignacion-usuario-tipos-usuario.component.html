@@ -1,14 +1,17 @@
 <h1 mat-dialog-title>Datos de Persona</h1>
 <mat-dialog-content>
     <div class="card ">
+
         <div class="card-header">
-            <select [(ngModel)]="tipoUsuario" type="text" class="form-control"
-                (change)="agregarTipoUsuarioALista($event)">
-                <option value="0" disabled>Seleccionar Tipo Usuario</option>
-                <option *ngFor="let item of tipoUsuarios" value="{{item.IdTipoUsuario}}">
-                    {{ item.Descripcion }}
-                </option>
-            </select>
+            <div class="form-group input-container mt-3">
+                <select #testSelect [(ngModel)]="tipoUsuario" type="text" class="form-control input-field" (click)="agregarTipoUsuarioALista($event)">
+                    <option value="0" disabled>Seleccionar Tipo Usuario</option>
+                    <option *ngFor="let item of tipoUsuarios" value="{{item.IdTipoUsuario}}">
+                        {{ item.Descripcion }}
+                    </option>
+                </select>
+                <i (click)="asignarTipoUsuario()" class="fa fa-plus icon ml-3" style="background-color:#f0ad4e;"></i>
+            </div>
         </div>
         <div class="card-body">
             <div class="row">
@@ -17,18 +20,16 @@
                         <table class="table table-sm">
                             <thead class="card-header">
                                 <tr>
-                                    <th scope="col">IdTipoUsuario</th>
                                     <th scope="col">Descripcion</th>
                                     <th scope="col" style="text-align: center;">Acciones</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr *ngFor="let item of tiposUsuario">
-                                    <td> {{ item.IdTipoUsuario }} </td>
+                                <tr *ngFor="let item of listaTipoUsuario">
                                     <td> {{ item.Descripcion }} </td>
                                     <td>
-                                        <button class="btn btn-sm btn-outline-danger btn-block" value="{{item.IdTipoUsuario}}"
-                                            (click)="eliminarTipoUsuarioDeLista(item)">
+                                        <button [disabled]="botonEliminar" class="btn btn-sm btn-outline-danger btn-block"
+                                            value="{{item.IdTipoUsuario}}" (click)="eliminarTipoUsuarioDeLista(item)">
                                             <i class="fa fa-trash" aria-hidden="true"></i>
                                         </button>
                                     </td>

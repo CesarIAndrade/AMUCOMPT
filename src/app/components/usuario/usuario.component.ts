@@ -7,9 +7,7 @@ import { PersonaService } from 'src/app/services/persona.service';
 
 // Interfaces
 import { Usuario } from 'src/app/interfaces/usuario/usuario';
-import { TipoDocumento } from 'src/app/interfaces/tipo-documento/tipo-documento';
 import { Persona } from 'src/app/interfaces/persona/persona';
-import { TipoUsuario } from 'src/app/interfaces/tipo-usuario/tipo-usuario';
 
 // Functional Components
 import { MatDialog } from "@angular/material/dialog";
@@ -141,24 +139,6 @@ export class UsuarioComponent implements OnInit {
     }
   }
 
-  // asignarTipoUsuario(idUsuario: string) {
-  //   this.usuarioService.asignacionTipoUsuario(
-  //     idUsuario, 
-  //     this.tipoUsuario, 
-  //     localStorage.getItem('miCuenta.postToken'))
-  //     .then(
-  //       ok => {
-  //         this.limpiarCampos();
-  //         this.consultarUsuarios();
-  //       }
-  //     )
-  //     .catch(
-  //       error => {
-  //         console.log(error);
-  //       }
-  //     )
-  // }
-
   actualizarUsuario() {
     this.usuarioService.actualizarUsuario(
       this.idUsuario,
@@ -231,11 +211,14 @@ export class UsuarioComponent implements OnInit {
   }
 
   abrirModalAsignacionUsuarioTiposUsuario(usuario) {
+    console.log(usuario);
+    var listaTipoUsuario = usuario.ListaTipoUsuario;
     let dialogRef = this.modalAsignacionUsuarioTiposUsuario.open(ModalAsignacionUsuarioTiposUsuarioComponent, {
       width: '900px',
       height: '500px',
       data: {
-        idUsuario: usuario.IdUsuario
+        idUsuario: usuario.IdUsuario,
+        listaTipoUsuario: listaTipoUsuario,
       }
     });
   }
@@ -259,23 +242,6 @@ export class UsuarioComponent implements OnInit {
       localStorage.getItem('miCuenta.deleteToken'))
       .then(
         ok => {
-          this.eliminarAsignacionTipoUsuario();
-          this.consultarUsuarios();
-        },
-      )
-      .catch(
-        err => {
-          console.log(err);
-        }
-      )
-  }
-
-  eliminarAsignacionTipoUsuario() {
-    this.usuarioService.eliminarAsignacionTipoUsuario(
-      this.idAsignacionTipoUsuario,
-      localStorage.getItem('miCuenta.deleteToken'))
-      .then(
-        ok => {
           this.consultarUsuarios();
         },
       )
@@ -295,8 +261,12 @@ export class UsuarioComponent implements OnInit {
   }
 
   setUsuario(usuario) {
+    console.log(usuario);
     this.idUsuario = usuario.IdUsuario;
     this.idPersona = usuario.IdPersona;
+    this.nombres = usuario.PrimerNombre +' '+ usuario.SegundoNombre;
+    this.apellidos = usuario.ApellidoPaterno +' '+ usuario.ApellidoMaterno;
+    this.cedula = usuario.NumeroDocumento;
     this.testButton.nativeElement.value = 'modificar';
     this.myForm.setValue({
       _valorUsuario: usuario.UsuarioLogin,

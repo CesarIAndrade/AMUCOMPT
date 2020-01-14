@@ -4,4 +4,5 @@ export interface TipoUsuario {
     Identificacion?: string;
     FechaCreacion?: string;
     Estado?: string;
+    encriptada?: string
 }
