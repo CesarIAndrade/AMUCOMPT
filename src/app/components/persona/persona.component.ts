@@ -62,7 +62,7 @@ export class PersonaComponent implements OnInit {
   selectCanton = true;
   selectParroquia = true;
   selectComunidad = true;
-
+  filterPersona='';
   nuevaPersona = 'Nueva Persona';
   contacto = 'Contacto ';
   direccion = 'Direccion';

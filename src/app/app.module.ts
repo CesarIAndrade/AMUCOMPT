@@ -40,7 +40,7 @@ import { ComunidadComponent } from './components/comunidad/comunidad.component';
 import { ParroquiaComponent } from './components/parroquia/parroquia.component';
 import { ProvinciaComponent } from './components/provincia/provincia.component';
 
-
+import { TooltipModule } from 'ng2-tooltip-directive';
 
 @NgModule({
   declarations: [
@@ -79,6 +79,7 @@ import { ProvinciaComponent } from './components/provincia/provincia.component';
     MatTabsModule,
     PipesModule,
     MatChipsModule,
+    TooltipModule,
   ],
   entryComponents: [ 
     ModalDetallePersonaComponent,

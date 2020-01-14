@@ -84,6 +84,7 @@ export class UsuarioComponent implements OnInit {
       .then(
         ok => {
           this.usuarios = ok['respuesta'];
+          console.log(this.usuarios);
         }
       )
       .catch(
