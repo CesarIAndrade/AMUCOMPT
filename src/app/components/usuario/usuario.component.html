@@ -83,19 +83,21 @@
                                 </td>
                                 <td>
                                     <button
+                                    tooltip="Asignar Tipo De Usuario" placement="top" 
                                         (click)="abrirModalAsignacionUsuarioTiposUsuario(item)"
                                         class="btn btn-sm btn-outline-info separacion-botones"><i
                                             class="fa fa-address-book" aria-hidden="true"></i> </button>
                                 </td>
                                 <td>
                                     <button
+                                    tooltip="Modificar" placement="top" 
                                         (click)="setUsuario(item)"
                                         class="btn btn-sm btn-outline-info separacion-botones"><i
                                             class="fa fa-pencil-square-o" aria-hidden="true"></i> 
                                     </button>
                                 </td>
                                 <td>
-                                    <button (click)="eliminarUsuario(item)"
+                                    <button tooltip="Eliminar" placement="top"  (click)="eliminarUsuario(item)"
                                         class="btn btn-sm btn-outline-danger separacion-botones"><i class="fa fa-trash"
                                             aria-hidden="true"></i></button>
                                 </td>
