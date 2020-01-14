@@ -3,6 +3,7 @@ import { PersonaService } from 'src/app/services/persona.service';
 import { Persona } from 'src/app/interfaces/persona/persona';
 import { MAT_DIALOG_DATA} from '@angular/material/dialog';
 import { DialogData } from '../usuario/usuario.component';
+
 @Component({
   selector: 'app-modal-asignacion-usuario-persona',
   templateUrl: './modal-asignacion-usuario-persona.component.html',
@@ -17,14 +18,16 @@ export class ModalAsignacionUsuarioPersonaComponent implements OnInit {
     console.log(this.data);
   }
   personas : Persona[] = [];
-  Cedula : string;
-  idPersona : string;
   filterPersona = '';
-  asignarUsuarioaPersona(idPersona: string,numeroDocumento: string)
-  {
-    this.data.cedula = numeroDocumento;
-    this.data.idPersona= idPersona;
+
+  asignarUsuarioaPersona(persona) {
+    this.data.cedula = persona.NumeroDocumento;
+    this.data.idPersona = persona.IdPersona;
+    this.data.idUsuario = persona.IdUsuario; 
+    this.data.nombres = persona.PrimerNombre +' '+ persona.SegundoNombre; 
+    this.data.apellidos = persona.ApellidoPaterno +' '+ persona.ApellidoMaterno; 
   }
+
   consultarPersonas() {
     this.personaService.consultarPersonasSinUsuario(localStorage.getItem('miCuenta.getToken'))
       .then(
@@ -32,7 +35,7 @@ export class ModalAsignacionUsuarioPersonaComponent implements OnInit {
           this.personas = ok['respuesta'];
           console.log(this.personas);
         },
-        err => console.log(err)
+        error => console.log(error)
       )
   }
 

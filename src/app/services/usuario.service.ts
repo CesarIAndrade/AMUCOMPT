@@ -169,6 +169,29 @@ export class UsuarioService {
         })
     })
   }
+
+  habilitarUsuario(
+    idUsuario: string,
+    _token: string
+  ){
+    const body = new HttpParams()
+      .set('IdUsuario', idUsuario)
+      .set('encriptada', _token)
+    return new Promise((resolve, reject) => {
+      this.http.post(this.apiUrl + 'Usuario/HabilitarUsuario', body.toString(),
+        {
+          headers: new HttpHeaders()
+            .set('Content-Type', 'application/x-www-form-urlencoded')
+        }
+      )
+        .subscribe(res => {
+          resolve(res);
+        }, (err) => {
+          reject(err);
+        })
+    })
+  }
+
   asignacionTipoUsuario(idUsuario:string,idTipoUsuario:string,_token:string)
   {
     const body = new HttpParams()
@@ -189,6 +212,7 @@ export class UsuarioService {
         })
     })
   }
+
   modificarAsignacionTipoUsuario(
     idAsignacionTU:string,
     idUsuario:string,

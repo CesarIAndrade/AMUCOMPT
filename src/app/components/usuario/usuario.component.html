@@ -7,14 +7,18 @@
         <div class="card-body">
             <div class="form-group input-container">
                 <input [value]="cedula" type="text" readonly class="form-control input-field">
-                <i (click)="abrirModal()" class="fa fa-user-plus icon" style="background-color:#f0ad4e;"
+                <i (click)="abrirModalAsignacionUsuarioPersona()" class="fa fa-user-plus icon" style="background-color:#f0ad4e;"
                     (click)="mostrarContrasena()"></i>
             </div>
-
+            <div class="form-group">
+                <input [value]="nombres" type="text" readonly class="form-control input-field">
+            </div>
+            <div class="form-group">
+                <input [value]="apellidos" type="text" readonly class="form-control input-field">
+            </div>
             <div class="badge badge-danger mb-3 btn-block" [hidden]="inputPersona">
                 Persona Requerida
             </div>
-
             <form [formGroup]="myForm" (ngSubmit)="validacionFormulario()" novalidate>
                 <div class="form-group">
                     <input formControlName="_valorUsuario" type="text" class="form-control"
@@ -26,53 +30,16 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="form-group input-container">
                     <input formControlName="_contrasena" type="password" [type]="inputType"
                         class="form-control input-field" placeholder="Ingrese Contraseña">
                         <i class="fa fa-eye icon" (click)="mostrarContrasena()"></i>
                 </div>
-
-                <div class="badge badge-danger btn-block"
+                <div class="badge badge-danger btn-block mb-3"
                     *ngIf="_contrasena.invalid && (_contrasena.dirty || _contrasena.touched)">
                     <div *ngIf="_contrasena.errors.required">
                         Contrasena Requerida
                     </div>
-                </div>
-
-                <div class="form-group">
-                    <select [(ngModel)]="tipoUsuario" [ngModelOptions]="{standalone: true}" type="text"
-                        (change)="moduloDeUnTipoDeUsuario($event.target.value)" class="form-control">
-                        <option value="0" disabled>Seleccionar tipo de usuario</option>
-                        <option *ngFor="let item of tipoUsuarios" value="{{item.IdTipoUsuario}}">
-                            {{ item.Descripcion }}
-                        </option>
-                    </select>
-                    <div class="badge badge-danger mt-3 btn-block" [hidden]="selectTipoUsuario">
-                        Tipo Usuario Requerido
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <select [(ngModel)]="modulo" [ngModelOptions]="{standalone: true}" type="text" class="form-control"
-                        (change)="privilegiosDeUnModuloTipo($event.target.value)">
-                        <option value="0" disabled>Seleccionar un Módulo</option>
-                        <option *ngFor="let item of modulos" value="{{item.IdModuloTipo}}"> {{ item.Descripcion }}
-                        </option>
-                    </select>
-                </div>
-
-                <div class="card-header" style="text-align: center;">
-                    PRIVILEGIOS
-                    <mat-form-field class="example-container">
-                        <mat-chip-list>
-                            <mat-chip *ngFor="let item of chipsPrivilegios" [selectable]="selectablePrivilegio"
-                                [removable]="removablePrivilegio" (removed)="removePrivilegio(item)"
-                                value="{{item.IdPrivilegios}}">
-                                {{item.Descripcion}}
-                            </mat-chip>
-                        </mat-chip-list>
-                    </mat-form-field>
                 </div>
                 <div class="form-group">
                     <button class="form-control btn-success" type="submit" [disabled]="myForm.invalid"
@@ -112,7 +79,13 @@
                                 <td> {{ item.Descripcion }} </td>
                                 <td>
                                     <button
-                                        (click)="setUsuario(item.IdUsuario,item.UsuarioLogin,item.IdPersona, item.Contrasena,item.IdTipoUsuario,item.AsignacionTipoUsuarioEntidad)"
+                                        (click)="abrirModalAsignacionUsuarioTiposUsuario(item)"
+                                        class="btn btn-sm btn-outline-info separacion-botones"><i
+                                            class="fa fa-address-book" aria-hidden="true"></i> </button>
+                                </td>
+                                <td>
+                                    <button
+                                        (click)="setUsuario(item)"
                                         class="btn btn-sm btn-outline-info separacion-botones"><i
                                             class="fa fa-pencil-square-o" aria-hidden="true"></i> 
                                     </button>

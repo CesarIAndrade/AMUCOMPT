@@ -39,6 +39,7 @@ import { CantonComponent } from './components/canton/canton.component';
 import { ComunidadComponent } from './components/comunidad/comunidad.component';
 import { ParroquiaComponent } from './components/parroquia/parroquia.component';
 import { ProvinciaComponent } from './components/provincia/provincia.component';
+import { ModalAsignacionUsuarioTiposUsuarioComponent } from './components/modal-asignacion-usuario-tipos-usuario/modal-asignacion-usuario-tipos-usuario.component';
 
 import { TooltipModule } from 'ng2-tooltip-directive';
 
@@ -59,7 +60,8 @@ import { TooltipModule } from 'ng2-tooltip-directive';
     CantonComponent,
     ComunidadComponent,
     ParroquiaComponent,
-    ProvinciaComponent
+    ProvinciaComponent,
+    ModalAsignacionUsuarioTiposUsuarioComponent
   ],
   imports: [
     BrowserModule,
@@ -83,7 +85,8 @@ import { TooltipModule } from 'ng2-tooltip-directive';
   ],
   entryComponents: [ 
     ModalDetallePersonaComponent,
-    ModalAsignacionUsuarioPersonaComponent 
+    ModalAsignacionUsuarioPersonaComponent ,
+    ModalAsignacionUsuarioTiposUsuarioComponent
   ],
   providers: [],
   bootstrap: [AppComponent]
