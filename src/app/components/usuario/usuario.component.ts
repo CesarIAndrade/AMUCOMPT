@@ -28,7 +28,6 @@ export interface DialogData {
 
 export interface TiposUsuario {
   idUsuario: string;
-  tiposUsuario: TipoUsuario[];
 }
 
 @Component({
@@ -66,7 +65,6 @@ export class UsuarioComponent implements OnInit {
   resultadoModal: DialogData;
 
   personas: Persona[] = [];
-  tipoUsuarios: TipoDocumento[] = [];
   usuarios: Usuario[] = [];
 
   idAsignacionTipoUsuario: string;
@@ -234,13 +232,12 @@ export class UsuarioComponent implements OnInit {
     });
   }
 
-  abrirModalAsignacionUsuarioTiposUsuario(idUsuario: string) {
+  abrirModalAsignacionUsuarioTiposUsuario(usuario) {
     let dialogRef = this.modalAsignacionUsuarioTiposUsuario.open(ModalAsignacionUsuarioTiposUsuarioComponent, {
       width: '900px',
       height: '500px',
       data: {
-        idUsuario: idUsuario,
-        tipoUsuarios: this.tipoUsuarios
+        idUsuario: usuario.IdUsuario
       }
     });
     dialogRef.afterClosed().subscribe(result => {

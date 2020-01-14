@@ -41,7 +41,6 @@ export class PersonaComponent implements OnInit {
       _numeroDocumento: new FormControl('', [Validators.required]),
       _telefono1: new FormControl('', [Validators.required]),
       _telefono2: new FormControl('', [Validators.required]),
-      _correo: new FormControl('', [Validators.required])
     });
   }
 
@@ -63,6 +62,7 @@ export class PersonaComponent implements OnInit {
   selectParroquia = true;
   selectComunidad = true;
 
+  correo: string;
   nuevaPersona = 'Nueva Persona';
   contacto = 'Contacto ';
   direccion = 'Direccion';
@@ -403,8 +403,6 @@ export class PersonaComponent implements OnInit {
         .then(
           ok => {
             this.idPersona = ok['respuesta'];
-            console.log(this.tipoTelefono1);
-            console.log(this.tipoTelefono2);
             this.crearTelefono(this.idPersona);
             this.crearCorreo(this.idPersona);
             this.crearDireccion(this.idPersona);
@@ -434,8 +432,6 @@ export class PersonaComponent implements OnInit {
         IdTipoTelefono: this.tipoTelefono2,
       }
     )
-
-    console.log(this.telefonos);
     this.telefonos.map(
       item => {
         this.personaService.crearTelefono(
@@ -460,7 +456,7 @@ export class PersonaComponent implements OnInit {
   crearCorreo(idPersona: string) {
     this.personaService.crearCorreo(
       idPersona,
-      this.myForm.get('_correo').value,
+      this.correo,
       localStorage.getItem('miCuenta.postToken'))
       .then(
         ok => {
@@ -549,8 +545,13 @@ export class PersonaComponent implements OnInit {
             this.personaModal.idTipoTelefonoModal2 = ok['respuesta']['ListaTelefono'][1]['TipoTelefono']['IdTipoTelefono'];
             this.personaModal.idTelefonoModal2 = ok['respuesta']['ListaTelefono'][1]['IdTelefono'];
             this.personaModal.telefonoModal2 = ok['respuesta']['ListaTelefono'][1]['Numero'];
-            this.personaModal.correoModal = ok['respuesta']['ListaCorreo'][0]['CorreoValor'];
-            this.personaModal.idCorreoModal = ok['respuesta']['ListaCorreo'][0]['IdCorreo'];
+            if(ok['respuesta']['ListaCorreo'] == null){
+              this.personaModal.correoModal = '';
+              this.personaModal.idCorreoModal = ''    
+            } else {
+              this.personaModal.correoModal = ok['respuesta']['ListaCorreo'][0]['CorreoValor'];
+              this.personaModal.idCorreoModal = ok['respuesta']['ListaCorreo'][0]['IdCorreo'];
+            }
             this.personaModal.idComunidadModal = ok['respuesta']['AsignacionPersonaComunidad'][0]['Comunidad']['IdComunidad'];
             this.personaModal.comunidadModal = ok['respuesta']['AsignacionPersonaComunidad'][0]['Comunidad']['Descripcion'];
             this.personaModal.idParroquiaModal = ok['respuesta']['AsignacionPersonaComunidad'][0]['Comunidad']['Parroquia']['IdParroquia'];
@@ -618,8 +619,12 @@ export class PersonaComponent implements OnInit {
         _numeroDocumento: personaModal.numeroDocumentoModal,
         _telefono1: personaModal.telefonoModal1,
         _telefono2: personaModal.telefonoModal2,
-        _correo: personaModal.correoModal,
       });
+      if(this.personaModal.correoModal == null){
+        this.correo = 'Sin Correo';
+      } else {
+        this.correo = personaModal.correoModal;
+      }
       this.tipoDocumento = personaModal.idTipoDocumentoModal;
       this.tipoTelefono1 = personaModal.idTipoTelefonoModal1;
       this.tipoTelefono2 = personaModal.idTipoTelefonoModal2;
@@ -698,7 +703,8 @@ export class PersonaComponent implements OnInit {
     this.provincia = '0';
     this.canton = '0';
     this.parroquia = '0';
-    this.comunidad = '0'
+    this.comunidad = '0';
+    this.correo = '';
   }
 
   actualizarTelefono(
@@ -750,7 +756,7 @@ export class PersonaComponent implements OnInit {
     this.personaService.actualizarCorreo(
       idPersona,
       idCorreo,
-      this.myForm.get('_correo').value,
+      this.correo,
       localStorage.getItem('miCuenta.putToken'))
       .then(
         ok => {
@@ -788,30 +794,35 @@ export class PersonaComponent implements OnInit {
   get _nombres() {
     return this.myForm.get('_nombres');
   }
+
   get _apellidos() {
     return this.myForm.get('_apellidos');
   }
+
   get _tipoDocumento() {
     return this.myForm.get('_tipoDocumento');
   }
+
   get _numeroDocumento() {
     return this.myForm.get('_numeroDocumento');
   }
+
   get _telefono1() {
     return this.myForm.get('_telefono1');
   }
+
   get _tipoTelefono1() {
     return this.myForm.get('_tipoTelefono1');
   }
+
   get _telefono2() {
     return this.myForm.get('_telefono2')
   }
+
   get _tipoTelefono2() {
     return this.myForm.get('_tipoTelefono2')
   }
-  get _correo() {
-    return this.myForm.get('_correo');
-  }
+
   ngOnInit() {
     this.consultarPersonas();
     this.consultarTipoDocumento();

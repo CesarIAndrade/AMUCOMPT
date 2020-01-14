@@ -112,14 +112,8 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <input type="email" formControlName="_correo" class="form-control"
+                            <input type="email" [(ngModel)]="correo" [ngModelOptions]="{standalone: true}" class="form-control"
                                 placeholder="Ingrese Correo">
-                            <div class="badge badge-danger mt-3 btn-block"
-                                *ngIf="_correo.invalid && (_correo.dirty || _correo.touched)">
-                                <div *ngIf="_correo.errors.required">
-                                    Correo Requerido
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -201,7 +195,6 @@
                 <table class="table table-sm">
                     <thead class="card-header">
                         <tr>
-                            <th scope="col">#</th>
                             <th scope="col">Nombres</th>
                             <th scope="col">Apellidos</th>
                             <th scope="col">Documento</th>
@@ -210,8 +203,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let item of personas, index as i">
-                            <th scope="row"> {{ i }} </th>
+                        <tr *ngFor="let item of personas">
                             <td> {{ item.PrimerNombre }} {{ item.SegundoNombre }} </td>
                             <td> {{ item.ApellidoPaterno }} {{ item.ApellidoMaterno }} </td>
                             <td> {{ item.TipoDocumento }} </td>

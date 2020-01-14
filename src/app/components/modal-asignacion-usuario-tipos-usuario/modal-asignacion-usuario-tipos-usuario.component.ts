@@ -16,24 +16,33 @@ export class ModalAsignacionUsuarioTiposUsuarioComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: TiposUsuario
   ) { }
 
-  idUsuario: string;
-  tiposUsuario: TipoUsuario[] = [];
+  idUsuario = this.data.idUsuario;
+  tablaTiposUsuario: TipoUsuario[] = [];
   tipoUsuario = '0';
   tipoUsuarios: TipoUsuario[] = [];
 
   agregarTipoUsuarioALista(tipoUsuario){
-    this.tiposUsuario.push({
+    this.tablaTiposUsuario.push({
       IdTipoUsuario: tipoUsuario.target.value,
       Descripcion: tipoUsuario.target.selectedOptions[0].label
     })
+    const index = this.tipoUsuarios.indexOf(tipoUsuario);
+    if (index >= 0) {
+      this.tipoUsuarios.splice(index, 1);
+      this.tipoUsuario = '0';
+    }
   }
 
   eliminarTipoUsuarioDeLista(tipoUsuario){
-    const index = this.tiposUsuario.indexOf(tipoUsuario);
+    const index = this.tablaTiposUsuario.indexOf(tipoUsuario);
     if (index >= 0) {
-      this.tiposUsuario.splice(index, 1);
+      this.tablaTiposUsuario.splice(index, 1);
       this.tipoUsuario = '0';
     }
+    this.tipoUsuarios.push({
+      IdTipoUsuario: tipoUsuario.target.value,
+      Descripcion: tipoUsuario.target.selectedOptions[0].label
+    })
   }
 
   consultarTipoUsuario() {
