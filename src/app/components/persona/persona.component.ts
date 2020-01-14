@@ -62,6 +62,7 @@ export class PersonaComponent implements OnInit {
   selectParroquia = true;
   selectComunidad = true;
 
+
   correo: string;
   nuevaPersona = 'Nueva Persona';
   contacto = 'Contacto ';
@@ -79,7 +80,7 @@ export class PersonaComponent implements OnInit {
   telefonos: Telefono[] = [];
   tipoDocumentos: TipoDocumento[] = [];
   tipoTelefonos: TipoTelefono[] = [];
-
+  filterPersona='';
   consultarProvincias() {
     this.personaService.consultarProvincias(localStorage.getItem('miCuenta.getToken'))
       .then(
