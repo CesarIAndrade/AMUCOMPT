@@ -52,14 +52,14 @@
                                         <tr *ngFor="let item of provincias | filter: filterProvincia : 'Descripcion'">
                                             <td> {{ item.Descripcion }} </td>
                                             <td>
-                                                <button class="btn btn-sm btn-outline-info separacion-botones"
+                                                <button tooltip="Modificar" placement="top" class="btn btn-sm btn-outline-info separacion-botones"
                                                     value="{{item.IdProvincia}}"
                                                     (click)=setProvincia(item)>
                                                     <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                                                 </button>
                                             </td>
                                             <td>
-                                                <button class="btn btn-sm btn-outline-danger separacion-botones"
+                                                <button tooltip="Eliminar" placement="top" class="btn btn-sm btn-outline-danger separacion-botones"
                                                     value="{{item.IdProvincia}}"
                                                     (click)=eliminarProvincia(item.IdProvincia)>
                                                     <i class="fa fa-trash" aria-hidden="true"></i>

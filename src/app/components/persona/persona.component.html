@@ -189,7 +189,7 @@
         <div class="col-md-12">
             <div class="form-group input-container">
                 <i class="fa fa-search icon"></i>
-                <input type="text" class="form-control input-field" placeholder="Ejem. Zambrano Zambrano">
+                <input  [(ngModel)]="filterPersona" type="text" class="form-control input-field" placeholder="Ejem. Zambrano Zambrano">
             </div>
             <div class="table-responsive-sm">
                 <table class="table table-sm">
@@ -209,24 +209,26 @@
                             <td> {{ item.TipoDocumento }} </td>
                             <td> {{ item.NumeroDocumento }} </td>
                             <td>
-                                <button class="btn btn-sm btn-outline-primary separacion-botones"
+                                <button tooltip="Ver Informacion" placement="top" class="btn btn-sm btn-outline-primary separacion-botones"
                                     value="{{item.IdPersona}}"
                                     (click)="consultarPersonaPorId('detalles', item.IdPersona)">
                                     <i class="fa fa-eye" aria-hidden="true"></i>
+                                    
                                 </button>
                             </td>
                             <td>
-                                <button class="btn btn-sm btn-outline-info separacion-botones"
+                                <button tooltip="Modificar" placement="top" class="btn btn-sm btn-outline-info separacion-botones"
                                     value="{{item.IdPersona}}"
                                     (click)="consultarPersonaPorId('modificar', item.IdPersona)">
                                     <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                                 </button>
                             </td>
                             <td>
-                                <button class="btn btn-sm btn-outline-danger separacion-botones"
+                                <button tooltip="Eliminar" placement="top"
+                                class="btn btn-sm btn-outline-danger separacion-botones"
                                     value="{{item.IdPersona}}" (click)="eliminarPersona(item.IdPersona)">
                                     <i class="fa fa-trash" aria-hidden="true"></i>
-                                </button>
+                                </button >
                             </td>
                         </tr>
                     </tbody>

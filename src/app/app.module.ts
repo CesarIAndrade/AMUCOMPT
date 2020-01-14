@@ -42,7 +42,7 @@ import { ProvinciaComponent } from './components/provincia/provincia.component';
 import { ModalAsignacionUsuarioTiposUsuarioComponent } from './components/modal-asignacion-usuario-tipos-usuario/modal-asignacion-usuario-tipos-usuario.component';
 import { ModalDetalleUsuarioComponent } from './components/modal-detalle-usuario/modal-detalle-usuario.component';
 
-
+import { TooltipModule } from 'ng2-tooltip-directive';
 
 @NgModule({
   declarations: [
@@ -83,6 +83,7 @@ import { ModalDetalleUsuarioComponent } from './components/modal-detalle-usuario
     MatTabsModule,
     PipesModule,
     MatChipsModule,
+    TooltipModule,
   ],
   entryComponents: [ 
     ModalDetallePersonaComponent,
