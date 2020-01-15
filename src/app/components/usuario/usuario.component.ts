@@ -191,9 +191,7 @@ export class UsuarioComponent implements OnInit {
       }
     });
     dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
       if (result != null) {
-        console.log(result);
         this.inputPersona = true;
         this.resultadoModal = result;
         this.cedula = this.resultadoModal.cedula;
@@ -215,7 +213,7 @@ export class UsuarioComponent implements OnInit {
     var listaTipoUsuario = usuario.ListaTipoUsuario;
     let dialogRef = this.modalAsignacionUsuarioTiposUsuario.open(ModalAsignacionUsuarioTiposUsuarioComponent, {
       width: '900px',
-      height: '500px',
+      height: '390px',
       data: {
         idUsuario: usuario.IdUsuario,
         listaTipoUsuario: listaTipoUsuario,
@@ -229,7 +227,7 @@ export class UsuarioComponent implements OnInit {
     
     let dialogRef = this.modalDetalleUsuario.open(ModalDetalleUsuarioComponent, {
       width: '500px',
-      height: '300px',
+      height: '320px',
       data: {
         listaTipoUsuario: listaTipoUsuario
       }

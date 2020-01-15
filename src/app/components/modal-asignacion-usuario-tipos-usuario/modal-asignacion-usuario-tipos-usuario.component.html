@@ -1,19 +1,22 @@
-<h1 mat-dialog-title>Datos de Persona</h1>
 <mat-dialog-content>
     <div class="card ">
-
         <div class="card-header">
-            <div class="form-group input-container mt-3">
-                <select #testSelect [(ngModel)]="tipoUsuario" type="text" class="form-control input-field" (click)="agregarTipoUsuarioALista($event)">
-                    <option value="0" disabled>Seleccionar Tipo Usuario</option>
-                    <option *ngFor="let item of tipoUsuarios" value="{{item.IdTipoUsuario}}">
-                        {{ item.Descripcion }}
-                    </option>
-                </select>
-                <i (click)="asignarTipoUsuario()" class="fa fa-plus icon ml-3" style="background-color:#f0ad4e;"></i>
-            </div>
+            Asignar Role(s)
         </div>
         <div class="card-body">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group input-container">
+                        <select #testSelect [(ngModel)]="tipoUsuario" type="text" class="form-control input-field" (click)="agregarTipoUsuarioALista($event)">
+                            <option value="0" disabled>Seleccionar Tipo Usuario</option>
+                            <option *ngFor="let item of tipoUsuarios" value="{{item.IdTipoUsuario}}">
+                                {{ item.Descripcion }}
+                            </option>
+                        </select>
+                        <i (click)="asignarTipoUsuario()" class="fa fa-plus icon ml-3" style="background-color:#f0ad4e;"></i>
+                    </div>
+                </div>
+            </div>
             <div class="row">
                 <div class="col-md-12">
                     <div class="table-responsive-sm">
@@ -43,7 +46,7 @@
     </div>
 </mat-dialog-content>
 <mat-dialog-actions>
-    <button mat-button [mat-dialog-close]="data" type="button" class="btn btn-primary">
-        Aceptar
+    <button mat-button [mat-dialog-close]="data" type="button" class="btn btn-block btn-primary">
+        Cerrar
     </button>
 </mat-dialog-actions>

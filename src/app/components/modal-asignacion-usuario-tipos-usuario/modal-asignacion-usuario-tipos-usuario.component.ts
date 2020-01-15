@@ -69,7 +69,6 @@ export class ModalAsignacionUsuarioTiposUsuarioComponent implements OnInit {
   }
 
   eliminarAsignacionTipoUsuario(tipoUsuario) {
-    console.log(tipoUsuario.IdAsignacionTu);
     this.usuarioService.eliminarAsignacionTipoUsuario(
       tipoUsuario.IdAsignacionTu,
       localStorage.getItem('miCuenta.deleteToken'))
@@ -92,7 +91,7 @@ export class ModalAsignacionUsuarioTiposUsuarioComponent implements OnInit {
           this.tipoUsuarios = [];
           ok['respuesta'].map(
             item => {
-              if (!this.arrayIndexesTipoUsuario.includes(item.IdTipoUsuario)) {
+              if (!this.arrayIndexesTipoUsuario.includes(item.Identificacion)) {
                 this.tipoUsuarios.push({
                   IdTipoUsuario: item.IdTipoUsuario,
                   Descripcion: item.Descripcion
@@ -110,7 +109,6 @@ export class ModalAsignacionUsuarioTiposUsuarioComponent implements OnInit {
   }
 
   consultarAsignacionTipoUsuario() {
-    console.log('idUsuario: ' + this.idUsuario);
     this.usuarioService.consultarAsignacionTipoUsuario(
       this.idUsuario,
       localStorage.getItem('miCuenta.getToken')
@@ -122,10 +120,9 @@ export class ModalAsignacionUsuarioTiposUsuarioComponent implements OnInit {
           this.listaTipoUsuario = ok['respuesta'];
           ok['respuesta'].map(
             item => {
-              this.arrayIndexesTipoUsuario.push(item.IdTipoUsuario);
+              this.arrayIndexesTipoUsuario.push(item.Identificacion);
             }
           )
-          console.log(this.arrayIndexesTipoUsuario);
           this.consultarTipoUsuario();
         }
       )
@@ -136,14 +133,14 @@ export class ModalAsignacionUsuarioTiposUsuarioComponent implements OnInit {
       )
   }
 
-  arrayIndexesTipoUsuario: number[] = [];
+  arrayIndexesTipoUsuario: string[] = [];
   ngOnInit() {
     this.consultarTipoUsuario();
     console.log(this.listaTipoUsuario);
     
     this.listaTipoUsuario.map(
       item => {
-        this.arrayIndexesTipoUsuario.push(item.IdTipoUsuario);
+        this.arrayIndexesTipoUsuario.push(item.Identificacion);
       }
     )
   }
