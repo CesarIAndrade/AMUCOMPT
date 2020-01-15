@@ -42,6 +42,7 @@ import { ProvinciaComponent } from './components/provincia/provincia.component';
 import { ModalAsignacionUsuarioTiposUsuarioComponent } from './components/modal-asignacion-usuario-tipos-usuario/modal-asignacion-usuario-tipos-usuario.component';
 
 import { TooltipModule } from 'ng2-tooltip-directive';
+import Swal from 'sweetalert2';
 
 @NgModule({
   declarations: [

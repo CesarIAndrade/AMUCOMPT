@@ -18,6 +18,9 @@ import { PersonaModal } from "src/app/interfaces/persona/persona-modal";
 // Functional Components
 import { MatDialog } from "@angular/material/dialog";
 
+//import swal from 'sweetalert';
+import swal from "sweetalert2"
+
 // Components
 import { ModalDetallePersonaComponent } from "src/app/components/modal-detalle-persona/modal-detalle-persona.component";
 
@@ -44,6 +47,7 @@ export class PersonaComponent implements OnInit {
     });
   }
 
+  tituloAlerta:string='';
   tipoDocumento = "0";
   tipoTelefono1 = "0";
   tipoTelefono2 = "0";
@@ -61,7 +65,7 @@ export class PersonaComponent implements OnInit {
   selectCanton = true;
   selectParroquia = true;
   selectComunidad = true;
-
+  
 
   correo: string;
   nuevaPersona = 'Nueva Persona';
@@ -504,20 +508,35 @@ export class PersonaComponent implements OnInit {
   }
 
   eliminarPersona(idPersona: string) {
-    this.personaService.eliminarPersona(
-      idPersona,
-      localStorage.getItem('miCuenta.deleteToken'))
-      .then(
-        ok => {
-          console.log(ok['respuesta']);
-        },
-      )
-      .catch(
-        err => {
-          console.log(err);
-        }
-      )
-    this.consultarPersonas();
+    
+    swal({
+      title: "Advertencia?",
+      text: "Esta Seguro que desea eliminar",
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+    })
+    .then((willDelete) => {
+      if (willDelete) {
+        this.personaService.eliminarPersona(
+          idPersona,
+          localStorage.getItem('miCuenta.deleteToken'))
+          .then(
+            ok => {
+              console.log(ok['respuesta']);
+              this.consultarPersonas();
+            },
+          )
+          .catch(
+            err => {
+              console.log(err);
+            }
+          )
+        swal("Se a eliminado Correctamente!", {
+          icon: "success",
+        });
+      }
+    });
   }
 
   consultarPersonaPorId(

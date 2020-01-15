@@ -8,7 +8,7 @@ import { PersonaService } from 'src/app/services/persona.service';
 // Interfaces
 import { Provincia } from 'src/app/interfaces/provincia/provincia';
 import { Canton } from 'src/app/interfaces/canton/canton';
-
+import swal from 'sweetalert';
 @Component({
   selector: 'app-canton',
   templateUrl: './canton.component.html',
@@ -139,6 +139,16 @@ export class CantonComponent implements OnInit {
   }
 
   eliminarCanton(idCanton: string) {
+    swal({
+      title: "Advertencia?",
+      text: "Esta Seguro que desea eliminar",
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+    })
+    .then((willDelete) => {
+      if (willDelete) {
+       
     this.panelAdministracionService.eliminarCanton(
       idCanton,
       localStorage.getItem('miCuenta.deleteToken'))
@@ -152,6 +162,11 @@ export class CantonComponent implements OnInit {
         console.log(error);
       }
     )
+        swal("Se a eliminado Correctamente!", {
+          icon: "success",
+        });
+      }
+    });
   }
 
   setProvincia(provincia) {

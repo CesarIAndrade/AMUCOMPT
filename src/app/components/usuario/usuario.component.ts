@@ -13,7 +13,7 @@ import { TipoUsuario } from 'src/app/interfaces/tipo-usuario/tipo-usuario';
 
 // Functional Components
 import { MatDialog } from "@angular/material/dialog";
-
+import swal from 'sweetalert';
 // Components
 import { ModalAsignacionUsuarioPersonaComponent } from '../modal-asignacion-usuario-persona/modal-asignacion-usuario-persona.component';
 import { ModalAsignacionUsuarioTiposUsuarioComponent } from '../modal-asignacion-usuario-tipos-usuario/modal-asignacion-usuario-tipos-usuario.component';

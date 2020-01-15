@@ -21,9 +21,10 @@ export class FilterPipe implements PipeTransform {
     {
       return arreglo.filter(item=>{
         this.nombres = item[columna].toLowerCase() +' '+ item[columna1].toLowerCase();
-        return ((item[columna].toLowerCase()+' '+item[columna1]+' '
-                +item[columna2].toLowerCase()+' '+item[columna3]
-                .toLowerCase()).toLowerCase().includes(texto))||item[columna4].toLowerCase().includes(texto);
+        texto = texto.replace(/ /g, "");
+        return ((item[columna].toLowerCase()+item[columna1]
+                +item[columna2].toLowerCase()+item[columna3]
+                .toLowerCase()).toLowerCase().indexOf(texto)>-1)||item[columna4].toLowerCase().includes(texto);
         // item[columna1].toLowerCase().includes(texto)||
         // item[columna2].toLowerCase().includes(texto)||
         // item[columna3].toLowerCase().includes(texto)||

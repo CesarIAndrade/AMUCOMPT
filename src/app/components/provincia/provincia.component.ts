@@ -4,7 +4,7 @@ import { PanelAdministracionService } from 'src/app/services/panel-administracio
 import { PersonaService } from 'src/app/services/persona.service';
 import { Provincia } from 'src/app/interfaces/provincia/provincia';
 
-
+import swal from 'sweetalert';
 @Component({
   selector: 'app-provincia',
   templateUrl: './provincia.component.html',
@@ -101,19 +101,33 @@ export class ProvinciaComponent implements OnInit {
   }
 
   eliminarProvincia(idProvincia: string) {
-    this.panelAdministracionService.eliminarProvincia(
-      idProvincia,
-      localStorage.getItem('miCuenta.deleteToken'))
-    .then(
-      ok => {
-        this.mostrarProvincia();
+    swal({
+      title: "Advertencia?",
+      text: "Esta Seguro que desea eliminar",
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+    })
+    .then((willDelete) => {
+      if (willDelete) {
+        this.panelAdministracionService.eliminarProvincia(
+          idProvincia,
+          localStorage.getItem('miCuenta.deleteToken'))
+        .then(
+          ok => {
+            this.mostrarProvincia();
+          }
+        )
+        .catch(
+          error => {
+            console.log(error);
+          }
+        )
+        swal("Se a eliminado Correctamente!", {
+          icon: "success",
+        });
       }
-    )
-    .catch(
-      error => {
-        console.log(error);
-      }
-    )
+    });
   }
 
   limpiarCampos() {
