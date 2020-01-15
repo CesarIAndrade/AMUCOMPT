@@ -10,9 +10,7 @@ export class ModalDetalleUsuarioComponent implements OnInit {
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any
-  ) { 
-    console.log(data)
-  }
+  ) { }
 
   listaTipoUsuario = this.data.listaTipoUsuario;
 

@@ -2,7 +2,6 @@ import { Component, OnInit, Inject, ViewChild, ElementRef } from '@angular/core'
 import { UsuarioService } from 'src/app/services/usuario.service';
 import { TipoUsuario } from 'src/app/interfaces/tipo-usuario/tipo-usuario';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { AsignacionTipoUsuario } from 'src/app/interfaces/asignacion-tipo-usuario/asignacion-tipo-usuario';
 
 @Component({
   selector: 'app-modal-asignacion-usuario-tipos-usuario',
@@ -27,7 +26,6 @@ export class ModalAsignacionUsuarioTiposUsuarioComponent implements OnInit {
   descripcion: string;
 
   agregarTipoUsuarioALista(tipoUsuario) {
-    this.consultarTipoUsuario();
     this.idTipoUsuario = tipoUsuario.target.value;
     this.descripcion = tipoUsuario.target.selectedOptions[0].label;
     if (tipoUsuario.target.value != 0) {
@@ -43,7 +41,6 @@ export class ModalAsignacionUsuarioTiposUsuarioComponent implements OnInit {
       localStorage.getItem('miCuenta.postToken'))
       .then(
         ok => {
-          console.log(ok['respuesta']);
           if (ok['respuesta'] == true) {
             this.tipoUsuario = '0';
             this.listaTipoUsuario.push({
@@ -52,7 +49,7 @@ export class ModalAsignacionUsuarioTiposUsuarioComponent implements OnInit {
             })
             this.testSelect.nativeElement.disabled = false;
             this.botonEliminar = false;
-            this.consultarTipoUsuario();
+            this.consultarAsignacionTipoUsuario();
           };
         }
       )
@@ -65,7 +62,6 @@ export class ModalAsignacionUsuarioTiposUsuarioComponent implements OnInit {
 
   eliminarTipoUsuarioDeLista(tipoUsuario) {
     const index = this.listaTipoUsuario.indexOf(tipoUsuario);
-    console.log(index);
     if (index >= 0) {
       this.listaTipoUsuario.splice(index, 1);
     }
@@ -73,13 +69,13 @@ export class ModalAsignacionUsuarioTiposUsuarioComponent implements OnInit {
   }
 
   eliminarAsignacionTipoUsuario(tipoUsuario) {
+    console.log(tipoUsuario.IdAsignacionTu);
     this.usuarioService.eliminarAsignacionTipoUsuario(
       tipoUsuario.IdAsignacionTu,
       localStorage.getItem('miCuenta.deleteToken'))
       .then(
         ok => {
-          console.log(ok['respuesta']);
-          this.consultarTipoUsuario();
+          this.consultarAsignacionTipoUsuario();
         },
       )
       .catch(
@@ -93,16 +89,17 @@ export class ModalAsignacionUsuarioTiposUsuarioComponent implements OnInit {
     this.usuarioService.consultarTipoUsuario(localStorage.getItem('miCuenta.getToken'))
       .then(
         ok => {
-            ok['respuesta'].map(
-              item => {
-                if (!this.arrayIndexesTipoUsuario.includes(item.IdTipoUsuario)) {
-                  this.tipoUsuarios.push({
-                    IdTipoUsuario: item.IdTipoUsuario,
-                    Descripcion: item.Descripcion
-                  });
-                }
+          this.tipoUsuarios = [];
+          ok['respuesta'].map(
+            item => {
+              if (!this.arrayIndexesTipoUsuario.includes(item.IdTipoUsuario)) {
+                this.tipoUsuarios.push({
+                  IdTipoUsuario: item.IdTipoUsuario,
+                  Descripcion: item.Descripcion
+                });
               }
-            )
+            }
+          )
         }
       )
       .catch(
@@ -112,7 +109,34 @@ export class ModalAsignacionUsuarioTiposUsuarioComponent implements OnInit {
       )
   }
 
-  arrayIndexesTipoUsuario = [];
+  consultarAsignacionTipoUsuario() {
+    console.log('idUsuario: ' + this.idUsuario);
+    this.usuarioService.consultarAsignacionTipoUsuario(
+      this.idUsuario,
+      localStorage.getItem('miCuenta.getToken')
+    )
+      .then(
+        ok => {
+          this.arrayIndexesTipoUsuario = [];
+          this.listaTipoUsuario = [];
+          this.listaTipoUsuario = ok['respuesta'];
+          ok['respuesta'].map(
+            item => {
+              this.arrayIndexesTipoUsuario.push(item.IdTipoUsuario);
+            }
+          )
+          console.log(this.arrayIndexesTipoUsuario);
+          this.consultarTipoUsuario();
+        }
+      )
+      .catch(
+        error => {
+          console.log(error);
+        }
+      )
+  }
+
+  arrayIndexesTipoUsuario: number[] = [];
   ngOnInit() {
     this.consultarTipoUsuario();
     this.listaTipoUsuario.map(

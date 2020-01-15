@@ -53,6 +53,7 @@ export class UsuarioComponent implements OnInit {
   nombres = 'Nombres';
   apellidos = 'Apellidos';
   filterUsuario = '';
+  idAsignacionTipoUsuario: string;
   idPersona: string;
   idUsuario: string;
   idUsuarioModalAUP: string;
@@ -63,15 +64,11 @@ export class UsuarioComponent implements OnInit {
   personas: Persona[] = [];
   usuarios: Usuario[] = [];
 
-  idAsignacionTipoUsuario: string;
-
   consultarUsuarios() {
-    console.log('consultando');
     this.usuarioService.consultarUsuarios(localStorage.getItem('miCuenta.getToken'))
       .then(
         ok => {
           this.usuarios = ok['respuesta'];
-          console.log(this.usuarios);
         }
       )
       .catch(
@@ -96,7 +93,11 @@ export class UsuarioComponent implements OnInit {
         ok => {
           this.personas = ok['respuesta'];
         },
-        err => console.log(err)
+      )
+      .catch(
+        error => {
+          console.log(error);
+        }
       )
   }
 
@@ -125,7 +126,6 @@ export class UsuarioComponent implements OnInit {
       this.usuarioService.crearUsuario(datosUsuario)
         .then(
           ok => {
-            console.log(ok['respuesta']);
             this.limpiarCampos();
             this.myForm.reset();
             this.consultarUsuarios();
@@ -160,9 +160,9 @@ export class UsuarioComponent implements OnInit {
       )
   }
 
-  habilitarUsuario() {
+  habilitarUsuario(usuario) {
     this.usuarioService.habilitarUsuario(
-      this.idUsuarioModalAUP,
+      usuario.IdUsuario,
       localStorage.getItem('miCuenta.postToken')
     )
       .then(
@@ -211,7 +211,6 @@ export class UsuarioComponent implements OnInit {
   }
 
   abrirModalAsignacionUsuarioTiposUsuario(usuario) {
-    console.log(usuario);
     var listaTipoUsuario = usuario.ListaTipoUsuario;
     let dialogRef = this.modalAsignacionUsuarioTiposUsuario.open(ModalAsignacionUsuarioTiposUsuarioComponent, {
       width: '900px',
@@ -225,7 +224,6 @@ export class UsuarioComponent implements OnInit {
 
   abrirModalDetalleUsuario(usuario){
     var listaTipoUsuario = usuario.ListaTipoUsuario;
-    console.log(usuario);
     let dialogRef = this.modalDetalleUsuario.open(ModalDetalleUsuarioComponent, {
       width: '500px',
       height: '300px',
@@ -236,13 +234,34 @@ export class UsuarioComponent implements OnInit {
   }
 
   eliminarUsuario(usuario) {
-    this.idAsignacionTipoUsuario = usuario.AsignacionTipoUsuarioEntidad.IdAsignacionTU;
+    var listaAsignacionTipoUsuario = usuario.ListaTipoUsuario;
     this.usuarioService.eliminarUsuario(
       usuario.IdUsuario,
       localStorage.getItem('miCuenta.deleteToken'))
       .then(
         ok => {
+          listaAsignacionTipoUsuario.map(
+            item => {
+              this.eliminarAsignacionTipoUsuario(item.IdAsignacionTu);
+            }
+          )
           this.consultarUsuarios();
+        },
+      )
+      .catch(
+        err => {
+          console.log(err);
+        }
+      )
+  }
+
+  eliminarAsignacionTipoUsuario(idAsignacionTipoUsuario) {
+    this.usuarioService.eliminarAsignacionTipoUsuario(
+      idAsignacionTipoUsuario,
+      localStorage.getItem('miCuenta.deleteToken'))
+      .then(
+        ok => {
+          console.log(ok['respuesta']);
         },
       )
       .catch(
@@ -261,7 +280,6 @@ export class UsuarioComponent implements OnInit {
   }
 
   setUsuario(usuario) {
-    console.log(usuario);
     this.idUsuario = usuario.IdUsuario;
     this.idPersona = usuario.IdPersona;
     this.nombres = usuario.PrimerNombre +' '+ usuario.SegundoNombre;

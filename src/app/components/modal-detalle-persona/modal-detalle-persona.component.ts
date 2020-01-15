@@ -23,8 +23,6 @@ export class ModalDetallePersonaComponent implements OnInit {
     this.data.cantonModal + ' > ' +
     this.data.parroquiaModal;
 
-    
-    
   sinNumero = 'Sin Numero';
   sinCorreo = 'Sin Correo';
   sinDireccion: string;
