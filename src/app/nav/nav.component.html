@@ -1,52 +1,53 @@
 <mat-sidenav-container class="sidenav-container bg-white">
-  <mat-sidenav #drawer class="sidenav bg-dark" fixedInViewport
+  <mat-sidenav #drawer class="sidenav bg-dark" fixedTopGap
     [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'" [mode]="(isHandset$ | async) ? 'over' : 'side'"
     [opened]="(isHandset$ | async) === false">
-    <mat-toolbar class="text-white bg-primary" routerLink="/inicio">Menu</mat-toolbar>
+    <mat-toolbar class="text-white bg-primary"><i class="fa fa-home"> MENU</i>
+    </mat-toolbar>
     <mat-nav-list>
-      <div class="animated flipInX" id="cu">
-        <a mat-list-item routerLink="/inicio/usuarios" style="color: white;">
+      <div class="matItemHover">
+        <a mat-list-item routerLink="/inicio/usuarios">
           <i style="margin-right: 10px;" class="fa fa-user" aria-hidden="true"></i>Usuarios
         </a>
       </div>
-      <div class="animated flipInX">
-        <a mat-list-item routerLink="/inicio/personas" style="color: white;">
+      <div class="matItemHover">
+        <a mat-list-item routerLink="/inicio/personas">
           <i style="margin-right: 10px;" class="fa fa-users" aria-hidden="true"></i>
           Persona
         </a>
       </div>
-      <div class="animated flipInX">
-        <a mat-list-item routerLink="/inicio/inventarios" style="color: white;">
+      <div class="matItemHover">
+        <a mat-list-item routerLink="/inicio/inventarios">
           <i style="margin-right: 10px;" class="fa fa-check-square" aria-hidden="true"></i>
           Inventario
         </a>
       </div>
-      <div class="animated flipInX">
-        <a mat-list-item routerLink="/inicio/compras" style="color: white;">
+      <div class="matItemHover">
+        <a mat-list-item routerLink="/inicio/compras">
           <i style="margin-right: 10px;" class="fa fa-truck" aria-hidden="true"></i>
           Compra
         </a>
       </div>
-      <div class="animated flipInX">
-        <a mat-list-item routerLink="/inicio/ventas" style="color: white;">
+      <div class="matItemHover">
+        <a mat-list-item routerLink="/inicio/ventas">
           <i style="margin-right: 10px;" class="fa fa-calculator" aria-hidden="true"></i>
           Venta
         </a>
       </div>
-      <div class="animated flipInX">
-        <a mat-list-item routerLink="/inicio/panel-administracion" style="color: white;">
+      <div class="matItemHover">
+        <a mat-list-item routerLink="/inicio/panel-administracion">
           <i style="margin-right: 10px;" class="fa fa-id-card" aria-hidden="true"></i>
           Administracion
         </a>
       </div>
-      <div class="animated flipInX">
-        <a mat-list-item style="color: white;">
+      <div class="matItemHover">
+        <a mat-list-item>
           <i style="margin-right: 10px;" class="fa fa-user" aria-hidden="true"></i>
           Cuenta
         </a>
       </div>
-      <div class="animated flipInX bg-info">
-        <a mat-list-item style="color: white; ">
+      <div class="matItemHover">
+        <a mat-list-item>
           <i style="margin-right: 10px;" class="fa fa-sign-out" aria-hidden="true"></i>
           Cerrar Sesion
         </a>
@@ -55,8 +56,8 @@
   </mat-sidenav>
   <mat-sidenav-content>
     <mat-toolbar class="card-header">
-      <a type="button" mat-icon-button (click)="drawer.toggle()" *ngIf="isHandset$ | async">
-        <mat-icon>menu</mat-icon>
+      <a (click)="drawer.toggle()" *ngIf="isHandset$ | async">
+        <i class="fa fa-bars"></i>
       </a>
       <img src="./assets/img/amucomt.png" width="210" height="100" class="amucomt" style="margin-left: 1rem;"
         routerLink="/inicio">

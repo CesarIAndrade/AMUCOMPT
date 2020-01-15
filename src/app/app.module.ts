@@ -41,6 +41,7 @@ import { ModalAsignacionUsuarioTiposUsuarioComponent } from './components/modal-
 import { ModalDetalleUsuarioComponent } from './components/modal-detalle-usuario/modal-detalle-usuario.component';
 
 import { TooltipModule } from 'ng2-tooltip-directive';
+import { MatCheckboxModule } from '@angular/material';
 
 @NgModule({
   declarations: [
@@ -73,6 +74,7 @@ import { TooltipModule } from 'ng2-tooltip-directive';
     MatSidenavModule,
     MatIconModule,
     MatListModule,
+    MatCheckboxModule,
     MatFormFieldModule,
     HttpClientModule,
     FormsModule,

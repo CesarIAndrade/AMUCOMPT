@@ -1,4 +1,3 @@
-<h1 mat-dialog-title>Datos de Persona</h1>
 <mat-dialog-content>
     <div class="card ">
         <div class="card-header" style="text-align: center;">
@@ -11,11 +10,6 @@
                         <i class="fa fa-search icon"></i>
                         <input [(ngModel)]="filterPersona" type="text" class="form-control input-field" placeholder="Ejem. Zambrano Zambrano">
                     </div>
-                    <input hidden disabled readonly matInput [(ngModel)]="data.cedula">
-                    <input hidden disabled readonly matInput [(ngModel)]="data.idPersona">
-                    <input hidden disabled readonly matInput [(ngModel)]="data.idUsuario">
-                    <input hidden disabled readonly matInput [(ngModel)]="data.nombres">
-                    <input hidden disabled readonly matInput [(ngModel)]="data.apellidos">
                     <div class="table-responsive-sm">
                         <table class="table table-sm">
                             <thead class="card-header">

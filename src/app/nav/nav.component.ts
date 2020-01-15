@@ -25,10 +25,4 @@ export class NavComponent {
       filter(([a, b]) => b && a instanceof NavigationEnd)
     ).subscribe(_ => this.drawer.close());
   }
-
-  ac(){
-    if(this.router.url === "/inicio/usuarios"){
-      document.getElementById('cu').style.backgroundColor = '#fff'
-    }
-  }
 }

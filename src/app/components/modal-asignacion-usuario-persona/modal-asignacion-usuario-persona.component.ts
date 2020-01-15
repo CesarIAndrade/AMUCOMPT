@@ -15,6 +15,7 @@ export class ModalAsignacionUsuarioPersonaComponent implements OnInit {
     private personaService: PersonaService,
     @Inject(MAT_DIALOG_DATA) public data: DialogData
   ) { }
+  
   personas : Persona[] = [];
   filterPersona = '';
 
