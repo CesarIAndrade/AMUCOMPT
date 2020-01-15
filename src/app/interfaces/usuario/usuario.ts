@@ -6,5 +6,5 @@ export interface Usuario {
     UsuarioLogin?: string;
     Contrasena?: string;
     FechaCreacion?: string;
-    Estado?: boolean;
+    EstadoUsuario?: boolean;
 }

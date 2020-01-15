@@ -90,8 +90,6 @@ export class UsuarioService {
     })
   }
 
-
-
   consultarTipoUsuario(_token: string){
     const body = new HttpParams()
     .set('encriptada', _token)
@@ -110,6 +108,23 @@ export class UsuarioService {
 
   }
 
+  consultarAsignacionTipoUsuario(idUsuario: string, _token: string){
+    const body = new HttpParams()
+    .set('IdUsuario', idUsuario)
+    .set('encriptada', _token)
+    return new Promise((resolve, reject) => {
+      this.http.post(this.apiUrl + 'Usuarios/ObtenerTipoUsuarioDeUnUsuario', body.toString(),
+      {
+        headers: new HttpHeaders()
+          .set('Content-Type', 'application/x-www-form-urlencoded')
+      })
+        .subscribe(res => {
+          resolve(res);
+        }, (err) => {
+          reject(err);
+        })
+    });
+  }
 
   consultarPrivilegios(_token: string) {
     const body = new HttpParams()

@@ -14,9 +14,7 @@ export class ModalAsignacionUsuarioPersonaComponent implements OnInit {
   constructor(
     private personaService: PersonaService,
     @Inject(MAT_DIALOG_DATA) public data: DialogData
-  ) {
-    console.log(this.data);
-  }
+  ) { }
   personas : Persona[] = [];
   filterPersona = '';
 
@@ -33,9 +31,12 @@ export class ModalAsignacionUsuarioPersonaComponent implements OnInit {
       .then(
         ok => {
           this.personas = ok['respuesta'];
-          console.log(this.personas);
         },
-        error => console.log(error)
+      )
+      .catch(
+        error => {
+          console.log(error);
+        }
       )
   }
 

@@ -7,8 +7,8 @@
         <div class="card-body">
             <div class="form-group input-container">
                 <input [value]="cedula" type="text" readonly class="form-control input-field">
-                <i (click)="abrirModalAsignacionUsuarioPersona()" class="fa fa-user-plus icon" style="background-color:#f0ad4e;"
-                    (click)="mostrarContrasena()"></i>
+                <i (click)="abrirModalAsignacionUsuarioPersona()" class="fa fa-user-plus icon"
+                    style="background-color:#f0ad4e;"></i>
             </div>
             <div class="form-group">
                 <input [value]="nombres" type="text" readonly class="form-control input-field">
@@ -33,7 +33,7 @@
                 <div class="form-group input-container">
                     <input formControlName="_contrasena" type="password" [type]="inputType"
                         class="form-control input-field" placeholder="Ingrese Contraseña">
-                        <i class="fa fa-eye icon" (click)="mostrarContrasena()"></i>
+                    <i class="fa fa-eye icon" (click)="mostrarContrasena()"></i>
                 </div>
                 <div class="badge badge-danger btn-block mb-3"
                     *ngIf="_contrasena.invalid && (_contrasena.dirty || _contrasena.touched)">
@@ -69,34 +69,54 @@
                         <thead class="card-header">
                             <tr>
                                 <th scope="col">Usuario</th>
-                                <th scope="col">Tipo</th>
-                                <th scope="col" colspan="3" style="text-align: center;">Acciones</th>
+                                <th scope="col" colspan="4" style="text-align: center;">Acciones</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr *ngFor="let item of usuarios | filter: filterUsuario : 'UsuarioLogin'">
                                 <td> {{ item.UsuarioLogin }} </td>
-                                <td> {{ item.Descripcion }} </td>
-                                <td>
-                                    <button
-                                    tooltip="Asignar Tipo De Usuario" placement="top" 
-                                        (click)="abrirModalAsignacionUsuarioTiposUsuario(item)"
-                                        class="btn btn-sm btn-outline-info separacion-botones"><i
-                                            class="fa fa-address-book" aria-hidden="true"></i> </button>
-                                </td>
-                                <td>
-                                    <button
-                                    tooltip="Modificar" placement="top" 
-                                        (click)="setUsuario(item)"
-                                        class="btn btn-sm btn-outline-info separacion-botones"><i
-                                            class="fa fa-pencil-square-o" aria-hidden="true"></i> 
-                                    </button>
-                                </td>
-                                <td>
-                                    <button tooltip="Eliminar" placement="top"  (click)="eliminarUsuario(item)"
-                                        class="btn btn-sm btn-outline-danger separacion-botones"><i class="fa fa-trash"
-                                            aria-hidden="true"></i></button>
-                                </td>
+
+                                <ng-container *ngIf="item.EstadoUsuario; then habilitado; else deshabilitado">
+                                </ng-container>
+
+                                <ng-template #habilitado>
+                                    <td>
+                                        <button (click)="abrirModalDetalleUsuario(item)"
+                                            class="btn btn-sm btn-outline-info">
+                                            <i class="fa fa-address-book" aria-hidden="true"></i>
+                                        </button>
+                                    </td>
+                                    <td>
+                                        <button tooltip="Asignar Tipo De Usuario" placement="top"
+                                            (click)="abrirModalAsignacionUsuarioTiposUsuario(item)"
+                                            class="btn btn-sm btn-outline-warning separacion-botones">
+                                            <i class="fa fa-address-book" aria-hidden="true"></i>
+                                        </button>
+                                    </td>
+                                    <td>
+                                        <button tooltip="Modificar" placement="top" (click)="setUsuario(item)"
+                                            class="btn btn-sm btn-outline-info separacion-botones">
+                                            <i class="fa fa-pencil-square-o" aria-hidden="true">
+                                            </i>
+                                        </button>
+                                    </td>
+                                    <td>
+                                        <button tooltip="Eliminar" placement="top" (click)="eliminarUsuario(item)"
+                                            class="btn btn-sm btn-outline-danger separacion-botones">
+                                            <i class="fa fa-trash" aria-hidden="true"></i>
+                                        </button>
+                                    </td>
+                                </ng-template>
+
+                                <ng-template #deshabilitado>
+
+                                    <td colspan="4">
+                                        <button (click)="habilitarUsuario(item)" style="justify-content: center;"
+                                            class="btn btn-sm btn-block btn-outline-success">
+                                            <i class="fa fa-user-plus" aria-hidden="true"> Habilitar</i>
+                                        </button>
+                                    </td>
+                                </ng-template>
                         </tbody>
                     </table>
                 </div>

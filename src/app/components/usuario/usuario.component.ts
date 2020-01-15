@@ -7,9 +7,7 @@ import { PersonaService } from 'src/app/services/persona.service';
 
 // Interfaces
 import { Usuario } from 'src/app/interfaces/usuario/usuario';
-import { TipoDocumento } from 'src/app/interfaces/tipo-documento/tipo-documento';
 import { Persona } from 'src/app/interfaces/persona/persona';
-import { TipoUsuario } from 'src/app/interfaces/tipo-usuario/tipo-usuario';
 
 // Functional Components
 import { MatDialog } from "@angular/material/dialog";
@@ -17,6 +15,7 @@ import swal from 'sweetalert';
 // Components
 import { ModalAsignacionUsuarioPersonaComponent } from '../modal-asignacion-usuario-persona/modal-asignacion-usuario-persona.component';
 import { ModalAsignacionUsuarioTiposUsuarioComponent } from '../modal-asignacion-usuario-tipos-usuario/modal-asignacion-usuario-tipos-usuario.component';
+import { ModalDetalleUsuarioComponent } from '../modal-detalle-usuario/modal-detalle-usuario.component';
 
 export interface DialogData {
   cedula: string;
@@ -24,10 +23,6 @@ export interface DialogData {
   idUsuario: string;
   nombres: string;
   apellidos: string;
-}
-
-export interface TiposUsuario {
-  idUsuario: string;
 }
 
 @Component({
@@ -43,6 +38,7 @@ export class UsuarioComponent implements OnInit {
   constructor(
     private modalAsignacionUsuarioPersona: MatDialog,
     private modalAsignacionUsuarioTiposUsuario: MatDialog,
+    private modalDetalleUsuario: MatDialog,
     private usuarioService: UsuarioService,
     private personaService: PersonaService,
   ) {
@@ -57,6 +53,7 @@ export class UsuarioComponent implements OnInit {
   nombres = 'Nombres';
   apellidos = 'Apellidos';
   filterUsuario = '';
+  idAsignacionTipoUsuario: string;
   idPersona: string;
   idUsuario: string;
   idUsuarioModalAUP: string;
@@ -67,15 +64,11 @@ export class UsuarioComponent implements OnInit {
   personas: Persona[] = [];
   usuarios: Usuario[] = [];
 
-  idAsignacionTipoUsuario: string;
-
   consultarUsuarios() {
-    console.log('consultando');
     this.usuarioService.consultarUsuarios(localStorage.getItem('miCuenta.getToken'))
       .then(
         ok => {
           this.usuarios = ok['respuesta'];
-          console.log(this.usuarios);
         }
       )
       .catch(
@@ -100,7 +93,11 @@ export class UsuarioComponent implements OnInit {
         ok => {
           this.personas = ok['respuesta'];
         },
-        err => console.log(err)
+      )
+      .catch(
+        error => {
+          console.log(error);
+        }
       )
   }
 
@@ -129,7 +126,6 @@ export class UsuarioComponent implements OnInit {
       this.usuarioService.crearUsuario(datosUsuario)
         .then(
           ok => {
-            console.log(ok['respuesta']);
             this.limpiarCampos();
             this.myForm.reset();
             this.consultarUsuarios();
@@ -142,24 +138,6 @@ export class UsuarioComponent implements OnInit {
         )
     }
   }
-
-  // asignarTipoUsuario(idUsuario: string) {
-  //   this.usuarioService.asignacionTipoUsuario(
-  //     idUsuario, 
-  //     this.tipoUsuario, 
-  //     localStorage.getItem('miCuenta.postToken'))
-  //     .then(
-  //       ok => {
-  //         this.limpiarCampos();
-  //         this.consultarUsuarios();
-  //       }
-  //     )
-  //     .catch(
-  //       error => {
-  //         console.log(error);
-  //       }
-  //     )
-  // }
 
   actualizarUsuario() {
     this.usuarioService.actualizarUsuario(
@@ -182,9 +160,9 @@ export class UsuarioComponent implements OnInit {
       )
   }
 
-  habilitarUsuario() {
+  habilitarUsuario(usuario) {
     this.usuarioService.habilitarUsuario(
-      this.idUsuarioModalAUP,
+      usuario.IdUsuario,
       localStorage.getItem('miCuenta.postToken')
     )
       .then(
@@ -233,27 +211,40 @@ export class UsuarioComponent implements OnInit {
   }
 
   abrirModalAsignacionUsuarioTiposUsuario(usuario) {
+    var listaTipoUsuario = usuario.ListaTipoUsuario;
     let dialogRef = this.modalAsignacionUsuarioTiposUsuario.open(ModalAsignacionUsuarioTiposUsuarioComponent, {
       width: '900px',
       height: '500px',
       data: {
-        idUsuario: usuario.IdUsuario
+        idUsuario: usuario.IdUsuario,
+        listaTipoUsuario: listaTipoUsuario,
       }
     });
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
-      console.log(result);
+  }
+
+  abrirModalDetalleUsuario(usuario){
+    var listaTipoUsuario = usuario.ListaTipoUsuario;
+    let dialogRef = this.modalDetalleUsuario.open(ModalDetalleUsuarioComponent, {
+      width: '500px',
+      height: '300px',
+      data: {
+        listaTipoUsuario: listaTipoUsuario
+      }
     });
   }
 
   eliminarUsuario(usuario) {
-    this.idAsignacionTipoUsuario = usuario.AsignacionTipoUsuarioEntidad.IdAsignacionTU;
+    var listaAsignacionTipoUsuario = usuario.ListaTipoUsuario;
     this.usuarioService.eliminarUsuario(
       usuario.IdUsuario,
       localStorage.getItem('miCuenta.deleteToken'))
       .then(
         ok => {
-          this.eliminarAsignacionTipoUsuario();
+          listaAsignacionTipoUsuario.map(
+            item => {
+              this.eliminarAsignacionTipoUsuario(item.IdAsignacionTu);
+            }
+          )
           this.consultarUsuarios();
         },
       )
@@ -264,13 +255,13 @@ export class UsuarioComponent implements OnInit {
       )
   }
 
-  eliminarAsignacionTipoUsuario() {
+  eliminarAsignacionTipoUsuario(idAsignacionTipoUsuario) {
     this.usuarioService.eliminarAsignacionTipoUsuario(
-      this.idAsignacionTipoUsuario,
+      idAsignacionTipoUsuario,
       localStorage.getItem('miCuenta.deleteToken'))
       .then(
         ok => {
-          this.consultarUsuarios();
+          console.log(ok['respuesta']);
         },
       )
       .catch(
@@ -291,6 +282,9 @@ export class UsuarioComponent implements OnInit {
   setUsuario(usuario) {
     this.idUsuario = usuario.IdUsuario;
     this.idPersona = usuario.IdPersona;
+    this.nombres = usuario.PrimerNombre +' '+ usuario.SegundoNombre;
+    this.apellidos = usuario.ApellidoPaterno +' '+ usuario.ApellidoMaterno;
+    this.cedula = usuario.NumeroDocumento;
     this.testButton.nativeElement.value = 'modificar';
     this.myForm.setValue({
       _valorUsuario: usuario.UsuarioLogin,

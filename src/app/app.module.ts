@@ -15,8 +15,6 @@ import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatDialogModule } from "@angular/material/dialog";
 import { MatTabsModule } from "@angular/material/tabs";
 
-
-
 // Components
 import { UsuarioComponent } from './components/usuario/usuario.component';
 import { LoginComponent } from './components/login/login.component';
@@ -40,6 +38,7 @@ import { ComunidadComponent } from './components/comunidad/comunidad.component';
 import { ParroquiaComponent } from './components/parroquia/parroquia.component';
 import { ProvinciaComponent } from './components/provincia/provincia.component';
 import { ModalAsignacionUsuarioTiposUsuarioComponent } from './components/modal-asignacion-usuario-tipos-usuario/modal-asignacion-usuario-tipos-usuario.component';
+import { ModalDetalleUsuarioComponent } from './components/modal-detalle-usuario/modal-detalle-usuario.component';
 
 import { TooltipModule } from 'ng2-tooltip-directive';
 import Swal from 'sweetalert2';
@@ -62,7 +61,8 @@ import Swal from 'sweetalert2';
     ComunidadComponent,
     ParroquiaComponent,
     ProvinciaComponent,
-    ModalAsignacionUsuarioTiposUsuarioComponent
+    ModalAsignacionUsuarioTiposUsuarioComponent,
+    ModalDetalleUsuarioComponent
   ],
   imports: [
     BrowserModule,
@@ -87,7 +87,8 @@ import Swal from 'sweetalert2';
   entryComponents: [ 
     ModalDetallePersonaComponent,
     ModalAsignacionUsuarioPersonaComponent ,
-    ModalAsignacionUsuarioTiposUsuarioComponent
+    ModalAsignacionUsuarioTiposUsuarioComponent,
+    ModalDetalleUsuarioComponent
   ],
   providers: [],
   bootstrap: [AppComponent]

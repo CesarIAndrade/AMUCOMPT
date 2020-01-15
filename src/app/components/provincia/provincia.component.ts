@@ -15,7 +15,6 @@ export class ProvinciaComponent implements OnInit {
   myForm: FormGroup;
   @ViewChild('testButton', { static: false }) testButton: ElementRef;
 
-
   constructor(private panelAdministracionService: PanelAdministracionService,
     private personaService: PersonaService
   ) {
@@ -72,8 +71,8 @@ export class ProvinciaComponent implements OnInit {
           console.log(err);
         }
       )
-    //this.testButton.nativeElement.value = 'modificar';
   }
+
   setProvincia(value)
   {
     this.valorIdProvincia=value.IdProvincia;
@@ -82,6 +81,7 @@ export class ProvinciaComponent implements OnInit {
     })
     this.testButton.nativeElement.value = 'modificar';
   }
+
   actualizarProvincia() {
     this.panelAdministracionService.actualizarProvincia(
       this.valorIdProvincia,
@@ -141,6 +141,5 @@ export class ProvinciaComponent implements OnInit {
   ngOnInit() {
     this.provincias = [];
     this.mostrarProvincia();
-
   }
 }
