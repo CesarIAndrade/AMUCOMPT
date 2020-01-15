@@ -69,6 +69,7 @@ export class UsuarioComponent implements OnInit {
       .then(
         ok => {
           this.usuarios = ok['respuesta'];
+          console.log(this.usuarios);
         }
       )
       .catch(
@@ -224,6 +225,8 @@ export class UsuarioComponent implements OnInit {
 
   abrirModalDetalleUsuario(usuario){
     var listaTipoUsuario = usuario.ListaTipoUsuario;
+    console.log(usuario);
+    
     let dialogRef = this.modalDetalleUsuario.open(ModalDetalleUsuarioComponent, {
       width: '500px',
       height: '300px',

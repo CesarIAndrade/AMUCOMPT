@@ -139,6 +139,8 @@ export class ModalAsignacionUsuarioTiposUsuarioComponent implements OnInit {
   arrayIndexesTipoUsuario: number[] = [];
   ngOnInit() {
     this.consultarTipoUsuario();
+    console.log(this.listaTipoUsuario);
+    
     this.listaTipoUsuario.map(
       item => {
         this.arrayIndexesTipoUsuario.push(item.IdTipoUsuario);
