@@ -4,6 +4,8 @@ import { PanelAdministracionService } from 'src/app/services/panel-administracio
 import { PersonaService } from 'src/app/services/persona.service';
 import { Parroquia } from 'src/app/interfaces/parroquia/parroquia';
 import { Canton } from 'src/app/interfaces/canton/canton';
+import swal from 'sweetalert';
+
 
 @Component({
   selector: 'app-parroquia',
@@ -130,19 +132,33 @@ export class ParroquiaComponent implements OnInit {
       )
   }
   eliminarParroquia(idParroquia: string){
-    this.panelAdministracionService.eliminarParroquia(
-      idParroquia,
-      localStorage.getItem('miCuenta.deleteToken'))
-      .then(
-        ok => {
-          this.consultarParroquias();
-        }
-      )
-      .catch(
-        error => {
-          console.log(error);
-        }
-      )
+    swal({
+      title: "Advertencia?",
+      text: "Esta Seguro que desea eliminar",
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+    })
+    .then((willDelete) => {
+      if (willDelete) {
+        this.panelAdministracionService.eliminarParroquia(
+          idParroquia,
+          localStorage.getItem('miCuenta.deleteToken'))
+          .then(
+            ok => {
+              this.consultarParroquias();
+            }
+          )
+          .catch(
+            error => {
+              console.log(error);
+            }
+          )
+        swal("Se a eliminado Correctamente!", {
+          icon: "success",
+        });
+      }
+    });
   }
   setCanton(canton) {
     this.idCanton = canton.IdCanton;

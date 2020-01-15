@@ -41,7 +41,7 @@ import { ModalAsignacionUsuarioTiposUsuarioComponent } from './components/modal-
 import { ModalDetalleUsuarioComponent } from './components/modal-detalle-usuario/modal-detalle-usuario.component';
 
 import { TooltipModule } from 'ng2-tooltip-directive';
-import { MatCheckboxModule } from '@angular/material';
+import Swal from 'sweetalert2';
 
 @NgModule({
   declarations: [
@@ -74,7 +74,6 @@ import { MatCheckboxModule } from '@angular/material';
     MatSidenavModule,
     MatIconModule,
     MatListModule,
-    MatCheckboxModule,
     MatFormFieldModule,
     HttpClientModule,
     FormsModule,
