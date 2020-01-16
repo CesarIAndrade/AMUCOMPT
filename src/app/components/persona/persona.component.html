@@ -149,8 +149,7 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <select type="text" [(ngModel)]="parroquia" [ngModelOptions]="{standalone: true}" class="form-control"
-                                (change)="comunidadesDeUnaParroquia($event.target.value)">
+                            <select type="text" [(ngModel)]="parroquia" [ngModelOptions]="{standalone: true}" class="form-control">
                                 <option value="0" disabled>Seleccionar Parroquia</option>
                                 <option *ngFor="let item of parroquias" value="{{item.IdParroquia}}">
                                     {{ item.Descripcion }}
@@ -160,7 +159,7 @@
                                 Parroquia Requerida
                             </div>
                         </div>
-                        <div class="form-group">
+                        <!-- <div class="form-group">
                             <select type="text" [(ngModel)]="comunidad" [ngModelOptions]="{standalone: true}" class="form-control"
                                 (change)="onChangeSelectComunidad($event.target.value)">
                                 <option value="0" disabled>Seleccionar Comunidad</option>
@@ -171,7 +170,7 @@
                             <div class="badge badge-danger mt-3 btn-block" [hidden]="selectComunidad">
                                 Comunidad Requerida
                             </div>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
             </div>
@@ -214,7 +213,6 @@
                                     value="{{item.IdPersona}}"
                                     (click)="consultarPersonaPorId('detalles', item.IdPersona)">
                                     <i class="fa fa-eye" aria-hidden="true"></i>
-                                    
                                 </button>
                             </td>
                             <td>
@@ -225,7 +223,7 @@
                                 </button>
                             </td>
                             <td>
-                                <button tooltip="Eliminar" placement="top"
+                                <button
                                 class="btn btn-sm btn-outline-danger separacion-botones"
                                     value="{{item.IdPersona}}" (click)="eliminarPersona(item.IdPersona)">
                                     <i class="fa fa-trash" aria-hidden="true"></i>

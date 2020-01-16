@@ -8,7 +8,8 @@ import { PersonaService } from 'src/app/services/persona.service';
 // Interfaces
 import { Provincia } from 'src/app/interfaces/provincia/provincia';
 import { Canton } from 'src/app/interfaces/canton/canton';
-import swal from 'sweetalert';
+import sweetalert from 'sweetalert';
+
 @Component({
   selector: 'app-canton',
   templateUrl: './canton.component.html',
@@ -107,7 +108,7 @@ export class CantonComponent implements OnInit {
     this.idProvincia = canton.Provincia.IdProvincia;
     this.provincias.map(
       item => {
-        if(this.idProvincia == item.IdProvincia){
+        if (this.idProvincia == item.IdProvincia) {
           this.provincia = item.Descripcion;
         }
       }
@@ -138,35 +139,35 @@ export class CantonComponent implements OnInit {
       )
   }
 
+
   eliminarCanton(idCanton: string) {
-    swal({
+    sweetAlert({
       title: "Advertencia?",
       text: "Esta Seguro que desea eliminar",
       icon: "warning",
-      buttons: true,
+      buttons: ['Cancelar', 'Ok'],
       dangerMode: true,
     })
-    .then((willDelete) => {
-      if (willDelete) {
-       
-    this.panelAdministracionService.eliminarCanton(
-      idCanton,
-      localStorage.getItem('miCuenta.deleteToken'))
-    .then(
-      ok => {
-        this.consultarCantones();
-      }
-    )
-    .catch(
-      error => {
-        console.log(error);
-      }
-    )
-        swal("Se a eliminado Correctamente!", {
-          icon: "success",
-        });
-      }
-    });
+      .then((willDelete) => {
+        if (willDelete) {
+          // this.panelAdministracionService.eliminarCanton(
+          //   idCanton,
+          //   localStorage.getItem('miCuenta.deleteToken'))
+          //   .then(
+          //     ok => {
+          //       this.consultarCantones();
+          //     }
+          //   )
+          //   .catch(
+          //     error => {
+          //       console.log(error);
+          //     }
+          //   )
+          sweetAlert("Se a eliminado Correctamente!", {
+            icon: "success",
+          });
+        }
+      });
   }
 
   setProvincia(provincia) {
@@ -175,7 +176,7 @@ export class CantonComponent implements OnInit {
     this.inputIdProvincia = true;
   }
 
-  limpiarCampos(){
+  limpiarCampos() {
     this.myForm.reset();
     this.provincia = 'Provincia';
   }

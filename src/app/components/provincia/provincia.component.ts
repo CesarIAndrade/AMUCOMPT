@@ -3,8 +3,8 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { PanelAdministracionService } from 'src/app/services/panel-administracion.service';
 import { PersonaService } from 'src/app/services/persona.service';
 import { Provincia } from 'src/app/interfaces/provincia/provincia';
+import sweetalert from 'sweetalert';
 
-import swal from 'sweetalert';
 @Component({
   selector: 'app-provincia',
   templateUrl: './provincia.component.html',
@@ -28,7 +28,7 @@ export class ProvinciaComponent implements OnInit {
 
   provincias: Provincia[] = [];
   filterProvincia = '';
-  valorIdProvincia:string;
+  valorIdProvincia: string;
   validarFormulario() {
     if (this.myForm.valid) {
       if (this.testButton.nativeElement.value == 'ingresar') {
@@ -73,9 +73,8 @@ export class ProvinciaComponent implements OnInit {
       )
   }
 
-  setProvincia(value)
-  {
-    this.valorIdProvincia=value.IdProvincia;
+  setProvincia(value) {
+    this.valorIdProvincia = value.IdProvincia;
     this.myForm.setValue({
       _provincia: value.Descripcion
     })
@@ -101,33 +100,61 @@ export class ProvinciaComponent implements OnInit {
   }
 
   eliminarProvincia(idProvincia: string) {
-    swal({
+    // sweetAlert({
+    //   title: "Are you sure?",
+    //   text: "Your will not be able to recover this imaginary file!",
+    //   icon: "warning",
+    //   buttons: {
+    //     cancel: { text: 'Cancel' },
+    //     confirm: { text: 'Confirm' },
+    //   }
+    // }).then((willDelete) => {
+    //   if (willDelete) {
+    //     this.panelAdministracionService.eliminarProvincia(
+    //       idProvincia,
+    //       localStorage.getItem('miCuenta.deleteToken'))
+    //       .then(
+    //         ok => {
+    //           this.mostrarProvincia();
+    //         }
+    //       )
+    //       .catch(
+    //         error => {
+    //           console.log(error);
+    //         }
+    //       )
+    //     sweetAlert("Se a eliminado Correctamente!", {
+    //       icon: "success",
+    //     });
+
+
+    sweetAlert({
       title: "Advertencia?",
       text: "Esta Seguro que desea eliminar",
       icon: "warning",
-      buttons: true,
+      buttons: ['Cancelar', 'Ok'],
       dangerMode: true,
     })
-    .then((willDelete) => {
-      if (willDelete) {
-        this.panelAdministracionService.eliminarProvincia(
-          idProvincia,
-          localStorage.getItem('miCuenta.deleteToken'))
-        .then(
-          ok => {
-            this.mostrarProvincia();
-          }
-        )
-        .catch(
-          error => {
-            console.log(error);
-          }
-        )
-        swal("Se a eliminado Correctamente!", {
-          icon: "success",
-        });
-      }
-    });
+      .then((willDelete) => {
+        if (willDelete) {
+          // this.panelAdministracionService.eliminarProvincia(
+          //   idProvincia,
+          //   localStorage.getItem('miCuenta.deleteToken'))
+          // .then(
+          //   ok => {
+          //     this.mostrarProvincia();
+          //   }
+          // )
+          // .catch(
+          //   error => {
+          //     console.log(error);
+          //   }
+          // )
+          sweetAlert("Se a eliminado Correctamente!", {
+            icon: "success",
+          });
+        }
+      });
   }
 
   limpiarCampos() {

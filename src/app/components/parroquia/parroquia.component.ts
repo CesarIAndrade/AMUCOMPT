@@ -4,7 +4,7 @@ import { PanelAdministracionService } from 'src/app/services/panel-administracio
 import { PersonaService } from 'src/app/services/persona.service';
 import { Parroquia } from 'src/app/interfaces/parroquia/parroquia';
 import { Canton } from 'src/app/interfaces/canton/canton';
-import swal from 'sweetalert';
+import sweetalert from 'sweetalert';
 
 
 @Component({
@@ -132,29 +132,29 @@ export class ParroquiaComponent implements OnInit {
       )
   }
   eliminarParroquia(idParroquia: string){
-    swal({
+    sweetAlert({
       title: "Advertencia?",
       text: "Esta Seguro que desea eliminar",
       icon: "warning",
-      buttons: true,
+      buttons: ['Cancelar', 'Ok'],
       dangerMode: true,
     })
     .then((willDelete) => {
       if (willDelete) {
-        this.panelAdministracionService.eliminarParroquia(
-          idParroquia,
-          localStorage.getItem('miCuenta.deleteToken'))
-          .then(
-            ok => {
-              this.consultarParroquias();
-            }
-          )
-          .catch(
-            error => {
-              console.log(error);
-            }
-          )
-        swal("Se a eliminado Correctamente!", {
+        // this.panelAdministracionService.eliminarParroquia(
+        //   idParroquia,
+        //   localStorage.getItem('miCuenta.deleteToken'))
+        //   .then(
+        //     ok => {
+        //       this.consultarParroquias();
+        //     }
+        //   )
+        //   .catch(
+        //     error => {
+        //       console.log(error);
+        //     }
+        //   )
+        sweetAlert("Se a eliminado Correctamente!", {
           icon: "success",
         });
       }

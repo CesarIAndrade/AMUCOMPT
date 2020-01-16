@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
+import sweetalert from "sweetalert"
 
 // Services
 import { UsuarioService } from 'src/app/services/usuario.service';
@@ -220,7 +221,7 @@ export class UsuarioComponent implements OnInit {
     });
   }
 
-  abrirModalDetalleUsuario(usuario){
+  abrirModalDetalleUsuario(usuario) {
     var listaTipoUsuario = usuario.ListaTipoUsuario;
     let dialogRef = this.modalDetalleUsuario.open(ModalDetalleUsuarioComponent, {
       width: '500px',
@@ -233,24 +234,38 @@ export class UsuarioComponent implements OnInit {
 
   eliminarUsuario(usuario) {
     var listaAsignacionTipoUsuario = usuario.ListaTipoUsuario;
-    this.usuarioService.eliminarUsuario(
-      usuario.IdUsuario,
-      localStorage.getItem('miCuenta.deleteToken'))
-      .then(
-        ok => {
-          listaAsignacionTipoUsuario.map(
-            item => {
-              this.eliminarAsignacionTipoUsuario(item.IdAsignacionTu);
-            }
-          )
-          this.consultarUsuarios();
-        },
-      )
-      .catch(
-        err => {
-          console.log(err);
+    sweetalert({
+      title: "Advertencia?",
+      text: "Esta Seguro que desea eliminar",
+      icon: "warning",
+      buttons: ['Cancelar', 'Ok'],
+      dangerMode: true
+    })
+      .then((willDelete) => {
+        if (willDelete) {
+          // this.usuarioService.eliminarUsuario(
+          //   usuario.IdUsuario,
+          //   localStorage.getItem('miCuenta.deleteToken'))
+          //   .then(
+          //     ok => {
+          //       listaAsignacionTipoUsuario.map(
+          //         item => {
+          //           this.eliminarAsignacionTipoUsuario(item.IdAsignacionTu);
+          //         }
+          //       )
+          //       this.consultarUsuarios();
+          //     },
+          //   )
+          //   .catch(
+          //     err => {
+          //       console.log(err);
+          //     }
+          //   )
+          sweetalert("Se a eliminado Correctamente!", {
+            icon: "success",
+          });
         }
-      )
+      });
   }
 
   eliminarAsignacionTipoUsuario(idAsignacionTipoUsuario) {
@@ -280,8 +295,8 @@ export class UsuarioComponent implements OnInit {
   setUsuario(usuario) {
     this.idUsuario = usuario.IdUsuario;
     this.idPersona = usuario.IdPersona;
-    this.nombres = usuario.PrimerNombre +' '+ usuario.SegundoNombre;
-    this.apellidos = usuario.ApellidoPaterno +' '+ usuario.ApellidoMaterno;
+    this.nombres = usuario.PrimerNombre + ' ' + usuario.SegundoNombre;
+    this.apellidos = usuario.ApellidoPaterno + ' ' + usuario.ApellidoMaterno;
     this.cedula = usuario.NumeroDocumento;
     this.testButton.nativeElement.value = 'modificar';
     this.myForm.setValue({

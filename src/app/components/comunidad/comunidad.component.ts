@@ -4,7 +4,7 @@ import { Parroquia } from 'src/app/interfaces/parroquia/parroquia';
 import { Comunidad } from 'src/app/interfaces/comunidad/comunidad';
 import { PanelAdministracionService } from 'src/app/services/panel-administracion.service';
 import { PersonaService } from 'src/app/services/persona.service';
-import swal from 'sweetalert';
+import sweetalert from 'sweetalert';
 @Component({
   selector: 'app-comunidad',
   templateUrl: './comunidad.component.html',
@@ -140,32 +140,32 @@ export class ComunidadComponent implements OnInit {
   }
 
   eliminarComunidad(idComunidad: string) {
-    swal({
+    sweetAlert({
       title: "Advertencia?",
       text: "Esta Seguro que desea eliminar",
       icon: "warning",
-      buttons: true,
+      buttons: ['Cancelar', 'Ok'],
       dangerMode: true,
     })
     .then((willDelete) => {
       if (willDelete) {
-        this.panelAdministracionService.eliminarComunidad(
-          idComunidad,
-          localStorage.getItem('miCuenta.deleteToken'))
-          .then(
-            ok => {
-              console.log(ok['respuesta']);
-              this.consultarComunidades();
-            }
-          )
-          .catch(
-            error => {
-              console.log(error);
-            }
-          )
-        // swal("Se a eliminado Correctamente!", {
-        //   icon: "success",
-        // });
+        // this.panelAdministracionService.eliminarComunidad(
+        //   idComunidad,
+        //   localStorage.getItem('miCuenta.deleteToken'))
+        //   .then(
+        //     ok => {
+        //       console.log(ok['respuesta']);
+        //       this.consultarComunidades();
+        //     }
+        //   )
+        //   .catch(
+        //     error => {
+        //       console.log(error);
+        //     }
+        //   )
+        sweetAlert("Se a eliminado Correctamente!", {
+          icon: "success",
+        });
       }
     });
   }
