@@ -232,35 +232,36 @@ export class UsuarioComponent implements OnInit {
     });
   }
 
-  eliminarUsuario(usuario) {
+  eliminarUsuario(usuario) {    
     var listaAsignacionTipoUsuario = usuario.ListaTipoUsuario;
     sweetalert({
-      title: "Advertencia?",
-      text: "Esta Seguro que desea eliminar",
+      title: "Advertencia",
+      text: "¿Está seguro que desea eliminar?",
       icon: "warning",
       buttons: ['Cancelar', 'Ok'],
       dangerMode: true
     })
       .then((willDelete) => {
         if (willDelete) {
-          // this.usuarioService.eliminarUsuario(
-          //   usuario.IdUsuario,
-          //   localStorage.getItem('miCuenta.deleteToken'))
-          //   .then(
-          //     ok => {
-          //       listaAsignacionTipoUsuario.map(
-          //         item => {
-          //           this.eliminarAsignacionTipoUsuario(item.IdAsignacionTu);
-          //         }
-          //       )
-          //       this.consultarUsuarios();
-          //     },
-          //   )
-          //   .catch(
-          //     err => {
-          //       console.log(err);
-          //     }
-          //   )
+          this.usuarioService.eliminarUsuario(
+            usuario.IdUsuario,
+            localStorage.getItem('miCuenta.deleteToken'))
+            .then(
+              ok => {
+                console.log(ok)
+                listaAsignacionTipoUsuario.map(
+                  item => {
+                    this.eliminarAsignacionTipoUsuario(item.IdAsignacionTu);
+                  }
+                )
+                this.consultarUsuarios();
+              },
+            )
+            .catch(
+              err => {
+                console.log(err);
+              }
+            )
           sweetalert("Se a eliminado Correctamente!", {
             icon: "success",
           });

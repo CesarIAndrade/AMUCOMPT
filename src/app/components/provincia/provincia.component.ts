@@ -100,40 +100,12 @@ export class ProvinciaComponent implements OnInit {
   }
 
   eliminarProvincia(idProvincia: string) {
-    // sweetAlert({
-    //   title: "Are you sure?",
-    //   text: "Your will not be able to recover this imaginary file!",
-    //   icon: "warning",
-    //   buttons: {
-    //     cancel: { text: 'Cancel' },
-    //     confirm: { text: 'Confirm' },
-    //   }
-    // }).then((willDelete) => {
-    //   if (willDelete) {
-    //     this.panelAdministracionService.eliminarProvincia(
-    //       idProvincia,
-    //       localStorage.getItem('miCuenta.deleteToken'))
-    //       .then(
-    //         ok => {
-    //           this.mostrarProvincia();
-    //         }
-    //       )
-    //       .catch(
-    //         error => {
-    //           console.log(error);
-    //         }
-    //       )
-    //     sweetAlert("Se a eliminado Correctamente!", {
-    //       icon: "success",
-    //     });
-
-
-    sweetAlert({
-      title: "Advertencia?",
-      text: "Esta Seguro que desea eliminar",
+    sweetalert({
+      title: "Advertencia",
+      text: "¿Está seguro que desea eliminar?",
       icon: "warning",
       buttons: ['Cancelar', 'Ok'],
-      dangerMode: true,
+      dangerMode: true
     })
       .then((willDelete) => {
         if (willDelete) {

@@ -34,7 +34,7 @@ export class PersonaService {
     const body = new HttpParams()
       .set('encriptada', _token)
     return new Promise((resolve, reject) => {
-      this.http.post(this.apiUrl + 'TalentoHumano/ListaUsuariosClientesInformacion/', body.toString(),
+      this.http.post(this.apiUrl + 'TalentoHumano/ConsultarPersonasSinUsuario', body.toString(),
         {
           headers: new HttpHeaders()
             .set('Content-Type', 'application/x-www-form-urlencoded')
@@ -299,15 +299,15 @@ export class PersonaService {
 
   crearDireccion(
     idPersona: string,
-    comunidad: string,
+    parroquia: string,
     _token: string,
   ) {
     const body = new HttpParams()
       .set('IdPersona', idPersona)
-      .set('IdComunidad', comunidad)
+      .set('IdParroquia', parroquia)
       .set('encriptada', _token)
     return new Promise((resolve, reject) => {
-      this.http.post(this.apiUrl + 'TalentoHumano/IngresoAsignacionPersonaComunidad', body.toString(),
+      this.http.post(this.apiUrl + 'TalentoHumano/IngresoAsignacionPersonaParroquia', body.toString(),
         {
           headers: new HttpHeaders()
             .set('Content-Type', 'application/x-www-form-urlencoded')
@@ -456,16 +456,16 @@ export class PersonaService {
   actualizarDireccion(
     idPersona: string,
     idAsignacionPC: string,
-    comunidad: string,
+    parroquia: string,
     _token: string,
   ) {
     const body = new HttpParams()
       .set('IdPersona', idPersona)
       .set('IdAsignacionPC', idAsignacionPC)
-      .set('IdComunidad', comunidad)
+      .set('IdParroquia', parroquia)
       .set('encriptada', _token)
     return new Promise((resolve, reject) => {
-      this.http.post(this.apiUrl + 'TalentoHumano/ActualizarAsignacionPersonaComunidad', body.toString(),
+      this.http.post(this.apiUrl + 'TalentoHumano/ActualizarAsignacionPersonaParroquia', body.toString(),
         {
           headers: new HttpHeaders()
             .set('Content-Type', 'application/x-www-form-urlencoded')

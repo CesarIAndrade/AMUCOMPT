@@ -141,12 +141,12 @@ export class CantonComponent implements OnInit {
 
 
   eliminarCanton(idCanton: string) {
-    sweetAlert({
-      title: "Advertencia?",
-      text: "Esta Seguro que desea eliminar",
+    sweetalert({
+      title: "Advertencia",
+      text: "¿Está seguro que desea eliminar?",
       icon: "warning",
       buttons: ['Cancelar', 'Ok'],
-      dangerMode: true,
+      dangerMode: true
     })
       .then((willDelete) => {
         if (willDelete) {
