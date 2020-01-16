@@ -69,22 +69,17 @@
                         <thead class="card-header">
                             <tr>
                                 <th scope="col">Usuario</th>
-                                <th scope="col" colspan="4" style="text-align: center;">Acciones</th>
+                                <th scope="col">Nombres y Apellidos</th>
+                                <th scope="col" colspan="3" style="text-align: center;">Acciones</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr *ngFor="let item of usuarios | filter: filterUsuario : 'UsuarioLogin'">
                                 <td> {{ item.UsuarioLogin }} </td>
+                                <td> {{ item.PrimerNombre }} {{ item.SegundoNombre }} {{ item.ApellidoPaterno }} {{ item.ApellidoMaterno }} </td>
                                 <ng-container *ngIf="item.EstadoUsuario; then habilitado; else deshabilitado">
                                 </ng-container>
                                 <ng-template #habilitado>
-                                    <td>
-                                        <button tooltip="Ver Roles" placement="top" 
-                                        (click)="abrirModalDetalleUsuario(item)"
-                                            class="btn btn-sm btn-outline-info">
-                                            <i class="fa fa-address-book" aria-hidden="true"></i>
-                                        </button>
-                                    </td>
                                     <td>
                                         <button tooltip="Asignar Roles" placement="top" 
                                         (click)="abrirModalAsignacionUsuarioTiposUsuario(item)"
@@ -109,7 +104,7 @@
                                     </td>
                                 </ng-template>
                                 <ng-template #deshabilitado>
-                                    <td colspan="4">
+                                    <td colspan="3">
                                         <button tooltip="Habilitar" placement="top" 
                                         (click)="habilitarUsuario(item)" style="justify-content: center;"
                                             class="btn btn-sm btn-block btn-outline-success">

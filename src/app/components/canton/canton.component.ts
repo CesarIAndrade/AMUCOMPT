@@ -58,6 +58,7 @@ export class CantonComponent implements OnInit {
       .then(
         ok => {
           this.cantones = ok['respuesta'];
+          console.log(this.cantones);
           this.consultarProvincias();
         }
       )
@@ -150,22 +151,28 @@ export class CantonComponent implements OnInit {
     })
       .then((willDelete) => {
         if (willDelete) {
-          // this.panelAdministracionService.eliminarCanton(
-          //   idCanton,
-          //   localStorage.getItem('miCuenta.deleteToken'))
-          //   .then(
-          //     ok => {
-          //       this.consultarCantones();
-          //     }
-          //   )
-          //   .catch(
-          //     error => {
-          //       console.log(error);
-          //     }
-          //   )
-          sweetAlert("Se a eliminado Correctamente!", {
-            icon: "success",
-          });
+          this.panelAdministracionService.eliminarCanton(
+            idCanton,
+            localStorage.getItem('miCuenta.deleteToken'))
+            .then(
+              ok => {
+                if (ok['respuesta']) {
+                  sweetAlert("Se a eliminado Correctamente!", {
+                    icon: "success",
+                  });
+                  this.consultarCantones();
+                } else {
+                  sweetAlert("No se ha podido elminiar!", {
+                    icon: "error",
+                  });
+                }
+              }
+            )
+            .catch(
+              error => {
+                console.log(error);
+              }
+            )
         }
       });
   }

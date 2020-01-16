@@ -49,7 +49,7 @@ export class ProvinciaComponent implements OnInit {
       .then(
         ok => {
           this.limpiarCampos();
-          this.mostrarProvincia();
+          this.consultarProvincia();
         }
       )
       .catch(
@@ -59,7 +59,7 @@ export class ProvinciaComponent implements OnInit {
       )
   }
 
-  mostrarProvincia() {
+  consultarProvincia() {
     this.panelAdministracionService.consultarProvincia(localStorage.getItem('miCuenta.getToken'))
       .then(
         ok => {
@@ -89,7 +89,7 @@ export class ProvinciaComponent implements OnInit {
       .then(
         ok => {
           this.limpiarCampos();
-          this.mostrarProvincia();
+          this.consultarProvincia();
         }
       )
       .catch(
@@ -109,22 +109,28 @@ export class ProvinciaComponent implements OnInit {
     })
       .then((willDelete) => {
         if (willDelete) {
-          // this.panelAdministracionService.eliminarProvincia(
-          //   idProvincia,
-          //   localStorage.getItem('miCuenta.deleteToken'))
-          // .then(
-          //   ok => {
-          //     this.mostrarProvincia();
-          //   }
-          // )
-          // .catch(
-          //   error => {
-          //     console.log(error);
-          //   }
-          // )
-          sweetAlert("Se a eliminado Correctamente!", {
-            icon: "success",
-          });
+          this.panelAdministracionService.eliminarProvincia(
+            idProvincia,
+            localStorage.getItem('miCuenta.deleteToken'))
+          .then(
+            ok => {
+              if(ok['respuesta']){
+                sweetAlert("Se a eliminado Correctamente!", {
+                  icon: "success",
+                });
+                this.consultarProvincia();
+              } else {
+                sweetAlert("No se ha podido elminiar!", {
+                  icon: "error",
+                });
+              }
+            }
+          )
+          .catch(
+            error => {
+              console.log(error);
+            }
+          )
         }
       });
   }
@@ -139,6 +145,6 @@ export class ProvinciaComponent implements OnInit {
 
   ngOnInit() {
     this.provincias = [];
-    this.mostrarProvincia();
+    this.consultarProvincia();
   }
 }

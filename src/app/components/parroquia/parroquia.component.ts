@@ -141,22 +141,28 @@ export class ParroquiaComponent implements OnInit {
     })
     .then((willDelete) => {
       if (willDelete) {
-        // this.panelAdministracionService.eliminarParroquia(
-        //   idParroquia,
-        //   localStorage.getItem('miCuenta.deleteToken'))
-        //   .then(
-        //     ok => {
-        //       this.consultarParroquias();
-        //     }
-        //   )
-        //   .catch(
-        //     error => {
-        //       console.log(error);
-        //     }
-        //   )
-        sweetAlert("Se a eliminado Correctamente!", {
-          icon: "success",
-        });
+        this.panelAdministracionService.eliminarParroquia(
+          idParroquia,
+          localStorage.getItem('miCuenta.deleteToken'))
+          .then(
+            ok => {
+              if(ok['respuesta']){
+                sweetAlert("Se a eliminado Correctamente!", {
+                  icon: "success",
+                });
+                this.consultarParroquias();
+              } else {
+                sweetAlert("No se ha podido elminiar!", {
+                  icon: "error",
+                });
+              }
+            }
+          )
+          .catch(
+            error => {
+              console.log(error);
+            }
+          )
       }
     });
   }

@@ -44,7 +44,7 @@ export class PersonaComponent implements OnInit {
     });
   }
 
-  tituloAlerta:string='';
+  tituloAlerta: string = '';
   tipoDocumento = "0";
   tipoTelefono1 = "0";
   tipoTelefono2 = "0";
@@ -61,7 +61,7 @@ export class PersonaComponent implements OnInit {
   selectProvincia = true;
   selectCanton = true;
   selectParroquia = true;
-  
+
   correo: string;
   nuevaPersona = 'Nueva Persona';
   contacto = 'Contacto ';
@@ -78,8 +78,8 @@ export class PersonaComponent implements OnInit {
   telefonos: Telefono[] = [];
   tipoDocumentos: TipoDocumento[] = [];
   tipoTelefonos: TipoTelefono[] = [];
-  filterPersona='';
-  
+  filterPersona = '';
+
   consultarProvincias() {
     this.personaService.consultarProvincias(localStorage.getItem('miCuenta.getToken'))
       .then(
@@ -182,7 +182,7 @@ export class PersonaComponent implements OnInit {
           if (value == 'ingresar') {
             this.canton = '0',
               this.parroquia = '0',
-            this.parroquias = null;
+              this.parroquias = null;
           }
         },
       )
@@ -224,8 +224,8 @@ export class PersonaComponent implements OnInit {
     provincia: string,
     canton: string,
     parroquia: string,
-    // comunidad: string
   ) {
+    console.log(parroquia);
     if (tipoDocumento == "0") {
       this.selectTipoDocumento = false;
     }
@@ -244,12 +244,9 @@ export class PersonaComponent implements OnInit {
     if (parroquia == "0") {
       this.selectParroquia = false;
     }
-    // if (comunidad == "0") {
-    //   this.selectComunidad = false;
-    // }
   }
 
-  validarNombres(validarDosNombres){
+  validarNombres(validarDosNombres) {
     var arrayNombres = this.myForm.get('_nombres').value.split(' ');
     if (arrayNombres.length == 1) {
       this.inputNombres = false;
@@ -265,7 +262,7 @@ export class PersonaComponent implements OnInit {
     }
   }
 
-  validarApellidos(validarDosApellidos){
+  validarApellidos(validarDosApellidos) {
     var arrayApellidos = this.myForm.get('_apellidos').value.split(' ');
     if (arrayApellidos.length == 1) {
       this.inputApellidos = false;
@@ -282,12 +279,21 @@ export class PersonaComponent implements OnInit {
   }
 
   validarFormulario() {
-    console.log('in validar Form');
+    this.validarSelects(
+      this.tipoDocumento, this.tipoTelefono1,
+      this.tipoTelefono2, this.provincia,
+      this.canton, this.parroquia,
+    )
     if (this.myForm.valid) {
-      console.log('in Form valid');
       if (this.testButton.nativeElement.value == 'insertar') {
-        console.log('ingresando');
-        this.crearPersona();
+        if (
+          this.selectTipoDocumento && this.selectTipoTelefono1 &&
+          this.selectTipoTelefono2 && this.selectProvincia &&
+          this.selectCanton && this.selectParroquia
+        ) {
+          console.log('selects validated');
+          this.crearPersona();
+        }
       } else if (this.testButton.nativeElement.value == 'modificar') {
         this.actualizarPersona('modificar', this.personaModal);
         this.testButton.nativeElement.value = 'insertar';
@@ -315,6 +321,12 @@ export class PersonaComponent implements OnInit {
     }
   }
 
+  onChangeSelectParroquia(value) {
+    if (value != "0") {
+      this.selectParroquia = true;
+    }
+  }
+
   onChangeInputNombres() {
     this.inputNombres = true;
   }
@@ -339,14 +351,6 @@ export class PersonaComponent implements OnInit {
       segundoCampo: '',
       valido: Boolean
     }
-    this.validarSelects(
-      this.tipoDocumento,
-      this.tipoTelefono1,
-      this.tipoTelefono2,
-      this.provincia,
-      this.canton,
-      this.parroquia,
-    )
     var dosNombres = this.validarNombres(validarNombress);
     var dosApellidos = this.validarApellidos(validarApellidos);
     if (dosNombres.valido == true && dosApellidos.valido == true) {
@@ -360,7 +364,7 @@ export class PersonaComponent implements OnInit {
         localStorage.getItem('miCuenta.postToken'))
         .then(
           ok => {
-            if(ok['respuesta'] == 'false'){
+            if (ok['respuesta'] == 'false') {
               console.log('cédula ya existe');
               this.inputCedula = false;
             } else {
@@ -469,27 +473,27 @@ export class PersonaComponent implements OnInit {
       buttons: ['Cancelar', 'Ok'],
       dangerMode: true
     })
-    .then((willDelete) => {
-      if (willDelete) {
-        this.personaService.eliminarPersona(
-          idPersona,
-          localStorage.getItem('miCuenta.deleteToken'))
-          .then(
-            ok => {
-              console.log(ok['respuesta']);
-              this.consultarPersonas();
-            },
-          )
-          .catch(
-            err => {
-              console.log(err);
-            }
-          )
-        sweetalert("Se a eliminado Correctamente!", {
-          icon: "success",
-        });
-      }
-    });
+      .then((willDelete) => {
+        if (willDelete) {
+          this.personaService.eliminarPersona(
+            idPersona,
+            localStorage.getItem('miCuenta.deleteToken'))
+            .then(
+              ok => {
+                console.log(ok['respuesta']);
+                this.consultarPersonas();
+              },
+            )
+            .catch(
+              err => {
+                console.log(err);
+              }
+            )
+          sweetalert("Se a eliminado Correctamente!", {
+            icon: "success",
+          });
+        }
+      });
   }
 
   consultarPersonaPorId(
@@ -519,9 +523,9 @@ export class PersonaComponent implements OnInit {
             this.personaModal.idTipoTelefonoModal2 = ok['respuesta']['ListaTelefono'][1]['TipoTelefono']['IdTipoTelefono'];
             this.personaModal.idTelefonoModal2 = ok['respuesta']['ListaTelefono'][1]['IdTelefono'];
             this.personaModal.telefonoModal2 = ok['respuesta']['ListaTelefono'][1]['Numero'];
-            if(ok['respuesta']['ListaCorreo'] == null){
+            if (ok['respuesta']['ListaCorreo'] == null) {
               this.personaModal.correoModal = '';
-              this.personaModal.idCorreoModal = ''    
+              this.personaModal.idCorreoModal = ''
             } else {
               this.personaModal.correoModal = ok['respuesta']['ListaCorreo'][0]['CorreoValor'];
               this.personaModal.idCorreoModal = ok['respuesta']['ListaCorreo'][0]['IdCorreo'];
@@ -581,7 +585,7 @@ export class PersonaComponent implements OnInit {
     value: string,
     personaModal?: PersonaModal
   ) {
-    if(value == ''){
+    if (value == '') {
       var nombres = personaModal.primerNombreModal + ' ' + personaModal.segundoNombreModal;
       var apellidos = personaModal.apellidoPaternoModal + ' ' + personaModal.apellidoMaternoModal;
       this.myForm.patchValue({
@@ -591,7 +595,7 @@ export class PersonaComponent implements OnInit {
         _telefono1: personaModal.telefonoModal1,
         _telefono2: personaModal.telefonoModal2,
       });
-      if(this.personaModal.correoModal == null){
+      if (this.personaModal.correoModal == null) {
         this.correo = 'Sin Correo';
       } else {
         this.correo = personaModal.correoModal;
@@ -661,9 +665,9 @@ export class PersonaComponent implements OnInit {
     }
   }
 
-  limpiarSelects(){
+  limpiarSelects() {
     this.tipoDocumento = '0',
-    this.tipoTelefono1 = '0';
+      this.tipoTelefono1 = '0';
     this.tipoTelefono2 = '0';
     this.provincia = '0';
     this.canton = '0';
