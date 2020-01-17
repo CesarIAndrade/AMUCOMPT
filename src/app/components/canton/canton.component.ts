@@ -61,6 +61,7 @@ export class CantonComponent implements OnInit {
         ok => {
           this.cantones = [];
           this.cantones = ok['respuesta'];
+          console.log(this.cantones);
           this.consultarProvincias();
         }
       )
@@ -197,4 +198,8 @@ export class CantonComponent implements OnInit {
   ngOnInit() {
     this.consultarCantones();
   }
+
+  tablaCantones = ['canton', 'provincia', 'acciones'];
+  tablaProvincias = ['provincia', 'acciones'];
+
 }

@@ -1,7 +1,7 @@
 <br>
 <div class="container">
     <div class="row">
-        <div class="col-lg-4 col-md-5 mr-auto">
+        <div class="col-lg-5 col-md-5 mr-auto">
             <div class="card">
                 <div class="card-header" style="text-align: center;">
                     Nueva Provincia
@@ -27,64 +27,57 @@
                 </div>
             </div>
         </div>
-        <div class="col-lg-8 col-md-7">
+        <div class="col-lg-7 col-md-7">
             <div class="card">
                 <div class="card-header" style="text-align: center;">
                     Lista Provincias
                 </div>
                 <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="form-group input-container">
-                                <i class="fa fa-search icon"></i>
-                                <input [(ngModel)]="filterProvincia" type="text" class="form-control input-field"
-                                    placeholder="Ejem. Manabi">
-                                <i class="fa fa-refresh icon" (click)="mostrarProvincia()" aria-hidden="true"></i>
-                            </div>
-                            <div class="table-responsive-sm">
-                                <table class="table table-sm">
-                                    <thead class="card-header">
-                                        <tr>
-                                            <th scope="col">Provincia</th>
-                                            <th scope="col" colspan="2" style="text-align: center;">Acciones</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr *ngFor="let item of provincias | filter: filterProvincia : 'Descripcion'">
-                                            <td> {{ item.Descripcion }} </td>
-                                            <ng-container
-                                                *ngIf="item.PermitirEliminacion; then sePuedeEliminar; else noSePuedeEliminar">
-                                            </ng-container>
-                                            <ng-template #noSePuedeEliminar>
-                                                <td colspan="2">
-                                                    <button tooltip="Modificar" placement="top"
-                                                        class="btn btn-block btn-sm btn-outline-info separacion-botones"
-                                                        value="{{item.IdProvincia}}" (click)=setProvincia(item)>
-                                                        <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                                                    </button>
-                                                </td>
-                                            </ng-template>
-                                            <ng-template #sePuedeEliminar>
-                                                <td>
-                                                    <button tooltip="Modificar" placement="top"
-                                                        class="btn btn-block btn-sm btn-outline-info separacion-botones"
-                                                        value="{{item.IdProvincia}}" (click)=setProvincia(item)>
-                                                        <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                                                    </button>
-                                                </td>
-                                                <td>
-                                                    <button class="btn btn-block btn-sm btn-outline-danger separacion-botones"
-                                                        value="{{item.IdProvincia}}"
-                                                        (click)=eliminarProvincia(item.IdProvincia)>
-                                                        <i class="fa fa-trash" aria-hidden="true"></i>
-                                                    </button>
-                                                </td>
-                                            </ng-template>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
+                    <div class="form-group input-container">
+                        <i class="fa fa-search icon"></i>
+                        <input [(ngModel)]="filterProvincia" type="text" class="form-control input-field"
+                            placeholder="Ejem. Manabi">
+                        <i class="fa fa-refresh icon" (click)="mostrarProvincia()" aria-hidden="true"></i>
                     </div>
+                    <table class="table-scroll table table-hover">
+                        <thead class="card-header">
+                            <tr>
+                                <th scope="col">Provincia</th>
+                                <th scope="col" colspan="2" style="text-align: center;">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of provincias | filter: filterProvincia : 'Descripcion'">
+                                <td> {{ item.Descripcion }} </td>
+                                <ng-container
+                                    *ngIf="item.PermitirEliminacion; then sePuedeEliminar; else noSePuedeEliminar">
+                                </ng-container>
+                                <ng-template #noSePuedeEliminar>
+                                    <td colspan="2">
+                                        <button tooltip="Modificar" placement="top"
+                                            class="btn btn-block btn-sm btn-outline-info separacion-botones"
+                                            value="{{item.IdProvincia}}" (click)=setProvincia(item)>
+                                            <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                        </button>
+                                    </td>
+                                </ng-template>
+                                <ng-template #sePuedeEliminar>
+                                    <td>
+                                        <button tooltip="Modificar" placement="top"
+                                            class="btn btn-block btn-sm btn-outline-info separacion-botones"
+                                            value="{{item.IdProvincia}}" (click)=setProvincia(item)>
+                                            <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                        </button>
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-block btn-sm btn-outline-danger separacion-botones"
+                                            value="{{item.IdProvincia}}" (click)=eliminarProvincia(item.IdProvincia)>
+                                            <i class="fa fa-trash" aria-hidden="true"></i>
+                                        </button>
+                                    </td>
+                                </ng-template>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>

@@ -12,7 +12,7 @@ import { Persona } from 'src/app/interfaces/persona/persona';
 
 // Functional Components
 import { MatDialog } from "@angular/material/dialog";
-import swal from 'sweetalert';
+
 // Components
 import { ModalAsignacionUsuarioPersonaComponent } from '../modal-asignacion-usuario-persona/modal-asignacion-usuario-persona.component';
 import { ModalAsignacionUsuarioTiposUsuarioComponent } from '../modal-asignacion-usuario-tipos-usuario/modal-asignacion-usuario-tipos-usuario.component';
@@ -35,6 +35,7 @@ export class UsuarioComponent implements OnInit {
 
   myForm: FormGroup;
   @ViewChild('testButton', { static: false }) testButton: ElementRef;
+  @ViewChild('testInput', { static: false }) testInput: ElementRef;
 
   constructor(
     private modalAsignacionUsuarioPersona: MatDialog,
@@ -62,6 +63,7 @@ export class UsuarioComponent implements OnInit {
   inputUsuario = true;
   inputType = 'password';
   resultadoModal: DialogData;
+  nuevoUsuario = 'Nuevo Usuario';
 
   personas: Persona[] = [];
   usuarios: Usuario[] = [];
@@ -110,7 +112,6 @@ export class UsuarioComponent implements OnInit {
         this.crearUsuario();
       } else if (this.testButton.nativeElement.value == "modificar") {
         this.actualizarUsuario();
-        this.myForm.reset();
         this.testButton.nativeElement.value = "insertar";
       }
     }
@@ -146,6 +147,8 @@ export class UsuarioComponent implements OnInit {
   }
 
   actualizarUsuario() {
+    console.log(this.idUsuario);
+    console.log(this.myForm);
     this.usuarioService.actualizarUsuario(
       this.idUsuario,
       this.idPersona,
@@ -158,7 +161,8 @@ export class UsuarioComponent implements OnInit {
           if(ok['respuesta']){
             this.limpiarCampos();
             this.consultarUsuarios();
-            this.testButton.nativeElement.value = 'insertar';
+            this.nuevoUsuario = 'Nuevo Usuario';
+            this.testInput.nativeElement.disabled = false;
           } else {
             this.inputUsuario = false;
           }
@@ -201,20 +205,22 @@ export class UsuarioComponent implements OnInit {
       }
     });
     dialogRef.afterClosed().subscribe(result => {
-      if (result != null) {
-        this.inputPersona = true;
-        this.resultadoModal = result;
-        this.cedula = this.resultadoModal.cedula;
-        this.idPersona = this.resultadoModal.idPersona;
-        this.nombres = this.resultadoModal.nombres;
-        this.apellidos = this.resultadoModal.apellidos;
-        if (result.idUsuario == null) {
-          this.idUsuarioModalAUP = '';
+      if(this.cedula == ''){
+        if (result != null) {
+          this.inputPersona = true;
+          this.resultadoModal = result;
+          this.cedula = this.resultadoModal.cedula;
+          this.idPersona = this.resultadoModal.idPersona;
+          this.nombres = this.resultadoModal.nombres;
+          this.apellidos = this.resultadoModal.apellidos;
+          if (result.idUsuario == null) {
+            this.idUsuarioModalAUP = '';
+          } else {
+            this.idUsuarioModalAUP = result.idUsuario;
+          }
         } else {
-          this.idUsuarioModalAUP = result.idUsuario;
+          this.inputPersona = false;
         }
-      } else {
-        this.inputPersona = false;
       }
     });
   }
@@ -308,6 +314,8 @@ export class UsuarioComponent implements OnInit {
   }
 
   setUsuario(usuario) {
+    this.testInput.nativeElement.disabled = true;
+    this.nuevoUsuario = 'Modificar Usuario';
     if(!this.inputUsuario){
       this.inputUsuario == false;
     }

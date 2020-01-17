@@ -42,6 +42,7 @@ import { ModalDetalleUsuarioComponent } from './components/modal-detalle-usuario
 
 import { TooltipModule } from 'ng2-tooltip-directive';
 import Swal from 'sweetalert2';
+import { MatTableModule } from '@angular/material';
 
 @NgModule({
   declarations: [
@@ -74,6 +75,7 @@ import Swal from 'sweetalert2';
     MatSidenavModule,
     MatIconModule,
     MatListModule,
+    MatTableModule,
     MatFormFieldModule,
     HttpClientModule,
     FormsModule,
