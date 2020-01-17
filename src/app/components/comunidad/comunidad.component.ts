@@ -89,7 +89,6 @@ export class ComunidadComponent implements OnInit {
     )
       .then(
         ok => {
-          console.log(ok['respuesta']);
           this.limpiarCampos();
           this.consultarComunidades();
         }
@@ -126,7 +125,6 @@ export class ComunidadComponent implements OnInit {
     )
       .then(
         ok => {
-          console.log(ok['respuesta']);
           this.limpiarCampos();
           this.consultarComunidades();
         }
@@ -148,20 +146,19 @@ export class ComunidadComponent implements OnInit {
     })
     .then((willDelete) => {
       if (willDelete) {
-        // this.panelAdministracionService.eliminarComunidad(
-        //   idComunidad,
-        //   localStorage.getItem('miCuenta.deleteToken'))
-        //   .then(
-        //     ok => {
-        //       console.log(ok['respuesta']);
-        //       this.consultarComunidades();
-        //     }
-        //   )
-        //   .catch(
-        //     error => {
-        //       console.log(error);
-        //     }
-        //   )
+        this.panelAdministracionService.eliminarComunidad(
+          idComunidad,
+          localStorage.getItem('miCuenta.deleteToken'))
+          .then(
+            ok => {
+              this.consultarComunidades();
+            }
+          )
+          .catch(
+            error => {
+              console.log(error);
+            }
+          )
         sweetAlert("Se a eliminado Correctamente!", {
           icon: "success",
         });

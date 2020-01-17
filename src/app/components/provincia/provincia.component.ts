@@ -29,6 +29,7 @@ export class ProvinciaComponent implements OnInit {
   provincias: Provincia[] = [];
   filterProvincia = '';
   valorIdProvincia: string;
+  
   validarFormulario() {
     if (this.myForm.valid) {
       if (this.testButton.nativeElement.value == 'ingresar') {
@@ -63,6 +64,7 @@ export class ProvinciaComponent implements OnInit {
     this.panelAdministracionService.consultarProvincia(localStorage.getItem('miCuenta.getToken'))
       .then(
         ok => {
+          this.provincias = [];
           this.provincias = ok['respuesta'];
         }
       )

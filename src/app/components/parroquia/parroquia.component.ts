@@ -35,6 +35,7 @@ export class ParroquiaComponent implements OnInit {
   filterParroquia = '';
   filterCanton = '';
   cantones: Canton[] = [];
+
   consultarCantones() {
     this.personaService.consultarCantones(localStorage.getItem('miCuenta.getToken'))
       .then(
@@ -48,10 +49,12 @@ export class ParroquiaComponent implements OnInit {
         }
       )
   }
+
   consultarParroquias() {
     this.personaService.consultarParroquias(localStorage.getItem('miCuenta.getToken'))
       .then(
         ok => {
+          this.parroquias = [];
           this.parroquias = ok['respuesta'];
           this.consultarCantones();
         }
@@ -62,6 +65,7 @@ export class ParroquiaComponent implements OnInit {
         }
       )
   }
+
   validarFormulario() {
     if (this.myForm.valid) {
       if (this.testButton.nativeElement.value == 'ingresar') {
@@ -79,6 +83,7 @@ export class ParroquiaComponent implements OnInit {
       console.log("Algo Salio Mal");
     }
   }
+
   crearParroquia(){
     this.panelAdministracionService.crearParroquia(
       this.idCanton,
@@ -97,6 +102,7 @@ export class ParroquiaComponent implements OnInit {
         }
       )
   }
+
   mostrarParroquia(parroquia) {
     this.idCanton = parroquia.Canton.IdCanton;
     this.cantones.map(
@@ -112,6 +118,7 @@ export class ParroquiaComponent implements OnInit {
     })
     this.testButton.nativeElement.value = 'modificar';
   }
+
   actualizarParroquia(){
     this.panelAdministracionService.actualizarParroquia(
       this.idCanton,
@@ -131,6 +138,7 @@ export class ParroquiaComponent implements OnInit {
         }
       )
   }
+  
   eliminarParroquia(idParroquia: string){
     sweetalert({
       title: "Advertencia",
@@ -166,18 +174,22 @@ export class ParroquiaComponent implements OnInit {
       }
     });
   }
+
   setCanton(canton) {
     this.idCanton = canton.IdCanton;
     this.canton = canton.Descripcion;
     this.inputIdCanton = true;
   }
+
   limpiarCampos() {
     this.myForm.reset();
     this.canton = 'Parroquia';
   }
+
   get _parroquia(){
     return this.myForm.get('_parroquia')
   }
+
   ngOnInit() {
     this.consultarParroquias();
   }

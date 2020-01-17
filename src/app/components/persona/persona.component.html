@@ -202,24 +202,6 @@
                             <td> {{ item.NumeroDocumento }} </td>
                             <ng-container *ngIf="item.IdUsuario == ''; then sePuedeEliminar; else noSePuedeEliminar">
                             </ng-container>
-                            <ng-template #noSePuedeEliminar>
-                                <td>
-                                    <button tooltip="Ver Información" placement="top" 
-                                    class="btn btn-sm btn-outline-primary separacion-botones"
-                                        value="{{item.IdPersona}}"
-                                        (click)="consultarPersonaPorId('detalles', item.IdPersona)">
-                                        <i class="fa fa-eye" aria-hidden="true"></i>
-                                    </button>
-                                </td>
-                                <td>
-                                    <button tooltip="Modificar" placement="top"  
-                                    class="btn btn-sm btn-outline-info separacion-botones"
-                                        value="{{item.IdPersona}}"
-                                        (click)="consultarPersonaPorId('modificar', item.IdPersona)">
-                                        <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                                    </button>
-                                </td>
-                            </ng-template>
                             <ng-template #sePuedeEliminar>
                                 <td>
                                     <button tooltip="Ver Información" placement="top" 
@@ -242,6 +224,24 @@
                                     class="btn btn-sm btn-outline-danger separacion-botones"
                                         value="{{item.IdPersona}}" (click)="eliminarPersona(item.IdPersona)">
                                         <i class="fa fa-trash" aria-hidden="true"></i>
+                                    </button>
+                                </td>
+                            </ng-template>
+                            <ng-template #noSePuedeEliminar>
+                                <td>
+                                    <button tooltip="Ver Información" placement="top" 
+                                    class="btn btn-sm btn-outline-primary separacion-botones"
+                                        value="{{item.IdPersona}}"
+                                        (click)="consultarPersonaPorId('detalles', item.IdPersona)">
+                                        <i class="fa fa-eye" aria-hidden="true"></i>
+                                    </button>
+                                </td>
+                                <td>
+                                    <button tooltip="Modificar" placement="top"  
+                                    class="btn btn-sm btn-outline-info separacion-botones"
+                                        value="{{item.IdPersona}}"
+                                        (click)="consultarPersonaPorId('modificar', item.IdPersona)">
+                                        <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                                     </button>
                                 </td>
                             </ng-template>

@@ -9,6 +9,7 @@ import { PersonaService } from 'src/app/services/persona.service';
 import { Provincia } from 'src/app/interfaces/provincia/provincia';
 import { Canton } from 'src/app/interfaces/canton/canton';
 import sweetalert from 'sweetalert';
+import { ProvinciaComponent } from '../provincia/provincia.component';
 
 @Component({
   selector: 'app-canton',
@@ -19,6 +20,7 @@ export class CantonComponent implements OnInit {
 
   myForm: FormGroup;
   @ViewChild('testButton', { static: false }) testButton: ElementRef;
+  @ViewChild('provinciaComponent', { static: false }) provinciaComponent: ProvinciaComponent;
 
   constructor(private panelAdministracionService: PanelAdministracionService,
     private personaService: PersonaService
@@ -57,8 +59,8 @@ export class CantonComponent implements OnInit {
     this.personaService.consultarCantones(localStorage.getItem('miCuenta.getToken'))
       .then(
         ok => {
+          this.cantones = [];
           this.cantones = ok['respuesta'];
-          console.log(this.cantones);
           this.consultarProvincias();
         }
       )
@@ -140,7 +142,7 @@ export class CantonComponent implements OnInit {
       )
   }
 
-
+ 
   eliminarCanton(idCanton: string) {
     sweetalert({
       title: "Advertencia",

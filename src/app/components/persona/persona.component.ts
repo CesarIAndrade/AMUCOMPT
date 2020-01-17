@@ -225,7 +225,6 @@ export class PersonaComponent implements OnInit {
     canton: string,
     parroquia: string,
   ) {
-    console.log(parroquia);
     if (tipoDocumento == "0") {
       this.selectTipoDocumento = false;
     }
@@ -291,12 +290,17 @@ export class PersonaComponent implements OnInit {
           this.selectTipoTelefono2 && this.selectProvincia &&
           this.selectCanton && this.selectParroquia
         ) {
-          console.log('selects validated');
           this.crearPersona();
         }
       } else if (this.testButton.nativeElement.value == 'modificar') {
-        this.actualizarPersona('modificar', this.personaModal);
-        this.testButton.nativeElement.value = 'insertar';
+        if (
+          this.selectTipoDocumento && this.selectTipoTelefono1 &&
+          this.selectTipoTelefono2 && this.selectProvincia &&
+          this.selectCanton && this.selectParroquia
+        ) {
+          this.actualizarPersona('modificar', this.personaModal);
+          this.testButton.nativeElement.value = 'insertar';
+        }
       }
     } else {
       console.log("Algo Salio Mal");
@@ -340,7 +344,6 @@ export class PersonaComponent implements OnInit {
   }
 
   crearPersona() {
-    console.log('in crear persona');
     var validarNombress = {
       primerCampo: '',
       segundoCampo: '',
@@ -365,7 +368,6 @@ export class PersonaComponent implements OnInit {
         .then(
           ok => {
             if (ok['respuesta'] == 'false') {
-              console.log('cédula ya existe');
               this.inputCedula = false;
             } else {
               this.idPersona = ok['respuesta'];
@@ -500,7 +502,6 @@ export class PersonaComponent implements OnInit {
     value: string,
     idPersona: string
   ) {
-    console.log(idPersona);
     this.testButton.nativeElement.value = value;
     this.personaService.consultarPersonaPorId(
       idPersona,
@@ -620,14 +621,6 @@ export class PersonaComponent implements OnInit {
         segundoCampo: '',
         valido: Boolean
       }
-      this.validarSelects(
-        this.tipoDocumento,
-        this.tipoTelefono1,
-        this.tipoTelefono2,
-        this.provincia,
-        this.canton,
-        this.parroquia,
-      )
       var dosNombres = this.validarNombres(validarNombress);
       var dosApellidos = this.validarApellidos(validarApellidos);
       if (dosNombres.valido == true && dosApellidos.valido == true) {
@@ -642,18 +635,21 @@ export class PersonaComponent implements OnInit {
           localStorage.getItem('miCuenta.putToken'))
           .then(
             ok => {
-              console.log(ok['respuesta']);
-              var idPersona = personaModal.idPersona;
-              var idTelefono1 = personaModal.idTelefonoModal1;
-              var idTelefono2 = personaModal.idTelefonoModal2;
-              this.actualizarTelefono(idPersona, idTelefono1, idTelefono2);
-              var idCorreo = personaModal.idCorreoModal;
-              this.actualizarCorreo(idPersona, idCorreo);
-              var idAsignacionPC = personaModal.idAsignacionPC;
-              this.actualizarDireccion(idPersona, idAsignacionPC);
-              this.nuevaPersona = 'Nueva Persona';
-              this.contacto = 'Contacto ';
-              this.direccion = 'Direccion';
+              if (ok['respuesta'] == 'false') {
+                this.inputCedula = false;
+              } else {
+                var idPersona = personaModal.idPersona;
+                var idTelefono1 = personaModal.idTelefonoModal1;
+                var idTelefono2 = personaModal.idTelefonoModal2;
+                this.actualizarTelefono(idPersona, idTelefono1, idTelefono2);
+                var idCorreo = personaModal.idCorreoModal;
+                this.actualizarCorreo(idPersona, idCorreo);
+                var idAsignacionPC = personaModal.idAsignacionPC;
+                this.actualizarDireccion(idPersona, idAsignacionPC);
+                this.nuevaPersona = 'Nueva Persona';
+                this.contacto = 'Contacto ';
+                this.direccion = 'Direccion';
+              }
             },
           )
           .catch(

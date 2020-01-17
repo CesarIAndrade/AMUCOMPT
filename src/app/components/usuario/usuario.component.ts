@@ -59,6 +59,7 @@ export class UsuarioComponent implements OnInit {
   idUsuario: string;
   idUsuarioModalAUP: string;
   inputPersona = true;
+  inputUsuario = true;
   inputType = 'password';
   resultadoModal: DialogData;
 
@@ -103,6 +104,7 @@ export class UsuarioComponent implements OnInit {
   }
 
   validacionFormulario() {
+    console.log(this.testButton.nativeElement.value);
     if (this.myForm.valid) {
       if (this.testButton.nativeElement.value == "insertar") {
         this.crearUsuario();
@@ -127,9 +129,12 @@ export class UsuarioComponent implements OnInit {
       this.usuarioService.crearUsuario(datosUsuario)
         .then(
           ok => {
-            this.limpiarCampos();
-            this.myForm.reset();
-            this.consultarUsuarios();
+            if(ok['respuesta']){
+              this.limpiarCampos();
+              this.consultarUsuarios();
+            } else {
+              this.inputUsuario = false;
+            }
           }
         )
         .catch(
@@ -149,9 +154,14 @@ export class UsuarioComponent implements OnInit {
       localStorage.getItem('miCuenta.putToken'))
       .then(
         ok => {
-          this.limpiarCampos();
-          this.consultarUsuarios();
-          this.testButton.nativeElement.value = 'insertar';
+          console.log(ok['respuesta']);
+          if(ok['respuesta']){
+            this.limpiarCampos();
+            this.consultarUsuarios();
+            this.testButton.nativeElement.value = 'insertar';
+          } else {
+            this.inputUsuario = false;
+          }
         },
       )
       .catch(
@@ -285,6 +295,10 @@ export class UsuarioComponent implements OnInit {
       )
   }
 
+  onChangeInputUsuario() {
+    this.inputUsuario = true;
+  }
+
   limpiarCampos() {
     this.myForm.reset();
     this.cedula = 'Cedula';
@@ -294,6 +308,9 @@ export class UsuarioComponent implements OnInit {
   }
 
   setUsuario(usuario) {
+    if(!this.inputUsuario){
+      this.inputUsuario == false;
+    }
     this.idUsuario = usuario.IdUsuario;
     this.idPersona = usuario.IdPersona;
     this.nombres = usuario.PrimerNombre + ' ' + usuario.SegundoNombre;

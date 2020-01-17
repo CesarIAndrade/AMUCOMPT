@@ -142,4 +142,8 @@ export class ModalAsignacionUsuarioTiposUsuarioComponent implements OnInit {
       }
     )
   }
+
+  ngOnDestroy() {
+    this.consultarAsignacionTipoUsuario();
+  }
 }
