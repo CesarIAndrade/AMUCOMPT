@@ -8,7 +8,7 @@ export class UsuarioService {
 
   constructor(private http: HttpClient) { }
 
-  private apiUrl = "http://192.168.25.16:90/api/"
+  private apiUrl = "http://192.168.25.20:90/api/"
   // private apiUrl: string = "http://localhost:49962/api/";
 
   login(

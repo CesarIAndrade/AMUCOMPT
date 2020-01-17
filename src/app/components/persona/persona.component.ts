@@ -161,7 +161,7 @@ export class PersonaComponent implements OnInit {
       .then(
         ok => {
           this.tipoDocumentos = ok['respuesta'];
-          console.log(this.tipoDocumentos);
+          console.log(ok['respuesta']);
         },
       )
       .catch(
@@ -408,6 +408,7 @@ export class PersonaComponent implements OnInit {
         .then(
           ok => {
             this.idPersona = ok['respuesta'];
+            console.log(ok['respuesta']);
             this.crearTelefono(this.idPersona);
             this.crearCorreo(this.idPersona);
             this.crearDireccion(this.idPersona);
@@ -543,6 +544,8 @@ export class PersonaComponent implements OnInit {
     value: string,
     idPersona: string
   ) {
+    console.log(idPersona);
+    
     this.testButton.nativeElement.value = value;
     this.personaService.consultarPersonaPorId(
       idPersona,
