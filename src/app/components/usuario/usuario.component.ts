@@ -342,4 +342,6 @@ export class UsuarioComponent implements OnInit {
   ngOnInit() {
     this.consultarUsuarios();
   }
+
+  tablaUsuarios = ['usuario', 'nombres', 'acciones'];
 }

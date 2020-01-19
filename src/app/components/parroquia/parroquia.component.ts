@@ -194,4 +194,7 @@ export class ParroquiaComponent implements OnInit {
     this.consultarParroquias();
   }
 
+  tablaParroquias = ['parroquia', 'canton', 'acciones'];
+  tablaCantones = ['canton', 'acciones'];
+
 }

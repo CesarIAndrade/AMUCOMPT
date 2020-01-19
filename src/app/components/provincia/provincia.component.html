@@ -39,7 +39,7 @@
                             placeholder="Ejem. Manabi">
                         <i class="fa fa-refresh icon" (click)="mostrarProvincia()" aria-hidden="true"></i>
                     </div>
-                    <table class="table-scroll table table-hover">
+                    <!-- <table class="table-scroll table table-hover">
                         <thead class="card-header">
                             <tr>
                                 <th scope="col">Provincia</th>
@@ -77,9 +77,49 @@
                                     </td>
                                 </ng-template>
                         </tbody>
-                    </table>
+                    </table> -->
+                    
+                    <div class="tablaProvincias mat-elevation-z5">
+                        <table mat-table [dataSource]="provincias">
+                            <ng-container matColumnDef="provincia">
+                                <th mat-header-cell *matHeaderCellDef> Provincia </th>
+                                <td mat-cell *matCellDef="let element"> {{element.Descripcion}} </td>
+                            </ng-container>
+                            <ng-container matColumnDef="acciones">
+                                <th colspan="2" mat-header-cell *matHeaderCellDef> Acciones </th>
+                                <ng-container *matCellDef="let element">
+                                    <ng-container *ngIf="element.PermitirEliminacion">
+                                        <td mat-cell>
+                                            <button tooltip="Modificar" placement="top"
+                                                class="btn btn-sm btn-outline-info" value="{{element.IdProvincia}}"
+                                                (click)=mostrarProvincia(element)>
+                                                <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                            </button>
+                                        </td>
+                                        <td mat-cell>
+                                            <button class="btn btn-sm btn-outline-danger"
+                                                value="{{element.IdProvincia}}"
+                                                (click)=eliminarProvincia(element.IdProvincia)>
+                                                <i class="fa fa-trash" aria-hidden="true"></i>
+                                            </button>
+                                        </td>
+                                    </ng-container>
+                                    <ng-container *ngIf="!element.PermitirEliminacion">
+                                        <td mat-cell colspan="2">
+                                            <button tooltip="Modificar" placement="top"
+                                                class="btn btn-sm btn-outline-info" value="{{element.IdProvincia}}"
+                                                (click)=mostrarProvincia(element)>
+                                                <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                            </button>
+                                        </td>
+                                    </ng-container>
+                                </ng-container>
+                            </ng-container>
+                            <tr mat-header-row *matHeaderRowDef="tablaProvincias; sticky: true"></tr>
+                            <tr mat-row *matRowDef="let row; columns: tablaProvincias;"></tr>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>

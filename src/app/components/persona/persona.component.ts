@@ -799,4 +799,6 @@ export class PersonaComponent implements OnInit {
     this.consultarProvincias();
   }
 
+  tablaPersonas = ['nombres', 'apellidos', 'documento', 'numeroDocumento', 'acciones'];
+
 }

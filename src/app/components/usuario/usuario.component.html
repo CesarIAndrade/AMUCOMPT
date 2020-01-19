@@ -68,7 +68,7 @@
                             placeholder="Ejem. Zambrano Zambrano">
                         <i class="fa fa-refresh icon" (click)="consultarUsuarios()" aria-hidden="true"></i>
                     </div>
-                    <table class="table table-hover">
+                    <!-- <table class="table table-hover">
                         <thead class="card-header">
                             <tr>
                                 <th scope="col">Usuario</th>
@@ -115,7 +115,61 @@
                                     </td>
                                 </ng-template>
                         </tbody>
-                    </table>
+                    </table> -->
+
+                    <div class="tablaUsuarios mat-elevation-z5">
+                        <table mat-table [dataSource]="usuarios">
+                            <ng-container matColumnDef="usuario">
+                                <th mat-header-cell *matHeaderCellDef> Usuario </th>
+                                <td mat-cell *matCellDef="let element"> {{element.UsuarioLogin}} </td>
+                            </ng-container>
+                            <ng-container matColumnDef="nombres">
+                                <th mat-header-cell *matHeaderCellDef> Nombres </th>
+                                <td mat-cell *matCellDef="let element"> {{ element.PrimerNombre }} {{ element.SegundoNombre }} {{ element.ApellidoPaterno }}
+                                    {{ element.ApellidoMaterno }} </td>
+                            </ng-container>
+                            <ng-container matColumnDef="acciones">
+                                <th colspan="2" mat-header-cell *matHeaderCellDef> Acciones </th>
+                                <ng-container *matCellDef="let element">
+                                    <ng-container *ngIf="element.EstadoUsuario">
+                                        <td mat-cell>
+                                            <button tooltip="Asignar Roles" placement="top"
+                                                (click)="abrirModalAsignacionUsuarioTiposUsuario(element)"
+                                                class="btn btn-sm btn-outline-warning separacion-botones">
+                                                <i class="fa fa-address-book" aria-hidden="true"></i>
+                                            </button>
+                                        </td>
+                                        <td mat-cell>
+                                            <button tooltip="Modificar" placement="top" 
+                                                (click)="setUsuario(element)"
+                                                class="btn btn-sm btn-outline-info separacion-botones">
+                                                <i class="fa fa-pencil-square-o" aria-hidden="true">
+                                                </i>
+                                            </button>
+                                        </td>
+                                        <td mat-cell>
+                                            <button tooltip="Deshabilitar" placement="top" (click)="eliminarUsuario(element)"
+                                                class="btn btn-sm btn-outline-danger separacion-botones">
+                                                <i class="fa fa-user-times" aria-hidden="true"></i>
+                                            </button>
+                                        </td>
+                                    </ng-container>
+                                    <ng-container *ngIf="!element.EstadoUsuario">
+                                        <td mat-cell colspan="3">
+                                            <button tooltip="Habilitar" placement="top" 
+                                                (click)="habilitarUsuario(element)"
+                                                style="justify-content: center;"
+                                                class="btn btn-sm btn-block btn-outline-success">
+                                                <i class="fa fa-user-plus" aria-hidden="true"> Habilitar</i>
+                                            </button>
+                                        </td>
+                                    </ng-container>
+                                </ng-container>
+                            </ng-container>
+                            <tr mat-header-row *matHeaderRowDef="tablaUsuarios; sticky: true"></tr>
+                            <tr mat-row *matRowDef="let row; columns: tablaUsuarios;"></tr>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>

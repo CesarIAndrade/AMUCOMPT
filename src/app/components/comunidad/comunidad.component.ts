@@ -184,4 +184,8 @@ export class ComunidadComponent implements OnInit {
   ngOnInit() {
     this.consultarComunidades();
   }
+
+  tablaComunidades = ['comunidad', 'parroquia', 'acciones'];
+  tablaParroquias = ['parroquia', 'acciones'];
+
 }

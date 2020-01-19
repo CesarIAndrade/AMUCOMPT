@@ -149,4 +149,7 @@ export class ProvinciaComponent implements OnInit {
     this.provincias = [];
     this.consultarProvincia();
   }
+
+  tablaProvincias = ['provincia', 'acciones'];
+
 }
