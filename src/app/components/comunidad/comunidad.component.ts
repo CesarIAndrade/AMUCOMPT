@@ -1,10 +1,15 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { FormGroup, FormControl, Validators, } from '@angular/forms';
+
+// Interfaces
 import { Parroquia } from 'src/app/interfaces/parroquia/parroquia';
 import { Comunidad } from 'src/app/interfaces/comunidad/comunidad';
+
+// Services
 import { PanelAdministracionService } from 'src/app/services/panel-administracion.service';
 import { PersonaService } from 'src/app/services/persona.service';
 import sweetalert from 'sweetalert';
+
 @Component({
   selector: 'app-comunidad',
   templateUrl: './comunidad.component.html',
@@ -15,7 +20,8 @@ export class ComunidadComponent implements OnInit {
   myForm: FormGroup;
   @ViewChild('testButton', { static: false }) testButton: ElementRef;
 
-  constructor(private panelAdministracionService: PanelAdministracionService,
+  constructor(
+    private panelAdministracionService: PanelAdministracionService,
     private personaService: PersonaService
   ) {
     this.myForm = new FormGroup({

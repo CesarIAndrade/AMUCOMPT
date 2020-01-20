@@ -45,4 +45,6 @@ export class ModalAsignacionUsuarioPersonaComponent implements OnInit {
     this.consultarPersonas();
   }
 
+  tablaPersonas = ['nombres', 'apellidos', 'documento', 'numeroDocumento', 'acciones'];
+
 }

@@ -7,23 +7,23 @@
     </div>
     <div class="form-group row">
         <div class="col-sm-6">
-            <input matInput [(ngModel)]="data.tipoDocumentoModal" type="text" class="form-control" readonly>
+            <input matInput [(ngModel)]="data.persona.TipoDocumento" type="text" class="form-control" readonly>
         </div>
         <div class="col-sm-6">
-            <input matInput [(ngModel)]="data.numeroDocumentoModal" type="text" class="form-control" readonly>
+            <input matInput [(ngModel)]="data.persona.NumeroDocumento" type="text" class="form-control" readonly>
         </div>
     </div>
     <div class="form-group row">
         <div class="col-sm-6">
-            <input matInput  [(ngModel)]="data.telefonoModal1 || sinNumero" type="text" class="form-control" readonly>
+            <input matInput  [(ngModel)]="data.persona.ListaTelefono[0].Numero || sinNumero" type="text" class="form-control" readonly>
         </div>
         <div class="col-sm-6">
-            <input matInput [(ngModel)]="data.telefonoModal2 || sinNumero" type="text" class="form-control" readonly>
+            <input matInput [(ngModel)]="data.persona.ListaTelefono[1].Numero || sinNumero" type="text" class="form-control" readonly>
         </div>
     </div>
     <div class="form-group row">
         <div class="col-sm-12">
-            <input matInput [(ngModel)]="data.correoModal || sinCorreo" type="text" class="form-control" readonly>
+            <input matInput [(ngModel)]="data.persona.ListaCorreo[0].CorreoValor || sinCorreo" type="text" class="form-control" readonly>
         </div>
     </div>
     <div class="form-group row">

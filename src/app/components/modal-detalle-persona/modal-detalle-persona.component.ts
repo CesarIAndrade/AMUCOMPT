@@ -1,5 +1,5 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { PersonaModal } from 'src/app/interfaces/persona/persona-modal';
 
 @Component({
@@ -11,27 +11,31 @@ export class ModalDetallePersonaComponent implements OnInit {
 
   constructor(
     public dialogRef: MatDialogRef<ModalDetallePersonaComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: PersonaModal
+    @Inject(MAT_DIALOG_DATA) public data: any
   ) { console.log(data) }
 
-  nombresCompletos = this.data.primerNombreModal + ' ' + 
-    this.data.segundoNombreModal + ' ' +
-    this.data.apellidoPaternoModal + ' '+ 
-    this.data.apellidoMaternoModal;
+  nombresCompletos = this.data.persona.PrimerNombre + ' ' +
+    this.data.persona.SegundoNombre + ' ' +
+    this.data.persona.ApellidoPaterno + ' ' +
+    this.data.persona.ApellidoMaterno;
 
-  direccion = this.data.provinciaModal + ' > ' +
-    this.data.cantonModal + ' > ' +
-    this.data.parroquiaModal;
+  provincia = this.data.persona.AsignacionPersonaParroquia[0].Parroquia.Canton.Provincia.Descripcion;
+  canton = this.data.persona.AsignacionPersonaParroquia[0].Parroquia.Canton.Descripcion;
+  parroquia = this.data.persona.AsignacionPersonaParroquia[0].Parroquia.Descripcion;
+
+  direccion = this.provincia + ' > ' +
+    this.canton + ' > ' +
+    this.parroquia;
 
   sinNumero = 'Sin Numero';
   sinCorreo = 'Sin Correo';
   sinDireccion: string;
 
   ngOnInit() {
-    if(this.data.provinciaModal == null || this.data.cantonModal == null ||
-      this.data.parroquiaModal == null) {
-        this.direccion = 'Sin Direccion';
-      }
+    if (this.provincia == null || this.canton == null ||
+      this.parroquia == null) {
+      this.direccion = 'Sin Direccion';
+    }
   }
 
 }

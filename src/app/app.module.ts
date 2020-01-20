@@ -24,6 +24,12 @@ import { NavComponent } from "./nav/nav.component";
 import { InventarioComponent } from './components/inventario/inventario.component';
 import { CompraComponent } from './components/compra/compra.component';
 import { VentaComponent } from './components/venta/venta.component';
+import { SembrioComponent } from './components/sembrio/sembrio.component';
+import { CantonComponent } from './components/canton/canton.component';
+import { ComunidadComponent } from './components/comunidad/comunidad.component';
+import { ParroquiaComponent } from './components/parroquia/parroquia.component';
+import { ProvinciaComponent } from './components/provincia/provincia.component';
+import { PanelAdministracionComponent } from './components/panel-administracion/panel-administracion.component';
 
 // Functional Components
 import { HttpClientModule } from "@angular/common/http";
@@ -32,17 +38,9 @@ import { ModalDetallePersonaComponent } from './components/modal-detalle-persona
 import { ModalAsignacionUsuarioPersonaComponent } from './components/modal-asignacion-usuario-persona/modal-asignacion-usuario-persona.component';
 import { PipesModule } from './pipes/pipes.module';
 import {MatChipsModule} from '@angular/material/chips';
-import { PanelAdministracionComponent } from './components/panel-administracion/panel-administracion.component';
-import { CantonComponent } from './components/canton/canton.component';
-import { ComunidadComponent } from './components/comunidad/comunidad.component';
-import { ParroquiaComponent } from './components/parroquia/parroquia.component';
-import { ProvinciaComponent } from './components/provincia/provincia.component';
 import { ModalAsignacionUsuarioTiposUsuarioComponent } from './components/modal-asignacion-usuario-tipos-usuario/modal-asignacion-usuario-tipos-usuario.component';
-import { ModalDetalleUsuarioComponent } from './components/modal-detalle-usuario/modal-detalle-usuario.component';
-
-import { TooltipModule } from 'ng2-tooltip-directive';
-import Swal from 'sweetalert2';
 import { MatTableModule } from '@angular/material';
+import { TooltipModule } from 'ng2-tooltip-directive';
 
 @NgModule({
   declarations: [
@@ -63,7 +61,7 @@ import { MatTableModule } from '@angular/material';
     ParroquiaComponent,
     ProvinciaComponent,
     ModalAsignacionUsuarioTiposUsuarioComponent,
-    ModalDetalleUsuarioComponent
+    SembrioComponent,
   ],
   imports: [
     BrowserModule,
@@ -90,7 +88,6 @@ import { MatTableModule } from '@angular/material';
     ModalDetallePersonaComponent,
     ModalAsignacionUsuarioPersonaComponent ,
     ModalAsignacionUsuarioTiposUsuarioComponent,
-    ModalDetalleUsuarioComponent
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -16,7 +16,6 @@ import { MatDialog } from "@angular/material/dialog";
 // Components
 import { ModalAsignacionUsuarioPersonaComponent } from '../modal-asignacion-usuario-persona/modal-asignacion-usuario-persona.component';
 import { ModalAsignacionUsuarioTiposUsuarioComponent } from '../modal-asignacion-usuario-tipos-usuario/modal-asignacion-usuario-tipos-usuario.component';
-import { ModalDetalleUsuarioComponent } from '../modal-detalle-usuario/modal-detalle-usuario.component';
 
 export interface DialogData {
   cedula: string;
@@ -228,22 +227,11 @@ export class UsuarioComponent implements OnInit {
   abrirModalAsignacionUsuarioTiposUsuario(usuario) {
     var listaTipoUsuario = usuario.ListaTipoUsuario;
     let dialogRef = this.modalAsignacionUsuarioTiposUsuario.open(ModalAsignacionUsuarioTiposUsuarioComponent, {
-      width: '900px',
-      height: '390px',
+      width: '500px',
+      height: '440px',
       data: {
         idUsuario: usuario.IdUsuario,
         listaTipoUsuario: listaTipoUsuario,
-      }
-    });
-  }
-
-  abrirModalDetalleUsuario(usuario) {
-    var listaTipoUsuario = usuario.ListaTipoUsuario;
-    let dialogRef = this.modalDetalleUsuario.open(ModalDetalleUsuarioComponent, {
-      width: '500px',
-      height: '320px',
-      data: {
-        listaTipoUsuario: listaTipoUsuario
       }
     });
   }

@@ -61,7 +61,6 @@ export class CantonComponent implements OnInit {
         ok => {
           this.cantones = [];
           this.cantones = ok['respuesta'];
-          console.log(this.cantones);
           this.consultarProvincias();
         }
       )

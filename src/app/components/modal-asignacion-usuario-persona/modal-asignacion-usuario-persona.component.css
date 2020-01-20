@@ -1,0 +1,8 @@
+.tablaPersonas {
+    height: 16rem;
+    overflow: auto;
+}
+
+table {
+    width: 100%;
+}

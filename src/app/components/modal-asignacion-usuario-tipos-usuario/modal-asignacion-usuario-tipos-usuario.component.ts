@@ -142,4 +142,6 @@ export class ModalAsignacionUsuarioTiposUsuarioComponent implements OnInit {
       }
     )
   }
+
+  tablaTipoUsuarios = ['tipoUsuario', 'acciones'];
 }

@@ -182,68 +182,6 @@
                 <input [(ngModel)]="filterPersona" type="text" class="form-control input-field"
                     placeholder="Ejem. Zambrano Zambrano">
             </div>
-            <!-- <table class="table table-hover">
-                <thead class="card-header">
-                    <tr>
-                        <th scope="col">Nombres</th>
-                        <th scope="col">Apellidos</th>
-                        <th scope="col">Documento</th>
-                        <th scope="col">No. Documento</th>
-                        <th scope="col" colspan="3" style="text-align: center;">Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr
-                        *ngFor="let item of personas | filter: filterPersona : 'PrimerNombre':'SegundoNombre':'ApellidoPaterno':'ApellidoMaterno':'NumeroDocumento'">
-                        <td> {{ item.PrimerNombre }} {{ item.SegundoNombre }} </td>
-                        <td> {{ item.ApellidoPaterno }} {{ item.ApellidoMaterno }} </td>
-                        <td> {{ item.TipoDocumento }} </td>
-                        <td> {{ item.NumeroDocumento }} </td>
-                        <ng-container *ngIf="item.IdUsuario == ''; then sePuedeEliminar; else noSePuedeEliminar">
-                        </ng-container>
-                        <ng-template #sePuedeEliminar>
-                            <td>
-                                <button tooltip="Ver Información" placement="top"
-                                    class="btn btn-sm btn-outline-primary separacion-botones" value="{{item.IdPersona}}"
-                                    (click)="consultarPersonaPorId('detalles', item.IdPersona)">
-                                    <i class="fa fa-eye" aria-hidden="true"></i>
-                                </button>
-                            </td>
-                            <td>
-                                <button tooltip="Modificar" placement="top"
-                                    class="btn btn-sm btn-outline-info separacion-botones" value="{{item.IdPersona}}"
-                                    (click)="consultarPersonaPorId('modificar', item.IdPersona)">
-                                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                                </button>
-                            </td>
-                            <td>
-                                <button tooltip="Eliminar" placement="top"
-                                    class="btn btn-sm btn-outline-danger separacion-botones" value="{{item.IdPersona}}"
-                                    (click)="eliminarPersona(item.IdPersona)">
-                                    <i class="fa fa-trash" aria-hidden="true"></i>
-                                </button>
-                            </td>
-                        </ng-template>
-                        <ng-template #noSePuedeEliminar>
-                            <td>
-                                <button tooltip="Ver Información" placement="top"
-                                    class="btn btn-sm btn-outline-primary separacion-botones" value="{{item.IdPersona}}"
-                                    (click)="consultarPersonaPorId('detalles', item.IdPersona)">
-                                    <i class="fa fa-eye" aria-hidden="true"></i>
-                                </button>
-                            </td>
-                            <td>
-                                <button tooltip="Modificar" placement="top"
-                                    class="btn btn-sm btn-outline-info separacion-botones" value="{{item.IdPersona}}"
-                                    (click)="consultarPersonaPorId('modificar', item.IdPersona)">
-                                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                                </button>
-                            </td>
-                        </ng-template>
-                    </tr>
-                </tbody>
-            </table> -->
-
             <div class="tablaPersonas mat-elevation-z5">
                 <table mat-table [dataSource]="personas">
                     <ng-container matColumnDef="nombres">
@@ -265,47 +203,43 @@
                         <td mat-cell *matCellDef="let element"> {{element.NumeroDocumento}} </td>
                     </ng-container>
                     <ng-container matColumnDef="acciones">
-                        <th colspan="2" mat-header-cell *matHeaderCellDef> Acciones </th>
+                        <th colspan="3" mat-header-cell *matHeaderCellDef> Acciones </th>
                         <ng-container *matCellDef="let element">
                             <ng-container *ngIf="element.IdUsuario == ''">
                                 <td mat-cell>
                                     <button tooltip="Ver Información" placement="top"
-                                        class="btn btn-sm btn-outline-primary separacion-botones"
-                                        value="{{element.IdPersona}}"
-                                        (click)="consultarPersonaPorId('detalles', element.IdPersona)">
+                                        class="btn btn-sm btn-outline-primary"
+                                        (click)="abrirModal(element)">
                                         <i class="fa fa-eye" aria-hidden="true"></i>
                                     </button>
                                 </td>
                                 <td mat-cell>
                                     <button tooltip="Modificar" placement="top"
-                                        class="btn btn-sm btn-outline-info separacion-botones"
-                                        value="{{element.IdPersona}}"
-                                        (click)="consultarPersonaPorId('modificar', element.IdPersona)">
+                                        class="btn btn-sm btn-outline-info"
+                                        (click)="mostrarPersona(element)">
                                         <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                                     </button>
                                 </td>
                                 <td mat-cell>
                                     <button tooltip="Eliminar" placement="top"
-                                        class="btn btn-sm btn-outline-danger separacion-botones"
-                                        value="{{item.IdPersona}}" (click)="eliminarPersona(element.IdPersona)">
+                                        class="btn btn-sm btn-outline-danger"
+                                        (click)="eliminarPersona(element.IdPersona)">
                                         <i class="fa fa-trash" aria-hidden="true"></i>
                                     </button>
                                 </td>
                             </ng-container>
-                            <ng-container *ngIf="!element.IdUsuario != ''">
+                            <ng-container *ngIf="element.IdUsuario != ''">
                                 <td mat-cell>
                                     <button tooltip="Ver Información" placement="top"
-                                        class="btn btn-sm btn-outline-primary separacion-botones"
-                                        value="{{element.IdPersona}}"
-                                        (click)="consultarPersonaPorId('detalles', element.IdPersona)">
+                                        class="btn btn-sm btn-outline-primary"
+                                        (click)="abrirModal(element)">
                                         <i class="fa fa-eye" aria-hidden="true"></i>
                                     </button>
                                 </td>
                                 <td mat-cell>
                                     <button tooltip="Modificar" placement="top"
-                                        class="btn btn-sm btn-outline-info separacion-botones"
-                                        value="{{element.IdPersona}}"
-                                        (click)="consultarPersonaPorId('modificar', element.IdPersona)">
+                                        class="btn btn-sm btn-outline-info"
+                                        (click)="mostrarPersona(element)">
                                         <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                                     </button>
                                 </td>

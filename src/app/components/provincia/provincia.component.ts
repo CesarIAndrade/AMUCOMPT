@@ -50,7 +50,7 @@ export class ProvinciaComponent implements OnInit {
       .then(
         ok => {
           this.limpiarCampos();
-          this.consultarProvincia();
+          this.consultarProvincias();
         }
       )
       .catch(
@@ -60,8 +60,8 @@ export class ProvinciaComponent implements OnInit {
       )
   }
 
-  consultarProvincia() {
-    this.panelAdministracionService.consultarProvincia(localStorage.getItem('miCuenta.getToken'))
+  consultarProvincias() {
+    this.personaService.consultarProvincias(localStorage.getItem('miCuenta.getToken'))
       .then(
         ok => {
           this.provincias = [];
@@ -91,7 +91,7 @@ export class ProvinciaComponent implements OnInit {
       .then(
         ok => {
           this.limpiarCampos();
-          this.consultarProvincia();
+          this.consultarProvincias();
         }
       )
       .catch(
@@ -120,7 +120,7 @@ export class ProvinciaComponent implements OnInit {
                 sweetAlert("Se a eliminado Correctamente!", {
                   icon: "success",
                 });
-                this.consultarProvincia();
+                this.consultarProvincias();
               } else {
                 sweetAlert("No se ha podido elminiar!", {
                   icon: "error",
@@ -147,7 +147,7 @@ export class ProvinciaComponent implements OnInit {
 
   ngOnInit() {
     this.provincias = [];
-    this.consultarProvincia();
+    this.consultarProvincias();
   }
 
   tablaProvincias = ['provincia', 'acciones'];

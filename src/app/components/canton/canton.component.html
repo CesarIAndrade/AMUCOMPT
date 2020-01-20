@@ -97,13 +97,13 @@
                                     <ng-container *ngIf="element.PermitirEliminacion">
                                         <td mat-cell>
                                             <button tooltip="Modificar" placement="top"
-                                                class="btn btn-sm btn-outline-info" value="{{element.IdCanton}}"
+                                                class="btn btn-sm btn-outline-info"
                                                 (click)=mostrarCanton(element)>
                                                 <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                                             </button>
                                         </td>
                                         <td mat-cell>
-                                            <button class="btn btn-sm btn-outline-danger" value="{{element.IdCanton}}"
+                                            <button class="btn btn-sm btn-outline-danger"
                                                 (click)=eliminarCanton(element.IdCanton)>
                                                 <i class="fa fa-trash" aria-hidden="true"></i>
                                             </button>
@@ -112,7 +112,7 @@
                                     <ng-container *ngIf="!element.PermitirEliminacion">
                                         <td mat-cell colspan="2">
                                             <button tooltip="Modificar" placement="top"
-                                                class="btn btn-sm btn-outline-info" value="{{element.IdCanton}}"
+                                                class="btn btn-sm btn-outline-info"
                                                 (click)=mostrarCanton(element)>
                                                 <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                                             </button>
