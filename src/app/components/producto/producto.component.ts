@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, Input, AfterViewInit } from '@angular/core';
 import { FormGroup, Validators, FormControl } from '@angular/forms';
 
 // Interfaces
@@ -18,11 +18,13 @@ export class ProductoComponent implements OnInit {
 
   myForm: FormGroup;
   @ViewChild('testButton', { static: false }) testButton: ElementRef;
-
-  constructor(private inventarioService: InventarioService) {
+  
+  constructor(
+    private inventarioService: InventarioService,
+  ) {
     this.myForm = new FormGroup({
       _nombre: new FormControl('', [Validators.required]),
-      _descripcion: new FormControl('', [Validators.required]),
+      _descripcion: new FormControl(''),
       _codigo: new FormControl('', [Validators.required])
     })
   }
@@ -55,17 +57,18 @@ export class ProductoComponent implements OnInit {
     this.inventarioService.consultarProductos(
       localStorage.getItem('miCuenta.getToken')
     )
-    .then(
-      ok => {
-        this.productos = [];
-        this.productos = ok['respuesta'];
-      }
-    )
-    .catch(
-      error => {
-        console.log(error);
-      }
-    )
+      .then(
+        ok => {
+          this.productos = [];
+          this.productos = ok['respuesta'];
+          this.consultarTipoProductos();
+        }
+      )
+      .catch(
+        error => {
+          console.log(error);
+        }
+      )
   }
 
   validarFormulario() {
@@ -93,6 +96,7 @@ export class ProductoComponent implements OnInit {
       )
         .then(
           ok => {
+            this.myForm.reset();
             this.consultarProductos();
           }
         )
@@ -174,7 +178,6 @@ export class ProductoComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.consultarTipoProductos();
     this.consultarProductos();
   }
 

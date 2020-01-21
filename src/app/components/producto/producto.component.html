@@ -19,14 +19,8 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <textarea rows="3" formControlName="_descripcion" class="form-control" type="text"
+                            <textarea rows="3" formControlName="_descripcion"                   class="form-control" type="text"
                                 placeholder="Ingrese Descripción Producto"></textarea>
-                            <div class="badge badge-danger mt-3 btn-block"
-                                *ngIf="_descripcion.invalid && (_descripcion.dirty || _descripcion.touched)">
-                                <div *ngIf="_descripcion.errors.required">
-                                    Descripción Producto Requerida
-                                </div>
-                            </div>
                         </div>
                         <div class="form-group">
                             <input formControlName="_codigo" class="form-control" type="text"

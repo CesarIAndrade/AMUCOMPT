@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, Output, EventEmitter } from '@angular/core';
 
 // Interfaces
 import { TipoProducto } from 'src/app/interfaces/tipo-producto/tipo-producto';
@@ -63,6 +63,7 @@ export class TipoProductoComponent implements OnInit {
     )
       .then(
         ok => {
+          this.nuevoTipoProductoCreado.emit(true);
           this.myForm.reset();
           this.consultarTipoProductos();
         }
@@ -126,6 +127,8 @@ export class TipoProductoComponent implements OnInit {
   ngOnInit() {
     this.consultarTipoProductos();
   }
+
+  @Output() nuevoTipoProductoCreado = new EventEmitter();
 
   tablaTipoProductos = ['descripcion', 'acciones'];
 

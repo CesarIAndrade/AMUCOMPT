@@ -3,7 +3,7 @@
         <app-producto></app-producto>
     </mat-tab>
     <mat-tab label="Tipo Productos">
-        <app-tipo-producto></app-tipo-producto>
+        <app-tipo-producto (nuevoTipoProductoCreado)="verificarNuevoTipoProductoCreado($event)"></app-tipo-producto>
     </mat-tab>
     <mat-tab label="Presentaciones">
         <app-presentacion></app-presentacion>
