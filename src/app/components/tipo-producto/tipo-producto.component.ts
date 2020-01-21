@@ -34,7 +34,6 @@ export class TipoProductoComponent implements OnInit {
       .then(
         ok => {
           this.tipoProductos = ok['respuesta'];
-          console.log(this.tipoProductos);
         }
       )
       .catch(
