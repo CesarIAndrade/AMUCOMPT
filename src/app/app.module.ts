@@ -41,6 +41,10 @@ import {MatChipsModule} from '@angular/material/chips';
 import { ModalAsignacionUsuarioTiposUsuarioComponent } from './components/modal-asignacion-usuario-tipos-usuario/modal-asignacion-usuario-tipos-usuario.component';
 import { MatTableModule } from '@angular/material';
 import { TooltipModule } from 'ng2-tooltip-directive';
+import { ProductoComponent } from './components/producto/producto.component';
+import { TipoProductoComponent } from './components/tipo-producto/tipo-producto.component';
+import { PresentacionComponent } from './components/presentacion/presentacion.component';
+import { MedidaComponent } from './components/medida/medida.component';
 
 @NgModule({
   declarations: [
@@ -62,6 +66,10 @@ import { TooltipModule } from 'ng2-tooltip-directive';
     ProvinciaComponent,
     ModalAsignacionUsuarioTiposUsuarioComponent,
     SembrioComponent,
+    ProductoComponent,
+    TipoProductoComponent,
+    PresentacionComponent,
+    MedidaComponent,
   ],
   imports: [
     BrowserModule,

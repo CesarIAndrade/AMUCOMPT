@@ -1,0 +1,8 @@
+.tablaTipoProductos {
+    height: 21rem;
+    overflow: auto;
+}
+
+table {
+    width: 100%;
+}

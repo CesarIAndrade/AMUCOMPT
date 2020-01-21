@@ -1,0 +1,2 @@
+export interface Medida {
+}
