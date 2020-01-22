@@ -51,6 +51,7 @@ export class LoginComponent implements OnInit {
         .then(
           ok => {
             if (ok['codigo'] == '200') {
+              console.log(ok['respuesta']);
               this.tipoUsuarios = ok['respuesta']['ListaTipoUsuario'];
               this.ingresarCredenciales = true;
               this.seleccionarTipoUsuario = false;
