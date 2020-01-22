@@ -4,7 +4,7 @@ import { PanelAdministracionService } from 'src/app/services/panel-administracio
 import { PersonaService } from 'src/app/services/persona.service';
 import { Parroquia } from 'src/app/interfaces/parroquia/parroquia';
 import { Canton } from 'src/app/interfaces/canton/canton';
-import swal from 'sweetalert';
+import sweetalert from 'sweetalert';
 
 
 @Component({
@@ -35,6 +35,7 @@ export class ParroquiaComponent implements OnInit {
   filterParroquia = '';
   filterCanton = '';
   cantones: Canton[] = [];
+
   consultarCantones() {
     this.personaService.consultarCantones(localStorage.getItem('miCuenta.getToken'))
       .then(
@@ -48,10 +49,12 @@ export class ParroquiaComponent implements OnInit {
         }
       )
   }
+
   consultarParroquias() {
     this.personaService.consultarParroquias(localStorage.getItem('miCuenta.getToken'))
       .then(
         ok => {
+          this.parroquias = [];
           this.parroquias = ok['respuesta'];
           this.consultarCantones();
         }
@@ -62,6 +65,7 @@ export class ParroquiaComponent implements OnInit {
         }
       )
   }
+
   validarFormulario() {
     if (this.myForm.valid) {
       if (this.testButton.nativeElement.value == 'ingresar') {
@@ -79,6 +83,7 @@ export class ParroquiaComponent implements OnInit {
       console.log("Algo Salio Mal");
     }
   }
+
   crearParroquia(){
     this.panelAdministracionService.crearParroquia(
       this.idCanton,
@@ -97,6 +102,7 @@ export class ParroquiaComponent implements OnInit {
         }
       )
   }
+
   mostrarParroquia(parroquia) {
     this.idCanton = parroquia.Canton.IdCanton;
     this.cantones.map(
@@ -112,6 +118,7 @@ export class ParroquiaComponent implements OnInit {
     })
     this.testButton.nativeElement.value = 'modificar';
   }
+
   actualizarParroquia(){
     this.panelAdministracionService.actualizarParroquia(
       this.idCanton,
@@ -131,13 +138,14 @@ export class ParroquiaComponent implements OnInit {
         }
       )
   }
+  
   eliminarParroquia(idParroquia: string){
-    swal({
-      title: "Advertencia?",
-      text: "Esta Seguro que desea eliminar",
+    sweetalert({
+      title: "Advertencia",
+      text: "¿Está seguro que desea eliminar?",
       icon: "warning",
-      buttons: true,
-      dangerMode: true,
+      buttons: ['Cancelar', 'Ok'],
+      dangerMode: true
     })
     .then((willDelete) => {
       if (willDelete) {
@@ -146,7 +154,16 @@ export class ParroquiaComponent implements OnInit {
           localStorage.getItem('miCuenta.deleteToken'))
           .then(
             ok => {
-              this.consultarParroquias();
+              if(ok['respuesta']){
+                sweetAlert("Se a eliminado Correctamente!", {
+                  icon: "success",
+                });
+                this.consultarParroquias();
+              } else {
+                sweetAlert("No se ha podido elminiar!", {
+                  icon: "error",
+                });
+              }
             }
           )
           .catch(
@@ -154,24 +171,25 @@ export class ParroquiaComponent implements OnInit {
               console.log(error);
             }
           )
-        swal("Se a eliminado Correctamente!", {
-          icon: "success",
-        });
       }
     });
   }
+
   setCanton(canton) {
     this.idCanton = canton.IdCanton;
     this.canton = canton.Descripcion;
     this.inputIdCanton = true;
   }
+
   limpiarCampos() {
     this.myForm.reset();
     this.canton = 'Parroquia';
   }
+
   get _parroquia(){
     return this.myForm.get('_parroquia')
   }
+
   ngOnInit() {
     this.consultarParroquias();
   }

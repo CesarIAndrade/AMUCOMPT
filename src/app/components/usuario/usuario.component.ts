@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
+import sweetalert from "sweetalert"
 
 // Services
 import { UsuarioService } from 'src/app/services/usuario.service';
@@ -58,6 +59,7 @@ export class UsuarioComponent implements OnInit {
   idUsuario: string;
   idUsuarioModalAUP: string;
   inputPersona = true;
+  inputUsuario = true;
   inputType = 'password';
   resultadoModal: DialogData;
 
@@ -103,6 +105,7 @@ export class UsuarioComponent implements OnInit {
   }
 
   validacionFormulario() {
+    console.log(this.testButton.nativeElement.value);
     if (this.myForm.valid) {
       if (this.testButton.nativeElement.value == "insertar") {
         this.crearUsuario();
@@ -127,9 +130,12 @@ export class UsuarioComponent implements OnInit {
       this.usuarioService.crearUsuario(datosUsuario)
         .then(
           ok => {
-            this.limpiarCampos();
-            this.myForm.reset();
-            this.consultarUsuarios();
+            if(ok['respuesta']){
+              this.limpiarCampos();
+              this.consultarUsuarios();
+            } else {
+              this.inputUsuario = false;
+            }
           }
         )
         .catch(
@@ -149,9 +155,14 @@ export class UsuarioComponent implements OnInit {
       localStorage.getItem('miCuenta.putToken'))
       .then(
         ok => {
-          this.limpiarCampos();
-          this.consultarUsuarios();
-          this.testButton.nativeElement.value = 'insertar';
+          console.log(ok['respuesta']);
+          if(ok['respuesta']){
+            this.limpiarCampos();
+            this.consultarUsuarios();
+            this.testButton.nativeElement.value = 'insertar';
+          } else {
+            this.inputUsuario = false;
+          }
         },
       )
       .catch(
@@ -221,7 +232,7 @@ export class UsuarioComponent implements OnInit {
     });
   }
 
-  abrirModalDetalleUsuario(usuario){
+  abrirModalDetalleUsuario(usuario) {
     var listaTipoUsuario = usuario.ListaTipoUsuario;
     console.log(usuario);
     
@@ -234,26 +245,41 @@ export class UsuarioComponent implements OnInit {
     });
   }
 
-  eliminarUsuario(usuario) {
+  eliminarUsuario(usuario) {    
     var listaAsignacionTipoUsuario = usuario.ListaTipoUsuario;
-    this.usuarioService.eliminarUsuario(
-      usuario.IdUsuario,
-      localStorage.getItem('miCuenta.deleteToken'))
-      .then(
-        ok => {
-          listaAsignacionTipoUsuario.map(
-            item => {
-              this.eliminarAsignacionTipoUsuario(item.IdAsignacionTu);
-            }
-          )
-          this.consultarUsuarios();
-        },
-      )
-      .catch(
-        err => {
-          console.log(err);
+    sweetalert({
+      title: "Advertencia",
+      text: "¿Está seguro que desea eliminar?",
+      icon: "warning",
+      buttons: ['Cancelar', 'Ok'],
+      dangerMode: true
+    })
+      .then((willDelete) => {
+        if (willDelete) {
+          this.usuarioService.eliminarUsuario(
+            usuario.IdUsuario,
+            localStorage.getItem('miCuenta.deleteToken'))
+            .then(
+              ok => {
+                console.log(ok)
+                listaAsignacionTipoUsuario.map(
+                  item => {
+                    this.eliminarAsignacionTipoUsuario(item.IdAsignacionTu);
+                  }
+                )
+                this.consultarUsuarios();
+              },
+            )
+            .catch(
+              err => {
+                console.log(err);
+              }
+            )
+          sweetalert("Se a eliminado Correctamente!", {
+            icon: "success",
+          });
         }
-      )
+      });
   }
 
   eliminarAsignacionTipoUsuario(idAsignacionTipoUsuario) {
@@ -272,6 +298,10 @@ export class UsuarioComponent implements OnInit {
       )
   }
 
+  onChangeInputUsuario() {
+    this.inputUsuario = true;
+  }
+
   limpiarCampos() {
     this.myForm.reset();
     this.cedula = 'Cedula';
@@ -281,10 +311,13 @@ export class UsuarioComponent implements OnInit {
   }
 
   setUsuario(usuario) {
+    if(!this.inputUsuario){
+      this.inputUsuario == false;
+    }
     this.idUsuario = usuario.IdUsuario;
     this.idPersona = usuario.IdPersona;
-    this.nombres = usuario.PrimerNombre +' '+ usuario.SegundoNombre;
-    this.apellidos = usuario.ApellidoPaterno +' '+ usuario.ApellidoMaterno;
+    this.nombres = usuario.PrimerNombre + ' ' + usuario.SegundoNombre;
+    this.apellidos = usuario.ApellidoPaterno + ' ' + usuario.ApellidoMaterno;
     this.cedula = usuario.NumeroDocumento;
     this.testButton.nativeElement.value = 'modificar';
     this.myForm.setValue({

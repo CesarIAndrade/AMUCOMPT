@@ -17,7 +17,7 @@
                                     Nombres Requeridos
                                 </div>
                             </div>
-                            <div class="badge badge-danger ml-3 mt-3" [hidden]="inputNombres">
+                            <div class="badge badge-danger mt-3 btn-block" [hidden]="inputNombres">
                                 Necesita dos Nombres
                             </div>
                         </div>
@@ -30,13 +30,13 @@
                                     Apellidos Requeridos
                                 </div>
                             </div>
-                            <div class="badge badge-danger ml-3 mt-3" [hidden]="inputApellidos">
+                            <div class="badge badge-danger mt-3 btn-block" [hidden]="inputApellidos">
                                 Necesita dos Apellidos
                             </div>
                         </div>
                         <div class="form-group">
-                            <select type="text" [(ngModel)]="tipoDocumento" [ngModelOptions]="{standalone: true}" class="form-control"
-                                (change)="onChangeSelectTipoDocumento($event.target.value)">
+                            <select type="text" [(ngModel)]="tipoDocumento" [ngModelOptions]="{standalone: true}"
+                                class="form-control" (change)="onChangeSelectTipoDocumento($event.target.value)">
                                 <option value="0">Seleccione Tipo Documento</option>
                                 <option *ngFor="let item of tipoDocumentos" value="{{item.IdTipoDocumento}}">
                                     {{ item.Documento }}
@@ -47,13 +47,16 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <input type="number" formControlName="_numeroDocumento" class="form-control"
+                            <input type="number" formControlName="_numeroDocumento" (keyup)="onChangeInputCedula()" class="form-control"
                                 placeholder="Ingrese Número Documento">
                             <div class="badge badge-danger mt-3 btn-block"
                                 *ngIf="_numeroDocumento.invalid && (_numeroDocumento.dirty || _numeroDocumento.touched)">
                                 <div *ngIf="_numeroDocumento.errors.required">
                                     Numero de Documento Requerido
                                 </div>
+                            </div>
+                            <div class="badge badge-danger mt-3 btn-block" [hidden]="inputCedula">
+                                Cédula ya existe
                             </div>
                         </div>
                     </div>
@@ -76,11 +79,10 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <select type="text" [(ngModel)]="tipoTelefono1" [ngModelOptions]="{standalone: true}" class="form-control"
-                                (change)="onChangeSelectTipoTelefono1($event.target.value)">
+                            <select type="text" [(ngModel)]="tipoTelefono1" [ngModelOptions]="{standalone: true}"
+                                class="form-control" (change)="onChangeSelectTipoTelefono1($event.target.value)">
                                 <option value="0" disabled>Tipo Telefono</option>
-                                <option *ngFor="let item of tipoTelefonos"
-                                value="{{item.IdTipoTelefono}}">
+                                <option *ngFor="let item of tipoTelefonos" value="{{item.IdTipoTelefono}}">
                                     {{ item.Descripcion }}
                                 </option>
                             </select>
@@ -99,11 +101,10 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <select type="text" [(ngModel)]="tipoTelefono2" [ngModelOptions]="{standalone: true}" class="form-control"
-                                (change)="onChangeSelectTipoTelefono2($event.target.value)">
+                            <select type="text" [(ngModel)]="tipoTelefono2" [ngModelOptions]="{standalone: true}"
+                                class="form-control" (change)="onChangeSelectTipoTelefono2($event.target.value)">
                                 <option value="0" disabled>Tipo Telefono</option>
-                                <option *ngFor="let item of tipoTelefonos"
-                                value="{{item.IdTipoTelefono}}">
+                                <option *ngFor="let item of tipoTelefonos" value="{{item.IdTipoTelefono}}">
                                     {{ item.Descripcion }}
                                 </option>
                             </select>
@@ -112,8 +113,8 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <input type="email" [(ngModel)]="correo" [ngModelOptions]="{standalone: true}" class="form-control"
-                                placeholder="Ingrese Correo">
+                            <input type="email" [(ngModel)]="correo" [ngModelOptions]="{standalone: true}"
+                                class="form-control" placeholder="Ingrese Correo">
                         </div>
                     </div>
                 </div>
@@ -125,8 +126,8 @@
                     </div>
                     <div class="card-body">
                         <div class="form-group">
-                            <select type="text" [(ngModel)]="provincia" [ngModelOptions]="{standalone: true}" class="form-control"
-                                (change)="cantonesDeUnaProvincia($event.target.value)">
+                            <select type="text" [(ngModel)]="provincia" [ngModelOptions]="{standalone: true}"
+                                class="form-control" (change)="cantonesDeUnaProvincia($event.target.value)">
                                 <option value="0" disabled>Seleccionar Provincia </option>
                                 <option *ngFor="let item of provincias" value="{{item.IdProvincia}}">
                                     {{ item.Descripcion }}
@@ -137,8 +138,8 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <select type="text" [(ngModel)]="canton" [ngModelOptions]="{standalone: true}" class="form-control"
-                                (change)="parroquiasDeUnCanton($event.target.value)">
+                            <select type="text" [(ngModel)]="canton" [ngModelOptions]="{standalone: true}"
+                                class="form-control" (change)="parroquiasDeUnCanton($event.target.value)">
                                 <option value="0" disabled>Seleccionar Cantón </option>
                                 <option *ngFor="let item of cantones" value="{{item.IdCanton}}">
                                     {{ item.Descripcion }}
@@ -149,8 +150,8 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <select type="text" [(ngModel)]="parroquia" [ngModelOptions]="{standalone: true}" class="form-control"
-                                (change)="comunidadesDeUnaParroquia($event.target.value)">
+                            <select type="text" [(ngModel)]="parroquia" [ngModelOptions]="{standalone: true}" (change)="onChangeSelectParroquia($event.target.value)"
+                                class="form-control">
                                 <option value="0" disabled>Seleccionar Parroquia</option>
                                 <option *ngFor="let item of parroquias" value="{{item.IdParroquia}}">
                                     {{ item.Descripcion }}
@@ -158,18 +159,6 @@
                             </select>
                             <div class="badge badge-danger mt-3 btn-block" [hidden]="selectParroquia">
                                 Parroquia Requerida
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <select type="text" [(ngModel)]="comunidad" [ngModelOptions]="{standalone: true}" class="form-control"
-                                (change)="onChangeSelectComunidad($event.target.value)">
-                                <option value="0" disabled>Seleccionar Comunidad</option>
-                                <option *ngFor="let item of comunidades" value="{{item.IdComunidad}}">
-                                    {{ item.Descripcion }}
-                                </option>
-                            </select>
-                            <div class="badge badge-danger mt-3 btn-block" [hidden]="selectComunidad">
-                                Comunidad Requerida
                             </div>
                         </div>
                     </div>
@@ -180,7 +169,8 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="form-group">
-                    <button type="submit" class="form-control btn-success" [value]="botonInsertar" #testButton>Guardar Persona</button>
+                    <button type="submit" class="form-control btn-success" [value]="botonInsertar" #testButton>Guardar
+                        Persona</button>
                 </div>
             </div>
         </div>
@@ -189,7 +179,8 @@
         <div class="col-md-12">
             <div class="form-group input-container">
                 <i class="fa fa-search icon"></i>
-                <input [(ngModel)]="filterPersona" type="text" class="form-control input-field" placeholder="Ejem. Zambrano Zambrano">
+                <input [(ngModel)]="filterPersona" type="text" class="form-control input-field"
+                    placeholder="Ejem. Zambrano Zambrano">
             </div>
             <div class="table-responsive-sm">
                 <table class="table table-sm">
@@ -203,34 +194,57 @@
                         </tr>
                     </thead>
                     <tbody>
-                        
-                        <tr *ngFor="let item of personas | filter: filterPersona : 'PrimerNombre':'SegundoNombre':'ApellidoPaterno':'ApellidoMaterno':'NumeroDocumento'">
+                        <tr
+                            *ngFor="let item of personas | filter: filterPersona : 'PrimerNombre':'SegundoNombre':'ApellidoPaterno':'ApellidoMaterno':'NumeroDocumento'">
                             <td> {{ item.PrimerNombre }} {{ item.SegundoNombre }} </td>
                             <td> {{ item.ApellidoPaterno }} {{ item.ApellidoMaterno }} </td>
                             <td> {{ item.TipoDocumento }} </td>
                             <td> {{ item.NumeroDocumento }} </td>
-                            <td>
-                                <button tooltip="Ver Informacion" placement="top" class="btn btn-sm btn-outline-primary separacion-botones"
-                                    value="{{item.IdPersona}}"
-                                    (click)="consultarPersonaPorId('detalles', item.IdPersona)">
-                                    <i class="fa fa-eye" aria-hidden="true"></i>
-                                    
-                                </button>
-                            </td>
-                            <td>
-                                <button tooltip="Modificar" placement="top" class="btn btn-sm btn-outline-info separacion-botones"
-                                    value="{{item.IdPersona}}"
-                                    (click)="consultarPersonaPorId('modificar', item.IdPersona)">
-                                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                                </button>
-                            </td>
-                            <td>
-                                <button tooltip="Eliminar" placement="top"
-                                class="btn btn-sm btn-outline-danger separacion-botones"
-                                    value="{{item.IdPersona}}" (click)="eliminarPersona(item.IdPersona)">
-                                    <i class="fa fa-trash" aria-hidden="true"></i>
-                                </button >
-                            </td>
+                            <ng-container *ngIf="item.IdUsuario == ''; then sePuedeEliminar; else noSePuedeEliminar">
+                            </ng-container>
+                            <ng-template #sePuedeEliminar>
+                                <td>
+                                    <button tooltip="Ver Información" placement="top" 
+                                    class="btn btn-sm btn-outline-primary separacion-botones"
+                                        value="{{item.IdPersona}}"
+                                        (click)="consultarPersonaPorId('detalles', item.IdPersona)">
+                                        <i class="fa fa-eye" aria-hidden="true"></i>
+                                    </button>
+                                </td>
+                                <td>
+                                    <button tooltip="Modificar" placement="top" 
+                                    class="btn btn-sm btn-outline-info separacion-botones"
+                                        value="{{item.IdPersona}}"
+                                        (click)="consultarPersonaPorId('modificar', item.IdPersona)">
+                                        <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                    </button>
+                                </td>
+                                <td>
+                                    <button tooltip="Eliminar" placement="top"  
+                                    class="btn btn-sm btn-outline-danger separacion-botones"
+                                        value="{{item.IdPersona}}" (click)="eliminarPersona(item.IdPersona)">
+                                        <i class="fa fa-trash" aria-hidden="true"></i>
+                                    </button>
+                                </td>
+                            </ng-template>
+                            <ng-template #noSePuedeEliminar>
+                                <td>
+                                    <button tooltip="Ver Información" placement="top" 
+                                    class="btn btn-sm btn-outline-primary separacion-botones"
+                                        value="{{item.IdPersona}}"
+                                        (click)="consultarPersonaPorId('detalles', item.IdPersona)">
+                                        <i class="fa fa-eye" aria-hidden="true"></i>
+                                    </button>
+                                </td>
+                                <td>
+                                    <button tooltip="Modificar" placement="top"  
+                                    class="btn btn-sm btn-outline-info separacion-botones"
+                                        value="{{item.IdPersona}}"
+                                        (click)="consultarPersonaPorId('modificar', item.IdPersona)">
+                                        <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                    </button>
+                                </td>
+                            </ng-template>
                         </tr>
                     </tbody>
                 </table>

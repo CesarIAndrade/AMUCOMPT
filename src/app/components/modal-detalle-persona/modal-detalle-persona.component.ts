@@ -12,7 +12,7 @@ export class ModalDetallePersonaComponent implements OnInit {
   constructor(
     public dialogRef: MatDialogRef<ModalDetallePersonaComponent>,
     @Inject(MAT_DIALOG_DATA) public data: PersonaModal
-  ) { }
+  ) { console.log(data) }
 
   nombresCompletos = this.data.primerNombreModal + ' ' + 
     this.data.segundoNombreModal + ' ' +
@@ -29,7 +29,7 @@ export class ModalDetallePersonaComponent implements OnInit {
 
   ngOnInit() {
     if(this.data.provinciaModal == null || this.data.cantonModal == null ||
-      this.data.parroquiaModal == null || this.data.comunidadModal == null) {
+      this.data.parroquiaModal == null) {
         this.direccion = 'Sin Direccion';
       }
   }

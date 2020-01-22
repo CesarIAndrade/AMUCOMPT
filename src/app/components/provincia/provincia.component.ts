@@ -3,8 +3,8 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { PanelAdministracionService } from 'src/app/services/panel-administracion.service';
 import { PersonaService } from 'src/app/services/persona.service';
 import { Provincia } from 'src/app/interfaces/provincia/provincia';
+import sweetalert from 'sweetalert';
 
-import swal from 'sweetalert';
 @Component({
   selector: 'app-provincia',
   templateUrl: './provincia.component.html',
@@ -28,7 +28,8 @@ export class ProvinciaComponent implements OnInit {
 
   provincias: Provincia[] = [];
   filterProvincia = '';
-  valorIdProvincia:string;
+  valorIdProvincia: string;
+  
   validarFormulario() {
     if (this.myForm.valid) {
       if (this.testButton.nativeElement.value == 'ingresar') {
@@ -49,7 +50,7 @@ export class ProvinciaComponent implements OnInit {
       .then(
         ok => {
           this.limpiarCampos();
-          this.mostrarProvincia();
+          this.consultarProvincia();
         }
       )
       .catch(
@@ -59,10 +60,11 @@ export class ProvinciaComponent implements OnInit {
       )
   }
 
-  mostrarProvincia() {
+  consultarProvincia() {
     this.panelAdministracionService.consultarProvincia(localStorage.getItem('miCuenta.getToken'))
       .then(
         ok => {
+          this.provincias = [];
           this.provincias = ok['respuesta'];
         }
       )
@@ -73,9 +75,8 @@ export class ProvinciaComponent implements OnInit {
       )
   }
 
-  setProvincia(value)
-  {
-    this.valorIdProvincia=value.IdProvincia;
+  setProvincia(value) {
+    this.valorIdProvincia = value.IdProvincia;
     this.myForm.setValue({
       _provincia: value.Descripcion
     })
@@ -90,7 +91,7 @@ export class ProvinciaComponent implements OnInit {
       .then(
         ok => {
           this.limpiarCampos();
-          this.mostrarProvincia();
+          this.consultarProvincia();
         }
       )
       .catch(
@@ -101,33 +102,39 @@ export class ProvinciaComponent implements OnInit {
   }
 
   eliminarProvincia(idProvincia: string) {
-    swal({
-      title: "Advertencia?",
-      text: "Esta Seguro que desea eliminar",
+    sweetalert({
+      title: "Advertencia",
+      text: "¿Está seguro que desea eliminar?",
       icon: "warning",
-      buttons: true,
-      dangerMode: true,
+      buttons: ['Cancelar', 'Ok'],
+      dangerMode: true
     })
-    .then((willDelete) => {
-      if (willDelete) {
-        this.panelAdministracionService.eliminarProvincia(
-          idProvincia,
-          localStorage.getItem('miCuenta.deleteToken'))
-        .then(
-          ok => {
-            this.mostrarProvincia();
-          }
-        )
-        .catch(
-          error => {
-            console.log(error);
-          }
-        )
-        swal("Se a eliminado Correctamente!", {
-          icon: "success",
-        });
-      }
-    });
+      .then((willDelete) => {
+        if (willDelete) {
+          this.panelAdministracionService.eliminarProvincia(
+            idProvincia,
+            localStorage.getItem('miCuenta.deleteToken'))
+          .then(
+            ok => {
+              if(ok['respuesta']){
+                sweetAlert("Se a eliminado Correctamente!", {
+                  icon: "success",
+                });
+                this.consultarProvincia();
+              } else {
+                sweetAlert("No se ha podido elminiar!", {
+                  icon: "error",
+                });
+              }
+            }
+          )
+          .catch(
+            error => {
+              console.log(error);
+            }
+          )
+        }
+      });
   }
 
   limpiarCampos() {
@@ -140,6 +147,6 @@ export class ProvinciaComponent implements OnInit {
 
   ngOnInit() {
     this.provincias = [];
-    this.mostrarProvincia();
+    this.consultarProvincia();
   }
 }

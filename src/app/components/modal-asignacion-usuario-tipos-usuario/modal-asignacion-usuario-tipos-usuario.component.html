@@ -9,7 +9,8 @@
                     <div class="form-group input-container">
                         <select #testSelect [(ngModel)]="tipoUsuario" type="text" class="form-control input-field" (click)="agregarTipoUsuarioALista($event)">
                             <option value="0" disabled>Seleccionar Tipo Usuario</option>
-                            <option *ngFor="let item of tipoUsuarios" value="{{item.IdTipoUsuario}}">
+                            <option *ngFor="let item of tipoUsuarios" 
+                            value="{{item.IdTipoUsuario}}">
                                 {{ item.Descripcion }}
                             </option>
                         </select>

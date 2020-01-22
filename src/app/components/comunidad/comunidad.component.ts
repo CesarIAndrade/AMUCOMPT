@@ -4,7 +4,7 @@ import { Parroquia } from 'src/app/interfaces/parroquia/parroquia';
 import { Comunidad } from 'src/app/interfaces/comunidad/comunidad';
 import { PanelAdministracionService } from 'src/app/services/panel-administracion.service';
 import { PersonaService } from 'src/app/services/persona.service';
-import swal from 'sweetalert';
+import sweetalert from 'sweetalert';
 @Component({
   selector: 'app-comunidad',
   templateUrl: './comunidad.component.html',
@@ -53,7 +53,6 @@ export class ComunidadComponent implements OnInit {
       .then(
         ok => {
           this.comunidades = ok['respuesta'];
-          console.log(ok['respuesta']);
           this.consultarParroquias();
         }
       )
@@ -90,7 +89,6 @@ export class ComunidadComponent implements OnInit {
     )
       .then(
         ok => {
-          console.log(ok['respuesta']);
           this.limpiarCampos();
           this.consultarComunidades();
         }
@@ -127,7 +125,6 @@ export class ComunidadComponent implements OnInit {
     )
       .then(
         ok => {
-          console.log(ok['respuesta']);
           this.limpiarCampos();
           this.consultarComunidades();
         }
@@ -140,12 +137,12 @@ export class ComunidadComponent implements OnInit {
   }
 
   eliminarComunidad(idComunidad: string) {
-    swal({
-      title: "Advertencia?",
-      text: "Esta Seguro que desea eliminar",
+    sweetalert({
+      title: "Advertencia",
+      text: "¿Está seguro que desea eliminar?",
       icon: "warning",
-      buttons: true,
-      dangerMode: true,
+      buttons: ['Cancelar', 'Ok'],
+      dangerMode: true
     })
     .then((willDelete) => {
       if (willDelete) {
@@ -154,7 +151,6 @@ export class ComunidadComponent implements OnInit {
           localStorage.getItem('miCuenta.deleteToken'))
           .then(
             ok => {
-              console.log(ok['respuesta']);
               this.consultarComunidades();
             }
           )
@@ -163,9 +159,9 @@ export class ComunidadComponent implements OnInit {
               console.log(error);
             }
           )
-        // swal("Se a eliminado Correctamente!", {
-        //   icon: "success",
-        // });
+        sweetAlert("Se a eliminado Correctamente!", {
+          icon: "success",
+        });
       }
     });
   }
