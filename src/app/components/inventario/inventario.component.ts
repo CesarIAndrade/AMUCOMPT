@@ -13,10 +13,7 @@ export class InventarioComponent implements OnInit {
 
   constructor() { }
   
-  nuevoProductoCreado = false;
-
   verificarNuevoTipoProductoCreado(event) {
-    console.log(event);
     if(event){
       this.tabProducto.ngOnInit();
     }

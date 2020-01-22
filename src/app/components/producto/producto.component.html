@@ -1,7 +1,7 @@
 <br>
 <div class="container">
     <div class="row">
-        <div class="col-lg-4 col-md-5">
+        <div class="col-lg-5">
             <div class="card">
                 <div class="card-header" style="text-align: center;">
                     Nuevo Producto
@@ -19,8 +19,16 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <textarea rows="3" formControlName="_descripcion"                   class="form-control" type="text"
-                                placeholder="Ingrese Descripción Producto"></textarea>
+                            <select type="text" [(ngModel)]="tipoProducto" [ngModelOptions]="{standalone: true}"
+                                class="form-control" (change)="onChangeSelectTipoProducto($event.target.value)">
+                                <option value="0" disabled>Seleccione Tipo Producto</option>
+                                <option *ngFor="let item of tipoProductos" value="{{item.IdTipoProducto}}">
+                                    {{ item.Descripcion }}
+                                </option>
+                            </select>
+                            <div class="badge badge-danger mt-3 btn-block" [hidden]="selectTipoProducto">
+                                Tipo Producto Requerido
+                            </div>
                         </div>
                         <div class="form-group">
                             <input formControlName="_codigo" class="form-control" type="text"
@@ -32,20 +40,50 @@
                                 </div>
                             </div>
                         </div>
-
                         <div class="form-group">
-                            <select type="text" [(ngModel)]="tipoProducto" [ngModelOptions]="{standalone: true}"
-                                class="form-control" (change)="onChangeSelectTipoProducto($event.target.value)">
-                                <option value="0" disabled>Tipo Producto</option>
-                                <option *ngFor="let item of tipoProductos" value="{{item.IdTipoProducto}}">
+                            <select type="text" [(ngModel)]="presentacion" [ngModelOptions]="{standalone: true}"
+                                class="form-control" (change)="onChangeSelectPresentacion($event.target.value)">
+                                <option value="0" disabled>Seleccione Presentación</option>
+                                <option *ngFor="let item of presentaciones" value="{{item.IdPresentacion}}">
                                     {{ item.Descripcion }}
                                 </option>
                             </select>
-                            <div class="badge badge-danger mt-3 btn-block" [hidden]="selectTipoProducto">
-                                Tipo Producto Requerido
+                            <div class="badge badge-danger mt-3 btn-block" [hidden]="selectPresentacion">
+                                Presentación Requerida
                             </div>
                         </div>
-
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <input formControlName="_contenidoNeto" class="form-control" type="number"
+                                        placeholder="Contenido Neto">
+                                    <div class="badge badge-danger mt-3 btn-block"
+                                        *ngIf="_contenidoNeto.invalid && (_contenidoNeto.dirty || _contenidoNeto.touched)">
+                                        <div *ngIf="_contenidoNeto.errors.required">
+                                            Contenido Neto Requerido
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <select type="text" [(ngModel)]="medida" [ngModelOptions]="{standalone: true}"
+                                        class="form-control" (change)="onChangeSelectMedida($event.target.value)">
+                                        <option value="0" disabled>Medida</option>
+                                        <option *ngFor="let item of medidas" value="{{item.IdMedida}}">
+                                            {{ item.Descripcion }}
+                                        </option>
+                                    </select>
+                                    <div class="badge badge-danger mt-3 btn-block" [hidden]="selectTipoProducto">
+                                        Medida Requerido
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <textarea formControlName="_descripcion" class="form-control" type="text"
+                                placeholder="Ingrese Descripción Producto"></textarea>
+                        </div>
                         <div class="form-group">
                             <button type="submit" [value]="botonIngresar" [disabled]="myForm.invalid"
                                 class="form-control btn-success" #testButton>Guardar Producto</button>
@@ -53,9 +91,8 @@
                     </form>
                 </div>
             </div>
-            <br>
         </div>
-        <div class="col-lg-8 col-md-7">
+        <div class="col-lg-7">
             <div class="card">
                 <div class="card-header" style="text-align: center;">
                     Lista Productos
@@ -83,13 +120,12 @@
                                     <ng-container *ngIf="element.ProductoUtilizado == '0'">
                                         <td mat-cell>
                                             <button tooltip="Modificar" placement="top"
-                                                class="btn btn-sm btn-outline-info"
-                                                (click)="mostrarProducto(element)">
+                                                class="btn btn-sm btn-outline-info" (click)="mostrarProducto(element)">
                                                 <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                                             </button>
                                         </td>
                                         <td mat-cell>
-                                            <button class="btn btn-sm btn-outline-danger" 
+                                            <button class="btn btn-sm btn-outline-danger"
                                                 (click)="eliminarProducto(element.IdProducto)">
                                                 <i class="fa fa-trash" aria-hidden="true"></i>
                                             </button>
@@ -98,8 +134,7 @@
                                     <ng-container *ngIf="element.ProductoUtilizado == '1'">
                                         <td mat-cell colspan="2">
                                             <button tooltip="Modificar" placement="top"
-                                                class="btn btn-sm btn-outline-info"
-                                                (click)="mostrarProducto(element)">
+                                                class="btn btn-sm btn-outline-info" (click)="mostrarProducto(element)">
                                                 <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                                             </button>
                                         </td>

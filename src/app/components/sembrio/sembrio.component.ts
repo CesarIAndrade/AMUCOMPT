@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 
 // Interfaces
@@ -8,6 +8,8 @@ import { Comunidad } from 'src/app/interfaces/comunidad/comunidad';
 // Services
 import { PersonaService } from 'src/app/services/persona.service';
 import { PanelAdministracionService } from 'src/app/services/panel-administracion.service';
+
+// SweetAlert
 import sweetalert from 'sweetalert';
 
 @Component({
@@ -19,6 +21,8 @@ export class SembrioComponent implements OnInit {
 
   myForm: FormGroup;
   @ViewChild('testButton', { static: false }) testButton: ElementRef;
+  @Output() nuevoSembrioCreado = new EventEmitter();
+  
   constructor(
     private panelAdministracionService: PanelAdministracionService,
     private personaService: PersonaService
@@ -79,7 +83,6 @@ export class SembrioComponent implements OnInit {
         }
       } else if (this.testButton.nativeElement.value == 'modificar') {
         this.actualizarSembrio();
-        this.testButton.nativeElement.value = 'ingresar';
       }
     } else {
       console.log("Algo Salio Mal");
@@ -94,6 +97,7 @@ export class SembrioComponent implements OnInit {
     )
       .then(
         ok => {
+          this.nuevoSembrioCreado.emit(true);
           this.limpiarCampos();
           this.consultarSembrios();
         }
@@ -138,6 +142,7 @@ export class SembrioComponent implements OnInit {
         ok => {
           this.limpiarCampos();
           this.consultarSembrios();
+          this.testButton.nativeElement.value = 'ingresar';
         }
       )
       .catch(

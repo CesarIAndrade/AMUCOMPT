@@ -6,7 +6,9 @@ import { Presentacion } from 'src/app/interfaces/presentacion/presentacion';
 
 // Services
 import { InventarioService } from 'src/app/services/inventario.service';
-import { error } from 'protractor';
+
+// SweetAlert
+import sweetalert from 'sweetalert';
 
 @Component({
   selector: 'app-presentacion',
@@ -106,20 +108,31 @@ export class PresentacionComponent implements OnInit {
   }
 
   eliminarPresentacion(idPresentacion) {
-    this.inventarioService.eliminarPresentacion(
-      idPresentacion,
-      localStorage.getItem('miCuenta.deleteToken')
-    )
-      .then(
-        ok => {
-          this.consultarPresentaciones();
+    sweetalert({
+      title: "Advertencia",
+      text: "¿Está seguro que desea eliminar?",
+      icon: "warning",
+      buttons: ['Cancelar', 'Ok'],
+      dangerMode: true
+    })
+      .then((willDelete) => {
+        if (willDelete) {
+          this.inventarioService.eliminarPresentacion(
+            idPresentacion,
+            localStorage.getItem('miCuenta.deleteToken')
+          )
+            .then(
+              ok => {
+                this.consultarPresentaciones();
+              }
+            )
+            .catch(
+              error => {
+                console.log(error);
+              }
+            )
         }
-      )
-      .catch(
-        error => {
-          console.log(error);
-        }
-      )
+      });
   }
 
   get _presentacion() {

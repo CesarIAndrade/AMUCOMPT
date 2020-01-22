@@ -45,6 +45,7 @@ import { ProductoComponent } from './components/producto/producto.component';
 import { TipoProductoComponent } from './components/tipo-producto/tipo-producto.component';
 import { PresentacionComponent } from './components/presentacion/presentacion.component';
 import { MedidaComponent } from './components/medida/medida.component';
+import { ConfiguracionProductoComponent } from './components/configuracion-producto/configuracion-producto.component';
 
 @NgModule({
   declarations: [
@@ -70,6 +71,7 @@ import { MedidaComponent } from './components/medida/medida.component';
     TipoProductoComponent,
     PresentacionComponent,
     MedidaComponent,
+    ConfiguracionProductoComponent,
   ],
   imports: [
     BrowserModule,

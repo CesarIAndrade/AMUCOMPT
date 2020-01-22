@@ -14,6 +14,7 @@ import { Page404Component } from './components/page404/page404.component';
 // Guards
 import { ValidarUsuarioGuard } from "src/app/guards/validar-usuario.guard";
 import { PanelAdministracionComponent } from './components/panel-administracion/panel-administracion.component';
+import { ConfiguracionProductoComponent } from './components/configuracion-producto/configuracion-producto.component';
 
 const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'login' },
@@ -29,6 +30,10 @@ const routes: Routes = [
       },
       {
         path: 'personas', component: PersonaComponent,
+        // canActivate: [ValidarUsuarioGuard]
+      },
+      {
+        path: 'configuracion-productos', component: ConfiguracionProductoComponent,
         // canActivate: [ValidarUsuarioGuard]
       },
       {

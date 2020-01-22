@@ -1,11 +1,16 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { PanelAdministracionService } from 'src/app/services/panel-administracion.service';
-import { PersonaService } from 'src/app/services/persona.service';
+
+// Interfaces
 import { Parroquia } from 'src/app/interfaces/parroquia/parroquia';
 import { Canton } from 'src/app/interfaces/canton/canton';
-import sweetalert from 'sweetalert';
 
+// Services
+import { PanelAdministracionService } from 'src/app/services/panel-administracion.service';
+import { PersonaService } from 'src/app/services/persona.service';
+
+// SweetAlert
+import sweetalert from 'sweetalert';
 
 @Component({
   selector: 'app-parroquia',
@@ -16,6 +21,7 @@ export class ParroquiaComponent implements OnInit {
 
   myForm: FormGroup;
   @ViewChild('testButton', { static: false }) testButton: ElementRef;
+  @Output() nuevaParroquiaCreada = new EventEmitter();
 
   constructor(private panelAdministracionService: PanelAdministracionService,
     private personaService: PersonaService
@@ -77,7 +83,6 @@ export class ParroquiaComponent implements OnInit {
         }
       } else if (this.testButton.nativeElement.value == 'modificar') {
         this.actualizarParroquia();
-        this.testButton.nativeElement.value = 'ingresar';
       }
     } else {
       console.log("Algo Salio Mal");
@@ -92,6 +97,7 @@ export class ParroquiaComponent implements OnInit {
     )
       .then(
         ok => {
+          this.nuevaParroquiaCreada.emit(true);
           this.limpiarCampos();
           this.consultarParroquias();
         }
@@ -130,6 +136,7 @@ export class ParroquiaComponent implements OnInit {
         ok => {
           this.limpiarCampos();
           this.consultarParroquias();
+          this.testButton.nativeElement.value = 'ingresar';
         }
       )
       .catch(

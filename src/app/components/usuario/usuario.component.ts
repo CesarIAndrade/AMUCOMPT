@@ -129,7 +129,7 @@ export class UsuarioComponent implements OnInit {
       this.usuarioService.crearUsuario(datosUsuario)
         .then(
           ok => {
-            if(ok['respuesta']){
+            if (ok['respuesta']) {
               this.limpiarCampos();
               this.consultarUsuarios();
             } else {
@@ -157,7 +157,7 @@ export class UsuarioComponent implements OnInit {
       .then(
         ok => {
           console.log(ok['respuesta']);
-          if(ok['respuesta']){
+          if (ok['respuesta']) {
             this.limpiarCampos();
             this.consultarUsuarios();
             this.nuevoUsuario = 'Nuevo Usuario';
@@ -194,32 +194,17 @@ export class UsuarioComponent implements OnInit {
   abrirModalAsignacionUsuarioPersona() {
     let dialogRef = this.modalAsignacionUsuarioPersona.open(ModalAsignacionUsuarioPersonaComponent, {
       width: '900px',
-      height: '500px',
-      data: {
-        cedula: this.cedula,
-        idPersona: this.idPersona,
-        idUsuario: this.idUsuarioModalAUP,
-        nombres: this.nombres,
-        apellidos: this.apellidos
-      }
+      height: '500px'
     });
     dialogRef.afterClosed().subscribe(result => {
-      if(this.cedula == ''){
-        if (result != null) {
-          this.inputPersona = true;
-          this.resultadoModal = result;
-          this.cedula = this.resultadoModal.cedula;
-          this.idPersona = this.resultadoModal.idPersona;
-          this.nombres = this.resultadoModal.nombres;
-          this.apellidos = this.resultadoModal.apellidos;
-          if (result.idUsuario == null) {
-            this.idUsuarioModalAUP = '';
-          } else {
-            this.idUsuarioModalAUP = result.idUsuario;
-          }
-        } else {
-          this.inputPersona = false;
-        }
+      if (result != null) {
+        this.inputPersona = true;
+        this.cedula = result.cedula;
+        this.idPersona = result.idPersona;
+        this.nombres = result.nombres;
+        this.apellidos = result.apellidos;
+      } else {
+        this.inputPersona = false;
       }
     });
   }
@@ -236,7 +221,7 @@ export class UsuarioComponent implements OnInit {
     });
   }
 
-  eliminarUsuario(usuario) {    
+  eliminarUsuario(usuario) {
     var listaAsignacionTipoUsuario = usuario.ListaTipoUsuario;
     sweetalert({
       title: "Advertencia",
@@ -304,7 +289,7 @@ export class UsuarioComponent implements OnInit {
   setUsuario(usuario) {
     this.testInput.nativeElement.disabled = true;
     this.nuevoUsuario = 'Modificar Usuario';
-    if(!this.inputUsuario){
+    if (!this.inputUsuario) {
       this.inputUsuario == false;
     }
     this.idUsuario = usuario.IdUsuario;
@@ -329,6 +314,7 @@ export class UsuarioComponent implements OnInit {
 
   ngOnInit() {
     this.consultarUsuarios();
+    console.log(localStorage.getItem('miCuenta.idAsignacionTipoUsuario'));
   }
 
   tablaUsuarios = ['usuario', 'nombres', 'acciones'];

@@ -344,4 +344,108 @@ export class InventarioService {
         })
     })
   }
+
+  consultarConfiguracionProducto(_token: string) {
+    const body = new HttpParams()
+      .set('encriptada', _token)
+    return new Promise((resolve, reject) => {
+      this.http.post(this.apiUrl + 'Inventario/ListaConfigurarProductos', body.toString(),
+        {
+          headers: new HttpHeaders()
+            .set('Content-Type', 'application/x-www-form-urlencoded')
+        }
+      )
+        .subscribe(res => {
+          resolve(res);
+        }, (err) => {
+          reject(err);
+        })
+    })
+  }
+
+  crearConfiguracionProducto(
+    idAsignacionTu: string,
+    idProducto: string,
+    idMedida: string,
+    idPresentacion: string,
+    cantidadMedida: string,
+    _token: string
+  ) {
+    const body = new HttpParams()
+      .set('IdAsignacionTu', idAsignacionTu)
+      .set('IdProducto', idProducto)
+      .set('IdMedida', idMedida)
+      .set('IdPresentacion', idPresentacion)
+      .set('CantidadMedida', cantidadMedida)
+      .set('encriptada', _token)
+
+    console.log(body);
+    return new Promise((resolve, reject) => {
+      this.http.post(this.apiUrl + 'Inventario/IngresoConfigurarProducto', body.toString(),
+        {
+          headers: new HttpHeaders()
+            .set('Content-Type', 'application/x-www-form-urlencoded')
+        }
+      )
+        .subscribe(res => {
+          resolve(res);
+        }, (err) => {
+          reject(err);
+        })
+    })
+  }
+
+  actualizarConfiguracionProducto(
+    idConfigurarProducto: string,
+    idAsignacionTu: string,
+    idProducto: string,
+    idMedida: string,
+    idPresentacion: string,
+    cantidadMedida: string,
+    _token: string
+  ) {
+    const body = new HttpParams()
+      .set('IdConfigurarProducto', idConfigurarProducto)
+      .set('IdAsignacionTu', idAsignacionTu)
+      .set('IdProducto', idProducto)
+      .set('IdMedida', idMedida)
+      .set('IdPresentacion', idPresentacion)
+      .set('CantidadMedida', cantidadMedida)
+      .set('encriptada', _token)
+    return new Promise((resolve, reject) => {
+      this.http.post(this.apiUrl + 'Inventario/ActualizarConfigurarProducto', body.toString(),
+        {
+          headers: new HttpHeaders()
+            .set('Content-Type', 'application/x-www-form-urlencoded')
+        }
+      )
+        .subscribe(res => {
+          resolve(res);
+        }, (err) => {
+          reject(err);
+        })
+    })
+  }
+
+  eliminarConfiguracionProducto(
+    idConfigurarProducto: string,
+    _token: string
+  ) {
+    const body = new HttpParams()
+      .set('IdConfigurarProducto', idConfigurarProducto)
+      .set('encriptada', _token)
+    return new Promise((resolve, reject) => {
+      this.http.post(this.apiUrl + 'Inventario/EliminarConfigurarProducto', body.toString(),
+        {
+          headers: new HttpHeaders()
+            .set('Content-Type', 'application/x-www-form-urlencoded')
+        }
+      )
+        .subscribe(res => {
+          resolve(res);
+        }, (err) => {
+          reject(err);
+        })
+    })
+  }
 }

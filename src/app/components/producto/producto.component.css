@@ -1,8 +1,12 @@
 .tablaProductos {
-    height: 21rem;
+    height: 24rem;
     overflow: auto;
 }
 
 table {
     width: 100%;
+}
+
+textarea {
+    resize: none;
 }

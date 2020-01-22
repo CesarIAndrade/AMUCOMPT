@@ -6,6 +6,7 @@ import { UsuarioService } from 'src/app/services/usuario.service';
 import { SeguridadService } from '../../services/seguridad.service'
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Usuario } from 'src/app/interfaces/usuario/usuario';
+import { TipoUsuario } from 'src/app/interfaces/tipo-usuario/tipo-usuario';
 
 @Component({
   selector: 'app-login',
@@ -25,8 +26,20 @@ export class LoginComponent implements OnInit {
     })
   }
 
-  usuarios: Usuario[] = [];
+  tipoUsuario = '0';
+  selectTipoUsuario = true;
   credendialesIncorrectasInput = true;
+  seleccionarTipoUsuario = true;
+  ingresarCredenciales = false;
+
+  onChangeSelectTipoUsuario(value) {
+    if (value != '0') {
+      this.selectTipoUsuario = true;
+    }
+  }
+
+  usuarios: Usuario[] = [];
+  tipoUsuarios: TipoUsuario[] = [];
 
   login() {
     if (this.myForm.valid) {
@@ -37,18 +50,31 @@ export class LoginComponent implements OnInit {
       )
         .then(
           ok => {
-            if(ok['codigo'] == '200'){
-              this.router.navigateByUrl('inicio');
+            if (ok['codigo'] == '200') {
+              this.tipoUsuarios = ok['respuesta']['ListaTipoUsuario'];
+              this.ingresarCredenciales = true;
+              this.seleccionarTipoUsuario = false;
               this.consultarTokens();
             } else {
               this.credendialesIncorrectasInput = false;
             }
           })
         .catch(
-          err => console.log(err)
+          error => {
+            console.log(error);
+          }
         )
     } else {
       console.log('Algo salio mal');
+    }
+  }
+
+  iniciarSesionSegunTipoUsuario() {
+    if (this.tipoUsuario == '0') {
+      this.selectTipoUsuario = false;
+    } else {
+      localStorage.setItem('miCuenta.idAsignacionTipoUsuario', this.tipoUsuario);
+      this.router.navigateByUrl('inicio');
     }
   }
 
@@ -60,7 +86,6 @@ export class LoginComponent implements OnInit {
     this.seguridadService.consultarTokens()
       .then(
         ok => {
-          console.log(ok['respuesta']);
           localStorage.setItem('miCuenta.getToken', ok['respuesta']['ClaveGetEncrip']);
           localStorage.setItem('miCuenta.postToken', ok['respuesta']['ClavePostEncrip']);
           localStorage.setItem('miCuenta.putToken', ok['respuesta']['ClavePutEncrip']);
@@ -72,9 +97,7 @@ export class LoginComponent implements OnInit {
   }
 
   consultarUsuarios(_token: string) {
-    this.usuarioService.consultarUsuarios(
-      _token
-    )
+    this.usuarioService.consultarUsuarios(_token)
       .then(
         ok => {
           console.log(ok['respuesta']);
@@ -96,10 +119,6 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit() {
-    // setTimeout(() => {
-    //   document.getElementById('loadingPage').hidden = true;
-    // }, 1000);
-    //this.consultarTokens();
   }
 
 }

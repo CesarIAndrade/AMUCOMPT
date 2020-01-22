@@ -7,6 +7,9 @@ import { TipoProducto } from 'src/app/interfaces/tipo-producto/tipo-producto';
 import { InventarioService } from 'src/app/services/inventario.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 
+// SweetAlert
+import sweetalert from 'sweetalert';
+
 @Component({
   selector: 'app-tipo-producto',
   templateUrl: './tipo-producto.component.html',
@@ -34,6 +37,7 @@ export class TipoProductoComponent implements OnInit {
       .then(
         ok => {
           this.tipoProductos = ok['respuesta'];
+          console.log(this.tipoProductos)
         }
       )
       .catch(
@@ -63,7 +67,6 @@ export class TipoProductoComponent implements OnInit {
     )
       .then(
         ok => {
-          this.nuevoTipoProductoCreado.emit(true);
           this.myForm.reset();
           this.consultarTipoProductos();
         }
@@ -104,20 +107,31 @@ export class TipoProductoComponent implements OnInit {
   }
 
   eliminarTipoProducto(idTipoProducto) {
-    this.inventarioService.eliminarTipoProducto(
-      idTipoProducto, 
-      localStorage.getItem('miCuenta.deleteToken')
-    )
-    .then(
-      ok => {
-        this.consultarTipoProductos();
+    sweetalert({
+      title: "Advertencia",
+      text: "¿Está seguro que desea eliminar?",
+      icon: "warning",
+      buttons: ['Cancelar', 'Ok'],
+      dangerMode: true
+    })
+    .then((willDelete) => {
+      if (willDelete) {
+        this.inventarioService.eliminarTipoProducto(
+          idTipoProducto, 
+          localStorage.getItem('miCuenta.deleteToken')
+        )
+        .then(
+          ok => {
+            this.consultarTipoProductos();
+          }
+        )
+        .catch(
+          error => {
+            console.log(error);
+          }
+        )
       }
-    )
-    .catch(
-      error => {
-        console.log(error);
-      }
-    )
+    });
   }
 
   get _tipoProducto() {
@@ -127,8 +141,6 @@ export class TipoProductoComponent implements OnInit {
   ngOnInit() {
     this.consultarTipoProductos();
   }
-
-  @Output() nuevoTipoProductoCreado = new EventEmitter();
 
   tablaTipoProductos = ['descripcion', 'acciones'];
 
