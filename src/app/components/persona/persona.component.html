@@ -183,7 +183,7 @@
                     placeholder="Ejem. Zambrano Zambrano">
             </div>
             <div class="tablaPersonas mat-elevation-z5">
-                <table mat-table [dataSource]="personas">
+                <table mat-table [dataSource]="personas|filter:filterPersona:'PrimerNombre':'SegundoNombre':'ApellidoPaterno':'ApellidoMaterno':'NumeroDocumento'">
                     <ng-container matColumnDef="nombres">
                         <th mat-header-cell *matHeaderCellDef> Nombres </th>
                         <td mat-cell *matCellDef="let element"> {{ element.PrimerNombre }} {{ element.SegundoNombre }}

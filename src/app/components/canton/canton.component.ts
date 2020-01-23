@@ -61,6 +61,7 @@ export class CantonComponent implements OnInit {
           this.cantones = [];
           this.cantones = ok['respuesta'];
           this.consultarProvincias();
+          
         }
       )
       .catch(

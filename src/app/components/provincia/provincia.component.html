@@ -80,7 +80,7 @@
                     </table> -->
                     
                     <div class="tablaProvincias mat-elevation-z5">
-                        <table mat-table [dataSource]="provincias">
+                        <table mat-table [dataSource]="provincias|filter:filterProvincia:'Descripcion'">
                             <ng-container matColumnDef="provincia">
                                 <th mat-header-cell *matHeaderCellDef> Provincia </th>
                                 <td mat-cell *matCellDef="let element"> {{element.Descripcion}} </td>

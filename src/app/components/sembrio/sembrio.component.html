@@ -46,7 +46,7 @@
                         <i class="fa fa-refresh icon" (click)="consultarComunidades()" aria-hidden="true"></i>
                     </div>
                     <div class="tablaComunidades mat-elevation-z5">
-                        <table mat-table [dataSource]="comunidades">
+                        <table mat-table [dataSource]="comunidades|filter:filterComunidad:'Descripcion'">
                             <ng-container matColumnDef="comunidad">
                                 <th mat-header-cell *matHeaderCellDef> Comunidad </th>
                                 <td mat-cell *matCellDef="let element"> {{element.Descripcion}} </td>
@@ -81,7 +81,7 @@
                         <i class="fa fa-refresh icon" (click)="consultarSembrios()" aria-hidden="true"></i>
                     </div>
                     <div class="tablaSembrios mat-elevation-z5">
-                        <table mat-table [dataSource]="sembrios">
+                        <table mat-table [dataSource]="sembrios|filter:filterSembrio:'Descripcion'">
                             <ng-container matColumnDef="sembrio">
                                 <th mat-header-cell *matHeaderCellDef> Sembríos </th>
                                 <td mat-cell *matCellDef="let element"> {{element.Descripcion}} </td>
