@@ -1,10 +1,17 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormControl, Validators, } from '@angular/forms';
+
+// Interfaces
 import { Parroquia } from 'src/app/interfaces/parroquia/parroquia';
 import { Comunidad } from 'src/app/interfaces/comunidad/comunidad';
+
+// Services
 import { PanelAdministracionService } from 'src/app/services/panel-administracion.service';
 import { PersonaService } from 'src/app/services/persona.service';
+
+// SweetAlert
 import sweetalert from 'sweetalert';
+
 @Component({
   selector: 'app-comunidad',
   templateUrl: './comunidad.component.html',
@@ -14,8 +21,10 @@ export class ComunidadComponent implements OnInit {
 
   myForm: FormGroup;
   @ViewChild('testButton', { static: false }) testButton: ElementRef;
+  @Output() nuevaCaomunidadCreada = new EventEmitter();
 
-  constructor(private panelAdministracionService: PanelAdministracionService,
+  constructor(
+    private panelAdministracionService: PanelAdministracionService,
     private personaService: PersonaService
   ) {
     this.myForm = new FormGroup({
@@ -74,7 +83,6 @@ export class ComunidadComponent implements OnInit {
         }
       } else if (this.testButton.nativeElement.value == 'modificar') {
         this.actualizarComunidad();
-        this.testButton.nativeElement.value = 'ingresar';
       }
     } else {
       console.log("Algo Salio Mal");
@@ -89,6 +97,7 @@ export class ComunidadComponent implements OnInit {
     )
       .then(
         ok => {
+          this.nuevaCaomunidadCreada.emit(true);
           this.limpiarCampos();
           this.consultarComunidades();
         }
@@ -127,6 +136,7 @@ export class ComunidadComponent implements OnInit {
         ok => {
           this.limpiarCampos();
           this.consultarComunidades();
+          this.testButton.nativeElement.value = 'ingresar';
         }
       )
       .catch(
@@ -184,4 +194,8 @@ export class ComunidadComponent implements OnInit {
   ngOnInit() {
     this.consultarComunidades();
   }
+
+  tablaComunidades = ['comunidad', 'parroquia', 'acciones'];
+  tablaParroquias = ['parroquia', 'acciones'];
+
 }

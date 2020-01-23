@@ -12,11 +12,10 @@ import { Persona } from 'src/app/interfaces/persona/persona';
 
 // Functional Components
 import { MatDialog } from "@angular/material/dialog";
-import swal from 'sweetalert';
+
 // Components
 import { ModalAsignacionUsuarioPersonaComponent } from '../modal-asignacion-usuario-persona/modal-asignacion-usuario-persona.component';
 import { ModalAsignacionUsuarioTiposUsuarioComponent } from '../modal-asignacion-usuario-tipos-usuario/modal-asignacion-usuario-tipos-usuario.component';
-import { ModalDetalleUsuarioComponent } from '../modal-detalle-usuario/modal-detalle-usuario.component';
 
 export interface DialogData {
   cedula: string;
@@ -35,6 +34,7 @@ export class UsuarioComponent implements OnInit {
 
   myForm: FormGroup;
   @ViewChild('testButton', { static: false }) testButton: ElementRef;
+  @ViewChild('testInput', { static: false }) testInput: ElementRef;
 
   constructor(
     private modalAsignacionUsuarioPersona: MatDialog,
@@ -62,6 +62,7 @@ export class UsuarioComponent implements OnInit {
   inputUsuario = true;
   inputType = 'password';
   resultadoModal: DialogData;
+  nuevoUsuario = 'Nuevo Usuario';
 
   personas: Persona[] = [];
   usuarios: Usuario[] = [];
@@ -111,7 +112,6 @@ export class UsuarioComponent implements OnInit {
         this.crearUsuario();
       } else if (this.testButton.nativeElement.value == "modificar") {
         this.actualizarUsuario();
-        this.myForm.reset();
         this.testButton.nativeElement.value = "insertar";
       }
     }
@@ -130,7 +130,7 @@ export class UsuarioComponent implements OnInit {
       this.usuarioService.crearUsuario(datosUsuario)
         .then(
           ok => {
-            if(ok['respuesta']){
+            if (ok['respuesta']) {
               this.limpiarCampos();
               this.consultarUsuarios();
             } else {
@@ -147,6 +147,8 @@ export class UsuarioComponent implements OnInit {
   }
 
   actualizarUsuario() {
+    console.log(this.idUsuario);
+    console.log(this.myForm);
     this.usuarioService.actualizarUsuario(
       this.idUsuario,
       this.idPersona,
@@ -156,10 +158,11 @@ export class UsuarioComponent implements OnInit {
       .then(
         ok => {
           console.log(ok['respuesta']);
-          if(ok['respuesta']){
+          if (ok['respuesta']) {
             this.limpiarCampos();
             this.consultarUsuarios();
-            this.testButton.nativeElement.value = 'insertar';
+            this.nuevoUsuario = 'Nuevo Usuario';
+            this.testInput.nativeElement.disabled = false;
           } else {
             this.inputUsuario = false;
           }
@@ -192,28 +195,15 @@ export class UsuarioComponent implements OnInit {
   abrirModalAsignacionUsuarioPersona() {
     let dialogRef = this.modalAsignacionUsuarioPersona.open(ModalAsignacionUsuarioPersonaComponent, {
       width: '900px',
-      height: '500px',
-      data: {
-        cedula: this.cedula,
-        idPersona: this.idPersona,
-        idUsuario: this.idUsuarioModalAUP,
-        nombres: this.nombres,
-        apellidos: this.apellidos
-      }
+      height: '500px'
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result != null) {
         this.inputPersona = true;
-        this.resultadoModal = result;
-        this.cedula = this.resultadoModal.cedula;
-        this.idPersona = this.resultadoModal.idPersona;
-        this.nombres = this.resultadoModal.nombres;
-        this.apellidos = this.resultadoModal.apellidos;
-        if (result.idUsuario == null) {
-          this.idUsuarioModalAUP = '';
-        } else {
-          this.idUsuarioModalAUP = result.idUsuario;
-        }
+        this.cedula = result.cedula;
+        this.idPersona = result.idPersona;
+        this.nombres = result.nombres;
+        this.apellidos = result.apellidos;
       } else {
         this.inputPersona = false;
       }
@@ -223,8 +213,8 @@ export class UsuarioComponent implements OnInit {
   abrirModalAsignacionUsuarioTiposUsuario(usuario) {
     var listaTipoUsuario = usuario.ListaTipoUsuario;
     let dialogRef = this.modalAsignacionUsuarioTiposUsuario.open(ModalAsignacionUsuarioTiposUsuarioComponent, {
-      width: '900px',
-      height: '390px',
+      width: '500px',
+      height: '440px',
       data: {
         idUsuario: usuario.IdUsuario,
         listaTipoUsuario: listaTipoUsuario,
@@ -232,20 +222,7 @@ export class UsuarioComponent implements OnInit {
     });
   }
 
-  abrirModalDetalleUsuario(usuario) {
-    var listaTipoUsuario = usuario.ListaTipoUsuario;
-    console.log(usuario);
-    
-    let dialogRef = this.modalDetalleUsuario.open(ModalDetalleUsuarioComponent, {
-      width: '500px',
-      height: '320px',
-      data: {
-        listaTipoUsuario: listaTipoUsuario
-      }
-    });
-  }
-
-  eliminarUsuario(usuario) {    
+  eliminarUsuario(usuario) {
     var listaAsignacionTipoUsuario = usuario.ListaTipoUsuario;
     sweetalert({
       title: "Advertencia",
@@ -311,7 +288,9 @@ export class UsuarioComponent implements OnInit {
   }
 
   setUsuario(usuario) {
-    if(!this.inputUsuario){
+    this.testInput.nativeElement.disabled = true;
+    this.nuevoUsuario = 'Modificar Usuario';
+    if (!this.inputUsuario) {
       this.inputUsuario == false;
     }
     this.idUsuario = usuario.IdUsuario;
@@ -336,5 +315,8 @@ export class UsuarioComponent implements OnInit {
 
   ngOnInit() {
     this.consultarUsuarios();
+    console.log(localStorage.getItem('miCuenta.idAsignacionTipoUsuario'));
   }
+
+  tablaUsuarios = ['usuario', 'nombres', 'acciones'];
 }

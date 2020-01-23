@@ -1,14 +1,17 @@
 <mat-tab-group>
     <mat-tab label="Provincias">
-        <app-provincia></app-provincia>
+        <app-provincia (nuevaProvinciaCreada)="verificarNuevaProvinciaCreada($event)" ></app-provincia>
     </mat-tab>
     <mat-tab label="Cantones">
-        <app-canton></app-canton>
+        <app-canton (nuevoCantonCreado)="verificarNuevoCantonCreado($event)" ></app-canton>
     </mat-tab>
     <mat-tab label="Parroquias">
-        <app-parroquia></app-parroquia>
+        <app-parroquia (nuevaParroquiaCreada)="verificarNuevaParroquiaCreada($event)"></app-parroquia>
     </mat-tab>
     <mat-tab label="Comunidades">
-        <app-comunidad></app-comunidad>
+        <app-comunidad (nuevaComunidadCreada)="verificarNuevaComunidadCreada($event)" ></app-comunidad>
+    </mat-tab>
+    <mat-tab label="Sembrios">
+        <app-sembrio (nuevoSembrioCreado)="verificarNuevoSembrioCreado($event)" ></app-sembrio>    
     </mat-tab>
 </mat-tab-group>

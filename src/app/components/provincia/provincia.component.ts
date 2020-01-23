@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { PanelAdministracionService } from 'src/app/services/panel-administracion.service';
 import { PersonaService } from 'src/app/services/persona.service';
@@ -14,6 +14,7 @@ export class ProvinciaComponent implements OnInit {
 
   myForm: FormGroup;
   @ViewChild('testButton', { static: false }) testButton: ElementRef;
+  @Output() nuevaProvinciaCreada = new EventEmitter();
 
   constructor(private panelAdministracionService: PanelAdministracionService,
     private personaService: PersonaService
@@ -49,8 +50,9 @@ export class ProvinciaComponent implements OnInit {
       localStorage.getItem('miCuenta.postToken'))
       .then(
         ok => {
+          this.nuevaProvinciaCreada.emit(true);
           this.limpiarCampos();
-          this.consultarProvincia();
+          this.consultarProvincias();
         }
       )
       .catch(
@@ -60,8 +62,8 @@ export class ProvinciaComponent implements OnInit {
       )
   }
 
-  consultarProvincia() {
-    this.panelAdministracionService.consultarProvincia(localStorage.getItem('miCuenta.getToken'))
+  consultarProvincias() {
+    this.personaService.consultarProvincias(localStorage.getItem('miCuenta.getToken'))
       .then(
         ok => {
           this.provincias = [];
@@ -91,7 +93,7 @@ export class ProvinciaComponent implements OnInit {
       .then(
         ok => {
           this.limpiarCampos();
-          this.consultarProvincia();
+          this.consultarProvincias();
         }
       )
       .catch(
@@ -120,7 +122,7 @@ export class ProvinciaComponent implements OnInit {
                 sweetAlert("Se a eliminado Correctamente!", {
                   icon: "success",
                 });
-                this.consultarProvincia();
+                this.consultarProvincias();
               } else {
                 sweetAlert("No se ha podido elminiar!", {
                   icon: "error",
@@ -147,6 +149,9 @@ export class ProvinciaComponent implements OnInit {
 
   ngOnInit() {
     this.provincias = [];
-    this.consultarProvincia();
+    this.consultarProvincias();
   }
+
+  tablaProvincias = ['provincia', 'acciones'];
+
 }

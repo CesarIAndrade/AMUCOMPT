@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { TipoProductoComponent } from '../tipo-producto/tipo-producto.component';
+import { ProductoComponent } from '../producto/producto.component';
 
 @Component({
   selector: 'app-inventario',
@@ -7,7 +9,15 @@ import { Component, OnInit } from '@angular/core';
 })
 export class InventarioComponent implements OnInit {
 
+  @ViewChild(ProductoComponent, {static: false}) tabProducto: ProductoComponent; 
+
   constructor() { }
+  
+  verificarNuevoTipoProductoCreado(event) {
+    if(event){
+      this.tabProducto.ngOnInit();
+    }
+  }
 
   ngOnInit() {
   }

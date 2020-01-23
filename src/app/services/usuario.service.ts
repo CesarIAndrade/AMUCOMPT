@@ -105,7 +105,6 @@ export class UsuarioService {
           reject(err);
         })
     });
-
   }
 
   consultarAsignacionTipoUsuario(idUsuario: string, _token: string){

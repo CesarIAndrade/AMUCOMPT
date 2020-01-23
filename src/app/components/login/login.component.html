@@ -1,5 +1,5 @@
 <br>
-<div class="container page-container animated fadeInDown">
+<div class="container page-container animated fadeInDown" [hidden]="ingresarCredenciales">
     <div class="row justify-content-center">
         <div class="col-md-6 col-xs-12 col-lg-4 col-sm-12">
             <div class="card">
@@ -7,8 +7,8 @@
                     <img src="../../../assets/img/logo.png" width="200" height="100">
                     <form [formGroup]="myForm" (ngSubmit)="login()" novalidate>
                         <div class="form-group">
-                            <label>Usuario</label>
-                            <input formControlName="_usuario" type="text" class="form-control" 
+                            <label for="usuarioLogin">Usuario</label>
+                            <input id="usuarioLogin" formControlName="_usuario" type="text" class="form-control" 
                             (keyup)="credendialesIncorrectas()">
                             <div class="badge badge-danger mt-3 btn-block"
                                 *ngIf="_usuario.invalid && (_usuario.dirty || _usuario.touched)">
@@ -18,8 +18,8 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label>Contrasena</label>
-                            <input formControlName="_contrasena" type="password" class="form-control"
+                            <label for="contrasena">Contrasena</label>
+                            <input id="contrasena" formControlName="_contrasena" type="password" class="form-control"
                             (keyup)="credendialesIncorrectas()">
                             <div class="badge badge-danger mt-3 btn-block"
                                 *ngIf="_contrasena.invalid && (_contrasena.dirty || _contrasena.touched)">
@@ -45,6 +45,33 @@
         </div>
     </div>
 </div>
-<!-- <div class="padre">
-    <div id="loadingPage" class="lds-roller hijo"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
-</div> -->
+
+<br>
+<div class="container page-container animated fadeInDown" [hidden]="seleccionarTipoUsuario">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-xs-12 col-lg-4 col-sm-12">
+            <div class="card">
+                <div class="card-body card-login">
+                    <img src="../../../assets/img/logo.png" width="200" height="100">
+                    <div class="form-group">
+                        <select type="text" [(ngModel)]="tipoUsuario"
+                            class="form-control" (change)="onChangeSelectTipoUsuario($event.target.value)">
+                            <option value="0" disabled>Seleccione Tipo Usuario</option>
+                            <option *ngFor="let item of tipoUsuarios" value="{{item.IdTipoUsuario}}">
+                                {{ item.Descripcion }}
+                            </option>
+                        </select>
+                        <div class="badge badge-danger mt-3 btn-block" [hidden]="selectTipoUsuario">
+                            Tipo Usuario Requerido
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" (click)="iniciarSesionSegunTipoUsuario()" class="form-control btn btn-primary">
+                            Iniciar Sesion
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -29,24 +29,6 @@ export class PanelAdministracionService {
         })
     })
   }
-  consultarProvincia(_token: string) {
-    const body = new HttpParams()
-      .set('encriptada', _token)
-    return new Promise((resolve, reject) => {
-      this.http.post(this.apiUrl + 'TalentoHumano/ListaProvincia',
-        body.toString(),
-        {
-          headers: new HttpHeaders()
-            .set('Content-Type', 'application/x-www-form-urlencoded')
-        })
-        .subscribe(res => {
-          resolve(res);
-        }, (err) => {
-          reject(err);
-        })
-    });
-  }
-
 
   actualizarProvincia(
     idProvincia: string,
@@ -297,4 +279,74 @@ export class PanelAdministracionService {
         })
     })
   }
+
+  crearSembrio(
+    idComunidad: string,
+    sembrio: string,
+    _token: string
+  ) {
+    const body = new HttpParams()
+      .set('IdComunidad', idComunidad)
+      .set('Descripcion', sembrio)
+      .set('encriptada', _token)
+    return new Promise((resolve, reject) => {
+      this.http.post(this.apiUrl + 'TalentoHumano/IngresoSembrio', body.toString(),
+        {
+          headers: new HttpHeaders()
+            .set('Content-Type', 'application/x-www-form-urlencoded')
+        }
+      )
+        .subscribe(res => {
+          resolve(res);
+        }, (err) => {
+          reject(err);
+        })
+    })
+  }
+
+  actualizarSembrio(
+    idComunidad: string,
+    idSembrio: string,
+    sembrio: string,
+    _token: string
+  ){
+    const body = new HttpParams()
+      .set('IdComunidad', idComunidad)
+      .set('IdSembrio', idSembrio)
+      .set('Descripcion', sembrio)
+      .set('encriptada', _token)
+    return new Promise((resolve, reject) => {
+      this.http.post(this.apiUrl + 'TalentoHumano/ActualizarSembrio', body.toString(),
+        {
+          headers: new HttpHeaders()
+            .set('Content-Type', 'application/x-www-form-urlencoded')
+        }
+      )
+        .subscribe(res => {
+          resolve(res);
+        }, (err) => {
+          reject(err);
+        })
+    })
+  }
+
+  eliminarSembrio(idSembrio: string, _token: string){
+    const body = new HttpParams()
+      .set('IdSembrio', idSembrio)
+      .set('encriptada', _token)
+    return new Promise((resolve, reject) => {
+      this.http.post(this.apiUrl + 'TalentoHumano/EliminarSembrio', body.toString(),
+        {
+          headers: new HttpHeaders()
+            .set('Content-Type', 'application/x-www-form-urlencoded')
+        }
+      )
+        .subscribe(res => {
+          resolve(res);
+        }, (err) => {
+          reject(err);
+        })
+    })
+  }
+
 }

@@ -1,0 +1,13 @@
+.tablaComunidades {
+    height: 34.5rem;
+    overflow: auto;
+}
+  
+.tablaParroquias {
+    height: 16rem;
+    overflow: auto;
+}
+
+table {
+    width: 100%;
+}

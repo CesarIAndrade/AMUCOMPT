@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 
 // Services
@@ -9,7 +9,6 @@ import { PersonaService } from 'src/app/services/persona.service';
 import { Provincia } from 'src/app/interfaces/provincia/provincia';
 import { Canton } from 'src/app/interfaces/canton/canton';
 import sweetalert from 'sweetalert';
-import { ProvinciaComponent } from '../provincia/provincia.component';
 
 @Component({
   selector: 'app-canton',
@@ -20,7 +19,7 @@ export class CantonComponent implements OnInit {
 
   myForm: FormGroup;
   @ViewChild('testButton', { static: false }) testButton: ElementRef;
-  @ViewChild('provinciaComponent', { static: false }) provinciaComponent: ProvinciaComponent;
+  @Output() nuevoCantonCreado = new EventEmitter();
 
   constructor(private panelAdministracionService: PanelAdministracionService,
     private personaService: PersonaService
@@ -96,6 +95,7 @@ export class CantonComponent implements OnInit {
       localStorage.getItem('miCuenta.postToken'))
       .then(
         ok => {
+          this.nuevoCantonCreado.emit();
           this.limpiarCampos();
           this.consultarCantones();
         }
@@ -197,4 +197,8 @@ export class CantonComponent implements OnInit {
   ngOnInit() {
     this.consultarCantones();
   }
+
+  tablaCantones = ['canton', 'provincia', 'acciones'];
+  tablaProvincias = ['provincia', 'acciones'];
+
 }

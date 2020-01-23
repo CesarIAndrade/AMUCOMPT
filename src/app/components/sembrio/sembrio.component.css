@@ -1,0 +1,13 @@
+.tablaSembrios {
+    height: 34.5rem;
+    overflow: auto;
+}
+  
+.tablaComunidades {
+    height: 16rem;
+    overflow: auto;
+}
+
+table {
+    width: 100%;
+}

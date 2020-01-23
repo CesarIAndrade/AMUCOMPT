@@ -1,74 +1,74 @@
 <br>
-<div class="col-lg-4 col-md-5" style="float: left;">
-    <div class="card ">
-        <div class="card-header" style="text-align: center;">
-            Nuevo Usuario
-        </div>
-        <div class="card-body">
-            <div class="form-group input-container">
-                <input [value]="cedula" type="text" readonly class="form-control input-field">
-                <i (click)="abrirModalAsignacionUsuarioPersona()" class="fa fa-user-plus icon"
-                    style="background-color:#f0ad4e;"></i>
-            </div>
-            <div class="form-group">
-                <input [value]="nombres" type="text" readonly class="form-control input-field">
-            </div>
-            <div class="form-group">
-                <input [value]="apellidos" type="text" readonly class="form-control input-field">
-            </div>
-            <div class="badge badge-danger mb-3 btn-block" [hidden]="inputPersona">
-                Persona Requerida
-            </div>
-            <form [formGroup]="myForm" (ngSubmit)="validacionFormulario()" novalidate>
-                <div class="form-group">
-                    <input formControlName="_valorUsuario" type="text" (keyup)="onChangeInputUsuario()" class="form-control"
-                        placeholder="Ingrese Usuario">
-                    <div class="badge badge-danger mt-3 btn-block"
-                        *ngIf="_valorUsuario.invalid && (_valorUsuario.dirty || _valorUsuario.touched)">
-                        <div *ngIf="_valorUsuario.errors.required">
-                            Usuario Requerido
+<div class="container">
+    <div class="row">
+        <div class="col-lg-4" style="float: left;">
+            <div class="card">
+                <div class="card-header" style="text-align: center;">
+                    {{ nuevoUsuario }}
+                </div>
+                <div class="card-body">
+                    <div class="form-group input-container">
+                        <input [value]="cedula" type="text" readonly class="form-control input-field">
+                        <i (click)="abrirModalAsignacionUsuarioPersona()" class="fa fa-user-plus icon"
+                            style="background-color:#f0ad4e;"></i>
+                    </div>
+                    <div class="form-group">
+                        <input [value]="nombres" type="text" readonly class="form-control input-field">
+                    </div>
+                    <div class="form-group">
+                        <input [value]="apellidos" type="text" readonly class="form-control input-field">
+                    </div>
+                    <div class="badge badge-danger mb-3 btn-block" [hidden]="inputPersona">
+                        Persona Requerida
+                    </div>
+                    <form [formGroup]="myForm" (ngSubmit)="validacionFormulario()" novalidate>
+                        <div class="form-group">
+                            <input #testInput formControlName="_valorUsuario" type="text"
+                                (keyup)="onChangeInputUsuario()" class="form-control" placeholder="Ingrese Usuario">
+                            <div class="badge badge-danger mt-3 btn-block"
+                                *ngIf="_valorUsuario.invalid && (_valorUsuario.dirty || _valorUsuario.touched)">
+                                <div *ngIf="_valorUsuario.errors.required">
+                                    Usuario Requerido
+                                </div>
+                            </div>
+                            <div class="badge badge-danger mt-3 btn-block" [hidden]="inputUsuario">
+                                Usuario ya existe
+                            </div>
                         </div>
-                    </div>
-                    <div class="badge badge-danger mt-3 btn-block" [hidden]="inputUsuario">
-                        Usuario ya existe
-                    </div>
+                        <div class="form-group input-container">
+                            <input formControlName="_contrasena" type="password" [type]="inputType"
+                                class="form-control input-field" placeholder="Ingrese Contraseña">
+                            <i class="fa fa-eye icon" (click)="mostrarContrasena()"></i>
+                        </div>
+                        <div class="badge badge-danger btn-block mb-3"
+                            *ngIf="_contrasena.invalid && (_contrasena.dirty || _contrasena.touched)">
+                            <div *ngIf="_contrasena.errors.required">
+                                Contrasena Requerida
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <button class="form-control btn-success" type="submit" [disabled]="myForm.invalid"
+                                [value]="botonInsertar" #testButton>
+                                Guardar Usuario
+                            </button>
+                        </div>
+                    </form>
                 </div>
-                <div class="form-group input-container">
-                    <input formControlName="_contrasena" type="password" [type]="inputType"
-                        class="form-control input-field" placeholder="Ingrese Contraseña">
-                    <i class="fa fa-eye icon" (click)="mostrarContrasena()"></i>
-                </div>
-                <div class="badge badge-danger btn-block mb-3"
-                    *ngIf="_contrasena.invalid && (_contrasena.dirty || _contrasena.touched)">
-                    <div *ngIf="_contrasena.errors.required">
-                        Contrasena Requerida
-                    </div>
-                </div>
-                <div class="form-group">
-                    <button class="form-control btn-success" type="submit" [disabled]="myForm.invalid"
-                        [value]="botonInsertar" #testButton>
-                        Guardar Usuario
-                    </button>
-                </div>
-            </form>
+            </div>
         </div>
-    </div>
-</div>
-<div class="card ">
-    <div class="card-header" style="text-align: center;">
-        Lista Usuarios
-    </div>
-    <div class="card-body">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="form-group input-container">
-                    <i class="fa fa-search icon"></i>
-                    <input [(ngModel)]="filterUsuario" type="text" class="form-control input-field"
-                        placeholder="Ejem. Zambrano Zambrano">
-                    <i class="fa fa-refresh icon" (click)="consultarUsuarios()" aria-hidden="true"></i>
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-header" style="text-align: center;">
+                    Lista Usuarios
                 </div>
-                <div class="table-responsive-sm">
-                    <table class="table table-sm">
+                <div class="card-body">
+                    <div class="form-group input-container">
+                        <i class="fa fa-search icon"></i>
+                        <input [(ngModel)]="filterUsuario" type="text" class="form-control input-field"
+                            placeholder="Ejem. Zambrano Zambrano">
+                        <i class="fa fa-refresh icon" (click)="consultarUsuarios()" aria-hidden="true"></i>
+                    </div>
+                    <!-- <table class="table table-hover">
                         <thead class="card-header">
                             <tr>
                                 <th scope="col">Usuario</th>
@@ -79,28 +79,27 @@
                         <tbody>
                             <tr *ngFor="let item of usuarios | filter: filterUsuario : 'UsuarioLogin'">
                                 <td> {{ item.UsuarioLogin }} </td>
-                                <td> {{ item.PrimerNombre }} {{ item.SegundoNombre }} {{ item.ApellidoPaterno }} {{ item.ApellidoMaterno }} </td>
+                                <td> {{ item.PrimerNombre }} {{ item.SegundoNombre }} {{ item.ApellidoPaterno }}
+                                    {{ item.ApellidoMaterno }} </td>
                                 <ng-container *ngIf="item.EstadoUsuario; then habilitado; else deshabilitado">
                                 </ng-container>
                                 <ng-template #habilitado>
                                     <td>
-                                        <button tooltip="Asignar Roles" placement="top" 
-                                        (click)="abrirModalAsignacionUsuarioTiposUsuario(item)"
+                                        <button tooltip="Asignar Roles" placement="top"
+                                            (click)="abrirModalAsignacionUsuarioTiposUsuario(item)"
                                             class="btn btn-sm btn-outline-warning separacion-botones">
                                             <i class="fa fa-address-book" aria-hidden="true"></i>
                                         </button>
                                     </td>
                                     <td>
-                                        <button tooltip="Modificar" placement="top" 
-                                        (click)="setUsuario(item)"
+                                        <button tooltip="Modificar" placement="top" (click)="setUsuario(item)"
                                             class="btn btn-sm btn-outline-info separacion-botones">
                                             <i class="fa fa-pencil-square-o" aria-hidden="true">
                                             </i>
                                         </button>
                                     </td>
                                     <td>
-                                        <button tooltip="Deshabilitar" placement="top" 
-                                        (click)="eliminarUsuario(item)"
+                                        <button tooltip="Deshabilitar" placement="top" (click)="eliminarUsuario(item)"
                                             class="btn btn-sm btn-outline-danger separacion-botones">
                                             <i class="fa fa-user-times" aria-hidden="true"></i>
                                         </button>
@@ -108,15 +107,69 @@
                                 </ng-template>
                                 <ng-template #deshabilitado>
                                     <td colspan="3">
-                                        <button tooltip="Habilitar" placement="top" 
-                                        (click)="habilitarUsuario(item)" style="justify-content: center;"
+                                        <button tooltip="Habilitar" placement="top" (click)="habilitarUsuario(item)"
+                                            style="justify-content: center;"
                                             class="btn btn-sm btn-block btn-outline-success">
                                             <i class="fa fa-user-plus" aria-hidden="true"> Habilitar</i>
                                         </button>
                                     </td>
                                 </ng-template>
                         </tbody>
-                    </table>
+                    </table> -->
+
+                    <div class="tablaUsuarios mat-elevation-z5">
+                        <table mat-table [dataSource]="usuarios">
+                            <ng-container matColumnDef="usuario">
+                                <th mat-header-cell *matHeaderCellDef> Usuario </th>
+                                <td mat-cell *matCellDef="let element"> {{element.UsuarioLogin}} </td>
+                            </ng-container>
+                            <ng-container matColumnDef="nombres">
+                                <th mat-header-cell *matHeaderCellDef> Nombres </th>
+                                <td mat-cell *matCellDef="let element"> {{ element.PrimerNombre }} {{ element.SegundoNombre }} {{ element.ApellidoPaterno }}
+                                    {{ element.ApellidoMaterno }} </td>
+                            </ng-container>
+                            <ng-container matColumnDef="acciones">
+                                <th colspan="3" mat-header-cell *matHeaderCellDef> Acciones </th>
+                                <ng-container *matCellDef="let element">
+                                    <ng-container *ngIf="element.EstadoUsuario">
+                                        <td mat-cell>
+                                            <button tooltip="Asignar Roles" placement="top"
+                                                (click)="abrirModalAsignacionUsuarioTiposUsuario(element)"
+                                                class="btn btn-sm btn-outline-warning separacion-botones">
+                                                <i class="fa fa-address-book" aria-hidden="true"></i>
+                                            </button>
+                                        </td>
+                                        <td mat-cell>
+                                            <button tooltip="Modificar" placement="top" 
+                                                (click)="setUsuario(element)"
+                                                class="btn btn-sm btn-outline-info separacion-botones">
+                                                <i class="fa fa-pencil-square-o" aria-hidden="true">
+                                                </i>
+                                            </button>
+                                        </td>
+                                        <td mat-cell>
+                                            <button tooltip="Deshabilitar" placement="top" (click)="eliminarUsuario(element)"
+                                                class="btn btn-sm btn-outline-danger separacion-botones">
+                                                <i class="fa fa-user-times" aria-hidden="true"></i>
+                                            </button>
+                                        </td>
+                                    </ng-container>
+                                    <ng-container *ngIf="!element.EstadoUsuario">
+                                        <td mat-cell colspan="3">
+                                            <button tooltip="Habilitar" placement="top" 
+                                                (click)="habilitarUsuario(element)"
+                                                style="justify-content: center;"
+                                                class="btn btn-sm btn-block btn-outline-success">
+                                                <i class="fa fa-user-plus" aria-hidden="true"> Habilitar</i>
+                                            </button>
+                                        </td>
+                                    </ng-container>
+                                </ng-container>
+                            </ng-container>
+                            <tr mat-header-row *matHeaderRowDef="tablaUsuarios; sticky: true"></tr>
+                            <tr mat-row *matRowDef="let row; columns: tablaUsuarios;"></tr>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
