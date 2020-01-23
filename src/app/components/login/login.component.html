@@ -57,7 +57,7 @@
                         <select type="text" [(ngModel)]="tipoUsuario"
                             class="form-control" (change)="onChangeSelectTipoUsuario($event.target.value)">
                             <option value="0" disabled>Seleccione Tipo Usuario</option>
-                            <option *ngFor="let item of tipoUsuarios" value="{{item.IdTipoUsuario}}">
+                            <option *ngFor="let item of tipoUsuarios" value="{{item.IdAsignacionTu}}">
                                 {{ item.Descripcion }}
                             </option>
                         </select>
