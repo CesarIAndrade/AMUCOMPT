@@ -103,6 +103,7 @@ export class ProductoComponent implements OnInit {
         ok => {
           this.productos = [];
           this.productos = ok['respuesta'];
+          console.log(this.productos);
           this.consultarTipoProductos();
         }
       )
@@ -203,13 +204,6 @@ export class ProductoComponent implements OnInit {
   }
 
   crearConfiguracionProducto() {
-    console.log('IATU '+localStorage.getItem('miCuenta.idAsignacionTipoUsuario'));
-    console.log('IDPRO '+this.idProducto);
-    console.log('MED '+this.medida);
-    console.log('PRE '+this.presentacion);
-    console.log('cont '+this.myForm.get('_contenidoNeto').value);
-    console.log('TOK '+localStorage.getItem('miCuenta.postToken'));
-
     this.inventarioService.crearConfiguracionProducto(
       localStorage.getItem('miCuenta.idAsignacionTipoUsuario'),
       this.idProducto,
