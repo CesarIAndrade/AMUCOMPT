@@ -379,8 +379,6 @@ export class InventarioService {
       .set('IdPresentacion', idPresentacion)
       .set('CantidadMedida', cantidadMedida)
       .set('encriptada', _token)
-
-    console.log(body);
     return new Promise((resolve, reject) => {
       this.http.post(this.apiUrl + 'Inventario/IngresoConfigurarProducto', body.toString(),
         {
@@ -437,6 +435,93 @@ export class InventarioService {
       .set('encriptada', _token)
     return new Promise((resolve, reject) => {
       this.http.post(this.apiUrl + 'Inventario/EliminarConfigurarProducto', body.toString(),
+        {
+          headers: new HttpHeaders()
+            .set('Content-Type', 'application/x-www-form-urlencoded')
+        }
+      )
+        .subscribe(res => {
+          resolve(res);
+        }, (err) => {
+          reject(err);
+        })
+    })
+  }
+
+  consultarKits(_token: string) {
+    const body = new HttpParams()
+      .set('encriptada', _token)
+    return new Promise((resolve, reject) => {
+      this.http.post(this.apiUrl + 'Inventario/ListaKit', body.toString(),
+        {
+          headers: new HttpHeaders()
+            .set('Content-Type', 'application/x-www-form-urlencoded')
+        }
+      )
+        .subscribe(res => {
+          resolve(res);
+        }, (err) => {
+          reject(err);
+        })
+    })
+  }
+
+  crearKit(
+    kit: string,
+    codigo: string,
+    _token: string
+  ) {
+    const body = new HttpParams()
+      .set('Descripcion', kit)
+      .set('Codigo', codigo)
+      .set('encriptada', _token)
+    return new Promise((resolve, reject) => {
+      this.http.post(this.apiUrl + 'Inventario/IngresoKit', body.toString(),
+        {
+          headers: new HttpHeaders()
+            .set('Content-Type', 'application/x-www-form-urlencoded')
+        }
+      )
+        .subscribe(res => {
+          resolve(res);
+        }, (err) => {
+          reject(err);
+        })
+    })
+  }
+
+  actualizarKit(
+    idKit: string,
+    kit: string,
+    codigo: string,
+    _token: string
+  ) {
+    const body = new HttpParams()
+      .set('IdKit', idKit)
+      .set('Descripcion', kit)
+      .set('Codigo', codigo)
+      .set('encriptada', _token)
+    return new Promise((resolve, reject) => {
+      this.http.post(this.apiUrl + 'Inventario/ActualizarKit', body.toString(),
+        {
+          headers: new HttpHeaders()
+            .set('Content-Type', 'application/x-www-form-urlencoded')
+        }
+      )
+        .subscribe(res => {
+          resolve(res);
+        }, (err) => {
+          reject(err);
+        })
+    })
+  }
+
+  eliminarKit(idKit: string, _token: string) {
+    const body = new HttpParams()
+      .set('IdKit', idKit)
+      .set('encriptada', _token)
+    return new Promise((resolve, reject) => {
+      this.http.post(this.apiUrl + 'Inventario/EliminarKit', body.toString(),
         {
           headers: new HttpHeaders()
             .set('Content-Type', 'application/x-www-form-urlencoded')

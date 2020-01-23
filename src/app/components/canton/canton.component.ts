@@ -34,11 +34,16 @@ export class CantonComponent implements OnInit {
   idProvincia = '0';
   inputIdProvincia = true;
   provincia = 'Seleccione Provincia';
-
+  inputCanton = true;
   filterProvincia = '';
   filterCanton = '';
+
   provincias: Provincia[] = [];
   cantones: Canton[] = [];
+
+  onChangeInptCanton() {
+    this.inputCanton = true;
+  }
 
   consultarProvincias() {
     this.personaService.consultarProvincias(localStorage.getItem('miCuenta.getToken'))
@@ -96,9 +101,25 @@ export class CantonComponent implements OnInit {
       localStorage.getItem('miCuenta.postToken'))
       .then(
         ok => {
-          this.nuevoCantonCreado.emit();
-          this.limpiarCampos();
-          this.consultarCantones();
+          if (ok['respuesta'] == null) {
+            sweetAlert("Inténtalo de nuevo!", {
+              icon: "warning",
+            });
+            this.limpiarCampos();
+          } else if (ok['respuesta'] == '400') {
+            this.inputCanton = false;
+          } else if (ok['respuesta'] == 'false') {
+            sweetAlert("Ha ocurrido un error!", {
+              icon: "error",
+            });
+          } else {
+            sweetAlert("Se ingresó correctamente!", {
+              icon: "success",
+            });
+            this.limpiarCampos();
+            this.consultarCantones();
+            this.nuevoCantonCreado.emit();
+          }
         }
       )
       .catch(
@@ -132,8 +153,25 @@ export class CantonComponent implements OnInit {
       localStorage.getItem('miCuenta.putToken'))
       .then(
         ok => {
-          this.limpiarCampos();
-          this.consultarCantones();
+          if (ok['respuesta'] == null) {
+            sweetAlert("Inténtalo de nuevo!", {
+              icon: "warning",
+            });
+            this.limpiarCampos();
+          } else if (ok['respuesta'] == '400') {
+            this.inputCanton = false;
+          } else if (ok['respuesta'] == 'false') {
+            sweetAlert("Ha ocurrido un error!", {
+              icon: "error",
+            });
+          } else {
+            sweetAlert("Se ingresó correctamente!", {
+              icon: "success",
+            });
+            this.limpiarCampos();
+            this.consultarCantones();
+          }
+
         }
       )
       .catch(
@@ -160,7 +198,7 @@ export class CantonComponent implements OnInit {
             .then(
               ok => {
                 if (ok['respuesta']) {
-                  sweetAlert("Se a eliminado Correctamente!", {
+                  sweetAlert("Se ha eliminado correctamente!", {
                     icon: "success",
                   });
                   this.consultarCantones();

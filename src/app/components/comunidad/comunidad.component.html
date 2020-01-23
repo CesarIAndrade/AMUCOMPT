@@ -13,8 +13,8 @@
                     </div>
                     <form [formGroup]="myForm" (ngSubmit)="validarFormulario()" novalidate>
                         <div class="form-group">
-                            <input formControlName="_comunidad" class="form-control" type="text"
-                                placeholder="Ingrese Comunidad">
+                            <input (keyup)="onChangeInptComunidad()" formControlName="_comunidad" class="form-control"
+                                type="text" placeholder="Ingrese Comunidad">
                             <div class="badge badge-danger mt-3 btn-block" [hidden]="inputIdParroquia">
                                 Parroquia Requerida
                             </div>
@@ -23,6 +23,9 @@
                                 <div *ngIf="_comunidad.errors.required">
                                     Comunidad Requerida
                                 </div>
+                            </div>
+                            <div class="badge badge-danger mt-3 btn-block" [hidden]="inputComunidad">
+                                Comunidad ya existe
                             </div>
                         </div>
                         <div class="form-group">
@@ -45,27 +48,6 @@
                             placeholder="Ejem. Bachillero">
                         <i class="fa fa-refresh icon" (click)="consultarComunidades()" aria-hidden="true"></i>
                     </div>
-                    <!-- <div class="table-responsive-sm">
-                      <table class="table table-sm">
-                          <thead class="card-header">
-                              <tr>
-                                  <th scope="col">Parroquia</th>
-                                  <th scope="col" style="text-align: center;">Seleccionar</th>
-                              </tr>
-                          </thead>
-                          <tbody>
-                              <tr *ngFor="let item of parroquias | filter: filterParroquia : 'Descripcion'">
-                                  <td> {{ item.Descripcion }} </td>
-                                  <td>
-                                      <button tooltip="Seleccionar" placement="top" class="btn btn-sm btn-block btn-outline-warning"
-                                          (click)="setParroquia(item)">
-                                          <i class="fa fa-plus" aria-hidden="true"></i>
-                                      </button>
-                                  </td>
-                          </tbody>
-                      </table>
-                  </div> -->
-
                     <div class="tablaParroquias mat-elevation-z5">
                         <table mat-table [dataSource]="parroquias|filter:filterParroquia:'Descripcion'">
                             <ng-container matColumnDef="parroquia">
@@ -73,14 +55,17 @@
                                 <td mat-cell *matCellDef="let element"> {{element.Descripcion}} </td>
                             </ng-container>
                             <ng-container matColumnDef="acciones">
-                                <th mat-header-cell *matHeaderCellDef> Acciones </th>
-                                <td mat-cell *matCellDef="let element">
-                                    <button tooltip="Seleccionar" placement="top"
-                                        class="btn btn-sm btn-block btn-outline-warning"
-                                        (click)="setParroquia(element)">
-                                        <i class="fa fa-plus" aria-hidden="true"></i>
-                                    </button>
-                                </td>
+                                <th colspan="2" mat-header-cell *matHeaderCellDef> Acciones </th>
+                                <ng-container matColumnDef="acciones">
+                                    <th mat-header-cell *matHeaderCellDef> Acciones </th>
+                                    <td mat-cell *matCellDef="let element">
+                                        <button tooltip="Seleccionar" placement="top"
+                                            class="btn btn-sm btn-block btn-outline-warning"
+                                            (click)="setParroquia(element)">
+                                            <i class="fa fa-plus" aria-hidden="true"></i>
+                                        </button>
+                                    </td>
+                                </ng-container>
                             </ng-container>
                             <tr mat-header-row *matHeaderRowDef="tablaParroquias; sticky: true"></tr>
                             <tr mat-row *matRowDef="let row; columns: tablaParroquias;"></tr>
@@ -113,20 +98,33 @@
                             </ng-container>
                             <ng-container matColumnDef="acciones">
                                 <th colspan="2" mat-header-cell *matHeaderCellDef> Acciones </th>
-                                <ng-container *matCellDef="let element">
-                                    <ng-container>
-                                        <td mat-cell>
-                                            <button tooltip="Modificar" placement="top"
-                                                (click)=mostrarComunidad(element) class="btn btn-sm btn-outline-info">
-                                                <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                                            </button>
-                                        </td>
-                                        <td mat-cell>
-                                            <button class="btn btn-sm btn-outline-danger ml-2"
-                                                (click)=eliminarComunidad(element.IdComunidad)>
-                                                <i class="fa fa-trash" aria-hidden="true"></i>
-                                            </button>
-                                        </td>
+                                <ng-container matColumnDef="acciones">
+                                    <th colspan="2" mat-header-cell *matHeaderCellDef> Acciones </th>
+                                    <ng-container *matCellDef="let element">
+                                        <ng-container *ngIf="element.ComunidadUtilizado == '0'">
+                                            <td mat-cell>
+                                                <button tooltip="Modificar" placement="top"
+                                                    (click)=mostrarComunidad(element)
+                                                    class="btn btn-sm btn-outline-info">
+                                                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                                </button>
+                                            </td>
+                                            <td mat-cell>
+                                                <button class="btn btn-sm btn-outline-danger ml-2"
+                                                    (click)=eliminarComunidad(element.IdComunidad)>
+                                                    <i class="fa fa-trash" aria-hidden="true"></i>
+                                                </button>
+                                            </td>
+                                        </ng-container>
+                                        <ng-container *ngIf="element.ComunidadUtilizado == '1'">
+                                            <td mat-cell colspan="2">
+                                                <button tooltip="Modificar" placement="top"
+                                                    (click)=mostrarComunidad(element)
+                                                    class="btn btn-sm btn-outline-info">
+                                                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                                </button>
+                                            </td>
+                                        </ng-container>
                                     </ng-container>
                                 </ng-container>
                             </ng-container>

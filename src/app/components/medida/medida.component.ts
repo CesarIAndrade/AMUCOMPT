@@ -29,8 +29,13 @@ export class MedidaComponent implements OnInit {
   filterMedida = '';
   idMedida = '0';
   botonIngresar = 'ingresar';
+  inputMedida = true;
 
   medidas: Medida[] = [];
+
+  onChangeInputMedida() {
+    this.inputMedida = true;
+  }
 
   consultarMedidas() {
     this.inventarioService.consultarMedidas(
@@ -68,8 +73,24 @@ export class MedidaComponent implements OnInit {
     )
       .then(
         ok => {
-          this.myForm.reset();
-          this.consultarMedidas();
+          if (ok['respuesta'] == null) {
+            sweetAlert("Inténtalo de nuevo!", {
+              icon: "warning",
+            });
+            this.myForm.reset();
+          } else if (ok['respuesta'] == '400') {
+            this.inputMedida = false;
+          } else if (ok['respuesta'] == 'false') {
+            sweetAlert("Ha ocurrido un error!", {
+              icon: "error",
+            });
+          } else {
+            sweetAlert("Se ingresó correctamente!", {
+              icon: "success",
+            });
+            this.myForm.reset();
+            this.consultarMedidas();
+          }
         }
       )
       .catch(
@@ -95,9 +116,24 @@ export class MedidaComponent implements OnInit {
     )
       .then(
         ok => {
-          this.myForm.reset();
-          this.testButton.nativeElement.value = 'ingresar';
-          this.consultarMedidas();
+          if (ok['respuesta'] == null) {
+            sweetAlert("Inténtalo de nuevo!", {
+              icon: "warning",
+            });
+          } else if (ok['respuesta'] == '400') {
+            this.inputMedida = false;
+          } else if (ok['respuesta'] == 'false') {
+            sweetAlert("Ha ocurrido un error!", {
+              icon: "error",
+            });
+          } else {
+            sweetAlert("Se ingresó correctamente!", {
+              icon: "success",
+            });
+            this.myForm.reset();
+            this.testButton.nativeElement.value = 'ingresar';
+            this.consultarMedidas();
+          }
         }
       )
       .catch(
@@ -123,7 +159,16 @@ export class MedidaComponent implements OnInit {
           )
             .then(
               ok => {
-                this.consultarMedidas();
+                if (ok['respuesta']) {
+                  sweetAlert("Se a eliminado correctamente!", {
+                    icon: "success",
+                  });
+                  this.consultarMedidas();
+                } else {
+                  sweetAlert("No se ha podido elminiar!", {
+                    icon: "error",
+                  });
+                }
               }
             )
             .catch(
