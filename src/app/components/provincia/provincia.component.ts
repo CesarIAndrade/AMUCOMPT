@@ -94,6 +94,13 @@ export class ProvinciaComponent implements OnInit {
         ok => {
           this.limpiarCampos();
           this.consultarProvincias();
+          //console.log(ok['respuesta']);
+          console.log(this.valorIdProvincia);
+          console.log(this.myForm.get('_provincia').value);
+          console.log(localStorage.getItem('miCuenta.putToken'));
+          
+          
+          
         }
       )
       .catch(
