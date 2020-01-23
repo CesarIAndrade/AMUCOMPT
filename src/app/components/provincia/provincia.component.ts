@@ -30,36 +30,10 @@ export class ProvinciaComponent implements OnInit {
   provincias: Provincia[] = [];
   filterProvincia = '';
   valorIdProvincia: string;
-  
-  validarFormulario() {
-    if (this.myForm.valid) {
-      if (this.testButton.nativeElement.value == 'ingresar') {
-        this.crearProvincia();
-      } else if (this.testButton.nativeElement.value == 'modificar') {
-        this.actualizarProvincia();
-        this.testButton.nativeElement.value = 'ingresar';
-      }
-    } else {
-      console.log("Algo Salio Mal");
-    }
-  }
+  inputProvincia = true;
 
-  crearProvincia() {
-    this.panelAdministracionService.crearProvincia(
-      this.myForm.get('_provincia').value,
-      localStorage.getItem('miCuenta.postToken'))
-      .then(
-        ok => {
-          this.nuevaProvinciaCreada.emit(true);
-          this.limpiarCampos();
-          this.consultarProvincias();
-        }
-      )
-      .catch(
-        error => {
-          console.log(error);
-        }
-      )
+  onChangeInptProvincia() {
+    this.inputProvincia = true;
   }
 
   consultarProvincias() {
@@ -77,6 +51,52 @@ export class ProvinciaComponent implements OnInit {
       )
   }
 
+  validarFormulario() {
+    if (this.myForm.valid) {
+      if (this.testButton.nativeElement.value == 'ingresar') {
+        this.crearProvincia();
+      } else if (this.testButton.nativeElement.value == 'modificar') {
+        this.actualizarProvincia();
+      }
+    } else {
+      console.log("Algo Salio Mal");
+    }
+  }
+
+  crearProvincia() {
+    this.panelAdministracionService.crearProvincia(
+      this.myForm.get('_provincia').value,
+      localStorage.getItem('miCuenta.postToken'))
+      .then(
+        ok => {
+          if (ok['respuesta'] == null) {
+            sweetAlert("Inténtalo de nuevo!", {
+              icon: "warning",
+            });
+            this.limpiarCampos();
+          } else if (ok['respuesta'] == '400') {
+            this.inputProvincia = false;
+          } else if (ok['respuesta'] == 'false') {
+            sweetAlert("Ha ocurrido un error!", {
+              icon: "error",
+            });
+          } else {
+            sweetAlert("Se ingresó correctamente!", {
+              icon: "success",
+            });
+            this.limpiarCampos();
+            this.consultarProvincias();
+            this.nuevaProvinciaCreada.emit(true);
+          }
+        }
+      )
+      .catch(
+        error => {
+          console.log(error);
+        }
+      )
+  }
+
   setProvincia(value) {
     this.valorIdProvincia = value.IdProvincia;
     this.myForm.setValue({
@@ -86,14 +106,32 @@ export class ProvinciaComponent implements OnInit {
   }
 
   actualizarProvincia() {
+    console.log(this.myForm.get('_provincia').value);
     this.panelAdministracionService.actualizarProvincia(
       this.valorIdProvincia,
       this.myForm.get('_provincia').value,
       localStorage.getItem('miCuenta.putToken'))
       .then(
         ok => {
-          this.limpiarCampos();
-          this.consultarProvincias();
+          if (ok['respuesta'] == null) {
+            sweetAlert("Inténtalo de nuevo!", {
+              icon: "warning",
+            });
+            this.limpiarCampos();
+          } else if (ok['respuesta'] == '400') {
+            this.inputProvincia = false;
+          } else if (ok['respuesta'] == 'false') {
+            sweetAlert("Ha ocurrido un error!", {
+              icon: "error",
+            });
+          } else {
+            sweetAlert("Se ingresó correctamente!", {
+              icon: "success",
+            });
+            this.limpiarCampos();
+            this.consultarProvincias();
+            this.testButton.nativeElement.value = 'ingresar';
+          }
         }
       )
       .catch(
@@ -116,25 +154,25 @@ export class ProvinciaComponent implements OnInit {
           this.panelAdministracionService.eliminarProvincia(
             idProvincia,
             localStorage.getItem('miCuenta.deleteToken'))
-          .then(
-            ok => {
-              if(ok['respuesta']){
-                sweetAlert("Se a eliminado Correctamente!", {
-                  icon: "success",
-                });
-                this.consultarProvincias();
-              } else {
-                sweetAlert("No se ha podido elminiar!", {
-                  icon: "error",
-                });
+            .then(
+              ok => {
+                if (ok['respuesta']) {
+                  sweetAlert("Se a eliminado Correctamente!", {
+                    icon: "success",
+                  });
+                  this.consultarProvincias();
+                } else {
+                  sweetAlert("No se ha podido elminiar!", {
+                    icon: "error",
+                  });
+                }
               }
-            }
-          )
-          .catch(
-            error => {
-              console.log(error);
-            }
-          )
+            )
+            .catch(
+              error => {
+                console.log(error);
+              }
+            )
         }
       });
   }
