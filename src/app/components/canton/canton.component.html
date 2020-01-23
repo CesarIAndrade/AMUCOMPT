@@ -4,7 +4,7 @@
         <div class="col-lg-4 col-md-5 mr-auto">
             <div class="card">
                 <div class="card-header" style="text-align: center;">
-                    Nuevo Canton
+                    Nuevo Cantón
                 </div>
                 <div class="card-body">
                     <input [value]="idProvincia" class="form-control" type="number" readonly disabled hidden>
@@ -13,16 +13,19 @@
                     </div>
                     <form [formGroup]="myForm" (ngSubmit)="validarFormulario()" novalidate>
                         <div class="form-group">
-                            <input formControlName="_canton" class="form-control" type="text"
+                            <input (keyup)="onChangeInptCanton()" formControlName="_canton" class="form-control" type="text"
                                 placeholder="Ingrese Canton">
                             <div class="badge badge-danger mt-3 btn-block" [hidden]="inputIdProvincia">
-                                Provincia Requerido
+                                Provincia requerida
                             </div>
                             <div class="badge badge-danger mt-3 btn-block"
                                 *ngIf="_canton.invalid && (_canton.dirty || _canton.touched)">
                                 <div *ngIf="_canton.errors.required">
-                                    Canton Requerido
+                                    Cantón requerido
                                 </div>
+                            </div>
+                            <div class="badge badge-danger mt-3 btn-block" [hidden]="inputCanton">
+                                Cantón ya existe
                             </div>
                         </div>
                         <div class="form-group">

@@ -40,6 +40,7 @@ export class ProductoComponent implements OnInit {
   selectTipoProducto = true;
   selectPresentacion = true;
   selectMedida = true;
+  inputNombreProducto = true;
 
   productos: Producto[] = [];
   tipoProductos: TipoProducto[] = [];
@@ -103,7 +104,6 @@ export class ProductoComponent implements OnInit {
         ok => {
           this.productos = [];
           this.productos = ok['respuesta'];
-          console.log(this.productos);
           this.consultarTipoProductos();
         }
       )
@@ -114,15 +114,38 @@ export class ProductoComponent implements OnInit {
       )
   }
 
+  validarSelects(
+    tipoProducto: string,
+    presentacion: string,
+    medida: string,
+  ) {
+    if (tipoProducto == "0") {
+      this.selectTipoProducto = false;
+    }
+    if (presentacion == "0") {
+      this.selectPresentacion = false;
+    }
+    if (medida == "0") {
+      this.selectMedida = false;
+    }
+  }
+
   validarFormulario() {
-    if (this.myForm.valid) {
-      if (this.testButton.nativeElement.value == 'ingresar') {
-        this.crearProducto();
-      } else if (this.testButton.nativeElement.value == 'modificar') {
-        this.actualizarProducto();
+    this.validarSelects(
+      this.tipoProducto,
+      this.presentacion,
+      this.medida
+    );
+    if(this.tipoProducto != '0' && this.presentacion != '0' && this.medida != '0') {
+      if (this.myForm.valid) {
+        if (this.testButton.nativeElement.value == 'ingresar') {
+          this.crearProducto();
+        } else if (this.testButton.nativeElement.value == 'modificar') {
+          this.actualizarProducto();
+        }
+      } else {
+        console.log("Algo Salio Mal");
       }
-    } else {
-      console.log("Algo Salio Mal");
     }
   }
 
@@ -139,9 +162,28 @@ export class ProductoComponent implements OnInit {
       )
         .then(
           ok => {
-            this.idProducto = ok['respuesta'];
-            this.crearConfiguracionProducto();
-            this.consultarProductos();
+            if(ok['respuesta'] == null) {
+              sweetAlert("Inténtalo de nuevo!", {
+                icon: "warning",
+              });
+              this.myForm.reset();
+              this.tipoProducto = '0';
+              this.presentacion = '0';
+              this.medida = '0';
+            } else if(ok['respuesta'] == '400') {
+              this.inputNombreProducto = false;
+            } else if(ok['respuesta'] == 'false') {
+              sweetAlert("Ha ocurrido un error!", {
+                icon: "error",
+              });
+            } else {
+              sweetAlert("Se ingresó correctamente!", {
+                icon: "success",
+              });
+              this.idProducto = ok['respuesta'];
+              this.crearConfiguracionProducto();
+              this.consultarProductos();
+            }
           }
         )
         .catch(
@@ -174,9 +216,28 @@ export class ProductoComponent implements OnInit {
     )
       .then(
         ok => {
-          this.myForm.reset();
-          this.testButton.nativeElement.value = 'ingresar';
-          this.consultarProductos();
+          if(ok['respuesta'] == null) {
+            sweetAlert("Inténtalo de nuevo!", {
+              icon: "warning",
+            });
+            this.myForm.reset();
+            this.tipoProducto = '0';
+            this.presentacion = '0';
+            this.medida = '0';
+          } else if(ok['respuesta'] == '400') {
+            this.inputNombreProducto = false;
+          } else if(ok['respuesta'] == 'false') {
+            sweetAlert("Ha ocurrido un error!", {
+              icon: "error",
+            });
+          } else {
+            sweetAlert("Se ingresó correctamente!", {
+              icon: "success",
+            });
+            this.myForm.reset();
+            this.testButton.nativeElement.value = 'ingresar';
+            this.consultarProductos();
+          }
         }
       )
       .catch(
@@ -244,6 +305,10 @@ export class ProductoComponent implements OnInit {
     if (value != "0") {
       this.selectMedida = true;
     }
+  }
+
+  onChangeInputNombreProducto() {
+    this.inputNombreProducto = true;
   }
 
   get _nombre() {

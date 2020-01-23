@@ -37,11 +37,16 @@ export class ComunidadComponent implements OnInit {
   parroquia = 'Parroquia';
   inputIdParroquia = true;
   idComunidad = '0';
+  inputComunidad = true;
 
   filterParroquia='';
   filterComunidad='';
   parroquias: Parroquia[] = [];
   comunidades: Comunidad[] = [];
+
+  onChangeInptComunidad() {
+    this.inputComunidad = true;
+  }
 
   consultarParroquias() {
     this.personaService.consultarParroquias(localStorage.getItem('miCuenta.getToken'))
@@ -62,6 +67,7 @@ export class ComunidadComponent implements OnInit {
       .then(
         ok => {
           this.comunidades = ok['respuesta'];
+          console.log(this.comunidades);
           this.consultarParroquias();
         }
       )
@@ -97,9 +103,25 @@ export class ComunidadComponent implements OnInit {
     )
       .then(
         ok => {
-          this.nuevaCaomunidadCreada.emit(true);
-          this.limpiarCampos();
-          this.consultarComunidades();
+          if (ok['respuesta'] == null) {
+            sweetAlert("Inténtalo de nuevo!", {
+              icon: "warning",
+            });
+            this.limpiarCampos();
+          } else if (ok['respuesta'] == '400') {
+            this.inputComunidad = false;
+          } else if (ok['respuesta'] == 'false') {
+            sweetAlert("Ha ocurrido un error!", {
+              icon: "error",
+            });
+          } else {
+            sweetAlert("Se ingresó correctamente!", {
+              icon: "success",
+            });
+            this.limpiarCampos();
+            this.consultarComunidades();
+            this.nuevaCaomunidadCreada.emit(true);
+          }
         }
       )
       .catch(
@@ -134,9 +156,25 @@ export class ComunidadComponent implements OnInit {
     )
       .then(
         ok => {
-          this.limpiarCampos();
-          this.consultarComunidades();
-          this.testButton.nativeElement.value = 'ingresar';
+          if (ok['respuesta'] == null) {
+            sweetAlert("Inténtalo de nuevo!", {
+              icon: "warning",
+            });
+            this.limpiarCampos();
+          } else if (ok['respuesta'] == '400') {
+            this.inputComunidad = false;
+          } else if (ok['respuesta'] == 'false') {
+            sweetAlert("Ha ocurrido un error!", {
+              icon: "error",
+            });
+          } else {
+            sweetAlert("Se ingresó correctamente!", {
+              icon: "success",
+            });
+            this.limpiarCampos();
+            this.consultarComunidades();
+            this.testButton.nativeElement.value = 'ingresar';
+          }
         }
       )
       .catch(
@@ -169,7 +207,7 @@ export class ComunidadComponent implements OnInit {
               console.log(error);
             }
           )
-        sweetAlert("Se a eliminado Correctamente!", {
+        sweetAlert("Se ha eliminado correctamente!", {
           icon: "success",
         });
       }

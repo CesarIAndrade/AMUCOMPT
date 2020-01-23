@@ -9,13 +9,16 @@
                 <div class="card-body">
                     <form [formGroup]="myForm" (ngSubmit)="validarFormulario()" novalidate>
                         <div class="form-group">
-                            <input formControlName="_presentacion" class="form-control" type="text"
+                            <input (keyup)="onChangeInputPresentacion()" formControlName="_presentacion" class="form-control" type="text"
                                 placeholder="Ingrese Presentación">
                             <div class="badge badge-danger mt-3 btn-block"
                                 *ngIf="_presentacion.invalid && (_presentacion.dirty || _presentacion.touched)">
                                 <div *ngIf="_presentacion.errors.required">
                                     Presentación Requerida
                                 </div>
+                            </div>
+                            <div class="badge badge-danger mt-3 btn-block" [hidden]="inputPresentacion">
+                                Presentación ya existe
                             </div>
                         </div>
                         <div class="form-group">
@@ -47,16 +50,9 @@
                                 <td mat-cell *matCellDef="let element"> {{element.Descripcion}} </td>
                             </ng-container>
                             <ng-container matColumnDef="acciones">
-                                <th colspan="2" mat-header-cell *matHeaderCellDef> Acciones </th>
+                                <th mat-header-cell *matHeaderCellDef> Acciones </th>
                                 <ng-container *matCellDef="let element">
                                     <ng-container *ngIf="element.PresentacionUtilizado == '0'">
-                                        <td mat-cell>
-                                            <button tooltip="Modificar" placement="top"
-                                                class="btn btn-sm btn-outline-info"
-                                                (click)="mostrarPresentacion(element)">
-                                                <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                                            </button>
-                                        </td>
                                         <td mat-cell>
                                             <button class="btn btn-sm btn-outline-danger" 
                                                 (click)="eliminarPresentacion(element.IdPresentacion)">
@@ -65,12 +61,7 @@
                                         </td>
                                     </ng-container>
                                     <ng-container *ngIf="element.PresentacionUtilizado == '1'">
-                                        <td mat-cell colspan="2">
-                                            <button tooltip="Modificar" placement="top"
-                                                class="btn btn-sm btn-outline-info"
-                                                (click)="mostrarPresentacion(element)">
-                                                <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                                            </button>
+                                        <td mat-cell>
                                         </td>
                                     </ng-container>
                                 </ng-container>

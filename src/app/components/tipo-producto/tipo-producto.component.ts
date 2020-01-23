@@ -31,13 +31,17 @@ export class TipoProductoComponent implements OnInit {
   filterTipoProducto = '';
   botonIngresar = 'ingresar';
   idTipoProducto = '0';
+  inputTipoProducto = true;
+
+  onChangeInputTipoUsuario() {
+    this.inputTipoProducto = true;
+  }
 
   consultarTipoProductos() {
     this.inventarioService.consultarTipoProductos(localStorage.getItem('miCuenta.getToken'))
       .then(
         ok => {
           this.tipoProductos = ok['respuesta'];
-          console.log(this.tipoProductos)
         }
       )
       .catch(
@@ -67,8 +71,24 @@ export class TipoProductoComponent implements OnInit {
     )
       .then(
         ok => {
-          this.myForm.reset();
-          this.consultarTipoProductos();
+          if(ok['respuesta'] == null) {
+            sweetAlert("Inténtalo de nuevo!", {
+              icon: "warning",
+            });
+            this.myForm.reset();
+          } else if(ok['respuesta'] == '400') {
+            this.inputTipoProducto = false;
+          } else if(ok['respuesta'] == 'false') {
+            sweetAlert("Ha ocurrido un error!", {
+              icon: "error",
+            });
+          } else {
+            sweetAlert("Se ingresó correctamente!", {
+              icon: "success",
+            });
+            this.myForm.reset();
+            this.consultarTipoProductos();
+          }
         }
       )
       .catch(
@@ -94,9 +114,24 @@ export class TipoProductoComponent implements OnInit {
     )
     .then(
       ok => {
-        this.myForm.reset();
-        this.testButton.nativeElement.value = 'ingresar';
-        this.consultarTipoProductos();
+        if(ok['respuesta'] == null) {
+          sweetAlert("Inténtalo de nuevo!", {
+            icon: "warning",
+          });
+        } else if(ok['respuesta'] == '400') {
+          this.inputTipoProducto = false;
+        } else if(ok['respuesta'] == 'false') {
+          sweetAlert("Ha ocurrido un error!", {
+            icon: "error",
+          });
+        } else {
+          sweetAlert("Se ingresó correctamente!", {
+            icon: "success",
+          });
+          this.myForm.reset();
+          this.testButton.nativeElement.value = 'ingresar';
+          this.consultarTipoProductos();
+        }
       }
     )
     .catch(
@@ -122,7 +157,16 @@ export class TipoProductoComponent implements OnInit {
         )
         .then(
           ok => {
-            this.consultarTipoProductos();
+            if(ok['respuesta']){
+              sweetAlert("Se a eliminado correctamente!", {
+                icon: "success",
+              });
+              this.consultarTipoProductos();
+            } else {
+              sweetAlert("No se ha podido elminiar!", {
+                icon: "error",
+              });
+            }
           }
         )
         .catch(

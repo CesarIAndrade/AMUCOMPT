@@ -29,8 +29,13 @@ export class PresentacionComponent implements OnInit {
   idPresentacion = '0';
   botonIngresar = 'ingresar';
   filterPresentacion = '';
+  inputPresentacion = true;
 
   presentaciones: Presentacion[] = [];
+
+  onChangeInputPresentacion() {
+    this.inputPresentacion = true;
+  }
 
   consultarPresentaciones() {
     this.inventarioService.consultarPresentaciones(
@@ -68,8 +73,25 @@ export class PresentacionComponent implements OnInit {
     )
       .then(
         ok => {
-          this.myForm.reset();
-          this.consultarPresentaciones();
+          console.log(ok['respuesta']);
+          if (ok['respuesta'] == null) {
+            sweetAlert("Inténtalo de nuevo!", {
+              icon: "warning",
+            });
+            this.myForm.reset();
+          } else if (ok['respuesta'] == '400') {
+            this.inputPresentacion = false;
+          } else if (ok['respuesta'] == 'false') {
+            sweetAlert("Ha ocurrido un error!", {
+              icon: "error",
+            });
+          } else {
+            sweetAlert("Se ingresó correctamente!", {
+              icon: "success",
+            });
+            this.myForm.reset();
+            this.consultarPresentaciones();
+          }
         }
       )
       .catch(
@@ -95,9 +117,24 @@ export class PresentacionComponent implements OnInit {
     )
       .then(
         ok => {
-          this.myForm.reset();
-          this.testButton.nativeElement.value = 'ingresar';
-          this.consultarPresentaciones();
+          if (ok['respuesta'] == null) {
+            sweetAlert("Inténtalo de nuevo!", {
+              icon: "warning",
+            });
+          } else if (ok['respuesta'] == '400') {
+            this.inputPresentacion = false;
+          } else if (ok['respuesta'] == 'false') {
+            sweetAlert("Ha ocurrido un error!", {
+              icon: "error",
+            });
+          } else {
+            sweetAlert("Se ingresó correctamente!", {
+              icon: "success",
+            });
+            this.myForm.reset();
+            this.testButton.nativeElement.value = 'ingresar';
+            this.consultarPresentaciones();
+          }
         }
       )
       .catch(
@@ -123,7 +160,16 @@ export class PresentacionComponent implements OnInit {
           )
             .then(
               ok => {
-                this.consultarPresentaciones();
+                if (ok['respuesta']) {
+                  sweetAlert("Se a eliminado correctamente!", {
+                    icon: "success",
+                  });
+                  this.consultarPresentaciones();
+                } else {
+                  sweetAlert("No se ha podido elminiar!", {
+                    icon: "error",
+                  });
+                }
               }
             )
             .catch(

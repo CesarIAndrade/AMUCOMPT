@@ -9,13 +9,16 @@
                 <div class="card-body">
                     <form [formGroup]="myForm" (ngSubmit)="validarFormulario()" novalidate>
                         <div class="form-group">
-                            <input formControlName="_nombre" class="form-control" type="text"
+                            <input (keyup)="onChangeInputNombreProducto()" formControlName="_nombre" class="form-control" type="text"
                                 placeholder="Ingrese Nombre Producto">
                             <div class="badge badge-danger mt-3 btn-block"
                                 *ngIf="_nombre.invalid && (_nombre.dirty || _nombre.touched)">
                                 <div *ngIf="_nombre.errors.required">
-                                    Nombre Producto Requerido
+                                    Producto Requerido
                                 </div>
+                            </div>
+                            <div class="badge badge-danger mt-3 btn-block" [hidden]="inputNombreProducto">
+                                Producto ya existe
                             </div>
                         </div>
                         <div class="form-group">
@@ -74,7 +77,7 @@
                                             {{ item.Descripcion }}
                                         </option>
                                     </select>
-                                    <div class="badge badge-danger mt-3 btn-block" [hidden]="selectTipoProducto">
+                                    <div class="badge badge-danger mt-3 btn-block" [hidden]="selectMedida">
                                         Medida Requerido
                                     </div>
                                 </div>
