@@ -1,7 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import { InventarioService } from 'src/app/services/inventario.service';
+
+// Interfaces
 import { Producto } from 'src/app/interfaces/producto/producto';
 import { Kit } from 'src/app/interfaces/kit/kit';
+
+// Services
+import { InventarioService } from 'src/app/services/inventario.service';
+
+// SweetAlert
+import sweetalert from 'sweetalert';
 
 @Component({
   selector: 'app-armar-kit',
@@ -15,6 +22,30 @@ export class ArmarKitComponent implements OnInit {
   productos: Producto[] = [];
   kits: Kit[] = [];
 
+  listaProductosDeUnKit: any[] = [];
+
+  onChangeSelectKit(idKit) {
+    this.consultarKitsYSusProductosDeUn(idKit);
+  }
+
+  consultarKitsYSusProductosDeUn(idKit) {
+    this.inventarioService.consultarKitsYSusProductosDeUn(
+      idKit,
+      localStorage.getItem('miCuenta.getToken')
+    )
+      .then(
+        ok => {
+          this.listaProductosDeUnKit = [];
+          this.listaProductosDeUnKit = ok['respuesta'][0]['ListaAsignarProductoKit'];
+        }
+      )
+      .catch(
+        error => {
+          console.log(error);
+        }
+      )
+  }
+
   consultarKits() {
     this.inventarioService.consultarKits(
       localStorage.getItem('miCuenta.getToken')
@@ -23,6 +54,7 @@ export class ArmarKitComponent implements OnInit {
         ok => {
           this.kits = [];
           this.kits = ok['respuesta'];
+          this.consultarProductos();
         }
       )
       .catch(
@@ -49,9 +81,43 @@ export class ArmarKitComponent implements OnInit {
       )
   }
 
+
+  agregarProductoDelKit(producto) {
+    sweetalert({
+      title: "Advertencia",
+      text: "¿Está seguro que desea agregar al Kit?",
+      icon: "warning",
+      buttons: ['Cancelar', 'Ok'],
+      dangerMode: true
+    })
+      .then((willDelete) => {
+        if (willDelete) {
+          console.log('ok');
+        }
+      });
+  }
+
+  eliminarProductoDelKit(producto) {
+    sweetalert({
+      title: "Advertencia",
+      text: "¿Está seguro que desea quitar del Kit?",
+      icon: "warning",
+      buttons: ['Cancelar', 'Ok'],
+      dangerMode: true
+    })
+      .then((willDelete) => {
+        if (willDelete) {
+          console.log('ok');
+        }
+      });
+  }
+
   ngOnInit() {
+    this.consultarKits();
   }
 
   tablaProductos = ['nombre', 'codigo', 'acciones'];
+
+  tablaProductosDeUnKit = ['nombre', 'tipoProducto', 'codigo', 'presentacion', 'contenidoNeto', 'medida', 'acciones']
 
 }
