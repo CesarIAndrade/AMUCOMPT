@@ -1,5 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 
+// Components
+import { ModalDetalleProductoComponent } from '../modal-detalle-producto/modal-detalle-producto.component';
+
+// Functional Components
+import { MatDialog } from "@angular/material/dialog";
+
 // Interfaces
 import { Producto } from 'src/app/interfaces/producto/producto';
 import { Kit } from 'src/app/interfaces/kit/kit';
@@ -10,6 +16,12 @@ import { InventarioService } from 'src/app/services/inventario.service';
 // SweetAlert
 import sweetalert from 'sweetalert';
 
+export interface DetalleProducto {
+  presentacion: string,
+  contenidoNeto: string,
+  medida: string
+}
+
 @Component({
   selector: 'app-armar-kit',
   templateUrl: './armar-kit.component.html',
@@ -17,19 +29,25 @@ import sweetalert from 'sweetalert';
 })
 export class ArmarKitComponent implements OnInit {
 
-  constructor(private inventarioService: InventarioService) { }
+  constructor(
+    private inventarioService: InventarioService,
+    private dialog: MatDialog,
+  ) { }
 
-  productos: Producto[] = [];
+  idKit = '0';
+  productos: any[] = [];
   kits: Kit[] = [];
 
   listaProductosDeUnKit: any[] = [];
 
   onChangeSelectKit(idKit) {
-    this.consultarKitsYSusProductosDeUn(idKit);
+    this.idKit = idKit;
+    this.consultarKitsYSusProductos(idKit);
+    this.consultarProductos(idKit);
   }
 
-  consultarKitsYSusProductosDeUn(idKit) {
-    this.inventarioService.consultarKitsYSusProductosDeUn(
+  consultarKitsYSusProductos(idKit) {
+    this.inventarioService.consultarKitsYSusProductos(
       idKit,
       localStorage.getItem('miCuenta.getToken')
     )
@@ -54,7 +72,6 @@ export class ArmarKitComponent implements OnInit {
         ok => {
           this.kits = [];
           this.kits = ok['respuesta'];
-          this.consultarProductos();
         }
       )
       .catch(
@@ -64,8 +81,9 @@ export class ArmarKitComponent implements OnInit {
       )
   }
 
-  consultarProductos() {
-    this.inventarioService.consultarProductos(
+  consultarProductos(idKit) {
+    this.inventarioService.consultarProductosQueNoTieneUnKit(
+      idKit,
       localStorage.getItem('miCuenta.getToken')
     )
       .then(
@@ -81,20 +99,60 @@ export class ArmarKitComponent implements OnInit {
       )
   }
 
-
-  agregarProductoDelKit(producto) {
-    sweetalert({
-      title: "Advertencia",
-      text: "¿Está seguro que desea agregar al Kit?",
-      icon: "warning",
-      buttons: ['Cancelar', 'Ok'],
-      dangerMode: true
-    })
-      .then((willDelete) => {
-        if (willDelete) {
-          console.log('ok');
+  mostrarDetalleProducto(producto, estructura) {
+    var detalleProducto: DetalleProducto;
+    if(estructura == 'productoDeUnKit') {
+      detalleProducto = {
+        presentacion: producto.ListaProductos.Presentacion.Descripcion,
+        contenidoNeto: producto.ListaProductos.CantidadMedida,
+        medida: producto.ListaProductos.Medida.Descripcion
+      }
+      let dialogRef = this.dialog.open(ModalDetalleProductoComponent, {
+        width: '325px',
+        height: '275px',
+        data: {
+          producto: detalleProducto
         }
       });
+    } else if(estructura == 'productoSinkit') {
+      detalleProducto = {
+        presentacion: producto.Presentacion.Descripcion,
+        contenidoNeto: producto.CantidadMedida,
+        medida: producto.Medida.Descripcion
+      }
+      let dialogRef = this.dialog.open(ModalDetalleProductoComponent, {
+        width: '325px',
+        height: '275px',
+        data: {
+          producto: detalleProducto
+        }
+      });
+    }
+
+
+  }
+
+  agregarProductoDelKit(producto) {
+    console.log(producto);
+    this.inventarioService.crearAsignacionProductoKit(
+      producto.IdConfigurarProducto,
+      this.idKit,
+      localStorage.getItem('miCuenta.postToken')
+    )
+      .then(
+        ok => {
+          if (ok['respuesta']) {
+            this.consultarKitsYSusProductos(this.idKit);
+            this.consultarProductos(this.idKit);
+          }
+        }
+      )
+      .catch(
+        error => {
+          console.log(error);
+        }
+      )
+
   }
 
   eliminarProductoDelKit(producto) {
@@ -107,7 +165,23 @@ export class ArmarKitComponent implements OnInit {
     })
       .then((willDelete) => {
         if (willDelete) {
-          console.log('ok');
+          this.inventarioService.eliminarAsignacionProductoKit(
+            producto.IdAsignarProductoKit,
+            localStorage.getItem('miCuenta.deleteToken')
+          )
+            .then(
+              ok => {
+                if (ok['respuesta']) {
+                  this.consultarKitsYSusProductos(producto.IdKit);
+                  this.consultarProductos(producto.IdKit);
+                }
+              }
+            )
+            .catch(
+              error => {
+                console.log(error);
+              }
+            )
         }
       });
   }
@@ -116,8 +190,7 @@ export class ArmarKitComponent implements OnInit {
     this.consultarKits();
   }
 
-  tablaProductos = ['nombre', 'codigo', 'acciones'];
-
-  tablaProductosDeUnKit = ['nombre', 'tipoProducto', 'codigo', 'presentacion', 'contenidoNeto', 'medida', 'acciones']
+  tablaProductos = ['nombre', 'tipoProducto', 'codigo', 'acciones'];
+  tablaProductosDeUnKit = ['nombre', 'tipoProducto', 'codigo', 'acciones']
 
 }

@@ -3,7 +3,7 @@
     <div class="row">
         <div class="col-lg-6">
             <div class="card">
-                <div class="card-header">
+                <div class="card-header" style="text-align: center;">
                     Kits
                 </div>
                 <div class="card-body">
@@ -30,24 +30,16 @@
                                 <th mat-header-cell *matHeaderCellDef> Código </th>
                                 <td mat-cell *matCellDef="let element"> {{element.ListaProductos.Producto.Codigo}} </td>
                             </ng-container>
-                            <ng-container matColumnDef="presentacion">
-                                <th mat-header-cell *matHeaderCellDef> Presentación </th>
-                                <td mat-cell *matCellDef="let element">
-                                    {{element.ListaProductos.Presentacion.Descripcion}} </td>
-                            </ng-container>
-                            <ng-container matColumnDef="contenidoNeto">
-                                <th mat-header-cell *matHeaderCellDef> Contenido Neto </th>
-                                <td mat-cell *matCellDef="let element"> {{element.ListaProductos.CantidadMedida}} </td>
-                            </ng-container>
-                            <ng-container matColumnDef="medida">
-                                <th mat-header-cell *matHeaderCellDef> Medida </th>
-                                <td mat-cell *matCellDef="let element">
-                                    {{element.ListaProductos.Medida.Descripcion}} </td>
-                            </ng-container>
                             <ng-container matColumnDef="acciones">
-                                <th mat-header-cell *matHeaderCellDef> Acciones </th>
+                                <th colspan="2" mat-header-cell *matHeaderCellDef> Acciones </th>
                                 <ng-container *matCellDef="let element">
                                     <ng-container>
+                                        <td mat-cell>
+                                            <button class="btn btn-sm btn-outline-info"
+                                                (click)="mostrarDetalleProducto(element, 'productoDeUnKit')">
+                                                <i class="fa fa-eye" aria-hidden="true"></i>
+                                            </button>
+                                        </td>
                                         <td mat-cell>
                                             <button class="btn btn-sm btn-outline-danger"
                                                 (click)="eliminarProductoDelKit(element)">
@@ -80,17 +72,27 @@
                         <table mat-table [dataSource]="productos">
                             <ng-container matColumnDef="nombre">
                                 <th mat-header-cell *matHeaderCellDef> Nombre </th>
-                                <td mat-cell *matCellDef="let element"> {{element.Nombre}} </td>
+                                <td mat-cell *matCellDef="let element"> {{element.Producto.Nombre}} </td>
+                            </ng-container>
+                            <ng-container matColumnDef="tipoProducto">
+                                <th mat-header-cell *matHeaderCellDef> Tipo Producto </th>
+                                <td mat-cell *matCellDef="let element"> {{element.Producto.TipoProducto.Descripcion}} </td>
                             </ng-container>
                             <ng-container matColumnDef="codigo">
                                 <th mat-header-cell *matHeaderCellDef> Código </th>
-                                <td mat-cell *matCellDef="let element"> {{element.Codigo}} </td>
+                                <td mat-cell *matCellDef="let element"> {{element.Producto.Codigo}} </td>
                             </ng-container>
                             <ng-container matColumnDef="acciones">
-                                <th mat-header-cell *matHeaderCellDef> Acciones </th>
+                                <th colspan="2" mat-header-cell *matHeaderCellDef> Acciones </th>
                                 <ng-container *matCellDef="let element">
                                     <td mat-cell>
-                                        <button class="btn btn-sm btn-outline-success"
+                                        <button class="btn btn-sm btn-outline-info"
+                                            (click)="mostrarDetalleProducto(element, 'productoSinkit')">
+                                            <i class="fa fa-eye" aria-hidden="true"></i>
+                                        </button>
+                                    </td>
+                                    <td mat-cell>
+                                        <button class="btn btn-sm btn-outline-warning"
                                             (click)="agregarProductoDelKit(element)">
                                             <i class="fa fa-plus" aria-hidden="true"></i>
                                         </button>

@@ -39,7 +39,7 @@ import { ModalAsignacionUsuarioPersonaComponent } from './components/modal-asign
 import { PipesModule } from './pipes/pipes.module';
 import {MatChipsModule} from '@angular/material/chips';
 import { ModalAsignacionUsuarioTiposUsuarioComponent } from './components/modal-asignacion-usuario-tipos-usuario/modal-asignacion-usuario-tipos-usuario.component';
-import { MatTableModule, MatOptionModule, MatSelectModule } from '@angular/material';
+import { MatTableModule, MatOptionModule, MatSelectModule, MatAutocompleteModule, MatInputModule } from '@angular/material';
 import { TooltipModule } from 'ng2-tooltip-directive';
 import { ProductoComponent } from './components/producto/producto.component';
 import { TipoProductoComponent } from './components/tipo-producto/tipo-producto.component';
@@ -48,6 +48,7 @@ import { MedidaComponent } from './components/medida/medida.component';
 import { ConfiguracionProductoComponent } from './components/configuracion-producto/configuracion-producto.component';
 import { KitComponent } from './components/kit/kit.component';
 import { ArmarKitComponent } from './components/armar-kit/armar-kit.component';
+import { ModalDetalleProductoComponent } from './components/modal-detalle-producto/modal-detalle-producto.component';
 
 @NgModule({
   declarations: [
@@ -76,6 +77,7 @@ import { ArmarKitComponent } from './components/armar-kit/armar-kit.component';
     ConfiguracionProductoComponent,
     KitComponent,
     ArmarKitComponent,
+    ModalDetalleProductoComponent,
   ],
   imports: [
     BrowserModule,
@@ -88,11 +90,13 @@ import { ArmarKitComponent } from './components/armar-kit/armar-kit.component';
     MatIconModule,
     MatListModule,
     MatTableModule,
+    MatInputModule,
     MatOptionModule,
     MatSelectModule,
     MatFormFieldModule,
     HttpClientModule,
     FormsModule,
+    MatAutocompleteModule,
     ReactiveFormsModule,
     MatDialogModule,
     MatTabsModule,
@@ -104,6 +108,7 @@ import { ArmarKitComponent } from './components/armar-kit/armar-kit.component';
     ModalDetallePersonaComponent,
     ModalAsignacionUsuarioPersonaComponent ,
     ModalAsignacionUsuarioTiposUsuarioComponent,
+    ModalDetalleProductoComponent
   ],
   providers: [],
   bootstrap: [AppComponent]

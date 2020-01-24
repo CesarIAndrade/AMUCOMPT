@@ -1,14 +1,25 @@
-import { Component, OnInit, ViewChild, ElementRef, Input, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { FormGroup, Validators, FormControl } from '@angular/forms';
 
+// Components
+import { ModalDetalleProductoComponent } from '../modal-detalle-producto/modal-detalle-producto.component';
+
+// Functional Components
+import { MatDialog } from "@angular/material/dialog";
+
 // Interfaces
-import { Producto } from 'src/app/interfaces/producto/producto';
 import { TipoProducto } from 'src/app/interfaces/tipo-producto/tipo-producto';
 import { Presentacion } from 'src/app/interfaces/presentacion/presentacion';
 import { Medida } from 'src/app/interfaces/medida/medida';
+import { DetalleProducto } from '../armar-kit/armar-kit.component';
 
 // Services
 import { InventarioService } from 'src/app/services/inventario.service';
+
+// SweetAlert
+import sweetalert from 'sweetalert';
+import { Observable } from 'rxjs';
+import { startWith, map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-producto',
@@ -19,30 +30,32 @@ export class ProductoComponent implements OnInit {
 
   myForm: FormGroup;
   @ViewChild('testButton', { static: false }) testButton: ElementRef;
-  
+
   constructor(
     private inventarioService: InventarioService,
+    private dialog: MatDialog,
   ) {
     this.myForm = new FormGroup({
-      _nombre: new FormControl('', [Validators.required]),
       _descripcion: new FormControl(''),
       _codigo: new FormControl('', [Validators.required]),
       _contenidoNeto: new FormControl('', [Validators.required]),
     })
   }
 
-  idProducto = '0';
+  idProducto: string;
   tipoProducto = '0';
   presentacion = '0';
   medida = '0';
   botonIngresar = 'ingresar';
   filterProducto = '';
+  nombreProducto: string;
   selectTipoProducto = true;
   selectPresentacion = true;
   selectMedida = true;
   inputNombreProducto = true;
 
-  productos: Producto[] = [];
+  nombresDeProductos: any;
+  productos: any[] = [];
   tipoProductos: TipoProducto[] = [];
   presentaciones: Presentacion[] = [];
   medidas: Medida[] = [];
@@ -97,14 +110,33 @@ export class ProductoComponent implements OnInit {
   }
 
   consultarProductos() {
-    this.inventarioService.consultarProductos(
+    this.inventarioService.consultarConfiguracionProducto(
       localStorage.getItem('miCuenta.getToken')
     )
       .then(
         ok => {
           this.productos = [];
           this.productos = ok['respuesta'];
+          this.nombresDeProductos = [];
+
+          console.log(this.productos);
+          for (var i = 0; i < ok['respuesta'].length; i++) {
+            this.nombresDeProductos[i] = ok['respuesta'][i].Producto.Nombre;
+            this.nombresDeProductos[i] = {
+              idProducto: ok['respuesta'][i].Producto.IdProducto,
+              nombre: ok['respuesta'][i].Producto.Nombre,
+              idTipoProducto: ok['respuesta'][i].Producto.TipoProducto.IdTipoProducto,
+              descripcion: ok['respuesta'][i].Producto.Descripcion,
+              codigo: ok['respuesta'][i].Producto.Codigo
+            }
+          }
+
           this.consultarTipoProductos();
+          this.filteredOptions = this.myControl.valueChanges
+            .pipe(
+              startWith(''),
+              map(value => this._filter(value))
+            );
         }
       )
       .catch(
@@ -136,7 +168,7 @@ export class ProductoComponent implements OnInit {
       this.presentacion,
       this.medida
     );
-    if(this.tipoProducto != '0' && this.presentacion != '0' && this.medida != '0') {
+    if (this.tipoProducto != '0' && this.presentacion != '0' && this.medida != '0') {
       if (this.myForm.valid) {
         if (this.testButton.nativeElement.value == 'ingresar') {
           this.crearProducto();
@@ -150,11 +182,9 @@ export class ProductoComponent implements OnInit {
   }
 
   crearProducto() {
-    if (this.tipoProducto == '0') {
-      this.selectTipoProducto = false;
-    } else {
+    if (this.idProducto == null && this.nombreProducto == null) {
       this.inventarioService.crearProducto(
-        this.myForm.get('_nombre').value,
+        this.myControl.value,
         this.myForm.get('_descripcion').value,
         this.myForm.get('_codigo').value,
         this.tipoProducto,
@@ -162,7 +192,8 @@ export class ProductoComponent implements OnInit {
       )
         .then(
           ok => {
-            if(ok['respuesta'] == null) {
+            console.log(ok['respuesta']);
+            if (ok['respuesta'] == null) {
               sweetAlert("Inténtalo de nuevo!", {
                 icon: "warning",
               });
@@ -170,16 +201,13 @@ export class ProductoComponent implements OnInit {
               this.tipoProducto = '0';
               this.presentacion = '0';
               this.medida = '0';
-            } else if(ok['respuesta'] == '400') {
+            } else if (ok['respuesta'] == '400') {
               this.inputNombreProducto = false;
-            } else if(ok['respuesta'] == 'false') {
+            } else if (ok['respuesta'] == 'false') {
               sweetAlert("Ha ocurrido un error!", {
                 icon: "error",
               });
             } else {
-              sweetAlert("Se ingresó correctamente!", {
-                icon: "success",
-              });
               this.idProducto = ok['respuesta'];
               this.crearConfiguracionProducto();
               this.consultarProductos();
@@ -191,6 +219,8 @@ export class ProductoComponent implements OnInit {
             console.log(error);
           }
         )
+    } else {
+      this.crearConfiguracionProducto();
     }
   }
 
@@ -216,7 +246,7 @@ export class ProductoComponent implements OnInit {
     )
       .then(
         ok => {
-          if(ok['respuesta'] == null) {
+          if (ok['respuesta'] == null) {
             sweetAlert("Inténtalo de nuevo!", {
               icon: "warning",
             });
@@ -224,9 +254,9 @@ export class ProductoComponent implements OnInit {
             this.tipoProducto = '0';
             this.presentacion = '0';
             this.medida = '0';
-          } else if(ok['respuesta'] == '400') {
+          } else if (ok['respuesta'] == '400') {
             this.inputNombreProducto = false;
-          } else if(ok['respuesta'] == 'false') {
+          } else if (ok['respuesta'] == 'false') {
             sweetAlert("Ha ocurrido un error!", {
               icon: "error",
             });
@@ -273,20 +303,86 @@ export class ProductoComponent implements OnInit {
       this.myForm.get('_contenidoNeto').value,
       localStorage.getItem('miCuenta.postToken')
     )
-    .then(
-      ok => {
-        console.log(ok['respuesta']);
-        this.myForm.reset();
-        this.tipoProducto = '0';
-        this.presentacion = '0';
-        this.medida = '0';
+      .then(
+        ok => {
+          if (ok['respuesta'] == null) {
+            sweetAlert("Inténtalo de nuevo!", {
+              icon: "warning",
+            });
+            this.myForm.reset();
+            this.tipoProducto = '0';
+            this.presentacion = '0';
+            this.medida = '0';
+          } else if (ok['respuesta'] == '400') {
+            this.inputNombreProducto = false;
+          } else if (ok['respuesta'] == 'false') {
+            sweetAlert("Ha ocurrido un error!", {
+              icon: "error",
+            });
+          } else {
+            sweetAlert("Se ingresó correctamente!", {
+              icon: "success",
+            });
+            this.myForm.reset();
+            this.tipoProducto = '0';
+            this.presentacion = '0';
+            this.medida = '0';
+            this.consultarProductos();
+          }
+        }
+      )
+      .catch(
+        error => {
+          console.log(error);
+        }
+      )
+  }
+
+  eliminarConfiguracionProducto(producto) {
+    sweetalert({
+      title: "Advertencia",
+      text: "¿Está seguro que desea eliminar?",
+      icon: "warning",
+      buttons: ['Cancelar', 'Ok'],
+      dangerMode: true
+    })
+      .then((willDelete) => {
+        if (willDelete) {
+          this.inventarioService.eliminarConfiguracionProducto(
+            producto.IdConfigurarProducto,
+            localStorage.getItem('miCuenta.postToken')
+          )
+            .then(
+              ok => {
+                if (ok['respuesta']) {
+                  this.eliminarProducto(producto.Producto.IdProducto);
+                }
+              }
+            )
+            .catch(
+              error => {
+                console.log(error);
+              }
+            )
+        }
+      });
+
+  }
+
+  mostrarDetalleProducto(producto) {
+    var detalleProducto: DetalleProducto;
+    detalleProducto = {
+      presentacion: producto.Presentacion.Descripcion,
+      contenidoNeto: producto.CantidadMedida,
+      medida: producto.Medida.Descripcion
+    }
+    let dialogRef = this.dialog.open(ModalDetalleProductoComponent, {
+      width: '325px',
+      height: '275px',
+      data: {
+        producto: detalleProducto
       }
-    )
-    .catch(
-      error => {
-        console.log(error);
-      }
-    )
+    });
   }
 
   onChangeSelectTipoProducto(value) {
@@ -311,9 +407,9 @@ export class ProductoComponent implements OnInit {
     this.inputNombreProducto = true;
   }
 
-  get _nombre() {
-    return this.myForm.get('_nombre');
-  }
+  // get _nombre() {
+  //   return this.myForm.get('_nombre');
+  // }
 
   get _descripcion() {
     return this.myForm.get('_descripcion');
@@ -327,12 +423,40 @@ export class ProductoComponent implements OnInit {
     return this.myForm.get('_contenidoNeto');
   }
 
+  testDisabled = false;
+  testDisabled2 = false;
+  testDisabled3= false;
+
+
+
+  test(option) {
+    this.idProducto = option.idProducto;
+    this.nombreProducto = option.nombre;
+    this.tipoProducto = option.idTipoProducto;
+    this.myForm.get('_descripcion').setValue(option.descripcion);
+    this.myForm.get('_codigo').setValue(option.codigo);
+
+
+    this.testDisabled = true;
+
+    this.testDisabled2 = true;
+    this.testDisabled3 = true;
+
+  }
+
   ngOnInit() {
     this.consultarProductos();
     this.consultarMedidas();
     this.consultarPresentaciones();
   }
 
-  tablaProductos = ['nombre', 'codigo', 'acciones'];
+  tablaProductos = ['nombre', 'tipoProducto', 'codigo', 'acciones'];
 
+  myControl = new FormControl();
+  filteredOptions: Observable<string[]>;
+
+  private _filter(value: string): string[] {
+    const filterValue = value.toLowerCase();
+    return this.nombresDeProductos.filter(option => option.nombre.toLowerCase().includes(filterValue));
+  }
 }
