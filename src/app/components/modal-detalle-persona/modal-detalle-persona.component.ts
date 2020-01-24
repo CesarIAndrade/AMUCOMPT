@@ -1,6 +1,5 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { PersonaModal } from 'src/app/interfaces/persona/persona-modal';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-modal-detalle-persona',
@@ -10,9 +9,8 @@ import { PersonaModal } from 'src/app/interfaces/persona/persona-modal';
 export class ModalDetallePersonaComponent implements OnInit {
 
   constructor(
-    public dialogRef: MatDialogRef<ModalDetallePersonaComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any
-  ) { console.log(data) }
+    @Inject(MAT_DIALOG_DATA) public data: any,
+  ) { }
 
   nombresCompletos = this.data.persona.PrimerNombre + ' ' +
     this.data.persona.SegundoNombre + ' ' +

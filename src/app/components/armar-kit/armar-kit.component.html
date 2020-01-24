@@ -3,17 +3,55 @@
     <div class="row">
         <div class="col-lg-6">
             <div class="card">
-                <div class="card-header">
+                <div class="card-header" style="text-align: center;">
                     Kits
                 </div>
                 <div class="card-body">
                     <div class="form-group">
-                        <select type="text" class="form-control">
-                            <option value="0" disabled>Kits</option>
+                        <select (change)="onChangeSelectKit($event.target.value)" type="text" class="form-control">
+                            <option value="0" disabled>Seleccione Kit</option>
                             <option *ngFor="let item of kits" value="{{item.IdKit}}">
                                 {{ item.Descripcion }}
                             </option>
                         </select>
+                    </div>
+                    <div class="tablaProductosDeUnKit mat-elevation-z5">
+                        <table mat-table [dataSource]="listaProductosDeUnKit">
+                            <ng-container matColumnDef="nombre">
+                                <th mat-header-cell *matHeaderCellDef> Nombre </th>
+                                <td mat-cell *matCellDef="let element"> {{element.ListaProductos.Producto.Nombre}} </td>
+                            </ng-container>
+                            <ng-container matColumnDef="tipoProducto">
+                                <th mat-header-cell *matHeaderCellDef> Tipo Producto </th>
+                                <td mat-cell *matCellDef="let element">
+                                    {{element.ListaProductos.Producto.TipoProducto.Descripcion}} </td>
+                            </ng-container>
+                            <ng-container matColumnDef="codigo">
+                                <th mat-header-cell *matHeaderCellDef> Código </th>
+                                <td mat-cell *matCellDef="let element"> {{element.ListaProductos.Producto.Codigo}} </td>
+                            </ng-container>
+                            <ng-container matColumnDef="acciones">
+                                <th colspan="2" mat-header-cell *matHeaderCellDef> Acciones </th>
+                                <ng-container *matCellDef="let element">
+                                    <ng-container>
+                                        <td mat-cell>
+                                            <button class="btn btn-sm btn-outline-info"
+                                                (click)="mostrarDetalleProducto(element, 'productoDeUnKit')">
+                                                <i class="fa fa-eye" aria-hidden="true"></i>
+                                            </button>
+                                        </td>
+                                        <td mat-cell>
+                                            <button class="btn btn-sm btn-outline-danger"
+                                                (click)="eliminarProductoDelKit(element)">
+                                                <i class="fa fa-times" aria-hidden="true"></i>
+                                            </button>
+                                        </td>
+                                    </ng-container>
+                                </ng-container>
+                            </ng-container>
+                            <tr mat-header-row *matHeaderRowDef="tablaProductosDeUnKit; sticky: true"></tr>
+                            <tr mat-row *matRowDef="let row; columns: tablaProductosDeUnKit;"></tr>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -34,37 +72,31 @@
                         <table mat-table [dataSource]="productos">
                             <ng-container matColumnDef="nombre">
                                 <th mat-header-cell *matHeaderCellDef> Nombre </th>
-                                <td mat-cell *matCellDef="let element"> {{element.Nombre}} </td>
+                                <td mat-cell *matCellDef="let element"> {{element.Producto.Nombre}} </td>
+                            </ng-container>
+                            <ng-container matColumnDef="tipoProducto">
+                                <th mat-header-cell *matHeaderCellDef> Tipo Producto </th>
+                                <td mat-cell *matCellDef="let element"> {{element.Producto.TipoProducto.Descripcion}} </td>
                             </ng-container>
                             <ng-container matColumnDef="codigo">
                                 <th mat-header-cell *matHeaderCellDef> Código </th>
-                                <td mat-cell *matCellDef="let element"> {{element.Codigo}} </td>
+                                <td mat-cell *matCellDef="let element"> {{element.Producto.Codigo}} </td>
                             </ng-container>
                             <ng-container matColumnDef="acciones">
                                 <th colspan="2" mat-header-cell *matHeaderCellDef> Acciones </th>
                                 <ng-container *matCellDef="let element">
-                                    <ng-container *ngIf="element.ProductoUtilizado == '0'">
-                                        <td mat-cell>
-                                            <button tooltip="Modificar" placement="top"
-                                                class="btn btn-sm btn-outline-info" (click)="mostrarProducto(element)">
-                                                <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                                            </button>
-                                        </td>
-                                        <td mat-cell>
-                                            <button class="btn btn-sm btn-outline-danger"
-                                                (click)="eliminarProducto(element.IdProducto)">
-                                                <i class="fa fa-trash" aria-hidden="true"></i>
-                                            </button>
-                                        </td>
-                                    </ng-container>
-                                    <ng-container *ngIf="element.ProductoUtilizado == '1'">
-                                        <td mat-cell colspan="2">
-                                            <button tooltip="Modificar" placement="top"
-                                                class="btn btn-sm btn-outline-info" (click)="mostrarProducto(element)">
-                                                <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                                            </button>
-                                        </td>
-                                    </ng-container>
+                                    <td mat-cell>
+                                        <button class="btn btn-sm btn-outline-info"
+                                            (click)="mostrarDetalleProducto(element, 'productoSinkit')">
+                                            <i class="fa fa-eye" aria-hidden="true"></i>
+                                        </button>
+                                    </td>
+                                    <td mat-cell>
+                                        <button class="btn btn-sm btn-outline-warning"
+                                            (click)="agregarProductoDelKit(element)">
+                                            <i class="fa fa-plus" aria-hidden="true"></i>
+                                        </button>
+                                    </td>
                                 </ng-container>
                             </ng-container>
                             <tr mat-header-row *matHeaderRowDef="tablaProductos; sticky: true"></tr>

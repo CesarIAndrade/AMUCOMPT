@@ -175,8 +175,8 @@ export class PersonaComponent implements OnInit {
           this.cantones = ok['respuesta'];
           if (value == 'ingresar') {
             this.canton = '0',
-            this.parroquia = '0',
-            this.parroquias = null;
+              this.parroquia = '0',
+              this.parroquias = null;
           }
         },
       )
@@ -473,7 +473,9 @@ export class PersonaComponent implements OnInit {
             localStorage.getItem('miCuenta.deleteToken'))
             .then(
               ok => {
-                console.log(ok['respuesta']);
+                sweetalert("Se ha eliminado correctamente!", {
+                  icon: "success",
+                });
                 this.consultarPersonas();
               },
             )
@@ -482,9 +484,6 @@ export class PersonaComponent implements OnInit {
                 console.log(err);
               }
             )
-          sweetalert("Se a eliminado Correctamente!", {
-            icon: "success",
-          });
         }
       });
   }
@@ -641,7 +640,7 @@ export class PersonaComponent implements OnInit {
 
   limpiarSelects() {
     this.tipoDocumento = '0',
-    this.tipoTelefono1 = '0';
+      this.tipoTelefono1 = '0';
     this.tipoTelefono2 = '0';
     this.provincia = '0';
     this.canton = '0';

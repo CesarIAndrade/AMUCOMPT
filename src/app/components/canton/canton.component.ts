@@ -8,6 +8,8 @@ import { PersonaService } from 'src/app/services/persona.service';
 // Interfaces
 import { Provincia } from 'src/app/interfaces/provincia/provincia';
 import { Canton } from 'src/app/interfaces/canton/canton';
+
+// SweetAlert
 import sweetalert from 'sweetalert';
 
 @Component({

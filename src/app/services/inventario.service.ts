@@ -534,4 +534,88 @@ export class InventarioService {
         })
     })
   }
+
+  consultarKitsYSusProductos(idKit: string, _token: string) {
+    const body = new HttpParams()
+      .set('IdKit', idKit)
+      .set('encriptada', _token)
+    return new Promise((resolve, reject) => {
+      this.http.post(this.apiUrl + 'Inventario/ListaAsignarProductoKit', body.toString(),
+        {
+          headers: new HttpHeaders()
+            .set('Content-Type', 'application/x-www-form-urlencoded')
+        }
+      )
+        .subscribe(res => {
+          resolve(res);
+        }, (err) => {
+          reject(err);
+        })
+    })
+  }
+
+  consultarProductosQueNoTieneUnKit(idKit: string, _token: string) {
+    const body = new HttpParams()
+      .set('IdKit', idKit)
+      .set('encriptada', _token)
+    return new Promise((resolve, reject) => {
+      this.http.post(this.apiUrl + 'Inventario/ListaConfigurarProductosQueNoTieneUnKit', body.toString(),
+        {
+          headers: new HttpHeaders()
+            .set('Content-Type', 'application/x-www-form-urlencoded')
+        }
+      )
+        .subscribe(res => {
+          resolve(res);
+        }, (err) => {
+          reject(err);
+        })
+    })
+  }
+
+  crearAsignacionProductoKit(
+    idConfigurarProducto: string,
+    idKit: string,
+    _token: string
+  ) {
+    const body = new HttpParams()
+      .set('IdConfigurarProducto', idConfigurarProducto)
+      .set('IdKit', idKit)
+      .set('encriptada', _token)
+    return new Promise((resolve, reject) => {
+      this.http.post(this.apiUrl + 'Inventario/IngresoAsignarProductoKit', body.toString(),
+        {
+          headers: new HttpHeaders()
+            .set('Content-Type', 'application/x-www-form-urlencoded')
+        }
+      )
+        .subscribe(res => {
+          resolve(res);
+        }, (err) => {
+          reject(err);
+        })
+    })
+  }
+
+  eliminarAsignacionProductoKit(
+    idAsignarProductoKit: string,
+    _token: string
+  ) {
+    const body = new HttpParams()
+      .set('IdAsignarProductoKit', idAsignarProductoKit)
+      .set('encriptada', _token)
+    return new Promise((resolve, reject) => {
+      this.http.post(this.apiUrl + 'Inventario/EliminarAsignarProductoKit', body.toString(),
+        {
+          headers: new HttpHeaders()
+            .set('Content-Type', 'application/x-www-form-urlencoded')
+        }
+      )
+        .subscribe(res => {
+          resolve(res);
+        }, (err) => {
+          reject(err);
+        })
+    })
+  }
 }
