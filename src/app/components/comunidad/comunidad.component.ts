@@ -39,8 +39,8 @@ export class ComunidadComponent implements OnInit {
   idComunidad = '0';
   inputComunidad = true;
 
-  filterParroquia='';
-  filterComunidad='';
+  filterParroquia = '';
+  filterComunidad = '';
   parroquias: Parroquia[] = [];
   comunidades: Comunidad[] = [];
 
@@ -67,7 +67,6 @@ export class ComunidadComponent implements OnInit {
       .then(
         ok => {
           this.comunidades = ok['respuesta'];
-          console.log(this.comunidades);
           this.consultarParroquias();
           console.log(ok['respuesta']);
 
@@ -194,26 +193,32 @@ export class ComunidadComponent implements OnInit {
       buttons: ['Cancelar', 'Ok'],
       dangerMode: true
     })
-    .then((willDelete) => {
-      if (willDelete) {
-        this.panelAdministracionService.eliminarComunidad(
-          idComunidad,
-          localStorage.getItem('miCuenta.deleteToken'))
-          .then(
-            ok => {
-              this.consultarComunidades();
-            }
-          )
-          .catch(
-            error => {
-              console.log(error);
-            }
-          )
-        sweetAlert("Se ha eliminado correctamente!", {
-          icon: "success",
-        });
-      }
-    });
+      .then((willDelete) => {
+        if (willDelete) {
+          this.panelAdministracionService.eliminarComunidad(
+            idComunidad,
+            localStorage.getItem('miCuenta.deleteToken'))
+            .then(
+              ok => {
+                if (ok['respuesta']) {
+                  sweetAlert("Se ha eliminado correctamente!", {
+                    icon: "success",
+                  });
+                  this.consultarComunidades();
+                } else {
+                  sweetAlert("No se ha podido elminiar!", {
+                    icon: "error",
+                  });
+                }
+              }
+            )
+            .catch(
+              error => {
+                console.log(error);
+              }
+            )
+        }
+      });
   }
 
   setParroquia(parroquia) {

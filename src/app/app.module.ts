@@ -47,6 +47,7 @@ import { PresentacionComponent } from './components/presentacion/presentacion.co
 import { MedidaComponent } from './components/medida/medida.component';
 import { ConfiguracionProductoComponent } from './components/configuracion-producto/configuracion-producto.component';
 import { KitComponent } from './components/kit/kit.component';
+import { ArmarKitComponent } from './components/armar-kit/armar-kit.component';
 
 @NgModule({
   declarations: [
@@ -74,6 +75,7 @@ import { KitComponent } from './components/kit/kit.component';
     MedidaComponent,
     ConfiguracionProductoComponent,
     KitComponent,
+    ArmarKitComponent,
   ],
   imports: [
     BrowserModule,

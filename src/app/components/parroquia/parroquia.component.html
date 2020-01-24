@@ -13,16 +13,19 @@
                     </div>
                     <form [formGroup]="myForm" (ngSubmit)="validarFormulario()" novalidate>
                         <div class="form-group">
-                            <input formControlName="_parroquia" class="form-control" type="text"
+                            <input (keyup)="onChangeInptParroquia()" formControlName="_parroquia" class="form-control" type="text"
                                 placeholder="Ingrese Parroquia">
                             <div class="badge badge-danger mt-3 btn-block" [hidden]="inputIdCanton">
-                                Canton Requerido
+                                Canton requerido
                             </div>
                             <div class="badge badge-danger mt-3 btn-block"
                                 *ngIf="_parroquia.invalid && (_parroquia.dirty || _parroquia.touched)">
                                 <div *ngIf="_parroquia.errors.required">
-                                    Parroquia Requerida
+                                    Parroquia requerida
                                 </div>
+                            </div>
+                            <div class="badge badge-danger mt-3 btn-block" [hidden]="inputParroquia">
+                                Parroquia ya existe
                             </div>
                         </div>
                         <div class="form-group">

@@ -36,11 +36,16 @@ export class ParroquiaComponent implements OnInit {
   canton = 'Canton';
   inputIdCanton = true;
   idCanton = '0';
+  inptParroquia = true;
 
   parroquias: Parroquia[] = [];
   filterParroquia = '';
   filterCanton = '';
   cantones: Canton[] = [];
+
+  onChangeInptParroquia() {
+    this.inptParroquia = true;
+  }
 
   consultarCantones() {
     this.personaService.consultarCantones(localStorage.getItem('miCuenta.getToken'))
@@ -97,9 +102,25 @@ export class ParroquiaComponent implements OnInit {
     )
       .then(
         ok => {
-          this.nuevaParroquiaCreada.emit(true);
-          this.limpiarCampos();
-          this.consultarParroquias();
+          if (ok['respuesta'] == null) {
+            sweetAlert("Inténtalo de nuevo!", {
+              icon: "warning",
+            });
+            this.limpiarCampos();
+          } else if (ok['respuesta'] == '400') {
+            this.inptParroquia = false;
+          } else if (ok['respuesta'] == 'false') {
+            sweetAlert("Ha ocurrido un error!", {
+              icon: "error",
+            });
+          } else {
+            sweetAlert("Se ingresó correctamente!", {
+              icon: "success",
+            });
+            this.limpiarCampos();
+            this.consultarParroquias();
+            this.nuevaParroquiaCreada.emit(true);
+          }
         }
       )
       .catch(
@@ -134,9 +155,25 @@ export class ParroquiaComponent implements OnInit {
     )
       .then(
         ok => {
-          this.limpiarCampos();
-          this.consultarParroquias();
-          this.testButton.nativeElement.value = 'ingresar';
+          if (ok['respuesta'] == null) {
+            sweetAlert("Inténtalo de nuevo!", {
+              icon: "warning",
+            });
+            this.limpiarCampos();
+          } else if (ok['respuesta'] == '400') {
+            this.inptParroquia = false;
+          } else if (ok['respuesta'] == 'false') {
+            sweetAlert("Ha ocurrido un error!", {
+              icon: "error",
+            });
+          } else {
+            sweetAlert("Se ingresó correctamente!", {
+              icon: "success",
+            });
+            this.limpiarCampos();
+            this.consultarParroquias();
+            this.testButton.nativeElement.value = 'ingresar';
+          }
         }
       )
       .catch(
@@ -162,7 +199,7 @@ export class ParroquiaComponent implements OnInit {
           .then(
             ok => {
               if(ok['respuesta']){
-                sweetAlert("Se a eliminado Correctamente!", {
+                sweetAlert("Se ha eliminado correctamente!", {
                   icon: "success",
                 });
                 this.consultarParroquias();
