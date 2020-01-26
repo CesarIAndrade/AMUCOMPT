@@ -1,86 +1,74 @@
-<br>
 <div class="container">
     <div class="row">
-        <div class="col-lg-5 col-md-5 mr-auto">
-            <div class="card">
-                <div class="card-header" style="text-align: center;">
-                    Nueva Provincia
-                </div>
-                <div class="card-body">
-                    <form [formGroup]="myForm" (ngSubmit)="validarFormulario()" novalidate>
-                        <div class="form-group">
-                            <input (keyup)="onChangeInptProvincia()" formControlName="_provincia" class="form-control" type="text"
-                                placeholder="Ingrese Provincia">
-                            <div class="badge badge-danger mt-3 btn-block"
-                                *ngIf="_provincia.invalid && (_provincia.dirty || _provincia.touched)">
-                                <div *ngIf="_provincia.errors.required">
-                                    Provincia requerida
-                                </div>
-                            </div>
-                            <div class="badge badge-danger mt-3 btn-block" [hidden]="inputProvincia">
-                                Provincia ya existe
-                            </div>
+        <div class="col-lg-4">
+            <div class="card-body">
+                <h5 style="text-align: center;">Nueva Provincia</h5>
+                <form [formGroup]="myForm" (ngSubmit)="validarFormulario()" novalidate>
+                    <mat-form-field class="example-full-width">
+                        <input matInput (keyup)="onChangeInptProvincia()" formControlName="_provincia" type="text"
+                            placeholder="Ingrese Provincia">
+                    </mat-form-field>
+                    <div class="badge badge-danger mb-3 btn-block"
+                        *ngIf="_provincia.invalid && (_provincia.dirty || _provincia.touched)">
+                        <div *ngIf="_provincia.errors.required">
+                            Provincia Requerida
                         </div>
-                        <div class="form-group">
-                            <button type="submit" [value]="botonIngresar" [disabled]="myForm.invalid"
-                                class="form-control btn-success" #testButton>Guardar
-                                Provincia</button>
-                        </div>
-                    </form>
-                </div>
+                    </div>
+                    <div class="badge badge-danger mb-3 btn-block" [hidden]="inputProvincia">
+                        Provincia Ya Existe
+                    </div>
+                    <div>
+                        <button type="submit" [value]="botonIngresar" [disabled]="myForm.invalid"
+                            class="btn btn-success btn-block" #testButton>Guardar</button>
+                    </div>
+                </form>
             </div>
         </div>
-        <div class="col-lg-7 col-md-7">
-            <div class="card">
-                <div class="card-header" style="text-align: center;">
-                    Lista Provincias
-                </div>
-                <div class="card-body">
-                    <div class="form-group input-container">
-                        <i class="fa fa-search icon"></i>
-                        <input [(ngModel)]="filterProvincia" type="text" class="form-control input-field"
-                            placeholder="Ejem. Manabi">
-                        <i class="fa fa-refresh icon" (click)="mostrarProvincia()" aria-hidden="true"></i>
-                    </div>                  
-                    <div class="tablaProvincias mat-elevation-z5">
-                        <table mat-table [dataSource]="provincias|filter:filterProvincia:'Descripcion'">
-                            <ng-container matColumnDef="provincia">
-                                <th mat-header-cell *matHeaderCellDef> Provincia </th>
-                                <td mat-cell *matCellDef="let element"> {{element.Descripcion}} </td>
-                            </ng-container>
-                            <ng-container matColumnDef="acciones">
-                                <th colspan="2" mat-header-cell *matHeaderCellDef> Acciones </th>
-                                <ng-container *matCellDef="let element">
-                                    <ng-container *ngIf="element.PermitirEliminacion">
-                                        <td mat-cell>
-                                            <button tooltip="Modificar" placement="top"
-                                                class="btn btn-sm btn-outline-info"
-                                                (click)=setProvincia(element)>
-                                                <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                                            </button>
-                                        </td>
-                                        <td mat-cell>
-                                            <button class="btn btn-sm btn-outline-danger"
-                                                (click)=eliminarProvincia(element.IdProvincia)>
-                                                <i class="fa fa-trash" aria-hidden="true"></i>
-                                            </button>
-                                        </td>
-                                    </ng-container>
-                                    <ng-container *ngIf="!element.PermitirEliminacion">
-                                        <td mat-cell colspan="2">
-                                            <button tooltip="Modificar" placement="top"
-                                                class="btn btn-sm btn-outline-info"
-                                                (click)=setProvincia(element)>
-                                                <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                                            </button>
-                                        </td>
-                                    </ng-container>
+        <div class="col-lg-8">
+            <div class="card-body mat-elevation-z5">
+                <h5 style="text-align: center;">Lista Provincias</h5>
+                <mat-form-field class="example-full-width">
+                    <input matInput [(ngModel)]="filterProvincia" type="text" placeholder="Buscar Provincia">
+                    <button mat-button matPrefix mat-icon-button>
+                        <mat-icon>search</mat-icon>
+                    </button>
+                </mat-form-field>
+                <div class="tablaProvincias">
+                    <table mat-table [dataSource]="provincias|filter:filterProvincia:'Descripcion'">
+                        <ng-container matColumnDef="provincia">
+                            <th mat-header-cell *matHeaderCellDef> Provincia </th>
+                            <td mat-cell *matCellDef="let element"> {{element.Descripcion}} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="acciones">
+                            <th colspan="2" mat-header-cell *matHeaderCellDef> Acciones </th>
+                            <ng-container *matCellDef="let element">
+                                <ng-container *ngIf="element.PermitirEliminacion">
+                                    <td mat-cell>
+                                        <button tooltip="Modificar" placement="top" class="btn btn-sm btn-outline-info"
+                                            (click)=setProvincia(element)>
+                                            <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                        </button>
+                                    </td>
+                                    <td mat-cell>
+                                        <button class="btn btn-sm btn-outline-danger"
+                                            (click)=eliminarProvincia(element.IdProvincia)>
+                                            <i class="fa fa-trash" aria-hidden="true"></i>
+                                        </button>
+                                    </td>
+                                </ng-container>
+                                <ng-container *ngIf="!element.PermitirEliminacion">
+                                    <td mat-cell colspan="2">
+                                        <button tooltip="Modificar" placement="top" class="btn btn-sm btn-outline-info"
+                                            (click)=setProvincia(element)>
+                                            <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                        </button>
+                                    </td>
                                 </ng-container>
                             </ng-container>
-                            <tr mat-header-row *matHeaderRowDef="tablaProvincias; sticky: true"></tr>
-                            <tr mat-row *matRowDef="let row; columns: tablaProvincias;"></tr>
-                        </table>
-                    </div>
+                        </ng-container>
+                        <tr mat-header-row *matHeaderRowDef="tablaProvincias; sticky: true"></tr>
+                        <tr mat-row *matRowDef="let row; columns: tablaProvincias;"></tr>
+                    </table>
                 </div>
             </div>
         </div>

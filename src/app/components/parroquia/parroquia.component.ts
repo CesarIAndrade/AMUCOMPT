@@ -33,10 +33,10 @@ export class ParroquiaComponent implements OnInit {
 
   botonIngresar = 'ingresar';
   idParroquia = '0';
-  canton = 'Canton';
+  canton = 'Cantón';
   inputIdCanton = true;
   idCanton = '0';
-  inptParroquia = true;
+  inputParroquia = true;
 
   parroquias: Parroquia[] = [];
   filterParroquia = '';
@@ -44,7 +44,7 @@ export class ParroquiaComponent implements OnInit {
   cantones: Canton[] = [];
 
   onChangeInptParroquia() {
-    this.inptParroquia = true;
+    this.inputParroquia = true;
   }
 
   consultarCantones() {
@@ -108,7 +108,7 @@ export class ParroquiaComponent implements OnInit {
             });
             this.limpiarCampos();
           } else if (ok['respuesta'] == '400') {
-            this.inptParroquia = false;
+            this.inputParroquia = false;
           } else if (ok['respuesta'] == 'false') {
             sweetAlert("Ha ocurrido un error!", {
               icon: "error",
@@ -161,7 +161,7 @@ export class ParroquiaComponent implements OnInit {
             });
             this.limpiarCampos();
           } else if (ok['respuesta'] == '400') {
-            this.inptParroquia = false;
+            this.inputParroquia = false;
           } else if (ok['respuesta'] == 'false') {
             sweetAlert("Ha ocurrido un error!", {
               icon: "error",
@@ -227,7 +227,7 @@ export class ParroquiaComponent implements OnInit {
 
   limpiarCampos() {
     this.myForm.reset();
-    this.canton = 'Parroquia';
+    this.canton = 'Cantón';
   }
 
   get _parroquia(){

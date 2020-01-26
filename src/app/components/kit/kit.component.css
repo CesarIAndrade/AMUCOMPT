@@ -1,8 +1,13 @@
 .tablaKits {
-    height: 21rem;
+    height: 20rem;
     overflow: auto;
 }
 
 table {
     width: 100%;
+}
+
+th {
+    background-color: #343a40;
+    color: #fff;
 }

@@ -11014,3 +11014,7 @@
   padding: 10px;
   outline: none;
 }
+
+.example-full-width {
+  width: 100%;
+}

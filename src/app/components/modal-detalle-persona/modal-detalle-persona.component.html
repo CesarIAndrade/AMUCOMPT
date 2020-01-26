@@ -1,36 +1,41 @@
 <h1 mat-dialog-title style="text-align: center;">Datos de Persona</h1>
 <mat-dialog-content>
-    <div class="form-group row">
-        <div class="col-sm-12">
-            <input matInput [(ngModel)]="nombresCompletos" type="text" class="form-control" readonly>
+    <mat-form-field class="example-full-width">
+        <input matInput [(ngModel)]="nombresCompletos" type="text" disabled readonly>
+    </mat-form-field>
+    <div class="row">
+        <div class="col-lg-6">
+            <mat-form-field class="example-full-width">
+                <input matInput [(ngModel)]="data.persona.TipoDocumento" type="text" disabled readonly>
+            </mat-form-field>
+        </div>
+        <div class="col-lg-6">
+            <mat-form-field class="example-full-width">
+                <input matInput [(ngModel)]="data.persona.NumeroDocumento" type="text" disabled readonly>
+            </mat-form-field>
         </div>
     </div>
-    <div class="form-group row">
-        <div class="col-sm-6">
-            <input matInput [(ngModel)]="data.persona.TipoDocumento" type="text" class="form-control" readonly>
+    <div class="row">
+        <div class="col-lg-6">
+            <mat-form-field class="example-full-width">
+                <input matInput [(ngModel)]="data.persona.ListaTelefono[0].Numero || sinNumero" type="text" disabled
+                    readonly>
+            </mat-form-field>
         </div>
-        <div class="col-sm-6">
-            <input matInput [(ngModel)]="data.persona.NumeroDocumento" type="text" class="form-control" readonly>
-        </div>
-    </div>
-    <div class="form-group row">
-        <div class="col-sm-6">
-            <input matInput  [(ngModel)]="data.persona.ListaTelefono[0].Numero || sinNumero" type="text" class="form-control" readonly>
-        </div>
-        <div class="col-sm-6">
-            <input matInput [(ngModel)]="data.persona.ListaTelefono[1].Numero || sinNumero" type="text" class="form-control" readonly>
+        <div class="col-lg-6">
+            <mat-form-field class="example-full-width">
+                <input matInput [(ngModel)]="data.persona.ListaTelefono[1].Numero || sinNumero" type="text" disabled
+                    readonly>
+            </mat-form-field>
         </div>
     </div>
-    <div class="form-group row">
-        <div class="col-sm-12">
-            <input matInput [(ngModel)]="data.persona.ListaCorreo[0].CorreoValor || sinCorreo" type="text" class="form-control" readonly>
-        </div>
-    </div>
-    <div class="form-group row">
-        <div class="col-sm-12">
-            <input matInput [(ngModel)]="direccion || sinDireccion" type="text" class="form-control" readonly>
-        </div>
-    </div>
+    <mat-form-field class="example-full-width">
+        <input matInput [(ngModel)]="data.persona.ListaCorreo[0].CorreoValor || sinCorreo" type="text" disabled
+            readonly>
+    </mat-form-field>
+    <mat-form-field class="example-full-width">
+        <input matInput [(ngModel)]="direccion || sinDireccion" type="text" disabled readonly>
+    </mat-form-field>
 </mat-dialog-content>
 <mat-dialog-actions>
     <button mat-button mat-dialog-close type="button" class="btn-block btn-primary">

@@ -1,5 +1,5 @@
 .tablaSembrios {
-    height: 34.5rem;
+    height: 31rem;
     overflow: auto;
 }
   
@@ -10,4 +10,9 @@
 
 table {
     width: 100%;
+}
+
+th {
+    background-color: #343a40;
+    color: #fff;
 }

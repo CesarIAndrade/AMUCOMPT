@@ -1,19 +1,17 @@
 <mat-dialog-content>
     <div class="card ">
-        <div class="card-header">
-            Asignar Role(s)
-        </div>
         <div class="card-body">
-            <div class="form-group input-container">
-                <select #testSelect [(ngModel)]="tipoUsuario" type="text" class="form-control input-field"
-                    (click)="agregarTipoUsuarioALista($event)">
-                    <option value="0" disabled>Seleccionar Tipo Usuario</option>
-                    <option *ngFor="let item of tipoUsuarios" value="{{item.IdTipoUsuario}}">
-                        {{ item.Descripcion }}
-                    </option>
-                </select>
-                <i (click)="asignarTipoUsuario()" class="fa fa-plus icon ml-3" style="background-color:#f0ad4e;"></i>
-            </div>
+            <h5 style="text-align: center;">Asignar Role(s)</h5>
+            <mat-form-field class="example-full-width">
+                <mat-label>Tipos Usuario</mat-label>
+                <mat-select #testSelect [(ngModel)]="tipoUsuario" [ngModelOptions]="{standalone: true}"
+                    (selectionChange)="agregarTipoUsuarioALista($event.value)">
+                    <mat-option *ngFor="let item of tipoUsuarios" [value]="item.IdTipoUsuario">
+                        {{item.Descripcion}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+            <i (click)="asignarTipoUsuario()" class="fa fa-plus icon ml-3" style="background-color:#f0ad4e;"></i>
             <div class="mat-elevation-z5">
                 <table mat-table [dataSource]="listaTipoUsuario">
                     <ng-container matColumnDef="tipoUsuario">

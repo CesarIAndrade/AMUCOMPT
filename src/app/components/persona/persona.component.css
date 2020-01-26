@@ -10,3 +10,8 @@ input:invalid{
 table {
     width: 100%;
 }
+
+th {
+    background-color: #343a40;
+    color: #fff;
+}

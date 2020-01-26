@@ -15,6 +15,7 @@ import { Page404Component } from './components/page404/page404.component';
 import { ValidarUsuarioGuard } from "src/app/guards/validar-usuario.guard";
 import { PanelAdministracionComponent } from './components/panel-administracion/panel-administracion.component';
 import { ConfiguracionProductoComponent } from './components/configuracion-producto/configuracion-producto.component';
+import { CuentaComponent } from './components/cuenta/cuenta.component';
 
 const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'login' },
@@ -50,6 +51,10 @@ const routes: Routes = [
       },
       {
         path: 'panel-administracion', component: PanelAdministracionComponent,
+        // canActivate: [ValidarUsuarioGuard]
+      },
+      {
+        path: 'cuenta', component: CuentaComponent,
         // canActivate: [ValidarUsuarioGuard]
       },
     ]

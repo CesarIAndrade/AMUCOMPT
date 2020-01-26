@@ -35,7 +35,7 @@ export class CantonComponent implements OnInit {
   idCanton = '0';
   idProvincia = '0';
   inputIdProvincia = true;
-  provincia = 'Seleccione Provincia';
+  provincia = 'Provincia';
   inputCanton = true;
   filterProvincia = '';
   filterCanton = '';

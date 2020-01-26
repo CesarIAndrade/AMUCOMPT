@@ -49,6 +49,7 @@ import { ConfiguracionProductoComponent } from './components/configuracion-produ
 import { KitComponent } from './components/kit/kit.component';
 import { ArmarKitComponent } from './components/armar-kit/armar-kit.component';
 import { ModalDetalleProductoComponent } from './components/modal-detalle-producto/modal-detalle-producto.component';
+import { CuentaComponent } from './components/cuenta/cuenta.component';
 
 @NgModule({
   declarations: [
@@ -78,6 +79,7 @@ import { ModalDetalleProductoComponent } from './components/modal-detalle-produc
     KitComponent,
     ArmarKitComponent,
     ModalDetalleProductoComponent,
+    CuentaComponent,
   ],
   imports: [
     BrowserModule,
