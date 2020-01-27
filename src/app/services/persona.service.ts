@@ -239,7 +239,6 @@ export class PersonaService {
     segundoNombre: string,
     _token: string
   ) {
-    console.log('in crear persona service');
     const body = new HttpParams()
       .set('NumeroDocumento', numeroDocumento)
       .set('IdTipoDocumento', tipoDocumento)

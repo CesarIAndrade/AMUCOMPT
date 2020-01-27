@@ -5,107 +5,120 @@
                 <div class="card-body">
                     <h5 style="text-align: center;">{{ nuevaPersona }}</h5>
                     <mat-form-field class="example-full-width">
-                        <input matInput type="text" formControlName="_nombres" placeholder="Ingrese Nombres"
-                            (keyup)="onChangeInputNombres()">
+                        <input matInput type="text" formControlName="_nombres" placeholder="Ingrese Nombres">
+                        <mat-error *ngIf="_nombres.invalid && (_nombres.dirty || _nombres.touched)">
+                            <mat-error *ngIf="_nombres.errors.required">
+                                Nombres Requeridos
+                            </mat-error>
+                        </mat-error>
                     </mat-form-field>
-                    <div class="badge badge-danger mb-3 btn-block"
-                        *ngIf="_nombres.invalid && (_nombres.dirty || _nombres.touched)">
-                        <div *ngIf="_nombres.errors.required">
-                            Nombres Requeridos
-                        </div>
-                    </div>
-                    <div class="badge badge-danger mb-3 btn-block" [hidden]="inputNombres">
-                        Necesita dos Nombres
-                    </div>
                     <mat-form-field class="example-full-width">
-                        <input matInput type="text" formControlName="_apellidos" placeholder="Ingrese Apellidos"
-                            (keyup)="onChangeInputApellidos()">
+                        <input matInput type="text" formControlName="_apellidos" placeholder="Ingrese Apellidos">
+                        <mat-error *ngIf="_apellidos.invalid && (_apellidos.dirty || _apellidos.touched)">
+                            <mat-error *ngIf="_apellidos.errors.required">
+                                Apellidos Requeridos
+                            </mat-error>
+                        </mat-error>
                     </mat-form-field>
-                    <div class="badge badge-danger mb-3 btn-block"
-                        *ngIf="_apellidos.invalid && (_apellidos.dirty || _apellidos.touched)">
-                        <div *ngIf="_apellidos.errors.required">
-                            Apellidos Requeridos
-                        </div>
-                    </div>
-                    <div class="badge badge-danger mb-3 btn-block" [hidden]="inputApellidos">
-                        Necesita dos Apellidos
-                    </div>
-
                     <mat-form-field class="example-full-width">
                         <mat-label>Seleccione Tipo Documento</mat-label>
-                        <mat-select [(ngModel)]="tipoDocumento" [ngModelOptions]="{standalone: true}"
-                            (selectionChange)="onChangeSelectTipoDocumento($event)">
+                        <mat-select formControlName="_tipoDocumento">
                             <mat-option *ngFor="let item of tipoDocumentos" [value]="item.IdTipoDocumento">
                                 {{item.Documento}}
                             </mat-option>
                         </mat-select>
+                        <mat-error *ngIf="_tipoDocumento.invalid && (_tipoDocumento.dirty || _tipoDocumento.touched)">
+                            <mat-error *ngIf="_tipoDocumento.errors.required">
+                                Tipo Documento Requerido
+                            </mat-error>
+                        </mat-error>
                     </mat-form-field>
-                    <div class="badge badge-danger mb-3 btn-block" [hidden]="selectTipoDocumento">
-                        Tipo Documento Requerido
-                    </div>
                     <mat-form-field class="example-full-width">
-                        <input matInput type="number" formControlName="_numeroDocumento" (keyup)="onChangeInputCedula()"
-                            placeholder="Ingrese Número Documento">
+                        <input matInput formControlName="_numeroDocumento" placeholder="Ingrese Número Documento">
+                        <mat-error
+                            *ngIf="_numeroDocumento.invalid && (_numeroDocumento.dirty || _numeroDocumento.touched)">
+                            <mat-error *ngIf="_numeroDocumento.errors.required">
+                                Número de Documento Requerido
+                            </mat-error>
+                            <mat-error *ngIf="_numeroDocumento.errors.maxlength">
+                                Máximo 10 Dígitos
+                            </mat-error>
+                        </mat-error>
                     </mat-form-field>
-                    <div class="badge badge-danger mb-3 btn-block"
-                        *ngIf="_numeroDocumento.invalid && (_numeroDocumento.dirty || _numeroDocumento.touched)">
-                        <div *ngIf="_numeroDocumento.errors.required">
-                            Número de Documento Requerido
-                        </div>
-                    </div>
-                    <div class="badge badge-danger mb-3 btn-block" [hidden]="inputCedula">
-                        Cédula Ya Existe
-                    </div>
                 </div>
             </div>
             <div class="col-lg-4">
                 <div class="card-body">
                     <h5 style="text-align: center;">{{ contacto }}</h5>
-                    <mat-form-field class="example-full-width">
-                        <input matInput type="number" formControlName="_telefono1" placeholder="Primer Telefono">
-                    </mat-form-field>
-                    <div class="badge badge-danger mb-3 btn-block"
-                        *ngIf="_telefono1.invalid && (_telefono1.dirty || _telefono1.touched)">
-                        <div *ngIf="_telefono1.errors.required">
-                            Primer Telefono Requerido
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <mat-form-field class="example-full-width">
+                                <input matInput type="number" formControlName="_telefono1" placeholder="Primer Telefono"
+                                    maxlength="10">
+                                <mat-error *ngIf="_telefono1.invalid && (_telefono1.dirty || _telefono1.touched)">
+                                    <mat-error *ngIf="_telefono1.errors.required">
+                                        Primer Telefono Requerido
+                                    </mat-error>
+                                    <mat-error *ngIf="_telefono1.errors.maxlength">
+                                        Máximo 10 Dígitos
+                                    </mat-error>
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-lg-6">
+                            <mat-form-field class="example-full-width">
+                                <mat-label>Tipo Telefono</mat-label>
+                                <mat-select formControlName="_tipoTelefono1">
+                                    <mat-option *ngFor="let item of tipoTelefonos" [value]="item.IdTipoTelefono">
+                                        {{item.Descripcion}}
+                                    </mat-option>
+                                </mat-select>
+                                <mat-error *ngIf="_tipoTelefono1.invalid && (_tipoTelefono1.dirty || _tipoTelefono1.touched)">
+                                    <mat-error *ngIf="_tipoTelefono1.errors.required">
+                                        Tipo Teléfono Requerido
+                                    </mat-error>
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <mat-form-field class="example-full-width">
+                                <input matInput type="number" formControlName="_telefono2"
+                                    placeholder="Segundo Telefono">
+                                <mat-error *ngIf="_telefono2.invalid && (_telefono2.dirty || _telefono2.touched)">
+                                    <mat-error *ngIf="_telefono2.errors.required">
+                                        Segundo Telefono Requerido
+                                    </mat-error>
+                                    <mat-error *ngIf="_telefono2.errors.maxlength">
+                                        Máximo 10 Dígitos
+                                    </mat-error>
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-lg-6">
+                            <mat-form-field class="example-full-width">
+                                <mat-label>Tipo Telefono</mat-label>
+                                <mat-select formControlName="_tipoTelefono2">
+                                    <mat-option *ngFor="let item of tipoTelefonos" [value]="item.IdTipoTelefono">
+                                        {{item.Descripcion}}
+                                    </mat-option>
+                                </mat-select>
+                                <mat-error
+                                    *ngIf="_tipoTelefono2.invalid && (_tipoTelefono2.dirty || _tipoTelefono2.touched)">
+                                    <mat-error *ngIf="_tipoTelefono2.errors.required">
+                                        Tipo Teléfono Requerido
+                                    </mat-error>
+                                </mat-error>
+                            </mat-form-field>
                         </div>
                     </div>
                     <mat-form-field class="example-full-width">
-                        <mat-label>Tipo Telefono</mat-label>
-                        <mat-select [(ngModel)]="tipoTelefono1" [ngModelOptions]="{standalone: true}"
-                            (selectionChange)="onChangeSelectTipoTelefono1($event.value)">
-                            <mat-option *ngFor="let item of tipoTelefonos" [value]="item.IdTipoTelefono">
-                                {{item.Descripcion}}
-                            </mat-option>
-                        </mat-select>
-                    </mat-form-field>
-                    <div class="badge badge-danger mb-3 btn-block" [hidden]="selectTipoTelefono1">
-                        Tipo Telefono Requerido
-                    </div>
-                    <mat-form-field class="example-full-width">
-                        <input matInput type="number" formControlName="_telefono2" placeholder="Segundo Telefono">
-                    </mat-form-field>
-                    <div class="badge badge-danger mb-3 btn-block"
-                        *ngIf="_telefono2.invalid && (_telefono2.dirty || _telefono2.touched)">
-                        <div *ngIf="_telefono2.errors.required">
-                            Segundo Telefono Requerido
-                        </div>
-                    </div>
-                    <mat-form-field class="example-full-width">
-                        <mat-label>Tipo Telefono</mat-label>
-                        <mat-select [(ngModel)]="tipoTelefono2" [ngModelOptions]="{standalone: true}"
-                            (selectionChange)="onChangeSelectTipoTelefono2($event.value)">
-                            <mat-option *ngFor="let item of tipoTelefonos" [value]="item.IdTipoTelefono">
-                                {{item.Descripcion}}
-                            </mat-option>
-                        </mat-select>
-                    </mat-form-field>
-                    <div class="badge badge-danger mb-3 btn-block" [hidden]="selectTipoTelefono2">
-                        Tipo Telefono Requerido
-                    </div>
-                    <mat-form-field class="example-full-width">
-                        <input matInput type="email" [(ngModel)]="correo" [ngModelOptions]="{standalone: true}"
-                            placeholder="Ingrese Correo">
+                        <input matInput placeholder="Ingrese Correo" formControlName="_correo"
+                            [errorStateMatcher]="matcher">
+                        <mat-error *ngIf="_correo.hasError('email')">
+                            Ingrese Dirección de Correo Válida
+                        </mat-error>
                     </mat-form-field>
                 </div>
             </div>
@@ -114,41 +127,45 @@
                     <h5 style="text-align: center;">{{ direccion }}</h5>
                     <mat-form-field class="example-full-width">
                         <mat-label>Seleccionar Provincia</mat-label>
-                        <mat-select [(ngModel)]="provincia" [ngModelOptions]="{standalone: true}"
-                            (selectionChange)="cantonesDeUnaProvincia($event.value)">
+                        <mat-select formControlName="_provincia"
+                            (selectionChange)="consultarCantonesDeUnaProvincia($event.value)">
                             <mat-option *ngFor="let item of provincias" [value]="item.IdProvincia">
                                 {{item.Descripcion}}
                             </mat-option>
                         </mat-select>
+                        <mat-error *ngIf="_provincia.invalid && (_provincia.dirty || _provincia.touched)">
+                            <mat-error *ngIf="_provincia.errors.required">
+                                Provincia Requerida
+                            </mat-error>
+                        </mat-error>
                     </mat-form-field>
-                    <div class="badge badge-danger mb-3 btn-block" [hidden]="selectProvincia">
-                        Provincia Requerida
-                    </div>
                     <mat-form-field class="example-full-width">
                         <mat-label>Seleccionar Cantón</mat-label>
-                        <mat-select [(ngModel)]="canton" [ngModelOptions]="{standalone: true}"
-                            (selectionChange)="parroquiasDeUnCanton($event.value)">
+                        <mat-select formControlName="_canton" 
+                            (selectionChange)="consultarParroquiasDeUnCanton($event.value)">
                             <mat-option *ngFor="let item of cantones" [value]="item.IdCanton">
                                 {{item.Descripcion}}
                             </mat-option>
                         </mat-select>
+                        <mat-error *ngIf="_canton.invalid && (_canton.dirty || _canton.touched)">
+                            <mat-error *ngIf="_canton.errors.required">
+                                Cantón Requerido
+                            </mat-error>
+                        </mat-error>
                     </mat-form-field>
-                    <div class="badge badge-danger mb-3 btn-block" [hidden]="selectCanton">
-                        Cantón Requerido
-                    </div>
-
                     <mat-form-field class="example-full-width">
                         <mat-label>Seleccionar Parroquia</mat-label>
-                        <mat-select [(ngModel)]="parroquia" [ngModelOptions]="{standalone: true}"
-                            (selectionChange)="onChangeSelectParroquia($event.value)">
+                        <mat-select formControlName="_parroquia">
                             <mat-option *ngFor="let item of parroquias" [value]="item.IdParroquia">
                                 {{item.Descripcion}}
                             </mat-option>
                         </mat-select>
+                        <mat-error *ngIf="_parroquia.invalid && (_parroquia.dirty || _parroquia.touched)">
+                            <mat-error *ngIf="_parroquia.errors.required">
+                                Parroquia Requerida
+                            </mat-error>
+                        </mat-error>
                     </mat-form-field>
-                    <div class="badge badge-danger mb-3 btn-block" [hidden]="selectParroquia">
-                        Parroquia Requerida
-                    </div>
                 </div>
             </div>
         </div>
@@ -156,7 +173,7 @@
             <div class="col-lg-12">
                 <div>
                     <button type="submit" class="btn btn-success btn-block" [value]="botonInsertar"
-                        #testButton>Guardar</button>
+                        #testButton>{{ guardar }}</button>
                 </div>
             </div>
         </div>
@@ -228,6 +245,8 @@
                                             (click)="mostrarPersona(element)">
                                             <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                                         </button>
+                                    </td>
+                                    <td mat-cell>
                                     </td>
                                 </ng-container>
                             </ng-container>
