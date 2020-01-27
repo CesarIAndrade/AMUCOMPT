@@ -80,7 +80,7 @@
                             </div>
                             <div class="col-lg-6">
                                 <div class="form-group">
-                                    <select type="text" [(ngModel)]="medida" [ngModelOptions]="{standalone: true}"
+                                    <select  [disabled]="testDisabled4" type="text" [(ngModel)]="medida" [ngModelOptions]="{standalone: true}"
                                         class="form-control" (change)="onChangeSelectMedida($event.target.value)">
                                         <option value="0" disabled>Medida</option>
                                         <option *ngFor="let item of medidas" value="{{item.IdMedida}}">

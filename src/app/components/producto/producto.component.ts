@@ -127,7 +127,8 @@ export class ProductoComponent implements OnInit {
               nombre: ok['respuesta'][i].Producto.Nombre,
               idTipoProducto: ok['respuesta'][i].Producto.TipoProducto.IdTipoProducto,
               descripcion: ok['respuesta'][i].Producto.Descripcion,
-              codigo: ok['respuesta'][i].Producto.Codigo
+              codigo: ok['respuesta'][i].Producto.Codigo,
+              idMedida: ok['respuesta'][i].Medida.IdMedida
             }
           }
 
@@ -425,11 +426,19 @@ export class ProductoComponent implements OnInit {
 
   testDisabled = false;
   testDisabled2 = false;
-  testDisabled3= false;
-
+  //testDisabled3= false;
+  testDisabled4= false;
 
 
   test(option) {
+    console.log(option);
+    
+    this.testDisabled = true;
+    this.testDisabled2 = true;
+    this.testDisabled4 = true;
+    //this.testDisabled3 = true;
+    
+    this.medida = option.idMedida
     this.idProducto = option.idProducto;
     this.nombreProducto = option.nombre;
     this.tipoProducto = option.idTipoProducto;
@@ -437,10 +446,7 @@ export class ProductoComponent implements OnInit {
     this.myForm.get('_codigo').setValue(option.codigo);
 
 
-    this.testDisabled = true;
-
-    this.testDisabled2 = true;
-    this.testDisabled3 = true;
+ 
 
   }
 
