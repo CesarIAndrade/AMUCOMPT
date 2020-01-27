@@ -7,7 +7,7 @@ import { stringify } from 'querystring';
 export class FilterPipe implements PipeTransform {
   nombres:string;
 
-  transform(arreglo: any[],texto: string, columna:string, columna1:string,columna2:string,columna3:string,columna4:string): any {
+  transform(arreglo: any[],texto: string, columna:string, columna1:string,columna2:string,columna3:string,columna4:string): any {    
     if (texto=='') {
       return arreglo;
     }

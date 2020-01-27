@@ -20,6 +20,7 @@ import { InventarioService } from 'src/app/services/inventario.service';
 import sweetalert from 'sweetalert';
 import { Observable } from 'rxjs';
 import { startWith, map } from 'rxjs/operators';
+import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 
 @Component({
   selector: 'app-producto',
@@ -43,6 +44,7 @@ export class ProductoComponent implements OnInit {
     })
   }
 
+  idConfiguracionProducto:string;
   idProducto: string;
   tipoProducto = '0';
   presentacion = '0';
@@ -55,9 +57,7 @@ export class ProductoComponent implements OnInit {
   selectMedida = true;
   inputNombreProducto = true;
 
-  testDisabled = false;
-  testDisabled2 = false;
-  testDisabled3= false;
+  CampoTipoProducto =false;
 
   filteredOptions: Observable<string[]>;
 
@@ -106,6 +106,12 @@ export class ProductoComponent implements OnInit {
     },
   ];
 
+  
+  applyFilter(event,columna)
+  {
+    console.log(event);
+    console.log(columna);
+  }
   consultarTipoProductos() {
     this.inventarioService.consultarTipoProductos(localStorage.getItem('miCuenta.getToken'))
       .then(
@@ -155,28 +161,43 @@ export class ProductoComponent implements OnInit {
       )
   }
 
+  consultarProductosTodos()
+  {
+    this.inventarioService.consultarConfiguracionProductoTodos(
+      localStorage.getItem('miCuenta.getToken')
+    )
+      .then(
+        ok => {
+          
+          this.productos = [];
+          this.productos = ok['respuesta'];
+        }
+      )
+      .catch(
+        error => {
+          console.log(error);
+        }
+      )
+  }
   consultarProductos() {
     this.inventarioService.consultarConfiguracionProducto(
       localStorage.getItem('miCuenta.getToken')
     )
       .then(
-        ok => {
-          this.productos = [];
-          this.productos = ok['respuesta'];
-          this.nombresDeProductos = [];
-
-          console.log(this.productos);
-          for (var i = 0; i < ok['respuesta'].length; i++) {
+        ok => {          
+          this.nombresDeProductos = [];          
+          for (var i = 0; i < (ok['respuesta'].length); i++) {
             this.nombresDeProductos[i] = ok['respuesta'][i].Producto.Nombre;
             this.nombresDeProductos[i] = {
               idProducto: ok['respuesta'][i].Producto.IdProducto,
               nombre: ok['respuesta'][i].Producto.Nombre,
               idTipoProducto: ok['respuesta'][i].Producto.TipoProducto.IdTipoProducto,
               descripcion: ok['respuesta'][i].Producto.Descripcion,
-              codigo: ok['respuesta'][i].Producto.Codigo
+              codigo: ok['respuesta'][i].Producto.Codigo,
+              idMedida: ok['respuesta'][i].Medida.IdMedida
             }
           }
-
+          this.consultarProductosTodos();
           this.consultarTipoProductos();
           this.filteredOptions = this.myForm.get('_nombre').valueChanges
             .pipe(
@@ -219,7 +240,8 @@ export class ProductoComponent implements OnInit {
         if (this.testButton.nativeElement.value == 'ingresar') {
           this.crearProducto();
         } else if (this.testButton.nativeElement.value == 'modificar') {
-          this.actualizarProducto();
+          this.actualizarConfiguracionProducto();
+          
         }
       } else {
         console.log("Algo Salio Mal");
@@ -228,59 +250,112 @@ export class ProductoComponent implements OnInit {
   }
 
   crearProducto() {
-    console.log(this.myForm.value);
-    // if (this.idProducto == null && this.nombreProducto == null) {
-    //   this.inventarioService.crearProducto(
-    //     this.myForm.get('_nombre').value,
-    //     this.myForm.get('_descripcion').value,
-    //     this.myForm.get('_codigo').value,
-    //     this.tipoProducto,
-    //     localStorage.getItem('miCuenta.postToken')
-    //   )
-    //     .then(
-    //       ok => {
-    //         console.log(ok['respuesta']);
-    //         if (ok['respuesta'] == null) {
-    //           sweetAlert("Inténtalo de nuevo!", {
-    //             icon: "warning",
-    //           });
-    //           this.myForm.reset();
-    //           this.tipoProducto = '0';
-    //           this.presentacion = '0';
-    //           this.medida = '0';
-    //         } else if (ok['respuesta'] == '400') {
-    //           this.inputNombreProducto = false;
-    //         } else if (ok['respuesta'] == 'false') {
-    //           sweetAlert("Ha ocurrido un error!", {
-    //             icon: "error",
-    //           });
-    //         } else {
-    //           this.idProducto = ok['respuesta'];
-    //           this.crearConfiguracionProducto();
-    //           this.consultarProductos();
-    //         }
-    //       }
-    //     )
-    //     .catch(
-    //       error => {
-    //         console.log(error);
-    //       }
-    //     )
-    // } else {
-    //   this.crearConfiguracionProducto();
-    // }
+    if (this.idProducto == '' && this.nombreProducto == '') {
+      this.inventarioService.crearProducto(
+        this.myForm.get('_nombre').value,
+        this.myForm.get('_descripcion').value,
+        this.myForm.get('_codigo').value,
+        this.tipoProducto,
+        localStorage.getItem('miCuenta.postToken')
+      )
+        .then(
+          ok => {
+            if (ok['respuesta'] == null) {
+              sweetAlert("Inténtalo de nuevo!", {
+                icon: "warning",
+              });
+              this.myForm.reset();
+              this.tipoProducto = '0';
+              this.presentacion = '0';
+              this.medida = '0';
+            } else if (ok['respuesta'] == '400') {
+              this.inputNombreProducto = false;
+            } else if (ok['respuesta'] == 'false') {
+              sweetAlert("Ha ocurrido un error!", {
+                icon: "error",
+              });
+            } else {
+              this.idProducto = ok['respuesta'];
+              this.crearConfiguracionProducto();
+              this.consultarProductos();
+            }
+          }
+        )
+        .catch(
+          error => {
+            console.log(error);
+          }
+        )
+    } else {
+      this.crearConfiguracionProducto();
+    }
   }
 
   mostrarProducto(producto) {
-    this.idProducto = producto.IdProducto;
-    this.tipoProducto = producto.TipoProducto.IdTipoProducto;
-    this.myForm.setValue({
-      _nombre: producto.Nombre,
-      _descripcion: producto.Descripcion,
-      _codigo: producto.Codigo
-    })
+    this.myForm.get('_nombre').disable();
+    this.myForm.get('_descripcion').disable();
+    this.myForm.get('_codigo').disable();
+    this.CampoTipoProducto =true;
+
+    this.idConfiguracionProducto=producto.IdConfigurarProducto;    
+    this.myForm.get('_nombre').setValue(producto.Producto.Nombre);
+    this.myForm.get('_descripcion').setValue(producto.Producto.Descripcion);
+    this.myForm.get('_codigo').setValue(producto.Producto.Codigo);
+    this.myForm.get('_contenidoNeto').setValue(producto.CantidadMedida);
+    this.tipoProducto=producto.Producto.TipoProducto.IdTipoProducto;
+    this.presentacion = producto.Presentacion.IdPresentacion;
+    this.medida = producto.Medida.IdMedida;
+    this.idProducto = producto.Producto.IdProducto;
     this.testButton.nativeElement.value = 'modificar';
   }
+
+  actualizarConfiguracionProducto() {
+    this.inventarioService.actualizarConfiguracionProducto(
+      this.idConfiguracionProducto,
+      localStorage.getItem('miCuenta.idAsignacionTipoUsuario'),
+      this.idProducto,
+      this.medida,
+      this.presentacion,
+      this.myForm.get('_contenidoNeto').value,   
+      localStorage.getItem('miCuenta.putToken')
+    )
+      .then(
+        ok => {
+          if (ok['respuesta'] == null) {
+            sweetAlert("Inténtalo de nuevo!", {
+              icon: "warning",
+            });
+            this.myForm.reset();
+            this.tipoProducto = '0';
+            this.presentacion = '0';
+            this.medida = '0';
+          } else if (ok['respuesta'] == '400') {
+            this.inputNombreProducto = false;
+          } else if (ok['respuesta'] == 'false') {
+            sweetAlert("Ha ocurrido un error!", {
+              icon: "error",
+            });
+          } else {
+            sweetAlert("Se ingresó correctamente!", {
+              icon: "success",
+            });
+            this.myForm.reset();
+            this.testButton.nativeElement.value = 'ingresar';
+            this.consultarProductos();
+            this.myForm.get('_nombre').enable();
+            this.myForm.get('_descripcion').enable();
+            this.myForm.get('_codigo').enable();    
+            this.CampoTipoProducto =false;
+          }
+        }
+      )
+      .catch(
+        error => {
+          console.log(error);
+        }
+      )
+  }
+
 
   actualizarProducto() {
     this.inventarioService.actualizarProducto(
@@ -325,12 +400,15 @@ export class ProductoComponent implements OnInit {
   }
 
   eliminarProducto(idProducto) {
+    
     this.inventarioService.eliminarProducto(
-      idProducto,
+      idProducto.IdConfigurarProducto,
       localStorage.getItem('miCuenta.deleteToken')
     )
       .then(
         ok => {
+          console.log(ok['respuesta']);
+          
           this.consultarProductos();
         }
       )
@@ -341,11 +419,11 @@ export class ProductoComponent implements OnInit {
       )
   }
 
-  crearConfiguracionProducto() {
+  crearConfiguracionProducto() {    
     this.inventarioService.crearConfiguracionProducto(
       localStorage.getItem('miCuenta.idAsignacionTipoUsuario'),
       this.idProducto,
-      this.medida,
+      this.medida, 
       this.presentacion,
       this.myForm.get('_contenidoNeto').value,
       localStorage.getItem('miCuenta.postToken')
@@ -375,6 +453,10 @@ export class ProductoComponent implements OnInit {
             this.presentacion = '0';
             this.medida = '0';
             this.consultarProductos();
+            this.myForm.get('_nombre').enable();
+            this.myForm.get('_descripcion').enable();
+            this.myForm.get('_codigo').enable();    
+            this.CampoTipoProducto =false;
           }
         }
       )
@@ -401,9 +483,8 @@ export class ProductoComponent implements OnInit {
           )
             .then(
               ok => {
-                if (ok['respuesta']) {
-                  this.eliminarProducto(producto.Producto.IdProducto);
-                }
+                console.log(ok['respuesta']);
+                this.consultarProductos();
               }
             )
             .catch(
@@ -439,7 +520,6 @@ export class ProductoComponent implements OnInit {
   }
 
   onChangeSelectPresentacion(value) {
-    console.log(value);
     if (value != "0") {
       this.selectPresentacion = true;
     }
@@ -470,19 +550,23 @@ export class ProductoComponent implements OnInit {
   get _contenidoNeto() {
     return this.myForm.get('_contenidoNeto');
   }
+  onKeydownEvent(event)
+  {
+    this.idProducto = '';
+    this.nombreProducto='';
+  }
+  test(option) {    
+    this.myForm.get('_nombre').disable();
+    this.myForm.get('_descripcion').disable();
+    this.myForm.get('_codigo').disable();    
+    this.CampoTipoProducto =true;
 
-  test(option) {
+    this.medida = option.idMedida
     this.idProducto = option.idProducto;
     this.nombreProducto = option.nombre;
     this.tipoProducto = option.idTipoProducto;
     this.myForm.get('_descripcion').setValue(option.descripcion);
     this.myForm.get('_codigo').setValue(option.codigo);
-
-
-    this.testDisabled = true;
-    this.testDisabled2 = true;
-    this.testDisabled3 = true;
-
   }
 
   ngOnInit() {
