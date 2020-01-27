@@ -5,7 +5,7 @@
                 <h5 style="text-align: center;">Nuevo Producto</h5>
                 <form [formGroup]="myForm" (ngSubmit)="validarFormulario()" novalidate>
                     <mat-form-field class="example-full-width">
-                        <input matInput formControlName="_nombre" type="text" placeholder="Producto"
+                        <input (keyup)=onKeydownEvent($event.target.value) matInput formControlName="_nombre" type="text" placeholder="Producto"
                             [matAutocomplete]="auto">
                         <mat-autocomplete #auto="matAutocomplete">
                             <mat-option (onSelectionChange)="test(option)"
@@ -22,7 +22,7 @@
                     </div>
                     <mat-form-field class="example-full-width">
                         <mat-label>Tipo Producto</mat-label>
-                        <mat-select [(ngModel)]="tipoProducto" [ngModelOptions]="{standalone: true}"
+                        <mat-select [disabled]="CampoTipoProducto" [(ngModel)]="tipoProducto" [ngModelOptions]="{standalone: true}"
                             (selectionChange)="onChangeSelectTipoProducto($event.value)">
                             <mat-option *ngFor="let item of tipoProductos" [value]="item.IdTipoProducto">
                                 {{item.Descripcion}}
@@ -95,7 +95,7 @@
             <div class="card-body mat-elevation-z5">
                 <h5 style="text-align: center;">Lista Productos</h5>
                 <mat-form-field class="example-full-width">
-                    <input matInput [(ngModel)]="filterProducto" type="text" class="input-field" placeholder="Buscar Producto">
+                    <input (keyup)="applyFilter($event.target.value, 'nombre')" matInput [(ngModel)]="filterProducto" type="text" class="input-field" placeholder="Buscar Producto">
                     <button mat-button matPrefix mat-icon-button>
                         <mat-icon>search</mat-icon>
                     </button>
@@ -131,7 +131,7 @@
                                     </button>
                                 </td>
                                 <td mat-cell>
-                                    <button class="btn btn-sm btn-outline-danger" (click)="eliminarProducto(element)">
+                                    <button class="btn btn-sm btn-outline-danger" (click)="eliminarConfiguracionProducto(element)">
                                         <i class="fa fa-trash" aria-hidden="true"></i>
                                     </button>
                                 </td>
