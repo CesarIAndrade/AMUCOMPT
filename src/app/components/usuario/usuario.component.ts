@@ -39,7 +39,6 @@ export class UsuarioComponent implements OnInit {
   constructor(
     private modalAsignacionUsuarioPersona: MatDialog,
     private modalAsignacionUsuarioTiposUsuario: MatDialog,
-    private modalDetalleUsuario: MatDialog,
     private usuarioService: UsuarioService,
     private personaService: PersonaService,
   ) {
@@ -72,7 +71,6 @@ export class UsuarioComponent implements OnInit {
       .then(
         ok => {
           this.usuarios = ok['respuesta'];
-          console.log(this.usuarios);
         }
       )
       .catch(
@@ -131,8 +129,15 @@ export class UsuarioComponent implements OnInit {
         .then(
           ok => {
             if (ok['respuesta']) {
+              sweetAlert("Se ingresó correctamente!", {
+                icon: "success",
+              });
               this.limpiarCampos();
               this.consultarUsuarios();
+            } else if(!ok['respuesta']) {
+              sweetAlert("Ha ocurrido un error!", {
+                icon: "error",
+              });
             } else {
               this.inputUsuario = false;
             }
@@ -147,8 +152,6 @@ export class UsuarioComponent implements OnInit {
   }
 
   actualizarUsuario() {
-    console.log(this.idUsuario);
-    console.log(this.myForm);
     this.usuarioService.actualizarUsuario(
       this.idUsuario,
       this.idPersona,
@@ -315,7 +318,6 @@ export class UsuarioComponent implements OnInit {
 
   ngOnInit() {
     this.consultarUsuarios();
-    console.log(localStorage.getItem('miCuenta.idAsignacionTipoUsuario'));
   }
 
   tablaUsuarios = ['usuario', 'nombres', 'acciones'];

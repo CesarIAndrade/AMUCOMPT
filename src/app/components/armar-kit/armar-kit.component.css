@@ -1,13 +1,18 @@
 .tablaProductos {
-    height: 21rem;
+    height: 23rem;
     overflow: auto;
 }
 
 .tablaProductosDeUnKit {
-    height: 21rem;
+    height: 23rem;
     overflow: auto;
 }
 
 table {
     width: 100%;
+}
+
+th {
+    background-color: #343a40;
+    color: #fff;
 }

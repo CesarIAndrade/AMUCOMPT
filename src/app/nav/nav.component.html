@@ -41,13 +41,13 @@
         </a>
       </div>
       <div class="matItemHover">
-        <a mat-list-item routerLink="/inicio/panel-administracion">
+        <a mat-list-item routerLink="/inicio/localizaciones">
           <i style="margin-right: 10px;" class="fa fa-id-card" aria-hidden="true"></i>
-          Administracion
+          Localizaciones
         </a>
       </div>
       <div class="matItemHover">
-        <a mat-list-item>
+        <a mat-list-item routerLink="/inicio/cuenta">
           <i style="margin-right: 10px;" class="fa fa-user" aria-hidden="true"></i>
           Cuenta
         </a>
@@ -61,12 +61,15 @@
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>
-    <mat-toolbar class="card-header">
+    <mat-toolbar class="bg-dark">
       <a (click)="drawer.toggle()" *ngIf="isHandset$ | async">
-        <i class="fa fa-bars"></i>
+        <i class="fa fa-bars mr-3" style="background-color: white;"></i>
       </a>
-      <img src="./assets/img/amucomt.png" width="210" height="100" class="amucomt" style="margin-left: 1rem;"
+      <div class="row">
+        <img src="./assets/img/amucomt.png" width="45" height="60" style="margin-left: 1rem;"
         routerLink="/inicio">
+        <h5 class="amucomt">AMUCOMT</h5>
+      </div>
     </mat-toolbar>
     <router-outlet></router-outlet>
   </mat-sidenav-content>

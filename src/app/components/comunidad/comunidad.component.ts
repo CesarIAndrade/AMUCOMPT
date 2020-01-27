@@ -68,8 +68,6 @@ export class ComunidadComponent implements OnInit {
         ok => {
           this.comunidades = ok['respuesta'];
           this.consultarParroquias();
-          console.log(ok['respuesta']);
-
         }
       )
       .catch(

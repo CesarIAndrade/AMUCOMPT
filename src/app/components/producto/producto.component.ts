@@ -36,6 +36,7 @@ export class ProductoComponent implements OnInit {
     private dialog: MatDialog,
   ) {
     this.myForm = new FormGroup({
+      _nombre: new FormControl('', [Validators.required]),
       _descripcion: new FormControl(''),
       _codigo: new FormControl('', [Validators.required]),
       _contenidoNeto: new FormControl('', [Validators.required]),
@@ -54,11 +55,56 @@ export class ProductoComponent implements OnInit {
   selectMedida = true;
   inputNombreProducto = true;
 
+  testDisabled = false;
+  testDisabled2 = false;
+  testDisabled3= false;
+
+  filteredOptions: Observable<string[]>;
+
   nombresDeProductos: any;
   productos: any[] = [];
-  tipoProductos: TipoProducto[] = [];
-  presentaciones: Presentacion[] = [];
-  medidas: Medida[] = [];
+  tipoProductos: TipoProducto[] = [
+    {
+      IdPresentacion: '1',
+      Descripcion: 'TPRO1'
+    },
+    {
+      IdPresentacion: '1',
+      Descripcion: 'TPRO2'
+    },
+    {
+      IdPresentacion: '1',
+      Descripcion: 'TPRO3'
+    },
+  ];
+  presentaciones: Presentacion[] = [
+    {
+      IdPresentacion: '1',
+      Descripcion: 'PRE1'
+    },
+    {
+      IdPresentacion: '2',
+      Descripcion: 'PRE2'
+    },
+    {
+      IdPresentacion: '3',
+      Descripcion: 'PRE3'
+    },
+  ];
+  medidas: Medida[] = [
+    {
+      IdMedida: '1',
+      Descripcion: 'MED1'
+    },
+    {
+      IdMedida: '2',
+      Descripcion: 'MED2'
+    },
+    {
+      IdMedida: '3',
+      Descripcion: 'MED3'
+    },
+  ];
 
   consultarTipoProductos() {
     this.inventarioService.consultarTipoProductos(localStorage.getItem('miCuenta.getToken'))
@@ -133,7 +179,7 @@ export class ProductoComponent implements OnInit {
           }
 
           this.consultarTipoProductos();
-          this.filteredOptions = this.myControl.valueChanges
+          this.filteredOptions = this.myForm.get('_nombre').valueChanges
             .pipe(
               startWith(''),
               map(value => this._filter(value))
@@ -183,46 +229,47 @@ export class ProductoComponent implements OnInit {
   }
 
   crearProducto() {
-    if (this.idProducto == null && this.nombreProducto == null) {
-      this.inventarioService.crearProducto(
-        this.myControl.value,
-        this.myForm.get('_descripcion').value,
-        this.myForm.get('_codigo').value,
-        this.tipoProducto,
-        localStorage.getItem('miCuenta.postToken')
-      )
-        .then(
-          ok => {
-            console.log(ok['respuesta']);
-            if (ok['respuesta'] == null) {
-              sweetAlert("Inténtalo de nuevo!", {
-                icon: "warning",
-              });
-              this.myForm.reset();
-              this.tipoProducto = '0';
-              this.presentacion = '0';
-              this.medida = '0';
-            } else if (ok['respuesta'] == '400') {
-              this.inputNombreProducto = false;
-            } else if (ok['respuesta'] == 'false') {
-              sweetAlert("Ha ocurrido un error!", {
-                icon: "error",
-              });
-            } else {
-              this.idProducto = ok['respuesta'];
-              this.crearConfiguracionProducto();
-              this.consultarProductos();
-            }
-          }
-        )
-        .catch(
-          error => {
-            console.log(error);
-          }
-        )
-    } else {
-      this.crearConfiguracionProducto();
-    }
+    console.log(this.myForm.value);
+    // if (this.idProducto == null && this.nombreProducto == null) {
+    //   this.inventarioService.crearProducto(
+    //     this.myForm.get('_nombre').value,
+    //     this.myForm.get('_descripcion').value,
+    //     this.myForm.get('_codigo').value,
+    //     this.tipoProducto,
+    //     localStorage.getItem('miCuenta.postToken')
+    //   )
+    //     .then(
+    //       ok => {
+    //         console.log(ok['respuesta']);
+    //         if (ok['respuesta'] == null) {
+    //           sweetAlert("Inténtalo de nuevo!", {
+    //             icon: "warning",
+    //           });
+    //           this.myForm.reset();
+    //           this.tipoProducto = '0';
+    //           this.presentacion = '0';
+    //           this.medida = '0';
+    //         } else if (ok['respuesta'] == '400') {
+    //           this.inputNombreProducto = false;
+    //         } else if (ok['respuesta'] == 'false') {
+    //           sweetAlert("Ha ocurrido un error!", {
+    //             icon: "error",
+    //           });
+    //         } else {
+    //           this.idProducto = ok['respuesta'];
+    //           this.crearConfiguracionProducto();
+    //           this.consultarProductos();
+    //         }
+    //       }
+    //     )
+    //     .catch(
+    //       error => {
+    //         console.log(error);
+    //       }
+    //     )
+    // } else {
+    //   this.crearConfiguracionProducto();
+    // }
   }
 
   mostrarProducto(producto) {
@@ -393,6 +440,7 @@ export class ProductoComponent implements OnInit {
   }
 
   onChangeSelectPresentacion(value) {
+    console.log(value);
     if (value != "0") {
       this.selectPresentacion = true;
     }
@@ -408,9 +456,9 @@ export class ProductoComponent implements OnInit {
     this.inputNombreProducto = true;
   }
 
-  // get _nombre() {
-  //   return this.myForm.get('_nombre');
-  // }
+  get _nombre() {
+    return this.myForm.get('_nombre');
+  }
 
   get _descripcion() {
     return this.myForm.get('_descripcion');
@@ -423,12 +471,6 @@ export class ProductoComponent implements OnInit {
   get _contenidoNeto() {
     return this.myForm.get('_contenidoNeto');
   }
-
-  testDisabled = false;
-  testDisabled2 = false;
-  //testDisabled3= false;
-  testDisabled4= false;
-
 
   test(option) {
     console.log(option);
@@ -446,7 +488,9 @@ export class ProductoComponent implements OnInit {
     this.myForm.get('_codigo').setValue(option.codigo);
 
 
- 
+    this.testDisabled = true;
+    this.testDisabled2 = true;
+    this.testDisabled3 = true;
 
   }
 
@@ -457,9 +501,6 @@ export class ProductoComponent implements OnInit {
   }
 
   tablaProductos = ['nombre', 'tipoProducto', 'codigo', 'acciones'];
-
-  myControl = new FormControl();
-  filteredOptions: Observable<string[]>;
 
   private _filter(value: string): string[] {
     const filterValue = value.toLowerCase();
