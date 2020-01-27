@@ -50,7 +50,7 @@ const routes: Routes = [
         // canActivate: [ValidarUsuarioGuard]
       },
       {
-        path: 'panel-administracion', component: PanelAdministracionComponent,
+        path: 'localizaciones', component: PanelAdministracionComponent,
         // canActivate: [ValidarUsuarioGuard]
       },
       {

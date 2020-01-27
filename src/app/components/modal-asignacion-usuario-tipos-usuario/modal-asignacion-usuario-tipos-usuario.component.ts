@@ -15,21 +15,18 @@ export class ModalAsignacionUsuarioTiposUsuarioComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any
   ) { }
 
-  @ViewChild('testSelect', { static: false }) testSelect: ElementRef;
-
   botonEliminar = false;
   idUsuario = this.data.idUsuario;
-  tipoUsuario = '0';
+  tipoUsuario: string;
   tipoUsuarios: TipoUsuario[] = [];
   listaTipoUsuario = this.data.listaTipoUsuario;
-  idTipoUsuario: string;
   descripcion: string;
 
   agregarTipoUsuarioALista(tipoUsuario) {
-    this.idTipoUsuario = tipoUsuario.target.value;
-    this.descripcion = tipoUsuario.target.selectedOptions[0].label;
-    if (tipoUsuario.target.value != 0) {
-      this.testSelect.nativeElement.disabled = true;
+    var descripcion = this.tipoUsuarios.find(item => item.IdTipoUsuario == tipoUsuario.value);
+    this.tipoUsuario = tipoUsuario.value;
+    this.descripcion = descripcion.Descripcion;
+    if (tipoUsuario.value != 0) {
       this.botonEliminar = true;
     }
   }
@@ -41,13 +38,12 @@ export class ModalAsignacionUsuarioTiposUsuarioComponent implements OnInit {
       localStorage.getItem('miCuenta.postToken'))
       .then(
         ok => {
-          if (ok['respuesta'] == true) {
-            this.tipoUsuario = '0';
+          if (ok['respuesta']) {
             this.listaTipoUsuario.push({
-              IdTipoUsuario: this.idTipoUsuario,
+              IdTipoUsuario: this.tipoUsuario,
               Descripcion: this.descripcion
             })
-            this.testSelect.nativeElement.disabled = false;
+            this.tipoUsuario = '0';
             this.botonEliminar = false;
             this.consultarAsignacionTipoUsuario();
           };
@@ -136,8 +132,6 @@ export class ModalAsignacionUsuarioTiposUsuarioComponent implements OnInit {
   arrayIndexesTipoUsuario: string[] = [];
   ngOnInit() {
     this.consultarTipoUsuario();
-    console.log(this.listaTipoUsuario);
-    
     this.listaTipoUsuario.map(
       item => {
         this.arrayIndexesTipoUsuario.push(item.Identificacion);

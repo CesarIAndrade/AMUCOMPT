@@ -34,9 +34,9 @@
                     <mat-form-field class="example-full-width">
                         <mat-label>Seleccione Tipo Documento</mat-label>
                         <mat-select [(ngModel)]="tipoDocumento" [ngModelOptions]="{standalone: true}"
-                            (selectionChange)="onChangeSelectTipoDocumento($event.value)">
+                            (selectionChange)="onChangeSelectTipoDocumento($event)">
                             <mat-option *ngFor="let item of tipoDocumentos" [value]="item.IdTipoDocumento">
-                                {{item.Descripcion}}
+                                {{item.Documento}}
                             </mat-option>
                         </mat-select>
                     </mat-form-field>

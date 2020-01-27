@@ -88,8 +88,8 @@ export class PersonaComponent implements OnInit {
         }
       )
       .catch(
-        err => {
-          console.log(err);
+        error => {
+          console.log(error);
         }
       )
   }
@@ -102,8 +102,8 @@ export class PersonaComponent implements OnInit {
         }
       )
       .catch(
-        err => {
-          console.log(err);
+        error => {
+          console.log(error);
         }
       )
   }
@@ -116,8 +116,8 @@ export class PersonaComponent implements OnInit {
         }
       )
       .catch(
-        err => {
-          console.log(err);
+        error => {
+          console.log(error);
         }
       )
   }
@@ -128,7 +128,11 @@ export class PersonaComponent implements OnInit {
         ok => {
           this.personas = ok['respuesta'];
         },
-        err => console.log(err)
+      )
+      .catch(
+        error => {
+          console.log(error);
+        }
       )
   }
 
@@ -140,8 +144,8 @@ export class PersonaComponent implements OnInit {
         },
       )
       .catch(
-        err => {
-          console.log(err);
+        error => {
+          console.log(error);
         }
       )
   }
@@ -154,8 +158,8 @@ export class PersonaComponent implements OnInit {
         },
       )
       .catch(
-        err => {
-          console.log(err);
+        error => {
+          console.log(error);
         }
       )
   }
@@ -181,8 +185,8 @@ export class PersonaComponent implements OnInit {
         },
       )
       .catch(
-        err => {
-          console.log(err);
+        error => {
+          console.log(error);
         }
       )
   }
@@ -205,8 +209,8 @@ export class PersonaComponent implements OnInit {
         },
       )
       .catch(
-        err => {
-          console.log(err);
+        error => {
+          console.log(error);
         }
       )
   }
@@ -365,14 +369,12 @@ export class PersonaComponent implements OnInit {
             } else {
               this.idPersona = ok['respuesta'];
               this.crearTelefono(this.idPersona);
-              this.crearCorreo(this.idPersona);
-              this.crearDireccion(this.idPersona);
             }
           },
         )
         .catch(
-          err => {
-            console.log(err);
+          error => {
+            console.log(error);
           }
         )
     }
@@ -400,12 +402,14 @@ export class PersonaComponent implements OnInit {
           localStorage.getItem('miCuenta.postToken'))
           .then(
             ok => {
-              console.log(ok['respuesta']);
+              if(ok['respuesta']) {
+                this.crearCorreo(this.idPersona);
+              }
             },
           )
           .catch(
-            err => {
-              console.log(err);
+            error => {
+              console.log(error);
             }
           )
       }
@@ -419,12 +423,14 @@ export class PersonaComponent implements OnInit {
       localStorage.getItem('miCuenta.postToken'))
       .then(
         ok => {
-          console.log(ok['respuesta']);
+          if(ok['respuesta']) {
+            this.crearDireccion(this.idPersona);
+          }
         },
       )
       .catch(
-        err => {
-          console.log(err);
+        error => {
+          console.log(error);
         }
       )
   }
@@ -437,15 +443,23 @@ export class PersonaComponent implements OnInit {
       localStorage.getItem('miCuenta.postToken'))
       .then(
         ok => {
-          console.log(ok['respuesta']);
-          this.myForm.reset();
-          this.limpiarSelects();
-          this.consultarPersonas();
+          if(ok['respuesta']) {
+            this.myForm.reset();
+            this.limpiarSelects();
+            this.consultarPersonas();
+            sweetAlert("Se ingresó correctamente!", {
+              icon: "success",
+            });
+          } else {
+            sweetAlert("Ha ocurrido un error!", {
+              icon: "error",
+            });
+          }
         },
       )
       .catch(
-        err => {
-          console.log(err);
+        error => {
+          console.log(error);
         }
       )
   }
@@ -480,8 +494,8 @@ export class PersonaComponent implements OnInit {
               },
             )
             .catch(
-              err => {
-                console.log(err);
+              error => {
+                console.log(error);
               }
             )
         }
@@ -545,8 +559,8 @@ export class PersonaComponent implements OnInit {
         },
       )
       .catch(
-        err => {
-          console.log(err);
+        error => {
+          console.log(error);
         }
       )
   }
@@ -631,8 +645,8 @@ export class PersonaComponent implements OnInit {
           },
         )
         .catch(
-          err => {
-            console.log(err);
+          error => {
+            console.log(error);
           }
         )
     }
@@ -640,7 +654,7 @@ export class PersonaComponent implements OnInit {
 
   limpiarSelects() {
     this.tipoDocumento = '0',
-      this.tipoTelefono1 = '0';
+    this.tipoTelefono1 = '0';
     this.tipoTelefono2 = '0';
     this.provincia = '0';
     this.canton = '0';
@@ -683,8 +697,8 @@ export class PersonaComponent implements OnInit {
             },
           )
           .catch(
-            err => {
-              console.log(err);
+            error => {
+              console.log(error);
             }
           )
       }
@@ -706,8 +720,8 @@ export class PersonaComponent implements OnInit {
         },
       )
       .catch(
-        err => {
-          console.log(err);
+        error => {
+          console.log(error);
         }
       )
   }
@@ -731,8 +745,8 @@ export class PersonaComponent implements OnInit {
         },
       )
       .catch(
-        err => {
-          console.log(err);
+        error => {
+          console.log(error);
         }
       )
   }

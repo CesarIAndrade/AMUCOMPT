@@ -206,12 +206,16 @@ export class UsuarioService {
     })
   }
 
-  asignacionTipoUsuario(idUsuario:string,idTipoUsuario:string,_token:string)
+  asignacionTipoUsuario(
+    idUsuario:string,
+    tipoUsuario:string,
+    _token:string)
   {
     const body = new HttpParams()
       .set('IdUsuario', idUsuario)
-      .set('IdTipoUsuario', idTipoUsuario)
+      .set('IdTipoUsuario', tipoUsuario)
       .set('encriptada', _token)
+    console.log(body)
     return new Promise((resolve, reject) => {
       this.http.post(this.apiUrl + 'TalentoHumano/IngresoTipoUsuario', body.toString(),
         {
