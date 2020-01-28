@@ -106,11 +106,10 @@ export class ProductoComponent implements OnInit {
     },
   ];
 
-  
+  Arrayproductos: any[] = [];
   applyFilter(event,columna)
   {
-    console.log(event);
-    console.log(columna);
+    this._filterTable(event,this.productos);
   }
   consultarTipoProductos() {
     this.inventarioService.consultarTipoProductos(localStorage.getItem('miCuenta.getToken'))
@@ -171,6 +170,7 @@ export class ProductoComponent implements OnInit {
           
           this.productos = [];
           this.productos = ok['respuesta'];
+          this.Arrayproductos = ok['respuesta'];
         }
       )
       .catch(
@@ -576,6 +576,19 @@ export class ProductoComponent implements OnInit {
   }
 
   tablaProductos = ['nombre', 'tipoProducto', 'codigo', 'acciones'];
+
+  private _filterTable(value: string,arreglo: any[]) {
+    const filterValue = value.toLowerCase();
+    if(value == '')
+    {
+      this.productos = this.Arrayproductos;
+    }else
+    {
+      this.productos = this.Arrayproductos.filter(option =>option['Producto']['Nombre'].trim().toLowerCase().includes(filterValue.trim()));
+      
+    }
+  }
+
 
   private _filter(value: string): string[] {
     const filterValue = value.toLowerCase();

@@ -39,11 +39,26 @@ export class ArmarKitComponent implements OnInit {
   kits: Kit[] = [];
 
   listaProductosDeUnKit: any[] = [];
-
+  Arrayproductos: any[] = [];
   onChangeSelectKit(idKit) {
     this.idKit = idKit;
     this.consultarKitsYSusProductos(idKit);
     this.consultarProductos(idKit);
+  }
+  applyFilter(event)
+  {
+    this._filterTable(event,this.productos);
+  }
+  private _filterTable(value: string,arreglo: any[]) {
+    const filterValue = value.toLowerCase();
+    if(value == '')
+    {
+      this.productos = this.Arrayproductos;
+    }else
+    {
+      this.productos = this.Arrayproductos.filter(option =>option['Producto']['Nombre'].trim().toLowerCase().includes(filterValue.trim()));
+      
+    }
   }
 
   consultarKitsYSusProductos(idKit) {
@@ -90,6 +105,7 @@ export class ArmarKitComponent implements OnInit {
         ok => {
           this.productos = [];
           this.productos = ok['respuesta'];
+          this.Arrayproductos = ok['respuesta'];
         }
       )
       .catch(
