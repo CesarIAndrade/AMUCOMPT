@@ -55,7 +55,7 @@
             <div class="card-body mat-elevation-z5">
                 <h5 style="text-align: center;">Lista Productos</h5>
                 <mat-form-field class="example-full-width">
-                    <input matInput [(ngModel)]="filterProducto" type="text"
+                    <input matInput (keyup)="applyFilter($event.target.value)" [(ngModel)]="filterProducto" type="text"
                         placeholder="Buscar Producto">
                         <button mat-button matPrefix mat-icon-button>
                             <mat-icon>search</mat-icon>
