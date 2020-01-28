@@ -1,67 +1,65 @@
 <div class="container page-container animated fadeInDown" [hidden]="ingresarCredenciales">
     <div class="row justify-content-center">
-        <div class="col-lg-4">
-            <div class="card">
-                <div class="card-header">
-                    <img src="../../../assets/img/logo.png" width="200" height="100">
-                    <form [formGroup]="myForm" (ngSubmit)="login()" novalidate>
-                        <mat-form-field class="example-full-width">
-                            <input matInput formControlName="_usuario" type="text" (keyup)="credendialesIncorrectas()" placeholder="Ingrese Usuario">
-                        </mat-form-field>
-                        <div class="badge badge-danger mb-3 btn-block"
-                            *ngIf="_usuario.invalid && (_usuario.dirty || _usuario.touched)">
-                            <div *ngIf="_usuario.errors.required">
+        <div class="col-lg-4 col-md-6>
+            <div class=" card">
+            <div class="card-header">
+                <img src="../../../assets/img/logo.png" width="200" height="100">
+                <form [formGroup]="myForm" (ngSubmit)="login()" novalidate>
+                    <mat-form-field class="example-full-width">
+                        <input matInput formControlName="_usuario" type="text" placeholder="Ingrese Usuario">
+                        <mat-error *ngIf="_usuario.invalid && (_usuario.dirty || _usuario.touched)">
+                            <mat-error *ngIf="_usuario.errors.required">
                                 Usuario Requerido
-                            </div>
-                        </div>
-                        <mat-form-field class="example-full-width">
-                            <input matInput formControlName="_contrasena" type="password"
-                                (keyup)="credendialesIncorrectas()" placeholder="Ingrese Contraseña">
-                        </mat-form-field>
-                        <div class="badge badge-danger mb-3 btn-block"
-                            *ngIf="_contrasena.invalid && (_contrasena.dirty || _contrasena.touched)">
-                            <div *ngIf="_contrasena.errors.required">
+                            </mat-error>
+                        </mat-error>
+                    </mat-form-field>
+
+                    <mat-form-field class="example-full-width">
+                        <input matInput formControlName="_contrasena" type="password" placeholder="Ingrese Contraseña">
+                        <mat-error *ngIf="_contrasena.invalid && (_contrasena.dirty || _contrasena.touched)">
+                            <mat-error *ngIf="_contrasena.errors.required">
                                 Contraseña Requerida
-                            </div>
-                        </div>
-                        <div class="badge badge-danger mb-3 btn-block" [hidden]="credendialesIncorrectasInput">
-                            Credenciales Incorrectas
-                        </div>
-                        <div class="mt-3 mb-4">
-                            <button type="submit" [disabled]="myForm.invalid" class="btn btn-primary btn-block">
-                                Continuar
-                            </button>
-                        </div>
-                    </form>
-                </div>
+                            </mat-error>
+                        </mat-error>
+                    </mat-form-field>
+
+                    <div class="mt-3 mb-4">
+                        <button type="submit" [disabled]="myForm.invalid" class="btn btn-primary btn-block">
+                            Continuar
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
 </div>
 <div class="container page-container animated fadeInDown" [hidden]="seleccionarTipoUsuario">
     <div class="row justify-content-center">
-        <div class="col-lg-4">
+        <div class="col-lg-4 col-md-6">
             <div class="card">
                 <div class="card-body card-login">
                     <img src="../../../assets/img/logo.png" width="200" height="100">
-                    <mat-form-field class="example-full-width">
-                        <mat-label>Seleccione Tipo Usuario</mat-label>
-                        <mat-select [(ngModel)]="tipoUsuario" [ngModelOptions]="{standalone: true}"
-                            (selectionChange)="onChangeSelectTipoUsuario($event.value)">
-                            <mat-option *ngFor="let item of tipoUsuarios" [value]="item.IdAsignacionTu">
-                                {{item.Descripcion}}
-                            </mat-option>
-                        </mat-select>
-                    </mat-form-field>
-                    <div class="badge badge-danger mb-3 btn-block" [hidden]="selectTipoUsuario">
-                        Tipo Usuario Requerido
-                    </div>
-                    <div class="mt-3 mb-4">
-                        <button type="submit" (click)="iniciarSesionSegunTipoUsuario()"
-                            class="btn btn-primary btn-block">
-                            Iniciar Sesion
-                        </button>
-                    </div>
+                    <form [formGroup]="myForm" (ngSubmit)="iniciarSesionSegunTipoUsuario()" novalidate>
+                        <mat-form-field class="example-full-width">
+                            <mat-label>Seleccione Tipo Usuario</mat-label>
+                            <mat-select formControlName="_tipoUsuario">
+                                <mat-option *ngFor="let item of tipoUsuarios" [value]="item.IdAsignacionTu">
+                                    {{item.Descripcion}}
+                                </mat-option>
+                            </mat-select>
+                            <mat-error *ngIf="_tipoUsuario.invalid && (_tipoUsuario.dirty || _tipoUsuario.touched)">
+                                <mat-error *ngIf="_tipoUsuario.errors.required">
+                                    Tipo Usuario Requerido
+                                </mat-error>
+                            </mat-error>
+                        </mat-form-field>
+
+                        <div class="mt-3 mb-4">
+                            <button type="submit" [disabled]="myForm.invalid" class="btn btn-primary btn-block">
+                                Iniciar Sesion
+                            </button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>

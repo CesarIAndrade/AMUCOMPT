@@ -1,0 +1,44 @@
+<mat-dialog-content>
+    <div class="card-body">
+        <h5 style="text-align: center;">Lista Productos</h5>
+        <mat-form-field class="example-full-width">
+            <input matInput [(ngModel)]="filterDetalle" type="text" placeholder="Buscar Persona">
+            <button mat-button matPrefix mat-icon-button>
+                <mat-icon>search</mat-icon>
+            </button>
+        </mat-form-field>
+        <div class="tablaConfiguracionProducto">
+            <table mat-table [dataSource]="configuracionProductos">
+                <ng-container matColumnDef="descripcion">
+                    <th mat-header-cell *matHeaderCellDef> Producto </th>
+                    <td mat-cell *matCellDef="let element"> {{element.Producto.Nombre}} </td>
+                </ng-container>
+                <ng-container matColumnDef="presentacion">
+                    <th mat-header-cell *matHeaderCellDef> Presentación </th>
+                    <td mat-cell *matCellDef="let element"> {{element.Presentacion.Descripcion}} </td>
+                </ng-container>
+                <ng-container matColumnDef="contenidoNeto">
+                    <th mat-header-cell *matHeaderCellDef> C. Neto </th>
+                    <td mat-cell *matCellDef="let element"> {{element.Producto.CantidadMedida}} </td>
+                </ng-container>
+                <ng-container matColumnDef="medida">
+                    <th mat-header-cell *matHeaderCellDef> Medida </th>
+                    <td mat-cell *matCellDef="let element"> {{element.Medida.Descripcion}} </td>
+                </ng-container>
+                <ng-container matColumnDef="acciones">
+                    <th mat-header-cell *matHeaderCellDef> Acciones </th>
+                    <ng-container *matCellDef="let element">
+                        <td mat-cell>
+                            <button [mat-dialog-close]="producto" tooltip="Agregar" placement="top" class="btn btn-sm btn-outline-warning"
+                                (click)="agregarDetalle(element)">
+                                <i class="fa fa-plus" aria-hidden="true"></i>
+                            </button>
+                        </td>
+                    </ng-container>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="tablaConfiguracionProducto; sticky: true"></tr>
+                <tr mat-row *matRowDef="let row; columns: tablaConfiguracionProducto;"></tr>
+            </table>
+        </div>
+    </div>
+</mat-dialog-content>

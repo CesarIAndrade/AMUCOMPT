@@ -1,1 +1,107 @@
-<p>compra works!</p>
+<div class="container">
+    <form [formGroup]="myForm" (ngSubmit)="validarFormulario()" novalidate>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card-body">
+                    <h5 style="text-align: center;">Compra</h5>
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6">
+                            <mat-form-field class="example-full-width">
+                                <input readonly matInput [matDatepicker]="picker" formControlName="_fecha">
+                                <button mat-button matSuffix mat-icon-button>
+                                    <mat-icon>date_range</mat-icon>
+                                </button>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-lg-6 col-md-6">
+                            <mat-form-field class="example-full-width">
+                                <input matInput type="text" formControlName="_codigo" placeholder="Código">
+                                <mat-error *ngIf="_codigo.invalid && (_codigo.dirty || _codigo.touched)">
+                                    <mat-error *ngIf="_codigo.errors.required">
+                                        Código Requerido
+                                    </mat-error>
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <mat-radio-group>
+                        <mat-radio-button (change)="test($event)" checked="true" value="1">Producto</mat-radio-button>
+                        <mat-radio-button (change)="test($event)" value="2">Kit</mat-radio-button>
+                    </mat-radio-group>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-4">
+                <div [hidden]="seccionProducto">
+                    <mat-form-field [hidden]="seccionKit" class="example-full-width">
+                        <mat-label>Kits</mat-label>
+                        <mat-select formControlName="_kit" (selectionChange)="onChangeSelectKit($event.value)">
+                            <mat-option *ngFor="let item of kits" [value]="item.IdKit">
+                                {{item.Descripcion}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <button mat-stroked-button class="mb-3 btn-block btn-outline-warning" (click)="agregarDetalle()">
+                        <i class="fa fa-plus"></i>
+                    </button>
+                    <mat-form-field class="example-full-width">
+                        <input readonly matInput placeholder="Producto" [(ngModel)]="producto.nombre"
+                            [ngModelOptions]="{standalone: true}">
+                    </mat-form-field>
+                    <mat-form-field class="example-full-width">
+                        <input readonly matInput placeholder="Descripción" [(ngModel)]="producto.configuracion"
+                            [ngModelOptions]="{standalone: true}">
+                    </mat-form-field>
+                    <mat-form-field class="example-full-width">
+                        <input matInput type="text" formControlName="_cantidad" placeholder="Cantidad">
+                        <mat-error *ngIf="_cantidad.invalid && (_cantidad.dirty || _cantidad.touched)">
+                            <mat-error *ngIf="_cantidad.errors.required">
+                                Cantidad Requerida
+                            </mat-error>
+                        </mat-error>
+                    </mat-form-field>
+                    <button type="submit" [disabled]="myForm.invalid" class="mt-2 mb-3 btn btn-success btn-block">Agregar
+                        Detalle</button>
+                </div>
+            </div>
+            <div class="col-lg-8">
+                <div class="card-body mat-elevation-z5">
+                    <div class="tablaDetalleCompra">
+                        <table mat-table [dataSource]="detallesCompra">
+                            <ng-container matColumnDef="kit">
+                                <th mat-header-cell *matHeaderCellDef> Kit </th>
+                                <ng-container *matCellDef="let element">
+                                    <ng-container *ngIf="element.IdKit == ''">
+                                        <td mat-cell> </td>
+                                    </ng-container>
+                                    <ng-container *ngIf="element.IdKit != ''">
+                                        <td mat-cell> {{element.Kit}} </td>
+                                    </ng-container>
+                                </ng-container>
+                            </ng-container>
+                            <ng-container matColumnDef="descripcion">
+                                <th mat-header-cell *matHeaderCellDef> Descripción </th>
+                                <td mat-cell *matCellDef="let element"> {{element.Producto}} {{element.Presentacion}}
+                                    {{element.ContenidoNeto}} {{element.Medida}} </td>
+                            </ng-container>
+                            <ng-container matColumnDef="acciones">
+                                <th mat-header-cell *matHeaderCellDef> Acciones </th>
+                                <ng-container *matCellDef="let element">
+                                    <td mat-cell>
+                                        <button tooltip="Quitar" placement="top" class="btn btn-sm btn-outline-danger"
+                                            (click)="quitarDetalle(element)">
+                                            <i class="fa fa-times" aria-hidden="true"></i>
+                                        </button>
+                                    </td>
+                                </ng-container>
+                            </ng-container>
+                            <tr mat-header-row *matHeaderRowDef="tablaDetalleCompra; sticky: true"></tr>
+                            <tr mat-row *matRowDef="let row; columns: tablaDetalleCompra;"></tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

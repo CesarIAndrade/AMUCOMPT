@@ -27,25 +27,20 @@ export class CantonComponent implements OnInit {
     private personaService: PersonaService
   ) {
     this.myForm = new FormGroup({
-      _canton: new FormControl('', [Validators.required])
+      _canton: new FormControl('', [Validators.required]),
+      _idProvincia: new FormControl('', [Validators.required]),
+      _provincia: new FormControl('Provincia', [Validators.required])
+
     })
   }
 
   botonIngresar = 'ingresar';
   idCanton = '0';
-  idProvincia = '0';
-  inputIdProvincia = true;
-  provincia = 'Provincia';
-  inputCanton = true;
   filterProvincia = '';
   filterCanton = '';
 
   provincias: Provincia[] = [];
   cantones: Canton[] = [];
-
-  onChangeInptCanton() {
-    this.inputCanton = true;
-  }
 
   consultarProvincias() {
     this.personaService.consultarProvincias(localStorage.getItem('miCuenta.getToken'))
@@ -68,7 +63,7 @@ export class CantonComponent implements OnInit {
           this.cantones = [];
           this.cantones = ok['respuesta'];
           this.consultarProvincias();
-          
+
         }
       )
       .catch(
@@ -81,15 +76,9 @@ export class CantonComponent implements OnInit {
   validarFormulario() {
     if (this.myForm.valid) {
       if (this.testButton.nativeElement.value == 'ingresar') {
-        if (this.idProvincia == '0') {
-          this.inputIdProvincia = false;
-        }
-        else {
-          this.crearCanton();
-        }
+        this.crearCanton();
       } else if (this.testButton.nativeElement.value == 'modificar') {
         this.actualizarCanton();
-        this.testButton.nativeElement.value = 'ingresar';
       }
     } else {
       console.log("Algo Salio Mal");
@@ -98,12 +87,11 @@ export class CantonComponent implements OnInit {
 
   crearCanton() {
     this.panelAdministracionService.crearCanton(
-      this.idProvincia,
-      this.myForm.get('_canton').value,
+      this._idProvincia.value,
+      this._canton.value,
       localStorage.getItem('miCuenta.postToken'))
       .then(
         ok => {
-          console.log(ok['respuesta']);
 
           if (ok['respuesta'] == null) {
             sweetAlert("Inténtalo de nuevo!", {
@@ -111,7 +99,9 @@ export class CantonComponent implements OnInit {
             });
             this.limpiarCampos();
           } else if (ok['respuesta'] == '400') {
-            this.inputCanton = false;
+            sweetAlert("Cantón ya existe!", {
+              icon: "warning",
+            });
           } else if (ok['respuesta'] == 'false') {
             sweetAlert("Ha ocurrido un error!", {
               icon: "error",
@@ -134,38 +124,36 @@ export class CantonComponent implements OnInit {
   }
 
   mostrarCanton(canton) {
-    this.idProvincia = canton.Provincia.IdProvincia;
+    this._idProvincia.setValue(canton.Provincia.IdProvincia);
     this.provincias.map(
       item => {
-        if (this.idProvincia == item.IdProvincia) {
-          this.provincia = item.Descripcion;
+        if (this._idProvincia.value == item.IdProvincia) {
+          this._provincia.setValue(item.Descripcion);
         }
       }
     )
     this.idCanton = canton.IdCanton;
-    this.myForm.setValue({
-      _canton: canton.Descripcion
-    })
+    this._canton.setValue(canton.Descripcion);
     this.testButton.nativeElement.value = 'modificar';
   }
 
   actualizarCanton() {
     this.panelAdministracionService.actualizarCanton(
-      this.idProvincia,
+      this._idProvincia.value,
       this.idCanton,
-      this.myForm.get('_canton').value,
+      this._canton.value,
       localStorage.getItem('miCuenta.putToken'))
       .then(
         ok => {
-          console.log(ok['respuesta']);
-
           if (ok['respuesta'] == null) {
             sweetAlert("Inténtalo de nuevo!", {
               icon: "warning",
             });
             this.limpiarCampos();
           } else if (ok['respuesta'] == '400') {
-            this.inputCanton = false;
+            sweetAlert("Cantón ya existe!", {
+              icon: "warning",
+            });
           } else if (ok['respuesta'] == 'false') {
             sweetAlert("Ha ocurrido un error!", {
               icon: "error",
@@ -174,10 +162,10 @@ export class CantonComponent implements OnInit {
             sweetAlert("Se ingresó correctamente!", {
               icon: "success",
             });
+            this.testButton.nativeElement.value = 'ingresar';
             this.limpiarCampos();
             this.consultarCantones();
           }
-
         }
       )
       .catch(
@@ -187,7 +175,7 @@ export class CantonComponent implements OnInit {
       )
   }
 
- 
+
   eliminarCanton(idCanton: string) {
     sweetalert({
       title: "Advertencia",
@@ -225,18 +213,25 @@ export class CantonComponent implements OnInit {
   }
 
   setProvincia(provincia) {
-    this.idProvincia = provincia.IdProvincia;
-    this.provincia = provincia.Descripcion;
-    this.inputIdProvincia = true;
+    this._provincia.setValue(provincia.Descripcion);
+    this._idProvincia.setValue(provincia.IdProvincia);
   }
 
   limpiarCampos() {
     this.myForm.reset();
-    this.provincia = 'Provincia';
+    this._provincia.setValue('Provincia');
   }
 
   get _canton() {
     return this.myForm.get('_canton');
+  }
+
+  get _provincia() {
+    return this.myForm.get('_provincia');
+  }
+
+  get _idProvincia() {
+    return this.myForm.get('_idProvincia');
   }
 
   ngOnInit() {

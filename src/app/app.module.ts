@@ -39,7 +39,7 @@ import { ModalAsignacionUsuarioPersonaComponent } from './components/modal-asign
 import { PipesModule } from './pipes/pipes.module';
 import {MatChipsModule} from '@angular/material/chips';
 import { ModalAsignacionUsuarioTiposUsuarioComponent } from './components/modal-asignacion-usuario-tipos-usuario/modal-asignacion-usuario-tipos-usuario.component';
-import { MatTableModule, MatOptionModule, MatSelectModule, MatAutocompleteModule, MatInputModule } from '@angular/material';
+import { MatTableModule, MatOptionModule, MatSelectModule, MatAutocompleteModule, MatInputModule, MatDatepickerModule, MatNativeDateModule, MatCheckboxModule, MatRadioModule } from '@angular/material';
 import { TooltipModule } from 'ng2-tooltip-directive';
 import { ProductoComponent } from './components/producto/producto.component';
 import { TipoProductoComponent } from './components/tipo-producto/tipo-producto.component';
@@ -50,6 +50,7 @@ import { KitComponent } from './components/kit/kit.component';
 import { ArmarKitComponent } from './components/armar-kit/armar-kit.component';
 import { ModalDetalleProductoComponent } from './components/modal-detalle-producto/modal-detalle-producto.component';
 import { CuentaComponent } from './components/cuenta/cuenta.component';
+import { ModalAsignacionConfiguracionProductoComponent } from './components/modal-asignacion-configuracion-producto/modal-asignacion-configuracion-producto.component';
 
 @NgModule({
   declarations: [
@@ -80,6 +81,7 @@ import { CuentaComponent } from './components/cuenta/cuenta.component';
     ArmarKitComponent,
     ModalDetalleProductoComponent,
     CuentaComponent,
+    ModalAsignacionConfiguracionProductoComponent,
   ],
   imports: [
     BrowserModule,
@@ -102,15 +104,20 @@ import { CuentaComponent } from './components/cuenta/cuenta.component';
     ReactiveFormsModule,
     MatDialogModule,
     MatTabsModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
     PipesModule,
     MatChipsModule,
     TooltipModule,
+    MatCheckboxModule,
+    MatRadioModule
   ],
   entryComponents: [ 
     ModalDetallePersonaComponent,
     ModalAsignacionUsuarioPersonaComponent ,
     ModalAsignacionUsuarioTiposUsuarioComponent,
-    ModalDetalleProductoComponent
+    ModalDetalleProductoComponent,
+    ModalAsignacionConfiguracionProductoComponent,
   ],
   providers: [],
   bootstrap: [AppComponent]

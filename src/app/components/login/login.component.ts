@@ -23,20 +23,13 @@ export class LoginComponent implements OnInit {
     this.myForm = new FormGroup({
       _usuario: new FormControl('', [Validators.required]),
       _contrasena: new FormControl('', [Validators.required]),
+      _tipoUsuario: new FormControl('0', [Validators.required])
     })
   }
 
-  tipoUsuario = '0';
-  selectTipoUsuario = true;
-  credendialesIncorrectasInput = true;
+  tipoUsuario: string;
   seleccionarTipoUsuario = true;
   ingresarCredenciales = false;
-
-  onChangeSelectTipoUsuario(value) {
-    if (value != '0') {
-      this.selectTipoUsuario = true;
-    }
-  }
 
   usuarios: Usuario[] = [];
   tipoUsuarios: TipoUsuario[] = [];
@@ -51,13 +44,15 @@ export class LoginComponent implements OnInit {
         .then(
           ok => {
             if (ok['codigo'] == '200') {
-              console.log(ok['respuesta']);
               this.tipoUsuarios = ok['respuesta']['ListaTipoUsuario'];
               this.ingresarCredenciales = true;
               this.seleccionarTipoUsuario = false;
               this.consultarTokens();
             } else {
-              this.credendialesIncorrectasInput = false;
+              sweetAlert("Credenciales Incorrectas", {
+                icon: "error",
+              });
+              this.myForm.reset();
             }
           })
         .catch(
@@ -71,16 +66,15 @@ export class LoginComponent implements OnInit {
   }
 
   iniciarSesionSegunTipoUsuario() {
-    if (this.tipoUsuario == '0') {
-      this.selectTipoUsuario = false;
+    if (this.myForm.get('_tipoUsuario').value == '0') {
+      sweetAlert("Seleccione Tipo Usuario", {
+        icon: "warning",
+      });
     } else {
       localStorage.setItem('miCuenta.idAsignacionTipoUsuario', this.tipoUsuario);
       this.router.navigateByUrl('inicio');
     }
-  }
 
-  credendialesIncorrectas() {
-    this.credendialesIncorrectasInput = true
   }
 
   consultarTokens() {
@@ -115,8 +109,13 @@ export class LoginComponent implements OnInit {
   get _usuario() {
     return this.myForm.get('_usuario')
   }
+
   get _contrasena() {
     return this.myForm.get('_contrasena')
+  }
+
+  get _tipoUsuario() {
+    return this.myForm.get('_tipoUsuario');
   }
 
   ngOnInit() {

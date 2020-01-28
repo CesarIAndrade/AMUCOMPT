@@ -3,27 +3,19 @@
         <div class="col-lg-4">
             <div class="card-body">
                 <h5 style="text-align: center;">Nuevo Cantón</h5>
-                <input matInput [value]="idProvincia" type="number" readonly disabled hidden>
                 <form [formGroup]="myForm" (ngSubmit)="validarFormulario()" novalidate>
                     <mat-form-field class="example-full-width">
-                        <input matInput [value]="provincia" type="text" readonly disabled>
+                        <input matInput formControlName="_provincia" type="text" readonly>
                     </mat-form-field>
-                    <div class="badge badge-danger mb-3 btn-block" [hidden]="inputIdProvincia">
-                        Provincia Requerida
-                    </div>
                     <mat-form-field class="example-full-width">
-                        <input matInput (keyup)="onChangeInptCanton()" formControlName="_canton" type="text"
+                        <input matInput formControlName="_canton" type="text"
                             placeholder="Ingrese Canton">
+                        <mat-error *ngIf="_canton.invalid && (_canton.dirty || _canton.touched)">
+                            <mat-error *ngIf="_canton.errors.required">
+                                Cantón Requerido
+                            </mat-error>
+                        </mat-error>
                     </mat-form-field>
-                    <div class="badge badge-danger mb-3 btn-block"
-                        *ngIf="_canton.invalid && (_canton.dirty || _canton.touched)">
-                        <div *ngIf="_canton.errors.required">
-                            Cantón Requerido
-                        </div>
-                    </div>
-                    <div class="badge badge-danger mb-3 btn-block" [hidden]="inputCanton">
-                        Cantón Ya Existe
-                    </div>
                     <div>
                         <button type="submit" [value]="botonIngresar" [disabled]="myForm.invalid"
                             class="btn btn-success btn-block" #testButton>Guardar</button>
@@ -63,11 +55,10 @@
             <div class="card-body mat-elevation-z5">
                 <h5 style="text-align: center;">Lista Cantones</h5>
                 <mat-form-field class="example-full-width">
-                    <input matInput [(ngModel)]="filterCanton" type="text"
-                        placeholder="Buscar Cantón">
-                        <button mat-button matPrefix mat-icon-button>
-                            <mat-icon>search</mat-icon>
-                        </button>
+                    <input matInput [(ngModel)]="filterCanton" type="text" placeholder="Buscar Cantón">
+                    <button mat-button matPrefix mat-icon-button>
+                        <mat-icon>search</mat-icon>
+                    </button>
                 </mat-form-field>
                 <div class="tablaCantones">
                     <table mat-table [dataSource]="cantones|filter:filterCanton:'Descripcion'">
