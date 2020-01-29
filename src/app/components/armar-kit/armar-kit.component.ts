@@ -40,15 +40,18 @@ export class ArmarKitComponent implements OnInit {
 
   listaProductosDeUnKit: any[] = [];
   Arrayproductos: any[] = [];
+
   onChangeSelectKit(idKit) {
     this.idKit = idKit;
     this.consultarKitsYSusProductos(idKit);
     this.consultarProductos(idKit);
   }
+
   applyFilter(event)
   {
     this._filterTable(event,this.productos);
   }
+  
   private _filterTable(value: string,arreglo: any[]) {
     const filterValue = value.toLowerCase();
     if(value == '')

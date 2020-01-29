@@ -27,7 +27,6 @@ export class LoginComponent implements OnInit {
     })
   }
 
-  tipoUsuario: string;
   seleccionarTipoUsuario = true;
   ingresarCredenciales = false;
 
@@ -45,6 +44,7 @@ export class LoginComponent implements OnInit {
           ok => {
             if (ok['codigo'] == '200') {
               this.tipoUsuarios = ok['respuesta']['ListaTipoUsuario'];
+              console.log(this.tipoUsuarios);
               this.ingresarCredenciales = true;
               this.seleccionarTipoUsuario = false;
               this.consultarTokens();
@@ -71,10 +71,10 @@ export class LoginComponent implements OnInit {
         icon: "warning",
       });
     } else {
-      localStorage.setItem('miCuenta.idAsignacionTipoUsuario', this.tipoUsuario);
+      localStorage.setItem('miCuenta.idAsignacionTipoUsuario', this._tipoUsuario.value);
+      console.log(localStorage.getItem('miCuenta.idAsignacionTipoUsuario'));
       this.router.navigateByUrl('inicio');
     }
-
   }
 
   consultarTokens() {

@@ -7,14 +7,6 @@
                     <div class="row">
                         <div class="col-lg-6 col-md-6">
                             <mat-form-field class="example-full-width">
-                                <input readonly matInput [matDatepicker]="picker" formControlName="_fecha">
-                                <button mat-button matSuffix mat-icon-button>
-                                    <mat-icon>date_range</mat-icon>
-                                </button>
-                            </mat-form-field>
-                        </div>
-                        <div class="col-lg-6 col-md-6">
-                            <mat-form-field class="example-full-width">
                                 <input matInput type="text" formControlName="_codigo" placeholder="Código">
                                 <mat-error *ngIf="_codigo.invalid && (_codigo.dirty || _codigo.touched)">
                                     <mat-error *ngIf="_codigo.errors.required">
@@ -25,14 +17,15 @@
                         </div>
                     </div>
                     <mat-radio-group>
-                        <mat-radio-button (change)="test($event)" checked="true" value="1">Producto</mat-radio-button>
-                        <mat-radio-button (change)="test($event)" value="2">Kit</mat-radio-button>
+                        <mat-radio-button (change)="varificarTipoCompra($event)" checked="true" value="1">Producto
+                        </mat-radio-button>
+                        <mat-radio-button (change)="varificarTipoCompra($event)" value="2">Kit</mat-radio-button>
                     </mat-radio-group>
                 </div>
             </div>
         </div>
         <div class="row">
-            <div class="col-lg-4">
+            <div class="col-lg-5">
                 <div [hidden]="seccionProducto">
                     <mat-form-field [hidden]="seccionKit" class="example-full-width">
                         <mat-label>Kits</mat-label>
@@ -42,30 +35,47 @@
                             </mat-option>
                         </mat-select>
                     </mat-form-field>
-                    <button mat-stroked-button class="mb-3 btn-block btn-outline-warning" (click)="agregarDetalle()">
+                    <button mat-stroked-button [disabled]="seleccionKit" class="mb-3 btn-block btn-outline-warning"
+                        (click)="seleccionarProducto()">
                         <i class="fa fa-plus"></i>
                     </button>
                     <mat-form-field class="example-full-width">
-                        <input readonly matInput placeholder="Producto" [(ngModel)]="producto.nombre"
-                            [ngModelOptions]="{standalone: true}">
+                        <input readonly matInput placeholder="Producto" formControlName="_producto">
                     </mat-form-field>
                     <mat-form-field class="example-full-width">
-                        <input readonly matInput placeholder="Descripción" [(ngModel)]="producto.configuracion"
-                            [ngModelOptions]="{standalone: true}">
-                    </mat-form-field>
-                    <mat-form-field class="example-full-width">
-                        <input matInput type="text" formControlName="_cantidad" placeholder="Cantidad">
+                        <input matInput type="number" formControlName="_cantidad" placeholder="Cantidad">
                         <mat-error *ngIf="_cantidad.invalid && (_cantidad.dirty || _cantidad.touched)">
                             <mat-error *ngIf="_cantidad.errors.required">
                                 Cantidad Requerida
                             </mat-error>
                         </mat-error>
                     </mat-form-field>
-                    <button type="submit" [disabled]="myForm.invalid" class="mt-2 mb-3 btn btn-success btn-block">Agregar
+                    <mat-form-field class="example-full-width">
+                        <input matInput readonly [matDatepicker]="picker" placeholder="Fecha Expiración"
+                            formControlName="_fechaExpiracion">
+                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-datepicker #picker></mat-datepicker>
+                        <mat-error
+                            *ngIf="_fechaExpiracion.invalid && (_fechaExpiracion.dirty || _fechaExpiracion.touched)">
+                            <mat-error *ngIf="_fechaExpiracion.errors.required">
+                                Fecha Expiración Requerida
+                            </mat-error>
+                        </mat-error>
+                    </mat-form-field>
+                    <mat-form-field class="example-full-width">
+                        <input matInput type="number" formControlName="_precio" placeholder="Precio">
+                        <mat-error *ngIf="_precio.invalid && (_precio.dirty || _precio.touched)">
+                            <mat-error *ngIf="_precio.errors.required">
+                                Precio Requerido
+                            </mat-error>
+                        </mat-error>
+                    </mat-form-field>
+                    <button type="submit" [disabled]="myForm.invalid"
+                        class="mt-2 mb-3 btn btn-success btn-block">Agregar
                         Detalle</button>
                 </div>
             </div>
-            <div class="col-lg-8">
+            <div class="col-lg-7">
                 <div class="card-body mat-elevation-z5">
                     <div class="tablaDetalleCompra">
                         <table mat-table [dataSource]="detallesCompra">
@@ -104,4 +114,9 @@
             </div>
         </div>
     </form>
+    <div class="row">
+        <div class="col-lg-12">
+            <button type="submit" class="mt-2 mb-3 btn btn-success btn-block">Realizar Compra</button>
+        </div>
+    </div>
 </div>

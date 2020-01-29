@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import { UsuarioService } from 'src/app/services/usuario.service';
 import { TipoUsuario } from 'src/app/interfaces/tipo-usuario/tipo-usuario';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
