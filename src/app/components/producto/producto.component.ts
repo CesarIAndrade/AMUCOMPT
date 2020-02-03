@@ -20,7 +20,6 @@ import { InventarioService } from 'src/app/services/inventario.service';
 import sweetalert from 'sweetalert';
 import { Observable } from 'rxjs';
 import { startWith, map } from 'rxjs/operators';
-import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 
 @Component({
   selector: 'app-producto',
@@ -38,77 +37,34 @@ export class ProductoComponent implements OnInit {
   ) {
     this.myForm = new FormGroup({
       _nombre: new FormControl('', [Validators.required]),
-      _descripcion: new FormControl(''),
+      _tipoProducto: new FormControl('', [Validators.required]),
       _codigo: new FormControl('', [Validators.required]),
+      _presentacion: new FormControl('', [Validators.required]),
       _contenidoNeto: new FormControl('', [Validators.required]),
+      _medida: new FormControl('', [Validators.required]),
+      _descripcion: new FormControl(''),
+      _productoExistente: new FormControl(''),
+      _idProducto: new FormControl(''),
+      _idConfiguracionProducto: new FormControl(''),
     })
   }
 
-  idConfiguracionProducto: string;
-  idProducto: string;
-  tipoProducto = '0';
-  presentacion = '0';
-  medida = '0';
   botonIngresar = 'ingresar';
   filterProducto = '';
-  nombreProducto: string;
-  selectTipoProducto = true;
-  selectPresentacion = true;
-  selectMedida = true;
-  inputNombreProducto = true;
-  CampoTipoProducto = false;
 
   filteredOptions: Observable<string[]>;
 
   nombresDeProductos: any;
   productos: any[] = [];
-  tipoProductos: TipoProducto[] = [
-    {
-      IdPresentacion: '1',
-      Descripcion: 'TPRO1'
-    },
-    {
-      IdPresentacion: '1',
-      Descripcion: 'TPRO2'
-    },
-    {
-      IdPresentacion: '1',
-      Descripcion: 'TPRO3'
-    },
-  ];
-  presentaciones: Presentacion[] = [
-    {
-      IdPresentacion: '1',
-      Descripcion: 'PRE1'
-    },
-    {
-      IdPresentacion: '2',
-      Descripcion: 'PRE2'
-    },
-    {
-      IdPresentacion: '3',
-      Descripcion: 'PRE3'
-    },
-  ];
-  medidas: Medida[] = [
-    {
-      IdMedida: '1',
-      Descripcion: 'MED1'
-    },
-    {
-      IdMedida: '2',
-      Descripcion: 'MED2'
-    },
-    {
-      IdMedida: '3',
-      Descripcion: 'MED3'
-    },
-  ];
-
+  tipoProductos: TipoProducto[] = [];
+  presentaciones: Presentacion[] = [];
+  medidas: Medida[] = [];
   ArrayProductos: any[] = [];
-  applyFilter(event, columna) {
+
+  applyFilter(event) {
     this._filterTable(event, this.productos);
   }
+
   consultarTipoProductos() {
     this.inventarioService.consultarTipoProductos(localStorage.getItem('miCuenta.getToken'))
       .then(
@@ -210,49 +166,25 @@ export class ProductoComponent implements OnInit {
       )
   }
 
-  validarSelects(
-    tipoProducto: string,
-    presentacion: string,
-    medida: string,
-  ) {
-    if (tipoProducto == "0") {
-      this.selectTipoProducto = false;
-    }
-    if (presentacion == "0") {
-      this.selectPresentacion = false;
-    }
-    if (medida == "0") {
-      this.selectMedida = false;
-    }
-  }
-
   validarFormulario() {
-    this.validarSelects(
-      this.tipoProducto,
-      this.presentacion,
-      this.medida
-    );
-    if (this.tipoProducto != '0' && this.presentacion != '0' && this.medida != '0') {
-      if (this.myForm.valid) {
-        if (this.testButton.nativeElement.value == 'ingresar') {
-          this.crearProducto();
-        } else if (this.testButton.nativeElement.value == 'modificar') {
-          this.actualizarConfiguracionProducto();
-
-        }
-      } else {
-        console.log("Algo Salio Mal");
+    if (this.myForm.valid) {
+      if (this.testButton.nativeElement.value == 'ingresar') {
+        this.crearProducto();
+      } else if (this.testButton.nativeElement.value == 'modificar') {
+        this.actualizarConfiguracionProducto();
       }
+    } else {
+      console.log("Algo Salio Mal");
     }
   }
 
   crearProducto() {
-    if (this.idProducto == '' && this.nombreProducto == '') {
+    if (this._idProducto.value == '' && this._productoExistente.value == '') {
       this.inventarioService.crearProducto(
-        this.myForm.get('_nombre').value,
-        this.myForm.get('_descripcion').value,
-        this.myForm.get('_codigo').value,
-        this.tipoProducto,
+        this._nombre.value,
+        this._descripcion.value,
+        this._codigo.value,
+        this._tipoProducto.value,
         localStorage.getItem('miCuenta.postToken')
       )
         .then(
@@ -262,17 +194,16 @@ export class ProductoComponent implements OnInit {
                 icon: "warning",
               });
               this.myForm.reset();
-              this.tipoProducto = '0';
-              this.presentacion = '0';
-              this.medida = '0';
             } else if (ok['respuesta'] == '400') {
-              this.inputNombreProducto = false;
+              sweetAlert("Producto Ya Existe!", {
+                icon: "warning",
+              });
             } else if (ok['respuesta'] == 'false') {
               sweetAlert("Ha ocurrido un error!", {
                 icon: "error",
               });
             } else {
-              this.idProducto = ok['respuesta'];
+              this._idProducto.setValue(ok['respuesta']);
               this.crearConfiguracionProducto();
               this.consultarProductos();
             }
@@ -289,30 +220,30 @@ export class ProductoComponent implements OnInit {
   }
 
   mostrarProducto(producto) {
-    this.myForm.get('_nombre').disable();
-    this.myForm.get('_descripcion').disable();
-    this.myForm.get('_codigo').disable();
-    this.CampoTipoProducto = true;
-    this.idConfiguracionProducto = producto.IdConfigurarProducto;
-    this.myForm.get('_nombre').setValue(producto.Producto.Nombre);
-    this.myForm.get('_descripcion').setValue(producto.Producto.Descripcion);
-    this.myForm.get('_codigo').setValue(producto.Producto.Codigo);
-    this.myForm.get('_contenidoNeto').setValue(producto.CantidadMedida);
-    this.tipoProducto = producto.Producto.TipoProducto.IdTipoProducto;
-    this.presentacion = producto.Presentacion.IdPresentacion;
-    this.medida = producto.Medida.IdMedida;
-    this.idProducto = producto.Producto.IdProducto;
+    this._nombre.disable();
+    this._descripcion.disable();
+    this._codigo.disable();
+    this._tipoProducto.disable();
+    this._idConfiguracionProducto.setValue(producto.IdConfigurarProducto);
+    this._nombre.setValue(producto.Producto.Nombre);
+    this._descripcion.setValue(producto.Producto.Descripcion);
+    this._codigo.setValue(producto.Producto.Codigo);
+    this._contenidoNeto.setValue(producto.CantidadMedida);
+    this._tipoProducto.setValue(producto.Producto.TipoProducto.IdTipoProducto);
+    this._presentacion.setValue(producto.Presentacion.IdPresentacion);
+    this._medida.setValue(producto.Medida.IdMedida);
+    this._idProducto.setValue(producto.Producto.IdProducto);
     this.testButton.nativeElement.value = 'modificar';
   }
 
   actualizarConfiguracionProducto() {
     this.inventarioService.actualizarConfiguracionProducto(
-      this.idConfiguracionProducto,
+      this._idConfiguracionProducto.value,
       localStorage.getItem('miCuenta.idAsignacionTipoUsuario'),
-      this.idProducto,
-      this.medida,
-      this.presentacion,
-      this.myForm.get('_contenidoNeto').value,
+      this._idProducto.value,
+      this._medida.value,
+      this._presentacion.value,
+      this._contenidoNeto.value,
       localStorage.getItem('miCuenta.putToken')
     )
       .then(
@@ -322,11 +253,10 @@ export class ProductoComponent implements OnInit {
               icon: "warning",
             });
             this.myForm.reset();
-            this.tipoProducto = '0';
-            this.presentacion = '0';
-            this.medida = '0';
           } else if (ok['respuesta'] == '400') {
-            this.inputNombreProducto = false;
+            sweetAlert("Producto Ya Existe!", {
+              icon: "warning",
+            });
           } else if (ok['respuesta'] == 'false') {
             sweetAlert("Ha ocurrido un error!", {
               icon: "error",
@@ -338,10 +268,10 @@ export class ProductoComponent implements OnInit {
             this.myForm.reset();
             this.testButton.nativeElement.value = 'ingresar';
             this.consultarProductos();
-            this.myForm.get('_nombre').enable();
-            this.myForm.get('_descripcion').enable();
-            this.myForm.get('_codigo').enable();
-            this.CampoTipoProducto = false;
+            this._nombre.enable();
+            this._descripcion.enable();
+            this._codigo.enable();
+            this._tipoProducto.enable();
           }
         }
       )
@@ -352,14 +282,13 @@ export class ProductoComponent implements OnInit {
       )
   }
 
-
   actualizarProducto() {
     this.inventarioService.actualizarProducto(
-      this.idProducto,
-      this.myForm.get('_nombre').value,
-      this.myForm.get('_descripcion').value,
-      this.myForm.get('_codigo').value,
-      this.tipoProducto,
+      this._idProducto.value,
+      this._nombre.value,
+      this._descripcion.value,
+      this._codigo.value,
+      this._tipoProducto.value,
       localStorage.getItem('miCuenta.putToken')
     )
       .then(
@@ -369,11 +298,10 @@ export class ProductoComponent implements OnInit {
               icon: "warning",
             });
             this.myForm.reset();
-            this.tipoProducto = '0';
-            this.presentacion = '0';
-            this.medida = '0';
           } else if (ok['respuesta'] == '400') {
-            this.inputNombreProducto = false;
+            sweetAlert("Producto Ya Existe!", {
+              icon: "warning",
+            });
           } else if (ok['respuesta'] == 'false') {
             sweetAlert("Ha ocurrido un error!", {
               icon: "error",
@@ -415,10 +343,10 @@ export class ProductoComponent implements OnInit {
   crearConfiguracionProducto() {
     this.inventarioService.crearConfiguracionProducto(
       localStorage.getItem('miCuenta.idAsignacionTipoUsuario'),
-      this.idProducto,
-      this.medida,
-      this.presentacion,
-      this.myForm.get('_contenidoNeto').value,
+      this._idProducto.value,
+      this._medida.value,
+      this._presentacion.value,
+      this._contenidoNeto.value,
       localStorage.getItem('miCuenta.postToken')
     )
       .then(
@@ -428,11 +356,10 @@ export class ProductoComponent implements OnInit {
               icon: "warning",
             });
             this.myForm.reset();
-            this.tipoProducto = '0';
-            this.presentacion = '0';
-            this.medida = '0';
           } else if (ok['respuesta'] == '400') {
-            this.inputNombreProducto = false;
+            sweetAlert("Producto Ya Existe!", {
+              icon: "warning",
+            });
           } else if (ok['respuesta'] == 'false') {
             sweetAlert("Ha ocurrido un error!", {
               icon: "error",
@@ -442,14 +369,11 @@ export class ProductoComponent implements OnInit {
               icon: "success",
             });
             this.myForm.reset();
-            this.tipoProducto = '0';
-            this.presentacion = '0';
-            this.medida = '0';
             this.consultarProductos();
-            this.myForm.get('_nombre').enable();
-            this.myForm.get('_descripcion').enable();
-            this.myForm.get('_codigo').enable();
-            this.CampoTipoProducto = false;
+            this._nombre.enable();
+            this._descripcion.enable();
+            this._codigo.enable();
+            this._tipoProducto.enable();
           }
         }
       )
@@ -461,6 +385,7 @@ export class ProductoComponent implements OnInit {
   }
 
   eliminarConfiguracionProducto(producto) {
+    console.log(producto);
     sweetalert({
       title: "Advertencia",
       text: "¿Está seguro que desea eliminar?",
@@ -472,7 +397,8 @@ export class ProductoComponent implements OnInit {
         if (willDelete) {
           this.inventarioService.eliminarConfiguracionProducto(
             producto.IdConfigurarProducto,
-            localStorage.getItem('miCuenta.postToken')
+            producto.Producto.IdProducto,
+            localStorage.getItem('miCuenta.deleteToken')
           )
             .then(
               ok => {
@@ -487,7 +413,6 @@ export class ProductoComponent implements OnInit {
             )
         }
       });
-
   }
 
   mostrarDetalleProducto(producto) {
@@ -498,8 +423,8 @@ export class ProductoComponent implements OnInit {
       medida: producto.Medida.Descripcion
     }
     let dialogRef = this.dialog.open(ModalDetalleProductoComponent, {
-      width: '325px',
-      height: '275px',
+      width: 'auto',
+      height: 'auto',
       data: {
         producto: detalleProducto
       }
@@ -507,58 +432,68 @@ export class ProductoComponent implements OnInit {
   }
 
   onChangeSelectTipoProducto(value) {
-    if (value != "0") {
-      this.selectTipoProducto = true;
-    }
+
   }
 
   onChangeSelectPresentacion(value) {
-    if (value != "0") {
-      this.selectPresentacion = true;
-    }
+
   }
 
   onChangeSelectMedida(value) {
-    if (value != "0") {
-      this.selectMedida = true;
-    }
-  }
 
-  onChangeInputNombreProducto() {
-    this.inputNombreProducto = true;
   }
 
   get _nombre() {
     return this.myForm.get('_nombre');
   }
 
-  get _descripcion() {
-    return this.myForm.get('_descripcion');
+  get _tipoProducto() {
+    return this.myForm.get('_tipoProducto');
   }
 
   get _codigo() {
     return this.myForm.get('_codigo');
   }
 
+  get _presentacion() {
+    return this.myForm.get('_presentacion');
+  }
+
   get _contenidoNeto() {
     return this.myForm.get('_contenidoNeto');
   }
-  onKeydownEvent(event) {
-    this.idProducto = '';
-    this.nombreProducto = '';
-  }
-  test(option) {
-    this.myForm.get('_nombre').disable();
-    this.myForm.get('_descripcion').disable();
-    this.myForm.get('_codigo').disable();
-    this.CampoTipoProducto = true;
 
-    this.medida = option.idMedida
-    this.idProducto = option.idProducto;
-    this.nombreProducto = option.nombre;
-    this.tipoProducto = option.idTipoProducto;
-    this.myForm.get('_descripcion').setValue(option.descripcion);
-    this.myForm.get('_codigo').setValue(option.codigo);
+  get _medida() {
+    return this.myForm.get('_medida');
+  }
+
+  get _descripcion() {
+    return this.myForm.get('_descripcion');
+  }
+
+  get _productoExistente() {
+    return this.myForm.get('_productoExistente');
+  }
+
+  get _idProducto() {
+    return this.myForm.get('_idProducto');
+  }
+
+  get _idConfiguracionProducto() {
+    return this.myForm.get('_idConfiguracionProducto');
+  }
+
+  seleccionarProductoSiExiste(producto) {
+    this._nombre.disable();
+    this._descripcion.disable();
+    this._codigo.disable();
+    this._tipoProducto.disable();
+    this._medida.setValue(producto.idMedida);
+    this._idProducto.setValue(producto.idProducto);
+    this._productoExistente.setValue(producto.nombre);
+    this._tipoProducto.setValue(producto.idTipoProducto);
+    this._descripcion.setValue(producto.descripcion);
+    this._codigo.setValue(producto.codigo);
   }
 
   ngOnInit() {

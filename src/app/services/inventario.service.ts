@@ -446,10 +446,12 @@ export class InventarioService {
 
   eliminarConfiguracionProducto(
     idConfigurarProducto: string,
+    idProducto: string,
     _token: string
   ) {
     const body = new HttpParams()
       .set('IdConfigurarProducto', idConfigurarProducto)
+      .set('IdProducto', idProducto)
       .set('encriptada', _token)
     return new Promise((resolve, reject) => {
       this.http.post(this.apiUrl + 'Inventario/EliminarConfigurarProducto', body.toString(),

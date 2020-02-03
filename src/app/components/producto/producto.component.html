@@ -5,80 +5,84 @@
                 <h5 style="text-align: center;">Nuevo Producto</h5>
                 <form [formGroup]="myForm" (ngSubmit)="validarFormulario()" novalidate>
                     <mat-form-field class="example-full-width">
-                        <input (keyup)=onKeydownEvent($event.target.value) matInput formControlName="_nombre" type="text" placeholder="Producto"
-                            [matAutocomplete]="auto">
+                        <input (keyup)=onKeydownEvent($event.target.value) matInput formControlName="_nombre"
+                            type="text" placeholder="Producto" [matAutocomplete]="auto">
                         <mat-autocomplete #auto="matAutocomplete">
-                            <mat-option (onSelectionChange)="test(option)"
+                            <mat-option (onSelectionChange)="seleccionarProductoSiExiste(option)"
                                 *ngFor="let option of filteredOptions | async" [value]="option.nombre">
                                 {{option.nombre}}
                             </mat-option>
                         </mat-autocomplete>
+                        <mat-error *ngIf="_nombre.invalid && (_nombre.dirty || _nombre.touched)">
+                            <mat-error *ngIf="_nombre.errors.required">
+                                Producto Requerido
+                            </mat-error>
+                        </mat-error>
                     </mat-form-field>
-                    <div class="badge badge-danger mb-3 btn-block"
-                        *ngIf="_nombre.invalid && (_nombre.dirty || _nombre.touched)">
-                        <div *ngIf="_nombre.errors.required">
-                            Producto Requerido
-                        </div>
-                    </div>
                     <mat-form-field class="example-full-width">
                         <mat-label>Tipo Producto</mat-label>
-                        <mat-select [disabled]="CampoTipoProducto" [(ngModel)]="tipoProducto" [ngModelOptions]="{standalone: true}"
+                        <mat-select formControlName="_tipoProducto"
                             (selectionChange)="onChangeSelectTipoProducto($event.value)">
                             <mat-option *ngFor="let item of tipoProductos" [value]="item.IdTipoProducto">
                                 {{item.Descripcion}}
                             </mat-option>
                         </mat-select>
+                        <mat-error *ngIf="_tipoProducto.invalid && (_tipoProducto.dirty || _tipoProducto.touched)">
+                            <mat-error *ngIf="_tipoProducto.errors.required">
+                                Tipo Producto Requerido
+                            </mat-error>
+                        </mat-error>
                     </mat-form-field>
-                    <div class="badge badge-danger mB-3 btn-block" [hidden]="selectTipoProducto">
-                        Tipo Producto Requerido
-                    </div>
                     <mat-form-field class="example-full-width">
                         <input matInput formControlName="_codigo" type="text" placeholder="Ingrese Código Producto">
+                        <mat-error *ngIf="_codigo.invalid && (_codigo.dirty || _codigo.touched)">
+                            <mat-error *ngIf="_codigo.errors.required">
+                                Código Requerido
+                            </mat-error>
+                        </mat-error>
                     </mat-form-field>
-                    <div class="badge badge-danger mb-3 btn-block"
-                        *ngIf="_codigo.invalid && (_codigo.dirty || _codigo.touched)">
-                        <div *ngIf="_codigo.errors.required">
-                            Código Producto Requerido
-                        </div>
-                    </div>
                     <mat-form-field class="example-full-width">
                         <mat-label>Presentación</mat-label>
-                        <mat-select [(ngModel)]="presentacion" [ngModelOptions]="{standalone: true}"
+                        <mat-select formControlName="_presentacion"
                             (selectionChange)="onChangeSelectPresentacion($event.value)">
                             <mat-option *ngFor="let item of presentaciones" [value]="item.IdPresentacion">
                                 {{item.Descripcion}}
                             </mat-option>
                         </mat-select>
+                        <mat-error *ngIf="_presentacion.invalid && (_presentacion.dirty || _presentacion.touched)">
+                            <mat-error *ngIf="_presentacion.errors.required">
+                                Presentación Requerida
+                            </mat-error>
+                        </mat-error>
                     </mat-form-field>
-                    <div class="badge badge-danger mb-3 btn-block" [hidden]="selectPresentacion">
-                        Presentación Requerida
-                    </div>
                     <div class="row">
                         <div class="col-lg-6">
                             <mat-form-field class="example-full-width">
                                 <input matInput formControlName="_contenidoNeto" type="number"
                                     placeholder="Contenido Neto">
+                                <mat-error
+                                    *ngIf="_contenidoNeto.invalid && (_contenidoNeto.dirty || _contenidoNeto.touched)">
+                                    <mat-error *ngIf="_contenidoNeto.errors.required">
+                                        Contenido Neto Requerido
+                                    </mat-error>
+                                </mat-error>
                             </mat-form-field>
-                            <div class="badge badge-danger mb-3 btn-block"
-                                *ngIf="_contenidoNeto.invalid && (_contenidoNeto.dirty || _contenidoNeto.touched)">
-                                <div *ngIf="_contenidoNeto.errors.required">
-                                    Contenido Neto Requerido
-                                </div>
-                            </div>
                         </div>
                         <div class="col-lg-6">
                             <mat-form-field class="example-full-width">
                                 <mat-label>Medida</mat-label>
-                                <mat-select [(ngModel)]="medida" [ngModelOptions]="{standalone: true}"
+                                <mat-select formControlName="_medida"
                                     (selectionChange)="onChangeSelectMedida($event.value)">
                                     <mat-option *ngFor="let item of medidas" [value]="item.IdMedida">
                                         {{item.Descripcion}}
                                     </mat-option>
                                 </mat-select>
+                                <mat-error *ngIf="_medida.invalid && (_medida.dirty || _medida.touched)">
+                                    <mat-error *ngIf="_medida.errors.required">
+                                        Medida Requerida
+                                    </mat-error>
+                                </mat-error>
                             </mat-form-field>
-                            <div class="badge badge-danger mb-3 btn-block" [hidden]="selectMedida">
-                                Medida Requerido
-                            </div>
                         </div>
                     </div>
                     <mat-form-field class="example-full-width">
@@ -86,7 +90,8 @@
                             placeholder="Ingrese Descripción Producto">
                     </mat-form-field>
                     <div>
-                        <button type="submit" class="btn btn-success btn-block"        [value]="botonIngresar" [disabled]="myForm.invalid"                     #testButton>Guardar</button>
+                        <button type="submit" class="btn btn-success btn-block" [value]="botonIngresar"
+                            [disabled]="myForm.invalid" #testButton>Guardar</button>
                     </div>
                 </form>
             </div>
@@ -95,7 +100,8 @@
             <div class="card-body mat-elevation-z5">
                 <h5 style="text-align: center;">Lista Productos</h5>
                 <mat-form-field class="example-full-width">
-                    <input (keyup)="applyFilter($event.target.value, 'nombre')" matInput [(ngModel)]="filterProducto" type="text" class="input-field" placeholder="Buscar Producto">
+                    <input (keyup)="applyFilter($event.target.value, 'nombre')" matInput [(ngModel)]="filterProducto"
+                        type="text" class="input-field" placeholder="Buscar Producto">
                     <button mat-button matPrefix mat-icon-button>
                         <mat-icon>search</mat-icon>
                     </button>
@@ -131,7 +137,8 @@
                                     </button>
                                 </td>
                                 <td mat-cell>
-                                    <button class="btn btn-sm btn-outline-danger" (click)="eliminarConfiguracionProducto(element)">
+                                    <button class="btn btn-sm btn-outline-danger"
+                                        (click)="eliminarConfiguracionProducto(element)">
                                         <i class="fa fa-trash" aria-hidden="true"></i>
                                     </button>
                                 </td>
