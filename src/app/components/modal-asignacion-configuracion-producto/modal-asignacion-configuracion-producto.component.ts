@@ -19,6 +19,8 @@ export class ModalAsignacionConfiguracionProductoComponent implements OnInit {
   producto = {
     idAsignarProductoKit: '',
     idConfigurarProducto: '',
+    idKit: '',
+    kit: '',
     nombre: '',
     presentacion: '',
     contenidoNeto: '',
@@ -39,6 +41,8 @@ export class ModalAsignacionConfiguracionProductoComponent implements OnInit {
               var producto = {
                 idAsignarProductoKit: '',
                 idConfigurarProducto: item.IdConfigurarProducto,
+                idKit: '',
+                kit: '',
                 nombre: item.Producto.Nombre,
                 presentacion: item.Presentacion.Descripcion,
                 contenidoNeto: item.CantidadMedida,
@@ -59,6 +63,8 @@ export class ModalAsignacionConfiguracionProductoComponent implements OnInit {
   agregarDetalle(producto) {
     this.producto.idAsignarProductoKit = producto.idAsignarProductoKit;
     this.producto.idConfigurarProducto = producto.idConfigurarProducto;
+    this.producto.idKit = producto.idKit;
+    this.producto.kit = producto.kit;
     this.producto.nombre = producto.nombre;
     this.producto.presentacion = producto.presentacion;
     this.producto.contenidoNeto = producto.contenidoNeto;
@@ -74,6 +80,8 @@ export class ModalAsignacionConfiguracionProductoComponent implements OnInit {
           var producto = {
             idAsignarProductoKit: item.IdAsignarProductoKit,
             idConfigurarProducto: item.ListaProductos.IdConfigurarProducto,
+            idKit: item.Kit.IdKit,
+            kit: item.Kit.Descripcion,
             nombre: item.ListaProductos.Producto.Nombre,
             presentacion: item.ListaProductos.Presentacion.Descripcion,
             contenidoNeto: item.ListaProductos.CantidadMedida,

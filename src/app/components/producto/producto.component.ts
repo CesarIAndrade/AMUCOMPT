@@ -44,7 +44,7 @@ export class ProductoComponent implements OnInit {
     })
   }
 
-  idConfiguracionProducto:string;
+  idConfiguracionProducto: string;
   idProducto: string;
   tipoProducto = '0';
   presentacion = '0';
@@ -56,8 +56,7 @@ export class ProductoComponent implements OnInit {
   selectPresentacion = true;
   selectMedida = true;
   inputNombreProducto = true;
-
-  CampoTipoProducto =false;
+  CampoTipoProducto = false;
 
   filteredOptions: Observable<string[]>;
 
@@ -106,10 +105,9 @@ export class ProductoComponent implements OnInit {
     },
   ];
 
-  Arrayproductos: any[] = [];
-  applyFilter(event,columna)
-  {
-    this._filterTable(event,this.productos);
+  ArrayProductos: any[] = [];
+  applyFilter(event, columna) {
+    this._filterTable(event, this.productos);
   }
   consultarTipoProductos() {
     this.inventarioService.consultarTipoProductos(localStorage.getItem('miCuenta.getToken'))
@@ -160,17 +158,15 @@ export class ProductoComponent implements OnInit {
       )
   }
 
-  consultarProductosTodos()
-  {
+  consultarConfiguracionProductoTodos() {
     this.inventarioService.consultarConfiguracionProductoTodos(
       localStorage.getItem('miCuenta.getToken')
     )
       .then(
         ok => {
-          
           this.productos = [];
           this.productos = ok['respuesta'];
-          this.Arrayproductos = ok['respuesta'];
+          this.ArrayProductos = ok['respuesta'];
         }
       )
       .catch(
@@ -179,15 +175,16 @@ export class ProductoComponent implements OnInit {
         }
       )
   }
+
   consultarProductos() {
     this.inventarioService.consultarConfiguracionProducto(
       localStorage.getItem('miCuenta.getToken')
     )
       .then(
-        ok => {          
-          this.nombresDeProductos = [];          
+        ok => {
+          this.nombresDeProductos = [];
+          console.log(ok['respuesta']);
           for (var i = 0; i < (ok['respuesta'].length); i++) {
-            this.nombresDeProductos[i] = ok['respuesta'][i].Producto.Nombre;
             this.nombresDeProductos[i] = {
               idProducto: ok['respuesta'][i].Producto.IdProducto,
               nombre: ok['respuesta'][i].Producto.Nombre,
@@ -197,7 +194,7 @@ export class ProductoComponent implements OnInit {
               idMedida: ok['respuesta'][i].Medida.IdMedida
             }
           }
-          this.consultarProductosTodos();
+          this.consultarConfiguracionProductoTodos();
           this.consultarTipoProductos();
           this.filteredOptions = this.myForm.get('_nombre').valueChanges
             .pipe(
@@ -241,7 +238,7 @@ export class ProductoComponent implements OnInit {
           this.crearProducto();
         } else if (this.testButton.nativeElement.value == 'modificar') {
           this.actualizarConfiguracionProducto();
-          
+
         }
       } else {
         console.log("Algo Salio Mal");
@@ -295,14 +292,13 @@ export class ProductoComponent implements OnInit {
     this.myForm.get('_nombre').disable();
     this.myForm.get('_descripcion').disable();
     this.myForm.get('_codigo').disable();
-    this.CampoTipoProducto =true;
-
-    this.idConfiguracionProducto=producto.IdConfigurarProducto;    
+    this.CampoTipoProducto = true;
+    this.idConfiguracionProducto = producto.IdConfigurarProducto;
     this.myForm.get('_nombre').setValue(producto.Producto.Nombre);
     this.myForm.get('_descripcion').setValue(producto.Producto.Descripcion);
     this.myForm.get('_codigo').setValue(producto.Producto.Codigo);
     this.myForm.get('_contenidoNeto').setValue(producto.CantidadMedida);
-    this.tipoProducto=producto.Producto.TipoProducto.IdTipoProducto;
+    this.tipoProducto = producto.Producto.TipoProducto.IdTipoProducto;
     this.presentacion = producto.Presentacion.IdPresentacion;
     this.medida = producto.Medida.IdMedida;
     this.idProducto = producto.Producto.IdProducto;
@@ -316,7 +312,7 @@ export class ProductoComponent implements OnInit {
       this.idProducto,
       this.medida,
       this.presentacion,
-      this.myForm.get('_contenidoNeto').value,   
+      this.myForm.get('_contenidoNeto').value,
       localStorage.getItem('miCuenta.putToken')
     )
       .then(
@@ -344,8 +340,8 @@ export class ProductoComponent implements OnInit {
             this.consultarProductos();
             this.myForm.get('_nombre').enable();
             this.myForm.get('_descripcion').enable();
-            this.myForm.get('_codigo').enable();    
-            this.CampoTipoProducto =false;
+            this.myForm.get('_codigo').enable();
+            this.CampoTipoProducto = false;
           }
         }
       )
@@ -400,15 +396,12 @@ export class ProductoComponent implements OnInit {
   }
 
   eliminarProducto(idProducto) {
-    
     this.inventarioService.eliminarProducto(
       idProducto.IdConfigurarProducto,
       localStorage.getItem('miCuenta.deleteToken')
     )
       .then(
         ok => {
-          console.log(ok['respuesta']);
-          
           this.consultarProductos();
         }
       )
@@ -419,11 +412,11 @@ export class ProductoComponent implements OnInit {
       )
   }
 
-  crearConfiguracionProducto() {    
+  crearConfiguracionProducto() {
     this.inventarioService.crearConfiguracionProducto(
       localStorage.getItem('miCuenta.idAsignacionTipoUsuario'),
       this.idProducto,
-      this.medida, 
+      this.medida,
       this.presentacion,
       this.myForm.get('_contenidoNeto').value,
       localStorage.getItem('miCuenta.postToken')
@@ -455,8 +448,8 @@ export class ProductoComponent implements OnInit {
             this.consultarProductos();
             this.myForm.get('_nombre').enable();
             this.myForm.get('_descripcion').enable();
-            this.myForm.get('_codigo').enable();    
-            this.CampoTipoProducto =false;
+            this.myForm.get('_codigo').enable();
+            this.CampoTipoProducto = false;
           }
         }
       )
@@ -550,16 +543,15 @@ export class ProductoComponent implements OnInit {
   get _contenidoNeto() {
     return this.myForm.get('_contenidoNeto');
   }
-  onKeydownEvent(event)
-  {
+  onKeydownEvent(event) {
     this.idProducto = '';
-    this.nombreProducto='';
+    this.nombreProducto = '';
   }
-  test(option) {    
+  test(option) {
     this.myForm.get('_nombre').disable();
     this.myForm.get('_descripcion').disable();
-    this.myForm.get('_codigo').disable();    
-    this.CampoTipoProducto =true;
+    this.myForm.get('_codigo').disable();
+    this.CampoTipoProducto = true;
 
     this.medida = option.idMedida
     this.idProducto = option.idProducto;
@@ -577,18 +569,14 @@ export class ProductoComponent implements OnInit {
 
   tablaProductos = ['nombre', 'tipoProducto', 'codigo', 'acciones'];
 
-  private _filterTable(value: string,arreglo: any[]) {
+  private _filterTable(value: string, arreglo: any[]) {
     const filterValue = value.toLowerCase();
-    if(value == '')
-    {
-      this.productos = this.Arrayproductos;
-    }else
-    {
-      this.productos = this.Arrayproductos.filter(option =>option['Producto']['Nombre'].trim().toLowerCase().includes(filterValue.trim()));
-      
+    if (value == '') {
+      this.productos = this.ArrayProductos;
+    } else {
+      this.productos = this.ArrayProductos.filter(option => option['Producto']['Nombre'].trim().toLowerCase().includes(filterValue.trim()));
     }
   }
-
 
   private _filter(value: string): string[] {
     const filterValue = value.toLowerCase();

@@ -1,8 +1,14 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { DetallesCompra } from 'src/app/interfaces/detalles-compra/detalles-compra';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material';
+
+// Component
 import { ModalAsignacionConfiguracionProductoComponent } from '../modal-asignacion-configuracion-producto/modal-asignacion-configuracion-producto.component';
+
+// Interfaces
+import { DetallesCompra } from 'src/app/interfaces/detalles-compra/detalles-compra';
+
+// Services
 import { InventarioService } from 'src/app/services/inventario.service';
 
 // SweetAlert
@@ -28,14 +34,16 @@ export class CompraComponent implements OnInit {
       _codigo: new FormControl('', [Validators.required]),
       _idConfigurarProducto: new FormControl(''),
       _idAsignarProductoKit: new FormControl(''),
+      _idKit: new FormControl(''),
+      _kit: new FormControl(''),
       _producto: new FormControl('', [Validators.required]),
       _cantidad: new FormControl('', [Validators.required]),
       _fechaExpiracion: new FormControl((new Date()).toJSON(), [Validators.required]),
       _precio: new FormControl('', [Validators.required]),
-      _kit: new FormControl(''),
     })
   }
 
+  codigo = '000';
   botonInsertar = 'ingresar';
   idCabecera: string
   tipoTransaccion: string;
@@ -44,28 +52,10 @@ export class CompraComponent implements OnInit {
   seccionKit = true;
   seleccionKit = false
 
-  detallesCompra: DetallesCompra[] = [
-    {
-      IdProducto: '1',
-      IdKit: '1',
-      Kit: 'Colas',
-      Producto: 'Coca Cola',
-      Presentacion: 'Botella',
-      ContenidoNeto: '1',
-      Medida: 'Litros'
-    },
-    {
-      IdProducto: '1',
-      IdKit: '',
-      Kit: '',
-      Producto: 'Agua',
-      Presentacion: 'Botella',
-      ContenidoNeto: '1',
-      Medida: 'Litros'
-    },
-  ];
+  detallesCompra: any[] = [];
   kits: any[] = [];
   listaProductosDeUnKit: any[] = [];
+  facturasNoFinalizadas: any[] = [];
 
   varificarTipoCompra(tipoCompra) {
     if (tipoCompra.value == '2') {
@@ -125,6 +115,61 @@ export class CompraComponent implements OnInit {
       )
   }
 
+  consultarDetalleFactura() {
+    this.inventarioService.consultarDetalleFactura(
+      this.idCabecera,
+      localStorage.getItem('miCuenta.getToken')
+    )
+      .then(
+        ok => {
+          this.detallesCompra = [];
+          var detalleCompra: DetallesCompra;
+          console.log(ok['respuesta']);
+          ok['respuesta'].map(
+            item => {
+              item.DetalleFactura.map(
+                producto => {
+                  if (producto.AsignarProductoKits != null) {
+                    console.log(producto);
+                    detalleCompra = {
+                      IdDetalleFactura: producto.IdDetalleFactura,
+                      IdCabeceraFactura: producto.IdCabeceraFactura,
+                      IdProducto: producto.AsignarProductoKits.ListaAsignarProductoKit[0].IdConfigurarProducto,
+                      // IdKit: producto.AsignarProductoKits.IdKit,
+                      // Kit: producto.AsignarProductoKits.Descripcion,
+                      Producto: producto.AsignarProductoKits.ListaAsignarProductoKit[0].ListaProductos.Producto.Nombre,
+                      Presentacion: producto.AsignarProductoKits.ListaAsignarProductoKit[0].ListaProductos.Presentacion.Descripcion,
+                      ContenidoNeto: producto.AsignarProductoKits.ListaAsignarProductoKit[0].ListaProductos.CantidadMedida,
+                      Medida: producto.AsignarProductoKits.ListaAsignarProductoKit[0].ListaProductos.Medida.Descripcion
+                    }
+                    this.detallesCompra.push(detalleCompra);
+                  } else {
+                    detalleCompra = {
+                      IdDetalleFactura: producto.IdDetalleFactura,
+                      IdCabeceraFactura: producto.IdCabeceraFactura,
+                      IdProducto: producto.ConfigurarProductos.IdConfigurarProducto,
+                      IdKit: '',
+                      Kit: '',
+                      Producto: producto.ConfigurarProductos.Producto.Nombre,
+                      Presentacion: producto.ConfigurarProductos.Presentacion.Descripcion,
+                      ContenidoNeto: producto.ConfigurarProductos.CantidadMedida,
+                      Medida: producto.ConfigurarProductos.Medida.Descripcion
+                    }
+                    this.detallesCompra.push(detalleCompra);
+                  }
+                }
+              )
+            }
+          )
+        }
+      )
+      .catch(
+        error => {
+          console.log(error);
+        }
+      )
+  }
+
   consultarKitsYSusProductos(idKit) {
     this.inventarioService.consultarKitsYSusProductos(
       idKit,
@@ -143,6 +188,22 @@ export class CompraComponent implements OnInit {
       )
   }
 
+  consultarFacturasNoFinalizadas() {
+    this.inventarioService.consultarFacturasNoFinalizadas(
+      localStorage.getItem('miCuenta.getToken')
+    )
+      .then(
+        ok => {
+          this.facturasNoFinalizadas = ok['respuesta'];
+        }
+      )
+      .catch(
+        error => {
+          console.log(error);
+        }
+      )
+  }
+
   onChangeSelectKit(idKit) {
     this.seleccionKit = false;
     this.consultarKitsYSusProductos(idKit);
@@ -150,7 +211,11 @@ export class CompraComponent implements OnInit {
 
   validarFormulario() {
     if (this.myForm.valid) {
-      this.crearCabeceraFactura();
+      if (this.testButton.nativeElement.value == 'ingresar') {
+        this.crearCabeceraFactura();
+      } else if (this.testButton.nativeElement.value == 'agregarDetalles') {
+        this.crearDetalleFactura();
+      }
     }
   }
 
@@ -170,6 +235,7 @@ export class CompraComponent implements OnInit {
           } else {
             this.idCabecera = ok['respuesta'];
             this.crearDetalleFactura();
+            this.testButton.nativeElement.value = 'agregarDetalles';
           }
         }
       )
@@ -194,11 +260,12 @@ export class CompraComponent implements OnInit {
       )
         .then(
           ok => {
-
             if (ok['respuesta']) {
-              sweetAlert("Todo bien!", {
-                icon: "success",
-              });
+              this.consultarDetalleFactura();
+              this.codigo = this._codigo.value;
+              this.myForm.reset();
+              this._fechaExpiracion.setValue((new Date()).toJSON());
+              this._codigo.setValue(this.codigo);
             } else {
               sweetAlert("Ha ocurrido un error!", {
                 icon: "error",
@@ -224,11 +291,12 @@ export class CompraComponent implements OnInit {
       )
         .then(
           ok => {
-
             if (ok['respuesta']) {
-              sweetAlert("Todo bien!", {
-                icon: "success",
-              });
+              this.consultarDetalleFactura();
+              this.codigo = this._codigo.value;
+              this.myForm.reset();
+              this._fechaExpiracion.setValue((new Date()).toJSON());
+              this._codigo.setValue(this.codigo);
             } else {
               sweetAlert("Ha ocurrido un error!", {
                 icon: "error",
@@ -244,10 +312,17 @@ export class CompraComponent implements OnInit {
     }
   }
 
+  mostrarDetalleFactura(detalleCompra) {
+    // var producto = detalleCompra.Nombre +' '+ detalleCompra.Presentacion +' '+                  detalleCompra.ContenidoNeto +' '+ detalleCompra.Medida;
+    // this._producto.setValue(producto);
+    // this._cantidad.setValue()
+    console.log(detalleCompra);
+  }
+
   seleccionarProducto(kit) {
     let dialogRef = this.modalAsignacionConfiguracionProducto.open(ModalAsignacionConfiguracionProductoComponent, {
-      width: '50rem',
-      height: '50rem',
+      width: '500px',
+      height: '500px',
       data: {
         listaProductosDeUnKit: this.listaProductosDeUnKit,
       }
@@ -259,13 +334,63 @@ export class CompraComponent implements OnInit {
         this._idConfigurarProducto.setValue(result.idConfigurarProducto);
         this._producto.setValue(producto);
         this._idAsignarProductoKit.setValue(result.idAsignarProductoKit);
-        console.log(this._idAsignarProductoKit.value);
       }
     });
   }
 
-  quitarDetalle(producto) {
-    console.log(producto);
+  quitarDetalle(detalleProducto) {
+    this.inventarioService.eliminarDetalleFactura(
+      detalleProducto.IdDetalleFactura,
+      detalleProducto.IdCabeceraFactura,
+      localStorage.getItem('miCuenta.deleteToken')
+    )
+      .then(
+        ok => {
+          console.log(ok['respuesta']);
+          this.consultarDetalleFactura();
+        }
+      )
+      .catch(
+        error => {
+          console.log(error);
+        }
+      )
+  }
+
+  realizarCompra() {
+
+  }
+
+  actualizarFactura(factura) {
+    this.detallesCompra = [];
+    var detalleCompra: DetallesCompra;
+    factura.DetalleFactura.map(
+      item => {
+        if (item.AsignarProductoKits != null) {
+          detalleCompra = {
+            IdProducto: item.AsignarProductoKits.ListaAsignarProductoKit[0].IdConfigurarProducto,
+            IdKit: item.AsignarProductoKits.IdKit,
+            Kit: item.AsignarProductoKits.Descripcion,
+            Producto: item.AsignarProductoKits.ListaAsignarProductoKit[0].ListaProductos.Producto.Nombre,
+            Presentacion: item.AsignarProductoKits.ListaAsignarProductoKit[0].ListaProductos.Presentacion.Descripcion,
+            ContenidoNeto: item.AsignarProductoKits.ListaAsignarProductoKit[0].ListaProductos.CantidadMedida,
+            Medida: item.AsignarProductoKits.ListaAsignarProductoKit[0].ListaProductos.Medida.Descripcion
+          }
+          this.detallesCompra.push(detalleCompra);
+        } else {
+          detalleCompra = {
+            IdProducto: item.ConfigurarProductos.IdConfigurarProducto,
+            IdKit: '',
+            Kit: '',
+            Producto: item.ConfigurarProductos.Producto.Nombre,
+            Presentacion: item.ConfigurarProductos.Presentacion.Descripcion,
+            ContenidoNeto: item.ConfigurarProductos.CantidadMedida,
+            Medida: item.ConfigurarProductos.Medida.Descripcion
+          }
+          this.detallesCompra.push(detalleCompra);
+        }
+      }
+    )
   }
 
   get _codigo() {
@@ -274,6 +399,10 @@ export class CompraComponent implements OnInit {
 
   get _cantidad() {
     return this.myForm.get('_cantidad');
+  }
+
+  get _idKit() {
+    return this.myForm.get('_idKit');
   }
 
   get _kit() {
@@ -303,10 +432,9 @@ export class CompraComponent implements OnInit {
   ngOnInit() {
     this.consultarKits();
     this.consultarTipoTransaccion();
-    console.log(localStorage.getItem('miCuenta.idAsignacionTipoUsuario'));
-    console.log(localStorage.getItem('miCuenta.getToken'));
+    this.consultarFacturasNoFinalizadas();
   }
 
   tablaDetalleCompra = ['kit', 'descripcion', 'acciones'];
-
+  tablaFacturasNoFinalidas = ['codigo', 'usuario', 'fecha', 'acciones'];
 }

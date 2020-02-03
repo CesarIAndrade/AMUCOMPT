@@ -1,4 +1,6 @@
 export interface DetallesCompra {
+    IdDetalleFactura?: string;
+    IdCabeceraFactura?: string;
     IdProducto?: string;
     IdKit?: string;
     Kit?: string;

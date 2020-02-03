@@ -16,6 +16,7 @@ import { TipoUsuario } from 'src/app/interfaces/tipo-usuario/tipo-usuario';
 export class LoginComponent implements OnInit {
 
   myForm: FormGroup;
+  
   constructor(private usuarioService: UsuarioService,
     private router: Router,
     private seguridadService: SeguridadService
@@ -43,9 +44,8 @@ export class LoginComponent implements OnInit {
         .then(
           ok => {
             if (ok['codigo'] == '200') {
-              this.tipoUsuarios = ok['respuesta']['ListaTipoUsuario'];
-              console.log(this.tipoUsuarios);
               this.ingresarCredenciales = true;
+              this.tipoUsuarios = ok['respuesta']['ListaTipoUsuario'];
               this.seleccionarTipoUsuario = false;
               this.consultarTokens();
             } else {

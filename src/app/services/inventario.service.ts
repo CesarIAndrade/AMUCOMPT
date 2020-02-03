@@ -655,6 +655,24 @@ export class InventarioService {
     })
   }
 
+  consultarFacturasNoFinalizadas(_token: string) {
+    const body = new HttpParams()
+      .set('encriptada', _token)
+    return new Promise((resolve, reject) => {
+      this.http.post(this.apiUrl + 'Factura/ListaFacturasNoFinalizadas', body.toString(),
+        {
+          headers: new HttpHeaders()
+            .set('Content-Type', 'application/x-www-form-urlencoded')
+        }
+      )
+        .subscribe(res => {
+          resolve(res);
+        }, (err) => {
+          reject(err);
+        })
+    })
+  }
+
   crearCabeceraFactura(
     codigo: string,
     idAsignacionTU: string,
@@ -666,9 +684,27 @@ export class InventarioService {
       .set('IdAsignacionTU', idAsignacionTU)
       .set('IdTipoTransaccion', idTipoTransaccion)
       .set('encriptada', _token)
-    console.log(body);
     return new Promise((resolve, reject) => {
       this.http.post(this.apiUrl + 'Factura/IngresoCabeceraFactura', body.toString(),
+        {
+          headers: new HttpHeaders()
+            .set('Content-Type', 'application/x-www-form-urlencoded')
+        }
+      )
+        .subscribe(res => {
+          resolve(res);
+        }, (err) => {
+          reject(err);
+        })
+    })
+  }
+
+  consultarDetalleFactura(idCabecera: string, _token: string) {
+    const body = new HttpParams()
+      .set('IdCabeceraFactura', idCabecera)
+      .set('encriptada', _token)
+    return new Promise((resolve, reject) => {
+      this.http.post(this.apiUrl + 'Factura/ListaFacturaDetalle', body.toString(),
         {
           headers: new HttpHeaders()
             .set('Content-Type', 'application/x-www-form-urlencoded')
@@ -703,6 +739,65 @@ export class InventarioService {
       .set('encriptada', _token)
     return new Promise((resolve, reject) => {
       this.http.post(this.apiUrl + 'Factura/IngresoDetalleFactura', body.toString(),
+        {
+          headers: new HttpHeaders()
+            .set('Content-Type', 'application/x-www-form-urlencoded')
+        }
+      )
+        .subscribe(res => {
+          resolve(res);
+        }, (err) => {
+          reject(err);
+        })
+    })
+  }
+
+  actualizarDetalleFactura(
+    idDetalleFactura: string,
+    idCabeceraFactura: string,
+    idRelacionLogica: string,
+    perteneceKit: string,
+    cantidad: string,
+    fechaExpiracion: string,
+    precio: string,
+    faltante: string,
+    _token: string
+  ) {
+    const body = new HttpParams()
+      .set('IdCabeceraFactura', idCabeceraFactura)
+      .set('IdDetalleFactura', idDetalleFactura)
+      .set('IdRelacionLogica', idRelacionLogica)
+      .set('PerteneceKit', perteneceKit)
+      .set('Cantidad', cantidad)
+      .set('FechaExpedicion', fechaExpiracion)
+      .set('ValorUnitario', precio)
+      .set('Faltante', faltante)
+      .set('encriptada', _token)
+    return new Promise((resolve, reject) => {
+      this.http.post(this.apiUrl + '', body.toString(),
+        {
+          headers: new HttpHeaders()
+            .set('Content-Type', 'application/x-www-form-urlencoded')
+        }
+      )
+        .subscribe(res => {
+          resolve(res);
+        }, (err) => {
+          reject(err);
+        })
+    })
+  }
+
+  eliminarDetalleFactura(
+    idDetalleFactura: string, 
+    idCabeceraFactura: string, 
+    _token: string) {
+    const body = new HttpParams()
+      .set('IdDetalleFactura', idDetalleFactura)
+      .set('IdCabeceraFactura', idCabeceraFactura)
+      .set('encriptada', _token)
+    return new Promise((resolve, reject) => {
+      this.http.post(this.apiUrl + 'Factura/EliminarDetalleFactura', body.toString(),
         {
           headers: new HttpHeaders()
             .set('Content-Type', 'application/x-www-form-urlencoded')

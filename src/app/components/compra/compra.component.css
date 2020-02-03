@@ -3,6 +3,11 @@
     overflow: auto;
 }
 
+.tablaFacturasNoFinalidas {
+    height: 20rem;
+    overflow: auto;
+}
+
 table {
     width: 100%;
 }
