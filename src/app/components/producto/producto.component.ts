@@ -139,7 +139,6 @@ export class ProductoComponent implements OnInit {
       .then(
         ok => {
           this.nombresDeProductos = [];
-          console.log(ok['respuesta']);
           for (var i = 0; i < (ok['respuesta'].length); i++) {
             this.nombresDeProductos[i] = {
               idProducto: ok['respuesta'][i].Producto.IdProducto,
@@ -431,18 +430,6 @@ export class ProductoComponent implements OnInit {
     });
   }
 
-  onChangeSelectTipoProducto(value) {
-
-  }
-
-  onChangeSelectPresentacion(value) {
-
-  }
-
-  onChangeSelectMedida(value) {
-
-  }
-
   get _nombre() {
     return this.myForm.get('_nombre');
   }
@@ -505,11 +492,11 @@ export class ProductoComponent implements OnInit {
   tablaProductos = ['nombre', 'tipoProducto', 'codigo', 'acciones'];
 
   private _filterTable(value: string, arreglo: any[]) {
-    const filterValue = value.toLowerCase();
+    const filterValue = value;
     if (value == '') {
       this.productos = this.ArrayProductos;
     } else {
-      this.productos = this.ArrayProductos.filter(option => option['Producto']['Nombre'].trim().toLowerCase().includes(filterValue.trim()));
+      this.productos = this.ArrayProductos.filter(option => option['Producto']['Nombre'].trim().includes(filterValue.trim()));
     }
   }
 

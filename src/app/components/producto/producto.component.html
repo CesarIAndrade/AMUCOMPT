@@ -5,7 +5,7 @@
                 <h5 style="text-align: center;">Nuevo Producto</h5>
                 <form [formGroup]="myForm" (ngSubmit)="validarFormulario()" novalidate>
                     <mat-form-field class="example-full-width">
-                        <input (keyup)=onKeydownEvent($event.target.value) matInput formControlName="_nombre"
+                        <input matInput formControlName="_nombre"
                             type="text" placeholder="Producto" [matAutocomplete]="auto">
                         <mat-autocomplete #auto="matAutocomplete">
                             <mat-option (onSelectionChange)="seleccionarProductoSiExiste(option)"
@@ -21,8 +21,7 @@
                     </mat-form-field>
                     <mat-form-field class="example-full-width">
                         <mat-label>Tipo Producto</mat-label>
-                        <mat-select formControlName="_tipoProducto"
-                            (selectionChange)="onChangeSelectTipoProducto($event.value)">
+                        <mat-select formControlName="_tipoProducto">
                             <mat-option *ngFor="let item of tipoProductos" [value]="item.IdTipoProducto">
                                 {{item.Descripcion}}
                             </mat-option>
@@ -43,8 +42,7 @@
                     </mat-form-field>
                     <mat-form-field class="example-full-width">
                         <mat-label>Presentación</mat-label>
-                        <mat-select formControlName="_presentacion"
-                            (selectionChange)="onChangeSelectPresentacion($event.value)">
+                        <mat-select formControlName="_presentacion">
                             <mat-option *ngFor="let item of presentaciones" [value]="item.IdPresentacion">
                                 {{item.Descripcion}}
                             </mat-option>
@@ -71,8 +69,7 @@
                         <div class="col-lg-6">
                             <mat-form-field class="example-full-width">
                                 <mat-label>Medida</mat-label>
-                                <mat-select formControlName="_medida"
-                                    (selectionChange)="onChangeSelectMedida($event.value)">
+                                <mat-select formControlName="_medida">
                                     <mat-option *ngFor="let item of medidas" [value]="item.IdMedida">
                                         {{item.Descripcion}}
                                     </mat-option>

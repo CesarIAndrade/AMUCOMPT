@@ -63,6 +63,7 @@ export class CompraComponent implements OnInit {
       this.seccionKit = false;
       this.seccionProducto = false;
     } else {
+      this.listaProductosDeUnKit = [];
       this.seccionProducto = false;
       this.seccionKit = true;
     }
@@ -258,26 +259,26 @@ export class CompraComponent implements OnInit {
         '0',
         localStorage.getItem('miCuenta.postToken')
       )
-        .then(
-          ok => {
-            if (ok['respuesta']) {
-              this.consultarDetalleFactura();
-              this.codigo = this._codigo.value;
-              this.myForm.reset();
-              this._fechaExpiracion.setValue((new Date()).toJSON());
-              this._codigo.setValue(this.codigo);
-            } else {
-              sweetAlert("Ha ocurrido un error!", {
-                icon: "error",
-              });
-            }
-          }
-        )
-        .catch(
-          error => {
-            console.log(error);
-          }
-        )
+        // .then(
+        //   ok => {
+        //     if (ok['respuesta']) {
+        //       this.consultarDetalleFactura();
+        //       this.codigo = this._codigo.value;
+        //       this.myForm.reset();
+        //       this._fechaExpiracion.setValue((new Date()).toJSON());
+        //       this._codigo.setValue(this.codigo);
+        //     } else {
+        //       sweetAlert("Ha ocurrido un error!", {
+        //         icon: "error",
+        //       });
+        //     }
+        //   }
+        // )
+        // .catch(
+        //   error => {
+        //     console.log(error);
+        //   }
+        // )
     } else {
       this.inventarioService.crearDetalleFactura(
         this.idCabecera,
@@ -289,26 +290,26 @@ export class CompraComponent implements OnInit {
         '0',
         localStorage.getItem('miCuenta.postToken')
       )
-        .then(
-          ok => {
-            if (ok['respuesta']) {
-              this.consultarDetalleFactura();
-              this.codigo = this._codigo.value;
-              this.myForm.reset();
-              this._fechaExpiracion.setValue((new Date()).toJSON());
-              this._codigo.setValue(this.codigo);
-            } else {
-              sweetAlert("Ha ocurrido un error!", {
-                icon: "error",
-              });
-            }
-          }
-        )
-        .catch(
-          error => {
-            console.log(error);
-          }
-        )
+        // .then(
+        //   ok => {
+        //     if (ok['respuesta']) {
+        //       this.consultarDetalleFactura();
+        //       this.codigo = this._codigo.value;
+        //       this.myForm.reset();
+        //       this._fechaExpiracion.setValue((new Date()).toJSON());
+        //       this._codigo.setValue(this.codigo);
+        //     } else {
+        //       sweetAlert("Ha ocurrido un error!", {
+        //         icon: "error",
+        //       });
+        //     }
+        //   }
+        // )
+        // .catch(
+        //   error => {
+        //     console.log(error);
+        //   }
+        // )
     }
   }
 
@@ -329,6 +330,7 @@ export class CompraComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result != null) {
+        console.log(result);
         var producto = result.nombre + ' ' + result.presentacion + ' ' + result.contenidoNeto
           + ' ' + result.medida;
         this._idConfigurarProducto.setValue(result.idConfigurarProducto);
