@@ -252,64 +252,64 @@ export class CompraComponent implements OnInit {
       this.inventarioService.crearDetalleFactura(
         this.idCabecera,
         this._idConfigurarProducto.value,
-        '0',
+        'false',
         this._cantidad.value,
         this._fechaExpiracion.value.split('T')[0],
         this._precio.value,
         '0',
         localStorage.getItem('miCuenta.postToken')
       )
-        // .then(
-        //   ok => {
-        //     if (ok['respuesta']) {
-        //       this.consultarDetalleFactura();
-        //       this.codigo = this._codigo.value;
-        //       this.myForm.reset();
-        //       this._fechaExpiracion.setValue((new Date()).toJSON());
-        //       this._codigo.setValue(this.codigo);
-        //     } else {
-        //       sweetAlert("Ha ocurrido un error!", {
-        //         icon: "error",
-        //       });
-        //     }
-        //   }
-        // )
-        // .catch(
-        //   error => {
-        //     console.log(error);
-        //   }
-        // )
+        .then(
+          ok => {
+            if (ok['respuesta']) {
+              this.consultarDetalleFactura();
+              this.codigo = this._codigo.value;
+              this.myForm.reset();
+              this._fechaExpiracion.setValue((new Date()).toJSON());
+              this._codigo.setValue(this.codigo);
+            } else {
+              sweetAlert("Ha ocurrido un error!", {
+                icon: "error",
+              });
+            }
+          }
+        )
+        .catch(
+          error => {
+            console.log(error);
+          }
+        )
     } else {
       this.inventarioService.crearDetalleFactura(
         this.idCabecera,
         this._idAsignarProductoKit.value,
-        '1',
+        'true',
         this._cantidad.value,
         this._fechaExpiracion.value.split('T')[0],
         this._precio.value,
         '0',
         localStorage.getItem('miCuenta.postToken')
       )
-        // .then(
-        //   ok => {
-        //     if (ok['respuesta']) {
-        //       this.consultarDetalleFactura();
-        //       this.codigo = this._codigo.value;
-        //       this.myForm.reset();
-        //       this._fechaExpiracion.setValue((new Date()).toJSON());
-        //       this._codigo.setValue(this.codigo);
-        //     } else {
-        //       sweetAlert("Ha ocurrido un error!", {
-        //         icon: "error",
-        //       });
-        //     }
-        //   }
-        // )
-        // .catch(
-        //   error => {
-        //     console.log(error);
-        //   }
-        // )
+        .then(
+          ok => {
+            if (ok['respuesta']) {
+              this.consultarDetalleFactura();
+              this.codigo = this._codigo.value;
+              this.myForm.reset();
+              this._fechaExpiracion.setValue((new Date()).toJSON());
+              this._codigo.setValue(this.codigo);
+            } else {
+              sweetAlert("Ha ocurrido un error!", {
+                icon: "error",
+              });
+            }
+          }
+        )
+        .catch(
+          error => {
+            console.log(error);
+          }
+        )
     }
   }
 
