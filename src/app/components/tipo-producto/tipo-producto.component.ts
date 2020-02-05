@@ -23,19 +23,15 @@ export class TipoProductoComponent implements OnInit {
   constructor(private inventarioService: InventarioService
   ) {
     this.myForm = new FormGroup({
-      _tipoProducto: new FormControl('', [Validators.required])
+      _tipoProducto: new FormControl('', [Validators.required]),
+      _idTipoProducto: new FormControl(''),
     })
   }
 
-  tipoProductos: TipoProducto[] = [];
   filterTipoProducto = '';
   botonIngresar = 'ingresar';
-  idTipoProducto = '0';
-  inputTipoProducto = true;
 
-  onChangeInputTipoUsuario() {
-    this.inputTipoProducto = true;
-  }
+  tipoProductos: TipoProducto[] = [];
 
   consultarTipoProductos() {
     this.inventarioService.consultarTipoProductos(localStorage.getItem('miCuenta.getToken'))
@@ -66,7 +62,7 @@ export class TipoProductoComponent implements OnInit {
 
   crearTipoProducto() {
     this.inventarioService.crearTipoProducto(
-      this.myForm.get('_tipoProducto').value,
+      this._tipoProducto.value,
       localStorage.getItem('miCuenta.postToken')
     )
       .then(
@@ -77,7 +73,9 @@ export class TipoProductoComponent implements OnInit {
             });
             this.myForm.reset();
           } else if(ok['respuesta'] == '400') {
-            this.inputTipoProducto = false;
+            sweetAlert("Tipo Producto ya xiste!", {
+              icon: "warning",
+            });
           } else if(ok['respuesta'] == 'false') {
             sweetAlert("Ha ocurrido un error!", {
               icon: "error",
@@ -99,17 +97,15 @@ export class TipoProductoComponent implements OnInit {
   }
 
   mostrarTipoProducto(tipoProducto) {
-    this.idTipoProducto = tipoProducto.IdTipoProducto;
-    this.myForm.setValue({
-      _tipoProducto: tipoProducto.Descripcion 
-    })
+    this._idTipoProducto .setValue(tipoProducto.IdTipoProducto);
+    this._tipoProducto.setValue(tipoProducto.Descripcion)
     this.testButton.nativeElement.value = 'modificar';
   }
 
   actualizarTipoProducto() {
     this.inventarioService.actualizarTipoProducto(
-      this.idTipoProducto,
-      this.myForm.get('_tipoProducto').value,
+      this._idTipoProducto.value,
+      this._tipoProducto.value,
       localStorage.getItem('miCuenta.putToken')
     )
     .then(
@@ -119,7 +115,9 @@ export class TipoProductoComponent implements OnInit {
             icon: "warning",
           });
         } else if(ok['respuesta'] == '400') {
-          this.inputTipoProducto = false;
+          sweetAlert("Tipo Producto ya xiste!", {
+            icon: "warning",
+          });
         } else if(ok['respuesta'] == 'false') {
           sweetAlert("Ha ocurrido un error!", {
             icon: "error",
@@ -180,6 +178,10 @@ export class TipoProductoComponent implements OnInit {
 
   get _tipoProducto() {
     return this.myForm.get('_tipoProducto');
+  }
+
+  get _idTipoProducto() {
+    return this.myForm.get('_idTipoProducto');
   }
 
   ngOnInit() {

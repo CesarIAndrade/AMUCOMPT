@@ -23,20 +23,15 @@ export class KitComponent implements OnInit {
   constructor(private inventarioService: InventarioService) {
     this.myForm = new FormGroup({
       _kit: new FormControl('', [Validators.required]),
-      _codigo: new FormControl('', [Validators.required])
+      _codigo: new FormControl('', [Validators.required]),
+      _idKit: new FormControl(''),
     })
   }
 
   filterKit = '';
-  idKit = '0';
   botonIngresar = 'ingresar';
-  inputKit = true;
 
   kits: Kit[] = [];
-
-  onChangeInputKit() {
-    this.inputKit = true;
-  }
 
   consultarKits() {
     this.inventarioService.consultarKits(
@@ -69,8 +64,8 @@ export class KitComponent implements OnInit {
 
   crearKit() {
     this.inventarioService.crearKit(
-      this.myForm.get('_kit').value,
-      this.myForm.get('_codigo').value,
+      this._kit.value,
+      this._codigo.value,
       localStorage.getItem('miCuenta.postToken')
     )
       .then(
@@ -81,7 +76,9 @@ export class KitComponent implements OnInit {
             });
             this.myForm.reset();
           } else if (ok['respuesta'] == '400') {
-            this.inputKit = false;
+            sweetAlert("Kit ya existe!", {
+              icon: "warning",
+            });
           } else if (ok['respuesta'] == 'false') {
             sweetAlert("Ha ocurrido un error!", {
               icon: "error",
@@ -103,19 +100,17 @@ export class KitComponent implements OnInit {
   }
 
   mostrarKit(kit) {
-    this.idKit = kit.IdKit;
-    this.myForm.setValue({
-      _kit: kit.Descripcion,
-      _codigo: kit.Codigo
-    })
+    this._idKit.setValue(kit.IdKit);
+    this._kit.setValue(kit.Descripcion);
+    this._codigo.setValue(kit.Codigo);
     this.testButton.nativeElement.value = 'modificar';
   }
 
   actualizarKit() {
     this.inventarioService.actualizarKit(
-      this.idKit,
-      this.myForm.get('_kit').value,
-      this.myForm.get('_codigo').value,
+      this._idKit.value,
+      this._kit.value,
+      this._codigo.value,
       localStorage.getItem('miCuenta.putToken')
     )
       .then(
@@ -125,7 +120,9 @@ export class KitComponent implements OnInit {
               icon: "warning",
             });
           } else if (ok['respuesta'] == '400') {
-            this.inputKit = false;
+            sweetAlert("Kit ya existe!", {
+              icon: "warning",
+            });
           } else if (ok['respuesta'] == 'false') {
             sweetAlert("Ha ocurrido un error!", {
               icon: "error",
@@ -173,7 +170,6 @@ export class KitComponent implements OnInit {
                     icon: "error",
                   });
                 }
-
               }
             )
             .catch(
@@ -191,6 +187,10 @@ export class KitComponent implements OnInit {
 
   get _codigo() {
     return this.myForm.get('_codigo');
+  }
+
+  get _idKit() {
+    return this.myForm.get('_idKit');
   }
 
   ngOnInit() {

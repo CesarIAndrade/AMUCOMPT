@@ -51,6 +51,7 @@ import { ArmarKitComponent } from './components/armar-kit/armar-kit.component';
 import { ModalDetalleProductoComponent } from './components/modal-detalle-producto/modal-detalle-producto.component';
 import { CuentaComponent } from './components/cuenta/cuenta.component';
 import { ModalAsignacionConfiguracionProductoComponent } from './components/modal-asignacion-configuracion-producto/modal-asignacion-configuracion-producto.component';
+import { StockComponent } from './components/stock/stock.component';
 
 @NgModule({
   declarations: [
@@ -82,6 +83,7 @@ import { ModalAsignacionConfiguracionProductoComponent } from './components/moda
     ModalDetalleProductoComponent,
     CuentaComponent,
     ModalAsignacionConfiguracionProductoComponent,
+    StockComponent,
   ],
   imports: [
     BrowserModule,

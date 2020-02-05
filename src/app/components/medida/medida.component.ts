@@ -22,20 +22,15 @@ export class MedidaComponent implements OnInit {
 
   constructor(private inventarioService: InventarioService) {
     this.myForm = new FormGroup({
-      _medida: new FormControl('', [Validators.required])
+      _medida: new FormControl('', [Validators.required]),
+      _idMedida: new FormControl(''),
     })
   }
 
   filterMedida = '';
-  idMedida = '0';
   botonIngresar = 'ingresar';
-  inputMedida = true;
 
   medidas: Medida[] = [];
-
-  onChangeInputMedida() {
-    this.inputMedida = true;
-  }
 
   consultarMedidas() {
     this.inventarioService.consultarMedidas(
@@ -68,7 +63,7 @@ export class MedidaComponent implements OnInit {
 
   crearMedida() {
     this.inventarioService.crearMedida(
-      this.myForm.get('_medida').value,
+      this._medida.value,
       localStorage.getItem('miCuenta.postToken')
     )
       .then(
@@ -78,8 +73,10 @@ export class MedidaComponent implements OnInit {
               icon: "warning",
             });
             this.myForm.reset();
-          } else if (ok['respuesta'] == '400') {
-            this.inputMedida = false;
+          } else if (ok['respuesta'] == '400') {  
+            sweetAlert("Medida ya existe!", {
+              icon: "warning",
+            });
           } else if (ok['respuesta'] == 'false') {
             sweetAlert("Ha ocurrido un error!", {
               icon: "error",
@@ -101,17 +98,15 @@ export class MedidaComponent implements OnInit {
   }
 
   mostrarMedida(medida) {
-    this.idMedida = medida.IdMedida;
-    this.myForm.setValue({
-      _medida: medida.Descripcion
-    })
+    this._medida.setValue(medida.IdMedida);
+    this._medida.setValue(medida.Descripcion)
     this.testButton.nativeElement.value = 'modificar';
   }
 
   actualizarMedida() {
     this.inventarioService.actualizarMedida(
-      this.idMedida,
-      this.myForm.get('_medida').value,
+      this._idMedida.value,
+      this._medida.value,
       localStorage.getItem('miCuenta.putToken')
     )
       .then(
@@ -121,7 +116,9 @@ export class MedidaComponent implements OnInit {
               icon: "warning",
             });
           } else if (ok['respuesta'] == '400') {
-            this.inputMedida = false;
+            sweetAlert("Medida ya existe!", {
+              icon: "warning",
+            });
           } else if (ok['respuesta'] == 'false') {
             sweetAlert("Ha ocurrido un error!", {
               icon: "error",
@@ -182,6 +179,10 @@ export class MedidaComponent implements OnInit {
 
   get _medida() {
     return this.myForm.get('_medida');
+  }
+
+  get _idMedida() {
+    return this.myForm.get('_idMedida');
   }
 
   ngOnInit() {

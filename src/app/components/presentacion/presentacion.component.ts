@@ -22,20 +22,15 @@ export class PresentacionComponent implements OnInit {
 
   constructor(private inventarioService: InventarioService) {
     this.myForm = new FormGroup({
-      _presentacion: new FormControl('', [Validators.required])
+      _presentacion: new FormControl('', [Validators.required]),
+      _idPresentacion: new FormControl(''),
     })
   }
 
-  idPresentacion = '0';
   botonIngresar = 'ingresar';
   filterPresentacion = '';
-  inputPresentacion = true;
 
   presentaciones: Presentacion[] = [];
-
-  onChangeInputPresentacion() {
-    this.inputPresentacion = true;
-  }
 
   consultarPresentaciones() {
     this.inventarioService.consultarPresentaciones(
@@ -68,7 +63,7 @@ export class PresentacionComponent implements OnInit {
 
   crearPresentacion() {
     this.inventarioService.crearPresentacion(
-      this.myForm.get('_presentacion').value,
+      this._presentacion.value,
       localStorage.getItem('miCuenta.postToken')
     )
       .then(
@@ -80,7 +75,9 @@ export class PresentacionComponent implements OnInit {
             });
             this.myForm.reset();
           } else if (ok['respuesta'] == '400') {
-            this.inputPresentacion = false;
+            sweetAlert("Presentación ya existe!", {
+              icon: "warning",
+            });
           } else if (ok['respuesta'] == 'false') {
             sweetAlert("Ha ocurrido un error!", {
               icon: "error",
@@ -102,17 +99,15 @@ export class PresentacionComponent implements OnInit {
   }
 
   mostrarPresentacion(presentacion) {
-    this.idPresentacion = presentacion.IdPresentacion;
-    this.myForm.setValue({
-      _presentacion: presentacion.Descripcion
-    })
+    this._idPresentacion.setValue(presentacion.IdPresentacion);
+    this._presentacion.setValue(presentacion.Descripcion);
     this.testButton.nativeElement.value = 'modificar';
   }
 
   actualizarPresentacion() {
     this.inventarioService.actualizarPresentacion(
-      this.idPresentacion,
-      this.myForm.get('_presentacion').value,
+      this._idPresentacion.value,
+      this._presentacion.value,
       localStorage.getItem('miCuenta.putToken')
     )
       .then(
@@ -122,7 +117,9 @@ export class PresentacionComponent implements OnInit {
               icon: "warning",
             });
           } else if (ok['respuesta'] == '400') {
-            this.inputPresentacion = false;
+            sweetAlert("Presentación ya existe!", {
+              icon: "warning",
+            });
           } else if (ok['respuesta'] == 'false') {
             sweetAlert("Ha ocurrido un error!", {
               icon: "error",
@@ -183,6 +180,10 @@ export class PresentacionComponent implements OnInit {
 
   get _presentacion() {
     return this.myForm.get('_presentacion');
+  }
+
+  get _idPresentacion() {
+    return this.myForm.get('_idPresentacion');
   }
 
   ngOnInit() {

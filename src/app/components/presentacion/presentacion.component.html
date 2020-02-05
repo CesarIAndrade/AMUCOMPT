@@ -5,21 +5,16 @@
                 <h5 style="text-align: center;">Nueva Presentación</h5>
                 <form [formGroup]="myForm" (ngSubmit)="validarFormulario()" novalidate>
                     <mat-form-field class="example-full-width">
-                        <input matInput (keyup)="onChangeInputPresentacion()" formControlName="_presentacion"
-                            type="text" placeholder="Ingrese Presentación">
+                        <input matInput formControlName="_presentacion" type="text" placeholder="Ingrese Presentación">
+                        <mat-error *ngIf="_presentacion.invalid && (_presentacion.dirty || _presentacion.touched)">
+                            <mat-error *ngIf="_presentacion.errors.required">
+                                Presentación Requerida
+                            </mat-error>
+                        </mat-error>
                     </mat-form-field>
-                    <div class="badge badge-danger mb-3 btn-block"
-                        *ngIf="_presentacion.invalid && (_presentacion.dirty || _presentacion.touched)">
-                        <div *ngIf="_presentacion.errors.required">
-                            Presentación Requerida
-                        </div>
-                    </div>
-                    <div class="badge badge-danger mb-3 btn-block" [hidden]="inputPresentacion">
-                        Presentación Ya Existe
-                    </div>
                     <div>
                         <button type="submit" [value]="botonIngresar" [disabled]="myForm.invalid"
-                            class="btn btn-success btn-block" #testButton>Guardar</button>
+                            class="btn btn-success btn-block mt-2" #testButton>Guardar</button>
                     </div>
                 </form>
             </div>

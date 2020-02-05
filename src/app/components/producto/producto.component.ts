@@ -182,7 +182,6 @@ export class ProductoComponent implements OnInit {
       this.inventarioService.crearProducto(
         this._nombre.value,
         this._descripcion.value,
-        this._codigo.value,
         this._tipoProducto.value,
         localStorage.getItem('miCuenta.postToken')
       )
@@ -226,7 +225,7 @@ export class ProductoComponent implements OnInit {
     this._idConfiguracionProducto.setValue(producto.IdConfigurarProducto);
     this._nombre.setValue(producto.Producto.Nombre);
     this._descripcion.setValue(producto.Producto.Descripcion);
-    this._codigo.setValue(producto.Producto.Codigo);
+    this._codigo.setValue(producto.Codigo);
     this._contenidoNeto.setValue(producto.CantidadMedida);
     this._tipoProducto.setValue(producto.Producto.TipoProducto.IdTipoProducto);
     this._presentacion.setValue(producto.Presentacion.IdPresentacion);
@@ -242,6 +241,7 @@ export class ProductoComponent implements OnInit {
       this._idProducto.value,
       this._medida.value,
       this._presentacion.value,
+      this._codigo.value,
       this._contenidoNeto.value,
       localStorage.getItem('miCuenta.putToken')
     )
@@ -286,7 +286,6 @@ export class ProductoComponent implements OnInit {
       this._idProducto.value,
       this._nombre.value,
       this._descripcion.value,
-      this._codigo.value,
       this._tipoProducto.value,
       localStorage.getItem('miCuenta.putToken')
     )
@@ -345,6 +344,7 @@ export class ProductoComponent implements OnInit {
       this._idProducto.value,
       this._medida.value,
       this._presentacion.value,
+      this._codigo.value,
       this._contenidoNeto.value,
       localStorage.getItem('miCuenta.postToken')
     )
@@ -489,7 +489,7 @@ export class ProductoComponent implements OnInit {
     this.consultarPresentaciones();
   }
 
-  tablaProductos = ['nombre', 'tipoProducto', 'codigo', 'acciones'];
+  tablaProductos = ['codigo', 'descripcion', 'tipoProducto', 'acciones'];
 
   private _filterTable(value: string, arreglo: any[]) {
     const filterValue = value;

@@ -43,21 +43,20 @@ export class UsuarioComponent implements OnInit {
     private personaService: PersonaService,
   ) {
     this.myForm = new FormGroup({
+      _cedula: new FormControl('', [Validators.required]),
+      _nombres: new FormControl(''),
+      _apellidos: new FormControl(''),
       _valorUsuario: new FormControl('', [Validators.required]),
       _contrasena: new FormControl('', [Validators.required])
     })
   }
 
   botonInsertar = 'insertar';
-  cedula = 'Cedula';
-  nombres = 'Nombres';
-  apellidos = 'Apellidos';
   filterUsuario = '';
   idAsignacionTipoUsuario: string;
   idPersona: string;
   idUsuario: string;
   idUsuarioModalAUP: string;
-  inputPersona = true;
   inputUsuario = true;
   inputType = 'password';
   resultadoModal: DialogData;
@@ -116,39 +115,35 @@ export class UsuarioComponent implements OnInit {
   }
 
   crearUsuario() {
-    if (this.cedula == 'Cedula') {
-      this.inputPersona = false;
-    } else {
-      var datosUsuario = {
-        idPersona: this.idPersona,
-        usuario: this.myForm.get('_valorUsuario').value,
-        contrasena: this.myForm.get('_contrasena').value,
-        token: localStorage.getItem('miCuenta.postToken')
-      }
-      this.usuarioService.crearUsuario(datosUsuario)
-        .then(
-          ok => {
-            if (ok['respuesta']) {
-              sweetAlert("Se ingresó correctamente!", {
-                icon: "success",
-              });
-              this.limpiarCampos();
-              this.consultarUsuarios();
-            } else if(!ok['respuesta']) {
-              sweetAlert("Ha ocurrido un error!", {
-                icon: "error",
-              });
-            } else {
-              this.inputUsuario = false;
-            }
-          }
-        )
-        .catch(
-          error => {
-            console.log(error);
-          }
-        )
+    var datosUsuario = {
+      idPersona: this.idPersona,
+      usuario: this.myForm.get('_valorUsuario').value,
+      contrasena: this.myForm.get('_contrasena').value,
+      token: localStorage.getItem('miCuenta.postToken')
     }
+    this.usuarioService.crearUsuario(datosUsuario)
+      .then(
+        ok => {
+          if (ok['respuesta']) {
+            sweetAlert("Se ingresó correctamente!", {
+              icon: "success",
+            });
+            this.limpiarCampos();
+            this.consultarUsuarios();
+          } else if (!ok['respuesta']) {
+            sweetAlert("Ha ocurrido un error!", {
+              icon: "error",
+            });
+          } else {
+            this.inputUsuario = false;
+          }
+        }
+      )
+      .catch(
+        error => {
+          console.log(error);
+        }
+      )
   }
 
   actualizarUsuario() {
@@ -195,6 +190,7 @@ export class UsuarioComponent implements OnInit {
       )
   }
 
+  test = false;
   abrirModalAsignacionUsuarioPersona() {
     let dialogRef = this.modalAsignacionUsuarioPersona.open(ModalAsignacionUsuarioPersonaComponent, {
       width: '900px',
@@ -202,13 +198,10 @@ export class UsuarioComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result != null) {
-        this.inputPersona = true;
-        this.cedula = result.cedula;
+        this._cedula.setValue(result.cedula);
         this.idPersona = result.idPersona;
-        this.nombres = result.nombres;
-        this.apellidos = result.apellidos;
-      } else {
-        this.inputPersona = false;
+        this._nombres.setValue(result.nombres);
+        this._apellidos.setValue(result.apellidos);
       }
     });
   }
@@ -284,9 +277,6 @@ export class UsuarioComponent implements OnInit {
 
   limpiarCampos() {
     this.myForm.reset();
-    this.cedula = 'Cedula';
-    this.nombres = 'Nombres';
-    this.apellidos = 'Apellidos';
     this.idPersona = '';
   }
 
@@ -298,9 +288,9 @@ export class UsuarioComponent implements OnInit {
     }
     this.idUsuario = usuario.IdUsuario;
     this.idPersona = usuario.IdPersona;
-    this.nombres = usuario.PrimerNombre + ' ' + usuario.SegundoNombre;
-    this.apellidos = usuario.ApellidoPaterno + ' ' + usuario.ApellidoMaterno;
-    this.cedula = usuario.NumeroDocumento;
+    this._nombres.setValue(usuario.PrimerNombre + ' ' + usuario.SegundoNombre);
+    this._apellidos.setValue(usuario.ApellidoPaterno + ' ' + usuario.ApellidoMaterno);
+    this._cedula.setValue(usuario.NumeroDocumento);
     this.testButton.nativeElement.value = 'modificar';
     this.myForm.setValue({
       _valorUsuario: usuario.UsuarioLogin,
@@ -314,6 +304,18 @@ export class UsuarioComponent implements OnInit {
 
   get _contrasena() {
     return this.myForm.get('_contrasena');
+  }
+
+  get _cedula() {
+    return this.myForm.get('_cedula');
+  }
+
+  get _nombres() {
+    return this.myForm.get('_nombres');
+  }
+
+  get _apellidos() {
+    return this.myForm.get('_apellidos');
   }
 
   ngOnInit() {

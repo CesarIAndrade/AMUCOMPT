@@ -5,21 +5,16 @@
                 <h5 style="text-align: center;">Nueva Medida</h5>
                 <form [formGroup]="myForm" (ngSubmit)="validarFormulario()" novalidate>
                     <mat-form-field class="example-full-width">
-                        <input matInput (keyup)="onChangeInputMedida()" formControlName="_medida" type="text"
-                            placeholder="Ingrese Medida">
+                        <input matInput formControlName="_medida" type="text" placeholder="Ingrese Medida">
+                        <mat-error *ngIf="_medida.invalid && (_medida.dirty || _medida.touched)">
+                            <mat-error *ngIf="_medida.errors.required">
+                                Medida Requerida
+                            </mat-error>
+                        </mat-error>
                     </mat-form-field>
-                    <div class="badge badge-danger mb-3 btn-block"
-                        *ngIf="_medida.invalid && (_medida.dirty || _medida.touched)">
-                        <div *ngIf="_medida.errors.required">
-                            Medida Requerida
-                        </div>
-                    </div>
-                    <div class="badge badge-danger mb-3 btn-block" [hidden]="inputMedida">
-                        Medida Ya Existe
-                    </div>
                     <div>
                         <button type="submit" [value]="botonIngresar" [disabled]="myForm.invalid"
-                            class="btn btn-success btn-block" #testButton>Guardar</button>
+                            class="btn btn-success btn-block mt-2" #testButton>Guardar</button>
                     </div>
                 </form>
             </div>

@@ -96,18 +96,12 @@
                                     {{element.ContenidoNeto}} {{element.Medida}} </td>
                             </ng-container>
                             <ng-container matColumnDef="acciones">
-                                <th colspan="2" mat-header-cell *matHeaderCellDef> Acciones </th>
+                                <th mat-header-cell *matHeaderCellDef> Acciones </th>
                                 <ng-container *matCellDef="let element">
                                     <td mat-cell>
                                         <button tooltip="Quitar" placement="top" class="btn btn-sm btn-outline-danger"
                                             (click)="quitarDetalle(element)">
                                             <i class="fa fa-times" aria-hidden="true"></i>
-                                        </button>
-                                    </td>
-                                    <td mat-cell>
-                                        <button tooltip="Modificar" placement="top" class="btn btn-sm btn-outline-info"
-                                            (click)="mostrarDetalleFactura(element)">
-                                            <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                                         </button>
                                     </td>
                                 </ng-container>
@@ -148,7 +142,7 @@
                             <ng-container *matCellDef="let element">
                                 <td mat-cell>
                                     <button tooltip="Modificar" placement="top" class="btn btn-sm btn-outline-info"
-                                        (click)="actualizarFactura(element)">
+                                        (click)="mostrarDetallesFactura(element)">
                                         <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                                     </button>
                                 </td>
