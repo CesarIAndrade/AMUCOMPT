@@ -31,14 +31,13 @@ export class CompraComponent implements OnInit {
     private router: Router
   ) {
     this.myForm = new FormGroup({
-      _codigo: new FormControl('', [Validators.required]),
       _idConfigurarProducto: new FormControl(''),
       _idAsignarProductoKit: new FormControl(''),
       _idKit: new FormControl(''),
       _kit: new FormControl(''),
       _producto: new FormControl('', [Validators.required]),
       _cantidad: new FormControl('', [Validators.required]),
-      _fechaExpiracion: new FormControl((new Date()).toJSON(), [Validators.required]),
+      _fechaExpiracion: new FormControl('', [Validators.required]),
       _precio: new FormControl('', [Validators.required]),
     })
   }
@@ -66,6 +65,7 @@ export class CompraComponent implements OnInit {
       this.listaProductosDeUnKit = [];
       this.seccionProducto = false;
       this.seccionKit = true;
+      this.seleccionKit = false;
     }
   }
 
@@ -222,7 +222,6 @@ export class CompraComponent implements OnInit {
 
   crearCabeceraFactura() {
     this.inventarioService.crearCabeceraFactura(
-      this._codigo.value,
       localStorage.getItem('miCuenta.idAsignacionTipoUsuario'),
       this.tipoTransaccion,
       localStorage.getItem('miCuenta.postToken')
@@ -264,10 +263,8 @@ export class CompraComponent implements OnInit {
           ok => {
             if (ok['respuesta']) {
               this.consultarDetalleFactura();
-              this.codigo = this._codigo.value;
               this.myForm.reset();
               this._fechaExpiracion.setValue((new Date()).toJSON());
-              this._codigo.setValue(this.codigo);
             } else {
               sweetAlert("Ha ocurrido un error!", {
                 icon: "error",
@@ -295,10 +292,8 @@ export class CompraComponent implements OnInit {
           ok => {
             if (ok['respuesta']) {
               this.consultarDetalleFactura();
-              this.codigo = this._codigo.value;
               this.myForm.reset();
               this._fechaExpiracion.setValue((new Date()).toJSON());
-              this._codigo.setValue(this.codigo);
             } else {
               sweetAlert("Ha ocurrido un error!", {
                 icon: "error",
@@ -379,15 +374,15 @@ export class CompraComponent implements OnInit {
   }
 
   mostrarDetallesFactura(factura) {
+    console.log(factura);
     this.detallesCompra = [];
-    this._codigo.disable();
     this.testButton.nativeElement.value = 'actualizarFactura';
     var detalleCompra: DetallesCompra;
     this.idCabecera = factura.IdCabeceraFactura;
-    this._codigo.setValue(factura.Codigo);
-    factura.DetalleFactura.map(
-      item => {
-        if (item.AsignarProductoKits != null) {
+    factura.DetalleFactura.map(    
+      item => {     
+        if (item.ConfigurarProductos == null) {
+          console.log('kit');
           detalleCompra = {
             IdDetalleFactura: item.IdDetalleFactura,
             IdCabeceraFactura: item.IdCabeceraFactura,
@@ -400,7 +395,8 @@ export class CompraComponent implements OnInit {
             Medida: item.AsignarProductoKits.ListaAsignarProductoKit[0].ListaProductos.Medida.Descripcion
           }
           this.detallesCompra.push(detalleCompra);
-        } else {
+        } else if(item.AsignarProductoKits == null) {
+          console.log('no kit');
           detalleCompra = {
             IdDetalleFactura: item.IdDetalleFactura,
             IdCabeceraFactura: item.IdCabeceraFactura,
@@ -416,10 +412,6 @@ export class CompraComponent implements OnInit {
         }
       }
     )
-  }
-
-  get _codigo() {
-    return this.myForm.get('_codigo');
   }
 
   get _cantidad() {
