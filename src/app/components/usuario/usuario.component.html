@@ -3,51 +3,46 @@
         <div class="col-lg-4" style="float: left;">
             <div class="card-body">
                 <h5 style="text-align: center;">{{ nuevoUsuario }}</h5>
-                <mat-form-field class="example-full-width">
-                    <input matInput [value]="cedula" type="text" disabled readonly>
-                </mat-form-field>
-                <button mat-stroked-button class="btn-block btn-outline-warning"
-                    (click)="abrirModalAsignacionUsuarioPersona()">
-                    <i class="fa fa-user-plus"></i>
-                </button>
-                <mat-form-field class="example-full-width">
-                    <input matInput [value]="nombres" type="text" disabled readonly>
-                </mat-form-field>
-                <mat-form-field class="example-full-width">
-                    <input matInput [value]="apellidos" type="text" disabled readonly>
-                </mat-form-field>
-                <div class="badge badge-danger mb-3 btn-block" [hidden]="inputPersona">
-                    Persona Requerida
-                </div>
                 <form [formGroup]="myForm" (ngSubmit)="validacionFormulario()" novalidate>
                     <mat-form-field class="example-full-width">
-                        <input matInput #testInput formControlName="_valorUsuario" type="text"
-                            (keyup)="onChangeInputUsuario()" placeholder="Ingrese Usuario">
+                        <input matInput formControlName="_cedula" type="text" placeholder="Cédula" readonly>
+                        <mat-error *ngIf="true">
+                            Persona Requerida
+                        </mat-error>
                     </mat-form-field>
-                    <div class="badge badge-danger mt-3 btn-block"
-                        *ngIf="_valorUsuario.invalid && (_valorUsuario.dirty || _valorUsuario.touched)">
-                        <div *ngIf="_valorUsuario.errors.required">
-                            Usuario Requerido
-                        </div>
-                    </div>
-                    <div class="badge badge-danger mb-3 btn-block" [hidden]="inputUsuario">
-                        Usuario Ya Existe
-                    </div>
+                    <button type="button" class="btn btn-block btn-outline-warning mt-2"
+                        (click)="abrirModalAsignacionUsuarioPersona()">
+                        <i class="fa fa-user-plus"></i>
+                    </button>
+                    <mat-form-field class="example-full-width">
+                        <input matInput placeholder="Nombres" type="text" disabled readonly>
+                    </mat-form-field>
+                    <mat-form-field class="example-full-width">
+                        <input matInput placeholder="Apellidos" type="text" disabled readonly>
+                    </mat-form-field>
+                    <mat-form-field class="example-full-width">
+                        <input matInput #testInput formControlName="_valorUsuario" type="text"
+                            placeholder="Ingrese Usuario">
+                        <mat-error *ngIf="_valorUsuario.invalid && (_valorUsuario.dirty || _valorUsuario.touched)">
+                            <mat-error *ngIf="_valorUsuario.errors.required">
+                                Usuario Requerido
+                            </mat-error>
+                        </mat-error>
+                    </mat-form-field>
                     <mat-form-field class="example-full-width">
                         <input matInput formControlName="_contrasena" type="password" [type]="inputType"
                             placeholder="Ingrese Contraseña">
                         <button mat-button matSuffix mat-icon-button (click)="mostrarContrasena()">
                             <mat-icon>visibility</mat-icon>
                         </button>
+                        <mat-error *ngIf="_contrasena.invalid && (_contrasena.dirty || _contrasena.touched)">
+                            <mat-error *ngIf="_contrasena.errors.required">
+                                Contrasena Requerida
+                            </mat-error>
+                        </mat-error>
                     </mat-form-field>
-                    <div class="badge badge-danger btn-block mb-3"
-                        *ngIf="_contrasena.invalid && (_contrasena.dirty || _contrasena.touched)">
-                        <div *ngIf="_contrasena.errors.required">
-                            Contrasena Requerida
-                        </div>
-                    </div>
                     <div>
-                        <button class="btn btn-success btn-block" type="submit" [disabled]="myForm.invalid"
+                        <button class="btn btn-success btn-block mt-2" type="submit" [disabled]="myForm.invalid"
                             [value]="botonInsertar" #testButton>Guardar</button>
                     </div>
                 </form>

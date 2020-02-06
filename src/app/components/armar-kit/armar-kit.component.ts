@@ -47,8 +47,7 @@ export class ArmarKitComponent implements OnInit {
     this.consultarProductos(idKit);
   }
 
-  applyFilter(event)
-  {
+  applyFilter(event) {
     this._filterTable(event,this.productos);
   }
   
@@ -60,7 +59,6 @@ export class ArmarKitComponent implements OnInit {
     }else
     {
       this.productos = this.Arrayproductos.filter(option =>option['Producto']['Nombre'].trim().toLowerCase().includes(filterValue.trim()));
-      
     }
   }
 
@@ -147,12 +145,9 @@ export class ArmarKitComponent implements OnInit {
         }
       });
     }
-
-
   }
 
   agregarProductoDelKit(producto) {
-    console.log(producto);
     this.inventarioService.crearAsignacionProductoKit(
       producto.IdConfigurarProducto,
       this.idKit,
@@ -171,7 +166,6 @@ export class ArmarKitComponent implements OnInit {
           console.log(error);
         }
       )
-
   }
 
   eliminarProductoDelKit(producto) {
@@ -209,7 +203,7 @@ export class ArmarKitComponent implements OnInit {
     this.consultarKits();
   }
 
-  tablaProductos = ['nombre', 'tipoProducto', 'codigo', 'acciones'];
-  tablaProductosDeUnKit = ['nombre', 'tipoProducto', 'codigo', 'acciones']
+  tablaProductos = ['codigo', 'descripcion', 'tipoProducto', 'acciones'];
+  tablaProductosDeUnKit = ['codigo', 'descripcion', 'tipoProducto', 'acciones'];
 
 }

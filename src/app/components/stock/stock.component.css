@@ -1,0 +1,8 @@
+.tablaStock {
+    height: 22rem;
+    overflow: auto;
+}
+
+table {
+    width: 100%;
+}

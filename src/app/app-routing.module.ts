@@ -16,6 +16,7 @@ import { ValidarUsuarioGuard } from "src/app/guards/validar-usuario.guard";
 import { PanelAdministracionComponent } from './components/panel-administracion/panel-administracion.component';
 import { ConfiguracionProductoComponent } from './components/configuracion-producto/configuracion-producto.component';
 import { CuentaComponent } from './components/cuenta/cuenta.component';
+import { StockComponent } from './components/stock/stock.component';
 
 const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'login' },
@@ -39,6 +40,10 @@ const routes: Routes = [
       },
       {
         path: 'inventarios', component: InventarioComponent,
+        // canActivate: [ValidarUsuarioGuard]
+      },
+      {
+        path: 'stock', component: StockComponent,
         // canActivate: [ValidarUsuarioGuard]
       },
       {

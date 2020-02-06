@@ -105,40 +105,50 @@
                 </mat-form-field>
                 <div class="tablaProductos">
                     <table mat-table [dataSource]="productos">
-                        <ng-container matColumnDef="nombre">
-                            <th mat-header-cell *matHeaderCellDef> Nombre </th>
-                            <td mat-cell *matCellDef="let element"> {{element.Producto.Nombre}} </td>
+                        <ng-container matColumnDef="codigo">
+                            <th mat-header-cell *matHeaderCellDef> Código </th>
+                            <td mat-cell *matCellDef="let element"> {{element.Codigo}} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="descripcion">
+                            <th mat-header-cell *matHeaderCellDef> Descripción </th>
+                            <td mat-cell *matCellDef="let element"> 
+                                {{element.Producto.Nombre}}
+                                {{element.Presentacion.Descripcion}}
+                                {{element.CantidadMedida}}
+                                {{element.Medida.Descripcion}}
+                            </td>
                         </ng-container>
                         <ng-container matColumnDef="tipoProducto">
                             <th mat-header-cell *matHeaderCellDef> Tipo Producto </th>
                             <td mat-cell *matCellDef="let element"> {{element.Producto.TipoProducto.Descripcion}}
                             </td>
                         </ng-container>
-                        <ng-container matColumnDef="codigo">
-                            <th mat-header-cell *matHeaderCellDef> Código </th>
-                            <td mat-cell *matCellDef="let element"> {{element.Producto.Codigo}} </td>
-                        </ng-container>
                         <ng-container matColumnDef="acciones">
-                            <th colspan="3" mat-header-cell *matHeaderCellDef> Acciones </th>
+                            <th colspan="2" mat-header-cell *matHeaderCellDef> Acciones </th>
                             <ng-container *matCellDef="let element">
-                                <td mat-cell>
-                                    <button class="btn btn-sm btn-outline-primary"
-                                        (click)="mostrarDetalleProducto(element)">
-                                        <i class="fa fa-eye" aria-hidden="true"></i>
-                                    </button>
-                                </td>
-                                <td mat-cell>
-                                    <button tooltip="Modificar" placement="top" class="btn btn-sm btn-outline-info"
-                                        (click)="mostrarProducto(element)">
-                                        <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                                    </button>
-                                </td>
-                                <td mat-cell>
-                                    <button class="btn btn-sm btn-outline-danger"
-                                        (click)="eliminarConfiguracionProducto(element)">
-                                        <i class="fa fa-trash" aria-hidden="true"></i>
-                                    </button>
-                                </td>
+                                <ng-container *ngIf="element.ConfigurarProductosUtilizado == '0'">
+                                    <td mat-cell>
+                                        <button tooltip="Modificar" placement="top" class="btn btn-sm btn-outline-info"
+                                            (click)="mostrarProducto(element)">
+                                            <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                        </button>
+                                    </td>
+                                    <td mat-cell>
+                                        <button class="btn btn-sm btn-outline-danger"
+                                            (click)="eliminarConfiguracionProducto(element)">
+                                            <i class="fa fa-trash" aria-hidden="true"></i>
+                                        </button>
+                                    </td>
+                                </ng-container>
+                                <ng-container *ngIf="element.ConfigurarProductosUtilizado == '1'">
+                                    <td mat-cell>
+                                        <button tooltip="Modificar" placement="top" class="btn btn-sm btn-outline-info"
+                                            (click)="mostrarProducto(element)">
+                                            <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                        </button>
+                                    </td>
+                                    <td mat-cell> </td>
+                                </ng-container>
                             </ng-container>
                         </ng-container>
                         <tr mat-header-row *matHeaderRowDef="tablaProductos; sticky: true"></tr>

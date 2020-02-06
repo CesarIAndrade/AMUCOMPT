@@ -5,29 +5,24 @@
                 <h5 style="text-align: center;">Nuevo Kit</h5>
                 <form [formGroup]="myForm" (ngSubmit)="validarFormulario()" novalidate>
                     <mat-form-field class="example-full-width">
-                        <input matInput (keyup)="onChangeInputKit()" formControlName="_kit" type="text"
-                            placeholder="Ingrese Nombre kit">
+                        <input matInput formControlName="_kit" type="text" placeholder="Ingrese Nombre kit">
+                        <mat-error *ngIf="_kit.invalid && (_kit.dirty || _kit.touched)">
+                            <mat-error *ngIf="_kit.errors.required">
+                                Nombre Kit Requerido
+                            </mat-error>
+                        </mat-error>
                     </mat-form-field>
-                    <div class="badge badge-danger mb-3 btn-block" *ngIf="_kit.invalid && (_kit.dirty || _kit.touched)">
-                        <div *ngIf="_kit.errors.required">
-                            Nombre Kit Requerido
-                        </div>
-                    </div>
-                    <div class="badge badge-danger mb-3 btn-block" [hidden]="inputKit">
-                        Kit Ya Existe
-                    </div>
                     <mat-form-field class="example-full-width">
                         <input matInput formControlName="_codigo" type="text" placeholder="Ingrese Código kit">
+                        <mat-error *ngIf="_codigo.invalid && (_codigo.dirty || _codigo.touched)">
+                            <mat-error *ngIf="_codigo.errors.required">
+                                Código Kit Requerido
+                            </mat-error>
+                        </mat-error>
                     </mat-form-field>
-                    <div class="badge badge-danger mb-3 btn-block"
-                        *ngIf="_codigo.invalid && (_codigo.dirty || _codigo.touched)">
-                        <div *ngIf="_codigo.errors.required">
-                            Código Kit Requerido
-                        </div>
-                    </div>
                     <div>
                         <button type="submit" [value]="botonIngresar" [disabled]="myForm.invalid"
-                            class="btn btn-success btn-block" #testButton>Guardar</button>
+                            class="btn btn-success btn-block mt-2" #testButton>Guardar</button>
                     </div>
                 </form>
             </div>

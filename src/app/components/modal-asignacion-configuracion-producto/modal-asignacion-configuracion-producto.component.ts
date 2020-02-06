@@ -72,6 +72,8 @@ export class ModalAsignacionConfiguracionProductoComponent implements OnInit {
   }
 
   ngOnInit() {
+    console.log(this.data.listaProductosDeUnKit);
+    
     if (this.data.listaProductosDeUnKit.length == 0) {
       this.consultarConfiguracionProducto();
     } else {
@@ -80,7 +82,7 @@ export class ModalAsignacionConfiguracionProductoComponent implements OnInit {
           var producto = {
             idAsignarProductoKit: item.IdAsignarProductoKit,
             idConfigurarProducto: item.ListaProductos.IdConfigurarProducto,
-            idKit: item.Kit.IdKit,
+            idKit: item.IdKit,
             kit: item.Kit.Descripcion,
             nombre: item.ListaProductos.Producto.Nombre,
             presentacion: item.ListaProductos.Presentacion.Descripcion,

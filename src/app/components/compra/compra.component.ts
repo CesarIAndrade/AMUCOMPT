@@ -125,19 +125,17 @@ export class CompraComponent implements OnInit {
         ok => {
           this.detallesCompra = [];
           var detalleCompra: DetallesCompra;
-          console.log(ok['respuesta']);
           ok['respuesta'].map(
             item => {
               item.DetalleFactura.map(
                 producto => {
                   if (producto.AsignarProductoKits != null) {
-                    console.log(producto);
                     detalleCompra = {
                       IdDetalleFactura: producto.IdDetalleFactura,
                       IdCabeceraFactura: producto.IdCabeceraFactura,
                       IdProducto: producto.AsignarProductoKits.ListaAsignarProductoKit[0].IdConfigurarProducto,
-                      // IdKit: producto.AsignarProductoKits.IdKit,
-                      // Kit: producto.AsignarProductoKits.Descripcion,
+                      IdKit: producto.AsignarProductoKits.IdKit,
+                      Kit: producto.AsignarProductoKits.Descripcion,
                       Producto: producto.AsignarProductoKits.ListaAsignarProductoKit[0].ListaProductos.Producto.Nombre,
                       Presentacion: producto.AsignarProductoKits.ListaAsignarProductoKit[0].ListaProductos.Presentacion.Descripcion,
                       ContenidoNeto: producto.AsignarProductoKits.ListaAsignarProductoKit[0].ListaProductos.CantidadMedida,
@@ -215,6 +213,8 @@ export class CompraComponent implements OnInit {
       if (this.testButton.nativeElement.value == 'ingresar') {
         this.crearCabeceraFactura();
       } else if (this.testButton.nativeElement.value == 'agregarDetalles') {
+        this.crearDetalleFactura();
+      } else if (this.testButton.nativeElement.value == 'actualizarFactura') {
         this.crearDetalleFactura();
       }
     }
@@ -313,13 +313,6 @@ export class CompraComponent implements OnInit {
     }
   }
 
-  mostrarDetalleFactura(detalleCompra) {
-    // var producto = detalleCompra.Nombre +' '+ detalleCompra.Presentacion +' '+                  detalleCompra.ContenidoNeto +' '+ detalleCompra.Medida;
-    // this._producto.setValue(producto);
-    // this._cantidad.setValue()
-    console.log(detalleCompra);
-  }
-
   seleccionarProducto(kit) {
     let dialogRef = this.modalAsignacionConfiguracionProducto.open(ModalAsignacionConfiguracionProductoComponent, {
       width: '500px',
@@ -330,7 +323,6 @@ export class CompraComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result != null) {
-        console.log(result);
         var producto = result.nombre + ' ' + result.presentacion + ' ' + result.contenidoNeto
           + ' ' + result.medida;
         this._idConfigurarProducto.setValue(result.idConfigurarProducto);
@@ -340,10 +332,10 @@ export class CompraComponent implements OnInit {
     });
   }
 
-  quitarDetalle(detalleProducto) {
+  quitarDetalle(DetalleFactura) {
     this.inventarioService.eliminarDetalleFactura(
-      detalleProducto.IdDetalleFactura,
-      detalleProducto.IdCabeceraFactura,
+      DetalleFactura.IdDetalleFactura,
+      DetalleFactura.IdCabeceraFactura,
       localStorage.getItem('miCuenta.deleteToken')
     )
       .then(
@@ -360,16 +352,44 @@ export class CompraComponent implements OnInit {
   }
 
   realizarCompra() {
-
+    this.inventarioService.finalizarFactura(
+      this.idCabecera,
+      localStorage.getItem('miCuenta.putToken')
+    )
+      .then(
+        ok => {
+          if (ok['respuesta']) {
+            sweetAlert("Se ingresó correctamente!", {
+              icon: "success",
+            });
+            this.consultarFacturasNoFinalizadas();
+          } else {
+            sweetAlert("Ha ocurrido un error!", {
+              icon: "error",
+            });
+          }
+        }
+      )
+      .catch(
+        error => {
+          console.log(error);
+        }
+      )
   }
 
-  actualizarFactura(factura) {
+  mostrarDetallesFactura(factura) {
     this.detallesCompra = [];
+    this._codigo.disable();
+    this.testButton.nativeElement.value = 'actualizarFactura';
     var detalleCompra: DetallesCompra;
+    this.idCabecera = factura.IdCabeceraFactura;
+    this._codigo.setValue(factura.Codigo);
     factura.DetalleFactura.map(
       item => {
         if (item.AsignarProductoKits != null) {
           detalleCompra = {
+            IdDetalleFactura: item.IdDetalleFactura,
+            IdCabeceraFactura: item.IdCabeceraFactura,
             IdProducto: item.AsignarProductoKits.ListaAsignarProductoKit[0].IdConfigurarProducto,
             IdKit: item.AsignarProductoKits.IdKit,
             Kit: item.AsignarProductoKits.Descripcion,
@@ -381,6 +401,8 @@ export class CompraComponent implements OnInit {
           this.detallesCompra.push(detalleCompra);
         } else {
           detalleCompra = {
+            IdDetalleFactura: item.IdDetalleFactura,
+            IdCabeceraFactura: item.IdCabeceraFactura,
             IdProducto: item.ConfigurarProductos.IdConfigurarProducto,
             IdKit: '',
             Kit: '',
