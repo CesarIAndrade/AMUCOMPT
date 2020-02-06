@@ -193,6 +193,8 @@ export class CompraComponent implements OnInit {
     )
       .then(
         ok => {
+          console.log(ok['respuesta']);
+          
           this.facturasNoFinalizadas = ok['respuesta'];
         }
       )
@@ -379,6 +381,8 @@ export class CompraComponent implements OnInit {
   }
 
   mostrarDetallesFactura(factura) {
+    console.log(factura);
+
     this.detallesCompra = [];
     this._codigo.disable();
     this.testButton.nativeElement.value = 'actualizarFactura';
