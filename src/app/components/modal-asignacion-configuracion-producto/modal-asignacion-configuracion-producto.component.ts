@@ -38,17 +38,19 @@ export class ModalAsignacionConfiguracionProductoComponent implements OnInit {
           this.configuracionProductos = [];
           ok['respuesta'].map(
             item => {
-              var producto = {
-                idAsignarProductoKit: '',
-                idConfigurarProducto: item.IdConfigurarProducto,
-                idKit: '',
-                kit: '',
-                nombre: item.Producto.Nombre,
-                presentacion: item.Presentacion.Descripcion,
-                contenidoNeto: item.CantidadMedida,
-                medida: item.Medida.Descripcion
+              if (item.ConfigurarProductosUtilizado == '0') {
+                var producto = {
+                  idAsignarProductoKit: '',
+                  idConfigurarProducto: item.IdConfigurarProducto,
+                  idKit: '',
+                  kit: '',
+                  nombre: item.Producto.Nombre,
+                  presentacion: item.Presentacion.Descripcion,
+                  contenidoNeto: item.CantidadMedida,
+                  medida: item.Medida.Descripcion
+                }
+                this.configuracionProductos.push(producto);
               }
-              this.configuracionProductos.push(producto);
             }
           )
         }
@@ -72,8 +74,6 @@ export class ModalAsignacionConfiguracionProductoComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log(this.data.listaProductosDeUnKit);
-    
     if (this.data.listaProductosDeUnKit.length == 0) {
       this.consultarConfiguracionProducto();
     } else {

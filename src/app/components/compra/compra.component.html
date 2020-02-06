@@ -131,7 +131,10 @@
                         </ng-container>
                         <ng-container matColumnDef="usuario">
                             <th mat-header-cell *matHeaderCellDef> Usuario </th>
-                            <td mat-cell *matCellDef="let element"> {{element.IdAsignacionTU}} </td>
+                            <td mat-cell *matCellDef="let element"> 
+                                {{element.PersonaEntidad.PrimerNombre}}
+                                {{element.PersonaEntidad.ApellidoPaterno}}
+                            </td>
                         </ng-container>
                         <ng-container matColumnDef="fecha">
                             <th mat-header-cell *matHeaderCellDef> Fecha </th>
