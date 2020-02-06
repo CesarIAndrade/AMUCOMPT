@@ -248,13 +248,14 @@ export class CompraComponent implements OnInit {
   }
 
   crearDetalleFactura() {
+    var fecha = new Date(this._fechaExpiracion.value).toJSON();
     if (this._idAsignarProductoKit.value == '') {
       this.inventarioService.crearDetalleFactura(
         this.idCabecera,
         this._idConfigurarProducto.value,
         'false',
         this._cantidad.value,
-        this._fechaExpiracion.value.split('T')[0],
+        fecha.split('T')[0],
         this._precio.value,
         '0',
         localStorage.getItem('miCuenta.postToken')
@@ -285,7 +286,7 @@ export class CompraComponent implements OnInit {
         this._idAsignarProductoKit.value,
         'true',
         this._cantidad.value,
-        this._fechaExpiracion.value.split('T')[0],
+        fecha.split('T')[0],
         this._precio.value,
         '0',
         localStorage.getItem('miCuenta.postToken')
