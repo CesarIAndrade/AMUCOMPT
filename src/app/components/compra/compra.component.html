@@ -22,8 +22,8 @@
                             </mat-option>
                         </mat-select>
                     </mat-form-field>
-                    <button mat-stroked-button type="button" [disabled]="seleccionKit"
-                        class="mb-3 btn-block btn-outline-warning" (click)="seleccionarProducto()">
+                    <button type="button" [disabled]="seleccionKit"
+                        class="mb-3 btn btn-sm btn-block btn-outline-warning" (click)="seleccionarProducto()">
                         <i class="fa fa-plus"></i>
                     </button>
                     <mat-form-field class="example-full-width">
@@ -40,7 +40,8 @@
                     <mat-form-field class="example-full-width">
                         <input matInput readonly [matDatepicker]="picker" placeholder="Fecha Expiración"
                             formControlName="_fechaExpiracion">
-                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-datepicker-toggle matSuffix [for]="picker">
+                        </mat-datepicker-toggle>
                         <mat-datepicker #picker></mat-datepicker>
                         <mat-error
                             *ngIf="_fechaExpiracion.invalid && (_fechaExpiracion.dirty || _fechaExpiracion.touched)">
@@ -58,7 +59,7 @@
                         </mat-error>
                     </mat-form-field>
                     <button type="submit" [disabled]="myForm.invalid" #testButton [value]="botonInsertar"
-                        class="mt-2 mb-3 btn btn-success btn-block">Agregar
+                        class="mt-3 mb-3 btn btn-success btn-block">Agregar
                         Detalle</button>
                 </div>
             </div>
@@ -103,8 +104,9 @@
     </form>
     <div class="row">
         <div class="col-lg-12">
-            <button type="button" (click)="realizarCompra()" class="mt-2 mb-3 btn btn-primary btn-block">Realizar
-                Compra</button>
+            <button #realizarCompraButton type="button" disabled="true" (click)="realizarCompra()" class="mt-3 mb-3 btn btn-primary btn-block">
+                Realizar Compra
+            </button>
         </div>
     </div>
     <div class="row">

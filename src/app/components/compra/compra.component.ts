@@ -24,6 +24,7 @@ export class CompraComponent implements OnInit {
 
   myForm: FormGroup;
   @ViewChild('testButton', { static: false }) testButton: ElementRef;
+  @ViewChild('realizarCompraButton', { static: false }) realizarCompraButton: ElementRef;
 
   constructor(
     private modalAsignacionConfiguracionProducto: MatDialog,
@@ -42,7 +43,6 @@ export class CompraComponent implements OnInit {
     })
   }
 
-  codigo = '000';
   botonInsertar = 'ingresar';
   idCabecera: string
   tipoTransaccion: string;
@@ -266,7 +266,7 @@ export class CompraComponent implements OnInit {
             if (ok['respuesta']) {
               this.consultarDetalleFactura();
               this.myForm.reset();
-              this._fechaExpiracion.setValue((new Date()).toJSON());
+              this.realizarCompraButton.nativeElement.disabled = false;
             } else {
               sweetAlert("Ha ocurrido un error!", {
                 icon: "error",
@@ -313,8 +313,8 @@ export class CompraComponent implements OnInit {
 
   seleccionarProducto(kit) {
     let dialogRef = this.modalAsignacionConfiguracionProducto.open(ModalAsignacionConfiguracionProductoComponent, {
-      width: '500px',
-      height: '500px',
+      width: '600px',
+      height: 'auto',
       data: {
         listaProductosDeUnKit: this.listaProductosDeUnKit,
       }
