@@ -1,3 +1,4 @@
+<br>
 <div class="container">
     <div class="row">
         <div class="col-lg-4" style="float: left;">
@@ -6,19 +7,16 @@
                 <form [formGroup]="myForm" (ngSubmit)="validacionFormulario()" novalidate>
                     <mat-form-field class="example-full-width">
                         <input matInput formControlName="_cedula" type="text" placeholder="Cédula" readonly>
-                        <mat-error *ngIf="true">
-                            Persona Requerida
-                        </mat-error>
                     </mat-form-field>
-                    <button type="button" class="btn btn-block btn-outline-warning mt-2"
+                    <button type="button" class="btn btn-block btn-sm btn-outline-warning"
                         (click)="abrirModalAsignacionUsuarioPersona()">
                         <i class="fa fa-user-plus"></i>
                     </button>
                     <mat-form-field class="example-full-width">
-                        <input matInput placeholder="Nombres" type="text" disabled readonly>
+                        <input matInput formControlName="_nombres" placeholder="Nombres" type="text" readonly>
                     </mat-form-field>
                     <mat-form-field class="example-full-width">
-                        <input matInput placeholder="Apellidos" type="text" disabled readonly>
+                        <input matInput formControlName="_apellidos" placeholder="Apellidos" type="text" readonly>
                     </mat-form-field>
                     <mat-form-field class="example-full-width">
                         <input matInput #testInput formControlName="_valorUsuario" type="text"

@@ -555,6 +555,96 @@ export class InventarioService {
     })
   }
 
+  consultarDescuentos(_token: string) {
+    const body = new HttpParams()
+      .set('encriptada', _token)
+    return new Promise((resolve, reject) => {
+      this.http.post(this.apiUrl + 'Inventario/ListaDescuento', body.toString(),
+        {
+          headers: new HttpHeaders()
+            .set('Content-Type', 'application/x-www-form-urlencoded')
+        }
+      )
+        .subscribe(res => {
+          resolve(res);
+        }, (err) => {
+          reject(err);
+        })
+    })
+  }
+
+  crearDescuentoKit(
+    descuento: string,
+    _token: string
+  ) {
+    const body = new HttpParams()
+      .set('Descuento', descuento)
+      .set('encriptada', _token)
+    return new Promise((resolve, reject) => {
+      this.http.post(this.apiUrl + '', body.toString(),
+        {
+          headers: new HttpHeaders()
+            .set('Content-Type', 'application/x-www-form-urlencoded')
+        }
+      )
+        .subscribe(res => {
+          resolve(res);
+        }, (err) => {
+          reject(err);
+        })
+    })
+  }
+
+  crearAsignacionDescuentoKit(
+    idKit: string,
+    idDescuento: string,
+    _token: string
+  ) {
+    const body = new HttpParams()
+      .set('IdKit', idKit)
+      .set('IdDescuento', idDescuento)
+      .set('encriptada', _token)
+    return new Promise((resolve, reject) => {
+      this.http.post(this.apiUrl + '', body.toString(),
+        {
+          headers: new HttpHeaders()
+            .set('Content-Type', 'application/x-www-form-urlencoded')
+        }
+      )
+        .subscribe(res => {
+          resolve(res);
+        }, (err) => {
+          reject(err);
+        })
+    })
+  }
+
+  actualizarAsignacionDescuentoKit(
+    idAsignacionDescuentoKit: string,
+    idKit: string,
+    idDescuento: string,
+    _token: string
+  ) {
+    const body = new HttpParams()
+      .set('IdAsignacionDescuentoKit', idAsignacionDescuentoKit)
+      .set('IdKit', idKit)
+      .set('IdDescuento', idDescuento)
+      .set('encriptada', _token)
+    return new Promise((resolve, reject) => {
+      this.http.post(this.apiUrl + '', body.toString(),
+        {
+          headers: new HttpHeaders()
+            .set('Content-Type', 'application/x-www-form-urlencoded')
+        }
+      )
+        .subscribe(res => {
+          resolve(res);
+        }, (err) => {
+          reject(err);
+        })
+    })
+  }
+
   consultarKitsYSusProductos(idKit: string, _token: string) {
     const body = new HttpParams()
       .set('IdKit', idKit)
@@ -746,7 +836,7 @@ export class InventarioService {
     precio: string,
     faltante: string,
     _token: string
-  ) {    
+  ) {
     const body = new HttpParams()
       .set('IdCabeceraFactura', idCabeceraFactura)
       .set('IdRelacionLogica', idRelacionLogica)
@@ -757,7 +847,7 @@ export class InventarioService {
       .set('Faltante', faltante)
       .set('encriptada', _token)
     console.log(body);
-    
+
 
     return new Promise((resolve, reject) => {
       this.http.post(this.apiUrl + 'Factura/IngresoDetalleFactura', body.toString(),

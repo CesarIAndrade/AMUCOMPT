@@ -54,7 +54,7 @@ export class ProductoComponent implements OnInit {
 
   filteredOptions: Observable<string[]>;
 
-  nombresDeProductos: any;
+  nombresDeProductos: any[] = [];
   productos: any[] = [];
   tipoProductos: TipoProducto[] = [];
   presentaciones: Presentacion[] = [];
@@ -138,20 +138,20 @@ export class ProductoComponent implements OnInit {
     )
       .then(
         ok => {
-          this.nombresDeProductos = [];
-          for (var i = 0; i < (ok['respuesta'].length); i++) {
-            this.nombresDeProductos[i] = {
-              idProducto: ok['respuesta'][i].Producto.IdProducto,
-              nombre: ok['respuesta'][i].Producto.Nombre,
-              idTipoProducto: ok['respuesta'][i].Producto.TipoProducto.IdTipoProducto,
-              descripcion: ok['respuesta'][i].Producto.Descripcion,
-              codigo: ok['respuesta'][i].Producto.Codigo,
-              idMedida: ok['respuesta'][i].Medida.IdMedida
+          for (let index = 0; index < ok['respuesta'].length; index++) {
+            const element = ok['respuesta'][index];
+            this.nombresDeProductos[index] = {
+              idProducto: element.Producto.IdProducto,
+              nombre: element.Producto.Nombre,
+              idTipoProducto: element.Producto.TipoProducto.IdTipoProducto,
+              descripcion: element.Producto.Descripcion,
+              codigo: element.Producto.Codigo,
+              idMedida: element.Medida.IdMedida
             }
           }
           this.consultarConfiguracionProductoTodos();
           this.consultarTipoProductos();
-          this.filteredOptions = this.myForm.get('_nombre').valueChanges
+          this.filteredOptions = this._nombre.valueChanges
             .pipe(
               startWith(''),
               map(value => this._filter(value))

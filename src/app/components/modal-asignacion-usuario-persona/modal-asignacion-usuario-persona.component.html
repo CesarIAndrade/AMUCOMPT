@@ -3,7 +3,7 @@
         <h5 style="text-align: center;">Lista Personas</h5>
         <mat-form-field class="example-full-width">
             <input matInput [(ngModel)]="filterPersona" type="text" placeholder="Buscar Persona">
-            <button mat-button matPrefix mat-icon-button>
+            <button autofocus="false" matPrefix mat-icon-button>
                 <mat-icon>search</mat-icon>
             </button>
         </mat-form-field>
@@ -31,7 +31,7 @@
                     <th mat-header-cell *matHeaderCellDef> Acciones </th>
                     <ng-container *matCellDef="let element">
                         <td mat-cell>
-                            <button [mat-dialog-close]="datosPersona" class="btn btn-sm btn-outline-warning"
+                            <button [mat-dialog-close]="datosPersona" class="btn btn-block btn-sm btn-outline-warning"
                                 (click)="asignarUsuarioaPersona(element)">
                                 <i class="fa fa-user-plus" aria-hidden="true"></i>
                             </button>

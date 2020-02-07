@@ -1,5 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { Observable } from 'rxjs';
+import { startWith, map } from 'rxjs/operators';
 
 // Interfaces
 import { Kit } from 'src/app/interfaces/kit/kit';
@@ -25,6 +27,9 @@ export class KitComponent implements OnInit {
       _kit: new FormControl('', [Validators.required]),
       _codigo: new FormControl('', [Validators.required]),
       _idKit: new FormControl(''),
+      _descuento: new FormControl('', [Validators.required]),
+      _idDescuento: new FormControl(''),
+      _idAsignacionDescuentoKit: new FormControl('')
     })
   }
 
@@ -32,6 +37,9 @@ export class KitComponent implements OnInit {
   botonIngresar = 'ingresar';
 
   kits: Kit[] = [];
+  descuentos: any[] = [];
+
+  filteredOptions: Observable<string[]>;
 
   consultarKits() {
     this.inventarioService.consultarKits(
@@ -48,6 +56,34 @@ export class KitComponent implements OnInit {
           console.log(error);
         }
       )
+  }
+
+  consultarDescuentos() {
+    this.inventarioService.consultarDescuentos(
+      localStorage.getItem('miCuenta.getToken')
+    )
+    .then(
+      ok => {
+        for (let index = 0; index < ok['respuesta'].length; index++) {
+          const element = ok['respuesta'][index];
+          console.log(element);
+          this.descuentos[index] = {
+            idDescuento: element.IdDescuento,
+            porcentaje: element.Porcentaje 
+          }
+        }
+      
+      }
+    )
+    .catch(
+      error => {
+        console.log(error);
+      }
+    )
+  }
+
+  seleccionarDescuentoSiExiste(descuento) {
+    console.log(descuento);
   }
 
   validarFormulario() {
@@ -87,9 +123,44 @@ export class KitComponent implements OnInit {
             sweetAlert("Se ingresó correctamente!", {
               icon: "success",
             });
-            this.myForm.reset();
-            this.consultarKits();
           }
+        }
+      )
+      .catch(
+        error => {
+          console.log(error);
+        }
+      )
+  }
+
+  crearDescuento() {
+    this.inventarioService.crearDescuentoKit(
+      this._descuento.value,
+      localStorage.getItem('miCuenta.postToken')
+    )
+      .then(
+        ok => {
+          console.log(ok['respuesta']);
+        }
+      )
+      .catch(
+        error => {
+          console.log(error);
+        }
+      )
+  }
+
+  crearAsignacionDescuentoKit() {
+    this.inventarioService.crearAsignacionDescuentoKit(
+      this._idKit.value,
+      this._idDescuento.value,
+      localStorage.getItem('miCuenta.postToken')
+    )
+      .then(
+        ok => {
+          console.log(ok['respuesta']);
+          this.myForm.reset();
+          this.consultarKits();
         }
       )
       .catch(
@@ -144,6 +215,26 @@ export class KitComponent implements OnInit {
       )
   }
 
+  actualizarAsignacionDescuentoKit() {
+    this.inventarioService.actualizarAsignacionDescuentoKit(
+      this._idAsignacionDescuentoKit.value,
+      this._idKit.value,
+      this._idDescuento.value,
+      localStorage.getItem('miCuenta.putToken')
+    )
+    .then(
+      ok => {
+        console.log(ok['respuesta']);
+        
+      }
+    )
+    .catch(
+      error => {
+        console.log(error);
+      }
+    )
+  }
+
   eliminarKit(idKit) {
     sweetalert({
       title: "Advertencia",
@@ -193,10 +284,33 @@ export class KitComponent implements OnInit {
     return this.myForm.get('_idKit');
   }
 
-  ngOnInit() {
-    this.consultarKits();
+  get _descuento() {
+    return this.myForm.get('_descuento');
   }
 
-  tablaKits = ['descripcion', 'codigo', 'acciones'];
+  get _idDescuento() {
+    return this.myForm.get('_idDescuento');
+  }
+
+  get _idAsignacionDescuentoKit() {
+    return this.myForm.get('_idAsignacionDescuentoKit');
+  }
+
+  ngOnInit() {
+    this.consultarKits();
+    this.consultarDescuentos();
+    this.filteredOptions = this._descuento.valueChanges
+    .pipe(
+      startWith(''),
+      map(value => this._filter(value))
+    );  
+  }
+
+  tablaKits = ['descripcion', 'codigo', 'descuento', 'acciones'];
+
+  private _filter(value: string): string[] {
+    const filterValue = value.toLowerCase();
+    return this.descuentos.filter(option => option.nombre.toLowerCase().includes(filterValue));
+  }
 
 }
