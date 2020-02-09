@@ -37,7 +37,16 @@ export class KitComponent implements OnInit {
   botonIngresar = 'ingresar';
 
   kits: Kit[] = [];
-  descuentos: any[] = [];
+  descuentos: any[] = [
+    {
+      IdDescuento: '1',
+      Porcentaje: '5'
+    },
+    {
+      IdDescuento: '2',
+      Porcentaje: '4'
+    }
+  ];
 
   filteredOptions: Observable<string[]>;
 
@@ -64,14 +73,15 @@ export class KitComponent implements OnInit {
     )
     .then(
       ok => {
-        for (let index = 0; index < ok['respuesta'].length; index++) {
-          const element = ok['respuesta'][index];
-          console.log(element);
-          this.descuentos[index] = {
-            idDescuento: element.IdDescuento,
-            porcentaje: element.Porcentaje 
-          }
-        }
+        console.log(this.descuentos);
+        
+        // for (let index = 0; index < ok['respuesta'].length; index++) {
+        //   const element = ok['respuesta'][index];
+        //   this.descuentos[index] = {
+        //     idDescuento: element.IdDescuento,
+        //     porcentaje: element.Porcentaje 
+        //   }
+        // }
       
       }
     )
@@ -297,20 +307,21 @@ export class KitComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.consultarKits();
-    this.consultarDescuentos();
+    // this.consultarKits();
+    // this.consultarDescuentos();
+    console.log(this.descuentos);
     this.filteredOptions = this._descuento.valueChanges
     .pipe(
       startWith(''),
       map(value => this._filter(value))
-    );  
+    );
   }
 
   tablaKits = ['descripcion', 'codigo', 'descuento', 'acciones'];
 
   private _filter(value: string): string[] {
-    const filterValue = value.toLowerCase();
-    return this.descuentos.filter(option => option.nombre.toLowerCase().includes(filterValue));
+    const filterValue = value.toLowerCase();    
+    return this.descuentos.filter(option => option.Porcentaje.toLowerCase().includes(filterValue));
   }
 
 }
