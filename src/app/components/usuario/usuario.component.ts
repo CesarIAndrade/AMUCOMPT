@@ -44,8 +44,8 @@ export class UsuarioComponent implements OnInit {
   ) {
     this.myForm = new FormGroup({
       _idUsuario: new FormControl(''),
-      _idPersona: new FormControl(''),
-      _cedula: new FormControl('', [Validators.required]),
+      _idPersona: new FormControl('', [Validators.required]),
+      _cedula: new FormControl(''),
       _nombres: new FormControl(''),
       _apellidos: new FormControl(''),
       _valorUsuario: new FormControl('', [Validators.required]),

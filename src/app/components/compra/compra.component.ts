@@ -1,6 +1,8 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material';
+import { Observable } from 'rxjs';
+import { startWith, map } from 'rxjs/operators';
 
 // Component
 import { ModalAsignacionConfiguracionProductoComponent } from '../modal-asignacion-configuracion-producto/modal-asignacion-configuracion-producto.component';
@@ -32,6 +34,8 @@ export class CompraComponent implements OnInit {
     private router: Router
   ) {
     this.myForm = new FormGroup({
+      _idCabecera: new FormControl(''),
+      _tipoTransaccion: new FormControl(''),
       _idConfigurarProducto: new FormControl(''),
       _idAsignarProductoKit: new FormControl(''),
       _idKit: new FormControl(''),
@@ -40,21 +44,23 @@ export class CompraComponent implements OnInit {
       _cantidad: new FormControl('', [Validators.required]),
       _fechaExpiracion: new FormControl('', [Validators.required]),
       _precio: new FormControl('', [Validators.required]),
+      _idLote: new FormControl('', [Validators.required]),
+      _lote: new FormControl(''),
     })
   }
 
   botonInsertar = 'ingresar';
-  idCabecera: string
-  tipoTransaccion: string;
-
   seccionProducto = false;
   seccionKit = true;
-  seleccionKit = false
+  seleccionKit = false;
 
   detallesCompra: any[] = [];
   kits: any[] = [];
+  lotes: any[] = [];
   listaProductosDeUnKit: any[] = [];
   facturasNoFinalizadas: any[] = [];
+
+  filteredOptions: Observable<string[]>;
 
   varificarTipoCompra(tipoCompra) {
     if (tipoCompra.value == '2') {
@@ -79,7 +85,7 @@ export class CompraComponent implements OnInit {
             ok['respuesta'].map(
               item => {
                 if (item.Descripcion == 'COMPRA') {
-                  this.tipoTransaccion = item.IdTipoTransaccion;
+                  this._tipoTransaccion.setValue(item.IdTipoTransaccion);
                 }
               }
             )
@@ -116,9 +122,29 @@ export class CompraComponent implements OnInit {
       )
   }
 
+  consultarLotes() {
+    this.inventarioService.consultarLotes(
+      localStorage.getItem('miCuenta.getToken')
+    )
+    .then(
+      ok => {
+        this.lotes = ok['respuesta'];
+      }
+    )
+    .catch(
+      error => {
+        console.log(error);
+      }
+    )
+  }
+
+  seleccionarLoteSiExiste(lote) {
+    console.log(lote);
+  }
+
   consultarDetalleFactura() {
     this.inventarioService.consultarDetalleFactura(
-      this.idCabecera,
+      this._idCabecera.value,
       localStorage.getItem('miCuenta.getToken')
     )
       .then(
@@ -225,7 +251,7 @@ export class CompraComponent implements OnInit {
   crearCabeceraFactura() {
     this.inventarioService.crearCabeceraFactura(
       localStorage.getItem('miCuenta.idAsignacionTipoUsuario'),
-      this.tipoTransaccion,
+      this._tipoTransaccion.value,
       localStorage.getItem('miCuenta.postToken')
     )
       .then(
@@ -235,7 +261,7 @@ export class CompraComponent implements OnInit {
               icon: "error",
             });
           } else {
-            this.idCabecera = ok['respuesta'];
+            this._idCabecera.setValue(ok['respuesta']);
             this.crearDetalleFactura();
             this.testButton.nativeElement.value = 'agregarDetalles';
           }
@@ -252,7 +278,7 @@ export class CompraComponent implements OnInit {
     var fecha = new Date(this._fechaExpiracion.value).toJSON();
     if (this._idAsignarProductoKit.value == '') {
       this.inventarioService.crearDetalleFactura(
-        this.idCabecera,
+        this._idCabecera.value,
         this._idConfigurarProducto.value,
         'false',
         this._cantidad.value,
@@ -281,7 +307,7 @@ export class CompraComponent implements OnInit {
         )
     } else {
       this.inventarioService.crearDetalleFactura(
-        this.idCabecera,
+        this._idCabecera.value,
         this._idAsignarProductoKit.value,
         'true',
         this._cantidad.value,
@@ -351,7 +377,7 @@ export class CompraComponent implements OnInit {
 
   realizarCompra() {
     this.inventarioService.finalizarFactura(
-      this.idCabecera,
+      this._idCabecera.value,
       localStorage.getItem('miCuenta.putToken')
     )
       .then(
@@ -376,15 +402,13 @@ export class CompraComponent implements OnInit {
   }
 
   mostrarDetallesFactura(factura) {
-    console.log(factura);
     this.detallesCompra = [];
     this.testButton.nativeElement.value = 'actualizarFactura';
     var detalleCompra: DetallesCompra;
-    this.idCabecera = factura.IdCabeceraFactura;
-    factura.DetalleFactura.map(    
-      item => {     
+    this._idCabecera.setValue(factura.IdCabeceraFactura);
+    factura.DetalleFactura.map(
+      item => {
         if (item.ConfigurarProductos == null) {
-          console.log('kit');
           detalleCompra = {
             IdDetalleFactura: item.IdDetalleFactura,
             IdCabeceraFactura: item.IdCabeceraFactura,
@@ -397,8 +421,7 @@ export class CompraComponent implements OnInit {
             Medida: item.AsignarProductoKits.ListaAsignarProductoKit[0].ListaProductos.Medida.Descripcion
           }
           this.detallesCompra.push(detalleCompra);
-        } else if(item.AsignarProductoKits == null) {
-          console.log('no kit');
+        } else if (item.AsignarProductoKits == null) {
           detalleCompra = {
             IdDetalleFactura: item.IdDetalleFactura,
             IdCabeceraFactura: item.IdCabeceraFactura,
@@ -448,10 +471,32 @@ export class CompraComponent implements OnInit {
     return this.myForm.get('_precio');
   }
 
+  get _idCabecera() {
+    return this.myForm.get('_idCabecera')
+  }
+
+  get _tipoTransaccion() {
+    return this.myForm.get('_tipoTransaccion')
+  }
+
+  get _lote() {
+    return this.myForm.get('_lote')
+  }
+
+  get _idLote() {
+    return this.myForm.get('_idLote')
+  }
+
   ngOnInit() {
     this.consultarKits();
+    this.consultarLotes();
     this.consultarTipoTransaccion();
     this.consultarFacturasNoFinalizadas();
+  }
+
+  private _filter(value: string): string[] {
+    const filterValue = value.toLowerCase();
+    return this.lotes.filter(option => option.Codigo.toLowerCase().includes(filterValue));
   }
 
   tablaDetalleCompra = ['kit', 'descripcion', 'acciones'];

@@ -6,23 +6,19 @@
                 <input matInput [value]="idComunidad" type="number" readonly disabled hidden>
                 <form [formGroup]="myForm" (ngSubmit)="validarFormulario()" novalidate>
                     <mat-form-field class="example-full-width">
-                        <input matInput [value]="comunidad" type="text" readonly disabled>
+                        <input matInput placeholder="Comunidad" type="text" readonly aria-disabled="true">
                     </mat-form-field>
-                    <div class="badge badge-danger mb-3 btn-block" [hidden]="inputIdComunidad">
-                        Comunidad Requerida
-                    </div>
                     <mat-form-field class="example-full-width">
                         <input matInput formControlName="_sembrio" type="text" placeholder="Ingrese Sembrío">
+                        <mat-error *ngIf="_sembrio.invalid && (_sembrio.dirty || _sembrio.touched)">
+                            <mat-error *ngIf="_sembrio.errors.required">
+                                Sembrío Requerido
+                            </mat-error>
+                        </mat-error>
                     </mat-form-field>
-                    <div class="badge badge-danger mb-3 btn-block"
-                        *ngIf="_sembrio.invalid && (_sembrio.dirty || _sembrio.touched)">
-                        <div *ngIf="_sembrio.errors.required">
-                            Sembrío Requerido
-                        </div>
-                    </div>
                     <div>
                         <button type="submit" [value]="botonIngresar" [disabled]="myForm.invalid"
-                            class="btn btn-success btn-block" #testButton>Guardar</button>
+                            class="mt-3 btn btn-success btn-block" #testButton>Guardar</button>
                     </div>
                 </form>
             </div>
@@ -59,11 +55,10 @@
             <div class="card-body mat-elevation-z5">
                 <h5 style="text-align: center;">Lista Sembríos</h5>
                 <mat-form-field class="example-full-width">
-                    <input matInput [(ngModel)]="filterSembrio" type="text"
-                        placeholder="Buscar Sembrío">
-                        <button mat-button matPrefix mat-icon-button>
-                            <mat-icon>search</mat-icon>
-                        </button>
+                    <input matInput [(ngModel)]="filterSembrio" type="text" placeholder="Buscar Sembrío">
+                    <button mat-button matPrefix mat-icon-button>
+                        <mat-icon>search</mat-icon>
+                    </button>
                 </mat-form-field>
                 <div class="tablaSembrios">
                     <table mat-table [dataSource]="sembrios|filter:filterSembrio:'Descripcion'">

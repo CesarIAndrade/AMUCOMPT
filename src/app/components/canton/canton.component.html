@@ -5,7 +5,7 @@
                 <h5 style="text-align: center;">Nuevo Cantón</h5>
                 <form [formGroup]="myForm" (ngSubmit)="validarFormulario()" novalidate>
                     <mat-form-field class="example-full-width">
-                        <input matInput formControlName="_provincia" type="text" readonly>
+                        <input matInput placeholder="Provincia" type="text" readonly aria-disabled="true">
                     </mat-form-field>
                     <mat-form-field class="example-full-width">
                         <input matInput formControlName="_canton" type="text"
@@ -18,7 +18,7 @@
                     </mat-form-field>
                     <div>
                         <button type="submit" [value]="botonIngresar" [disabled]="myForm.invalid"
-                            class="btn btn-success btn-block" #testButton>Guardar</button>
+                            class="mt-3 btn btn-success btn-block" #testButton>Guardar</button>
                     </div>
                 </form>
             </div>

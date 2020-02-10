@@ -27,15 +27,14 @@ export class CantonComponent implements OnInit {
     private personaService: PersonaService
   ) {
     this.myForm = new FormGroup({
+      _idCanton: new FormControl(''),
       _canton: new FormControl('', [Validators.required]),
       _idProvincia: new FormControl('', [Validators.required]),
-      _provincia: new FormControl('Provincia', [Validators.required])
-
+      _provincia: new FormControl('')
     })
   }
 
   botonIngresar = 'ingresar';
-  idCanton = '0';
   filterProvincia = '';
   filterCanton = '';
 
@@ -63,7 +62,6 @@ export class CantonComponent implements OnInit {
           this.cantones = [];
           this.cantones = ok['respuesta'];
           this.consultarProvincias();
-
         }
       )
       .catch(
@@ -97,7 +95,7 @@ export class CantonComponent implements OnInit {
             sweetAlert("Inténtalo de nuevo!", {
               icon: "warning",
             });
-            this.limpiarCampos();
+            this.myForm.reset();
           } else if (ok['respuesta'] == '400') {
             sweetAlert("Cantón ya existe!", {
               icon: "warning",
@@ -110,7 +108,7 @@ export class CantonComponent implements OnInit {
             sweetAlert("Se ingresó correctamente!", {
               icon: "success",
             });
-            this.limpiarCampos();
+            this.myForm.reset();
             this.consultarCantones();
             this.nuevoCantonCreado.emit();
           }
@@ -132,7 +130,7 @@ export class CantonComponent implements OnInit {
         }
       }
     )
-    this.idCanton = canton.IdCanton;
+    this._idCanton.setValue(canton.IdCanton);
     this._canton.setValue(canton.Descripcion);
     this.testButton.nativeElement.value = 'modificar';
   }
@@ -140,7 +138,7 @@ export class CantonComponent implements OnInit {
   actualizarCanton() {
     this.panelAdministracionService.actualizarCanton(
       this._idProvincia.value,
-      this.idCanton,
+      this._idCanton.value,
       this._canton.value,
       localStorage.getItem('miCuenta.putToken'))
       .then(
@@ -149,7 +147,7 @@ export class CantonComponent implements OnInit {
             sweetAlert("Inténtalo de nuevo!", {
               icon: "warning",
             });
-            this.limpiarCampos();
+            this.myForm.reset();
           } else if (ok['respuesta'] == '400') {
             sweetAlert("Cantón ya existe!", {
               icon: "warning",
@@ -163,7 +161,7 @@ export class CantonComponent implements OnInit {
               icon: "success",
             });
             this.testButton.nativeElement.value = 'ingresar';
-            this.limpiarCampos();
+            this.myForm.reset();
             this.consultarCantones();
           }
         }
@@ -217,9 +215,8 @@ export class CantonComponent implements OnInit {
     this._idProvincia.setValue(provincia.IdProvincia);
   }
 
-  limpiarCampos() {
-    this.myForm.reset();
-    this._provincia.setValue('Provincia');
+  get _idCanton() {
+    return this.myForm.get('_idCanton');
   }
 
   get _canton() {

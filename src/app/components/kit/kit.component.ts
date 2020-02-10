@@ -29,24 +29,19 @@ export class KitComponent implements OnInit {
       _idKit: new FormControl(''),
       _descuento: new FormControl('', [Validators.required]),
       _idDescuento: new FormControl(''),
-      _idAsignacionDescuentoKit: new FormControl('')
+      _idAsignacionDescuentoKit: new FormControl(''),
     })
+  }
+
+  get _tempDescuento() {
+    return this.myForm.get('_tempDescuento');
   }
 
   filterKit = '';
   botonIngresar = 'ingresar';
 
   kits: Kit[] = [];
-  descuentos: any[] = [
-    {
-      IdDescuento: '1',
-      Porcentaje: '5'
-    },
-    {
-      IdDescuento: '2',
-      Porcentaje: '4'
-    }
-  ];
+  descuentos: any[] = [];
 
   filteredOptions: Observable<string[]>;
 
@@ -71,36 +66,43 @@ export class KitComponent implements OnInit {
     this.inventarioService.consultarDescuentos(
       localStorage.getItem('miCuenta.getToken')
     )
-    .then(
-      ok => {
-        console.log(this.descuentos);
-        
-        // for (let index = 0; index < ok['respuesta'].length; index++) {
-        //   const element = ok['respuesta'][index];
-        //   this.descuentos[index] = {
-        //     idDescuento: element.IdDescuento,
-        //     porcentaje: element.Porcentaje 
-        //   }
-        // }
-      
-      }
-    )
-    .catch(
-      error => {
-        console.log(error);
-      }
-    )
+      .then(
+        ok => {
+          this.descuentos = [];
+          for (let index = 0; index < ok['respuesta'].length; index++) {
+            const element = ok['respuesta'][index];
+            this.descuentos[index] = {
+              IdDescuento: element.IdDescuento,
+              Porcentaje: String(element.Porcentaje)
+            }
+          }
+          this.filteredOptions = this._descuento.valueChanges
+            .pipe(
+              startWith(''),
+              map(value => this._filter(value))
+            );
+        }
+      )
+      .catch(
+        error => {
+          console.log(error);
+        }
+      )
   }
 
   seleccionarDescuentoSiExiste(descuento) {
-    console.log(descuento);
+    this._idDescuento.setValue(descuento.IdDescuento);
+    this._descuento.setValue(descuento.Porcentaje);
   }
 
   validarFormulario() {
+    console.log(this.testButton.nativeElement.value);
+
     if (this.myForm.valid) {
       if (this.testButton.nativeElement.value == 'ingresar') {
         this.crearKit();
       } else if (this.testButton.nativeElement.value == 'modificar') {
+
         this.actualizarKit();
       }
     } else {
@@ -120,11 +122,11 @@ export class KitComponent implements OnInit {
             sweetAlert("Inténtalo de nuevo!", {
               icon: "warning",
             });
-            this.myForm.reset();
           } else if (ok['respuesta'] == '400') {
             sweetAlert("Kit ya existe!", {
               icon: "warning",
             });
+            this.myForm.reset();
           } else if (ok['respuesta'] == 'false') {
             sweetAlert("Ha ocurrido un error!", {
               icon: "error",
@@ -133,6 +135,8 @@ export class KitComponent implements OnInit {
             sweetAlert("Se ingresó correctamente!", {
               icon: "success",
             });
+            this._idKit.setValue(ok['respuesta']);
+            this.crearDescuento();
           }
         }
       )
@@ -150,7 +154,13 @@ export class KitComponent implements OnInit {
     )
       .then(
         ok => {
-          console.log(ok['respuesta']);
+          if (typeof (ok['respuesta']) == 'string') {
+            this._idDescuento.setValue(ok['respuesta']);
+            this.crearAsignacionDescuentoKit();
+          } else {
+            this._idDescuento.setValue(ok['respuesta'].IdDescuento);
+            this.crearAsignacionDescuentoKit();
+          }
         }
       )
       .catch(
@@ -161,6 +171,9 @@ export class KitComponent implements OnInit {
   }
 
   crearAsignacionDescuentoKit() {
+    // console.log(this._idKit.value);
+    // console.log(this._idDescuento.value);
+    
     this.inventarioService.crearAsignacionDescuentoKit(
       this._idKit.value,
       this._idDescuento.value,
@@ -168,9 +181,9 @@ export class KitComponent implements OnInit {
     )
       .then(
         ok => {
-          console.log(ok['respuesta']);
           this.myForm.reset();
           this.consultarKits();
+          this.consultarDescuentos();
         }
       )
       .catch(
@@ -184,6 +197,8 @@ export class KitComponent implements OnInit {
     this._idKit.setValue(kit.IdKit);
     this._kit.setValue(kit.Descripcion);
     this._codigo.setValue(kit.Codigo);
+    this._descuento.setValue(kit.AsignarDescuentoKit.Descuento.Porcentaje);
+    this._idDescuento.setValue(kit.AsignarDescuentoKit.Descuento.IdDescuento);
     this.testButton.nativeElement.value = 'modificar';
   }
 
@@ -200,10 +215,6 @@ export class KitComponent implements OnInit {
             sweetAlert("Inténtalo de nuevo!", {
               icon: "warning",
             });
-          } else if (ok['respuesta'] == '400') {
-            sweetAlert("Kit ya existe!", {
-              icon: "warning",
-            });
           } else if (ok['respuesta'] == 'false') {
             sweetAlert("Ha ocurrido un error!", {
               icon: "error",
@@ -212,9 +223,10 @@ export class KitComponent implements OnInit {
             sweetAlert("Se ingresó correctamente!", {
               icon: "success",
             });
-            this.myForm.reset();
+            this.crearDescuento();
             this.testButton.nativeElement.value = 'ingresar';
             this.consultarKits();
+            this.consultarDescuentos();
           }
         }
       )
@@ -232,17 +244,17 @@ export class KitComponent implements OnInit {
       this._idDescuento.value,
       localStorage.getItem('miCuenta.putToken')
     )
-    .then(
-      ok => {
-        console.log(ok['respuesta']);
-        
-      }
-    )
-    .catch(
-      error => {
-        console.log(error);
-      }
-    )
+      .then(
+        ok => {
+          console.log(ok['respuesta']);
+
+        }
+      )
+      .catch(
+        error => {
+          console.log(error);
+        }
+      )
   }
 
   eliminarKit(idKit) {
@@ -307,20 +319,14 @@ export class KitComponent implements OnInit {
   }
 
   ngOnInit() {
-    // this.consultarKits();
-    // this.consultarDescuentos();
-    console.log(this.descuentos);
-    this.filteredOptions = this._descuento.valueChanges
-    .pipe(
-      startWith(''),
-      map(value => this._filter(value))
-    );
+    this.consultarKits();
+    this.consultarDescuentos();
   }
 
   tablaKits = ['descripcion', 'codigo', 'descuento', 'acciones'];
 
   private _filter(value: string): string[] {
-    const filterValue = value.toLowerCase();    
+    const filterValue = value.toLowerCase();
     return this.descuentos.filter(option => option.Porcentaje.toLowerCase().includes(filterValue));
   }
 

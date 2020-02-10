@@ -28,14 +28,13 @@ export class SembrioComponent implements OnInit {
     private personaService: PersonaService
   ) {
     this.myForm = new FormGroup({
-      _sembrio: new FormControl('', [Validators.required])
+      _idSembrio: new FormControl(''),
+      _sembrio: new FormControl('', [Validators.required]),
+      _idComunidad: new FormControl('', [Validators.required]),
+      _comunidad: new FormControl('')
     })
   }
 
-  idComunidad = '0';
-  idSembrio = '0';
-  comunidad = 'Comunidad';
-  inputIdComunidad = true;
   botonIngresar = 'ingresar';
   filterComunidad = '';
   filterSembrio = '';
@@ -75,12 +74,7 @@ export class SembrioComponent implements OnInit {
   validarFormulario() {
     if (this.myForm.valid) {
       if (this.testButton.nativeElement.value == 'ingresar') {
-        if (this.idComunidad == '0') {
-          this.inputIdComunidad = false;
-        }
-        else {
           this.crearSembrio();
-        }
       } else if (this.testButton.nativeElement.value == 'modificar') {
         this.actualizarSembrio();
       }
@@ -91,14 +85,14 @@ export class SembrioComponent implements OnInit {
 
   crearSembrio() {
     this.panelAdministracionService.crearSembrio(
-      this.idComunidad,
-      this.myForm.get('_sembrio').value,
+      this._idComunidad.value,
+      this._sembrio.value,
       localStorage.getItem('miCuenta.postToken')
     )
       .then(
         ok => {
           this.nuevoSembrioCreado.emit(true);
-          this.limpiarCampos();
+          this.myForm.reset();
           this.consultarSembrios();
         }
       )
@@ -110,37 +104,34 @@ export class SembrioComponent implements OnInit {
   }
 
   setComunidad(comunidad) {
-    this.idComunidad = comunidad.IdComunidad;
-    this.comunidad = comunidad.Descripcion;
-    this.inputIdComunidad = true;
+    this._idComunidad.setValue(comunidad.IdComunidad);
+    this._comunidad.setValue(comunidad.Descripcion);
   }
 
   mostrarSembrio(sembrio) {
-    this.idComunidad = sembrio.Comunidad.IdComunidad;
+    this._idComunidad.setValue(sembrio.Comunidad.IdComunidad);
     this.comunidades.map(
       item => {
-        if (this.idComunidad == item.IdComunidad) {
-          this.comunidad = item.Descripcion;
+        if (this._idComunidad.value == item.IdComunidad) {
+          this._comunidad.setValue(item.Descripcion);
         }
       }
     )
-    this.idSembrio = sembrio.IdSembrio;
-    this.myForm.setValue({
-      _sembrio: sembrio.Descripcion
-    })
+    this._idSembrio.setValue(sembrio.IdSembrio);
+    this.myForm.setValue(sembrio.Descripcion)
     this.testButton.nativeElement.value = 'modificar';
   }
 
   actualizarSembrio() {
     this.panelAdministracionService.actualizarSembrio(
-      this.idComunidad,
-      this.idSembrio,
-      this.myForm.get('_sembrio').value,
+      this._idComunidad.value,
+      this._idSembrio.value,
+      this._sembrio.value,
       localStorage.getItem('miCuenta.putToken')
     )
       .then(
         ok => {
-          this.limpiarCampos();
+          this.myForm.reset();
           this.consultarSembrios();
           this.testButton.nativeElement.value = 'ingresar';
         }
@@ -182,13 +173,20 @@ export class SembrioComponent implements OnInit {
       });
   }
 
-  limpiarCampos() {
-    this.myForm.reset();
-    this.comunidad = 'Comunidad';
-  }
+get _idSembrio() {
+  return this.myForm.get('_idSembrio');
+}
 
   get _sembrio() {
     return this.myForm.get('_sembrio');
+  }
+
+  get _idComunidad() {
+    return this.myForm.get('_idComunidad');
+  }
+
+  get _comunidad() {
+    return this.myForm.get('_comunidad');
   }
 
   ngOnInit() {

@@ -27,25 +27,19 @@ export class ParroquiaComponent implements OnInit {
     private personaService: PersonaService
   ) {
     this.myForm = new FormGroup({
-      _parroquia: new FormControl('', [Validators.required])
+      _idParroquia: new FormControl(''),
+      _parroquia: new FormControl('', [Validators.required]),
+      _idCanton: new FormControl('', [Validators.required]),
+      _canton: new FormControl('')
     })
   }
 
   botonIngresar = 'ingresar';
-  idParroquia = '0';
-  canton = 'Cantón';
-  inputIdCanton = true;
-  idCanton = '0';
-  inputParroquia = true;
-
-  parroquias: Parroquia[] = [];
   filterParroquia = '';
   filterCanton = '';
-  cantones: Canton[] = [];
 
-  onChangeInptParroquia() {
-    this.inputParroquia = true;
-  }
+  cantones: Canton[] = [];
+  parroquias: Parroquia[] = [];
 
   consultarCantones() {
     this.personaService.consultarCantones(localStorage.getItem('miCuenta.getToken'))
@@ -80,12 +74,7 @@ export class ParroquiaComponent implements OnInit {
   validarFormulario() {
     if (this.myForm.valid) {
       if (this.testButton.nativeElement.value == 'ingresar') {
-        if (this.idCanton == '0') {
-          this.inputIdCanton = false;
-        }
-        else {
-          this.crearParroquia();
-        }
+        this.crearParroquia();
       } else if (this.testButton.nativeElement.value == 'modificar') {
         this.actualizarParroquia();
       }
@@ -94,10 +83,10 @@ export class ParroquiaComponent implements OnInit {
     }
   }
 
-  crearParroquia(){
+  crearParroquia() {
     this.panelAdministracionService.crearParroquia(
-      this.idCanton,
-      this.myForm.get('_parroquia').value,
+      this._idCanton.value,
+      this._parroquia.value,
       localStorage.getItem('miCuenta.postToken')
     )
       .then(
@@ -108,7 +97,9 @@ export class ParroquiaComponent implements OnInit {
             });
             this.limpiarCampos();
           } else if (ok['respuesta'] == '400') {
-            this.inputParroquia = false;
+            sweetAlert("Cantón ya existe!", {
+              icon: "warning",
+            });
           } else if (ok['respuesta'] == 'false') {
             sweetAlert("Ha ocurrido un error!", {
               icon: "error",
@@ -131,26 +122,24 @@ export class ParroquiaComponent implements OnInit {
   }
 
   mostrarParroquia(parroquia) {
-    this.idCanton = parroquia.Canton.IdCanton;
+    this._idCanton.setValue(parroquia.Canton.IdCanton);
     this.cantones.map(
       item => {
-        if (this.idCanton == item.IdCanton) {
-          this.canton = item.Descripcion;
+        if (this._idCanton.value == item.IdCanton) {
+          this._canton.setValue(item.Descripcion);
         }
       }
     )
-    this.idParroquia = parroquia.IdParroquia;
-    this.myForm.setValue({
-      _parroquia: parroquia.Descripcion
-    })
+    this._idParroquia.setValue(parroquia.IdParroquia);
+    this.myForm.setValue(parroquia.Descripcion)
     this.testButton.nativeElement.value = 'modificar';
   }
 
-  actualizarParroquia(){
+  actualizarParroquia() {
     this.panelAdministracionService.actualizarParroquia(
-      this.idCanton,
-      this.idParroquia,
-      this.myForm.get('_parroquia').value,
+      this._idCanton.value,
+      this._idParroquia.value,
+      this._parroquia.value,
       localStorage.getItem('miCuenta.putToken')
     )
       .then(
@@ -161,7 +150,9 @@ export class ParroquiaComponent implements OnInit {
             });
             this.limpiarCampos();
           } else if (ok['respuesta'] == '400') {
-            this.inputParroquia = false;
+            sweetAlert("Cantón ya existe!", {
+              icon: "warning",
+            });
           } else if (ok['respuesta'] == 'false') {
             sweetAlert("Ha ocurrido un error!", {
               icon: "error",
@@ -182,8 +173,8 @@ export class ParroquiaComponent implements OnInit {
         }
       )
   }
-  
-  eliminarParroquia(idParroquia: string){
+
+  eliminarParroquia(idParroquia: string) {
     sweetalert({
       title: "Advertencia",
       text: "¿Está seguro que desea eliminar?",
@@ -191,47 +182,58 @@ export class ParroquiaComponent implements OnInit {
       buttons: ['Cancelar', 'Ok'],
       dangerMode: true
     })
-    .then((willDelete) => {
-      if (willDelete) {
-        this.panelAdministracionService.eliminarParroquia(
-          idParroquia,
-          localStorage.getItem('miCuenta.deleteToken'))
-          .then(
-            ok => {
-              if(ok['respuesta']){
-                sweetAlert("Se ha eliminado correctamente!", {
-                  icon: "success",
-                });
-                this.consultarParroquias();
-              } else {
-                sweetAlert("No se ha podido elminiar!", {
-                  icon: "error",
-                });
+      .then((willDelete) => {
+        if (willDelete) {
+          this.panelAdministracionService.eliminarParroquia(
+            idParroquia,
+            localStorage.getItem('miCuenta.deleteToken'))
+            .then(
+              ok => {
+                if (ok['respuesta']) {
+                  sweetAlert("Se ha eliminado correctamente!", {
+                    icon: "success",
+                  });
+                  this.consultarParroquias();
+                } else {
+                  sweetAlert("No se ha podido elminiar!", {
+                    icon: "error",
+                  });
+                }
               }
-            }
-          )
-          .catch(
-            error => {
-              console.log(error);
-            }
-          )
-      }
-    });
+            )
+            .catch(
+              error => {
+                console.log(error);
+              }
+            )
+        }
+      });
   }
 
   setCanton(canton) {
-    this.idCanton = canton.IdCanton;
-    this.canton = canton.Descripcion;
-    this.inputIdCanton = true;
+    this._idCanton.setValue(canton.IdCanton);
+    this._canton.setValue(canton.Descripcion);
   }
 
   limpiarCampos() {
     this.myForm.reset();
-    this.canton = 'Cantón';
+    this._canton.setValue('Cantón');
   }
 
-  get _parroquia(){
+  get _idParroquia() {
+    return this.myForm.get('_idParroquia');
+  }
+
+  get _parroquia() {
     return this.myForm.get('_parroquia')
+  }
+
+  get _idCanton() {
+    return this.myForm.get('_idCanton');
+  }
+
+  get _canton() {
+    return this.myForm.get('_canton');
   }
 
   ngOnInit() {

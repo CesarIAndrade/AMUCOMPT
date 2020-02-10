@@ -28,25 +28,19 @@ export class ComunidadComponent implements OnInit {
     private personaService: PersonaService
   ) {
     this.myForm = new FormGroup({
-      _comunidad: new FormControl('', [Validators.required])
+      _idComunidad: new FormControl(''),
+      _comunidad: new FormControl('', [Validators.required]),
+      _idParroquia: new FormControl('', [Validators.required]),
+      _parroquia: new FormControl('')
     })
   }
 
   botonIngresar = 'ingresar';
-  idParroquia = '0';
-  parroquia = 'Parroquia';
-  inputIdParroquia = true;
-  idComunidad = '0';
-  inputComunidad = true;
-
   filterParroquia = '';
   filterComunidad = '';
+
   parroquias: Parroquia[] = [];
   comunidades: Comunidad[] = [];
-
-  onChangeInptComunidad() {
-    this.inputComunidad = true;
-  }
 
   consultarParroquias() {
     this.personaService.consultarParroquias(localStorage.getItem('miCuenta.getToken'))
@@ -80,12 +74,7 @@ export class ComunidadComponent implements OnInit {
   validarFormulario() {
     if (this.myForm.valid) {
       if (this.testButton.nativeElement.value == 'ingresar') {
-        if (this.idParroquia == '0') {
-          this.inputIdParroquia = false;
-        }
-        else {
-          this.crearComunidad();
-        }
+        this.crearComunidad();
       } else if (this.testButton.nativeElement.value == 'modificar') {
         this.actualizarComunidad();
       }
@@ -96,8 +85,8 @@ export class ComunidadComponent implements OnInit {
 
   crearComunidad() {
     this.panelAdministracionService.crearComunidad(
-      this.idParroquia,
-      this.myForm.get('_comunidad').value,
+      this._idParroquia.value,
+      this._comunidad.value,
       localStorage.getItem('miCuenta.postToken')
     )
       .then(
@@ -106,9 +95,11 @@ export class ComunidadComponent implements OnInit {
             sweetAlert("Inténtalo de nuevo!", {
               icon: "warning",
             });
-            this.limpiarCampos();
+            this.myForm.reset();
           } else if (ok['respuesta'] == '400') {
-            this.inputComunidad = false;
+            sweetAlert("Comunidad ya existe!", {
+              icon: "warning",
+            });
           } else if (ok['respuesta'] == 'false') {
             sweetAlert("Ha ocurrido un error!", {
               icon: "error",
@@ -117,7 +108,7 @@ export class ComunidadComponent implements OnInit {
             sweetAlert("Se ingresó correctamente!", {
               icon: "success",
             });
-            this.limpiarCampos();
+            this.myForm.reset();
             this.consultarComunidades();
             this.nuevaCaomunidadCreada.emit(true);
           }
@@ -131,26 +122,24 @@ export class ComunidadComponent implements OnInit {
   }
 
   mostrarComunidad(comunidad) {
-    this.idParroquia = comunidad.Parroquia.IdParroquia;
+    this._idParroquia.setValue(comunidad.Parroquia.IdParroquia);
     this.parroquias.map(
       item => {
-        if (this.idParroquia == item.IdParroquia) {
-          this.parroquia = item.Descripcion;
+        if (this._idParroquia.value == item.IdParroquia) {
+          this._parroquia.setValue(item.Descripcion);
         }
       }
     )
-    this.idComunidad = comunidad.IdComunidad;
-    this.myForm.setValue({
-      _comunidad: comunidad.Descripcion
-    })
+    this._idComunidad.setValue(comunidad.IdComunidad);
+    this.myForm.setValue(comunidad.Descripcion)
     this.testButton.nativeElement.value = 'modificar';
   }
 
   actualizarComunidad() {
     this.panelAdministracionService.actualizarComunidad(
-      this.idParroquia,
-      this.idComunidad,
-      this.myForm.get('_comunidad').value,
+      this._idParroquia.value,
+      this._idComunidad.value,
+      this._comunidad.value,
       localStorage.getItem('miCuenta.putToken')
     )
       .then(
@@ -159,9 +148,11 @@ export class ComunidadComponent implements OnInit {
             sweetAlert("Inténtalo de nuevo!", {
               icon: "warning",
             });
-            this.limpiarCampos();
+            this.myForm.reset();
           } else if (ok['respuesta'] == '400') {
-            this.inputComunidad = false;
+            sweetAlert("Comunidad ya existe!", {
+              icon: "warning",
+            });
           } else if (ok['respuesta'] == 'false') {
             sweetAlert("Ha ocurrido un error!", {
               icon: "error",
@@ -170,7 +161,7 @@ export class ComunidadComponent implements OnInit {
             sweetAlert("Se ingresó correctamente!", {
               icon: "success",
             });
-            this.limpiarCampos();
+            this.myForm.reset();
             this.consultarComunidades();
             this.testButton.nativeElement.value = 'ingresar';
           }
@@ -220,18 +211,24 @@ export class ComunidadComponent implements OnInit {
   }
 
   setParroquia(parroquia) {
-    this.idParroquia = parroquia.IdParroquia;
-    this.parroquia = parroquia.Descripcion;
-    this.inputIdParroquia = true;
+    this._idParroquia.setValue(parroquia.IdParroquia);
+    this._parroquia.setValue(parroquia.Descripcion);
   }
 
-  limpiarCampos() {
-    this.myForm.reset();
-    this.parroquia = 'Parroquia';
+  get _idComunidad() {
+    return this.myForm.get('_idComunidad');
   }
 
   get _comunidad() {
-    return this.myForm.get('_comunidad')
+    return this.myForm.get('_comunidad');
+  }
+
+  get _idParroquia() {
+    return this.myForm.get('_idParroquia');
+  }
+
+  get _parroquia() {
+    return this.myForm.get('_parroquia');
   }
 
   ngOnInit() {
