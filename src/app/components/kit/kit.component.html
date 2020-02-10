@@ -21,14 +21,11 @@
                         </mat-error>
                     </mat-form-field>
                     <mat-form-field class="example-full-width">
-                        <input matInput formControlName="_descuento"
-                            type="text" placeholder="Descuento" [matAutocomplete]="auto">
+                        <input type="text" placeholder="Descuento" matInput
+                            formControlName="_descuento" [matAutocomplete]="auto">
                         <mat-autocomplete #auto="matAutocomplete">
-                            <mat-option 
-                            (onSelectionChange)="seleccionarDescuentoSiExiste(option)"
-                                *ngFor="let option of filteredOptions | async" 
-                                [value]="option.porcentaje">
-                                {{option.porcentaje}}
+                            <mat-option (onSelectionChange)="seleccionarDescuentoSiExiste(option)" *ngFor="let option of filteredOptions | async" [value]="option.Porcentaje">
+                                {{option.Porcentaje}}
                             </mat-option>
                         </mat-autocomplete>
                         <mat-error *ngIf="_descuento.invalid && (_descuento.dirty || _descuento.touched)">
