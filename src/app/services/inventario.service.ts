@@ -685,12 +685,12 @@ export class InventarioService {
 
   crearAsignacionProductoKit(
     idConfigurarProducto: string,
-    idKit: string,
+    idAsignarDescuentoKit: string,
     _token: string
   ) {
     const body = new HttpParams()
       .set('IdConfigurarProducto', idConfigurarProducto)
-      .set('IdKit', idKit)
+      .set('IdAsignarDescuentoKit', idAsignarDescuentoKit)
       .set('encriptada', _token)
     return new Promise((resolve, reject) => {
       this.http.post(this.apiUrl + 'Inventario/IngresoAsignarProductoKit', body.toString(),
