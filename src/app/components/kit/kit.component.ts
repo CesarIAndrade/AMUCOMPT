@@ -72,6 +72,13 @@ export class KitComponent implements OnInit {
             porcentaje: element.Porcentaje 
           }
         }
+        this.filteredOptions = this._kit.valueChanges
+            .pipe(
+              startWith(''),
+              map(value => this._filter(value))
+            );
+        console.log(this.descuentos);
+        
       
       }
     )
@@ -299,16 +306,13 @@ export class KitComponent implements OnInit {
   ngOnInit() {
     this.consultarKits();
     this.consultarDescuentos();
-    this.filteredOptions = this._descuento.valueChanges
-    .pipe(
-      startWith(''),
-      map(value => this._filter(value))
-    );  
   }
 
   tablaKits = ['descripcion', 'codigo', 'descuento', 'acciones'];
 
   private _filter(value: string): string[] {
+    console.log(this.descuentos);
+    
     const filterValue = value.toLowerCase();
     return this.descuentos.filter(option => option.nombre.toLowerCase().includes(filterValue));
   }
