@@ -28,6 +28,9 @@
                                 {{option.Porcentaje}}
                             </mat-option>
                         </mat-autocomplete>
+                        <button mat-button matSuffix mat-icon-button>
+                            <mat-icon>%&nbsp;</mat-icon>
+                        </button>
                         <mat-error *ngIf="_descuento.invalid && (_descuento.dirty || _descuento.touched)">
                             <mat-error *ngIf="_descuento.errors.required">
                                 Descuento Requerido
@@ -62,7 +65,7 @@
                         </ng-container>
                         <ng-container matColumnDef="descuento">
                             <th mat-header-cell *matHeaderCellDef> Descuento </th>
-                            <td mat-cell *matCellDef="let element"> {{element}} </td>
+                            <td mat-cell *matCellDef="let element"> {{element.AsignarDescuentoKit.Descuento.Porcentaje}} %</td>
                         </ng-container>
                         <ng-container matColumnDef="acciones">
                             <th colspan="2" mat-header-cell *matHeaderCellDef> Acciones </th>

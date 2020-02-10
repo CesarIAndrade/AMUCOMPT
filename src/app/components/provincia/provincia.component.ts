@@ -20,21 +20,15 @@ export class ProvinciaComponent implements OnInit {
     private personaService: PersonaService
   ) {
     this.myForm = new FormGroup({
+      _idProvincia: new FormControl(''),
       _provincia: new FormControl('', [Validators.required])
     })
   }
 
-  idProvincia = '0';
   botonIngresar = 'ingresar';
 
   provincias: Provincia[] = [];
   filterProvincia = '';
-  valorIdProvincia: string;
-  inputProvincia = true;
-
-  onChangeInptProvincia() {
-    this.inputProvincia = true;
-  }
 
   consultarProvincias() {
     this.personaService.consultarProvincias(localStorage.getItem('miCuenta.getToken'))
@@ -65,19 +59,19 @@ export class ProvinciaComponent implements OnInit {
 
   crearProvincia() {
     this.panelAdministracionService.crearProvincia(
-      this.myForm.get('_provincia').value,
+      this._provincia.value,
       localStorage.getItem('miCuenta.postToken'))
       .then(
         ok => {
-          console.log(ok['respuesta']);
-          
           if (ok['respuesta'] == null) {
             sweetAlert("Inténtalo de nuevo!", {
               icon: "warning",
             });
-            this.limpiarCampos();
+            this.myForm.reset();
           } else if (ok['respuesta'] == '400') {
-            this.inputProvincia = false;
+            sweetAlert("Provincia ya existe!", {
+              icon: "warning",
+            });
           } else if (ok['respuesta'] == 'false') {
             sweetAlert("Ha ocurrido un error!", {
               icon: "error",
@@ -86,7 +80,7 @@ export class ProvinciaComponent implements OnInit {
             sweetAlert("Se ingresó correctamente!", {
               icon: "success",
             });
-            this.limpiarCampos();
+            this.myForm.reset();
             this.consultarProvincias();
             this.nuevaProvinciaCreada.emit(true);
           }
@@ -99,19 +93,16 @@ export class ProvinciaComponent implements OnInit {
       )
   }
 
-  setProvincia(value) {
-    this.valorIdProvincia = value.IdProvincia;
-    this.myForm.setValue({
-      _provincia: value.Descripcion
-    })
+  setProvincia(provincia) {
+    this._idProvincia.setValue(provincia.IdProvincia);
+    this.myForm.setValue(provincia.Descripcion)
     this.testButton.nativeElement.value = 'modificar';
   }
 
   actualizarProvincia() {
-    console.log(this.myForm.get('_provincia').value);
     this.panelAdministracionService.actualizarProvincia(
-      this.valorIdProvincia,
-      this.myForm.get('_provincia').value,
+      this._idProvincia.value,
+      this._provincia.value,
       localStorage.getItem('miCuenta.putToken'))
       .then(
         ok => {
@@ -120,9 +111,11 @@ export class ProvinciaComponent implements OnInit {
             sweetAlert("Inténtalo de nuevo!", {
               icon: "warning",
             });
-            this.limpiarCampos();
+            this.myForm.reset();
           } else if (ok['respuesta'] == '400') {
-            this.inputProvincia = false;
+            sweetAlert("Provincia ya existe!", {
+              icon: "warning",
+            });
           } else if (ok['respuesta'] == 'false') {
             sweetAlert("Ha ocurrido un error!", {
               icon: "error",
@@ -131,7 +124,7 @@ export class ProvinciaComponent implements OnInit {
             sweetAlert("Se ingresó correctamente!", {
               icon: "success",
             });
-            this.limpiarCampos();
+            this.myForm.reset();
             this.consultarProvincias();
             this.testButton.nativeElement.value = 'ingresar';
           }
@@ -180,8 +173,8 @@ export class ProvinciaComponent implements OnInit {
       });
   }
 
-  limpiarCampos() {
-    this.myForm.reset();
+  get _idProvincia() {
+    return this.myForm.get('_idProvincia');
   }
 
   get _provincia() {

@@ -5,18 +5,14 @@
                 <h5 style="text-align: center;">Nueva Provincia</h5>
                 <form [formGroup]="myForm" (ngSubmit)="validarFormulario()" novalidate>
                     <mat-form-field class="example-full-width">
-                        <input matInput (keyup)="onChangeInptProvincia()" formControlName="_provincia" type="text"
-                            placeholder="Ingrese Provincia">
+                        <input matInput formControlName="_provincia" type="text" placeholder="Ingrese Provincia">
+                        <mat-error *ngIf="_provincia.invalid && (_provincia.dirty || _provincia.touched)">
+                            <mat-error *ngIf="_provincia.errors.required">
+                                Provincia Requerida
+                            </mat-error>
+                        </mat-error>
+
                     </mat-form-field>
-                    <div class="badge badge-danger mb-3 btn-block"
-                        *ngIf="_provincia.invalid && (_provincia.dirty || _provincia.touched)">
-                        <div *ngIf="_provincia.errors.required">
-                            Provincia Requerida
-                        </div>
-                    </div>
-                    <div class="badge badge-danger mb-3 btn-block" [hidden]="inputProvincia">
-                        Provincia Ya Existe
-                    </div>
                     <div>
                         <button type="submit" [value]="botonIngresar" [disabled]="myForm.invalid"
                             class="btn btn-success btn-block" #testButton>Guardar</button>

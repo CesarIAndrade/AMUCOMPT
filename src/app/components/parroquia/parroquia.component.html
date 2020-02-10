@@ -6,27 +6,19 @@
                 <input matInput [value]="idCanton" class="form-control" type="number" readonly disabled hidden>
                 <form [formGroup]="myForm" (ngSubmit)="validarFormulario()" novalidate>
                     <mat-form-field class="example-full-width">
-                        <input matInput [value]="canton" type="text" readonly disabled>
+                        <input matInput placeholder="Cantón" type="text" readonly aria-disabled="true">
                     </mat-form-field>
-                    <div class="badge badge-danger mb-3 btn-block" [hidden]="inputIdCanton">
-                        Cantón Requerido
-                    </div>
                     <mat-form-field class="example-full-width">
-                        <input matInput (keyup)="onChangeInptParroquia()" formControlName="_parroquia" type="text"
-                            placeholder="Ingrese Parroquia">
+                        <input matInput formControlName="_parroquia" type="text" placeholder="Ingrese Parroquia">
+                        <mat-error *ngIf="_parroquia.invalid && (_parroquia.dirty || _parroquia.touched)">
+                            <mat-error *ngIf="_parroquia.errors.required">
+                                Parroquia Requerida
+                            </mat-error>
+                        </mat-error>
                     </mat-form-field>
-                    <div class="badge badge-danger mb-3 btn-block"
-                        *ngIf="_parroquia.invalid && (_parroquia.dirty || _parroquia.touched)">
-                        <div *ngIf="_parroquia.errors.required">
-                            Parroquia Requerida
-                        </div>
-                    </div>
-                    <div class="badge badge-danger mb-3 btn-block" [hidden]="inputParroquia">
-                        Parroquia Ya Existe
-                    </div>
                     <div>
                         <button type="submit" [value]="botonIngresar" [disabled]="myForm.invalid"
-                            class="btn btn-success btn-block" #testButton>Guardar</button>
+                            class="mt-3 btn btn-success btn-block" #testButton>Guardar</button>
                     </div>
                 </form>
             </div>

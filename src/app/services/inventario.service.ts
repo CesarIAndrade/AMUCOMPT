@@ -578,10 +578,10 @@ export class InventarioService {
     _token: string
   ) {
     const body = new HttpParams()
-      .set('Descuento', descuento)
+      .set('Porcentaje', descuento)
       .set('encriptada', _token)
     return new Promise((resolve, reject) => {
-      this.http.post(this.apiUrl + '', body.toString(),
+      this.http.post(this.apiUrl + 'Inventario/IngresoDescuento', body.toString(),
         {
           headers: new HttpHeaders()
             .set('Content-Type', 'application/x-www-form-urlencoded')
@@ -605,7 +605,7 @@ export class InventarioService {
       .set('IdDescuento', idDescuento)
       .set('encriptada', _token)
     return new Promise((resolve, reject) => {
-      this.http.post(this.apiUrl + '', body.toString(),
+      this.http.post(this.apiUrl + 'Inventario/IngresoAsignarDescuentoKit', body.toString(),
         {
           headers: new HttpHeaders()
             .set('Content-Type', 'application/x-www-form-urlencoded')
@@ -924,6 +924,24 @@ export class InventarioService {
   }
 
   consultarStock(_token: string) {
+    const body = new HttpParams()
+      .set('encriptada', _token)
+    return new Promise((resolve, reject) => {
+      this.http.post(this.apiUrl + 'Factura/ListarStock', body.toString(),
+        {
+          headers: new HttpHeaders()
+            .set('Content-Type', 'application/x-www-form-urlencoded')
+        }
+      )
+        .subscribe(res => {
+          resolve(res);
+        }, (err) => {
+          reject(err);
+        })
+    })
+  }
+
+  consultarLotes(_token: string) {
     const body = new HttpParams()
       .set('encriptada', _token)
     return new Promise((resolve, reject) => {

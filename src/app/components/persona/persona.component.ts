@@ -51,14 +51,13 @@ export class PersonaComponent implements OnInit {
       _provincia: new FormControl('', [Validators.required]),
       _canton: new FormControl('', [Validators.required]),
       _parroquia: new FormControl('', [Validators.required]),
+      _idCorreo: new FormControl(''),
+      _idAsignacionPersonaParroquia: new FormControl(''),
+      _idPersona: new FormControl(''),
+      _idTelefono1: new FormControl(''),
+      _idTelefono2: new FormControl('')
     });
   }
-
-  asignacionPersonaParroquia: string;
-  idCorreo: string;
-  idPersona: string;
-  idTelefono1: string;
-  idTelefono2: string;
 
   botonInsertar = "insertar";
   contacto = 'Contacto ';
@@ -171,8 +170,8 @@ export class PersonaComponent implements OnInit {
         ok => {
           this.cantones = ok['respuesta'];
           if (value == 'ingresar') {
-            this.myForm.get('_canton').setValue('0');
-            this.myForm.get('_parroquia').setValue('0');
+            this._canton.setValue('0');
+            this._parroquia.setValue('0');
             this.parroquias = null;
           }
         },
@@ -194,7 +193,7 @@ export class PersonaComponent implements OnInit {
         ok => {
           this.parroquias = ok['respuesta'];
           if (value == 'ingresar') {
-            this.myForm.get('_parroquia').setValue('0');
+            this._parroquia.setValue('0');
           }
         },
       )
@@ -273,8 +272,8 @@ export class PersonaComponent implements OnInit {
     var dosApellidos = this.validarApellidos(validarApellidos);
     if (dosNombres.valido == true && dosApellidos.valido == true) {
       this.personaService.crearPersona(
-        this.myForm.get('_numeroDocumento').value,
-        this.myForm.get('_tipoDocumento').value,
+        this._numeroDocumento.value,
+        this._tipoDocumento.value,
         dosApellidos.primerCampo,
         dosApellidos.segundoCampo,
         dosNombres.primerCampo,
@@ -292,8 +291,8 @@ export class PersonaComponent implements OnInit {
                 icon: "error",
               });
             } else {
-              this.idPersona = ok['respuesta'];
-              this.crearTelefono(this.idPersona);
+              this._idPersona.setValue(ok['respuesta']);
+              this.crearTelefono(this._idPersona.value);
             }
           },
         )
@@ -309,13 +308,13 @@ export class PersonaComponent implements OnInit {
     this.telefonos.push(
       {
         IdPersona: idPersona,
-        Numero: this.myForm.get('_telefono1').value,
-        IdTipoTelefono: this.myForm.get('_tipoTelefono1').value,
+        Numero: this._telefono1.value,
+        IdTipoTelefono: this._tipoTelefono1.value,
       },
       {
         IdPersona: idPersona,
-        Numero: this.myForm.get('_telefono2').value,
-        IdTipoTelefono: this.myForm.get('_tipoTelefono2').value,
+        Numero: this._telefono2.value,
+        IdTipoTelefono: this._tipoTelefono2.value,
       }
     )
     this.telefonos.map(
@@ -328,15 +327,15 @@ export class PersonaComponent implements OnInit {
           .then(
             ok => {
               if (ok['respuesta']) {
-                this.crearCorreo(this.idPersona);
+                this.crearCorreo(this._idPersona.value);
               } else {
                 sweetAlert("Ha ocurrido un error!", {
                   icon: "error",
                 });
-                this.myForm.get('_telefono1').setValue('');
-                this.myForm.get('_telefono2').setValue('');
-                this.myForm.get('_tipoTelefono1').setValue('');
-                this.myForm.get('_tipoTelefono2').setValue('');
+                this._telefono1.setValue('');
+                this._telefono2.setValue('');
+                this._tipoTelefono1.setValue('');
+                this._tipoTelefono2.setValue('');
               }
             },
           )
@@ -352,17 +351,17 @@ export class PersonaComponent implements OnInit {
   crearCorreo(idPersona: string) {
     this.personaService.crearCorreo(
       idPersona,
-      this.myForm.get('_correo').value,
+      this._correo.value,
       localStorage.getItem('miCuenta.postToken'))
       .then(
         ok => {
           if (ok['respuesta']) {
-            this.crearDireccion(this.idPersona);
+            this.crearDireccion(this._idPersona.value);
           } else {
             sweetAlert("Ha ocurrido un error!", {
               icon: "error",
             });
-            this.myForm.get('_correo').setValue('');
+            this._correo.setValue('');
           }
         },
       )
@@ -376,7 +375,7 @@ export class PersonaComponent implements OnInit {
   crearDireccion(idPersona: string) {
     this.personaService.crearDireccion(
       idPersona,
-      this.myForm.get('_parroquia').value,
+      this._parroquia.value,
       localStorage.getItem('miCuenta.postToken'))
       .then(
         ok => {
@@ -390,9 +389,9 @@ export class PersonaComponent implements OnInit {
             sweetAlert("Ha ocurrido un error!", {
               icon: "error",
             });
-            this.myForm.get('_provincia').setValue('0');
-            this.myForm.get('_canton').setValue('0');
-            this.myForm.get('_parroquia').setValue('0');
+            this._provincia.setValue('0');
+            this._canton.setValue('0');
+            this._parroquia.setValue('0');
           }
         },
       )
@@ -448,31 +447,31 @@ export class PersonaComponent implements OnInit {
     this.contacto = 'Modificar Contacto';
     this.direccion = 'Modificar Direccion';
     this.guardar = 'Modificar';
-    this.idPersona = persona.IdPersona;
+    this._idPersona.setValue(persona.IdPersona);
     var nombres = persona.PrimerNombre + ' ' + persona.SegundoNombre;
     var apellidos = persona.ApellidoPaterno + ' ' + persona.ApellidoMaterno;
     if (persona.ListaCorreo == null) {
-      this.myForm.get('_correo').setValue('Sin Correo');
+      this._correo.setValue('Sin Correo');
     } else {
-      this.idCorreo = persona.ListaCorreo[0].IdCorreo;
-      this.myForm.get('_correo').setValue(persona.ListaCorreo[0].CorreoValor);
+      this._idCorreo.setValue(persona.ListaCorreo[0].IdCorreo);
+      this._correo.setValue(persona.ListaCorreo[0].CorreoValor);
     }
-    this.myForm.get('_nombres').setValue(nombres);
-    this.myForm.get('_apellidos').setValue(apellidos);
-    this.myForm.get('_tipoDocumento').setValue(persona.IdTipoDocumento);
-    this.myForm.get('_numeroDocumento').setValue(persona.NumeroDocumento);
-    this.idTelefono1 = persona.ListaTelefono[0].IdTelefono;
-    this.myForm.get('_telefono1').setValue(persona.ListaTelefono[0].Numero);
-    this.myForm.get('_tipoTelefono1').setValue(persona.ListaTelefono[0].TipoTelefono.IdTipoTelefono);
-    this.idTelefono2 = persona.ListaTelefono[1].IdTelefono;
-    this.myForm.get('_telefono2').setValue(persona.ListaTelefono[1].Numero);
-    this.myForm.get('_tipoTelefono2').setValue(persona.ListaTelefono[1].TipoTelefono.IdTipoTelefono);
-    this.myForm.get('_provincia').setValue(persona.AsignacionPersonaParroquia[0].Parroquia.Canton.Provincia.IdProvincia);
-    this.consultarCantonesDeUnaProvincia(this.myForm.get('_provincia').value, '');
-    this.myForm.get('_canton').setValue(persona.AsignacionPersonaParroquia[0].Parroquia.Canton.IdCanton);
-    this.consultarParroquiasDeUnCanton(this.myForm.get('_canton').value, '');
-    this.myForm.get('_parroquia').setValue(persona.AsignacionPersonaParroquia[0].Parroquia.IdParroquia);
-    this.asignacionPersonaParroquia = persona.AsignacionPersonaParroquia[0].IdAsignacionPC;
+    this._nombres.setValue(nombres);
+    this._apellidos.setValue(apellidos);
+    this._tipoDocumento.setValue(persona.IdTipoDocumento);
+    this._numeroDocumento.setValue(persona.NumeroDocumento);
+    this._idTelefono1.setValue(persona.ListaTelefono[0].IdTelefono);
+    this._telefono1.setValue(persona.ListaTelefono[0].Numero);
+    this._tipoTelefono1.setValue(persona.ListaTelefono[0].TipoTelefono.IdTipoTelefono);
+    this._idTelefono2.setValue(persona.ListaTelefono[1].IdTelefono);
+    this._telefono2.setValue(persona.ListaTelefono[1].Numero);
+    this._tipoTelefono2.setValue(persona.ListaTelefono[1].TipoTelefono.IdTipoTelefono);
+    this._provincia.setValue(persona.AsignacionPersonaParroquia[0].Parroquia.Canton.Provincia.IdProvincia);
+    this.consultarCantonesDeUnaProvincia(this._provincia.value, '');
+    this._canton.setValue(persona.AsignacionPersonaParroquia[0].Parroquia.Canton.IdCanton);
+    this.consultarParroquiasDeUnCanton(this._canton.value, '');
+    this._parroquia.setValue(persona.AsignacionPersonaParroquia[0].Parroquia.IdParroquia);
+    this._idAsignacionPersonaParroquia.setValue(persona.AsignacionPersonaParroquia[0].IdAsignacionPC);
     this.testButton.nativeElement.value = 'modificar';
   }
 
@@ -491,9 +490,9 @@ export class PersonaComponent implements OnInit {
     var dosApellidos = this.validarApellidos(validarApellidos);
     if (dosNombres.valido == true && dosApellidos.valido == true) {
       this.personaService.actualizarPersona(
-        this.idPersona,
-        this.myForm.get('_numeroDocumento').value,
-        this.myForm.get('_tipoDocumento').value,
+        this._idPersona.value,
+        this._numeroDocumento.value,
+        this._tipoDocumento.value,
         dosApellidos.primerCampo,
         dosApellidos.segundoCampo,
         dosNombres.primerCampo,
@@ -525,16 +524,16 @@ export class PersonaComponent implements OnInit {
   actualizarTelefono() {
     this.telefonos.push(
       {
-        IdPersona: this.idPersona,
-        IdTelefono: this.idTelefono1,
-        Numero: this.myForm.get('_telefono1').value,
-        IdTipoTelefono: this.myForm.get('_tipoTelefono1').value
+        IdPersona: this._idPersona.value,
+        IdTelefono: this._idTelefono1.value,
+        Numero: this._telefono1.value,
+        IdTipoTelefono: this._tipoTelefono1.value
       },
       {
-        IdPersona: this.idPersona,
-        IdTelefono: this.idTelefono2,
-        Numero: this.myForm.get('_telefono2').value,
-        IdTipoTelefono: this.myForm.get('_tipoTelefono2').value
+        IdPersona: this._idPersona.value,
+        IdTelefono: this._idTelefono2.value,
+        Numero: this._telefono2.value,
+        IdTipoTelefono: this._tipoTelefono2.value
       }
     )
     this.telefonos.map(
@@ -548,7 +547,7 @@ export class PersonaComponent implements OnInit {
           .then(
             ok => {
               if (ok['respuesta']) {
-                this.actualizarCorreo(this.idPersona, this.idCorreo);
+                this.actualizarCorreo(this._idPersona.value, this._idCorreo.value);
               } else {
                 sweetAlert("Ha ocurrido un error!", {
                   icon: "error",
@@ -577,7 +576,10 @@ export class PersonaComponent implements OnInit {
       .then(
         ok => {
           if (ok['respuesta']) {
-            this.actualizarDireccion(this.idPersona, this.asignacionPersonaParroquia);
+            this.actualizarDireccion(
+              this._idPersona.value,
+              this._idAsignacionPersonaParroquia.value
+            );
           } else {
             sweetAlert("Ha ocurrido un error!", {
               icon: "error",
@@ -674,6 +676,26 @@ export class PersonaComponent implements OnInit {
 
   get _parroquia() {
     return this.myForm.get('_parroquia');
+  }
+
+  get _idCorreo() {
+    return this.myForm.get('_idCorreo');
+  }
+
+  get _idAsignacionPersonaParroquia() {
+    return this.myForm.get('_idAsignacionPersonaParroquia');
+  }
+
+  get _idPersona() {
+    return this.myForm.get('_idPersona');
+  }
+
+  get _idTelefono1() {
+    return this.myForm.get('_idTelefono1');
+  }
+
+  get _idTelefono2() {
+    return this.myForm.get('_idTelefono2');
   }
 
   ngOnInit() {

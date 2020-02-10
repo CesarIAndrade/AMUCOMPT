@@ -1,18 +1,32 @@
+<br>
 <div class="container">
     <form [formGroup]="myForm" (ngSubmit)="validarFormulario()" novalidate>
         <div class="row">
             <div class="col-lg-12">
-                <br>
                 <h5 style="text-align: center;">Compra</h5>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-5">
+                <mat-form-field class="example-full-width">
+                    <input type="text" placeholder="Lote" matInput formControlName="_lote" [matAutocomplete]="auto">
+                    <mat-autocomplete #auto="matAutocomplete">
+                        <mat-option (onSelectionChange)="seleccionarLoteSiExiste(option)"
+                            *ngFor="let option of filteredOptions | async" [value]="option.Codigo">
+                            {{option.Codigo}}
+                        </mat-option>
+                    </mat-autocomplete>
+                    <mat-error *ngIf="_lote.invalid && (_lote.dirty || _lote.touched)">
+                        <mat-error *ngIf="_lote.errors.required">
+                            Lote Requerido
+                        </mat-error>
+                    </mat-error>
+                </mat-form-field>
                 <mat-radio-group>
                     <mat-radio-button (change)="varificarTipoCompra($event)" checked="true" value="1">Producto
                     </mat-radio-button>
                     <mat-radio-button (change)="varificarTipoCompra($event)" value="2">Kit</mat-radio-button>
                 </mat-radio-group>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-lg-5">
                 <div [hidden]="seccionProducto">
                     <mat-form-field [hidden]="seccionKit" class="example-full-width">
                         <mat-label>Kits</mat-label>
@@ -104,7 +118,8 @@
     </form>
     <div class="row">
         <div class="col-lg-12">
-            <button #realizarCompraButton type="button" disabled="true" (click)="realizarCompra()" class="mt-3 mb-3 btn btn-primary btn-block">
+            <button #realizarCompraButton type="button" disabled="true" (click)="realizarCompra()"
+                class="mt-3 mb-3 btn btn-primary btn-block">
                 Realizar Compra
             </button>
         </div>
