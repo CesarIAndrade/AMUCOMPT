@@ -1,8 +1,5 @@
 import { Component, OnInit, ViewChild, ElementRef, Output, EventEmitter } from '@angular/core';
 
-// Interfaces
-import { TipoProducto } from 'src/app/interfaces/tipo-producto/tipo-producto';
-
 // Services
 import { InventarioService } from 'src/app/services/inventario.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
@@ -31,7 +28,7 @@ export class TipoProductoComponent implements OnInit {
   filterTipoProducto = '';
   botonIngresar = 'ingresar';
 
-  tipoProductos: TipoProducto[] = [];
+  tipoProductos: any[] = [];
 
   consultarTipoProductos() {
     this.inventarioService.consultarTipoProductos(localStorage.getItem('miCuenta.getToken'))

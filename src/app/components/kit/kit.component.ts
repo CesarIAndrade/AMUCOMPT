@@ -3,9 +3,6 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { startWith, map } from 'rxjs/operators';
 
-// Interfaces
-import { Kit } from 'src/app/interfaces/kit/kit';
-
 // Services
 import { InventarioService } from 'src/app/services/inventario.service';
 
@@ -40,7 +37,7 @@ export class KitComponent implements OnInit {
   filterKit = '';
   botonIngresar = 'ingresar';
 
-  kits: Kit[] = [];
+  kits: any[] = [];
   descuentos: any[] = [];
 
   filteredOptions: Observable<string[]>;

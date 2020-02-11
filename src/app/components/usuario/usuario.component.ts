@@ -1,29 +1,19 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import sweetalert from "sweetalert"
-
-// Services
-import { UsuarioService } from 'src/app/services/usuario.service';
-import { PersonaService } from 'src/app/services/persona.service';
-
-// Interfaces
-import { Usuario } from 'src/app/interfaces/usuario/usuario';
-import { Persona } from 'src/app/interfaces/persona/persona';
-
-// Functional Components
-import { MatDialog } from "@angular/material/dialog";
 
 // Components
 import { ModalAsignacionUsuarioPersonaComponent } from '../modal-asignacion-usuario-persona/modal-asignacion-usuario-persona.component';
 import { ModalAsignacionUsuarioTiposUsuarioComponent } from '../modal-asignacion-usuario-tipos-usuario/modal-asignacion-usuario-tipos-usuario.component';
 
-export interface DialogData {
-  cedula: string;
-  idPersona: string;
-  idUsuario: string;
-  nombres: string;
-  apellidos: string;
-}
+// Functional Components
+import { MatDialog } from "@angular/material/dialog";
+
+// Services
+import { UsuarioService } from 'src/app/services/usuario.service';
+import { PersonaService } from 'src/app/services/persona.service';
+
+// SweetAlert
+import sweetalert from "sweetalert"
 
 @Component({
   selector: 'app-usuario',
@@ -53,15 +43,14 @@ export class UsuarioComponent implements OnInit {
     })
   }
 
+  resultadoModal: any;
   botonInsertar = 'insertar';
+  inputType = 'password';
+  nuevoUsuario = 'Nuevo Usuario';
   filterUsuario = '';
 
-  inputType = 'password';
-  resultadoModal: DialogData;
-  nuevoUsuario = 'Nuevo Usuario';
-
-  personas: Persona[] = [];
-  usuarios: Usuario[] = [];
+  personas: any[] = [];
+  usuarios: any[] = [];
 
   consultarUsuarios() {
     this.usuarioService.consultarUsuarios(localStorage.getItem('miCuenta.getToken'))
@@ -271,10 +260,8 @@ export class UsuarioComponent implements OnInit {
     this._apellidos.setValue(usuario.ApellidoPaterno + ' ' + usuario.ApellidoMaterno);
     this._cedula.setValue(usuario.NumeroDocumento);
     this.testButton.nativeElement.value = 'modificar';
-    this.myForm.setValue({
-      _valorUsuario: usuario.UsuarioLogin,
-      _contrasena: ''
-    })
+    this._valorUsuario.setValue(usuario.UsuarioLogin);
+    this._contrasena.setValue('');
   }
 
   get _valorUsuario() {

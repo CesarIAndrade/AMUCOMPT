@@ -6,15 +6,12 @@ import { ModalDetalleProductoComponent } from '../modal-detalle-producto/modal-d
 // Functional Components
 import { MatDialog } from "@angular/material/dialog";
 
-// Interfaces
-import { Producto } from 'src/app/interfaces/producto/producto';
-import { Kit } from 'src/app/interfaces/kit/kit';
-
 // Services
 import { InventarioService } from 'src/app/services/inventario.service';
 
 // SweetAlert
 import sweetalert from 'sweetalert';
+import { FormGroup, FormControl } from '@angular/forms';
 
 export interface DetalleProducto {
   presentacion: string,
@@ -29,22 +26,36 @@ export interface DetalleProducto {
 })
 export class ArmarKitComponent implements OnInit {
 
+  myForm: FormGroup;
   constructor(
     private inventarioService: InventarioService,
     private dialog: MatDialog,
-  ) { }
+  ) {
+    this.myForm = new FormGroup({
+      _idKit: new FormControl(''),
+      _idAsignarDescuentoKit: new FormControl('')
+    })
+   }
 
-  idKit = '0';
+   get _idKit() {
+     return this.myForm.get('_idKit');
+   }
+
+   get _idAsignarDescuentoKit() {
+    return this.myForm.get('_idAsignarDescuentoKit');
+  }
+  
   productos: any[] = [];
-  kits: Kit[] = [];
+  kits: any[] = [];
 
   listaProductosDeUnKit: any[] = [];
   Arrayproductos: any[] = [];
 
-  onChangeSelectKit(idKit) {
-    this.idKit = idKit;
-    this.consultarKitsYSusProductos(idKit);
-    this.consultarProductos(idKit);
+  onChangeSelectKit() {
+    var kit = this.kits.find(kit => kit.IdKit == this._idKit.value);
+    this._idAsignarDescuentoKit.setValue(kit.AsignarDescuentoKit.IdAsignarDescuentoKit);
+    this.consultarKitsYSusProductos(this._idKit.value);
+    this.consultarProductos(this._idKit.value);
   }
 
   applyFilter(event) {
@@ -53,11 +64,9 @@ export class ArmarKitComponent implements OnInit {
   
   private _filterTable(value: string,arreglo: any[]) {
     const filterValue = value.toLowerCase();
-    if(value == '')
-    {
+    if(value == '') {
       this.productos = this.Arrayproductos;
-    }else
-    {
+    } else {
       this.productos = this.Arrayproductos.filter(option =>option['Producto']['Nombre'].trim().toLowerCase().includes(filterValue.trim()));
     }
   }
@@ -125,8 +134,8 @@ export class ArmarKitComponent implements OnInit {
         medida: producto.ListaProductos.Medida.Descripcion
       }
       let dialogRef = this.dialog.open(ModalDetalleProductoComponent, {
-        width: '325px',
-        height: '275px',
+        width: '300px',
+        height: 'auto',
         data: {
           producto: detalleProducto
         }
@@ -138,8 +147,8 @@ export class ArmarKitComponent implements OnInit {
         medida: producto.Medida.Descripcion
       }
       let dialogRef = this.dialog.open(ModalDetalleProductoComponent, {
-        width: '325px',
-        height: '275px',
+        width: '300px',
+        height: 'auto',
         data: {
           producto: detalleProducto
         }
@@ -150,14 +159,14 @@ export class ArmarKitComponent implements OnInit {
   agregarProductoDelKit(producto) {
     this.inventarioService.crearAsignacionProductoKit(
       producto.IdConfigurarProducto,
-      this.idKit,
+      this._idAsignarDescuentoKit.value,
       localStorage.getItem('miCuenta.postToken')
     )
       .then(
         ok => {
           if (ok['respuesta']) {
-            this.consultarKitsYSusProductos(this.idKit);
-            this.consultarProductos(this.idKit);
+            this.consultarKitsYSusProductos(this._idKit.value);
+            this.consultarProductos(this._idKit.value);
           }
         }
       )
@@ -185,8 +194,8 @@ export class ArmarKitComponent implements OnInit {
             .then(
               ok => {
                 if (ok['respuesta']) {
-                  this.consultarKitsYSusProductos(producto.IdKit);
-                  this.consultarProductos(producto.IdKit);
+                  this.consultarKitsYSusProductos(this._idKit.value);
+                  this.consultarProductos(this._idKit.value);
                 }
               }
             )

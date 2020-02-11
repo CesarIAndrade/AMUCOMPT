@@ -1,8 +1,11 @@
 import { Component, OnInit, ViewChild, ElementRef, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
+
+// Services
 import { PanelAdministracionService } from 'src/app/services/panel-administracion.service';
 import { PersonaService } from 'src/app/services/persona.service';
-import { Provincia } from 'src/app/interfaces/provincia/provincia';
+
+// SweetAlert
 import sweetalert from 'sweetalert';
 
 @Component({
@@ -27,7 +30,7 @@ export class ProvinciaComponent implements OnInit {
 
   botonIngresar = 'ingresar';
 
-  provincias: Provincia[] = [];
+  provincias: any[] = [];
   filterProvincia = '';
 
   consultarProvincias() {
@@ -95,7 +98,7 @@ export class ProvinciaComponent implements OnInit {
 
   setProvincia(provincia) {
     this._idProvincia.setValue(provincia.IdProvincia);
-    this.myForm.setValue(provincia.Descripcion)
+    this._provincia.setValue(provincia.Descripcion)
     this.testButton.nativeElement.value = 'modificar';
   }
 

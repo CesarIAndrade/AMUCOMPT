@@ -3,10 +3,9 @@
         <div class="col-lg-4">
             <div class="card-body">
                 <h5 style="text-align: center;">Nuevo Sembrío</h5>
-                <input matInput [value]="idComunidad" type="number" readonly disabled hidden>
                 <form [formGroup]="myForm" (ngSubmit)="validarFormulario()" novalidate>
                     <mat-form-field class="example-full-width">
-                        <input matInput placeholder="Comunidad" type="text" readonly aria-disabled="true">
+                        <input matInput formControlName="_comunidad" placeholder="Comunidad" type="text" readonly aria-disabled="true">
                     </mat-form-field>
                     <mat-form-field class="example-full-width">
                         <input matInput formControlName="_sembrio" type="text" placeholder="Ingrese Sembrío">

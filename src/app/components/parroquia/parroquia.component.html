@@ -3,10 +3,9 @@
         <div class="col-lg-4">
             <div class="card-body">
                 <h5 style="text-align: center;">Nueva Parroquia</h5>
-                <input matInput [value]="idCanton" class="form-control" type="number" readonly disabled hidden>
                 <form [formGroup]="myForm" (ngSubmit)="validarFormulario()" novalidate>
                     <mat-form-field class="example-full-width">
-                        <input matInput placeholder="Cantón" type="text" readonly aria-disabled="true">
+                        <input matInput formControlName="_canton" placeholder="Cantón" type="text" readonly aria-disabled="true">
                     </mat-form-field>
                     <mat-form-field class="example-full-width">
                         <input matInput formControlName="_parroquia" type="text" placeholder="Ingrese Parroquia">

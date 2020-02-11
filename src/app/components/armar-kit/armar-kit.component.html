@@ -3,14 +3,17 @@
         <div class="col-lg-6">
             <div class="card-body">
                 <h5 style="text-align: center;">Kits</h5>
-                <mat-form-field class="example-full-width">
-                    <mat-label>Kits</mat-label>
-                    <mat-select (selectionChange)="onChangeSelectKit($event.value)">
-                        <mat-option *ngFor="let item of kits" [value]="item.IdKit">
-                            {{item.Descripcion}}
-                        </mat-option>
-                    </mat-select>
-                </mat-form-field>
+                <form [formGroup]="myForm">
+                    <mat-form-field class="example-full-width">
+                        <mat-label>Kits</mat-label>
+                        <mat-select (selectionChange)="onChangeSelectKit()" formControlName="_idKit">
+                            <mat-option *ngFor="let item of kits" [value]="item.IdKit">
+                                {{item.Descripcion}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </form>
+
                 <div class="tablaProductosDeUnKit">
                     <table mat-table [dataSource]="listaProductosDeUnKit">
                         <ng-container matColumnDef="codigo">

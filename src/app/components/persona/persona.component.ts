@@ -8,16 +8,6 @@ import { ModalDetallePersonaComponent } from "src/app/components/modal-detalle-p
 // Functional Components
 import { MatDialog } from "@angular/material/dialog";
 
-// Interfaces
-import { Persona } from "../../interfaces/persona/persona";
-import { TipoDocumento } from "../../interfaces/tipo-documento/tipo-documento";
-import { Provincia } from 'src/app/interfaces/provincia/provincia';
-import { Canton } from 'src/app/interfaces/canton/canton';
-import { Parroquia } from 'src/app/interfaces/parroquia/parroquia';
-import { TipoTelefono } from 'src/app/interfaces/tipo-telefono/tipo-telefono';
-import { Telefono } from 'src/app/interfaces/telefono/telefono';
-import { PersonaModal } from "src/app/interfaces/persona/persona-modal";
-
 // Services
 import { PersonaService } from "../../services/persona.service";
 
@@ -66,14 +56,14 @@ export class PersonaComponent implements OnInit {
   guardar = 'Guardar';
   nuevaPersona = 'Nueva Persona';
 
-  cantones: Canton[] = [];
-  parroquias: Parroquia[] = [];
-  personaModal: PersonaModal = {};
-  personas: Persona[] = [];
-  provincias: Provincia[] = [];
-  telefonos: Telefono[] = [];
-  tipoDocumentos: TipoDocumento[] = [];
-  tipoTelefonos: TipoTelefono[] = [];
+  cantones: any[] = [];
+  parroquias: any[] = [];
+  personaModal: any = {};
+  personas: any[] = [];
+  provincias: any[] = [];
+  telefonos: any[] = [];
+  tipoDocumentos: any[] = [];
+  tipoTelefonos: any[] = [];
 
   consultarProvincias() {
     this.personaService.consultarProvincias(localStorage.getItem('miCuenta.getToken'))

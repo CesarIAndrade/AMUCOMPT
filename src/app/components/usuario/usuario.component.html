@@ -6,7 +6,7 @@
                 <h5 style="text-align: center;">{{ nuevoUsuario }}</h5>
                 <form [formGroup]="myForm" (ngSubmit)="validacionFormulario()" novalidate>
                     <mat-form-field class="example-full-width">
-                        <input matInput type="text" placeholder="Cédula" readonly aria-disabled="true">
+                        <input matInput formControlName="_cedula" type="text" placeholder="Cédula" readonly aria-disabled="true">
                     </mat-form-field>
                     <button type="button" class="btn btn-block btn-sm btn-outline-warning"
                         (click)="abrirModalAsignacionUsuarioPersona()">

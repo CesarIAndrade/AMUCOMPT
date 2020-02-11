@@ -1,6 +1,5 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { UsuarioService } from 'src/app/services/usuario.service';
-import { TipoUsuario } from 'src/app/interfaces/tipo-usuario/tipo-usuario';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
@@ -18,7 +17,7 @@ export class ModalAsignacionUsuarioTiposUsuarioComponent implements OnInit {
   botonEliminar = false;
   idUsuario = this.data.idUsuario;
   tipoUsuario: string;
-  tipoUsuarios: TipoUsuario[] = [];
+  tipoUsuarios: any[] = [];
   listaTipoUsuario = this.data.listaTipoUsuario;
   descripcion: string;
 
