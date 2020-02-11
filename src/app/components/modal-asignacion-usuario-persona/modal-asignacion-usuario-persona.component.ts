@@ -1,6 +1,5 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { PersonaService } from 'src/app/services/persona.service';
-import { Persona } from 'src/app/interfaces/persona/persona';
 
 @Component({
   selector: 'app-modal-asignacion-usuario-persona',
@@ -13,7 +12,7 @@ export class ModalAsignacionUsuarioPersonaComponent implements OnInit {
     private personaService: PersonaService,
   ) { }
   
-  personas : Persona[] = [];
+  personas : any[] = [];
   filterPersona = '';
 
   datosPersona = {

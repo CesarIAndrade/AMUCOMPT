@@ -5,7 +5,7 @@
                 <h5 style="text-align: center;">Nuevo Cantón</h5>
                 <form [formGroup]="myForm" (ngSubmit)="validarFormulario()" novalidate>
                     <mat-form-field class="example-full-width">
-                        <input matInput placeholder="Provincia" type="text" readonly aria-disabled="true">
+                        <input matInput formControlName="_provincia" placeholder="Provincia" type="text" readonly aria-disabled="true">
                     </mat-form-field>
                     <mat-form-field class="example-full-width">
                         <input matInput formControlName="_canton" type="text"

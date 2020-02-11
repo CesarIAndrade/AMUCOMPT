@@ -1,10 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 
-// Interfaces
-import { Parroquia } from 'src/app/interfaces/parroquia/parroquia';
-import { Canton } from 'src/app/interfaces/canton/canton';
-
 // Services
 import { PanelAdministracionService } from 'src/app/services/panel-administracion.service';
 import { PersonaService } from 'src/app/services/persona.service';
@@ -38,8 +34,8 @@ export class ParroquiaComponent implements OnInit {
   filterParroquia = '';
   filterCanton = '';
 
-  cantones: Canton[] = [];
-  parroquias: Parroquia[] = [];
+  cantones: any[] = [];
+  parroquias: any[] = [];
 
   consultarCantones() {
     this.personaService.consultarCantones(localStorage.getItem('miCuenta.getToken'))
@@ -123,15 +119,10 @@ export class ParroquiaComponent implements OnInit {
 
   mostrarParroquia(parroquia) {
     this._idCanton.setValue(parroquia.Canton.IdCanton);
-    this.cantones.map(
-      item => {
-        if (this._idCanton.value == item.IdCanton) {
-          this._canton.setValue(item.Descripcion);
-        }
-      }
-    )
+    var canton = this.cantones.find(canton => canton.IdCanton == this._idCanton.value);
+    this._canton.setValue(canton.Descripcion);
     this._idParroquia.setValue(parroquia.IdParroquia);
-    this.myForm.setValue(parroquia.Descripcion)
+    this._parroquia.setValue(parroquia.Descripcion)
     this.testButton.nativeElement.value = 'modificar';
   }
 

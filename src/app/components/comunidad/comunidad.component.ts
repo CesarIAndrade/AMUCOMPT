@@ -1,10 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormControl, Validators, } from '@angular/forms';
 
-// Interfaces
-import { Parroquia } from 'src/app/interfaces/parroquia/parroquia';
-import { Comunidad } from 'src/app/interfaces/comunidad/comunidad';
-
 // Services
 import { PanelAdministracionService } from 'src/app/services/panel-administracion.service';
 import { PersonaService } from 'src/app/services/persona.service';
@@ -39,8 +35,8 @@ export class ComunidadComponent implements OnInit {
   filterParroquia = '';
   filterComunidad = '';
 
-  parroquias: Parroquia[] = [];
-  comunidades: Comunidad[] = [];
+  parroquias: any[] = [];
+  comunidades: any[] = [];
 
   consultarParroquias() {
     this.personaService.consultarParroquias(localStorage.getItem('miCuenta.getToken'))
@@ -123,13 +119,8 @@ export class ComunidadComponent implements OnInit {
 
   mostrarComunidad(comunidad) {
     this._idParroquia.setValue(comunidad.Parroquia.IdParroquia);
-    this.parroquias.map(
-      item => {
-        if (this._idParroquia.value == item.IdParroquia) {
-          this._parroquia.setValue(item.Descripcion);
-        }
-      }
-    )
+    var parroquia = this.parroquias.find(parroquia => parroquia.IdParroquia == this._idParroquia)
+    this._parroquia.setValue(parroquia.Descripcion);
     this._idComunidad.setValue(comunidad.IdComunidad);
     this.myForm.setValue(comunidad.Descripcion)
     this.testButton.nativeElement.value = 'modificar';

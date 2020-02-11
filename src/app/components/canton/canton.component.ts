@@ -5,10 +5,6 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { PanelAdministracionService } from 'src/app/services/panel-administracion.service';
 import { PersonaService } from 'src/app/services/persona.service';
 
-// Interfaces
-import { Provincia } from 'src/app/interfaces/provincia/provincia';
-import { Canton } from 'src/app/interfaces/canton/canton';
-
 // SweetAlert
 import sweetalert from 'sweetalert';
 
@@ -38,8 +34,8 @@ export class CantonComponent implements OnInit {
   filterProvincia = '';
   filterCanton = '';
 
-  provincias: Provincia[] = [];
-  cantones: Canton[] = [];
+  provincias: any[] = [];
+  cantones: any[] = [];
 
   consultarProvincias() {
     this.personaService.consultarProvincias(localStorage.getItem('miCuenta.getToken'))
@@ -123,13 +119,8 @@ export class CantonComponent implements OnInit {
 
   mostrarCanton(canton) {
     this._idProvincia.setValue(canton.Provincia.IdProvincia);
-    this.provincias.map(
-      item => {
-        if (this._idProvincia.value == item.IdProvincia) {
-          this._provincia.setValue(item.Descripcion);
-        }
-      }
-    )
+    var provincia = this.provincias.find(provincia => provincia.IdProvincia == this._idProvincia.value);
+    this._provincia.setValue(provincia.Descripcion);
     this._idCanton.setValue(canton.IdCanton);
     this._canton.setValue(canton.Descripcion);
     this.testButton.nativeElement.value = 'modificar';

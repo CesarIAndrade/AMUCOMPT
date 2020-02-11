@@ -7,12 +7,6 @@ import { ModalDetalleProductoComponent } from '../modal-detalle-producto/modal-d
 // Functional Components
 import { MatDialog } from "@angular/material/dialog";
 
-// Interfaces
-import { TipoProducto } from 'src/app/interfaces/tipo-producto/tipo-producto';
-import { Presentacion } from 'src/app/interfaces/presentacion/presentacion';
-import { Medida } from 'src/app/interfaces/medida/medida';
-import { DetalleProducto } from '../armar-kit/armar-kit.component';
-
 // Services
 import { InventarioService } from 'src/app/services/inventario.service';
 
@@ -56,9 +50,9 @@ export class ProductoComponent implements OnInit {
 
   nombresDeProductos: any[] = [];
   productos: any[] = [];
-  tipoProductos: TipoProducto[] = [];
-  presentaciones: Presentacion[] = [];
-  medidas: Medida[] = [];
+  tipoProductos: any[] = [];
+  presentaciones: any[] = [];
+  medidas: any[] = [];
   ArrayProductos: any[] = [];
 
   applyFilter(event) {
@@ -220,7 +214,6 @@ export class ProductoComponent implements OnInit {
   mostrarProducto(producto) {
     this._nombre.disable();
     this._descripcion.disable();
-    this._codigo.disable();
     this._tipoProducto.disable();
     this._idConfiguracionProducto.setValue(producto.IdConfigurarProducto);
     this._nombre.setValue(producto.Producto.Nombre);
@@ -384,7 +377,6 @@ export class ProductoComponent implements OnInit {
   }
 
   eliminarConfiguracionProducto(producto) {
-    console.log(producto);
     sweetalert({
       title: "Advertencia",
       text: "¿Está seguro que desea eliminar?",
@@ -415,7 +407,7 @@ export class ProductoComponent implements OnInit {
   }
 
   mostrarDetalleProducto(producto) {
-    var detalleProducto: DetalleProducto;
+    var detalleProducto: any;
     detalleProducto = {
       presentacion: producto.Presentacion.Descripcion,
       contenidoNeto: producto.CantidadMedida,
@@ -471,11 +463,11 @@ export class ProductoComponent implements OnInit {
   }
 
   seleccionarProductoSiExiste(producto) {
+    console.log(producto);
+    
     this._nombre.disable();
     this._descripcion.disable();
-    this._codigo.disable();
     this._tipoProducto.disable();
-    this._medida.setValue(producto.idMedida);
     this._idProducto.setValue(producto.idProducto);
     this._productoExistente.setValue(producto.nombre);
     this._tipoProducto.setValue(producto.idTipoProducto);

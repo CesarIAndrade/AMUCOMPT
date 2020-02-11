@@ -6,10 +6,6 @@ import { ModalDetalleProductoComponent } from '../modal-detalle-producto/modal-d
 // Functional Components
 import { MatDialog } from "@angular/material/dialog";
 
-// Interfaces
-import { Producto } from 'src/app/interfaces/producto/producto';
-import { Kit } from 'src/app/interfaces/kit/kit';
-
 // Services
 import { InventarioService } from 'src/app/services/inventario.service';
 
@@ -50,14 +46,14 @@ export class ArmarKitComponent implements OnInit {
   }
   
   productos: any[] = [];
-  kits: Kit[] = [];
+  kits: any[] = [];
 
   listaProductosDeUnKit: any[] = [];
   Arrayproductos: any[] = [];
 
   onChangeSelectKit() {
-    var kits = this.kits.find(item => item.IdKit == this._idKit.value);
-    this._idAsignarDescuentoKit.setValue(kits.AsignarDescuentoKit.IdAsignarDescuentoKit)
+    var kit = this.kits.find(kit => kit.IdKit == this._idKit.value);
+    this._idAsignarDescuentoKit.setValue(kit.AsignarDescuentoKit.IdAsignarDescuentoKit);
     this.consultarKitsYSusProductos(this._idKit.value);
     this.consultarProductos(this._idKit.value);
   }

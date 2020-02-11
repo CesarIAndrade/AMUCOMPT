@@ -1,9 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 
-// Interfaces
-import { Presentacion } from 'src/app/interfaces/presentacion/presentacion';
-
 // Services
 import { InventarioService } from 'src/app/services/inventario.service';
 
@@ -30,7 +27,7 @@ export class PresentacionComponent implements OnInit {
   botonIngresar = 'ingresar';
   filterPresentacion = '';
 
-  presentaciones: Presentacion[] = [];
+  presentaciones: any[] = [];
 
   consultarPresentaciones() {
     this.inventarioService.consultarPresentaciones(

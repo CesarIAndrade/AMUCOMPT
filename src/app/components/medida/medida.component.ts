@@ -1,9 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 
-// Interfaces
-import { Medida } from 'src/app/interfaces/medida/medida';
-
 // Services
 import { InventarioService } from 'src/app/services/inventario.service';
 
@@ -30,7 +27,7 @@ export class MedidaComponent implements OnInit {
   filterMedida = '';
   botonIngresar = 'ingresar';
 
-  medidas: Medida[] = [];
+  medidas: any[] = [];
 
   consultarMedidas() {
     this.inventarioService.consultarMedidas(

@@ -1,10 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 
-// Interfaces
-import { Sembrio } from "src/app/interfaces/sembrio/sembrio";
-import { Comunidad } from 'src/app/interfaces/comunidad/comunidad';
-
 // Services
 import { PersonaService } from 'src/app/services/persona.service';
 import { PanelAdministracionService } from 'src/app/services/panel-administracion.service';
@@ -39,8 +35,8 @@ export class SembrioComponent implements OnInit {
   filterComunidad = '';
   filterSembrio = '';
 
-  sembrios: Sembrio[] = [];
-  comunidades: Comunidad[] = [];
+  sembrios: any[] = [];
+  comunidades: any[] = [];
 
   consultarComunidades() {
     this.personaService.consultarComunidades(localStorage.getItem('miCuenta.getToken'))
@@ -110,13 +106,8 @@ export class SembrioComponent implements OnInit {
 
   mostrarSembrio(sembrio) {
     this._idComunidad.setValue(sembrio.Comunidad.IdComunidad);
-    this.comunidades.map(
-      item => {
-        if (this._idComunidad.value == item.IdComunidad) {
-          this._comunidad.setValue(item.Descripcion);
-        }
-      }
-    )
+    var comunidad = this.comunidades.find(comunidad => comunidad.IdComunidad == this._idComunidad)
+    this._comunidad.setValue(comunidad.Descripcion);
     this._idSembrio.setValue(sembrio.IdSembrio);
     this.myForm.setValue(sembrio.Descripcion)
     this.testButton.nativeElement.value = 'modificar';
