@@ -8,20 +8,6 @@
         </div>
         <div class="row">
             <div class="col-lg-5">
-                <mat-form-field class="example-full-width">
-                    <input type="text" placeholder="Lote" matInput formControlName="_lote" [matAutocomplete]="auto">
-                    <mat-autocomplete #auto="matAutocomplete">
-                        <mat-option (onSelectionChange)="seleccionarLoteSiExiste(option)"
-                            *ngFor="let option of filteredOptions | async" [value]="option.Codigo">
-                            {{option.Codigo}}
-                        </mat-option>
-                    </mat-autocomplete>
-                    <mat-error *ngIf="_lote.invalid && (_lote.dirty || _lote.touched)">
-                        <mat-error *ngIf="_lote.errors.required">
-                            Lote Requerido
-                        </mat-error>
-                    </mat-error>
-                </mat-form-field>
                 <mat-radio-group>
                     <mat-radio-button (change)="varificarTipoCompra($event)" checked="true" value="1">Producto
                     </mat-radio-button>
@@ -42,6 +28,15 @@
                     </button>
                     <mat-form-field class="example-full-width">
                         <input readonly matInput placeholder="Producto" formControlName="_producto">
+                    </mat-form-field>
+                    <mat-form-field class="example-full-width">
+                        <input type="text" placeholder="Lote" matInput formControlName="_lote" [matAutocomplete]="auto">
+                        <mat-autocomplete #auto="matAutocomplete">
+                            <mat-option (onSelectionChange)="seleccionarLoteSiExiste(option)"
+                                *ngFor="let option of filteredOptions | async" [value]="option.Codigo">
+                                {{option.Codigo}}
+                            </mat-option>
+                        </mat-autocomplete>
                     </mat-form-field>
                     <mat-form-field class="example-full-width">
                         <input matInput type="number" formControlName="_cantidad" placeholder="Cantidad">

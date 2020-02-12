@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 
 // Services
 import { InventarioService } from 'src/app/services/inventario.service';
-import { DetallesCompra } from 'src/app/interfaces/detalles-compra/detalles-compra';
 
 @Component({
   selector: 'app-stock',

@@ -463,8 +463,6 @@ export class ProductoComponent implements OnInit {
   }
 
   seleccionarProductoSiExiste(producto) {
-    console.log(producto);
-    
     this._nombre.disable();
     this._descripcion.disable();
     this._tipoProducto.disable();

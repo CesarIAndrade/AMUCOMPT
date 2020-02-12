@@ -595,7 +595,7 @@ export class InventarioService {
     })
   }
 
-  crearAsignacionDescuentoKit(
+  asignarDescuentoKit(
     idKit: string,
     idDescuento: string,
     _token: string
@@ -683,7 +683,7 @@ export class InventarioService {
     })
   }
 
-  crearAsignacionProductoKit(
+  asignarProductoKit(
     idConfigurarProducto: string,
     idAsignarDescuentoKit: string,
     _token: string
@@ -829,64 +829,21 @@ export class InventarioService {
 
   crearDetalleFactura(
     idCabeceraFactura: string,
-    idRelacionLogica: string,
-    perteneceKit: string,
+    idAsignarProductoLote: string,
     cantidad: string,
-    fechaExpiracion: string,
     precio: string,
     faltante: string,
     _token: string
   ) {
     const body = new HttpParams()
       .set('IdCabeceraFactura', idCabeceraFactura)
-      .set('IdRelacionLogica', idRelacionLogica)
-      .set('PerteneceKit', perteneceKit)
+      .set('IdAsignarProductoLote', idAsignarProductoLote)
       .set('Cantidad', cantidad)
-      .set('FechaExpedicion', fechaExpiracion)
       .set('ValorUnitario', precio)
       .set('Faltante', faltante)
       .set('encriptada', _token)
-    console.log(body);
-
-
     return new Promise((resolve, reject) => {
       this.http.post(this.apiUrl + 'Factura/IngresoDetalleFactura', body.toString(),
-        {
-          headers: new HttpHeaders()
-            .set('Content-Type', 'application/x-www-form-urlencoded')
-        }
-      )
-        .subscribe(res => {
-          resolve(res);
-        }, (err) => {
-          reject(err);
-        })
-    })
-  }
-
-  actualizarDetalleFactura(
-    idDetalleFactura: string,
-    idCabeceraFactura: string,
-    idRelacionLogica: string,
-    perteneceKit: string,
-    cantidad: string,
-    fechaExpiracion: string,
-    precio: string,
-    faltante: string,
-    _token: string
-  ) {
-    const body = new HttpParams()
-      .set('IdCabeceraFactura', idCabeceraFactura)
-      .set('IdDetalleFactura', idDetalleFactura)
-      .set('IdRelacionLogica', idRelacionLogica)
-      .set('PerteneceKit', perteneceKit)
-      .set('Cantidad', cantidad)
-      .set('FechaExpedicion', fechaExpiracion)
-      .set('ValorUnitario', precio)
-      .set('Faltante', faltante)
-      .set('encriptada', _token)
-    return new Promise((resolve, reject) => {
-      this.http.post(this.apiUrl + '', body.toString(),
         {
           headers: new HttpHeaders()
             .set('Content-Type', 'application/x-www-form-urlencoded')
@@ -941,11 +898,16 @@ export class InventarioService {
     })
   }
 
-  consultarLotes(_token: string) {
+  consultarLotesDeUnProducto(
+    idRelacionLogica: string,
+    perteneceKit: string,
+    _token: string) {
     const body = new HttpParams()
+      .set('IdRelacionLogica', idRelacionLogica)
+      .set('PerteneceKit', perteneceKit)
       .set('encriptada', _token)
     return new Promise((resolve, reject) => {
-      this.http.post(this.apiUrl + 'Factura/ListarStock', body.toString(),
+      this.http.post(this.apiUrl + 'Factura/ListaLote', body.toString(),
         {
           headers: new HttpHeaders()
             .set('Content-Type', 'application/x-www-form-urlencoded')
@@ -958,4 +920,60 @@ export class InventarioService {
         })
     })
   }
+
+  crearLote(
+    codigo: string,
+    capacidad: string,
+    fechaExpiracion: string,
+    _token: string
+  ) {
+    const body = new HttpParams()
+      .set('Codigo', codigo)
+      .set('Capacidad', capacidad)
+      .set('FechaExpiracion', fechaExpiracion)
+      .set('encriptada', _token)
+    return new Promise((resolve, reject) => {
+      this.http.post(this.apiUrl + 'Factura/IngresoLote', body.toString(),
+        {
+          headers: new HttpHeaders()
+            .set('Content-Type', 'application/x-www-form-urlencoded')
+        }
+      )
+        .subscribe(res => {
+          resolve(res);
+        }, (err) => {
+          reject(err);
+        })
+    })
+  }
+
+  asignarProductoLote(
+    idRelacionLogica: string,
+    perteneceKit: string,
+    _token: string,
+    idLote?: string,
+    fechaExpiracion?: string,
+  ) {
+    const body = new HttpParams()
+      .set('IdRelacionLogica', idRelacionLogica)
+      .set('PerteneceKit', perteneceKit)
+      .set('encriptada', _token)
+      .set('IdLote', idLote)
+      .set('FechaExpiracion', fechaExpiracion)
+    return new Promise((resolve, reject) => {
+      this.http.post(this.apiUrl + 'Factura/IngresoAsignarProductoLote', body.toString(),
+        {
+          headers: new HttpHeaders()
+            .set('Content-Type', 'application/x-www-form-urlencoded')
+        }
+      )
+        .subscribe(res => {
+          resolve(res);
+        }, (err) => {
+          reject(err);
+        })
+    })
+  }
+
+
 }
