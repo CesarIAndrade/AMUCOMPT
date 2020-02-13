@@ -144,9 +144,11 @@ export class CompraComponent implements OnInit {
       )
   }
 
-  seleccionarLoteSiExiste(lote) {
+  seleccionarLoteSiExiste(lote) {    
     this._idLote.setValue(lote.IdLote);
     this._lote.setValue(lote.Codigo);
+    this._fechaExpiracion.setValue(lote.FechaExpiracion);
+    this._fechaExpiracion.disable();
   }
 
   consultarDetalleFactura() {
@@ -159,29 +161,52 @@ export class CompraComponent implements OnInit {
           this.detallesCompra = [];
           var detalleCompra: any;
           console.log(ok['respuesta']);
-
+          
           ok['respuesta'].map(
             item => {
               item.DetalleFactura.map(
                 producto => {
-                  detalleCompra = {
-                    IdDetalleFactura: producto.IdDetalleFactura,
-                    Cantidad: producto.Cantidad,
-                    ValorUnitario: producto.ValorUnitario,
-                    IdCabeceraFactura: producto.IdCabeceraFactura,
-                    Codigo: producto.AsignarProductoLote[0].ConfigurarProductos.Codigo,
-                    IdKit: producto.AsignarProductoLote[0].AsignarProductoKits.IdKit,
-                    Kit: producto.AsignarProductoLote[0].AsignarProductoKits.Descripcion,
-                    IdProducto: producto.AsignarProductoLote[0].ConfigurarProductos.IdConfigurarProducto,
-                    Producto: producto.AsignarProductoLote[0].ConfigurarProductos.Producto.Nombre,
-                    Presentacion: producto.AsignarProductoLote[0].ConfigurarProductos.Presentacion.Descripcion,
-                    ContenidoNeto: producto.AsignarProductoLote[0].ConfigurarProductos.CantidadMedida,
-                    Medida: producto.AsignarProductoLote[0].ConfigurarProductos.Medida.Descripcion,
-                    Lote: producto.AsignarProductoLote[0].Lote,
-                    FechaExpiracion: producto.AsignarProductoLote[0].FechaExpiracion,
-                    Total: parseInt(producto.Cantidad) * parseInt(producto.ValorUnitario)
+                  console.log(producto);
+                  
+                  if (producto.AsignarProductoLote[0].PerteneceKit) {
+                    detalleCompra = {
+                      IdDetalleFactura: producto.IdDetalleFactura,
+                      Cantidad: producto.Cantidad,
+                      ValorUnitario: producto.ValorUnitario,
+                      IdCabeceraFactura: producto.IdCabeceraFactura,
+                      Codigo: producto.AsignarProductoLote[0].AsignarProductoKits.ListaAsignarProductoKit[0].ListaProductos.Codigo,
+                      IdKit: producto.AsignarProductoLote[0].AsignarProductoKits.IdKit,
+                      Kit: producto.AsignarProductoLote[0].AsignarProductoKits.Descripcion,
+                      IdProducto: producto.AsignarProductoLote[0].AsignarProductoKits.ListaAsignarProductoKit[0].ListaProductos.IdConfigurarProducto,
+                      Producto: producto.AsignarProductoLote[0].AsignarProductoKits.ListaAsignarProductoKit[0].ListaProductos.Producto.Nombre,
+                      Presentacion: producto.AsignarProductoLote[0].AsignarProductoKits.ListaAsignarProductoKit[0].ListaProductos.Presentacion.Descripcion,
+                      ContenidoNeto: producto.AsignarProductoLote[0].AsignarProductoKits.ListaAsignarProductoKit[0].ListaProductos.CantidadMedida,
+                      Medida: producto.AsignarProductoLote[0].AsignarProductoKits.ListaAsignarProductoKit[0].ListaProductos.Medida.Descripcion,
+                      Lote: producto.AsignarProductoLote[0].Lote.Codigo,
+                      FechaExpiracion: producto.AsignarProductoLote[0].FechaExpiracion,
+                      Total: parseInt(producto.Cantidad) * parseInt(producto.ValorUnitario)
+                    }
+                    this.detallesCompra.push(detalleCompra);
+                  } else if(!producto.AsignarProductoLote[0].PerteneceKit) {
+                    detalleCompra = {
+                      IdDetalleFactura: producto.IdDetalleFactura,
+                      Cantidad: producto.Cantidad,
+                      ValorUnitario: producto.ValorUnitario,
+                      IdCabeceraFactura: producto.IdCabeceraFactura,
+                      Codigo: producto.AsignarProductoLote[0].ConfigurarProductos.Codigo,
+                      IdKit: producto.AsignarProductoLote[0].AsignarProductoKits.IdKit,
+                      Kit: producto.AsignarProductoLote[0].AsignarProductoKits.Descripcion,
+                      IdProducto: producto.AsignarProductoLote[0].ConfigurarProductos.IdConfigurarProducto,
+                      Producto: producto.AsignarProductoLote[0].ConfigurarProductos.Producto.Nombre,
+                      Presentacion: producto.AsignarProductoLote[0].ConfigurarProductos.Presentacion.Descripcion,
+                      ContenidoNeto: producto.AsignarProductoLote[0].ConfigurarProductos.CantidadMedida,
+                      Medida: producto.AsignarProductoLote[0].ConfigurarProductos.Medida.Descripcion,
+                      Lote: producto.AsignarProductoLote[0].Lote.Codigo,
+                      FechaExpiracion: producto.AsignarProductoLote[0].FechaExpiracion,
+                      Total: parseInt(producto.Cantidad) * parseInt(producto.ValorUnitario)
+                    }
+                    this.detallesCompra.push(detalleCompra);
                   }
-                  this.detallesCompra.push(detalleCompra);
                 }
               )
             }
@@ -334,7 +359,7 @@ export class CompraComponent implements OnInit {
         this._producto.setValue(producto);
         this.consultarLotesDeUnProducto();
         console.log(result);
-        
+
       }
     });
   }
@@ -385,42 +410,10 @@ export class CompraComponent implements OnInit {
   }
 
   mostrarDetallesFactura(factura) {
-    this.detallesCompra = [];
     this.testButton.nativeElement.value = 'actualizarFactura';
     var detalleCompra: any;
     this._idCabecera.setValue(factura.IdCabeceraFactura);
     this.consultarDetalleFactura();
-    // factura.DetalleFactura.map(
-    //   item => {
-    //     if (item.ConfigurarProductos == null) {
-    //       detalleCompra = {
-    //         IdDetalleFactura: item.IdDetalleFactura,
-    //         IdCabeceraFactura: item.IdCabeceraFactura,
-    //         IdProducto: item.AsignarProductoKits.ListaAsignarProductoKit[0].IdConfigurarProducto,
-    //         IdKit: item.AsignarProductoKits.IdKit,
-    //         Kit: item.AsignarProductoKits.Descripcion,
-    //         Producto: item.AsignarProductoKits.ListaAsignarProductoKit[0].ListaProductos.Producto.Nombre,
-    //         Presentacion: item.AsignarProductoKits.ListaAsignarProductoKit[0].ListaProductos.Presentacion.Descripcion,
-    //         ContenidoNeto: item.AsignarProductoKits.ListaAsignarProductoKit[0].ListaProductos.CantidadMedida,
-    //         Medida: item.AsignarProductoKits.ListaAsignarProductoKit[0].ListaProductos.Medida.Descripcion
-    //       }
-    //       this.detallesCompra.push(detalleCompra);
-    //     } else if (item.AsignarProductoKits == null) {
-    //       detalleCompra = {
-    //         IdDetalleFactura: item.IdDetalleFactura,
-    //         IdCabeceraFactura: item.IdCabeceraFactura,
-    //         IdProducto: item.ConfigurarProductos.IdConfigurarProducto,
-    //         IdKit: '',
-    //         Kit: '',
-    //         Producto: item.ConfigurarProductos.Producto.Nombre,
-    //         Presentacion: item.ConfigurarProductos.Presentacion.Descripcion,
-    //         ContenidoNeto: item.ConfigurarProductos.CantidadMedida,
-    //         Medida: item.ConfigurarProductos.Medida.Descripcion
-    //       }
-    //       this.detallesCompra.push(detalleCompra);
-    //     }
-    //   }
-    // )
   }
 
   crearLote() {
