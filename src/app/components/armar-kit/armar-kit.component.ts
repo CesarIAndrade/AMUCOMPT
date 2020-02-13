@@ -156,8 +156,8 @@ export class ArmarKitComponent implements OnInit {
     }
   }
 
-  agregarProductoDelKit(producto) {
-    this.inventarioService.crearAsignacionProductoKit(
+  asignarProductoKit(producto) {
+    this.inventarioService.asignarProductoKit(
       producto.IdConfigurarProducto,
       this._idAsignarDescuentoKit.value,
       localStorage.getItem('miCuenta.postToken')
@@ -177,7 +177,7 @@ export class ArmarKitComponent implements OnInit {
       )
   }
 
-  eliminarProductoDelKit(producto) {
+  eliminarAsignacionProductoKit(producto) {
     sweetalert({
       title: "Advertencia",
       text: "¿Está seguro que desea quitar del Kit?",

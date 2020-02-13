@@ -93,13 +93,10 @@ export class KitComponent implements OnInit {
   }
 
   validarFormulario() {
-    console.log(this.testButton.nativeElement.value);
-
     if (this.myForm.valid) {
       if (this.testButton.nativeElement.value == 'ingresar') {
         this.crearKit();
       } else if (this.testButton.nativeElement.value == 'modificar') {
-
         this.actualizarKit();
       }
     } else {
@@ -153,10 +150,10 @@ export class KitComponent implements OnInit {
         ok => {
           if (typeof (ok['respuesta']) == 'string') {
             this._idDescuento.setValue(ok['respuesta']);
-            this.crearAsignacionDescuentoKit();
+            this.asignarDescuentoKit();
           } else {
             this._idDescuento.setValue(ok['respuesta'].IdDescuento);
-            this.crearAsignacionDescuentoKit();
+            this.asignarDescuentoKit();
           }
         }
       )
@@ -167,11 +164,8 @@ export class KitComponent implements OnInit {
       )
   }
 
-  crearAsignacionDescuentoKit() {
-    // console.log(this._idKit.value);
-    // console.log(this._idDescuento.value);
-    
-    this.inventarioService.crearAsignacionDescuentoKit(
+  asignarDescuentoKit() {    
+    this.inventarioService.asignarDescuentoKit(
       this._idKit.value,
       this._idDescuento.value,
       localStorage.getItem('miCuenta.postToken')

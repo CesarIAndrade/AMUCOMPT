@@ -17,8 +17,8 @@ export class ModalAsignacionConfiguracionProductoComponent implements OnInit {
   filterDetalle = '';
 
   producto = {
-    idAsignarProductoKit: '',
-    idConfigurarProducto: '',
+    idRelacionLogica: '',
+    perteneceKit: '',
     idKit: '',
     kit: '',
     nombre: '',
@@ -40,8 +40,8 @@ export class ModalAsignacionConfiguracionProductoComponent implements OnInit {
             item => {
               if (item.ConfigurarProductosUtilizado == '0') {
                 var producto = {
-                  idAsignarProductoKit: '',
-                  idConfigurarProducto: item.IdConfigurarProducto,
+                  idRelacionLogica: item.IdConfigurarProducto,
+                  perteneceKit: 'False',
                   idKit: '',
                   kit: '',
                   nombre: item.Producto.Nombre,
@@ -62,9 +62,9 @@ export class ModalAsignacionConfiguracionProductoComponent implements OnInit {
       )
   }
 
-  agregarDetalle(producto) {
-    this.producto.idAsignarProductoKit = producto.idAsignarProductoKit;
-    this.producto.idConfigurarProducto = producto.idConfigurarProducto;
+  agregarDetalle(producto) { 
+    this.producto.idRelacionLogica = producto.idRelacionLogica;
+    this.producto.perteneceKit = producto.perteneceKit;
     this.producto.idKit = producto.idKit;
     this.producto.kit = producto.kit;
     this.producto.nombre = producto.nombre;
@@ -80,9 +80,9 @@ export class ModalAsignacionConfiguracionProductoComponent implements OnInit {
       this.data.listaProductosDeUnKit.map(
         item => {
           var producto = {
-            idAsignarProductoKit: item.IdAsignarProductoKit,
-            idConfigurarProducto: item.ListaProductos.IdConfigurarProducto,
-            idKit: item.IdKit,
+            idRelacionLogica: item.IdAsignarProductoKit,
+            perteneceKit: 'True',
+            idKit: item.Kit.IdKit,
             kit: item.Kit.Descripcion,
             nombre: item.ListaProductos.Producto.Nombre,
             presentacion: item.ListaProductos.Presentacion.Descripcion,

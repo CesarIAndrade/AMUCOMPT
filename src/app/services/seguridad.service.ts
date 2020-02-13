@@ -9,7 +9,7 @@ export class SeguridadService {
   constructor(private http: HttpClient) { }
 
   private apiUrl = "http://192.168.25.20:90/api/";
-  // private apiUrl: string = "http://localhost:49962/api/";
+  //private apiUrl: string = "http://localhost:49962/api/";
 
   consultarTokens(){
     return new Promise((resolve, reject) => {
