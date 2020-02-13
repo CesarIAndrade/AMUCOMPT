@@ -144,7 +144,7 @@ export class CompraComponent implements OnInit {
       )
   }
 
-  seleccionarLoteSiExiste(lote) {    
+  seleccionarLoteSiExiste(lote) {
     this._idLote.setValue(lote.IdLote);
     this._lote.setValue(lote.Codigo);
     this._fechaExpiracion.setValue(lote.FechaExpiracion);
@@ -160,15 +160,14 @@ export class CompraComponent implements OnInit {
         ok => {
           this.detallesCompra = [];
           var detalleCompra: any;
-          console.log(ok['respuesta']);
-          
           ok['respuesta'].map(
             item => {
               item.DetalleFactura.map(
                 producto => {
-                  console.log(producto);
-                  
+
                   if (producto.AsignarProductoLote[0].PerteneceKit) {
+                    console.log('perteneceKit');
+                    console.log(producto);
                     detalleCompra = {
                       IdDetalleFactura: producto.IdDetalleFactura,
                       Cantidad: producto.Cantidad,
@@ -187,7 +186,9 @@ export class CompraComponent implements OnInit {
                       Total: parseInt(producto.Cantidad) * parseInt(producto.ValorUnitario)
                     }
                     this.detallesCompra.push(detalleCompra);
-                  } else if(!producto.AsignarProductoLote[0].PerteneceKit) {
+                  } else {
+                  console.log('noPerteneceKit');
+                    console.log(producto);
                     detalleCompra = {
                       IdDetalleFactura: producto.IdDetalleFactura,
                       Cantidad: producto.Cantidad,
