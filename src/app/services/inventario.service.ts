@@ -948,6 +948,8 @@ export class InventarioService {
   }
 
   asignarProductoLote(
+    idCabeceraFactura: string,
+    cantidad: string,
     idRelacionLogica: string,
     perteneceKit: string,
     _token: string,
@@ -955,11 +957,15 @@ export class InventarioService {
     fechaExpiracion?: string,
   ) {
     const body = new HttpParams()
+      .set('IdCabeceraFactura', idCabeceraFactura)
+      .set('Cantidad', cantidad)
       .set('IdRelacionLogica', idRelacionLogica)
       .set('PerteneceKit', perteneceKit)
       .set('encriptada', _token)
       .set('IdLote', idLote)
       .set('FechaExpiracion', fechaExpiracion)
+    console.log(body);
+
     return new Promise((resolve, reject) => {
       this.http.post(this.apiUrl + 'Factura/IngresoAsignarProductoLote', body.toString(),
         {

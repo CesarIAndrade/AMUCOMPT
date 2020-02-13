@@ -158,37 +158,30 @@ export class CompraComponent implements OnInit {
         ok => {
           this.detallesCompra = [];
           var detalleCompra: any;
+          console.log(ok['respuesta']);
+
           ok['respuesta'].map(
             item => {
               item.DetalleFactura.map(
                 producto => {
-                  if (producto.AsignarProductoKits != null) {
-                    detalleCompra = {
-                      IdDetalleFactura: producto.IdDetalleFactura,
-                      IdCabeceraFactura: producto.IdCabeceraFactura,
-                      IdProducto: producto.AsignarProductoKits.ListaAsignarProductoKit[0].IdConfigurarProducto,
-                      IdKit: producto.AsignarProductoKits.IdKit,
-                      Kit: producto.AsignarProductoKits.Descripcion,
-                      Producto: producto.AsignarProductoKits.ListaAsignarProductoKit[0].ListaProductos.Producto.Nombre,
-                      Presentacion: producto.AsignarProductoKits.ListaAsignarProductoKit[0].ListaProductos.Presentacion.Descripcion,
-                      ContenidoNeto: producto.AsignarProductoKits.ListaAsignarProductoKit[0].ListaProductos.CantidadMedida,
-                      Medida: producto.AsignarProductoKits.ListaAsignarProductoKit[0].ListaProductos.Medida.Descripcion
-                    }
-                    this.detallesCompra.push(detalleCompra);
-                  } else {
-                    detalleCompra = {
-                      IdDetalleFactura: producto.IdDetalleFactura,
-                      IdCabeceraFactura: producto.IdCabeceraFactura,
-                      IdProducto: producto.ConfigurarProductos.IdConfigurarProducto,
-                      IdKit: '',
-                      Kit: '',
-                      Producto: producto.ConfigurarProductos.Producto.Nombre,
-                      Presentacion: producto.ConfigurarProductos.Presentacion.Descripcion,
-                      ContenidoNeto: producto.ConfigurarProductos.CantidadMedida,
-                      Medida: producto.ConfigurarProductos.Medida.Descripcion
-                    }
-                    this.detallesCompra.push(detalleCompra);
+                  detalleCompra = {
+                    IdDetalleFactura: producto.IdDetalleFactura,
+                    Cantidad: producto.Cantidad,
+                    ValorUnitario: producto.ValorUnitario,
+                    IdCabeceraFactura: producto.IdCabeceraFactura,
+                    Codigo: producto.AsignarProductoLote[0].ConfigurarProductos.Codigo,
+                    IdKit: producto.AsignarProductoLote[0].AsignarProductoKits.IdKit,
+                    Kit: producto.AsignarProductoLote[0].AsignarProductoKits.Descripcion,
+                    IdProducto: producto.AsignarProductoLote[0].ConfigurarProductos.IdConfigurarProducto,
+                    Producto: producto.AsignarProductoLote[0].ConfigurarProductos.Producto.Nombre,
+                    Presentacion: producto.AsignarProductoLote[0].ConfigurarProductos.Presentacion.Descripcion,
+                    ContenidoNeto: producto.AsignarProductoLote[0].ConfigurarProductos.CantidadMedida,
+                    Medida: producto.AsignarProductoLote[0].ConfigurarProductos.Medida.Descripcion,
+                    Lote: producto.AsignarProductoLote[0].Lote,
+                    FechaExpiracion: producto.AsignarProductoLote[0].FechaExpiracion,
+                    Total: parseInt(producto.Cantidad) * parseInt(producto.ValorUnitario)
                   }
+                  this.detallesCompra.push(detalleCompra);
                 }
               )
             }
@@ -281,17 +274,17 @@ export class CompraComponent implements OnInit {
   }
 
   limpiarCampos() {
-    this._idRelacionLogica.reset(),
-    this._perteneceKit.reset()
-    this._idKit.reset()
-    this._kit.reset()
-    this._producto.reset()
-    this._cantidad.reset()
-    this._fechaExpiracion.reset()
-    this._precio.reset()
-    this._idLote.reset()
-    this._lote.reset()
-    this._idAsignarProductoLote.reset()
+    this._idRelacionLogica.reset();
+    this._perteneceKit.reset();
+    this._idKit.reset();
+    this._kit.reset();
+    this._producto.reset();
+    this._cantidad.reset();
+    this._fechaExpiracion.reset();
+    this._precio.reset();
+    this._idLote.reset();
+    this._lote.reset();
+    this._idAsignarProductoLote.reset();
   }
 
   crearDetalleFactura() {
@@ -340,6 +333,8 @@ export class CompraComponent implements OnInit {
         this._perteneceKit.setValue(result.perteneceKit);
         this._producto.setValue(producto);
         this.consultarLotesDeUnProducto();
+        console.log(result);
+        
       }
     });
   }
@@ -394,37 +389,38 @@ export class CompraComponent implements OnInit {
     this.testButton.nativeElement.value = 'actualizarFactura';
     var detalleCompra: any;
     this._idCabecera.setValue(factura.IdCabeceraFactura);
-    factura.DetalleFactura.map(
-      item => {
-        if (item.ConfigurarProductos == null) {
-          detalleCompra = {
-            IdDetalleFactura: item.IdDetalleFactura,
-            IdCabeceraFactura: item.IdCabeceraFactura,
-            IdProducto: item.AsignarProductoKits.ListaAsignarProductoKit[0].IdConfigurarProducto,
-            IdKit: item.AsignarProductoKits.IdKit,
-            Kit: item.AsignarProductoKits.Descripcion,
-            Producto: item.AsignarProductoKits.ListaAsignarProductoKit[0].ListaProductos.Producto.Nombre,
-            Presentacion: item.AsignarProductoKits.ListaAsignarProductoKit[0].ListaProductos.Presentacion.Descripcion,
-            ContenidoNeto: item.AsignarProductoKits.ListaAsignarProductoKit[0].ListaProductos.CantidadMedida,
-            Medida: item.AsignarProductoKits.ListaAsignarProductoKit[0].ListaProductos.Medida.Descripcion
-          }
-          this.detallesCompra.push(detalleCompra);
-        } else if (item.AsignarProductoKits == null) {
-          detalleCompra = {
-            IdDetalleFactura: item.IdDetalleFactura,
-            IdCabeceraFactura: item.IdCabeceraFactura,
-            IdProducto: item.ConfigurarProductos.IdConfigurarProducto,
-            IdKit: '',
-            Kit: '',
-            Producto: item.ConfigurarProductos.Producto.Nombre,
-            Presentacion: item.ConfigurarProductos.Presentacion.Descripcion,
-            ContenidoNeto: item.ConfigurarProductos.CantidadMedida,
-            Medida: item.ConfigurarProductos.Medida.Descripcion
-          }
-          this.detallesCompra.push(detalleCompra);
-        }
-      }
-    )
+    this.consultarDetalleFactura();
+    // factura.DetalleFactura.map(
+    //   item => {
+    //     if (item.ConfigurarProductos == null) {
+    //       detalleCompra = {
+    //         IdDetalleFactura: item.IdDetalleFactura,
+    //         IdCabeceraFactura: item.IdCabeceraFactura,
+    //         IdProducto: item.AsignarProductoKits.ListaAsignarProductoKit[0].IdConfigurarProducto,
+    //         IdKit: item.AsignarProductoKits.IdKit,
+    //         Kit: item.AsignarProductoKits.Descripcion,
+    //         Producto: item.AsignarProductoKits.ListaAsignarProductoKit[0].ListaProductos.Producto.Nombre,
+    //         Presentacion: item.AsignarProductoKits.ListaAsignarProductoKit[0].ListaProductos.Presentacion.Descripcion,
+    //         ContenidoNeto: item.AsignarProductoKits.ListaAsignarProductoKit[0].ListaProductos.CantidadMedida,
+    //         Medida: item.AsignarProductoKits.ListaAsignarProductoKit[0].ListaProductos.Medida.Descripcion
+    //       }
+    //       this.detallesCompra.push(detalleCompra);
+    //     } else if (item.AsignarProductoKits == null) {
+    //       detalleCompra = {
+    //         IdDetalleFactura: item.IdDetalleFactura,
+    //         IdCabeceraFactura: item.IdCabeceraFactura,
+    //         IdProducto: item.ConfigurarProductos.IdConfigurarProducto,
+    //         IdKit: '',
+    //         Kit: '',
+    //         Producto: item.ConfigurarProductos.Producto.Nombre,
+    //         Presentacion: item.ConfigurarProductos.Presentacion.Descripcion,
+    //         ContenidoNeto: item.ConfigurarProductos.CantidadMedida,
+    //         Medida: item.ConfigurarProductos.Medida.Descripcion
+    //       }
+    //       this.detallesCompra.push(detalleCompra);
+    //     }
+    //   }
+    // )
   }
 
   crearLote() {
@@ -470,6 +466,8 @@ export class CompraComponent implements OnInit {
     fecha?: string
   ) {
     this.inventarioService.asignarProductoLote(
+      this._idCabecera.value,
+      this._cantidad.value,
       this._idRelacionLogica.value,
       this._perteneceKit.value,
       localStorage.getItem('miCuenta.postToken'),
@@ -543,7 +541,6 @@ export class CompraComponent implements OnInit {
   }
 
   ngOnInit() {
-    // this.consultarLotesDeUnProducto();
     this.consultarKits();
     this.consultarTipoTransaccion();
     this.consultarFacturasNoFinalizadas();
@@ -554,6 +551,6 @@ export class CompraComponent implements OnInit {
     return this.lotes.filter(option => option.Codigo.toLowerCase().includes(filterValue));
   }
 
-  tablaDetalleCompra = ['kit', 'descripcion', 'acciones'];
+  tablaDetalleCompra = ['codigo', 'kit', 'descripcion', 'presentacion', 'lote', 'fechaExpiracion', 'valorUnitario', 'cantidad', 'total', 'acciones'];
   tablaFacturasNoFinalidas = ['codigo', 'usuario', 'fecha', 'acciones'];
 }
