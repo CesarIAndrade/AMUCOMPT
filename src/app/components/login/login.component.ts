@@ -5,8 +5,8 @@ import { Router } from '@angular/router';
 import { UsuarioService } from 'src/app/services/usuario.service';
 import { SeguridadService } from '../../services/seguridad.service'
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { Usuario } from 'src/app/interfaces/usuario/usuario';
-import { TipoUsuario } from 'src/app/interfaces/tipo-usuario/tipo-usuario';
+//import { Usuario } from 'src/app/interfaces/usuario/usuario';
+//import { TipoUsuario } from 'src/app/interfaces/tipo-usuario/tipo-usuario';
 
 @Component({
   selector: 'app-login',
@@ -31,8 +31,8 @@ export class LoginComponent implements OnInit {
   seleccionarTipoUsuario = true;
   ingresarCredenciales = false;
 
-  usuarios: Usuario[] = [];
-  tipoUsuarios: TipoUsuario[] = [];
+  usuarios: any[] = [];
+  tipoUsuarios: any[] = [];
 
   login() {
     if (this.myForm.valid) {

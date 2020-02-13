@@ -8,7 +8,7 @@ import { startWith, map } from 'rxjs/operators';
 import { ModalAsignacionConfiguracionProductoComponent } from '../modal-asignacion-configuracion-producto/modal-asignacion-configuracion-producto.component';
 
 // Interfaces
-import { DetallesCompra } from 'src/app/interfaces/detalles-compra/detalles-compra';
+//import { DetallesCompra } from 'src/app/interfaces/detalles-compra/detalles-compra';
 
 // Services
 import { InventarioService } from 'src/app/services/inventario.service';
@@ -150,7 +150,7 @@ export class CompraComponent implements OnInit {
       .then(
         ok => {
           this.detallesCompra = [];
-          var detalleCompra: DetallesCompra;
+          var detalleCompra: any;
           ok['respuesta'].map(
             item => {
               item.DetalleFactura.map(
@@ -404,7 +404,7 @@ export class CompraComponent implements OnInit {
   mostrarDetallesFactura(factura) {
     this.detallesCompra = [];
     this.testButton.nativeElement.value = 'actualizarFactura';
-    var detalleCompra: DetallesCompra;
+    var detalleCompra: any;
     this._idCabecera.setValue(factura.IdCabeceraFactura);
     factura.DetalleFactura.map(
       item => {
