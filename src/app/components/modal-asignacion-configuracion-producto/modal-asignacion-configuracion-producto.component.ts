@@ -41,7 +41,7 @@ export class ModalAsignacionConfiguracionProductoComponent implements OnInit {
               if (item.ConfigurarProductosUtilizado == '0') {
                 var producto = {
                   idRelacionLogica: item.IdConfigurarProducto,
-                  perteneceKit: '0',
+                  perteneceKit: 'False',
                   idKit: '',
                   kit: '',
                   nombre: item.Producto.Nombre,
@@ -81,7 +81,7 @@ export class ModalAsignacionConfiguracionProductoComponent implements OnInit {
         item => {
           var producto = {
             idRelacionLogica: item.IdAsignarProductoKit,
-            perteneceKit: '1',
+            perteneceKit: 'True',
             idKit: item.Kit.IdKit,
             kit: item.Kit.Descripcion,
             nombre: item.ListaProductos.Producto.Nombre,

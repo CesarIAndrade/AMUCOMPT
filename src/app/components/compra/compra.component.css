@@ -1,15 +1,23 @@
 .tablaDetalleCompra {
     height: auto;
     overflow: auto;
+    text-align: center;
 }
 
 .tablaFacturasNoFinalidas {
     height: 20rem;
     overflow: auto;
+    text-align: center;
 }
 
 table {
     width: 100%;
+}
+
+th {
+    background-color: #343a40;
+    color: #fff;
+    text-align: center;
 }
 
 .mat-radio-button ~ .mat-radio-button {
