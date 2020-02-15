@@ -11,11 +11,10 @@
                                 Provincia Requerida
                             </mat-error>
                         </mat-error>
-
                     </mat-form-field>
                     <div>
-                        <button type="submit" [value]="botonIngresar" [disabled]="myForm.invalid"
-                            class="btn btn-success btn-block" #testButton>Guardar</button>
+                        <button mat-button type="submit" [value]="botonIngresar" [disabled]="myForm.invalid"
+                            class="bg-success text-white btn-block">Guardar</button>
                     </div>
                 </form>
             </div>
@@ -40,23 +39,23 @@
                             <ng-container *matCellDef="let element">
                                 <ng-container *ngIf="element.PermitirEliminacion">
                                     <td mat-cell>
-                                        <button tooltip="Modificar" placement="top" class="btn btn-sm btn-outline-info"
+                                        <button mat-button tooltip="Modificar" placement="top" class="btn-outline-primary"
                                             (click)=setProvincia(element)>
-                                            <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                            <mat-icon>edit</mat-icon>
                                         </button>
                                     </td>
                                     <td mat-cell>
-                                        <button class="btn btn-sm btn-outline-danger"
+                                        <button mat-button class="btn-outline-danger"
                                             (click)=eliminarProvincia(element.IdProvincia)>
-                                            <i class="fa fa-trash" aria-hidden="true"></i>
+                                            <mat-icon>remove</mat-icon>
                                         </button>
                                     </td>
                                 </ng-container>
                                 <ng-container *ngIf="!element.PermitirEliminacion">
                                     <td mat-cell colspan="2">
-                                        <button tooltip="Modificar" placement="top" class="btn btn-sm btn-outline-info"
+                                        <button mat-button tooltip="Modificar" placement="top" class="btn-outline-primary btn-block"
                                             (click)=setProvincia(element)>
-                                            <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                            <mat-icon>edit</mat-icon>
                                         </button>
                                     </td>
                                 </ng-container>

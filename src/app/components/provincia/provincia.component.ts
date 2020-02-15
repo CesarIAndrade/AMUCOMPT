@@ -16,7 +16,6 @@ import sweetalert from 'sweetalert';
 export class ProvinciaComponent implements OnInit {
 
   myForm: FormGroup;
-  @ViewChild('testButton', { static: false }) testButton: ElementRef;
   @Output() nuevaProvinciaCreada = new EventEmitter();
 
   constructor(private panelAdministracionService: PanelAdministracionService,
@@ -50,9 +49,9 @@ export class ProvinciaComponent implements OnInit {
 
   validarFormulario() {
     if (this.myForm.valid) {
-      if (this.testButton.nativeElement.value == 'ingresar') {
+      if (this.botonIngresar == 'ingresar') {
         this.crearProvincia();
-      } else if (this.testButton.nativeElement.value == 'modificar') {
+      } else if (this.botonIngresar == 'modificar') {
         this.actualizarProvincia();
       }
     } else {
@@ -99,7 +98,7 @@ export class ProvinciaComponent implements OnInit {
   setProvincia(provincia) {
     this._idProvincia.setValue(provincia.IdProvincia);
     this._provincia.setValue(provincia.Descripcion)
-    this.testButton.nativeElement.value = 'modificar';
+    this.botonIngresar = 'modificar';
   }
 
   actualizarProvincia() {
@@ -129,7 +128,7 @@ export class ProvinciaComponent implements OnInit {
             });
             this.myForm.reset();
             this.consultarProvincias();
-            this.testButton.nativeElement.value = 'ingresar';
+            this.botonIngresar = 'ingresar';
           }
         }
       )

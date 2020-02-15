@@ -10,9 +10,15 @@
 
 table {
     width: 100%;
-}
-
-th {
     background-color: #343a40;
+  }
+  
+  table th {
+    text-align: center;
     color: #fff;
-}
+  }
+  
+  td {
+    text-align: center;
+    color: #fff;
+  }

@@ -15,7 +15,6 @@ import sweetalert from 'sweetalert';
 export class PresentacionComponent implements OnInit {
 
   myForm: FormGroup;
-  @ViewChild('testButton', { static: false }) testButton: ElementRef;
 
   constructor(private inventarioService: InventarioService) {
     this.myForm = new FormGroup({
@@ -48,9 +47,9 @@ export class PresentacionComponent implements OnInit {
 
   validarFormulario() {
     if (this.myForm.valid) {
-      if (this.testButton.nativeElement.value == 'ingresar') {
+      if (this.botonIngresar == 'ingresar') {
         this.crearPresentacion();
-      } else if (this.testButton.nativeElement.value == 'modificar') {
+      } else if (this.botonIngresar == 'modificar') {
         this.actualizarPresentacion();
       }
     } else {
@@ -98,7 +97,7 @@ export class PresentacionComponent implements OnInit {
   mostrarPresentacion(presentacion) {
     this._idPresentacion.setValue(presentacion.IdPresentacion);
     this._presentacion.setValue(presentacion.Descripcion);
-    this.testButton.nativeElement.value = 'modificar';
+    this.botonIngresar = 'modificar';
   }
 
   actualizarPresentacion() {
@@ -126,7 +125,7 @@ export class PresentacionComponent implements OnInit {
               icon: "success",
             });
             this.myForm.reset();
-            this.testButton.nativeElement.value = 'ingresar';
+            this.botonIngresar = 'ingresar';
             this.consultarPresentaciones();
           }
         }

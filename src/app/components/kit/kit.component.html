@@ -38,8 +38,8 @@
                         </mat-error>
                     </mat-form-field>
                     <div>
-                        <button type="submit" [value]="botonIngresar" [disabled]="myForm.invalid"
-                            class="btn btn-success btn-block mt-2" #testButton>Guardar</button>
+                        <button mat-button type="submit" [value]="botonIngresar" [disabled]="myForm.invalid"
+                            class="bg-success text-white btn-block mt-2">Guardar</button>
                     </div>
                 </form>
             </div>
@@ -72,21 +72,21 @@
                             <ng-container *matCellDef="let element">
                                 <ng-container *ngIf="element.KitUtilizado == '0'">
                                     <td mat-cell>
-                                        <button class="btn btn-sm btn-outline-info" (click)="mostrarKit(element)">
-                                            <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                        <button mat-button class="btn-outline-primary" (click)="mostrarKit(element)">
+                                            <mat-icon>edit</mat-icon>
                                         </button>
                                     </td>
                                     <td mat-cell>
-                                        <button class="btn btn-sm btn-outline-danger"
+                                        <button mat-button class="btn btn-sm btn-outline-danger"
                                             (click)="eliminarKit(element.IdKit)">
-                                            <i class="fa fa-trash" aria-hidden="true"></i>
+                                            <mat-icon>remove</mat-icon>
                                         </button>
                                     </td>
                                 </ng-container>
                                 <ng-container *ngIf="element.KitUtilizado == '1'">
                                     <td mat-cell colspan="2">
-                                        <button class="btn btn-sm btn-outline-info" (click)="mostrarKit(element)">
-                                            <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                        <button mat-button class="btn-outline-primary btn-block" (click)="mostrarKit(element)">
+                                            <mat-icon>edit</mat-icon>
                                         </button>
                                     </td>
                                 </ng-container>

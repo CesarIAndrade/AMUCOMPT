@@ -1,28 +1,36 @@
 <br>
 <div class="container">
+    <div class="row">
+        <div class="col-lg-12">
+            <h5 style="text-align: center;">COMPRA</h5>
+        </div>
+    </div>
     <form [formGroup]="myForm" (ngSubmit)="validarFormulario()" novalidate>
         <div class="row">
-            <div class="col-lg-12">
-                <h5 style="text-align: center;">Compra</h5>
-                <mat-radio-group>
-                    <mat-radio-button (change)="varificarTipoCompra($event)" checked="true" value="1">Producto
-                    </mat-radio-button>
-                    <mat-radio-button (change)="varificarTipoCompra($event)" value="2">Kit</mat-radio-button>
-                </mat-radio-group>
+            <div class="col-lg-6">
+                <mat-form-field class="example-full-width">
+                    <mat-label>Seleccione Tipo Compra</mat-label>
+                    <mat-select [(value)]="selected" (selectionChange)="selecionarTipoCompra($event)" formControlName="_tipoCompra">
+                        <mat-option *ngFor="let item of tipoCompra" [value]="item.tipo">
+                            {{item.tipo}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div class="col-lg-6">
+                <mat-form-field [hidden]="seccionKit" class="example-full-width">
+                    <mat-label>Kits</mat-label>
+                    <mat-select formControlName="_kit" (selectionChange)="onChangeSelectKit($event.value)">
+                        <mat-option *ngFor="let item of kits" [value]="item.IdKit">
+                            {{item.Descripcion}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
             </div>
         </div>
-        <br>
         <div class="row">
             <div class="col-lg-6">
                 <div [hidden]="seccionProducto">
-                    <mat-form-field [hidden]="seccionKit" class="example-full-width">
-                        <mat-label>Kits</mat-label>
-                        <mat-select formControlName="_kit" (selectionChange)="onChangeSelectKit($event.value)">
-                            <mat-option *ngFor="let item of kits" [value]="item.IdKit">
-                                {{item.Descripcion}}
-                            </mat-option>
-                        </mat-select>
-                    </mat-form-field>
                     <div class="row">
                         <div class="col-lg-9 col-md-10">
                             <mat-form-field class="example-full-width">
@@ -30,9 +38,9 @@
                             </mat-form-field>
                         </div>
                         <div class="col-lg-3 col-md-2">
-                            <button class="mt-2" type="button" mat-raised-button color="warn" [disabled]="seleccionKit"
+                            <button tooltip="Seleccionar Producto" placement="top" type="button" mat-button class="mt-2 btn-outline-warning" [disabled]="seleccionKit"
                                 (click)="seleccionarProducto()">
-                                <mat-icon>control_point</mat-icon>
+                                <mat-icon>add</mat-icon>
                             </button>
                         </div>
                     </div>
@@ -44,14 +52,6 @@
                                 {{option.Codigo}}
                             </mat-option>
                         </mat-autocomplete>
-                    </mat-form-field>
-                    <mat-form-field class="example-full-width">
-                        <input matInput type="number" formControlName="_cantidad" placeholder="Cantidad">
-                        <mat-error *ngIf="_cantidad.invalid && (_cantidad.dirty || _cantidad.touched)">
-                            <mat-error *ngIf="_cantidad.errors.required">
-                                Cantidad Requerida
-                            </mat-error>
-                        </mat-error>
                     </mat-form-field>
                 </div>
             </div>
@@ -68,14 +68,35 @@
                         </mat-error>
                     </mat-error>
                 </mat-form-field>
-                <mat-form-field class="example-full-width">
-                    <input matInput type="number" formControlName="_precio" placeholder="Precio">
-                    <mat-error *ngIf="_precio.invalid && (_precio.dirty || _precio.touched)">
-                        <mat-error *ngIf="_precio.errors.required">
-                            Precio Requerido
-                        </mat-error>
-                    </mat-error>
-                </mat-form-field>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <mat-form-field class="example-full-width">
+                            <input matInput type="number" formControlName="_cantidad" placeholder="Cantidad">
+                            <mat-error *ngIf="_cantidad.invalid && (_cantidad.dirty || _cantidad.touched)">
+                                <mat-error *ngIf="_cantidad.errors.required">
+                                    Cantidad Requerida
+                                </mat-error>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-lg-6">
+                        <mat-form-field class="example-full-width">
+                            <input matInput type="number" formControlName="_precio" placeholder="Precio">
+                            <button mat-button matPrefix mat-icon-button>
+                                <mat-icon>attach_money</mat-icon>
+                            </button>
+                            <mat-error *ngIf="_precio.invalid && (_precio.dirty || _precio.touched)">
+                                <mat-error *ngIf="_precio.errors.required">
+                                    Precio Requerido
+                                </mat-error>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
                 <button type="submit" class="mt-2 btn-block bg-success text-white" mat-raised-button
                     [disabled]="myForm.invalid" [value]="botonInsertar">
                     Agregar Detalle
@@ -136,9 +157,9 @@
                             <th mat-header-cell *matHeaderCellDef> Acciones </th>
                             <ng-container *matCellDef="let element">
                                 <td mat-cell>
-                                    <button tooltip="Quitar" placement="top" class="btn btn-sm btn-outline-danger"
+                                    <button mat-button class="btn-outline-danger"
                                         (click)="quitarDetalle(element)">
-                                        <i class="fa fa-times" aria-hidden="true"></i>
+                                        <mat-icon>remove</mat-icon>
                                     </button>
                                 </td>
                             </ng-container>
@@ -189,7 +210,7 @@
                                     <th mat-header-cell *matHeaderCellDef> Acciones </th>
                                     <ng-container *matCellDef="let element">
                                         <td mat-cell>
-                                            <button mat-button color="accent" tooltip="Modificar" placement="top"
+                                            <button mat-button class="btn-outline-primary" tooltip="Modificar" placement="top"
                                                 (click)="mostrarDetallesFactura(element)">
                                                 <mat-icon>format_line_spacing</mat-icon>
                                             </button>

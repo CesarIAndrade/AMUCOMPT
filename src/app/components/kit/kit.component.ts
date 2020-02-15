@@ -17,7 +17,6 @@ import sweetalert from 'sweetalert';
 export class KitComponent implements OnInit {
 
   myForm: FormGroup;
-  @ViewChild('testButton', { static: false }) testButton: ElementRef;
 
   constructor(private inventarioService: InventarioService) {
     this.myForm = new FormGroup({
@@ -94,9 +93,9 @@ export class KitComponent implements OnInit {
 
   validarFormulario() {
     if (this.myForm.valid) {
-      if (this.testButton.nativeElement.value == 'ingresar') {
+      if (this.botonIngresar == 'ingresar') {
         this.crearKit();
-      } else if (this.testButton.nativeElement.value == 'modificar') {
+      } else if (this.botonIngresar == 'modificar') {
         this.actualizarKit();
       }
     } else {
@@ -190,7 +189,7 @@ export class KitComponent implements OnInit {
     this._codigo.setValue(kit.Codigo);
     this._descuento.setValue(kit.AsignarDescuentoKit.Descuento.Porcentaje);
     this._idDescuento.setValue(kit.AsignarDescuentoKit.Descuento.IdDescuento);
-    this.testButton.nativeElement.value = 'modificar';
+    this.botonIngresar = 'modificar';
   }
 
   actualizarKit() {
@@ -215,7 +214,7 @@ export class KitComponent implements OnInit {
               icon: "success",
             });
             this.crearDescuento();
-            this.testButton.nativeElement.value = 'ingresar';
+            this.botonIngresar = 'ingresar';
             this.consultarKits();
             this.consultarDescuentos();
           }

@@ -43,10 +43,36 @@ export class CompraComponent implements OnInit {
       _idLote: new FormControl(''),
       _lote: new FormControl(''),
       _idAsignarProductoLote: new FormControl(''),
+      _tipoCompra: new FormControl('')
     })
   }
 
+  tipoCompra: any[] = [
+    {
+      tipo: 'Producto'
+    },
+    {
+      tipo: 'Kit'
+    }
+  ]
+
+  selecionarTipoCompra(tipoCompra) {
+    if (tipoCompra.value == 'Kit') {
+      this.seleccionKit = true;
+      this.seccionKit = false;
+      this.seccionProducto = false;
+      this.limpiarCampos();
+    } else {
+      this.listaProductosDeUnKit = [];
+      this.seccionProducto = false;
+      this.seccionKit = true;
+      this.seleccionKit = false;
+      this.limpiarCampos();
+    }
+  }
+
   botonInsertar = 'ingresar';
+  selected = 'Producto';
   seccionProducto = false;
   seccionKit = true;
   seleccionKit = false;
@@ -62,17 +88,9 @@ export class CompraComponent implements OnInit {
   filteredOptions: Observable<string[]>;
 
   varificarTipoCompra(tipoCompra) {
-    if (tipoCompra.value == '2') {
-      this.seleccionKit = true;
-      this.seccionKit = false;
-      this.seccionProducto = false;
-    } else {
-      this.listaProductosDeUnKit = [];
-      this.seccionProducto = false;
-      this.seccionKit = true;
-      this.seleccionKit = false;
-    }
+
   }
+
 
   consultarTipoTransaccion() {
     this.inventarioService.consultarTipoTransaccion(
@@ -541,6 +559,10 @@ export class CompraComponent implements OnInit {
 
   get _idAsignarProductoLote() {
     return this.myForm.get('_idAsignarProductoLote')
+  }
+
+  get _tipoCompra() {
+    return this.myForm.get('_tipoCompra');
   }
 
   ngOnInit() {

@@ -39,7 +39,7 @@ import { ModalAsignacionUsuarioPersonaComponent } from './components/modal-asign
 import { PipesModule } from './pipes/pipes.module';
 import {MatChipsModule} from '@angular/material/chips';
 import { ModalAsignacionUsuarioTiposUsuarioComponent } from './components/modal-asignacion-usuario-tipos-usuario/modal-asignacion-usuario-tipos-usuario.component';
-import { MatTableModule, MatOptionModule, MatSelectModule, MatAutocompleteModule, MatInputModule, MatDatepickerModule, MatNativeDateModule, MatCheckboxModule, MatRadioModule, MatExpansionModule } from '@angular/material';
+import { MatTableModule, MatOptionModule, MatSelectModule, MatAutocompleteModule, MatInputModule, MatDatepickerModule, MatNativeDateModule, MatCheckboxModule, MatRadioModule, MatExpansionModule, MatCardModule } from '@angular/material';
 import { TooltipModule } from 'ng2-tooltip-directive';
 import { ProductoComponent } from './components/producto/producto.component';
 import { TipoProductoComponent } from './components/tipo-producto/tipo-producto.component';
@@ -114,6 +114,7 @@ import { StockComponent } from './components/stock/stock.component';
     MatCheckboxModule,
     MatRadioModule,
     MatExpansionModule,
+    MatCardModule,
   ],
   entryComponents: [ 
     ModalDetallePersonaComponent,

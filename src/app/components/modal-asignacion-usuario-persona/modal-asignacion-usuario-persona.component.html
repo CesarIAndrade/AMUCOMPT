@@ -31,9 +31,9 @@
                     <th mat-header-cell *matHeaderCellDef> Acciones </th>
                     <ng-container *matCellDef="let element">
                         <td mat-cell>
-                            <button [mat-dialog-close]="datosPersona" class="btn btn-block btn-sm btn-outline-warning"
+                            <button mat-button [mat-dialog-close]="datosPersona" class="btn-outline-warning"
                                 (click)="asignarUsuarioaPersona(element)">
-                                <i class="fa fa-user-plus" aria-hidden="true"></i>
+                                <mat-icon>person_add</mat-icon>
                             </button>
                         </td>
                     </ng-container>

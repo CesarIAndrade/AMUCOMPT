@@ -13,8 +13,8 @@
                         </mat-error>
                     </mat-form-field>
                     <div>
-                        <button type="submit" [value]="botonIngresar" [disabled]="myForm.invalid"
-                            class="btn btn-success btn-block mt-2" #testButton>Guardar</button>
+                        <button mat-button type="submit" [value]="botonIngresar" [disabled]="myForm.invalid"
+                            class="bg-success text-white btn-block mt-2">Guardar</button>
                     </div>
                 </form>
             </div>
@@ -39,9 +39,9 @@
                             <ng-container *matCellDef="let element">
                                 <ng-container *ngIf="element.PresentacionUtilizado == '0'">
                                     <td mat-cell>
-                                        <button class="btn btn-sm btn-outline-danger"
+                                        <button mat-icon class="btn-outline-danger"
                                             (click)="eliminarPresentacion(element.IdPresentacion)">
-                                            <i class="fa fa-trash" aria-hidden="true"></i>
+                                            <mat-icon>remove</mat-icon>
                                         </button>
                                     </td>
                                 </ng-container>

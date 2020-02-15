@@ -23,8 +23,6 @@ import sweetalert from "sweetalert"
 export class UsuarioComponent implements OnInit {
 
   myForm: FormGroup;
-  @ViewChild('testButton', { static: false }) testButton: ElementRef;
-  @ViewChild('testInput', { static: false }) testInput: ElementRef;
 
   constructor(
     private modalAsignacionUsuarioPersona: MatDialog,
@@ -91,11 +89,10 @@ export class UsuarioComponent implements OnInit {
 
   validacionFormulario() {
     if (this.myForm.valid) {
-      if (this.testButton.nativeElement.value == "insertar") {
+      if (this.botonInsertar == "insertar") {
         this.crearUsuario();
-      } else if (this.testButton.nativeElement.value == "modificar") {
+      } else if (this.botonInsertar == "modificar") {
         this.actualizarUsuario();
-        this.testButton.nativeElement.value = "insertar";
       }
     }
   }
@@ -143,7 +140,8 @@ export class UsuarioComponent implements OnInit {
             this.myForm.reset();
             this.consultarUsuarios();
             this.nuevoUsuario = 'Nuevo Usuario';
-            this.testInput.nativeElement.disabled = false;
+            this.botonInsertar = "insertar";
+
           }
         },
       )
@@ -173,7 +171,7 @@ export class UsuarioComponent implements OnInit {
 
   abrirModalAsignacionUsuarioPersona() {
     let dialogRef = this.modalAsignacionUsuarioPersona.open(ModalAsignacionUsuarioPersonaComponent, {
-      width: '600px',
+      width: '700px',
       height: 'auto'
     });
     dialogRef.afterClosed().subscribe(result => {
@@ -189,7 +187,7 @@ export class UsuarioComponent implements OnInit {
   abrirModalAsignacionUsuarioTiposUsuario(usuario) {
     var listaTipoUsuario = usuario.ListaTipoUsuario;
     let dialogRef = this.modalAsignacionUsuarioTiposUsuario.open(ModalAsignacionUsuarioTiposUsuarioComponent, {
-      width: '450px',
+      width: '500px',
       height: 'auto',
       data: {
         idUsuario: usuario.IdUsuario,
@@ -252,14 +250,13 @@ export class UsuarioComponent implements OnInit {
   }
 
   setUsuario(usuario) {
-    this.testInput.nativeElement.disabled = true;
     this.nuevoUsuario = 'Modificar Usuario';
     this._idUsuario.setValue(usuario.IdUsuario);
     this._idPersona.setValue(usuario.IdPersona);
     this._nombres.setValue(usuario.PrimerNombre + ' ' + usuario.SegundoNombre);
     this._apellidos.setValue(usuario.ApellidoPaterno + ' ' + usuario.ApellidoMaterno);
     this._cedula.setValue(usuario.NumeroDocumento);
-    this.testButton.nativeElement.value = 'modificar';
+    this.botonInsertar = 'modificar';
     this._valorUsuario.setValue(usuario.UsuarioLogin);
     this._contrasena.setValue('');
   }

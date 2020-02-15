@@ -134,7 +134,7 @@ export class ArmarKitComponent implements OnInit {
         medida: producto.ListaProductos.Medida.Descripcion
       }
       let dialogRef = this.dialog.open(ModalDetalleProductoComponent, {
-        width: '300px',
+        width: '400px',
         height: 'auto',
         data: {
           producto: detalleProducto
@@ -147,7 +147,7 @@ export class ArmarKitComponent implements OnInit {
         medida: producto.Medida.Descripcion
       }
       let dialogRef = this.dialog.open(ModalDetalleProductoComponent, {
-        width: '300px',
+        width: '400px',
         height: 'auto',
         data: {
           producto: detalleProducto

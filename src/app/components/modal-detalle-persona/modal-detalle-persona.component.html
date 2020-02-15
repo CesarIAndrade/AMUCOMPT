@@ -1,44 +1,48 @@
-<h1 mat-dialog-title style="text-align: center;">Datos de Persona</h1>
-<mat-dialog-content>
-    <mat-form-field class="example-full-width">
-        <input matInput [(ngModel)]="nombresCompletos" type="text" disabled readonly>
-    </mat-form-field>
-    <div class="row">
-        <div class="col-lg-6">
-            <mat-form-field class="example-full-width">
-                <input matInput [(ngModel)]="data.persona.TipoDocumento" type="text" disabled readonly>
-            </mat-form-field>
+<mat-card>
+    <mat-card-title>
+        <h1 mat-dialog-title style="text-align: center;">Datos de Persona</h1>
+    </mat-card-title>
+    <mat-card-content>
+        <mat-form-field class="example-full-width">
+            <input matInput [(ngModel)]="nombresCompletos" type="text" disabled readonly>
+        </mat-form-field>
+        <div class="row">
+            <div class="col-lg-6">
+                <mat-form-field class="example-full-width">
+                    <input matInput [(ngModel)]="data.persona.TipoDocumento" type="text" disabled readonly>
+                </mat-form-field>
+            </div>
+            <div class="col-lg-6">
+                <mat-form-field class="example-full-width">
+                    <input matInput [(ngModel)]="data.persona.NumeroDocumento" type="text" disabled readonly>
+                </mat-form-field>
+            </div>
         </div>
-        <div class="col-lg-6">
-            <mat-form-field class="example-full-width">
-                <input matInput [(ngModel)]="data.persona.NumeroDocumento" type="text" disabled readonly>
-            </mat-form-field>
+        <div class="row">
+            <div class="col-lg-6">
+                <mat-form-field class="example-full-width">
+                    <input matInput [(ngModel)]="data.persona.ListaTelefono[0].Numero || sinNumero" type="text"
+                        disabled readonly>
+                </mat-form-field>
+            </div>
+            <div class="col-lg-6">
+                <mat-form-field class="example-full-width">
+                    <input matInput [(ngModel)]="data.persona.ListaTelefono[1].Numero || sinNumero" type="text"
+                        disabled readonly>
+                </mat-form-field>
+            </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-lg-6">
-            <mat-form-field class="example-full-width">
-                <input matInput [(ngModel)]="data.persona.ListaTelefono[0].Numero || sinNumero" type="text" disabled
-                    readonly>
-            </mat-form-field>
-        </div>
-        <div class="col-lg-6">
-            <mat-form-field class="example-full-width">
-                <input matInput [(ngModel)]="data.persona.ListaTelefono[1].Numero || sinNumero" type="text" disabled
-                    readonly>
-            </mat-form-field>
-        </div>
-    </div>
-    <mat-form-field class="example-full-width">
-        <input matInput [(ngModel)]="data.persona.ListaCorreo[0].CorreoValor || sinCorreo" type="text" disabled
-            readonly>
-    </mat-form-field>
-    <mat-form-field class="example-full-width">
-        <input matInput [(ngModel)]="direccion || sinDireccion" type="text" disabled readonly>
-    </mat-form-field>
-</mat-dialog-content>
-<mat-dialog-actions>
-    <button mat-button mat-dialog-close type="button" class="btn-block btn-primary">
-        Cerrar
-    </button>
-</mat-dialog-actions>
+        <mat-form-field class="example-full-width">
+            <input matInput [(ngModel)]="data.persona.ListaCorreo[0].CorreoValor || sinCorreo" type="text" disabled
+                readonly>
+        </mat-form-field>
+        <mat-form-field class="example-full-width">
+            <input matInput [(ngModel)]="direccion || sinDireccion" type="text" disabled readonly>
+        </mat-form-field>
+    </mat-card-content>
+    <mat-card-actions>
+        <button mat-button mat-dialog-close type="button" class="btn-block bg-primary text-white">
+            Cerrar
+        </button>
+    </mat-card-actions>
+</mat-card>
