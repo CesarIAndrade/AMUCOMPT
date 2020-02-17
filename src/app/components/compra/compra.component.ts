@@ -143,6 +143,7 @@ export class CompraComponent implements OnInit {
     this.inventarioService.consultarLotesDeUnProducto(
       this._idRelacionLogica.value,
       this._perteneceKit.value,
+      this._idCabecera.value,
       localStorage.getItem('miCuenta.getToken')
     )
       .then(
@@ -176,7 +177,7 @@ export class CompraComponent implements OnInit {
     )
       .then(
         ok => {
-          console.log(ok['respuesta']);
+
           ok['respuesta'].map(
             item => {
               var lote: string;
@@ -184,9 +185,7 @@ export class CompraComponent implements OnInit {
               var detalle: any;
               this.detalleCompra = [];
               item.DetalleFactura.map(
-                producto => {
-                  console.log();
-                  
+                producto => {                                    
                   if (String(producto.AsignarProductoLote[0].Lote) == 'undefined' 
                   || String(producto.AsignarProductoLote[0].Lote) == 'null') {
                     lote = '';
@@ -194,13 +193,19 @@ export class CompraComponent implements OnInit {
                   } else {
                     lote = producto.AsignarProductoLote[0].Lote.Codigo;
                     fechaExpiracionLote = producto.AsignarProductoLote[0].Lote.FechaExpiracion;
-                    console.log(lote);
                   }
+                  if(producto.AsignarProductoLote[0].FechaExpiracion!= 'null')
+                  {
+                    fechaExpiracionLote=producto.AsignarProductoLote[0].FechaExpiracion;
+                  }
+
+                  
+                  
                   if (producto.AsignarProductoLote[0].PerteneceKit == 'True') {
                     detalle = {
                       IdDetalleFactura: producto.IdDetalleFactura,
                       Cantidad: producto.Cantidad,
-                      ValorUnitario: producto.ValorUnitario,
+                      ValorUnitario: producto.AsignarProductoLote[0].ValorUnitario,
                       IdCabeceraFactura: producto.IdCabeceraFactura,
                       Codigo: producto.AsignarProductoLote[0].AsignarProductoKits.ListaAsignarProductoKit[0].ListaProductos.Codigo,
                       IdKit: producto.AsignarProductoLote[0].AsignarProductoKits.IdKit,
@@ -212,14 +217,17 @@ export class CompraComponent implements OnInit {
                       Medida: producto.AsignarProductoLote[0].AsignarProductoKits.ListaAsignarProductoKit[0].ListaProductos.Medida.Descripcion,
                       Lote: lote,
                       FechaExpiracion: fechaExpiracionLote,
-                      Total: parseInt(producto.Cantidad) * parseInt(producto.ValorUnitario)
+                      Total: parseInt(producto.Cantidad) * parseInt(producto.AsignarProductoLote[0].ValorUnitario)
                     }
                     this.detalleCompra.push(detalle);
+                    console.log(this.detalleCompra);
+                                          
+
                   } else {
                     detalle = {
                       IdDetalleFactura: producto.IdDetalleFactura,
                       Cantidad: producto.Cantidad,
-                      ValorUnitario: producto.ValorUnitario,
+                      ValorUnitario: producto.AsignarProductoLote[0].ValorUnitario,
                       IdCabeceraFactura: producto.IdCabeceraFactura,
                       Codigo: producto.AsignarProductoLote[0].ConfigurarProductos.Codigo,
                       IdKit: producto.AsignarProductoLote[0].AsignarProductoKits.IdKit,
@@ -231,12 +239,15 @@ export class CompraComponent implements OnInit {
                       Medida: producto.AsignarProductoLote[0].ConfigurarProductos.Medida.Descripcion,
                       Lote: lote,
                       FechaExpiracion: producto.AsignarProductoLote[0].FechaExpiracion,
-                      Total: parseInt(producto.Cantidad) * parseInt(producto.ValorUnitario)
+                      Total: parseInt(producto.Cantidad) * parseInt(producto.AsignarProductoLote[0].ValorUnitario)
                     }
                     this.detalleCompra.push(detalle);
+                    console.log(this.detalleCompra);
+
                   }
                 }
               )
+              
             }
           )
         }
@@ -272,8 +283,6 @@ export class CompraComponent implements OnInit {
     )
       .then(
         ok => {
-          console.log(ok['respuesta']);
-          
           this.facturasNoFinalizadas = ok['respuesta'];
         }
       )
@@ -290,8 +299,6 @@ export class CompraComponent implements OnInit {
   }
 
   validarFormulario() {
-    console.log(this.botonInsertar);
-    
     if (this.myForm.valid) {
       if (this.botonInsertar == 'ingresar') {
         this.crearCabeceraFactura();
@@ -311,7 +318,6 @@ export class CompraComponent implements OnInit {
     )
       .then(
         ok => {
-          console.log('idCabecera ' + ok['respuesta']);
           if (ok['respuesta'] == 'false') {
             sweetAlert("Ha ocurrido un error!", {
               icon: "error",
@@ -349,13 +355,11 @@ export class CompraComponent implements OnInit {
       this._idCabecera.value,
       this._idAsignarProductoLote.value,
       this._cantidad.value,
-      this._precio.value,
       '0',
       localStorage.getItem('miCuenta.postToken')
     )
       .then(
-        ok => {
-          console.log('idDetalleFactura ' + ok['respuesta']);
+        ok => {          
           if (ok['respuesta']) {
             this.limpiarCampos();
             this.consultarDetalleFactura();
@@ -402,7 +406,6 @@ export class CompraComponent implements OnInit {
     )
       .then(
         ok => {
-          console.log(ok['respuesta']);
           this.consultarDetalleFactura();
         }
       )
@@ -456,7 +459,6 @@ export class CompraComponent implements OnInit {
     )
       .then(
         ok => {
-          console.log('idLote ' + ok['respuesta']);
           if (typeof (ok['respuesta']) == 'string') {
             this._idLote.setValue(ok['respuesta']);
             this.asignarProductoLote(this._idLote.value, fecha);
@@ -476,10 +478,8 @@ export class CompraComponent implements OnInit {
   validarSiPerteneceALote() {
     var fecha = new Date(this._fechaExpiracion.value).toJSON();
     if (this._lote.value == '' || this._lote.value == null) {
-      console.log('el producto no tiene lote');
       this.asignarProductoLote('', fecha);
     } else {
-      console.log('el producto tiene lote');
       this.crearLote();
     }
   }
@@ -493,13 +493,13 @@ export class CompraComponent implements OnInit {
       this._cantidad.value,
       this._idRelacionLogica.value,
       this._perteneceKit.value,
+      this._precio.value,
       localStorage.getItem('miCuenta.postToken'),
       idLote,
       fecha
     )
       .then(
         ok => {
-          console.log('idAsignarProductoLote ' + ok['respuesta']);
           this._idAsignarProductoLote.setValue(ok['respuesta']);
           this.crearDetalleFactura();
         }
