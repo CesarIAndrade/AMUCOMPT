@@ -35,6 +35,8 @@ export class ModalAsignacionConfiguracionProductoComponent implements OnInit {
     )
       .then(
         ok => {
+          console.log(ok['respuesta']);
+          
           this.configuracionProductos = [];
           ok['respuesta'].map(
             item => {
