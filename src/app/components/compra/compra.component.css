@@ -10,8 +10,15 @@
 
 table {
     width: 100%;
-}
-
-.mat-radio-button ~ .mat-radio-button {
-    margin-left: 16px;
+    background-color: #343a40;
+  }
+  
+  table th {
+    text-align: center;
+    color: #fff;
+  }
+  
+  td {
+    text-align: center;
+    color: #fff;
   }

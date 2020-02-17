@@ -15,7 +15,6 @@ import sweetalert from 'sweetalert';
 export class TipoProductoComponent implements OnInit {
 
   myForm: FormGroup;
-  @ViewChild('testButton', { static: false }) testButton: ElementRef;
 
   constructor(private inventarioService: InventarioService
   ) {
@@ -46,9 +45,9 @@ export class TipoProductoComponent implements OnInit {
 
   validarFormulario() {
     if (this.myForm.valid) {
-      if (this.testButton.nativeElement.value == 'ingresar') {
+      if (this.botonIngresar == 'ingresar') {
         this.crearTipoProducto();
-      } else if (this.testButton.nativeElement.value == 'modificar') {
+      } else if (this.botonIngresar == 'modificar') {
         this.actualizarTipoProducto();
       }
     } else {
@@ -96,7 +95,7 @@ export class TipoProductoComponent implements OnInit {
   mostrarTipoProducto(tipoProducto) {
     this._idTipoProducto .setValue(tipoProducto.IdTipoProducto);
     this._tipoProducto.setValue(tipoProducto.Descripcion)
-    this.testButton.nativeElement.value = 'modificar';
+    this.botonIngresar = 'modificar';
   }
 
   actualizarTipoProducto() {
@@ -124,7 +123,7 @@ export class TipoProductoComponent implements OnInit {
             icon: "success",
           });
           this.myForm.reset();
-          this.testButton.nativeElement.value = 'ingresar';
+          this.botonIngresar = 'ingresar';
           this.consultarTipoProductos();
         }
       }

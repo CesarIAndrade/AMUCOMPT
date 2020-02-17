@@ -16,7 +16,6 @@ import sweetalert from 'sweetalert';
 export class SembrioComponent implements OnInit {
 
   myForm: FormGroup;
-  @ViewChild('testButton', { static: false }) testButton: ElementRef;
   @Output() nuevoSembrioCreado = new EventEmitter();
   
   constructor(
@@ -69,9 +68,9 @@ export class SembrioComponent implements OnInit {
 
   validarFormulario() {
     if (this.myForm.valid) {
-      if (this.testButton.nativeElement.value == 'ingresar') {
+      if (this.botonIngresar == 'ingresar') {
           this.crearSembrio();
-      } else if (this.testButton.nativeElement.value == 'modificar') {
+      } else if (this.botonIngresar == 'modificar') {
         this.actualizarSembrio();
       }
     } else {
@@ -106,11 +105,10 @@ export class SembrioComponent implements OnInit {
 
   mostrarSembrio(sembrio) {
     this._idComunidad.setValue(sembrio.Comunidad.IdComunidad);
-    var comunidad = this.comunidades.find(comunidad => comunidad.IdComunidad == this._idComunidad)
-    this._comunidad.setValue(comunidad.Descripcion);
+    this._comunidad.setValue(sembrio.Comunidad.Descripcion);
     this._idSembrio.setValue(sembrio.IdSembrio);
-    this.myForm.setValue(sembrio.Descripcion)
-    this.testButton.nativeElement.value = 'modificar';
+    this._sembrio.setValue(sembrio.Descripcion)
+    this.botonIngresar = 'modificar';
   }
 
   actualizarSembrio() {
@@ -124,7 +122,7 @@ export class SembrioComponent implements OnInit {
         ok => {
           this.myForm.reset();
           this.consultarSembrios();
-          this.testButton.nativeElement.value = 'ingresar';
+          this.botonIngresar = 'ingresar';
         }
       )
       .catch(

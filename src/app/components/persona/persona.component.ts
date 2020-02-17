@@ -22,7 +22,6 @@ import sweetalert from "sweetalert"
 export class PersonaComponent implements OnInit {
 
   myForm: FormGroup;
-  @ViewChild('testButton', { static: false }) testButton: ElementRef;
 
   constructor(
     private personaService: PersonaService,
@@ -236,9 +235,9 @@ export class PersonaComponent implements OnInit {
 
   validarFormulario() {
     if (this.myForm.valid) {
-      if (this.testButton.nativeElement.value == 'insertar') {
+      if (this.botonInsertar == 'insertar') {
         this.crearPersona();
-      } else if (this.testButton.nativeElement.value == 'modificar') {
+      } else if (this.botonInsertar == 'modificar') {
         this.actualizarPersona();
       }
     } else {
@@ -425,7 +424,7 @@ export class PersonaComponent implements OnInit {
   abrirModal(persona) {
     let dialogRef = this.dialog.open(ModalDetallePersonaComponent, {
       width: '500px',
-      height: '500px',
+      height: 'auto',
       data: {
         persona: persona
       }
@@ -462,7 +461,7 @@ export class PersonaComponent implements OnInit {
     this.consultarParroquiasDeUnCanton(this._canton.value, '');
     this._parroquia.setValue(persona.AsignacionPersonaParroquia[0].Parroquia.IdParroquia);
     this._idAsignacionPersonaParroquia.setValue(persona.AsignacionPersonaParroquia[0].IdAsignacionPC);
-    this.testButton.nativeElement.value = 'modificar';
+    this.botonInsertar = 'modificar';
   }
 
   actualizarPersona() {
@@ -597,7 +596,7 @@ export class PersonaComponent implements OnInit {
         ok => {
           if (ok['respuesta']) {
             this.myForm.reset();
-            this.testButton.nativeElement.value = 'insertar';
+            this.botonInsertar = 'insertar';
             this.consultarPersonas();
             this.nuevaPersona = 'Nueva Persona';
             this.contacto = 'Contacto ';

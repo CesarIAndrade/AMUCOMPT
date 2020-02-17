@@ -5,13 +5,20 @@
             <div class="card-body">
                 <h5 style="text-align: center;">{{ nuevoUsuario }}</h5>
                 <form [formGroup]="myForm" (ngSubmit)="validacionFormulario()" novalidate>
-                    <mat-form-field class="example-full-width">
-                        <input matInput formControlName="_cedula" type="text" placeholder="Cédula" readonly aria-disabled="true">
-                    </mat-form-field>
-                    <button type="button" class="btn btn-block btn-sm btn-outline-warning"
-                        (click)="abrirModalAsignacionUsuarioPersona()">
-                        <i class="fa fa-user-plus"></i>
-                    </button>
+                    <div class="row">
+                        <div class="col-lg-9 col-md-10">
+                            <mat-form-field class="example-full-width">
+                                <input matInput formControlName="_cedula" type="text" placeholder="Cédula" readonly
+                                    aria-disabled="true">
+                            </mat-form-field>
+                        </div>
+                        <div class="col-lg-3 col-md-2">
+                            <button mat-button class="mt-2 btn-outline-warning" type="button"
+                                (click)="abrirModalAsignacionUsuarioPersona()">
+                                <mat-icon>person_add</mat-icon>
+                            </button>
+                        </div>
+                    </div>
                     <mat-form-field class="example-full-width">
                         <input matInput formControlName="_nombres" placeholder="Nombres" type="text" readonly>
                     </mat-form-field>
@@ -19,7 +26,7 @@
                         <input matInput formControlName="_apellidos" placeholder="Apellidos" type="text" readonly>
                     </mat-form-field>
                     <mat-form-field class="example-full-width">
-                        <input matInput #testInput formControlName="_valorUsuario" type="text"
+                        <input matInput formControlName="_valorUsuario" type="text"
                             placeholder="Ingrese Usuario">
                         <mat-error *ngIf="_valorUsuario.invalid && (_valorUsuario.dirty || _valorUsuario.touched)">
                             <mat-error *ngIf="_valorUsuario.errors.required">
@@ -40,8 +47,8 @@
                         </mat-error>
                     </mat-form-field>
                     <div>
-                        <button class="btn btn-success btn-block mt-2" type="submit" [disabled]="myForm.invalid"
-                            [value]="botonInsertar" #testButton>Guardar</button>
+                        <button mat-button class="bg-success text-white btn-block mt-2" type="submit" [disabled]="myForm.invalid"
+                            [value]="botonInsertar">Guardar</button>
                     </div>
                 </form>
             </div>
@@ -74,33 +81,29 @@
                             <ng-container *matCellDef="let element">
                                 <ng-container *ngIf="element.EstadoUsuario">
                                     <td mat-cell>
-                                        <button tooltip="Asignar Roles" placement="top"
-                                            (click)="abrirModalAsignacionUsuarioTiposUsuario(element)"
-                                            class="btn btn-sm btn-outline-warning separacion-botones">
-                                            <i class="fa fa-address-book" aria-hidden="true"></i>
+                                        <button mat-button class="btn-outline-warning" tooltip="Asignar Roles" placement="top"
+                                            (click)="abrirModalAsignacionUsuarioTiposUsuario(element)">
+                                            <mat-icon>person</mat-icon>
                                         </button>
                                     </td>
                                     <td mat-cell>
-                                        <button tooltip="Modificar" placement="top" (click)="setUsuario(element)"
-                                            class="btn btn-sm btn-outline-info separacion-botones">
-                                            <i class="fa fa-pencil-square-o" aria-hidden="true">
-                                            </i>
+                                        <button mat-button class="btn-outline-primary" tooltip="Modificar" placement="top" (click)="setUsuario(element)">
+                                            <mat-icon>edit</mat-icon>
                                         </button>
                                     </td>
                                     <td mat-cell>
-                                        <button tooltip="Deshabilitar" placement="top"
-                                            (click)="eliminarUsuario(element)"
-                                            class="btn btn-sm btn-outline-danger separacion-botones">
-                                            <i class="fa fa-user-times" aria-hidden="true"></i>
+                                        <button mat-button class="btn-outline-danger" tooltip="Deshabilitar" placement="top"
+                                            (click)="eliminarUsuario(element)">
+                                            <mat-icon>remove</mat-icon>
                                         </button>
                                     </td>
                                 </ng-container>
                                 <ng-container *ngIf="!element.EstadoUsuario">
                                     <td mat-cell colspan="3">
-                                        <button tooltip="Habilitar" placement="top" (click)="habilitarUsuario(element)"
+                                        <button mat-button tooltip="Habilitar" placement="top" (click)="habilitarUsuario(element)"
                                             style="justify-content: center;"
-                                            class="btn btn-sm btn-block btn-outline-success">
-                                            <i class="fa fa-user-plus" aria-hidden="true"> Habilitar</i>
+                                            class="btn-outline-success btn-block">
+                                            <mat-icon>how_to_reg</mat-icon>
                                         </button>
                                     </td>
                                 </ng-container>

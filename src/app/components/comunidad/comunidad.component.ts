@@ -16,7 +16,6 @@ import sweetalert from 'sweetalert';
 export class ComunidadComponent implements OnInit {
 
   myForm: FormGroup;
-  @ViewChild('testButton', { static: false }) testButton: ElementRef;
   @Output() nuevaCaomunidadCreada = new EventEmitter();
 
   constructor(
@@ -69,9 +68,9 @@ export class ComunidadComponent implements OnInit {
 
   validarFormulario() {
     if (this.myForm.valid) {
-      if (this.testButton.nativeElement.value == 'ingresar') {
+      if (this.botonIngresar == 'ingresar') {
         this.crearComunidad();
-      } else if (this.testButton.nativeElement.value == 'modificar') {
+      } else if (this.botonIngresar == 'modificar') {
         this.actualizarComunidad();
       }
     } else {
@@ -119,11 +118,10 @@ export class ComunidadComponent implements OnInit {
 
   mostrarComunidad(comunidad) {
     this._idParroquia.setValue(comunidad.Parroquia.IdParroquia);
-    var parroquia = this.parroquias.find(parroquia => parroquia.IdParroquia == this._idParroquia)
-    this._parroquia.setValue(parroquia.Descripcion);
+    this._parroquia.setValue(comunidad.Parroquia.Descripcion);
     this._idComunidad.setValue(comunidad.IdComunidad);
-    this.myForm.setValue(comunidad.Descripcion)
-    this.testButton.nativeElement.value = 'modificar';
+    this._comunidad.setValue(comunidad.Descripcion)
+    this.botonIngresar = 'modificar';
   }
 
   actualizarComunidad() {
@@ -154,7 +152,7 @@ export class ComunidadComponent implements OnInit {
             });
             this.myForm.reset();
             this.consultarComunidades();
-            this.testButton.nativeElement.value = 'ingresar';
+            this.botonIngresar = 'ingresar';
           }
         }
       )

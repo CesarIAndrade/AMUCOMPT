@@ -16,7 +16,6 @@ import sweetalert from 'sweetalert';
 export class ParroquiaComponent implements OnInit {
 
   myForm: FormGroup;
-  @ViewChild('testButton', { static: false }) testButton: ElementRef;
   @Output() nuevaParroquiaCreada = new EventEmitter();
 
   constructor(private panelAdministracionService: PanelAdministracionService,
@@ -69,9 +68,9 @@ export class ParroquiaComponent implements OnInit {
 
   validarFormulario() {
     if (this.myForm.valid) {
-      if (this.testButton.nativeElement.value == 'ingresar') {
+      if (this.botonIngresar == 'ingresar') {
         this.crearParroquia();
-      } else if (this.testButton.nativeElement.value == 'modificar') {
+      } else if (this.botonIngresar == 'modificar') {
         this.actualizarParroquia();
       }
     } else {
@@ -119,11 +118,10 @@ export class ParroquiaComponent implements OnInit {
 
   mostrarParroquia(parroquia) {
     this._idCanton.setValue(parroquia.Canton.IdCanton);
-    var canton = this.cantones.find(canton => canton.IdCanton == this._idCanton.value);
-    this._canton.setValue(canton.Descripcion);
+    this._canton.setValue(parroquia.Canton.Descripcion);
     this._idParroquia.setValue(parroquia.IdParroquia);
     this._parroquia.setValue(parroquia.Descripcion)
-    this.testButton.nativeElement.value = 'modificar';
+    this.botonIngresar = 'modificar';
   }
 
   actualizarParroquia() {
@@ -154,7 +152,7 @@ export class ParroquiaComponent implements OnInit {
             });
             this.limpiarCampos();
             this.consultarParroquias();
-            this.testButton.nativeElement.value = 'ingresar';
+            this.botonIngresar = 'ingresar';
           }
         }
       )

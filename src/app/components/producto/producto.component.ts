@@ -23,7 +23,6 @@ import { startWith, map } from 'rxjs/operators';
 export class ProductoComponent implements OnInit {
 
   myForm: FormGroup;
-  @ViewChild('testButton', { static: false }) testButton: ElementRef;
 
   constructor(
     private inventarioService: InventarioService,
@@ -161,9 +160,9 @@ export class ProductoComponent implements OnInit {
 
   validarFormulario() {
     if (this.myForm.valid) {
-      if (this.testButton.nativeElement.value == 'ingresar') {
+      if (this.botonIngresar == 'ingresar') {
         this.crearProducto();
-      } else if (this.testButton.nativeElement.value == 'modificar') {
+      } else if (this.botonIngresar == 'modificar') {
         this.actualizarConfiguracionProducto();
       }
     } else {
@@ -197,7 +196,6 @@ export class ProductoComponent implements OnInit {
             } else {
               this._idProducto.setValue(ok['respuesta']);
               this.crearConfiguracionProducto();
-              this.consultarProductos();
             }
           }
         )
@@ -224,7 +222,7 @@ export class ProductoComponent implements OnInit {
     this._presentacion.setValue(producto.Presentacion.IdPresentacion);
     this._medida.setValue(producto.Medida.IdMedida);
     this._idProducto.setValue(producto.Producto.IdProducto);
-    this.testButton.nativeElement.value = 'modificar';
+    this.botonIngresar = 'modificar';
   }
 
   actualizarConfiguracionProducto() {
@@ -258,70 +256,13 @@ export class ProductoComponent implements OnInit {
               icon: "success",
             });
             this.myForm.reset();
-            this.testButton.nativeElement.value = 'ingresar';
+            this.botonIngresar = 'ingresar';
             this.consultarProductos();
             this._nombre.enable();
             this._descripcion.enable();
             this._codigo.enable();
             this._tipoProducto.enable();
           }
-        }
-      )
-      .catch(
-        error => {
-          console.log(error);
-        }
-      )
-  }
-
-  actualizarProducto() {
-    this.inventarioService.actualizarProducto(
-      this._idProducto.value,
-      this._nombre.value,
-      this._descripcion.value,
-      this._tipoProducto.value,
-      localStorage.getItem('miCuenta.putToken')
-    )
-      .then(
-        ok => {
-          if (ok['respuesta'] == null) {
-            sweetAlert("Inténtalo de nuevo!", {
-              icon: "warning",
-            });
-            this.myForm.reset();
-          } else if (ok['respuesta'] == '400') {
-            sweetAlert("Producto Ya Existe!", {
-              icon: "warning",
-            });
-          } else if (ok['respuesta'] == 'false') {
-            sweetAlert("Ha ocurrido un error!", {
-              icon: "error",
-            });
-          } else {
-            sweetAlert("Se ingresó correctamente!", {
-              icon: "success",
-            });
-            this.myForm.reset();
-            this.testButton.nativeElement.value = 'ingresar';
-            this.consultarProductos();
-          }
-        }
-      )
-      .catch(
-        error => {
-          console.log(error);
-        }
-      )
-  }
-
-  eliminarProducto(idProducto) {
-    this.inventarioService.eliminarProducto(
-      idProducto.IdConfigurarProducto,
-      localStorage.getItem('miCuenta.deleteToken')
-    )
-      .then(
-        ok => {
-          this.consultarProductos();
         }
       )
       .catch(
@@ -491,7 +432,10 @@ export class ProductoComponent implements OnInit {
   }
 
   private _filter(value: string): string[] {
-    const filterValue = value.toLowerCase();
-    return this.nombresDeProductos.filter(option => option.nombre.toLowerCase().includes(filterValue));
+    try {
+      const filterValue = value.toLowerCase();
+      return this.nombresDeProductos.filter(option => option.nombre.toLowerCase().includes(filterValue)); 
+    } catch (error) {
+    }
   }
 }

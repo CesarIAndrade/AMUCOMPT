@@ -964,8 +964,8 @@ export class InventarioService {
       .set('encriptada', _token)
       .set('IdLote', idLote)
       .set('FechaExpiracion', fechaExpiracion)
-    console.log(body);
-
+    console.log(fechaExpiracion);
+    
     return new Promise((resolve, reject) => {
       this.http.post(this.apiUrl + 'Factura/IngresoAsignarProductoLote', body.toString(),
         {

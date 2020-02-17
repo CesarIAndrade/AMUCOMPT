@@ -15,7 +15,6 @@ import sweetalert from 'sweetalert';
 export class MedidaComponent implements OnInit {
 
   myForm: FormGroup;
-  @ViewChild('testButton', { static: false }) testButton: ElementRef;
 
   constructor(private inventarioService: InventarioService) {
     this.myForm = new FormGroup({
@@ -48,9 +47,9 @@ export class MedidaComponent implements OnInit {
 
   validarFormulario() {
     if (this.myForm.valid) {
-      if (this.testButton.nativeElement.value == 'ingresar') {
+      if (this.botonIngresar == 'ingresar') {
         this.crearMedida();
-      } else if (this.testButton.nativeElement.value == 'modificar') {
+      } else if (this.botonIngresar == 'modificar') {
         this.actualizarMedida();
       }
     } else {
@@ -97,7 +96,7 @@ export class MedidaComponent implements OnInit {
   mostrarMedida(medida) {
     this._medida.setValue(medida.IdMedida);
     this._medida.setValue(medida.Descripcion)
-    this.testButton.nativeElement.value = 'modificar';
+    this.botonIngresar = 'modificar';
   }
 
   actualizarMedida() {
@@ -125,7 +124,7 @@ export class MedidaComponent implements OnInit {
               icon: "success",
             });
             this.myForm.reset();
-            this.testButton.nativeElement.value = 'ingresar';
+            this.botonIngresar = 'ingresar';
             this.consultarMedidas();
           }
         }

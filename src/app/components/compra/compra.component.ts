@@ -22,8 +22,6 @@ import { Router } from '@angular/router';
 export class CompraComponent implements OnInit {
 
   myForm: FormGroup;
-  @ViewChild('testButton', { static: false }) testButton: ElementRef;
-  @ViewChild('realizarCompraButton', { static: false }) realizarCompraButton: ElementRef;
 
   constructor(
     private modalAsignacionConfiguracionProducto: MatDialog,
@@ -45,15 +43,43 @@ export class CompraComponent implements OnInit {
       _idLote: new FormControl(''),
       _lote: new FormControl(''),
       _idAsignarProductoLote: new FormControl(''),
+      _tipoCompra: new FormControl('')
     })
   }
 
+  tipoCompra: any[] = [
+    {
+      tipo: 'Producto'
+    },
+    {
+      tipo: 'Kit'
+    }
+  ]
+
+  selecionarTipoCompra(tipoCompra) {
+    if (tipoCompra.value == 'Kit') {
+      this.seleccionKit = true;
+      this.seccionKit = false;
+      this.seccionProducto = false;
+      this.limpiarCampos();
+    } else {
+      this.listaProductosDeUnKit = [];
+      this.seccionProducto = false;
+      this.seccionKit = true;
+      this.seleccionKit = false;
+      this.limpiarCampos();
+    }
+  }
+
   botonInsertar = 'ingresar';
+  selected = 'Producto';
   seccionProducto = false;
   seccionKit = true;
   seleccionKit = false;
+  realizarCompraButton = true;
+  panelOpenState = false;
 
-  detallesCompra: any[] = [];
+  detalleCompra: any[] = [];
   kits: any[] = [];
   lotes: any[] = [];
   listaProductosDeUnKit: any[] = [];
@@ -62,17 +88,9 @@ export class CompraComponent implements OnInit {
   filteredOptions: Observable<string[]>;
 
   varificarTipoCompra(tipoCompra) {
-    if (tipoCompra.value == '2') {
-      this.seleccionKit = true;
-      this.seccionKit = false;
-      this.seccionProducto = false;
-    } else {
-      this.listaProductosDeUnKit = [];
-      this.seccionProducto = false;
-      this.seccionKit = true;
-      this.seleccionKit = false;
-    }
+
   }
+
 
   consultarTipoTransaccion() {
     this.inventarioService.consultarTipoTransaccion(
@@ -158,17 +176,28 @@ export class CompraComponent implements OnInit {
     )
       .then(
         ok => {
-          this.detallesCompra = [];
-          var detalleCompra: any;
+          console.log(ok['respuesta']);
           ok['respuesta'].map(
             item => {
+              var lote: string;
+              var fechaExpiracionLote: string;
+              var detalle: any;
+              this.detalleCompra = [];
               item.DetalleFactura.map(
                 producto => {
-
-                  if (producto.AsignarProductoLote[0].PerteneceKit) {
-                    console.log('perteneceKit');
-                    console.log(producto);
-                    detalleCompra = {
+                  console.log();
+                  
+                  if (String(producto.AsignarProductoLote[0].Lote) == 'undefined' 
+                  || String(producto.AsignarProductoLote[0].Lote) == 'null') {
+                    lote = '';
+                    fechaExpiracionLote = '';
+                  } else {
+                    lote = producto.AsignarProductoLote[0].Lote.Codigo;
+                    fechaExpiracionLote = producto.AsignarProductoLote[0].Lote.FechaExpiracion;
+                    console.log(lote);
+                  }
+                  if (producto.AsignarProductoLote[0].PerteneceKit == 'True') {
+                    detalle = {
                       IdDetalleFactura: producto.IdDetalleFactura,
                       Cantidad: producto.Cantidad,
                       ValorUnitario: producto.ValorUnitario,
@@ -181,15 +210,13 @@ export class CompraComponent implements OnInit {
                       Presentacion: producto.AsignarProductoLote[0].AsignarProductoKits.ListaAsignarProductoKit[0].ListaProductos.Presentacion.Descripcion,
                       ContenidoNeto: producto.AsignarProductoLote[0].AsignarProductoKits.ListaAsignarProductoKit[0].ListaProductos.CantidadMedida,
                       Medida: producto.AsignarProductoLote[0].AsignarProductoKits.ListaAsignarProductoKit[0].ListaProductos.Medida.Descripcion,
-                      Lote: producto.AsignarProductoLote[0].Lote.Codigo,
-                      FechaExpiracion: producto.AsignarProductoLote[0].FechaExpiracion,
+                      Lote: lote,
+                      FechaExpiracion: fechaExpiracionLote,
                       Total: parseInt(producto.Cantidad) * parseInt(producto.ValorUnitario)
                     }
-                    this.detallesCompra.push(detalleCompra);
+                    this.detalleCompra.push(detalle);
                   } else {
-                  console.log('noPerteneceKit');
-                    console.log(producto);
-                    detalleCompra = {
+                    detalle = {
                       IdDetalleFactura: producto.IdDetalleFactura,
                       Cantidad: producto.Cantidad,
                       ValorUnitario: producto.ValorUnitario,
@@ -202,11 +229,11 @@ export class CompraComponent implements OnInit {
                       Presentacion: producto.AsignarProductoLote[0].ConfigurarProductos.Presentacion.Descripcion,
                       ContenidoNeto: producto.AsignarProductoLote[0].ConfigurarProductos.CantidadMedida,
                       Medida: producto.AsignarProductoLote[0].ConfigurarProductos.Medida.Descripcion,
-                      Lote: producto.AsignarProductoLote[0].Lote.Codigo,
+                      Lote: lote,
                       FechaExpiracion: producto.AsignarProductoLote[0].FechaExpiracion,
                       Total: parseInt(producto.Cantidad) * parseInt(producto.ValorUnitario)
                     }
-                    this.detallesCompra.push(detalleCompra);
+                    this.detalleCompra.push(detalle);
                   }
                 }
               )
@@ -263,12 +290,14 @@ export class CompraComponent implements OnInit {
   }
 
   validarFormulario() {
+    console.log(this.botonInsertar);
+    
     if (this.myForm.valid) {
-      if (this.testButton.nativeElement.value == 'ingresar') {
+      if (this.botonInsertar == 'ingresar') {
         this.crearCabeceraFactura();
-      } else if (this.testButton.nativeElement.value == 'agregarDetalles') {
+      } else if (this.botonInsertar == 'agregarDetalles') {
         this.validarSiPerteneceALote();
-      } else if (this.testButton.nativeElement.value == 'actualizarFactura') {
+      } else if (this.botonInsertar == 'actualizarFactura') {
         this.validarSiPerteneceALote();
       }
     }
@@ -290,7 +319,7 @@ export class CompraComponent implements OnInit {
           } else {
             this._idCabecera.setValue(ok['respuesta']);
             this.validarSiPerteneceALote();
-            this.testButton.nativeElement.value = 'agregarDetalles';
+            this.botonInsertar = 'agregarDetalles';
           }
         }
       )
@@ -330,7 +359,7 @@ export class CompraComponent implements OnInit {
           if (ok['respuesta']) {
             this.limpiarCampos();
             this.consultarDetalleFactura();
-            this.realizarCompraButton.nativeElement.disabled = false;
+            this.realizarCompraButton = false;
           } else {
             sweetAlert("Ha ocurrido un error!", {
               icon: "error",
@@ -361,8 +390,6 @@ export class CompraComponent implements OnInit {
         this._perteneceKit.setValue(result.perteneceKit);
         this._producto.setValue(producto);
         this.consultarLotesDeUnProducto();
-        console.log(result);
-
       }
     });
   }
@@ -413,8 +440,8 @@ export class CompraComponent implements OnInit {
   }
 
   mostrarDetallesFactura(factura) {
-    this.testButton.nativeElement.value = 'actualizarFactura';
-    var detalleCompra: any;
+    this.botonInsertar = 'actualizarFactura';
+    this.realizarCompraButton = false;
     this._idCabecera.setValue(factura.IdCabeceraFactura);
     this.consultarDetalleFactura();
   }
@@ -536,6 +563,10 @@ export class CompraComponent implements OnInit {
     return this.myForm.get('_idAsignarProductoLote')
   }
 
+  get _tipoCompra() {
+    return this.myForm.get('_tipoCompra');
+  }
+
   ngOnInit() {
     this.consultarKits();
     this.consultarTipoTransaccion();
@@ -543,8 +574,11 @@ export class CompraComponent implements OnInit {
   }
 
   private _filter(value: string): string[] {
-    const filterValue = value.toLowerCase();
-    return this.lotes.filter(option => option.Codigo.toLowerCase().includes(filterValue));
+    try {
+      const filterValue = value.toLowerCase();
+      return this.lotes.filter(option => option.Codigo.toLowerCase().includes(filterValue));
+    } catch (error) {
+    }
   }
 
   tablaDetalleCompra = ['codigo', 'kit', 'descripcion', 'presentacion', 'lote', 'fechaExpiracion', 'valorUnitario', 'cantidad', 'total', 'acciones'];

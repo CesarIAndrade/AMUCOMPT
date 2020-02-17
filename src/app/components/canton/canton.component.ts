@@ -16,7 +16,6 @@ import sweetalert from 'sweetalert';
 export class CantonComponent implements OnInit {
 
   myForm: FormGroup;
-  @ViewChild('testButton', { static: false }) testButton: ElementRef;
   @Output() nuevoCantonCreado = new EventEmitter();
 
   constructor(private panelAdministracionService: PanelAdministracionService,
@@ -69,9 +68,9 @@ export class CantonComponent implements OnInit {
 
   validarFormulario() {
     if (this.myForm.valid) {
-      if (this.testButton.nativeElement.value == 'ingresar') {
+      if (this.botonIngresar == 'ingresar') {
         this.crearCanton();
-      } else if (this.testButton.nativeElement.value == 'modificar') {
+      } else if (this.botonIngresar == 'modificar') {
         this.actualizarCanton();
       }
     } else {
@@ -119,11 +118,10 @@ export class CantonComponent implements OnInit {
 
   mostrarCanton(canton) {
     this._idProvincia.setValue(canton.Provincia.IdProvincia);
-    var provincia = this.provincias.find(provincia => provincia.IdProvincia == this._idProvincia.value);
-    this._provincia.setValue(provincia.Descripcion);
+    this._provincia.setValue(canton.Provincia.Descripcion);
     this._idCanton.setValue(canton.IdCanton);
     this._canton.setValue(canton.Descripcion);
-    this.testButton.nativeElement.value = 'modificar';
+    this.botonIngresar = 'modificar';
   }
 
   actualizarCanton() {
@@ -151,7 +149,7 @@ export class CantonComponent implements OnInit {
             sweetAlert("Se ingresó correctamente!", {
               icon: "success",
             });
-            this.testButton.nativeElement.value = 'ingresar';
+            this.botonIngresar = 'ingresar';
             this.myForm.reset();
             this.consultarCantones();
           }
