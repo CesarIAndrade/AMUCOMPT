@@ -7,9 +7,8 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 export class InventarioService {
 
   constructor(private http: HttpClient) { }
-  //private apiUrl = "http://localhost:49962/api/";
-
-  private apiUrl = "http://192.168.25.20:90/api/";
+  private apiUrl = "http://25.39.0.74:90/api/";
+  // private apiUrl = "http://192.168.25.20:90/api/";
 
   consultarTipoProductos(_token: string) {
     const body = new HttpParams()
@@ -831,7 +830,6 @@ export class InventarioService {
     idCabeceraFactura: string,
     idAsignarProductoLote: string,
     cantidad: string,
-    precio: string,
     faltante: string,
     _token: string
   ) {
@@ -839,7 +837,6 @@ export class InventarioService {
       .set('IdCabeceraFactura', idCabeceraFactura)
       .set('IdAsignarProductoLote', idAsignarProductoLote)
       .set('Cantidad', cantidad)
-      .set('ValorUnitario', precio)
       .set('Faltante', faltante)
       .set('encriptada', _token)
     return new Promise((resolve, reject) => {
@@ -952,6 +949,7 @@ export class InventarioService {
     cantidad: string,
     idRelacionLogica: string,
     perteneceKit: string,
+    precio: string,
     _token: string,
     idLote?: string,
     fechaExpiracion?: string,
@@ -961,6 +959,7 @@ export class InventarioService {
       .set('Cantidad', cantidad)
       .set('IdRelacionLogica', idRelacionLogica)
       .set('PerteneceKit', perteneceKit)
+      .set('ValorUnitario', precio)
       .set('encriptada', _token)
       .set('IdLote', idLote)
       .set('FechaExpiracion', fechaExpiracion)

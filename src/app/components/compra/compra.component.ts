@@ -347,7 +347,6 @@ export class CompraComponent implements OnInit {
       this._idCabecera.value,
       this._idAsignarProductoLote.value,
       this._cantidad.value,
-      this._precio.value,
       '0',
       localStorage.getItem('miCuenta.postToken')
     )
@@ -358,10 +357,6 @@ export class CompraComponent implements OnInit {
             this.limpiarCampos();
             this.consultarDetalleFactura();
             this.realizarCompraButton = false;
-          } else {
-            sweetAlert("Ha ocurrido un error!", {
-              icon: "error",
-            });
           }
         }
       )
@@ -491,6 +486,7 @@ export class CompraComponent implements OnInit {
       this._cantidad.value,
       this._idRelacionLogica.value,
       this._perteneceKit.value,
+      this._precio.value,
       localStorage.getItem('miCuenta.postToken'),
       idLote,
       fecha
@@ -498,8 +494,14 @@ export class CompraComponent implements OnInit {
       .then(
         ok => {
           console.log('idAsignarProductoLote ' + ok['respuesta']);
-          this._idAsignarProductoLote.setValue(ok['respuesta']);
-          this.crearDetalleFactura();
+          if (ok['respuesta']) {
+            console.log('la cantidad se ha aumentado');
+          } else if (!ok['respuesta']) {
+            console.log('la cagaste');
+          } else if (typeof(ok['respuesta']) == 'string') {
+            this._idAsignarProductoLote.setValue(ok['respuesta']);
+            this.crearDetalleFactura();
+          }
         }
       )
       .catch(
