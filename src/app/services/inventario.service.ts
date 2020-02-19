@@ -895,9 +895,9 @@ export class InventarioService {
   }
 
   consultarLotesDeUnProducto(
+    idCabeceraFactura: string,
     idRelacionLogica: string,
     perteneceKit: string,
-    idCabeceraFactura: string,
     _token: string) {
     const body = new HttpParams()
       .set('IdRelacionLogica', idRelacionLogica)
@@ -1016,8 +1016,6 @@ export class InventarioService {
       .set('PerteneceKit', perteneceKit)
       .set('FechaExpiracion', fechaExpiracion)
       .set('encriptada', _token)
-    console.log(body);
-    
     return new Promise((resolve, reject) => {
       this.http.post(this.apiUrl + 'Factura/BuscarInformacionDeUnDetalle', body.toString(),
         {
@@ -1032,6 +1030,5 @@ export class InventarioService {
         })
     })
   }
-
 
 }

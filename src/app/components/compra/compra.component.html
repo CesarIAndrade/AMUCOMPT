@@ -66,13 +66,6 @@
                     <mat-datepicker-toggle matSuffix [for]="picker">
                     </mat-datepicker-toggle>
                     <mat-datepicker #picker></mat-datepicker>
-
-                    <mat-error *ngIf="_fechaExpiracion.invalid && (_fechaExpiracion.dirty || _fechaExpiracion.touched)">
-                        <mat-error *ngIf="_fechaExpiracion.errors.required">
-                            Fecha Expiración Requerida
-                        </mat-error>
-                    </mat-error>
-
                 </mat-form-field>
                 <div class="row">
                     <div class="col-lg-6">
