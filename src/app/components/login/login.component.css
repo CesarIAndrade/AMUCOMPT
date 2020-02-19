@@ -1,27 +1,37 @@
-section {
+body {
+    padding: 20%;
     background-image: url('../../../assets/img/fondo.jpg');
+    background-position: center center;
+    background-repeat: no-repeat;
     background-attachment: fixed;
-    padding-bottom: 15%;
+    background-size: cover;
 }
 
 .card {
-    background-color: rgba(0, 0, 0, 6);
-    opacity: 0.7;
-    margin-top: 5rem;
-    padding: 2rem;
+    background-color: #343a40;;  
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
 
-/* ::ng-deep .mat-focused .mat-form-field-label {
+.card-body {
+    padding: 3rem 3rem;
+}
+
+::ng-deep .mat-focused .mat-form-field-label {
     color: white !important;
 }
   
 ::ng-deep.mat-form-field-underline {
     background-color: white !important;
+    color: white;
 } 
   
 ::ng-deep.mat-form-field-ripple {
-    background-color: white !important;;
-} */
+    background-color: white !important;
+    color: white;
+}
 
 .amucomt {
     color: #fff;

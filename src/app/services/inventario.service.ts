@@ -7,9 +7,7 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 export class InventarioService {
 
   constructor(private http: HttpClient) { }
-  private apiUrl = "http://localhost:49962/api/";
-
-  //private apiUrl = "http://192.168.25.20:90/api/";
+  private apiUrl = "http://192.168.25.20:90/api/";
 
   consultarTipoProductos(_token: string) {
     const body = new HttpParams()
@@ -855,7 +853,7 @@ export class InventarioService {
     })
   }
 
-  eliminarDetalleFactura(
+  quitarDetalleFactura(
     idDetalleFactura: string,
     idCabeceraFactura: string,
     _token: string) {
@@ -952,7 +950,7 @@ export class InventarioService {
     cantidad: string,
     idRelacionLogica: string,
     perteneceKit: string,
-    precio:string,
+    precio: string,
     _token: string,
     idLote?: string,
     fechaExpiracion?: string,
@@ -967,9 +965,35 @@ export class InventarioService {
       .set('IdLote', idLote)
       .set('FechaExpiracion', fechaExpiracion)
     console.log(fechaExpiracion);
+    console.log(typeof(fechaExpiracion));
+    
 
     return new Promise((resolve, reject) => {
       this.http.post(this.apiUrl + 'Factura/IngresoAsignarProductoLote', body.toString(),
+        {
+          headers: new HttpHeaders()
+            .set('Content-Type', 'application/x-www-form-urlencoded')
+        }
+      )
+        .subscribe(res => {
+          resolve(res);
+        }, (err) => {
+          reject(err);
+        })
+    })
+  }
+
+  modificarCantidadDeProductoEnDetalle(
+    idDetalleFactura: string,
+    cantidad: string,
+    _token: string
+  ) {
+    const body = new HttpParams()
+      .set('IdDetalleFactura', idDetalleFactura)
+      .set('Cantidad', cantidad)
+      .set('encriptada', _token)
+    return new Promise((resolve, reject) => {
+      this.http.post(this.apiUrl + 'Factura/AumentarDetalleFactura', body.toString(),
         {
           headers: new HttpHeaders()
             .set('Content-Type', 'application/x-www-form-urlencoded')

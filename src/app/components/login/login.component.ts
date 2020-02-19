@@ -35,8 +35,8 @@ export class LoginComponent implements OnInit {
   login() {
     if (this.myForm.valid) {
       this.usuarioService.login(
-        this.myForm.get('_usuario').value,
-        this.myForm.get('_contrasena').value,
+        this._usuario.value,
+        this._contrasena.value,
         localStorage.getItem('miCuenta.getToken')
       )
         .then(

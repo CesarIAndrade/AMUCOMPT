@@ -22,3 +22,18 @@ table {
     text-align: center;
     color: #fff;
   }
+
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  input[type=number] {
+    -moz-appearance:textfield;
+  }
+
+  .tableButton:focus {
+    border-color: #f0ad4e;
+    box-shadow: 0 0 8px 0 #f0ad4e;;
+  }

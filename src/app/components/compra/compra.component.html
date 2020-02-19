@@ -10,7 +10,7 @@
             <div class="col-lg-6">
                 <mat-form-field class="example-full-width">
                     <mat-label>Seleccione Tipo Compra</mat-label>
-                    <mat-select [(value)]="selected" (selectionChange)="selecionarTipoCompra($event)" formControlName="_tipoCompra">
+                    <mat-select [(value)]="selected" (selectionChange)="selecionarTipoCompra($event)">
                         <mat-option *ngFor="let item of tipoCompra" [value]="item.tipo">
                             {{item.tipo}}
                         </mat-option>
@@ -38,7 +38,8 @@
                             </mat-form-field>
                         </div>
                         <div class="col-lg-3 col-md-2">
-                            <button tooltip="Seleccionar Producto" placement="top" type="button" mat-button class="mt-2 btn-outline-warning" [disabled]="seleccionKit"
+                            <button tooltip="Seleccionar Producto" placement="top" type="button" mat-button
+                                class="mt-2 btn-outline-warning" [disabled]="seleccionKit"
                                 (click)="seleccionarProducto()">
                                 <mat-icon>add</mat-icon>
                             </button>
@@ -147,7 +148,9 @@
                         </ng-container>
                         <ng-container matColumnDef="cantidad">
                             <th mat-header-cell *matHeaderCellDef> Cantidad </th>
-                            <td mat-cell *matCellDef="let element"> {{element.Cantidad}} </td>
+                                <input mat-cell *matCellDef="let element" matInput class="p-4 text-white tableButton" style="text-align: center; font-weight: bold;"
+                                    (keyup)="modificarCantidadDeProductoEnDetalle($event, element)" type="number"
+                                    value="{{element.Cantidad}}">
                         </ng-container>
                         <ng-container matColumnDef="total">
                             <th mat-header-cell *matHeaderCellDef> Total </th>
@@ -157,8 +160,7 @@
                             <th mat-header-cell *matHeaderCellDef> Acciones </th>
                             <ng-container *matCellDef="let element">
                                 <td mat-cell>
-                                    <button mat-button class="btn-outline-danger"
-                                        (click)="quitarDetalle(element)">
+                                    <button mat-button class="btn-outline-danger" (click)="quitarDetalleFactura(element)">
                                         <mat-icon>remove</mat-icon>
                                     </button>
                                 </td>
@@ -210,8 +212,8 @@
                                     <th mat-header-cell *matHeaderCellDef> Acciones </th>
                                     <ng-container *matCellDef="let element">
                                         <td mat-cell>
-                                            <button mat-button class="btn-outline-primary" tooltip="Modificar" placement="top"
-                                                (click)="mostrarDetallesFactura(element)">
+                                            <button mat-button class="btn-outline-primary" tooltip="Modificar"
+                                                placement="top" (click)="mostrarDetallesFactura(element)">
                                                 <mat-icon>format_line_spacing</mat-icon>
                                             </button>
                                         </td>
