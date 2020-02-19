@@ -498,6 +498,8 @@ export class CompraComponent implements OnInit {
 
   validarSiPerteneceALote() {
     var fecha = new Date(this._fechaExpiracion.value).toJSON();
+    console.log(fecha);
+    
     if (this._lote.value == '' || this._lote.value == null) {
       this.asignarProductoLote('', fecha);
     } else {
