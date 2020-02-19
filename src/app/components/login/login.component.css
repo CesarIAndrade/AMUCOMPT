@@ -1,5 +1,4 @@
 body {
-    padding: 20%;
     background-image: url('../../../assets/img/fondo.jpg');
     background-position: center center;
     background-repeat: no-repeat;
@@ -15,9 +14,7 @@ body {
     transform: translate(-50%, -50%);
 }
 
-.card-body {
-    padding: 3rem 3rem;
-}
+
 
 ::ng-deep .mat-focused .mat-form-field-label {
     color: white !important;

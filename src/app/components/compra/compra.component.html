@@ -58,16 +58,21 @@
             </div>
             <div class="col-lg-6">
                 <mat-form-field class="example-full-width">
-                    <input matInput readonly [matDatepicker]="picker" placeholder="Fecha Expiración"
-                        formControlName="_fechaExpiracion">
+                    <input readonly matInput (dateInput)="addEvent()" formControlName="_fechaExpiracion" [matDatepicker]="picker"
+                        placeholder="Fecha Expiración">
+                    <button type="button" mat-button matPrefix mat-icon-button>
+                        <mat-icon [hidden]="dateIcon" (click)="clearDate()">clear</mat-icon>
+                    </button>
                     <mat-datepicker-toggle matSuffix [for]="picker">
                     </mat-datepicker-toggle>
                     <mat-datepicker #picker></mat-datepicker>
+
                     <mat-error *ngIf="_fechaExpiracion.invalid && (_fechaExpiracion.dirty || _fechaExpiracion.touched)">
                         <mat-error *ngIf="_fechaExpiracion.errors.required">
                             Fecha Expiración Requerida
                         </mat-error>
                     </mat-error>
+
                 </mat-form-field>
                 <div class="row">
                     <div class="col-lg-6">
@@ -148,9 +153,10 @@
                         </ng-container>
                         <ng-container matColumnDef="cantidad">
                             <th mat-header-cell *matHeaderCellDef> Cantidad </th>
-                                <input mat-cell *matCellDef="let element" matInput class="p-4 text-white tableButton" style="text-align: center; font-weight: bold;"
-                                    (keyup)="modificarCantidadDeProductoEnDetalle($event, element)" type="number"
-                                    value="{{element.Cantidad}}">
+                            <input mat-cell *matCellDef="let element" matInput class="p-4 text-white tableButton"
+                                style="text-align: center; font-weight: bold;"
+                                (keyup)="modificarCantidadDeProductoEnDetalle($event, element)" type="number"
+                                value="{{element.Cantidad}}">
                         </ng-container>
                         <ng-container matColumnDef="total">
                             <th mat-header-cell *matHeaderCellDef> Total </th>
@@ -160,7 +166,8 @@
                             <th mat-header-cell *matHeaderCellDef> Acciones </th>
                             <ng-container *matCellDef="let element">
                                 <td mat-cell>
-                                    <button mat-button class="btn-outline-danger" (click)="quitarDetalleFactura(element)">
+                                    <button mat-button class="btn-outline-danger"
+                                        (click)="quitarDetalleFactura(element)">
                                         <mat-icon>remove</mat-icon>
                                     </button>
                                 </td>

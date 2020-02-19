@@ -46,6 +46,45 @@ export class CompraComponent implements OnInit {
     })
   }
 
+  buscarFechaYPrecio() {
+    var fecha: any;
+    if (this._fechaExpiracion.value != null) {
+      fecha = new Date(this._fechaExpiracion.value).toJSON();
+      try {
+        fecha = fecha.split('T')[0];        
+      } catch (error) { }
+    }
+    if(this._idRelacionLogica.value != '' && this._perteneceKit.value != '' ) {
+      this.inventarioService.buscarFechaYPrecio(
+        this._idCabecera.value,
+        this._idRelacionLogica.value,
+        this._perteneceKit.value,
+        fecha,
+        localStorage.getItem('miCuenta.getToken')
+      )
+      .then(
+        ok => {
+          console.log(ok['respuesta']);
+        }
+      )
+      .catch(
+        error => {
+          console.log(error);
+        }
+      )
+    }
+  }
+
+  addEvent() {
+    this.dateIcon = false;
+    this.buscarFechaYPrecio();
+  }
+
+  clearDate() {
+    this.dateIcon = true;
+    this._fechaExpiracion.setValue('');
+  }
+
   tipoCompra: any[] = [
     {
       tipo: 'Producto'
@@ -56,9 +95,9 @@ export class CompraComponent implements OnInit {
   ]
 
   modificarCantidadDeProductoEnDetalle(event, element) {
-    if(event.key == "Enter") {
+    if (event.key == "Enter") {
       var cantidadAntigua = element.Cantidad;
-      if(event.target.value <= 0) {
+      if (event.target.value <= 0) {
         event.target.value = cantidadAntigua;
       } else {
         this.inventarioService.modificarCantidadDeProductoEnDetalle(
@@ -66,18 +105,18 @@ export class CompraComponent implements OnInit {
           event.target.value,
           localStorage.getItem('miCuenta.putToken')
         )
-        .then(
-          ok => {
-            if(ok['respuesta']) {
-              this.consultarDetalleFactura();
+          .then(
+            ok => {
+              if (ok['respuesta']) {
+                this.consultarDetalleFactura();
+              }
             }
-          }
-        )
-        .catch(
-          error => {
-            console.log(error);
-          }
-        )
+          )
+          .catch(
+            error => {
+              console.log(error);
+            }
+          )
       }
     }
   }
@@ -104,6 +143,7 @@ export class CompraComponent implements OnInit {
   seleccionKit = false;
   realizarCompraButton = true;
   panelOpenState = false;
+  dateIcon = true;
 
   detalleCompra: any[] = [];
   kits: any[] = [];
@@ -209,7 +249,7 @@ export class CompraComponent implements OnInit {
                 producto => {
                   if (String(producto.AsignarProductoLote[0].Lote) == 'undefined'
                     || String(producto.AsignarProductoLote[0].Lote) == 'null') {
-                      idLote = ''
+                    idLote = ''
                     lote = '';
                     fechaExpiracionLote = '';
                   } else {
@@ -375,11 +415,10 @@ export class CompraComponent implements OnInit {
     )
       .then(
         ok => {
-          if (ok['respuesta']) {
-            this.limpiarCampos();
-            this.consultarDetalleFactura();
-            this.realizarCompraButton = false;
-          }
+          this.limpiarCampos();
+          this.consultarDetalleFactura();
+          this.dateIcon = true;
+          this.realizarCompraButton = false;
         }
       )
       .catch(
@@ -405,6 +444,7 @@ export class CompraComponent implements OnInit {
         this._perteneceKit.setValue(result.perteneceKit);
         this._producto.setValue(producto);
         this.consultarLotesDeUnProducto();
+        this.buscarFechaYPrecio();
       }
     });
   }
@@ -416,12 +456,8 @@ export class CompraComponent implements OnInit {
       localStorage.getItem('miCuenta.deleteToken')
     )
       .then(
-        ok => {    
-          console.log(ok['respuesta']);
-          console.log(typeof(ok['respuesta']));
-          
-          if(ok['respuesta'] == '0') {
-            console.log('in');
+        ok => {
+          if (ok['respuesta'] == '0') {
             this.detalleCompra = [];
             this._idCabecera.setValue('');
             this.botonInsertar = 'ingresar'
@@ -497,9 +533,10 @@ export class CompraComponent implements OnInit {
   }
 
   validarSiPerteneceALote() {
-    var fecha = new Date(this._fechaExpiracion.value).toJSON();
-    console.log(fecha);
-    
+    var fecha: any;
+    if (this._fechaExpiracion.value != null) {
+      fecha = new Date(this._fechaExpiracion.value).toJSON();
+    }
     if (this._lote.value == '' || this._lote.value == null) {
       this.asignarProductoLote('', fecha);
     } else {
@@ -519,7 +556,7 @@ export class CompraComponent implements OnInit {
       this._precio.value,
       localStorage.getItem('miCuenta.postToken'),
       idLote,
-      fecha
+      fecha.split('T')[0],
     )
       .then(
         ok => {

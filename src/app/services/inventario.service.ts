@@ -964,10 +964,6 @@ export class InventarioService {
       .set('encriptada', _token)
       .set('IdLote', idLote)
       .set('FechaExpiracion', fechaExpiracion)
-    console.log(fechaExpiracion);
-    console.log(typeof(fechaExpiracion));
-    
-
     return new Promise((resolve, reject) => {
       this.http.post(this.apiUrl + 'Factura/IngresoAsignarProductoLote', body.toString(),
         {
@@ -994,6 +990,36 @@ export class InventarioService {
       .set('encriptada', _token)
     return new Promise((resolve, reject) => {
       this.http.post(this.apiUrl + 'Factura/AumentarDetalleFactura', body.toString(),
+        {
+          headers: new HttpHeaders()
+            .set('Content-Type', 'application/x-www-form-urlencoded')
+        }
+      )
+        .subscribe(res => {
+          resolve(res);
+        }, (err) => {
+          reject(err);
+        })
+    })
+  }
+
+  buscarFechaYPrecio(
+    idCabeceraFactura: string,
+    idRelacionLogica: string,
+    perteneceKit: string,
+    fechaExpiracion: string,
+    _token: string
+  ) {
+    const body = new HttpParams()
+      .set('IdCabeceraFactura', idCabeceraFactura)
+      .set('IdRelacionLogica', idRelacionLogica)
+      .set('PerteneceKit', perteneceKit)
+      .set('FechaExpiracion', fechaExpiracion)
+      .set('encriptada', _token)
+    console.log(body);
+    
+    return new Promise((resolve, reject) => {
+      this.http.post(this.apiUrl + 'Factura/BuscarInformacionDeUnDetalle', body.toString(),
         {
           headers: new HttpHeaders()
             .set('Content-Type', 'application/x-www-form-urlencoded')
