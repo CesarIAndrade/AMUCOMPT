@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material';
 import { Observable } from 'rxjs';
@@ -30,12 +30,12 @@ export class CompraComponent implements OnInit {
   ) {
     this.myForm = new FormGroup({
       _idCabecera: new FormControl(''),
+      _cabecera: new FormControl(''),
       _tipoTransaccion: new FormControl(''),
       _idRelacionLogica: new FormControl(''),
       _perteneceKit: new FormControl(''),
       _idKit: new FormControl(''),
       _kit: new FormControl(''),
-      // , [Validators.required]
       _producto: new FormControl('', [Validators.required]),
       _cantidad: new FormControl('', [Validators.required]),
       _fechaExpiracion: new FormControl(''),
@@ -45,6 +45,29 @@ export class CompraComponent implements OnInit {
       _idAsignarProductoLote: new FormControl(''),
     })
   }
+
+  selected = 'Producto';
+  seccionProducto = false;
+  seccionKit = true;
+  seleccionKit = false;
+  realizarCompraButton = true;
+  panelOpenState = false;
+  dateIcon = true;
+  selectTipoCompra = true;
+  buttonGenerarFactura = false;
+  buttonSeleccionarProducto = true;
+
+  detalleCompra: any[] = [];
+  kits: any[] = [];
+  lotes: any[] = [];
+  listaProductosDeUnKit: any[] = [];
+  facturasNoFinalizadas: any[] = [];
+  tipoCompra: any[] = [
+    { tipo: 'Producto' },
+    { tipo: 'Kit' }
+  ]
+
+  filteredOptions: Observable<string[]>;
 
   buscarFechaYPrecio() {
     var fecha: any;
@@ -93,15 +116,6 @@ export class CompraComponent implements OnInit {
     this._fechaExpiracion.setValue('');
   }
 
-  tipoCompra: any[] = [
-    {
-      tipo: 'Producto'
-    },
-    {
-      tipo: 'Kit'
-    }
-  ]
-
   modificarCantidadDeProductoEnDetalle(event, element) {
     if (event.key == "Enter") {
       var cantidadAntigua = element.Cantidad;
@@ -143,23 +157,6 @@ export class CompraComponent implements OnInit {
       this.limpiarCampos();
     }
   }
-
-  botonInsertar = 'ingresar';
-  selected = 'Producto';
-  seccionProducto = false;
-  seccionKit = true;
-  seleccionKit = false;
-  realizarCompraButton = true;
-  panelOpenState = false;
-  dateIcon = true;
-
-  detalleCompra: any[] = [];
-  kits: any[] = [];
-  lotes: any[] = [];
-  listaProductosDeUnKit: any[] = [];
-  facturasNoFinalizadas: any[] = [];
-
-  filteredOptions: Observable<string[]>;
 
   consultarTipoTransaccion() {
     this.inventarioService.consultarTipoTransaccion(
@@ -217,9 +214,10 @@ export class CompraComponent implements OnInit {
     )
       .then(
         ok => {
-          this.lotes = ok['respuesta'];
-          console.log(this.lotes);
 
+          console.log(ok['respuesta']);
+
+          this.lotes = ok['respuesta'];
           this.filteredOptions = this._lote.valueChanges
             .pipe(
               startWith(''),
@@ -391,13 +389,7 @@ export class CompraComponent implements OnInit {
 
   validarFormulario() {
     if (this.myForm.valid) {
-      if (this.botonInsertar == 'ingresar') {
-        this.crearCabeceraFactura();
-      } else if (this.botonInsertar == 'agregarDetalles') {
-        this.validarSiPerteneceALote();
-      } else if (this.botonInsertar == 'actualizarFactura') {
-        this.validarSiPerteneceALote();
-      }
+      this.validarSiPerteneceALote();
     }
   }
 
@@ -414,9 +406,12 @@ export class CompraComponent implements OnInit {
               icon: "error",
             });
           } else {
-            this._idCabecera.setValue(ok['respuesta']);
-            this.validarSiPerteneceALote();
-            this.botonInsertar = 'agregarDetalles';
+            this._idCabecera.setValue(ok['respuesta'].IdCabeceraFactura);
+            this._cabecera.setValue(ok['respuesta'].Codigo);
+            this.myForm.enable();
+            this.selectTipoCompra = false;
+            this.buttonSeleccionarProducto = false;
+            this.buttonGenerarFactura = true;
           }
         }
       )
@@ -497,7 +492,6 @@ export class CompraComponent implements OnInit {
           if (ok['respuesta'] == '0') {
             this.detalleCompra = [];
             this._idCabecera.setValue('');
-            this.botonInsertar = 'ingresar'
             this.consultarFacturasNoFinalizadas();
           } else {
             this.consultarDetalleFactura();
@@ -538,10 +532,13 @@ export class CompraComponent implements OnInit {
   }
 
   mostrarDetallesFactura(factura) {
-    this.botonInsertar = 'actualizarFactura';
     this.realizarCompraButton = false;
     this._idCabecera.setValue(factura.IdCabeceraFactura);
     this.consultarDetalleFactura();
+    this._cabecera.setValue(factura.Codigo);
+    this.myForm.enable();
+    this.buttonSeleccionarProducto = false;
+    this.selectTipoCompra = false;
   }
 
   crearLote() {
@@ -645,6 +642,10 @@ export class CompraComponent implements OnInit {
     return this.myForm.get('_idCabecera')
   }
 
+  get _cabecera() {
+    return this.myForm.get('_cabecera')
+  }
+
   get _tipoTransaccion() {
     return this.myForm.get('_tipoTransaccion')
   }
@@ -665,6 +666,7 @@ export class CompraComponent implements OnInit {
     this.consultarKits();
     this.consultarTipoTransaccion();
     this.consultarFacturasNoFinalizadas();
+    this.myForm.disable();
   }
 
   private _filter(value: string): string[] {

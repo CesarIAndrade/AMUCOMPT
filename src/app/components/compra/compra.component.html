@@ -8,9 +8,21 @@
     <form [formGroup]="myForm" (ngSubmit)="validarFormulario()" novalidate>
         <div class="row">
             <div class="col-lg-6">
+                <button [disabled]="buttonGenerarFactura" type="button" class=" mt-2 mb-2 btn-block bg-primary text-white" mat-raised-button (click)="crearCabeceraFactura()">
+                    Generar Factura
+                </button>
+            </div>
+            <div class="col-lg-6">
+                <mat-form-field class="example-full-width">
+                    <input readonly matInput placeholder="Cabecera" formControlName="_cabecera">
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
                 <mat-form-field class="example-full-width">
                     <mat-label>Seleccione Tipo Compra</mat-label>
-                    <mat-select [(value)]="selected" (selectionChange)="selecionarTipoCompra($event)">
+                    <mat-select [disabled]="selectTipoCompra" [(value)]="selected" (selectionChange)="selecionarTipoCompra($event)">
                         <mat-option *ngFor="let item of tipoCompra" [value]="item.tipo">
                             {{item.tipo}}
                         </mat-option>
@@ -38,7 +50,7 @@
                             </mat-form-field>
                         </div>
                         <div class="col-lg-3 col-md-2">
-                            <button tooltip="Seleccionar Producto" placement="top" type="button" mat-button
+                            <button [disabled]="buttonSeleccionarProducto" tooltip="Seleccionar Producto" placement="top" type="button" mat-button
                                 class="mt-2 btn-outline-warning" [disabled]="seleccionKit"
                                 (click)="seleccionarProducto()">
                                 <mat-icon>add</mat-icon>
@@ -58,8 +70,8 @@
             </div>
             <div class="col-lg-6">
                 <mat-form-field class="example-full-width">
-                    <input readonly matInput (dateInput)="addEvent()" formControlName="_fechaExpiracion" [matDatepicker]="picker"
-                        placeholder="Fecha Expiración">
+                    <input readonly matInput (dateInput)="addEvent()" formControlName="_fechaExpiracion"
+                        [matDatepicker]="picker" placeholder="Fecha Expiración">
                     <button type="button" mat-button matPrefix mat-icon-button>
                         <mat-icon [hidden]="dateIcon" (click)="clearDate()">clear</mat-icon>
                     </button>
@@ -97,7 +109,7 @@
         <div class="row">
             <div class="col-lg-12">
                 <button type="submit" class="mt-2 btn-block bg-success text-white" mat-raised-button
-                    [disabled]="myForm.invalid" [value]="botonInsertar">
+                    [disabled]="myForm.invalid">
                     Agregar Detalle
                 </button>
             </div>
