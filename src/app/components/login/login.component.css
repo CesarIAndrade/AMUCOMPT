@@ -1,4 +1,6 @@
 body {
+    margin: 0;
+    padding: 0;
     background-image: url('../../../assets/img/fondo.jpg');
     background-position: center center;
     background-repeat: no-repeat;
@@ -7,14 +9,17 @@ body {
 }
 
 .card {
-    background-color: #343a40;;  
+    padding: 3rem 2rem;
+    background-color: #343a40;  
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
 }
 
-
+::ng-deep .mat-select-value{    
+    color: white!important;  
+}
 
 ::ng-deep .mat-focused .mat-form-field-label {
     color: white !important;

@@ -32,14 +32,13 @@
             </div>
         </div>
     </div>
-
     <div [hidden]="seleccionarTipoUsuario">
         <div class="card">
             <div class="card-body">
-                <h3 class="amucomt mb-3">AMUCOMT</h3>
+                <h3 class="amucomt mb-4">AMUCOMT</h3>
                 <form [formGroup]="myForm" (ngSubmit)="iniciarSesionSegunTipoUsuario()" novalidate>
                     <mat-form-field class="example-full-width">
-                        <mat-label style="color: white;">Seleccione Tipo Usuario</mat-label>
+                        <mat-label style="color: white;">Roles</mat-label>
                         <mat-select formControlName="_tipoUsuario">
                             <mat-option *ngFor="let item of tipoUsuarios" [value]="item.IdAsignacionTu">
                                 {{item.Descripcion}}

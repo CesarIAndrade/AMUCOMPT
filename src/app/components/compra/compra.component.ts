@@ -70,23 +70,27 @@ export class CompraComponent implements OnInit {
   filteredOptions: Observable<string[]>;
 
   buscarFechaYPrecio() {
-    var fecha: any;
-    if (this._fechaExpiracion.value != null) {
-      fecha = new Date(this._fechaExpiracion.value).toJSON();
-      try {
-        fecha = fecha.split('T')[0];
-      } catch (error) { }
+    var fechaExpiracion: any;
+    fechaExpiracion = new Date(this._fechaExpiracion.value).toJSON();
+    try {
+      fechaExpiracion = fechaExpiracion.split('T')[0];
+    } catch (error) { 
+      fechaExpiracion = null
     }
+
+    console.log(fechaExpiracion);
+    
     if (this._idRelacionLogica.value != '' && this._perteneceKit.value != '') {
       this.inventarioService.buscarFechaYPrecio(
         this._idCabecera.value,
         this._idRelacionLogica.value,
         this._perteneceKit.value,
-        fecha,
+        fechaExpiracion,
         localStorage.getItem('miCuenta.getToken')
       )
         .then(
           ok => {
+            console.log(ok['respuesta']);
             try {
               if (ok['respuesta'].IdDetalleFactura != null) {
                 this._precio.disable();
@@ -114,6 +118,13 @@ export class CompraComponent implements OnInit {
   clearDate() {
     this.dateIcon = true;
     this._fechaExpiracion.setValue('');
+  }
+
+  onKeyUp() {
+    this._precio.reset();
+    this._precio.enable();
+    this._fechaExpiracion.setValidators([Validators.required]);
+    this._fechaExpiracion.updateValueAndValidity();
   }
 
   modificarCantidadDeProductoEnDetalle(event, element) {
@@ -208,15 +219,10 @@ export class CompraComponent implements OnInit {
   consultarLotesDeUnProducto() {
     this.inventarioService.consultarLotesDeUnProducto(
       this._idCabecera.value,
-      this._idRelacionLogica.value,
-      this._perteneceKit.value,
       localStorage.getItem('miCuenta.getToken')
     )
       .then(
         ok => {
-
-          console.log(ok['respuesta']);
-
           this.lotes = ok['respuesta'];
           this.filteredOptions = this._lote.valueChanges
             .pipe(
@@ -451,6 +457,7 @@ export class CompraComponent implements OnInit {
           this.dateIcon = true;
           this.realizarCompraButton = false;
           this._precio.enable();
+          this._fechaExpiracion.clearValidators();
         }
       )
       .catch(
@@ -568,12 +575,21 @@ export class CompraComponent implements OnInit {
   }
 
   validarSiPerteneceALote() {
-    var fecha: any;
-    if (this._fechaExpiracion.value != null) {
-      fecha = new Date(this._fechaExpiracion.value).toJSON();
+    var fechaExpiracion: any
+    fechaExpiracion = new Date(this._fechaExpiracion.value);
+    var fechaActual = new Date();
+    try {
+      if (fechaExpiracion.getFullYear() < fechaActual.getFullYear()) {
+        fechaExpiracion = null;
+      } else {
+        fechaExpiracion = fechaExpiracion.toJSON();
+        fechaExpiracion = fechaExpiracion.split('T')[0];
+      }
+    } catch (error) {
+      fechaExpiracion = null;
     }
     if (this._lote.value == '' || this._lote.value == null) {
-      this.asignarProductoLote('', fecha);
+      this.asignarProductoLote('', fechaExpiracion);
     } else {
       this.crearLote();
     }
@@ -591,7 +607,7 @@ export class CompraComponent implements OnInit {
       this._precio.value,
       localStorage.getItem('miCuenta.postToken'),
       idLote,
-      fecha.split('T')[0],
+      fecha,
     )
       .then(
         ok => {
