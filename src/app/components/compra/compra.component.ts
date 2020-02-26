@@ -77,9 +77,6 @@ export class CompraComponent implements OnInit {
     } catch (error) { 
       fechaExpiracion = null
     }
-
-    console.log(fechaExpiracion);
-    
     if (this._idRelacionLogica.value != '' && this._perteneceKit.value != '') {
       this.inventarioService.buscarFechaYPrecio(
         this._idCabecera.value,
@@ -97,6 +94,7 @@ export class CompraComponent implements OnInit {
                 this._precio.setValue(ok['respuesta'].AsignarProductoLote[0].ValorUnitario);
               } else {
                 this._precio.enable();
+                console.log(this._precio.value);
                 this._precio.setValue('');
               }
             } catch (error) { }
@@ -219,10 +217,14 @@ export class CompraComponent implements OnInit {
   consultarLotesDeUnProducto() {
     this.inventarioService.consultarLotesDeUnProducto(
       this._idCabecera.value,
+      this._idRelacionLogica.value,
+      this._perteneceKit.value,
       localStorage.getItem('miCuenta.getToken')
     )
       .then(
         ok => {
+          console.log(ok['respuesta']);
+          
           this.lotes = ok['respuesta'];
           this.filteredOptions = this._lote.valueChanges
             .pipe(

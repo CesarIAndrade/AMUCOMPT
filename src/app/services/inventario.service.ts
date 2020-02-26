@@ -838,9 +838,6 @@ export class InventarioService {
       .set('Cantidad', cantidad)
       .set('Faltante', faltante)
       .set('encriptada', _token)
-
-      console.log(body);
-      
     return new Promise((resolve, reject) => {
       this.http.post(this.apiUrl + 'Factura/IngresoDetalleFactura', body.toString(),
         {
@@ -899,10 +896,17 @@ export class InventarioService {
 
   consultarLotesDeUnProducto(
     idCabeceraFactura: string,
+    idRelacionLogica: string,
+    perteneceKit: string,
     _token: string) {
     const body = new HttpParams()
       .set('IdCabeceraFactura', idCabeceraFactura)
+      .set('IdRelacionLogica', idRelacionLogica)
+      .set('PerteneceKit', perteneceKit)
       .set('encriptada', _token)
+
+     console.log(body);
+      
     return new Promise((resolve, reject) => {
       this.http.post(this.apiUrl + 'Factura/ListaLote', body.toString(),
         {
