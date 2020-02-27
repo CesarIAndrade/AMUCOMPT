@@ -109,7 +109,9 @@ export class CompraComponent implements OnInit {
 
   addEvent() {
     this.dateIcon = false;
-    this.buscarFechaYPrecio();
+    if (this._lote.value == null || this._lote.value == '') {
+      this.buscarFechaYPrecio();
+    }
   }
 
   clearDate() {
@@ -294,6 +296,8 @@ export class CompraComponent implements OnInit {
               this.detalleCompra = [];
               item.DetalleFactura.map(
                 producto => {
+                  console.log(producto);
+
                   perteneceLote = this.estructurarSiPerteneceALote(producto);
                   perteneceKit = this.estructurarSiPerteneceAKit(producto);
                   if (perteneceLote != null) {
@@ -565,8 +569,8 @@ export class CompraComponent implements OnInit {
     this.selectTipoCompra = false;
     this.buttonGenerarFactura = false;
     var fecha = new Date(factura.FechaGeneracion);
-    var dia = this.dias[fecha.getDay()];    
-    var mes = this.meses[fecha.getMonth()];    
+    var dia = this.dias[fecha.getDay()];
+    var mes = this.meses[fecha.getMonth()];
     this._fechaActual.setValue(dia + ', ' + fecha.getDate() + ' ' + mes + ' ' + fecha.getFullYear());
   }
 
@@ -613,10 +617,14 @@ export class CompraComponent implements OnInit {
   }
 
   validarSiPerteneceALote() {
-    if (this._lote.value == '' || this._lote.value == null) {
+    if (this._lote.value == '' || this._lote.value == null || this._lote.value == 'null') {
       this.asignarProductoLote('', this.validarFecha());
     } else {
-      this.crearLote();
+      if (this._idAsignarProductoLote.value == '' || this._idAsignarProductoLote.value == null || this._idAsignarProductoLote.value == 'null') {
+        this.crearLote();
+      } else {
+        this.crearDetalleFactura();
+      }
     }
   }
 
@@ -636,9 +644,8 @@ export class CompraComponent implements OnInit {
     )
       .then(
         ok => {
-          console.log(ok['respuesta']);
-          // this._idAsignarProductoLote.setValue(ok['respuesta']);
-          // this.crearDetalleFactura();
+          this._idAsignarProductoLote.setValue(ok['respuesta'].IdAsignarProductoLote);
+          this.crearDetalleFactura();
         }
       )
       .catch(
