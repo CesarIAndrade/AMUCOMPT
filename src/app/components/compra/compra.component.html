@@ -1,35 +1,35 @@
 <br>
 <div class="container">
-    <div class="row">
-        <div class="col-lg-12">
-            <h5 style="text-align: center;">COMPRA</h5>
-        </div>
-    </div>
     <form [formGroup]="myForm" (ngSubmit)="validarFormulario()" novalidate>
         <div class="row">
-            <div class="col-lg-6">
-                <button [disabled]="buttonGenerarFactura" type="button" class=" mt-2 mb-2 btn-block bg-primary text-white" mat-raised-button (click)="crearCabeceraFactura()">
-                    Generar Factura
-                </button>
-            </div>
-            <div class="col-lg-6">
+            <div class="col-lg-5">
                 <mat-form-field class="example-full-width">
-                    <input readonly matInput placeholder="Cabecera" formControlName="_cabecera">
+                    <input readonly matInput formControlName="_cabecera" placeholder="Factura">
                 </mat-form-field>
+            </div>
+            <div class="col-lg-4">
+                <mat-form-field class="example-full-width">
+                    <input readonly matInput formControlName="_fechaActual" placeholder="Fecha">
+                </mat-form-field>
+            </div>
+            <div class="col-lg-3">
+                <button [disabled]="buttonGenerarFactura" type="button"
+                    class=" mt-2 mb-2 btn-block bg-warning text-white" mat-raised-button
+                    (click)="crearCabeceraFactura()">
+                    Nueva Factura
+                </button>
             </div>
         </div>
         <div class="row">
-            <div class="col-lg-6">
+            <div class="col-lg-4">
                 <mat-form-field class="example-full-width">
-                    <mat-label>Seleccione Tipo Compra</mat-label>
-                    <mat-select [disabled]="selectTipoCompra" [(value)]="selected" (selectionChange)="selecionarTipoCompra($event)">
+                    <mat-select [disabled]="selectTipoCompra" [(value)]="selected"
+                        (selectionChange)="selecionarTipoCompra($event)">
                         <mat-option *ngFor="let item of tipoCompra" [value]="item.tipo">
                             {{item.tipo}}
                         </mat-option>
                     </mat-select>
                 </mat-form-field>
-            </div>
-            <div class="col-lg-6">
                 <mat-form-field [hidden]="seccionKit" class="example-full-width">
                     <mat-label>Kits</mat-label>
                     <mat-select formControlName="_kit" (selectionChange)="onChangeSelectKit($event.value)">
@@ -39,26 +39,23 @@
                     </mat-select>
                 </mat-form-field>
             </div>
-        </div>
-        <div class="row">
-            <div class="col-lg-6">
-                <div [hidden]="seccionProducto">
-                    <div class="row">
-                        <div class="col-lg-9 col-md-10">
-                            <mat-form-field class="example-full-width">
-                                <input readonly matInput placeholder="Producto" formControlName="_producto">
-                            </mat-form-field>
-                        </div>
-                        <div class="col-lg-3 col-md-2">
-                            <button [disabled]="buttonSeleccionarProducto" tooltip="Seleccionar Producto" placement="top" type="button" mat-button
-                                class="mt-2 btn-outline-warning" [disabled]="seleccionKit"
-                                (click)="seleccionarProducto()">
-                                <mat-icon>add</mat-icon>
-                            </button>
-                        </div>
+            <div class="col-lg-4">
+                <div class="row">
+                    <div class="col-lg-9 col-md-10">
+                        <mat-form-field class="example-full-width">
+                            <input readonly matInput placeholder="Producto" formControlName="_producto">
+                        </mat-form-field>
+                    </div>
+                    <div class="col-lg-3 col-md-2">
+                        <button [disabled]="buttonSeleccionarProducto" tooltip="Seleccionar Producto" placement="top"
+                            type="button" mat-button class="mt-2 btn-outline-warning" [disabled]="seleccionKit"
+                            (click)="seleccionarProducto()">
+                            <mat-icon>add</mat-icon>
+                        </button>
                     </div>
                     <mat-form-field class="example-full-width">
-                        <input type="text" (keyup)="onKeyUp()" placeholder="Lote" matInput formControlName="_lote" [matAutocomplete]="auto">
+                        <input type="text" (keyup)="onKeyUp()" placeholder="Lote" matInput formControlName="_lote"
+                            [matAutocomplete]="auto">
                         <mat-autocomplete #auto="matAutocomplete">
                             <mat-option (onSelectionChange)="seleccionarLoteSiExiste(option)"
                                 *ngFor="let option of filteredOptions | async" [value]="option.Codigo">
@@ -68,7 +65,7 @@
                     </mat-form-field>
                 </div>
             </div>
-            <div class="col-lg-6">
+            <div class="col-lg-4">
                 <mat-form-field class="example-full-width">
                     <input readonly matInput (dateInput)="addEvent()" formControlName="_fechaExpiracion"
                         [matDatepicker]="picker" placeholder="Fecha Expiración">
@@ -107,92 +104,85 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-lg-12">
-                <button type="submit" class="mt-2 btn-block bg-success text-white" mat-raised-button
+            <div class="col-lg-6">
+                <button type="submit" class="mt-2 mb-2 btn-block bg-success text-white" mat-raised-button
                     [disabled]="myForm.invalid">
                     Agregar Detalle
+                </button>
+            </div>
+            <div class="col-lg-6">
+                <button type="button" mat-raised-button [disabled]="realizarCompraButton" (click)="realizarCompra()"
+                    class="mt-2 mb-2 btn-block bg-primary text-white">
+                    Realizar Compra
                 </button>
             </div>
         </div>
     </form>
     <div class="row">
         <div class="col-lg-12">
-            <div class="card-body">
-                <div class="tablaDetalleCompra">
-                    <table mat-table [dataSource]="detalleCompra">
-                        <ng-container matColumnDef="codigo">
-                            <th mat-header-cell *matHeaderCellDef> Código </th>
-                            <td mat-cell *matCellDef="let element"> {{element.Codigo}} </td>
+            <table class="tablaDetalleCompra" mat-table [dataSource]="detalleCompra">
+                <ng-container matColumnDef="codigo">
+                    <th mat-header-cell *matHeaderCellDef>Código</th>
+                    <td mat-cell *matCellDef="let element"> {{element.Codigo}} </td>
+                </ng-container>
+                <ng-container matColumnDef="kit">
+                    <th mat-header-cell *matHeaderCellDef>Kit</th>
+                    <ng-container *matCellDef="let element">
+                        <ng-container *ngIf="element.IdKit == ''">
+                            <td mat-cell> </td>
                         </ng-container>
-                        <ng-container matColumnDef="kit">
-                            <th mat-header-cell *matHeaderCellDef> Kit </th>
-                            <ng-container *matCellDef="let element">
-                                <ng-container *ngIf="element.IdKit == ''">
-                                    <td mat-cell> </td>
-                                </ng-container>
-                                <ng-container *ngIf="element.IdKit != ''">
-                                    <td mat-cell> {{element.Kit}} </td>
-                                </ng-container>
-                            </ng-container>
+                        <ng-container *ngIf="element.IdKit != ''">
+                            <td mat-cell> {{element.Kit}} </td>
                         </ng-container>
-                        <ng-container matColumnDef="descripcion">
-                            <th mat-header-cell *matHeaderCellDef> Descripción </th>
-                            <td mat-cell *matCellDef="let element"> {{element.Producto}} </td>
-                        </ng-container>
-                        <ng-container matColumnDef="presentacion">
-                            <th mat-header-cell *matHeaderCellDef> Presentación </th>
-                            <td mat-cell *matCellDef="let element">
-                                {{element.ContenidoNeto}} {{element.Medida}} </td>
-                        </ng-container>
-                        <ng-container matColumnDef="lote">
-                            <th mat-header-cell *matHeaderCellDef> Lote </th>
-                            <td mat-cell *matCellDef="let element"> {{element.Lote}} </td>
-                        </ng-container>
-                        <ng-container matColumnDef="fechaExpiracion">
-                            <th mat-header-cell *matHeaderCellDef> Fecha Expiración </th>
-                            <td mat-cell *matCellDef="let element"> {{element.FechaExpiracion}} </td>
-                        </ng-container>
-                        <ng-container matColumnDef="valorUnitario">
-                            <th mat-header-cell *matHeaderCellDef> V. Unitario </th>
-                            <td mat-cell *matCellDef="let element"> {{element.ValorUnitario}} </td>
-                        </ng-container>
-                        <ng-container matColumnDef="cantidad">
-                            <th mat-header-cell *matHeaderCellDef> Cantidad </th>
-                            <input mat-cell *matCellDef="let element" matInput class="p-4 text-white tableButton"
-                                style="text-align: center; font-weight: bold;"
-                                (keyup)="modificarCantidadDeProductoEnDetalle($event, element)" type="number"
-                                value="{{element.Cantidad}}">
-                        </ng-container>
-                        <ng-container matColumnDef="total">
-                            <th mat-header-cell *matHeaderCellDef> Total </th>
-                            <td mat-cell *matCellDef="let element"> {{element.Total}} </td>
-                        </ng-container>
-                        <ng-container matColumnDef="acciones">
-                            <th mat-header-cell *matHeaderCellDef> Acciones </th>
-                            <ng-container *matCellDef="let element">
-                                <td mat-cell>
-                                    <button mat-button class="btn-outline-danger"
-                                        (click)="quitarDetalleFactura(element)">
-                                        <mat-icon>remove</mat-icon>
-                                    </button>
-                                </td>
-                            </ng-container>
-                        </ng-container>
-                        <tr mat-header-row *matHeaderRowDef="tablaDetalleCompra; sticky: true"></tr>
-                        <tr mat-row *matRowDef="let row; columns: tablaDetalleCompra;"></tr>
-                    </table>
-                </div>
-            </div>
+                    </ng-container>
+                </ng-container>
+                <ng-container matColumnDef="descripcion">
+                    <th mat-header-cell *matHeaderCellDef>Descripción</th>
+                    <td mat-cell *matCellDef="let element"> {{element.Producto}} </td>
+                </ng-container>
+                <ng-container matColumnDef="presentacion">
+                    <th mat-header-cell *matHeaderCellDef>Presentación</th>
+                    <td mat-cell *matCellDef="let element">
+                        {{element.ContenidoNeto}} {{element.Medida}} </td>
+                </ng-container>
+                <ng-container matColumnDef="lote">
+                    <th mat-header-cell *matHeaderCellDef>Lote</th>
+                    <td mat-cell *matCellDef="let element"> {{element.Lote}} </td>
+                </ng-container>
+                <ng-container matColumnDef="fechaExpiracion">
+                    <th mat-header-cell *matHeaderCellDef>Expira</th>
+                    <td mat-cell *matCellDef="let element"> {{element.FechaExpiracion}} </td>
+                </ng-container>
+                <ng-container matColumnDef="valorUnitario">
+                    <th mat-header-cell *matHeaderCellDef>V. Unitario</th>
+                    <td mat-cell *matCellDef="let element"> {{element.ValorUnitario}} </td>
+                </ng-container>
+                <ng-container matColumnDef="cantidad">
+                    <th mat-header-cell *matHeaderCellDef>Cantidad</th>
+                    <input mat-cell *matCellDef="let element" matInput class="p-4 tableButton"
+                        (keyup)="modificarCantidadDeProductoEnDetalle($event, element)" type="number"
+                        value="{{element.Cantidad}}">
+                </ng-container>
+                <ng-container matColumnDef="total">
+                    <th mat-header-cell *matHeaderCellDef>Total</th>
+                    <td mat-cell *matCellDef="let element"> {{element.Total}} </td>
+                </ng-container>
+                <ng-container matColumnDef="acciones">
+                    <th mat-header-cell *matHeaderCellDef>Acciones</th>
+                    <ng-container *matCellDef="let element">
+                        <td mat-cell>
+                            <button mat-button class="btn-outline-danger" (click)="quitarDetalleFactura(element)">
+                                <mat-icon>remove</mat-icon>
+                            </button>
+                        </td>
+                    </ng-container>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="tablaDetalleCompra; sticky: true"></tr>
+                <tr mat-row *matRowDef="let row; columns: tablaDetalleCompra;"></tr>
+            </table>
         </div>
     </div>
-    <div class="row">
-        <div class="col-lg-12">
-            <button type="button" mat-raised-button [disabled]="realizarCompraButton" (click)="realizarCompra()"
-                class="mt-3 mb-3 btn-block bg-primary text-white">
-                Realizar Compra
-            </button>
-        </div>
-    </div>
+<br>
     <div class="row">
         <div class="col-lg-12">
             <mat-accordion>
@@ -202,39 +192,37 @@
                             Facturas Sin Finalizar
                         </mat-panel-title>
                     </mat-expansion-panel-header>
-                    <div class="card-body">
-                        <div class="tablaFacturasNoFinalidas">
-                            <table mat-table [dataSource]="facturasNoFinalizadas">
-                                <ng-container matColumnDef="codigo">
-                                    <th mat-header-cell *matHeaderCellDef> Código </th>
-                                    <td mat-cell *matCellDef="let element"> {{element.Codigo}} </td>
-                                </ng-container>
-                                <ng-container matColumnDef="usuario">
-                                    <th mat-header-cell *matHeaderCellDef> Usuario </th>
-                                    <td mat-cell *matCellDef="let element">
-                                        {{element.PersonaEntidad.PrimerNombre}}
-                                        {{element.PersonaEntidad.ApellidoPaterno}}
+                    <div class="tablaFacturasNoFinalidas">
+                        <table mat-table [dataSource]="facturasNoFinalizadas">
+                            <ng-container matColumnDef="codigo">
+                                <th mat-header-cell *matHeaderCellDef> Código </th>
+                                <td mat-cell *matCellDef="let element"> {{element.Codigo}} </td>
+                            </ng-container>
+                            <ng-container matColumnDef="usuario">
+                                <th mat-header-cell *matHeaderCellDef> Usuario </th>
+                                <td mat-cell *matCellDef="let element">
+                                    {{element.PersonaEntidad.PrimerNombre}}
+                                    {{element.PersonaEntidad.ApellidoPaterno}}
+                                </td>
+                            </ng-container>
+                            <ng-container matColumnDef="fecha">
+                                <th mat-header-cell *matHeaderCellDef> Fecha </th>
+                                <td mat-cell *matCellDef="let element"> {{element.FechaGeneracion}} </td>
+                            </ng-container>
+                            <ng-container matColumnDef="acciones">
+                                <th mat-header-cell *matHeaderCellDef> Acciones </th>
+                                <ng-container *matCellDef="let element">
+                                    <td mat-cell>
+                                        <button mat-button class="btn-outline-primary" tooltip="Modificar"
+                                            placement="top" (click)="mostrarDetallesFactura(element)">
+                                            <mat-icon>format_line_spacing</mat-icon>
+                                        </button>
                                     </td>
                                 </ng-container>
-                                <ng-container matColumnDef="fecha">
-                                    <th mat-header-cell *matHeaderCellDef> Fecha </th>
-                                    <td mat-cell *matCellDef="let element"> {{element.FechaGeneracion}} </td>
-                                </ng-container>
-                                <ng-container matColumnDef="acciones">
-                                    <th mat-header-cell *matHeaderCellDef> Acciones </th>
-                                    <ng-container *matCellDef="let element">
-                                        <td mat-cell>
-                                            <button mat-button class="btn-outline-primary" tooltip="Modificar"
-                                                placement="top" (click)="mostrarDetallesFactura(element)">
-                                                <mat-icon>format_line_spacing</mat-icon>
-                                            </button>
-                                        </td>
-                                    </ng-container>
-                                </ng-container>
-                                <tr mat-header-row *matHeaderRowDef="tablaFacturasNoFinalidas; sticky: true"></tr>
-                                <tr mat-row *matRowDef="let row; columns: tablaFacturasNoFinalidas;"></tr>
-                            </table>
-                        </div>
+                            </ng-container>
+                            <tr mat-header-row *matHeaderRowDef="tablaFacturasNoFinalidas; sticky: true"></tr>
+                            <tr mat-row *matRowDef="let row; columns: tablaFacturasNoFinalidas;"></tr>
+                        </table>
                     </div>
                 </mat-expansion-panel>
             </mat-accordion>

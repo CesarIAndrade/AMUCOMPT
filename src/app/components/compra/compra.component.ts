@@ -43,11 +43,18 @@ export class CompraComponent implements OnInit {
       _idLote: new FormControl(''),
       _lote: new FormControl(''),
       _idAsignarProductoLote: new FormControl(''),
+      _fechaActual: new FormControl(''),
     })
   }
 
+  meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+  dias = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
+
+  get _fechaActual() {
+    return this.myForm.get('_fechaActual');
+  }
+
   selected = 'Producto';
-  seccionProducto = false;
   seccionKit = true;
   seleccionKit = false;
   realizarCompraButton = true;
@@ -150,11 +157,10 @@ export class CompraComponent implements OnInit {
     if (tipoCompra.value == 'Kit') {
       this.seleccionKit = true;
       this.seccionKit = false;
-      this.seccionProducto = false;
+      this.buttonSeleccionarProducto = true;
       this.limpiarCampos();
     } else {
       this.listaProductosDeUnKit = [];
-      this.seccionProducto = false;
       this.seccionKit = true;
       this.seleccionKit = false;
       this.limpiarCampos();
@@ -388,6 +394,7 @@ export class CompraComponent implements OnInit {
   onChangeSelectKit(idKit) {
     this.seleccionKit = false;
     this.consultarKitsYSusProductos(idKit);
+    this.buttonSeleccionarProducto = false;
   }
 
   validarFormulario() {
@@ -417,6 +424,10 @@ export class CompraComponent implements OnInit {
             this.selectTipoCompra = false;
             this.buttonSeleccionarProducto = false;
             this.buttonGenerarFactura = true;
+            var fecha = new Date();
+            var dia = this.dias[fecha.getDay()];;
+            var mes = this.meses[fecha.getMonth()];
+            this._fechaActual.setValue(dia + ', ' + fecha.getDate() + ' ' + mes + ' ' + fecha.getFullYear());
           }
         }
       )
@@ -525,6 +536,10 @@ export class CompraComponent implements OnInit {
               icon: "success",
             });
             this.consultarFacturasNoFinalizadas();
+            this.limpiarCampos();
+            this.detalleCompra = [];
+            this._fechaActual.reset();
+            this._cabecera.reset();
           } else {
             sweetAlert("Ha ocurrido un error!", {
               icon: "error",
@@ -549,6 +564,10 @@ export class CompraComponent implements OnInit {
     this.buttonSeleccionarProducto = false;
     this.selectTipoCompra = false;
     this.buttonGenerarFactura = false;
+    var fecha = new Date(factura.FechaGeneracion);
+    var dia = this.dias[fecha.getDay()];;
+    var mes = this.meses[fecha.getMonth()];
+    this._fechaActual.setValue(dia + ', ' + fecha.getDate() + ' ' + mes + ' ' + fecha.getFullYear());
   }
 
   crearLote() {
@@ -595,17 +614,9 @@ export class CompraComponent implements OnInit {
 
   validarSiPerteneceALote() {
     if (this._lote.value == '' || this._lote.value == null) {
-      if (this._idAsignarProductoLote.value == null || this._idAsignarProductoLote.value == '') {
-        this.asignarProductoLote('', this.validarFecha());
-      } else {
-        this.crearDetalleFactura();
-      }
+      this.asignarProductoLote('', this.validarFecha());
     } else {
-      if (this._idAsignarProductoLote.value == null) {
-        this.crearLote();
-      } else {
-        this.crearDetalleFactura();
-      }
+      this.crearLote();
     }
   }
 
@@ -625,8 +636,9 @@ export class CompraComponent implements OnInit {
     )
       .then(
         ok => {
-          this._idAsignarProductoLote.setValue(ok['respuesta']);
-          this.crearDetalleFactura();
+          console.log(ok['respuesta']);
+          // this._idAsignarProductoLote.setValue(ok['respuesta']);
+          // this.crearDetalleFactura();
         }
       )
       .catch(

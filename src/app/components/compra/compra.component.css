@@ -1,6 +1,6 @@
 .tablaDetalleCompra {
-    height: auto;
-    overflow: auto;
+  height: auto;
+  overflow: auto;
 }
 
 .tablaFacturasNoFinalidas {
@@ -8,32 +8,38 @@
     overflow: auto;
 }
 
+.tablaFacturasNoFinalidas td {
+  background-color: #343a40 !important;
+  color: white !important;
+}
+
 table {
-    width: 100%;
-    background-color: #343a40;
-  }
-  
-  table th {
-    text-align: center;
-    color: #fff;
-  }
-  
-  td {
-    text-align: center;
-    color: #fff;
-  }
+  width: 100%;
+}
 
-  input::-webkit-outer-spin-button,
-  input::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-  }
+table th {
+  background-color: #343a40;
+  color: white;
+  text-align: center;
+  width: 8rem;
+}
 
-  input[type=number] {
-    -moz-appearance:textfield;
-  }
+table td {
+  text-align: center;
+}
 
-  .tableButton:focus {
-    border-color: #f0ad4e;
-    box-shadow: 0 0 8px 0 #f0ad4e;;
-  }
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type=number] {
+  -moz-appearance:textfield;
+}
+
+.tableButton:focus {
+  border-color: #343a40;
+  text-align: center;
+  font-weight: bold;
+}
