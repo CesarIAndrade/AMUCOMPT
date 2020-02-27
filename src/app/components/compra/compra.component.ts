@@ -48,7 +48,7 @@ export class CompraComponent implements OnInit {
   }
 
   meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
-  dias = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
+  dias = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
 
   get _fechaActual() {
     return this.myForm.get('_fechaActual');
@@ -565,8 +565,8 @@ export class CompraComponent implements OnInit {
     this.selectTipoCompra = false;
     this.buttonGenerarFactura = false;
     var fecha = new Date(factura.FechaGeneracion);
-    var dia = this.dias[fecha.getDay()];;
-    var mes = this.meses[fecha.getMonth()];
+    var dia = this.dias[fecha.getDay()];    
+    var mes = this.meses[fecha.getMonth()];    
     this._fechaActual.setValue(dia + ', ' + fecha.getDate() + ' ' + mes + ' ' + fecha.getFullYear());
   }
 

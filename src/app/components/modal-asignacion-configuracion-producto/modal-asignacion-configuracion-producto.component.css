@@ -12,7 +12,7 @@ table {
     width: 100%;
 }
 
-th {
+table th {
     background-color: #343a40;
     color: #fff;
     text-align: center;

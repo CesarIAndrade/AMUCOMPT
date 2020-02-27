@@ -1,24 +1,24 @@
 .tablaCantones {
-    height: 31rem;
-    overflow: auto;
+  height: 31rem;
+  overflow: auto;
 }
   
 .tablaProvincias {
-    height: 16rem;
-    overflow: auto;
+  height: 16rem;
+  overflow: auto;
 }
 
 table {
-    width: 100%;
-    background-color: #343a40;
-  }
+  width: 100%;
+  background-color: #343a40;
+}
   
-  table th {
-    text-align: center;
-    color: #fff;
-  }
-  
-  td {
-    text-align: center;
-    color: #fff;
-  }
+table th {
+  text-align: center;
+  color: #fff;
+}
+
+table td {
+  text-align: center;
+  color: #fff;
+}
