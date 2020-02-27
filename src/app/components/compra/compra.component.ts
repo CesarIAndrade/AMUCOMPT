@@ -70,31 +70,23 @@ export class CompraComponent implements OnInit {
   filteredOptions: Observable<string[]>;
 
   buscarFechaYPrecio() {
-    var fechaExpiracion: any;
-    fechaExpiracion = new Date(this._fechaExpiracion.value).toJSON();
-    try {
-      fechaExpiracion = fechaExpiracion.split('T')[0];
-    } catch (error) { 
-      fechaExpiracion = null
-    }
     if (this._idRelacionLogica.value != '' && this._perteneceKit.value != '') {
       this.inventarioService.buscarFechaYPrecio(
         this._idCabecera.value,
         this._idRelacionLogica.value,
         this._perteneceKit.value,
-        fechaExpiracion,
+        this.validarFecha(),
         localStorage.getItem('miCuenta.getToken')
       )
         .then(
           ok => {
-            console.log(ok['respuesta']);
             try {
-              if (ok['respuesta'].IdDetalleFactura != null) {
+              if (typeof (ok['respuesta']) == 'object') {
+                this._idAsignarProductoLote.setValue(ok['respuesta'].IdAsignarProductoLote);
                 this._precio.disable();
                 this._precio.setValue(ok['respuesta'].AsignarProductoLote[0].ValorUnitario);
-              } else {
+              } else if (typeof (ok['respuesta']) == 'string') {
                 this._precio.enable();
-                console.log(this._precio.value);
                 this._precio.setValue('');
               }
             } catch (error) { }
@@ -116,6 +108,8 @@ export class CompraComponent implements OnInit {
   clearDate() {
     this.dateIcon = true;
     this._fechaExpiracion.setValue('');
+    this._precio.setValue('');
+    this.buscarFechaYPrecio();
   }
 
   onKeyUp() {
@@ -223,8 +217,6 @@ export class CompraComponent implements OnInit {
     )
       .then(
         ok => {
-          console.log(ok['respuesta']);
-          
           this.lotes = ok['respuesta'];
           this.filteredOptions = this._lote.valueChanges
             .pipe(
@@ -241,10 +233,13 @@ export class CompraComponent implements OnInit {
   }
 
   seleccionarLoteSiExiste(lote) {
+    this._idAsignarProductoLote.setValue(lote.AsignarProductoLote.IdAsignarProductoLote);
     this._idLote.setValue(lote.IdLote);
     this._lote.setValue(lote.Codigo);
     this._fechaExpiracion.setValue(lote.FechaExpiracion);
     this._fechaExpiracion.disable();
+    this._precio.setValue(lote.AsignarProductoLote.ValorUnitario);
+    this._precio.disable();
   }
 
   estructurarSiPerteneceALote(detalleFactura) {
@@ -402,6 +397,8 @@ export class CompraComponent implements OnInit {
   }
 
   crearCabeceraFactura() {
+    this.limpiarCampos();
+    this.detalleCompra = [];
     this.inventarioService.crearCabeceraFactura(
       localStorage.getItem('miCuenta.idAsignacionTipoUsuario'),
       this._tipoTransaccion.value,
@@ -460,6 +457,8 @@ export class CompraComponent implements OnInit {
           this.realizarCompraButton = false;
           this._precio.enable();
           this._fechaExpiracion.clearValidators();
+          this._fechaExpiracion.enable();
+          this.buttonGenerarFactura = false;
         }
       )
       .catch(
@@ -469,7 +468,7 @@ export class CompraComponent implements OnInit {
       )
   }
 
-  seleccionarProducto(kit) {
+  seleccionarProducto() {
     let dialogRef = this.modalAsignacionConfiguracionProducto.open(ModalAsignacionConfiguracionProductoComponent, {
       width: '600px',
       height: 'auto',
@@ -541,6 +540,7 @@ export class CompraComponent implements OnInit {
   }
 
   mostrarDetallesFactura(factura) {
+    this.myForm.reset();
     this.realizarCompraButton = false;
     this._idCabecera.setValue(factura.IdCabeceraFactura);
     this.consultarDetalleFactura();
@@ -548,24 +548,24 @@ export class CompraComponent implements OnInit {
     this.myForm.enable();
     this.buttonSeleccionarProducto = false;
     this.selectTipoCompra = false;
+    this.buttonGenerarFactura = false;
   }
 
   crearLote() {
-    var fecha = new Date(this._fechaExpiracion.value).toJSON();
     this.inventarioService.crearLote(
       this._lote.value,
       this._cantidad.value,
-      fecha.split('T')[0],
+      this.validarFecha(),
       localStorage.getItem('miCuenta.postToken')
     )
       .then(
         ok => {
           if (typeof (ok['respuesta']) == 'string') {
             this._idLote.setValue(ok['respuesta']);
-            this.asignarProductoLote(this._idLote.value, fecha);
+            this.asignarProductoLote(this._idLote.value, this.validarFecha());
           } else {
             this._idLote.setValue(ok['respuesta'].IdLote);
-            this.asignarProductoLote(this._idLote.value, fecha);
+            this.asignarProductoLote(this._idLote.value, this.validarFecha());
           }
         }
       )
@@ -576,7 +576,7 @@ export class CompraComponent implements OnInit {
       )
   }
 
-  validarSiPerteneceALote() {
+  validarFecha() {
     var fechaExpiracion: any
     fechaExpiracion = new Date(this._fechaExpiracion.value);
     var fechaActual = new Date();
@@ -586,14 +586,26 @@ export class CompraComponent implements OnInit {
       } else {
         fechaExpiracion = fechaExpiracion.toJSON();
         fechaExpiracion = fechaExpiracion.split('T')[0];
+        return fechaExpiracion
       }
     } catch (error) {
-      fechaExpiracion = null;
+      return fechaExpiracion = null;
     }
+  }
+
+  validarSiPerteneceALote() {
     if (this._lote.value == '' || this._lote.value == null) {
-      this.asignarProductoLote('', fechaExpiracion);
+      if (this._idAsignarProductoLote.value == null || this._idAsignarProductoLote.value == '') {
+        this.asignarProductoLote('', this.validarFecha());
+      } else {
+        this.crearDetalleFactura();
+      }
     } else {
-      this.crearLote();
+      if (this._idAsignarProductoLote.value == null) {
+        this.crearLote();
+      } else {
+        this.crearDetalleFactura();
+      }
     }
   }
 
