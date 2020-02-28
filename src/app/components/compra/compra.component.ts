@@ -90,6 +90,7 @@ export class CompraComponent implements OnInit {
             try {
               if (typeof (ok['respuesta']) == 'object') {
                 this._idAsignarProductoLote.setValue(ok['respuesta'].IdAsignarProductoLote);
+                console.log(this._idAsignarProductoLote.value);
                 this._precio.disable();
                 this._precio.setValue(ok['respuesta'].AsignarProductoLote[0].ValorUnitario);
               } else if (typeof (ok['respuesta']) == 'string') {
@@ -126,6 +127,7 @@ export class CompraComponent implements OnInit {
     this._precio.enable();
     this._fechaExpiracion.setValidators([Validators.required]);
     this._fechaExpiracion.updateValueAndValidity();
+    this._idAsignarProductoLote.setValue('');
   }
 
   modificarCantidadDeProductoEnDetalle(event, element) {
@@ -242,6 +244,7 @@ export class CompraComponent implements OnInit {
 
   seleccionarLoteSiExiste(lote) {
     this._idAsignarProductoLote.setValue(lote.AsignarProductoLote.IdAsignarProductoLote);
+    console.log(this._idAsignarProductoLote.value);
     this._idLote.setValue(lote.IdLote);
     this._lote.setValue(lote.Codigo);
     this._fechaExpiracion.setValue(lote.FechaExpiracion);
@@ -296,8 +299,6 @@ export class CompraComponent implements OnInit {
               this.detalleCompra = [];
               item.DetalleFactura.map(
                 producto => {
-                  console.log(producto);
-
                   perteneceLote = this.estructurarSiPerteneceALote(producto);
                   perteneceKit = this.estructurarSiPerteneceAKit(producto);
                   if (perteneceLote != null) {
@@ -618,11 +619,14 @@ export class CompraComponent implements OnInit {
 
   validarSiPerteneceALote() {
     if (this._lote.value == '' || this._lote.value == null || this._lote.value == 'null') {
-      this.asignarProductoLote('', this.validarFecha());
+        console.log('creando asignacion...');
+        this.asignarProductoLote('', this.validarFecha());
     } else {
       if (this._idAsignarProductoLote.value == '' || this._idAsignarProductoLote.value == null || this._idAsignarProductoLote.value == 'null') {
+        console.log('creando lote...');
         this.crearLote();
       } else {
+        console.log('creando detalle...');
         this.crearDetalleFactura();
       }
     }
