@@ -1,69 +1,83 @@
 <mat-sidenav-container class="sidenav-container bg-white">
   <mat-sidenav #drawer class="sidenav bg-dark" fixedTopGap [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
     [mode]="(isHandset$ | async) ? 'over' : 'side'" [opened]="(isHandset$ | async) === false">
-    <mat-toolbar class="text-white bg-primary"><i class="fa fa-home"> MENU</i>
-    </mat-toolbar>
-    <mat-nav-list>
-      <div class="matItemHover">
+    <!-- <mat-toolbar class="text-white bg-primary"><i class="fa fa-home"> MENU</i>
+    </mat-toolbar> -->
+    <!-- <mat-nav-list>
+      <mat-list-item class="matItemHover">
         <a mat-list-item routerLink="/inicio/usuarios">
           <i style="margin-right: 10px;" class="fa fa-user" aria-hidden="true"></i>Usuarios
         </a>
-      </div>
-      <div class="matItemHover">
+      </mat-list-item>
+      <mat-list-item class="matItemHover">
         <a mat-list-item routerLink="/inicio/personas">
           <i style="margin-right: 10px;" class="fa fa-users" aria-hidden="true"></i>
           Persona
         </a>
-      </div>
-      <div class="matItemHover">
+      </mat-list-item>
+      <mat-list-item class="matItemHover">
         <a mat-list-item routerLink="/inicio/configuracion-productos">
           <i style="margin-right: 10px;" class="fa fa-cog" aria-hidden="true"></i>
           Configuración Productos
         </a>
-      </div>
-      <div class="matItemHover">
+      </mat-list-item>
+      <mat-list-item class="matItemHover">
         <a mat-list-item routerLink="/inicio/inventarios">
           <i style="margin-right: 10px;" class="fa fa-check-square" aria-hidden="true"></i>
           Inventario
         </a>
-      </div>
-      <div class="matItemHover">
+      </mat-list-item>
+      <mat-list-item class="matItemHover">
         <a mat-list-item routerLink="/inicio/stock">
           <i style="margin-right: 10px;" class="fa fa-truck" aria-hidden="true"></i>
           Stock
         </a>
-      </div>
-      <div class="matItemHover">
+      </mat-list-item>
+      <mat-divider style="background-color: white;"></mat-divider>
+      <mat-list-item class="matItemHover">
         <a mat-list-item routerLink="/inicio/compras">
           <i style="margin-right: 10px;" class="fa fa-truck" aria-hidden="true"></i>
           Compra
         </a>
-      </div>
-      <div class="matItemHover">
+      </mat-list-item>
+      <mat-list-item class="matItemHover">
         <a mat-list-item routerLink="/inicio/ventas">
           <i style="margin-right: 10px;" class="fa fa-calculator" aria-hidden="true"></i>
           Venta
         </a>
-      </div>
-      <div class="matItemHover">
+      </mat-list-item>
+      <mat-list-item class="matItemHover">
         <a mat-list-item routerLink="/inicio/localizaciones">
           <i style="margin-right: 10px;" class="fa fa-id-card" aria-hidden="true"></i>
           Localizaciones
         </a>
-      </div>
-      <div class="matItemHover">
+      </mat-list-item>
+      <mat-list-item class="matItemHover">
         <a mat-list-item routerLink="/inicio/cuenta">
           <i style="margin-right: 10px;" class="fa fa-user" aria-hidden="true"></i>
           Cuenta
         </a>
-      </div>
-      <div class="matItemHover">
+      </mat-list-item>
+      <mat-list-item class="matItemHover">
         <a mat-list-item>
           <i style="margin-right: 10px;" class="fa fa-sign-out" aria-hidden="true"></i>
           Cerrar Sesion
         </a>
-      </div>
-    </mat-nav-list>
+      </mat-list-item>
+    </mat-nav-list> -->
+
+    <mat-nav-list>
+			<mat-list-item (click)="showSubmenu = !showSubmenu" class="parent">
+				<span class="full-width" *ngIf="isExpanded || isShowing">Parent Menu</span>
+				<mat-icon mat-list-icon>home</mat-icon>
+				<mat-icon class="menu-button" [ngClass]="{'rotated' : showSubmenu}" *ngIf="isExpanded || isShowing">expand_more</mat-icon>
+			</mat-list-item>
+			<div class="submenu" [ngClass]="{'expanded' : showSubmenu}" *ngIf="isShowing || isExpanded">
+				<a mat-list-item href="...">Submenu Item 1</a>
+				<a mat-list-item href="...">Submenu Item 2</a>
+			</div>
+		</mat-nav-list>
+
   </mat-sidenav>
   <mat-sidenav-content>
     <mat-toolbar class="bg-dark">

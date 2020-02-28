@@ -48,7 +48,7 @@
                     </div>
                     <div class="col-lg-3 col-md-2">
                         <button [disabled]="buttonSeleccionarProducto" tooltip="Seleccionar Producto" placement="top"
-                            type="button" mat-button class="mt-2 btn-outline-warning" [disabled]="seleccionKit"
+                            type="button" mat-button class="mt-2 btn-outline-warning" 
                             (click)="seleccionarProducto()">
                             <mat-icon>add</mat-icon>
                         </button>
@@ -62,6 +62,9 @@
                                 {{option.Codigo}}
                             </mat-option>
                         </mat-autocomplete>
+                        <mat-hint [hidden]="loteEnDetalle" style="color: red;">
+                            Este Lote ya está en el Detalle
+                        </mat-hint>
                     </mat-form-field>
                 </div>
             </div>

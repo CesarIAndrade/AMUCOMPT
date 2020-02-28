@@ -1031,4 +1031,30 @@ export class InventarioService {
     })
   }
 
+  buscarLote(
+    lote: string,
+    idRelacionLogica: string,
+    perteneceKit: string,
+    _token: string
+  ) {
+    const body = new HttpParams()
+      .set('Codigo', lote)
+      .set('AsignarProductoLote.IdRelacionLogica', idRelacionLogica)
+      .set('AsignarProductoLote.PerteneceKit', perteneceKit)
+      .set('encriptada', _token)
+    return new Promise((resolve, reject) => {
+      this.http.post(this.apiUrl + 'Factura/BuscarLote', body.toString(),
+        {
+          headers: new HttpHeaders()
+            .set('Content-Type', 'application/x-www-form-urlencoded')
+        }
+      )
+        .subscribe(res => {
+          resolve(res);
+        }, (err) => {
+          reject(err);
+        })
+    })
+  }
+
 }

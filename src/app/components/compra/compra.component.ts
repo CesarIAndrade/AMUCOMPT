@@ -56,7 +56,6 @@ export class CompraComponent implements OnInit {
 
   selected = 'Producto';
   seccionKit = true;
-  seleccionKit = false;
   realizarCompraButton = true;
   panelOpenState = false;
   dateIcon = true;
@@ -90,7 +89,6 @@ export class CompraComponent implements OnInit {
             try {
               if (typeof (ok['respuesta']) == 'object') {
                 this._idAsignarProductoLote.setValue(ok['respuesta'].IdAsignarProductoLote);
-                console.log(this._idAsignarProductoLote.value);
                 this._precio.disable();
                 this._precio.setValue(ok['respuesta'].AsignarProductoLote[0].ValorUnitario);
               } else if (typeof (ok['respuesta']) == 'string') {
@@ -113,6 +111,7 @@ export class CompraComponent implements OnInit {
     if (this._lote.value == null || this._lote.value == '') {
       this.buscarFechaYPrecio();
     }
+    console.log(this._fechaExpiracion.value);
   }
 
   clearDate() {
@@ -122,12 +121,67 @@ export class CompraComponent implements OnInit {
     this.buscarFechaYPrecio();
   }
 
+  loteEnDetalle = true;
+
   onKeyUp() {
     this._precio.reset();
     this._precio.enable();
     this._fechaExpiracion.setValidators([Validators.required]);
     this._fechaExpiracion.updateValueAndValidity();
     this._idAsignarProductoLote.setValue('');
+
+    if (this._idRelacionLogica.value != null) {
+      this.inventarioService.buscarLote(
+        this._lote.value,
+        this._idRelacionLogica.value,
+        this._perteneceKit.value,
+        localStorage.getItem('miCuenta.getToken')
+      )
+        .then(
+          ok => {
+            console.log((ok['respuesta']));
+            try {
+              this._idAsignarProductoLote.setValue(ok['respuesta'].IdAsignarProductoLote);
+              this._idLote.setValue(ok['respuesta'].Lote.IdLote);
+              console.log(this._idLote.value);
+              
+              var fecha = new Date(ok['respuesta'].Lote.FechaExpiracion);
+              this._fechaExpiracion.setValue(fecha);
+              this.dateIcon = false;
+              this._precio.setValue(ok['respuesta'].ValorUnitario);
+              this._fechaExpiracion.disable();
+              this._precio.disable();
+            } catch (error) {
+              this._fechaExpiracion.reset();
+              this.dateIcon = true;
+              this._cantidad.reset();
+              this._precio.reset();
+            }
+          }
+        )
+        .catch(
+          error => {
+            console.log(error);
+          }
+        )
+    }
+
+    // var _loteEnDetalle = this.detalleCompra.find(item => item.Lote == this._lote.value);
+    // if (_loteEnDetalle == null) {
+    //   this.loteEnDetalle = true;
+    //   this._fechaExpiracion.enable();
+    //   this._cantidad.enable();
+    //   this._precio.enable();
+    // } else {
+    //   this.loteEnDetalle = false;
+    //   this._fechaExpiracion.reset();
+    //   this.dateIcon = true;
+    //   this._cantidad.reset();
+    //   this._precio.reset();
+    //   this._fechaExpiracion.disable();
+    //   this._cantidad.disable();
+    //   this._precio.disable();
+    // }
   }
 
   modificarCantidadDeProductoEnDetalle(event, element) {
@@ -159,14 +213,12 @@ export class CompraComponent implements OnInit {
 
   selecionarTipoCompra(tipoCompra) {
     if (tipoCompra.value == 'Kit') {
-      this.seleccionKit = true;
       this.seccionKit = false;
       this.buttonSeleccionarProducto = true;
       this.limpiarCampos();
     } else {
       this.listaProductosDeUnKit = [];
       this.seccionKit = true;
-      this.seleccionKit = false;
       this.limpiarCampos();
     }
   }
@@ -244,7 +296,6 @@ export class CompraComponent implements OnInit {
 
   seleccionarLoteSiExiste(lote) {
     this._idAsignarProductoLote.setValue(lote.AsignarProductoLote.IdAsignarProductoLote);
-    console.log(this._idAsignarProductoLote.value);
     this._idLote.setValue(lote.IdLote);
     this._lote.setValue(lote.Codigo);
     this._fechaExpiracion.setValue(lote.FechaExpiracion);
@@ -397,7 +448,6 @@ export class CompraComponent implements OnInit {
   }
 
   onChangeSelectKit(idKit) {
-    this.seleccionKit = false;
     this.consultarKitsYSusProductos(idKit);
     this.buttonSeleccionarProducto = false;
   }
@@ -474,6 +524,9 @@ export class CompraComponent implements OnInit {
           this._precio.enable();
           this._fechaExpiracion.clearValidators();
           this._fechaExpiracion.enable();
+          if (!this.seccionKit) {
+            this.buttonSeleccionarProducto = true;
+          }
           this.buttonGenerarFactura = false;
         }
       )
@@ -501,6 +554,11 @@ export class CompraComponent implements OnInit {
         this._producto.setValue(producto);
         this.consultarLotesDeUnProducto();
         this.buscarFechaYPrecio();
+        this._fechaExpiracion.reset();
+        this.dateIcon = true;
+        this._lote.reset();
+        this._cantidad.reset();
+        this._precio.reset();
       }
     });
   }
@@ -618,16 +676,21 @@ export class CompraComponent implements OnInit {
   }
 
   validarSiPerteneceALote() {
+    console.log(this._lote.value);
     if (this._lote.value == '' || this._lote.value == null || this._lote.value == 'null') {
-        console.log('creando asignacion...');
-        this.asignarProductoLote('', this.validarFecha());
+      console.log('creando asignacion sin lote...');
+      this.asignarProductoLote('', this.validarFecha());
     } else {
       if (this._idAsignarProductoLote.value == '' || this._idAsignarProductoLote.value == null || this._idAsignarProductoLote.value == 'null') {
-        console.log('creando lote...');
-        this.crearLote();
+        if (this.loteEnDetalle) {
+          console.log('creando lote...');
+          this.crearLote();
+        } else {
+          return
+        }
       } else {
-        console.log('creando detalle...');
-        this.crearDetalleFactura();
+        console.log(this._idLote.value);
+        this.crearLote();
       }
     }
   }
