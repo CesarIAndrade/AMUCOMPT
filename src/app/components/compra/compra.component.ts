@@ -111,7 +111,6 @@ export class CompraComponent implements OnInit {
     if (this._lote.value == null || this._lote.value == '') {
       this.buscarFechaYPrecio();
     }
-    console.log(this._fechaExpiracion.value);
   }
 
   clearDate() {
@@ -129,7 +128,6 @@ export class CompraComponent implements OnInit {
     this._fechaExpiracion.setValidators([Validators.required]);
     this._fechaExpiracion.updateValueAndValidity();
     this._idAsignarProductoLote.setValue('');
-
     if (this._idRelacionLogica.value != null) {
       this.inventarioService.buscarLote(
         this._lote.value,
@@ -139,12 +137,9 @@ export class CompraComponent implements OnInit {
       )
         .then(
           ok => {
-            console.log((ok['respuesta']));
             try {
               this._idAsignarProductoLote.setValue(ok['respuesta'].IdAsignarProductoLote);
               this._idLote.setValue(ok['respuesta'].Lote.IdLote);
-              console.log(this._idLote.value);
-              
               var fecha = new Date(ok['respuesta'].Lote.FechaExpiracion);
               this._fechaExpiracion.setValue(fecha);
               this.dateIcon = false;
@@ -165,23 +160,6 @@ export class CompraComponent implements OnInit {
           }
         )
     }
-
-    // var _loteEnDetalle = this.detalleCompra.find(item => item.Lote == this._lote.value);
-    // if (_loteEnDetalle == null) {
-    //   this.loteEnDetalle = true;
-    //   this._fechaExpiracion.enable();
-    //   this._cantidad.enable();
-    //   this._precio.enable();
-    // } else {
-    //   this.loteEnDetalle = false;
-    //   this._fechaExpiracion.reset();
-    //   this.dateIcon = true;
-    //   this._cantidad.reset();
-    //   this._precio.reset();
-    //   this._fechaExpiracion.disable();
-    //   this._cantidad.disable();
-    //   this._precio.disable();
-    // }
   }
 
   modificarCantidadDeProductoEnDetalle(event, element) {
@@ -676,7 +654,6 @@ export class CompraComponent implements OnInit {
   }
 
   validarSiPerteneceALote() {
-    console.log(this._lote.value);
     if (this._lote.value == '' || this._lote.value == null || this._lote.value == 'null') {
       console.log('creando asignacion sin lote...');
       this.asignarProductoLote('', this.validarFecha());
@@ -689,7 +666,6 @@ export class CompraComponent implements OnInit {
           return
         }
       } else {
-        console.log(this._idLote.value);
         this.crearLote();
       }
     }
