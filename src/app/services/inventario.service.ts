@@ -7,7 +7,7 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 export class InventarioService {
 
   constructor(private http: HttpClient) { }
-  private apiUrl = "http://192.168.25.20:90/api/";
+  private apiUrl = "http://localhost:49962/api/";
 
   consultarTipoProductos(_token: string) {
     const body = new HttpParams()
@@ -832,6 +832,8 @@ export class InventarioService {
     faltante: string,
     _token: string
   ) {
+    console.log("ID ASIGNAR PRODUCTO LOTE");
+    console.log(idAsignarProductoLote);
     const body = new HttpParams()
       .set('IdCabeceraFactura', idCabeceraFactura)
       .set('IdAsignarProductoLote', idAsignarProductoLote)

@@ -144,7 +144,7 @@ export class CompraComponent implements OnInit {
               this._idAsignarProductoLote.setValue(ok['respuesta'].IdAsignarProductoLote);
               this._idLote.setValue(ok['respuesta'].Lote.IdLote);
               console.log(this._idLote.value);
-              
+
               var fecha = new Date(ok['respuesta'].Lote.FechaExpiracion);
               this._fechaExpiracion.setValue(fecha);
               this.dateIcon = false;
@@ -461,6 +461,8 @@ export class CompraComponent implements OnInit {
   crearCabeceraFactura() {
     this.limpiarCampos();
     this.detalleCompra = [];
+    console.log(localStorage.getItem('miCuenta.idAsignacionTipoUsuario'));
+    console.log(this._tipoTransaccion.value);
     this.inventarioService.crearCabeceraFactura(
       localStorage.getItem('miCuenta.idAsignacionTipoUsuario'),
       this._tipoTransaccion.value,
@@ -517,6 +519,7 @@ export class CompraComponent implements OnInit {
     )
       .then(
         ok => {
+          //console.log("detalle creado "+ this._idAsignarProductoLote.value);
           this.limpiarCampos();
           this.consultarDetalleFactura();
           this.dateIcon = true;
