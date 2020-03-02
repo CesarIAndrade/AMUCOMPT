@@ -7,7 +7,9 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 export class InventarioService {
 
   constructor(private http: HttpClient) { }
-  private apiUrl = "http://192.168.25.20:90/api/";
+
+  // private apiUrl = "http://192.168.25.20:90/api/";
+  private apiUrl = "http://25.70.109.48:90/api/"
 
   consultarTipoProductos(_token: string) {
     const body = new HttpParams()
@@ -1055,6 +1057,24 @@ export class InventarioService {
           reject(err);
         })
     })
+  }
+
+  consultarSembios(_token: string) {
+    const body = new HttpParams()
+    .set('encriptada', _token)
+  return new Promise((resolve, reject) => {
+    this.http.post(this.apiUrl + 'TalentoHumano/ListaSembrios', body.toString(),
+      {
+        headers: new HttpHeaders()
+          .set('Content-Type', 'application/x-www-form-urlencoded')
+      }
+    )
+      .subscribe(res => {
+        resolve(res);
+      }, (err) => {
+        reject(err);
+      })
+  })
   }
 
 }

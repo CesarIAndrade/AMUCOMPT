@@ -50,10 +50,6 @@ export class CompraComponent implements OnInit {
   meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
   dias = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
 
-  get _fechaActual() {
-    return this.myForm.get('_fechaActual');
-  }
-
   selected = 'Producto';
   seccionKit = true;
   realizarCompraButton = true;
@@ -525,10 +521,10 @@ export class CompraComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result != null) {
-        var producto = result.nombre + ' ' + result.presentacion + ' ' + result.contenidoNeto
-          + ' ' + result.medida;
-        this._idRelacionLogica.setValue(result.idRelacionLogica);
-        this._perteneceKit.setValue(result.perteneceKit);
+        var producto = result.Producto + ' ' + result.Presentacion + ' ' + result.ContenidoNeto
+          + ' ' + result.Medida;
+        this._idRelacionLogica.setValue(result.IdRelacionLogica);
+        this._perteneceKit.setValue(result.PerteneceKit);
         this._producto.setValue(producto);
         this.consultarLotesDeUnProducto();
         this.buscarFechaYPrecio();
@@ -696,6 +692,10 @@ export class CompraComponent implements OnInit {
           console.log(error);
         }
       )
+  }
+
+  get _fechaActual() {
+    return this.myForm.get('_fechaActual');
   }
 
   get _cantidad() {

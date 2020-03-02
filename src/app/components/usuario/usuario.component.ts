@@ -141,7 +141,6 @@ export class UsuarioComponent implements OnInit {
             this.consultarUsuarios();
             this.nuevoUsuario = 'Nuevo Usuario';
             this.botonInsertar = "insertar";
-
           }
         },
       )
