@@ -113,6 +113,8 @@ export class ProductoComponent implements OnInit {
     )
       .then(
         ok => {
+          console.log(ok['respuesta']);
+          
           this.productos = [];
           this.productos = ok['respuesta'];
           this.ArrayProductos = ok['respuesta'];
@@ -284,6 +286,8 @@ export class ProductoComponent implements OnInit {
     )
       .then(
         ok => {
+          console.log(ok['respuesta']);
+          
           if (ok['respuesta'] == null) {
             sweetAlert("Inténtalo de nuevo!", {
               icon: "warning",
