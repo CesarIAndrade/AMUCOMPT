@@ -1078,4 +1078,26 @@ export class InventarioService {
   })
   }
 
+  crearPrecio(
+    idConfigurarProducto: string,
+    precio: string,
+    _token: string
+  ) {
+    const body = new HttpParams()
+    .set('encriptada', _token)
+  return new Promise((resolve, reject) => {
+    this.http.post(this.apiUrl + 'Inventario/IngresoPrecioConfigurarProducto', body.toString(),
+      {
+        headers: new HttpHeaders()
+          .set('Content-Type', 'application/x-www-form-urlencoded')
+      }
+    )
+      .subscribe(res => {
+        resolve(res);
+      }, (err) => {
+        reject(err);
+      })
+  })
+  }
+
 }

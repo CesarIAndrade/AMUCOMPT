@@ -40,6 +40,7 @@ export class ProductoComponent implements OnInit {
       _productoExistente: new FormControl(''),
       _idProducto: new FormControl(''),
       _idConfiguracionProducto: new FormControl(''),
+      _precio: new FormControl('', [Validators.required]),
     })
   }
 
@@ -304,15 +305,8 @@ export class ProductoComponent implements OnInit {
               icon: "error",
             });
           } else {
-            sweetAlert("Se ingresó correctamente!", {
-              icon: "success",
-            });
-            this.myForm.reset();
-            this.consultarProductos();
-            this._nombre.enable();
-            this._descripcion.enable();
-            this._codigo.enable();
-            this._tipoProducto.enable();
+            this._idConfiguracionProducto.setValue(ok['respuesta']);
+            this.crearPrecio();
           }
         }
       )
@@ -321,6 +315,38 @@ export class ProductoComponent implements OnInit {
           console.log(error);
         }
       )
+  }
+
+  crearPrecio() {
+    this.inventarioService.crearPrecio(
+      this._idConfiguracionProducto.value,
+      this._precio.value,
+      localStorage.getItem('miCuenta.postToken')
+    )
+    .then(
+      ok => {
+        if(ok['respuesta']) {
+          sweetAlert("Se ingresó correctamente!", {
+            icon: "success",
+          });
+          this.myForm.reset();
+          this.consultarProductos();
+          this._nombre.enable();
+          this._descripcion.enable();
+          this._codigo.enable();
+          this._tipoProducto.enable();
+        } else {
+          sweetAlert("Ha ocurrido un error!", {
+            icon: "error",
+          });
+        }
+      }
+    )
+    .catch(
+      error => {
+        console.log(error);
+      }
+    )
   }
 
   eliminarConfiguracionProducto(producto) {
@@ -403,6 +429,10 @@ export class ProductoComponent implements OnInit {
 
   get _idProducto() {
     return this.myForm.get('_idProducto');
+  }
+
+  get _precio() {
+    return this.myForm.get('_precio');
   }
 
   get _idConfiguracionProducto() {
