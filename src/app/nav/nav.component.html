@@ -1,65 +1,78 @@
 <mat-sidenav-container class="sidenav-container bg-white">
   <mat-sidenav #drawer class="sidenav bg-dark" fixedTopGap [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
     [mode]="(isHandset$ | async) ? 'over' : 'side'" [opened]="(isHandset$ | async) === false">
-
-
     <mat-toolbar class="text-white bg-primary"><i class="fa fa-home"> MENU</i>
     </mat-toolbar>
     <mat-nav-list>
       <mat-list-item class="matItemHover">
         <a mat-list-item routerLink="/inicio/usuarios">
-          <i style="margin-right: 10px;" class="fa fa-user" aria-hidden="true"></i>Usuarios
+          <mat-icon mat-list-icon>person</mat-icon>
+          Usuarios
         </a>
       </mat-list-item>
       <mat-list-item class="matItemHover">
         <a mat-list-item routerLink="/inicio/personas">
-          <i style="margin-right: 10px;" class="fa fa-users" aria-hidden="true"></i>
+          <mat-icon mat-list-icon>contacts</mat-icon>
           Persona
         </a>
       </mat-list-item>
       <mat-list-item class="matItemHover">
         <a mat-list-item routerLink="/inicio/configuracion-productos">
-          <i style="margin-right: 10px;" class="fa fa-cog" aria-hidden="true"></i>
+          <mat-icon mat-list-icon>settings</mat-icon>
           Configuración Productos
         </a>
       </mat-list-item>
       <mat-list-item class="matItemHover">
         <a mat-list-item routerLink="/inicio/inventarios">
-          <i style="margin-right: 10px;" class="fa fa-check-square" aria-hidden="true"></i>
+          <mat-icon mat-list-icon>storage</mat-icon>
           Inventario
         </a>
       </mat-list-item>
       <mat-list-item class="matItemHover">
         <a mat-list-item routerLink="/inicio/stock">
-          <i style="margin-right: 10px;" class="fa fa-truck" aria-hidden="true"></i>
+          <mat-icon mat-list-icon>list_alt</mat-icon>
           Stock
-        </a>
-      </mat-list-item>
-      <mat-divider style="background-color: white;"></mat-divider>
-      <mat-list-item class="matItemHover">
-        <a mat-list-item routerLink="/inicio/compras">
-          <i style="margin-right: 10px;" class="fa fa-truck" aria-hidden="true"></i>
-          Compra
         </a>
       </mat-list-item>
       <mat-list-item class="matItemHover">
         <a mat-list-item routerLink="/inicio/ventas">
-          <i style="margin-right: 10px;" class="fa fa-calculator" aria-hidden="true"></i>
-          Venta
+          <mat-icon mat-list-icon>attach_money</mat-icon>
+          Ventas
         </a>
       </mat-list-item>
       <mat-list-item class="matItemHover">
         <a mat-list-item routerLink="/inicio/localizaciones">
-          <i style="margin-right: 10px;" class="fa fa-id-card" aria-hidden="true"></i>
+          <mat-icon mat-list-icon>where_to_vote</mat-icon>
           Localizaciones
         </a>
       </mat-list-item>
       <mat-list-item class="matItemHover">
         <a mat-list-item routerLink="/inicio/cuenta">
-          <i style="margin-right: 10px;" class="fa fa-user" aria-hidden="true"></i>
+          <mat-icon mat-list-icon>face</mat-icon>
           Cuenta
         </a>
       </mat-list-item>
+      <mat-list-item class="matItemHover" (click)="showSubmenu = !showSubmenu" class="parent">
+        <span class="full-width" *ngIf="isExpanded || isShowing">Compras</span>
+        <mat-icon mat-list-icon>local_shipping</mat-icon>
+        <mat-icon class="menu-button" [ngClass]="{'rotated' : showSubmenu}" *ngIf="isExpanded || isShowing">expand_more
+        </mat-icon>
+      </mat-list-item>
+      <div class="submenu" [ngClass]="{'expanded' : showSubmenu}" *ngIf="isShowing || isExpanded">
+        <mat-list-item class="matItemHover">
+          <a mat-list-item routerLink="/inicio/compras">
+            <mat-icon mat-list-icon>shop</mat-icon>
+            Compras de Inventario
+          </a>
+        </mat-list-item>
+        <mat-list-item class="matItemHover">
+          <a mat-list-item routerLink="/inicio/compras">
+            <mat-icon mat-list-icon>shopping_cart</mat-icon>
+            Compras de Rubros
+          </a>
+        </mat-list-item>
+      </div>
+
       <mat-list-item class="matItemHover">
         <a mat-list-item>
           <i style="margin-right: 10px;" class="fa fa-sign-out" aria-hidden="true"></i>
@@ -67,18 +80,6 @@
         </a>
       </mat-list-item>
     </mat-nav-list>
-
-    <!-- <mat-nav-list>
-			<mat-list-item (click)="showSubmenu = !showSubmenu" class="parent">
-				<span class="full-width" *ngIf="isExpanded || isShowing">Parent Menu</span>
-				<mat-icon mat-list-icon>home</mat-icon>
-				<mat-icon class="menu-button" [ngClass]="{'rotated' : showSubmenu}" *ngIf="isExpanded || isShowing">expand_more</mat-icon>
-			</mat-list-item>
-			<div class="submenu" [ngClass]="{'expanded' : showSubmenu}" *ngIf="isShowing || isExpanded">
-				<a mat-list-item href="...">Submenu Item 1</a>
-				<a mat-list-item href="...">Submenu Item 2</a>
-			</div>
-		</mat-nav-list> -->
 
   </mat-sidenav>
   <mat-sidenav-content>

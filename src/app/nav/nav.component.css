@@ -31,6 +31,10 @@
   color: white;
 }
 
+span, mat-icon, a {
+  color: white;
+}
+
 .full-width {
   width: 100%;
 }
