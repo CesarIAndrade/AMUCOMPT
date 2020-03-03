@@ -33,8 +33,10 @@
             </div>
         </div>
         <mat-form-field class="example-full-width">
-            <input matInput [(ngModel)]="data.persona.ListaCorreo[0].CorreoValor || sinCorreo" type="text" disabled
-                readonly>
+            <!-- <input matInput [(ngModel)]="data.persona.ListaCorreo[0].CorreoValor || sinCorreo" 
+                type="text" disabled
+                readonly> -->
+                <input matInput [(ngModel)]="correo" type="text" disabled readonly>
         </mat-form-field>
         <mat-form-field class="example-full-width">
             <input matInput [(ngModel)]="direccion || sinDireccion" type="text" disabled readonly>

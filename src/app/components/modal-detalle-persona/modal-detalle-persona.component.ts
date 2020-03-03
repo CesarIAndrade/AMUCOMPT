@@ -1,5 +1,6 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { IfStmt } from '@angular/compiler';
 
 @Component({
   selector: 'app-modal-detalle-persona',
@@ -17,11 +18,12 @@ export class ModalDetallePersonaComponent implements OnInit {
     this.data.persona.ApellidoPaterno + ' ' +
     this.data.persona.ApellidoMaterno;
 
-  provincia = this.data.persona.AsignacionPersonaParroquia[0].Parroquia.Canton.Provincia.Descripcion;
-  canton = this.data.persona.AsignacionPersonaParroquia[0].Parroquia.Canton.Descripcion;
-  parroquia = this.data.persona.AsignacionPersonaParroquia[0].Parroquia.Descripcion;
+    provincia = this.data.persona.AsignacionPersonaParroquia[0].Parroquia.Canton.Provincia.Descripcion;
+    canton = this.data.persona.AsignacionPersonaParroquia[0].Parroquia.Canton.Descripcion;
+    parroquia = this.data.persona.AsignacionPersonaParroquia[0].Parroquia.Descripcion;
 
-  direccion = this.provincia + ' > ' +
+    correo = '';
+    direccion = this.provincia + ' > ' +
     this.canton + ' > ' +
     this.parroquia;
 
@@ -30,6 +32,15 @@ export class ModalDetallePersonaComponent implements OnInit {
   sinDireccion: string;
 
   ngOnInit() {
+    console.log(this.correo);
+    if (this.data.persona.ListaCorreo == null ) {
+      this.correo = 'Sin Correo';
+    }else
+    {
+      console.log(this.data.persona.ListaCorreo[0].CorreoValor);
+      this.correo = this.data.persona.ListaCorreo[0].CorreoValor;
+    }
+
     if (this.provincia == null || this.canton == null ||
       this.parroquia == null) {
       this.direccion = 'Sin Direccion';

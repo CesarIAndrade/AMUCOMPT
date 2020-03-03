@@ -40,7 +40,7 @@ export class ModalAsignacionConfiguracionProductoComponent implements OnInit {
       localStorage.getItem('miCuenta.getToken')
     )
       .then(
-        ok => {
+        ok => {          
           this.configuracionProductos = [];
           ok['respuesta'].map(
             item => {
@@ -50,7 +50,7 @@ export class ModalAsignacionConfiguracionProductoComponent implements OnInit {
                   PerteneceKit: 'False',
                   IdKit: '',
                   Kit: '',
-                  Producto: item.Producto.Nombre,
+                  Nombre: item.Producto.Nombre,
                   Presentacion: item.Presentacion.Descripcion,
                   ContenidoNeto: item.CantidadMedida,
                   Medida: item.Medida.Descripcion
@@ -59,6 +59,8 @@ export class ModalAsignacionConfiguracionProductoComponent implements OnInit {
               }
             }
           )
+          console.log(this.configuracionProductos);
+          
         }
       )
       .catch(
@@ -73,10 +75,12 @@ export class ModalAsignacionConfiguracionProductoComponent implements OnInit {
     this.producto.PerteneceKit = producto.PerteneceKit;
     this.producto.IdKit = producto.IdKit;
     this.producto.Kit = producto.Kit;
-    this.producto.Producto = producto.Producto;
+    this.producto.Producto = producto.Nombre;
     this.producto.Presentacion = producto.Presentacion;
     this.producto.ContenidoNeto = producto.ContenidoNeto;
     this.producto.Medida = producto.Medida;
+    console.log(producto);
+    
   }
 
   agregarDetalleParaVenta(producto) { 
@@ -215,7 +219,7 @@ export class ModalAsignacionConfiguracionProductoComponent implements OnInit {
             this.configuracionProductos.push(producto);
           }
         )
-      }
+      }      
     } else {
       this.consultarStock();
       this.areaTablaConfiguracionProducto = true;

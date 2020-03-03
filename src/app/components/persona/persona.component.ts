@@ -110,6 +110,8 @@ export class PersonaComponent implements OnInit {
     this.personaService.consultarPersonas(localStorage.getItem('miCuenta.getToken'))
       .then(
         ok => {
+          console.log(ok['respuesta']);
+          
           this.personas = ok['respuesta'];
         },
       )
@@ -234,6 +236,8 @@ export class PersonaComponent implements OnInit {
   }
 
   validarFormulario() {
+    console.log(this.botonInsertar);
+    
     if (this.myForm.valid) {
       if (this.botonInsertar == 'insertar') {
         this.crearPersona();
@@ -440,7 +444,7 @@ export class PersonaComponent implements OnInit {
     var nombres = persona.PrimerNombre + ' ' + persona.SegundoNombre;
     var apellidos = persona.ApellidoPaterno + ' ' + persona.ApellidoMaterno;
     if (persona.ListaCorreo == null) {
-      this._correo.setValue('Sin Correo');
+      this._correo.setValue('');
     } else {
       this._idCorreo.setValue(persona.ListaCorreo[0].IdCorreo);
       this._correo.setValue(persona.ListaCorreo[0].CorreoValor);

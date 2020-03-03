@@ -14,6 +14,7 @@ import { InventarioService } from 'src/app/services/inventario.service';
 import sweetalert from 'sweetalert';
 import { Observable } from 'rxjs';
 import { startWith, map } from 'rxjs/operators';
+import { LoginComponent } from '../login/login.component';
 
 @Component({
   selector: 'app-producto',
@@ -113,7 +114,6 @@ export class ProductoComponent implements OnInit {
     )
       .then(
         ok => {
-          console.log(ok['respuesta']);
           
           this.productos = [];
           this.productos = ok['respuesta'];
@@ -133,7 +133,7 @@ export class ProductoComponent implements OnInit {
     )
       .then(
         ok => {
-          for (let index = 0; index < ok['respuesta'].length; index++) {
+          for (let index = 0; index < (ok['respuesta'].length); index++) {
             const element = ok['respuesta'][index];
             this.nombresDeProductos[index] = {
               idProducto: element.Producto.IdProducto,
@@ -146,6 +146,8 @@ export class ProductoComponent implements OnInit {
           }
           this.consultarConfiguracionProductoTodos();
           this.consultarTipoProductos();
+          console.log(ok['respuesta']);
+          console.log(this.nombresDeProductos);
           this.filteredOptions = this._nombre.valueChanges
             .pipe(
               startWith(''),
@@ -435,7 +437,9 @@ export class ProductoComponent implements OnInit {
     }
   }
 
-  private _filter(value: string): string[] {
+  private _filter(value: string): string[] 
+  {
+    
     try {
       const filterValue = value.toLowerCase();
       return this.nombresDeProductos.filter(option => option.nombre.toLowerCase().includes(filterValue)); 
