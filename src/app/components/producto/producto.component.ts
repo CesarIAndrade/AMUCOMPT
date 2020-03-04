@@ -148,7 +148,6 @@ export class ProductoComponent implements OnInit {
           this.consultarConfiguracionProductoTodos();
           this.consultarTipoProductos();
           console.log(ok['respuesta']);
-          console.log(this.nombresDeProductos);
           this.filteredOptions = this._nombre.valueChanges
             .pipe(
               startWith(''),
@@ -227,7 +226,6 @@ export class ProductoComponent implements OnInit {
       .then(
         ok => {
           console.log(ok['respuesta']);
-          
           if (ok['respuesta'] == null) {
             sweetAlert("Inténtalo de nuevo!", {
               icon: "warning",
@@ -242,7 +240,7 @@ export class ProductoComponent implements OnInit {
               icon: "error",
             });
           } else {
-            this._idConfiguracionProducto.setValue(ok['respuesta']);
+            this._idConfiguracionProducto.setValue(ok['respuesta'].IdConfigurarProducto);
             this.crearPrecio();
           }
         }
@@ -299,6 +297,8 @@ export class ProductoComponent implements OnInit {
     this._presentacion.setValue(producto.Presentacion.IdPresentacion);
     this._medida.setValue(producto.Medida.IdMedida);
     this._idProducto.setValue(producto.Producto.IdProducto);
+    this._precio.setValue(producto.PrecioConfigurarProducto.Precio);
+    this._idConfiguracionProducto.setValue(producto.PrecioConfigurarProducto.IdConfigurarProducto);
     this.botonIngresar = 'modificar';
   }
 
@@ -332,7 +332,8 @@ export class ProductoComponent implements OnInit {
             sweetAlert("Se ingresó correctamente!", {
               icon: "success",
             });
-            this.actualizarPrecio();
+            //this.actualizarPrecio();
+            this.crearPrecio();
           }
         }
       )
@@ -492,12 +493,12 @@ export class ProductoComponent implements OnInit {
     }
   }
 
-  private _filter(value: string): string[] 
+  private _filter(value: string): string[]
   {
-    
+
     try {
       const filterValue = value.toLowerCase();
-      return this.nombresDeProductos.filter(option => option.nombre.toLowerCase().includes(filterValue)); 
+      return this.nombresDeProductos.filter(option => option.nombre.toLowerCase().includes(filterValue));
     } catch (error) {
     }
   }
