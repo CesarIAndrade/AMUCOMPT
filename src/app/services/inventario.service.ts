@@ -7,8 +7,9 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 export class InventarioService {
 
   constructor(private http: HttpClient) { }
-  private apiUrl = "http://localhost:49962/api/";
+
   //private apiUrl = "http://192.168.25.20:90/api/";
+  private apiUrl = "http://25.39.0.74/api/";
 
   consultarTipoProductos(_token: string) {
     const body = new HttpParams()
@@ -1062,20 +1063,20 @@ export class InventarioService {
 
   consultarSembios(_token: string) {
     const body = new HttpParams()
-    .set('encriptada', _token)
-  return new Promise((resolve, reject) => {
-    this.http.post(this.apiUrl + 'TalentoHumano/ListaSembrios', body.toString(),
-      {
-        headers: new HttpHeaders()
-          .set('Content-Type', 'application/x-www-form-urlencoded')
-      }
-    )
-      .subscribe(res => {
-        resolve(res);
-      }, (err) => {
-        reject(err);
-      })
-  })
+      .set('encriptada', _token)
+    return new Promise((resolve, reject) => {
+      this.http.post(this.apiUrl + 'TalentoHumano/ListaSembrios', body.toString(),
+        {
+          headers: new HttpHeaders()
+            .set('Content-Type', 'application/x-www-form-urlencoded')
+        }
+      )
+        .subscribe(res => {
+          resolve(res);
+        }, (err) => {
+          reject(err);
+        })
+    })
   }
 
   crearPrecio(
@@ -1084,20 +1085,48 @@ export class InventarioService {
     _token: string
   ) {
     const body = new HttpParams()
-    .set('encriptada', _token)
-  return new Promise((resolve, reject) => {
-    this.http.post(this.apiUrl + 'Inventario/IngresoPrecioConfigurarProducto', body.toString(),
-      {
-        headers: new HttpHeaders()
-          .set('Content-Type', 'application/x-www-form-urlencoded')
-      }
-    )
-      .subscribe(res => {
-        resolve(res);
-      }, (err) => {
-        reject(err);
-      })
-  })
+      .set('IdConfigurarProducto', idConfigurarProducto)
+      .set('Precio', precio)
+      .set('encriptada', _token)
+    return new Promise((resolve, reject) => {
+      this.http.post(this.apiUrl + 'Inventario/IngresoPrecioConfigurarProducto', body.toString(),
+        {
+          headers: new HttpHeaders()
+            .set('Content-Type', 'application/x-www-form-urlencoded')
+        }
+      )
+        .subscribe(res => {
+          resolve(res);
+        }, (err) => {
+          reject(err);
+        })
+    })
+  }
+
+  actualizarPrecio(
+    idPrecio: string,
+    idConfigurarProducto: string,
+    precio: string,
+    _token: string
+  ) {
+    const body = new HttpParams()
+      .set('IdPrecio', idPrecio)
+      .set('IdConfigurarProducto', idConfigurarProducto)
+      .set('Precio', precio)
+      .set('encriptada', _token)
+    return new Promise((resolve, reject) => {
+      this.http.post(this.apiUrl + 'Inventario/ActualizarPrecioConfigurarProducto', body.toString(),
+        {
+          headers: new HttpHeaders()
+            .set('Content-Type', 'application/x-www-form-urlencoded')
+        }
+      )
+        .subscribe(res => {
+          resolve(res);
+        }, (err) => {
+          reject(err);
+        })
+    })
   }
 
 }

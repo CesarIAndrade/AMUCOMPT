@@ -41,6 +41,7 @@ export class ProductoComponent implements OnInit {
       _idProducto: new FormControl(''),
       _idConfiguracionProducto: new FormControl(''),
       _precio: new FormControl('', [Validators.required]),
+      _idPrecio: new FormControl(''),
     })
   }
 
@@ -115,7 +116,6 @@ export class ProductoComponent implements OnInit {
     )
       .then(
         ok => {
-          
           this.productos = [];
           this.productos = ok['respuesta'];
           this.ArrayProductos = ok['respuesta'];
@@ -214,69 +214,6 @@ export class ProductoComponent implements OnInit {
     }
   }
 
-  mostrarProducto(producto) {
-    this._nombre.disable();
-    this._descripcion.disable();
-    this._tipoProducto.disable();
-    this._idConfiguracionProducto.setValue(producto.IdConfigurarProducto);
-    this._nombre.setValue(producto.Producto.Nombre);
-    this._descripcion.setValue(producto.Producto.Descripcion);
-    this._codigo.setValue(producto.Codigo);
-    this._contenidoNeto.setValue(producto.CantidadMedida);
-    this._tipoProducto.setValue(producto.Producto.TipoProducto.IdTipoProducto);
-    this._presentacion.setValue(producto.Presentacion.IdPresentacion);
-    this._medida.setValue(producto.Medida.IdMedida);
-    this._idProducto.setValue(producto.Producto.IdProducto);
-    this.botonIngresar = 'modificar';
-  }
-
-  actualizarConfiguracionProducto() {
-    this.inventarioService.actualizarConfiguracionProducto(
-      this._idConfiguracionProducto.value,
-      localStorage.getItem('miCuenta.idAsignacionTipoUsuario'),
-      this._idProducto.value,
-      this._medida.value,
-      this._presentacion.value,
-      this._codigo.value,
-      this._contenidoNeto.value,
-      localStorage.getItem('miCuenta.putToken')
-    )
-      .then(
-        ok => {
-          if (ok['respuesta'] == null) {
-            sweetAlert("Inténtalo de nuevo!", {
-              icon: "warning",
-            });
-            this.myForm.reset();
-          } else if (ok['respuesta'] == '400') {
-            sweetAlert("Producto Ya Existe!", {
-              icon: "warning",
-            });
-          } else if (ok['respuesta'] == 'false') {
-            sweetAlert("Ha ocurrido un error!", {
-              icon: "error",
-            });
-          } else {
-            sweetAlert("Se ingresó correctamente!", {
-              icon: "success",
-            });
-            this.myForm.reset();
-            this.botonIngresar = 'ingresar';
-            this.consultarProductos();
-            this._nombre.enable();
-            this._descripcion.enable();
-            this._codigo.enable();
-            this._tipoProducto.enable();
-          }
-        }
-      )
-      .catch(
-        error => {
-          console.log(error);
-        }
-      )
-  }
-
   crearConfiguracionProducto() {
     this.inventarioService.crearConfiguracionProducto(
       localStorage.getItem('miCuenta.idAsignacionTipoUsuario'),
@@ -339,6 +276,90 @@ export class ProductoComponent implements OnInit {
           sweetAlert("Ha ocurrido un error!", {
             icon: "error",
           });
+        }
+      }
+    )
+    .catch(
+      error => {
+        console.log(error);
+      }
+    )
+  }
+
+  mostrarProducto(producto) {
+    this._nombre.disable();
+    this._descripcion.disable();
+    this._tipoProducto.disable();
+    this._idConfiguracionProducto.setValue(producto.IdConfigurarProducto);
+    this._nombre.setValue(producto.Producto.Nombre);
+    this._descripcion.setValue(producto.Producto.Descripcion);
+    this._codigo.setValue(producto.Codigo);
+    this._contenidoNeto.setValue(producto.CantidadMedida);
+    this._tipoProducto.setValue(producto.Producto.TipoProducto.IdTipoProducto);
+    this._presentacion.setValue(producto.Presentacion.IdPresentacion);
+    this._medida.setValue(producto.Medida.IdMedida);
+    this._idProducto.setValue(producto.Producto.IdProducto);
+    this.botonIngresar = 'modificar';
+  }
+
+  actualizarConfiguracionProducto() {
+    this.inventarioService.actualizarConfiguracionProducto(
+      this._idConfiguracionProducto.value,
+      localStorage.getItem('miCuenta.idAsignacionTipoUsuario'),
+      this._idProducto.value,
+      this._medida.value,
+      this._presentacion.value,
+      this._codigo.value,
+      this._contenidoNeto.value,
+      localStorage.getItem('miCuenta.putToken')
+    )
+      .then(
+        ok => {
+          if (ok['respuesta'] == null) {
+            sweetAlert("Inténtalo de nuevo!", {
+              icon: "warning",
+            });
+            this.myForm.reset();
+          } else if (ok['respuesta'] == '400') {
+            sweetAlert("Producto Ya Existe!", {
+              icon: "warning",
+            });
+          } else if (ok['respuesta'] == 'false') {
+            sweetAlert("Ha ocurrido un error!", {
+              icon: "error",
+            });
+          } else {
+            sweetAlert("Se ingresó correctamente!", {
+              icon: "success",
+            });
+            this.actualizarPrecio();
+          }
+        }
+      )
+      .catch(
+        error => {
+          console.log(error);
+        }
+      )
+  }
+
+  actualizarPrecio() {
+    this.inventarioService.actualizarPrecio(
+      this._idPrecio.value,
+      this._idConfiguracionProducto.value,
+      this._precio.value,
+      localStorage.getItem('miCuenta.putToken')
+    )
+    .then(
+      ok => {
+        if(ok['respuesta']) {
+          this.myForm.reset();
+          this.botonIngresar = 'ingresar';
+          this.consultarProductos();
+          this._nombre.enable();
+          this._descripcion.enable();
+          this._codigo.enable();
+          this._tipoProducto.enable();
         }
       }
     )
@@ -435,6 +456,10 @@ export class ProductoComponent implements OnInit {
     return this.myForm.get('_precio');
   }
 
+  get _idPrecio() {
+    return this.myForm.get('_idPrecio');
+  }
+
   get _idConfiguracionProducto() {
     return this.myForm.get('_idConfiguracionProducto');
   }
@@ -456,7 +481,7 @@ export class ProductoComponent implements OnInit {
     this.consultarPresentaciones();
   }
 
-  tablaProductos = ['codigo', 'descripcion', 'tipoProducto', 'acciones'];
+  tablaProductos = ['codigo', 'descripcion', 'tipoProducto', 'precio', 'acciones'];
 
   private _filterTable(value: string, arreglo: any[]) {
     const filterValue = value;
