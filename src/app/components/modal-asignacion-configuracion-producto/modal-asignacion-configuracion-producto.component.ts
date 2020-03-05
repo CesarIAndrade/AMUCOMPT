@@ -30,7 +30,8 @@ export class ModalAsignacionConfiguracionProductoComponent implements OnInit {
     IdLote: '',
     Lote: '',
     Codigo: '',
-    FechaExpiracion: ''
+    FechaExpiracion: '',
+    Porcentaje : '',
   };
 
   configuracionProductos: any[] = [];
@@ -44,7 +45,7 @@ export class ModalAsignacionConfiguracionProductoComponent implements OnInit {
           this.configuracionProductos = [];
           ok['respuesta'].map(
             item => {
-              if (item.ConfigurarProductosUtilizado == '0') {
+              //if (item.ConfigurarProductosUtilizado == '0') {
                 var producto = {
                   IdRelacionLogica: item.IdConfigurarProducto,
                   PerteneceKit: 'False',
@@ -56,7 +57,7 @@ export class ModalAsignacionConfiguracionProductoComponent implements OnInit {
                   Medida: item.Medida.Descripcion
                 }
                 this.configuracionProductos.push(producto);
-              }
+              //}
             }
           )
           console.log(this.configuracionProductos);
@@ -79,7 +80,6 @@ export class ModalAsignacionConfiguracionProductoComponent implements OnInit {
     this.producto.Presentacion = producto.Presentacion;
     this.producto.ContenidoNeto = producto.ContenidoNeto;
     this.producto.Medida = producto.Medida;
-    console.log(producto);
     
   }
 
@@ -95,6 +95,7 @@ export class ModalAsignacionConfiguracionProductoComponent implements OnInit {
       this.producto.Presentacion = producto.Presentacion;
       this.producto.ContenidoNeto = producto.ContenidoNeto;
       this.producto.Medida = producto.Medida;
+      this.producto.Porcentaje = producto.Porcentaje;
   }
 
   listaProductosEnStock: any[] = [];
@@ -134,7 +135,7 @@ export class ModalAsignacionConfiguracionProductoComponent implements OnInit {
     )
       .then(
         ok => {
-          console.log(ok['respuesta']);
+          //console.log(ok['respuesta']);
           var perteneceKit: any;
           var perteneceLote: any;
           var detalle: any;
@@ -152,6 +153,7 @@ export class ModalAsignacionConfiguracionProductoComponent implements OnInit {
                   IdLote: perteneceLote.IdLote,
                   Lote: perteneceLote.Lote,
                   FechaExpiracion: perteneceLote.FechaExpiracion,
+                  Porcentaje : '',
                 }
               } else {
                 detalle = {
@@ -160,6 +162,7 @@ export class ModalAsignacionConfiguracionProductoComponent implements OnInit {
                   IdLote: '',
                   Lote: '',
                   FechaExpiracion: producto.AsignarProductoLote.FechaExpiracion,
+                  Porcentaje : '',
                 }
               }
               if (perteneceKit != null) {
@@ -172,6 +175,7 @@ export class ModalAsignacionConfiguracionProductoComponent implements OnInit {
                   Presentacion: perteneceKit.Presentacion,
                   ContenidoNeto: perteneceKit.ContenidoNeto,
                   Medida: perteneceKit.Medida,
+                  Porcentaje : producto.AsignarProductoLote.AsignarProductoKits.ListaAsignarProductoKit[0].Kit.AsignarDescuentoKit.Descuento.Porcentaje + '%',
                 }
               } else {
                 datosKit = {
@@ -183,6 +187,7 @@ export class ModalAsignacionConfiguracionProductoComponent implements OnInit {
                   Presentacion: producto.AsignarProductoLote.ConfigurarProductos.Presentacion.Descripcion,
                   ContenidoNeto: producto.AsignarProductoLote.ConfigurarProductos.CantidadMedida,
                   Medida: producto.AsignarProductoLote.ConfigurarProductos.Medida.Descripcion,
+                  Porcentaje : '',
                 }
               }
               estructuraFinal = Object.assign(detalle, datosKit);
@@ -201,7 +206,7 @@ export class ModalAsignacionConfiguracionProductoComponent implements OnInit {
   ngOnInit() {
     if(this.data != null) {
       this.areaTablaStock = true;
-      if (this.data.listaProductosDeUnKit.length == 0) {
+      if (this.data.listaProductosDeUnKit.length == 0) {        
         this.consultarConfiguracionProducto();
       } else {
         this.data.listaProductosDeUnKit.map(

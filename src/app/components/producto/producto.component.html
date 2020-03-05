@@ -87,7 +87,7 @@
                         <mat-error *ngIf="_precio.invalid && (_precio.dirty || _precio.touched)">
                             <mat-error *ngIf="_precio.errors.required">
                                 Precio Requerido
-                            </mat-error> 
+                            </mat-error>
                         </mat-error>
                     </mat-form-field>
                     <mat-form-field class="example-full-width">
@@ -119,7 +119,7 @@
                         </ng-container>
                         <ng-container matColumnDef="descripcion">
                             <th mat-header-cell *matHeaderCellDef> Descripción </th>
-                            <td mat-cell *matCellDef="let element"> 
+                            <td mat-cell *matCellDef="let element">
                                 {{element.Producto.Nombre}}
                                 {{element.Presentacion.Descripcion}}
                                 {{element.CantidadMedida}}
@@ -131,9 +131,9 @@
                             <td mat-cell *matCellDef="let element"> {{element.Producto.TipoProducto.Descripcion}}
                             </td>
                         </ng-container>
-                        <ng-container matColumnDef="codigo">
-                            <th mat-header-cell *matHeaderCellDef> Código </th>
-                            <td mat-cell *matCellDef="let element"> {{element.Codigo}} </td>
+                        <ng-container matColumnDef="precio">
+                            <th mat-header-cell *matHeaderCellDef> P.V </th>
+                            <td mat-cell *matCellDef="let element"> {{element.PrecioConfigurarProducto.Precio}} </td>
                         </ng-container>
                         <ng-container matColumnDef="acciones">
                             <th colspan="2" mat-header-cell *matHeaderCellDef> Acciones </th>

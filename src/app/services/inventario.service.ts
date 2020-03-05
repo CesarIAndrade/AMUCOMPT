@@ -8,10 +8,7 @@ export class InventarioService {
 
   constructor(private http: HttpClient) { }
 
-  //private apiUrl = "http://192.168.25.20:90/api/";
-  // private apiUrl = "http://25.39.0.74/api/";
-  private apiUrl = "http://25.69.95.20/api/";
-  
+  private apiUrl = "http://25.70.109.48/api/";
 
   consultarTipoProductos(_token: string) {
     const body = new HttpParams()
@@ -749,6 +746,46 @@ export class InventarioService {
     })
   }
 
+  consultarDetalleDeUnaFacturasVenta(
+    IdCabeceraFactura: string,
+    _token: string
+    ) {
+    const body = new HttpParams()
+      .set('IdCabeceraFactura', IdCabeceraFactura)
+      .set('encriptada', _token)
+    return new Promise((resolve, reject) => {
+      this.http.post(this.apiUrl + 'Factura/ListaFacturaVenta', body.toString(),
+        {
+          headers: new HttpHeaders()
+            .set('Content-Type', 'application/x-www-form-urlencoded')
+        }
+      )
+        .subscribe(res => {
+          resolve(res);
+        }, (err) => {
+          reject(err);
+        })
+    })
+  }
+
+  consultarFacturasVentasFinalizadas(_token: string) {
+    const body = new HttpParams()
+      .set('encriptada', _token)
+    return new Promise((resolve, reject) => {
+      this.http.post(this.apiUrl + 'Factura/ListaFacturasFinalizadasVenta', body.toString(),
+        {
+          headers: new HttpHeaders()
+            .set('Content-Type', 'application/x-www-form-urlencoded')
+        }
+      )
+        .subscribe(res => {
+          resolve(res);
+        }, (err) => {
+          reject(err);
+        })
+    })
+  }
+
   consultarFacturasNoFinalizadas(_token: string) {
     const body = new HttpParams()
       .set('encriptada', _token)
@@ -766,6 +803,7 @@ export class InventarioService {
         })
     })
   }
+
 
   crearCabeceraFactura(
     idAsignacionTU: string,
@@ -858,6 +896,73 @@ export class InventarioService {
         })
     })
   }
+
+  crearDetalleVenta(
+    IdCabeceraFactura: string,
+    IdAsignarProductoLote: string,
+    AplicaDescuento: string,
+    Faltante: string,
+    Cantidad: string,
+    _token: string
+  ) {
+    const body = new HttpParams()
+      .set('IdCabeceraFactura', IdCabeceraFactura)
+      .set('IdAsignarProductoLote', IdAsignarProductoLote)
+      .set('AplicaDescuento', AplicaDescuento)
+      .set('Faltante', Faltante)
+      .set('Cantidad', Cantidad)
+      .set('encriptada', _token)
+    return new Promise((resolve, reject) => {
+      this.http.post(this.apiUrl + 'Credito/IngresoDetalleVenta', body.toString(),
+        {
+          headers: new HttpHeaders()
+            .set('Content-Type', 'application/x-www-form-urlencoded')
+        }
+      )
+        .subscribe(res => {
+          resolve(res);
+        }, (err) => {
+          reject(err);
+        })
+    })
+  }
+
+
+
+  crearConfiguracionVenta(
+    idCabeceraFactura: string,
+    IdPersona: string,
+    IdSembrio: string,
+    EstadoConfVenta: string,
+    IdConfiguracionInteres: string,
+    Efectivo: string,
+    Descuento: string,
+    _token: string
+  ) {
+    const body = new HttpParams()
+      .set('IdCabeceraFactura', idCabeceraFactura)
+      .set('IdPersona', IdPersona)
+      .set('IdSembrio', IdSembrio)
+      .set('EstadoConfVenta', EstadoConfVenta)
+      .set('IdConfiguracionInteres', IdConfiguracionInteres)
+      .set('Efectivo', Efectivo)
+      .set('Descuento', Descuento)
+      .set('encriptada', _token)
+    return new Promise((resolve, reject) => {
+      this.http.post(this.apiUrl + 'Factura/IngresoConfigurarVenta', body.toString(),
+        {
+          headers: new HttpHeaders()
+            .set('Content-Type', 'application/x-www-form-urlencoded')
+        }
+      )
+        .subscribe(res => {
+          resolve(res);
+        }, (err) => {
+          reject(err);
+        })
+    })
+  }
+
 
   quitarDetalleFactura(
     idDetalleFactura: string,
