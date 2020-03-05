@@ -988,6 +988,29 @@ export class InventarioService {
     })
   }
 
+  quitarDetalleFacturaVenta(
+    IdDetalleVenta: string,
+    _token: string) {
+    const body = new HttpParams()
+      .set('IdDetalleVenta', IdDetalleVenta)
+      .set('encriptada', _token)
+    return new Promise((resolve, reject) => {
+      this.http.post(this.apiUrl + 'Credito/EliminarDetalleVenta', body.toString(),
+        {
+          headers: new HttpHeaders()
+            .set('Content-Type', 'application/x-www-form-urlencoded')
+        }
+      )
+        .subscribe(res => {
+          resolve(res);
+        }, (err) => {
+          reject(err);
+        })
+    })
+  }
+
+
+
   consultarStock(_token: string) {
     const body = new HttpParams()
       .set('encriptada', _token)
@@ -1114,6 +1137,52 @@ export class InventarioService {
         })
     })
   }
+  modificarCantidadDeProductoEnDetalleVenta(
+    IdDetalleVenta: string,
+    Cantidad: string,
+    _token: string
+  ) {
+    const body = new HttpParams()
+      .set('IdDetalleVenta', IdDetalleVenta)
+      .set('Cantidad', Cantidad)
+      .set('encriptada', _token)
+    return new Promise((resolve, reject) => {
+      this.http.post(this.apiUrl + 'Credito/AumentarDetalleVenta', body.toString(),
+        {
+          headers: new HttpHeaders()
+            .set('Content-Type', 'application/x-www-form-urlencoded')
+        }
+      )
+        .subscribe(res => {
+          resolve(res);
+        }, (err) => {
+          reject(err);
+        })
+    })
+  }
+
+  buscarPrecioDeUnProducto(
+    IdAsignarProductoLote: string,
+    _token: string
+  ) {
+    const body = new HttpParams()
+      .set('IdAsignarProductoLote', IdAsignarProductoLote)
+      .set('encriptada', _token)
+    return new Promise((resolve, reject) => {
+      this.http.post(this.apiUrl + 'Inventario/BuscarPrecioConfigurarProducto', body.toString(),
+        {
+          headers: new HttpHeaders()
+            .set('Content-Type', 'application/x-www-form-urlencoded')
+        }
+      )
+        .subscribe(res => {
+          resolve(res);
+        }, (err) => {
+          reject(err);
+        })
+    })
+  }
+
 
   buscarFechaYPrecio(
     idCabeceraFactura: string,
