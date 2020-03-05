@@ -53,6 +53,7 @@ export class VentaComponent implements OnInit {
       _idAsignarProductoLote: new FormControl(''),
       _kit: new FormControl(''),
       _checkedDescuento: new FormControl(''),
+      _disponible: new FormControl(''),
     })
   }
   meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
@@ -72,7 +73,7 @@ export class VentaComponent implements OnInit {
       if (result != null) {
         this._cedula.setValue(result.cedula);
         this._idPersona.setValue(result.idPersona);
-        var nombres = result.nombres +' '+ result.apellidos
+        var nombres = result.nombres + ' ' + result.apellidos
         this._nombres.setValue(nombres);
       }
     });
@@ -83,19 +84,22 @@ export class VentaComponent implements OnInit {
       height: 'auto',
     });
     dialogRef.afterClosed().subscribe(result => {
-      this._idAsignarProductoLote 
+      console.log(result.Disponible);
+      console.log(result);
+      
+      //this._idAsignarProductoLote 
       if (result != null) {
-        if(result.Kit != null)
-        {
+        if (result.Kit != null) {
           this.seccionKit = false;
-          this._kit.setValue(result.Kit+' ('+result.Porcentaje+')');
-        }else
-        {
+          this._kit.setValue(result.Kit + ' (' + result.Porcentaje + ')');
+        } else {
           this.seccionKit = true;
           this._kit.setValue('');
           this._checkedDescuento.setValue(false);
         }
         this._idAsignarProductoLote.setValue(result.IdAsignarProductoLote);
+        this.consultarPrecioDeUnProducto();
+        this._disponible.setValue(result.Disponible);
         var producto = result.Producto + ' ' + result.Presentacion + ' ' + result.ContenidoNeto
           + ' ' + result.Medida;
         // this._idRelacionLogica.setValue(result.idRelacionLogica);
@@ -107,7 +111,7 @@ export class VentaComponent implements OnInit {
         // this.dateIcon = true;
         // this._lote.reset();
         this._cantidad.reset();
-        this._precio.reset();
+        //this._precio.reset();
       }
     });
   }
@@ -160,7 +164,10 @@ export class VentaComponent implements OnInit {
   }
   get _idCabecera() {
     return this.myForm.get('_idCabecera')
+  }get _disponible() {
+    return this.myForm.get('_disponible')
   }
+  
   get _idAsignarProductoLote() {
     return this.myForm.get('_idAsignarProductoLote')
   }
@@ -241,17 +248,14 @@ export class VentaComponent implements OnInit {
       )
   }
 
-  crearDetalleVenta()
-  {
-    console.log(this._checkedDescuento.value);
-    var EstadoCheck :string;
-    
-    if(this._checkedDescuento.value == true)
-    {
-      EstadoCheck= '1';
-    }else
-    {
-      EstadoCheck= '0';
+  crearDetalleVenta() {
+    //console.log(this._checkedDescuento.value);
+    var EstadoCheck: string;
+
+    if (this._checkedDescuento.value == true) {
+      EstadoCheck = '1';
+    } else {
+      EstadoCheck = '0';
     }
     this.inventarioService.crearDetalleVenta(
       this._idCabecera.value,
@@ -261,17 +265,28 @@ export class VentaComponent implements OnInit {
       this._cantidad.value,
       localStorage.getItem('miCuenta.postToken')
     )
-    .then(
-      ok => {
-        console.log(ok['respuesta']);
-        this.consultarDetalleDeUnaFactura();
-      }
-    )
-    .catch(
-      error => {
-        console.log(error);
-      }
-    )
+      .then(
+        ok => {
+          //console.log(ok['respuesta']);
+          if (ok['respuesta'] == "true") {
+            this.consultarDetalleDeUnaFactura();
+            this.limpiarCampos();
+          }
+          if (ok['respuesta'] == "false") {
+            console.log("error en el servidor");
+          }
+          if (ok['respuesta'] != "true" && ok['respuesta'] != "false") {
+            sweetAlert(ok['respuesta'], {
+              icon: "error",
+            });
+          }
+        }
+      )
+      .catch(
+        error => {
+          console.log(error);
+        }
+      )
   }
   consultarFacturasVentaFinalizadas() {
     this.inventarioService.consultarFacturasVentasFinalizadas(
@@ -279,7 +294,7 @@ export class VentaComponent implements OnInit {
     )
       .then(
         ok => {
-          console.log(ok['respuesta']);
+          //console.log(ok['respuesta']);
           //this.facturasNoFinalizadas = ok['respuesta'];
         }
       )
@@ -290,74 +305,17 @@ export class VentaComponent implements OnInit {
       )
   }
 
-  consultarDetalleDeUnaFactura() {
-    //console.log(this._idCabecera.value);
-    
-    this.inventarioService.consultarDetalleDeUnaFacturasVenta(
-      this._idCabecera.value,
+  consultarPrecioDeUnProducto() {
+    this.inventarioService.buscarPrecioDeUnProducto(
+      this._idAsignarProductoLote.value,
       localStorage.getItem('miCuenta.getToken')
     )
       .then(
         ok => {
-          var detalle: any;
-          var lote :string;
-          var FechaExp : string;
-          var Descuento : string;
-          this.detalleVenta = [];
-          ok['respuesta'][0].DetalleVenta.map(
-            DetalleVenta=>{
-              //console.log(DetalleVenta.IdAsignarProductoLote);
-              if(DetalleVenta.AsignarProductoLote.IdLote != "")
-              {
-                lote = DetalleVenta.AsignarProductoLote.Lote.Codigo;
-                FechaExp = DetalleVenta.AsignarProductoLote.Lote.FechaExpiracion
-              }else
-              {
-                lote = '';
-                FechaExp = DetalleVenta.AsignarProductoLote.FechaExpiracion;
-              }
 
-              if(DetalleVenta.AplicaDescuento == "True")
-              {
-                Descuento = DetalleVenta.AsignarProductoLote.AsignarProductoKits.ListaAsignarProductoKit[0].Kit.AsignarDescuentoKit.Descuento.Porcentaje+'%' ;
-              }
-              else
-              {
-                Descuento = '';
-              }
-              if(DetalleVenta.AsignarProductoLote.PerteneceKit == "False")
-              { 
-                detalle = {
-                  Codigo : DetalleVenta.AsignarProductoLote.ConfigurarProductos.Codigo,
-                  IdDetalleVenta: DetalleVenta.IdDetalleVenta,
-                  Cantidad: DetalleVenta.Cantidad,
-                  Producto : DetalleVenta.AsignarProductoLote.ConfigurarProductos.Producto.Nombre,
-                  Presentacion : DetalleVenta.AsignarProductoLote.ConfigurarProductos.Presentacion.Descripcion+' '+DetalleVenta.AsignarProductoLote.ConfigurarProductos.CantidadMedida +' '+DetalleVenta.AsignarProductoLote.ConfigurarProductos.Medida.Descripcion,
-                  Lote : lote,
-                  FechaExpiracion : FechaExp,
-                  Kit : '',
-                  AplicaDescuento : Descuento,
-                }
-              }else
-              {
-                detalle = {
-                  Codigo : DetalleVenta.AsignarProductoLote.AsignarProductoKits.ListaAsignarProductoKit[0].ListaProductos.Codigo,
-                  IdDetalleVenta: DetalleVenta.IdDetalleVenta,
-                  Cantidad: DetalleVenta.Cantidad,
-                  Producto : DetalleVenta.AsignarProductoLote.AsignarProductoKits.ListaAsignarProductoKit[0].ListaProductos.Producto.Nombre,
-                  Presentacion: DetalleVenta.AsignarProductoLote.AsignarProductoKits.ListaAsignarProductoKit[0].ListaProductos.Presentacion.Descripcion+' '+ DetalleVenta.AsignarProductoLote.AsignarProductoKits.ListaAsignarProductoKit[0].ListaProductos.CantidadMedida+' '+DetalleVenta.AsignarProductoLote.AsignarProductoKits.ListaAsignarProductoKit[0].ListaProductos.Medida.Descripcion,
-                  Lote : lote,
-                  FechaExpiracion : FechaExp,
-                  Kit : DetalleVenta.AsignarProductoLote.AsignarProductoKits.Descripcion,
-                  AplicaDescuento : Descuento,
-                }
-              }
-              this.detalleVenta.push(detalle);
-            }
-          )
-          this.detalleVenta1 = this.detalleVenta;
-          console.log(ok['respuesta'][0].DetalleVenta);
-          console.log(this.detalleVenta);
+          this._precio.setValue(ok['respuesta'].Precio);
+          //console.log(ok['respuesta']);
+          //this.facturasNoFinalizadas = ok['respuesta'];
         }
       )
       .catch(
@@ -368,8 +326,165 @@ export class VentaComponent implements OnInit {
   }
 
 
+  consultarDetalleDeUnaFactura() {
+    //console.log(this._idCabecera.value);
+
+    this.inventarioService.consultarDetalleDeUnaFacturasVenta(
+      this._idCabecera.value,
+      localStorage.getItem('miCuenta.getToken')
+    )
+      .then(
+        ok => {
+          var detalle: any;
+          var lote: string;
+          var FechaExp: string;
+          var Descuento: string;
+          this.detalleVenta = [];
+          ok['respuesta'][0].DetalleVenta.map(
+            DetalleVenta => {
+              //console.log(DetalleVenta.IdAsignarProductoLote);
+              if (DetalleVenta.AsignarProductoLote.IdLote != "") {
+                lote = DetalleVenta.AsignarProductoLote.Lote.Codigo;
+                FechaExp = DetalleVenta.AsignarProductoLote.Lote.FechaExpiracion
+              } else {
+                lote = '';
+                FechaExp = DetalleVenta.AsignarProductoLote.FechaExpiracion;
+              }
+
+              if (DetalleVenta.AplicaDescuento == "True") {
+                Descuento = DetalleVenta.AsignarProductoLote.AsignarProductoKits.ListaAsignarProductoKit[0].Kit.AsignarDescuentoKit.Descuento.Porcentaje + '%';
+              }
+              else {
+                Descuento = '';
+              }
+              if (DetalleVenta.AsignarProductoLote.PerteneceKit == "False") {
+                detalle = {
+                  Codigo: DetalleVenta.AsignarProductoLote.ConfigurarProductos.Codigo,
+                  IdDetalleVenta: DetalleVenta.IdDetalleVenta,
+                  Cantidad: DetalleVenta.Cantidad,
+                  Producto: DetalleVenta.AsignarProductoLote.ConfigurarProductos.Producto.Nombre,
+                  Presentacion: DetalleVenta.AsignarProductoLote.ConfigurarProductos.Presentacion.Descripcion + ' ' + DetalleVenta.AsignarProductoLote.ConfigurarProductos.CantidadMedida + ' ' + DetalleVenta.AsignarProductoLote.ConfigurarProductos.Medida.Descripcion,
+                  Lote: lote,
+                  FechaExpiracion: FechaExp,
+                  Kit: '',
+                  AplicaDescuento: Descuento,
+                  ValorUnidad: DetalleVenta.ValorUnitario,
+                  Total: DetalleVenta.Total,
+                  Subtotal: DetalleVenta.Subtotal
+                }
+              } else {
+                detalle = {
+                  Codigo: DetalleVenta.AsignarProductoLote.AsignarProductoKits.ListaAsignarProductoKit[0].ListaProductos.Codigo,
+                  IdDetalleVenta: DetalleVenta.IdDetalleVenta,
+                  Cantidad: DetalleVenta.Cantidad,
+                  Producto: DetalleVenta.AsignarProductoLote.AsignarProductoKits.ListaAsignarProductoKit[0].ListaProductos.Producto.Nombre,
+                  Presentacion: DetalleVenta.AsignarProductoLote.AsignarProductoKits.ListaAsignarProductoKit[0].ListaProductos.Presentacion.Descripcion + ' ' + DetalleVenta.AsignarProductoLote.AsignarProductoKits.ListaAsignarProductoKit[0].ListaProductos.CantidadMedida + ' ' + DetalleVenta.AsignarProductoLote.AsignarProductoKits.ListaAsignarProductoKit[0].ListaProductos.Medida.Descripcion,
+                  Lote: lote,
+                  FechaExpiracion: FechaExp,
+                  Kit: DetalleVenta.AsignarProductoLote.AsignarProductoKits.Descripcion,
+                  AplicaDescuento: Descuento,
+                  ValorUnidad: DetalleVenta.ValorUnitario,
+                  Total: DetalleVenta.Total,
+                  Subtotal: DetalleVenta.Subtotal
+                }
+              }
+              this.detalleVenta.push(detalle);
+            }
+          )
+          this.detalleVenta1 = this.detalleVenta;
+          //console.log(ok['respuesta'][0].DetalleVenta);
+          //console.log(this.detalleVenta);
+        }
+      )
+      .catch(
+        error => {
+          console.log(error);
+        }
+      )
+  }
+
+  modificarCantidadDeProductoEnDetalle(event, element) {
+    if (event.key == "Enter") {
+      var cantidadAntigua = element.Cantidad;
+      if (event.target.value <= 0) {
+        event.target.value = cantidadAntigua;
+      } else {
+        this.inventarioService.modificarCantidadDeProductoEnDetalleVenta(
+          element.IdDetalleVenta,
+          event.target.value,
+          localStorage.getItem('miCuenta.putToken')
+        )
+          .then(
+            ok => {
+              //console.log(ok['respuesta']);
+              if (ok['respuesta'] == "true") {
+                this.consultarDetalleDeUnaFactura();
+                //this.limpiarCampos();
+              }
+              if (ok['respuesta'] == "false") {
+                console.log("error en el servidor");
+              }
+              if (ok['respuesta'] != "true" && ok['respuesta'] != "false") {
+                event.target.value = cantidadAntigua;
+                sweetAlert(ok['respuesta'], {
+                  icon: "error",
+                });
+              }
+
+
+              // if (ok['respuesta']) {
+              //   this.consultarDetalleDeUnaFactura();
+              // }
+            }
+          )
+          .catch(
+            error => {
+              console.log(error);
+            }
+          )
+      }
+    }
+  }
+  quitarDetalleFactura(DetalleFactura) {
+    this.inventarioService.quitarDetalleFacturaVenta(
+      DetalleFactura.IdDetalleVenta,
+      localStorage.getItem('miCuenta.deleteToken')
+    )
+      .then(
+        ok => {
+          if (ok['respuesta']) {
+            this.consultarDetalleDeUnaFactura();
+          }
+          /*
+          if (ok['respuesta'] == '0') {
+            this.detalleCompra = [];
+            this._idCabecera.setValue('');
+            this.consultarFacturasNoFinalizadas();
+          } else {
+            this.consultarDetalleFactura();
+          }*/
+        }
+      )
+      .catch(
+        error => {
+          console.log(error);
+        }
+      )
+  }
+
+  limpiarCampos() {
+    this._producto.reset();
+    this._cantidad.reset();
+    this._idAsignarProductoLote.reset();
+    this._kit.reset();
+    this._checkedDescuento.reset();
+    this._precio.reset();
+    this.seccionKit = true;
+  }
+
+
   ngOnInit() {
-    console.log(this._checkedDescuento.value);
+    //console.log(this._checkedDescuento.value);
 
     //this._checkedDescuento.setValue('false');
     this.consultarSembios();
@@ -384,6 +499,6 @@ export class VentaComponent implements OnInit {
     }
   }
 
-  tablaDetalleCompra = ['codigo', 'kit', 'descripcion', 'presentacion', 'lote', 'fechaExpiracion', 'valorUnitario', 'cantidad','Descuento', 'total', 'acciones'];
+  tablaDetalleCompra = ['codigo', 'kit', 'descripcion', 'presentacion', 'lote', 'fechaExpiracion', 'valorUnitario', 'cantidad', 'Descuento', 'Subtotal', 'total', 'acciones'];
 
 }

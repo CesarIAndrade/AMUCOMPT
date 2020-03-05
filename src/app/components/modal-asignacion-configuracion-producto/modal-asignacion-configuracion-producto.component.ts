@@ -32,6 +32,7 @@ export class ModalAsignacionConfiguracionProductoComponent implements OnInit {
     Codigo: '',
     FechaExpiracion: '',
     Porcentaje : '',
+    Disponible: '',
   };
 
   configuracionProductos: any[] = [];
@@ -96,6 +97,7 @@ export class ModalAsignacionConfiguracionProductoComponent implements OnInit {
       this.producto.ContenidoNeto = producto.ContenidoNeto;
       this.producto.Medida = producto.Medida;
       this.producto.Porcentaje = producto.Porcentaje;
+      this.producto.Disponible = producto.Cantidad;
   }
 
   listaProductosEnStock: any[] = [];
@@ -232,6 +234,6 @@ export class ModalAsignacionConfiguracionProductoComponent implements OnInit {
   }
 
   tablaConfiguracionProducto = ['descripcion', 'presentacion', 'contenidoNeto', 'medida', 'acciones'];
-  tablaStock = ['codigo', 'kit', 'descripcion', 'presentacion', 'lote', 'fechaExpiracion', 'acciones'];
+  tablaStock = ['codigo', 'kit', 'descripcion', 'presentacion', 'lote', 'fechaExpiracion','Disponible', 'acciones'];
 
 }
