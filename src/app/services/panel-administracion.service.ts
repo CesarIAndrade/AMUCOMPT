@@ -9,7 +9,8 @@ export class PanelAdministracionService {
   constructor(private http: HttpClient) { }
 
   // private apiUrl = "http://192.168.25.20:90/api/";
-  private apiUrl = "http://25.39.0.74/api/";
+  // private apiUrl = "http://25.39.0.74/api/";
+  private apiUrl = "http://25.69.95.20/api/";
 
   crearProvincia(provincia: string, _token: string) {
     const body = new HttpParams()
