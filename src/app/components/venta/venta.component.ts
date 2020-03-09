@@ -55,6 +55,7 @@ export class VentaComponent implements OnInit {
       _disponible: new FormControl("")
     });
   }
+
   meses = [
     "Enero",
     "Febrero",
@@ -83,7 +84,9 @@ export class VentaComponent implements OnInit {
   detalleVenta: any[] = [];
   detalleVenta1: any[] = [];
   seccionKit = true;
+
   filteredOptions: Observable<string[]>;
+
   seleccionarPersona() {
     let dialogRef = this.modalAsignacionUsuarioPersona.open(
       ModalAsignacionUsuarioPersonaComponent,
@@ -101,6 +104,7 @@ export class VentaComponent implements OnInit {
       }
     });
   }
+
   seleccionarProducto() {
     let dialogRef = this.modalAsignacionConfiguracionProducto.open(
       ModalAsignacionConfiguracionProductoComponent,
@@ -112,7 +116,6 @@ export class VentaComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       console.log(result.Disponible);
       console.log(result);
-
       //this._idAsignarProductoLote
       if (result != null) {
         if (result.Kit != null) {
@@ -147,6 +150,7 @@ export class VentaComponent implements OnInit {
       }
     });
   }
+  
   consultarSembios() {
     this.inventarioService
       .consultarSembios(localStorage.getItem("miCuenta.getToken"))
@@ -161,55 +165,27 @@ export class VentaComponent implements OnInit {
         console.log(error);
       });
   }
+
   seleccionarSembrioSiExiste(sembrio) {
     console.log(sembrio);
   }
-  get _producto() {
-    return this.myForm.get("_producto");
-  }
-  get _cantidad() {
-    return this.myForm.get("_cantidad");
-  }
-  get _precio() {
-    return this.myForm.get("_precio");
-  }
-  get _cedula() {
-    return this.myForm.get("_cedula");
-  }
-  get _nombres() {
-    return this.myForm.get("_nombres");
-  }
-  get _idPersona() {
-    return this.myForm.get("_idPersona");
-  }
-  get _sembrio() {
-    return this.myForm.get("_sembrio");
-  }
-  get _tipoTransaccion() {
-    return this.myForm.get("_tipoTransaccion");
-  }
-  get _idCabecera() {
-    return this.myForm.get("_idCabecera");
-  }
-  get _disponible() {
-    return this.myForm.get("_disponible");
-  }
 
-  get _idAsignarProductoLote() {
-    return this.myForm.get("_idAsignarProductoLote");
-  }
-  get _cabecera() {
-    return this.myForm.get("_cabecera");
-  }
-  get _fechaActual() {
-    return this.myForm.get("_fechaActual");
-  }
-  get _kit() {
-    return this.myForm.get("_kit");
-  }
-  get _checkedDescuento() {
-    return this.myForm.get("_checkedDescuento");
-  }
+  get _producto() { return this.myForm.get("_producto"); }
+  get _cantidad() { return this.myForm.get("_cantidad"); }
+  get _precio() { return this.myForm.get("_precio"); }
+  get _cedula() { return this.myForm.get("_cedula"); }
+  get _nombres() { return this.myForm.get("_nombres"); }
+  get _idPersona() { return this.myForm.get("_idPersona"); }
+  get _sembrio() { return this.myForm.get("_sembrio"); }
+  get _tipoTransaccion() { return this.myForm.get("_tipoTransaccion"); }
+  get _idCabecera() { return this.myForm.get("_idCabecera"); }
+  get _disponible() { return this.myForm.get("_disponible"); }
+  get _idAsignarProductoLote() { return this.myForm.get("_idAsignarProductoLote"); }
+  get _cabecera() { return this.myForm.get("_cabecera"); }
+  get _fechaActual() { return this.myForm.get("_fechaActual"); }
+  get _kit() { return this.myForm.get("_kit"); }
+  get _checkedDescuento() { return this.myForm.get("_checkedDescuento"); }
+  
   consultarTipoTransaccion() {
     this.inventarioService
       .consultarTipoTransaccion(localStorage.getItem("miCuenta.getToken"))
@@ -226,6 +202,7 @@ export class VentaComponent implements OnInit {
         console.log(error);
       });
   }
+
   validarFormulario() {
     this.crearDetalleVenta();
     /*if (this.myForm.valid) {
@@ -270,7 +247,6 @@ export class VentaComponent implements OnInit {
   crearDetalleVenta() {
     //console.log(this._checkedDescuento.value);
     var EstadoCheck: string;
-
     if (this._checkedDescuento.value == true) {
       EstadoCheck = "1";
     } else {
@@ -304,6 +280,7 @@ export class VentaComponent implements OnInit {
         console.log(error);
       });
   }
+  
   consultarFacturasVentaFinalizadas() {
     this.inventarioService
       .consultarFacturasVentasFinalizadas(
@@ -336,7 +313,6 @@ export class VentaComponent implements OnInit {
 
   consultarDetalleDeUnaFactura() {
     //console.log(this._idCabecera.value);
-
     this.inventarioService
       .consultarDetalleDeUnaFacturasVenta(
         this._idCabecera.value,
@@ -357,7 +333,6 @@ export class VentaComponent implements OnInit {
             lote = "";
             FechaExp = DetalleVenta.AsignarProductoLote.FechaExpiracion;
           }
-
           if (DetalleVenta.AplicaDescuento == "True") {
             Descuento =
               DetalleVenta.AsignarProductoLote.AsignarProductoKits
@@ -461,7 +436,6 @@ export class VentaComponent implements OnInit {
                 icon: "error"
               });
             }
-
             // if (ok['respuesta']) {
             //   this.consultarDetalleDeUnaFactura();
             // }
@@ -472,6 +446,7 @@ export class VentaComponent implements OnInit {
       }
     }
   }
+  
   quitarDetalleFactura(DetalleFactura) {
     this.inventarioService
       .quitarDetalleFacturaVenta(
@@ -508,7 +483,6 @@ export class VentaComponent implements OnInit {
 
   ngOnInit() {
     //console.log(this._checkedDescuento.value);
-
     //this._checkedDescuento.setValue('false');
     this.consultarSembios();
     this.consultarTipoTransaccion();
@@ -537,4 +511,5 @@ export class VentaComponent implements OnInit {
     "total",
     "acciones"
   ];
+  tablaFacturasNoFinalidas = ['codigo', 'usuario', 'fecha', 'acciones'];
 }
