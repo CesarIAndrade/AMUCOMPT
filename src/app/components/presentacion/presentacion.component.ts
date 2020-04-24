@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-
+import { MatPaginator, MatTableDataSource, MatPaginatorIntl } from '@angular/material';
 // Services
 import { InventarioService } from 'src/app/services/inventario.service';
 
@@ -26,16 +26,18 @@ export class PresentacionComponent implements OnInit {
   botonIngresar = 'ingresar';
   filterPresentacion = '';
 
-  presentaciones: any[] = [];
-
+  //presentaciones: any[] = [];
+  @ViewChild('paginator', { static: false }) paginator: MatPaginator;
+  presentaciones = new MatTableDataSource<Element[]>();
   consultarPresentaciones() {
     this.inventarioService.consultarPresentaciones(
       localStorage.getItem('miCuenta.getToken')
     )
       .then(
         ok => {
-          this.presentaciones = [];
-          this.presentaciones = ok['respuesta'];
+          this.presentaciones.data = [];
+          this.presentaciones.data = ok['respuesta'];
+          this.presentaciones.paginator = this.paginator;
         }
       )
       .catch(

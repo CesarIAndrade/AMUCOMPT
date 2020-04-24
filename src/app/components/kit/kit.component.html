@@ -95,6 +95,7 @@
                         <tr mat-header-row *matHeaderRowDef="tablaKits; sticky: true"></tr>
                         <tr mat-row *matRowDef="let row; columns: tablaKits;"></tr>
                     </table>
+                    <mat-paginator #paginator [pageSizeOptions]="[5]" showFirstLastButtons></mat-paginator>
                 </div>
             </div>
         </div>

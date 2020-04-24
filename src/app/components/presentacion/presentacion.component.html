@@ -54,6 +54,7 @@
                         <tr mat-header-row *matHeaderRowDef="tablaPresentaciones; sticky: true"></tr>
                         <tr mat-row *matRowDef="let row; columns: tablaPresentaciones;"></tr>
                     </table>
+                    <mat-paginator #paginator [pageSizeOptions]="[5]" showFirstLastButtons></mat-paginator>
                 </div>
             </div>
         </div>

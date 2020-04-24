@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,ViewChild } from '@angular/core';
 
 // Components
 import { ModalDetalleProductoComponent } from '../modal-detalle-producto/modal-detalle-producto.component';
-
+import { MatPaginator, MatTableDataSource, MatPaginatorIntl } from '@angular/material';
 // Functional Components
 import { MatDialog } from "@angular/material/dialog";
 
@@ -44,11 +44,15 @@ export class ArmarKitComponent implements OnInit {
    get _idAsignarDescuentoKit() {
     return this.myForm.get('_idAsignarDescuentoKit');
   }
-  
-  productos: any[] = [];
+  @ViewChild('paginator', { static: false }) paginator: MatPaginator;
+  @ViewChild('paginator1', { static: false }) paginator1: MatPaginator;
+  productos = new MatTableDataSource<Element[]>();
+  listaProductosDeUnKit = new MatTableDataSource<Element[]>();
+
+  //productos: any[] = [];
   kits: any[] = [];
 
-  listaProductosDeUnKit: any[] = [];
+  //listaProductosDeUnKit: any[] = [];
   Arrayproductos: any[] = [];
 
   onChangeSelectKit() {
@@ -59,15 +63,15 @@ export class ArmarKitComponent implements OnInit {
   }
 
   applyFilter(event) {
-    this._filterTable(event,this.productos);
+    this._filterTable(event,this.productos.data);
   }
-  
+
   private _filterTable(value: string,arreglo: any[]) {
     const filterValue = value.toLowerCase();
     if(value == '') {
-      this.productos = this.Arrayproductos;
+      this.productos.data = this.Arrayproductos;
     } else {
-      this.productos = this.Arrayproductos.filter(option =>option['Producto']['Nombre'].trim().toLowerCase().includes(filterValue.trim()));
+      this.productos.data = this.Arrayproductos.filter(option =>option['Producto']['Nombre'].trim().toLowerCase().includes(filterValue.trim()));
     }
   }
 
@@ -78,8 +82,9 @@ export class ArmarKitComponent implements OnInit {
     )
       .then(
         ok => {
-          this.listaProductosDeUnKit = [];
-          this.listaProductosDeUnKit = ok['respuesta'][0]['ListaAsignarProductoKit'];
+          this.listaProductosDeUnKit.data = [];
+          this.listaProductosDeUnKit.data = ok['respuesta'][0]['ListaAsignarProductoKit'];
+          this.listaProductosDeUnKit.paginator = this.paginator1;
         }
       )
       .catch(
@@ -113,8 +118,9 @@ export class ArmarKitComponent implements OnInit {
     )
       .then(
         ok => {
-          this.productos = [];
-          this.productos = ok['respuesta'];
+          this.productos.data = [];
+          this.productos.data = ok['respuesta'];
+          this.productos.paginator = this.paginator;
           this.Arrayproductos = ok['respuesta'];
         }
       )

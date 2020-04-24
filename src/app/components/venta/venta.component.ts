@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,ViewChild } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ModalAsignacionUsuarioPersonaComponent } from '../modal-asignacion-usuario-persona/modal-asignacion-usuario-persona.component';
 import { MatDialog } from "@angular/material/dialog";
@@ -6,6 +6,7 @@ import { ModalAsignacionConfiguracionProductoComponent } from '../modal-asignaci
 import { Observable } from 'rxjs';
 import { startWith, map } from 'rxjs/operators';
 import { InventarioService } from 'src/app/services/inventario.service';
+import { MatPaginator, MatTableDataSource, MatPaginatorIntl } from '@angular/material';
 
 // SweetAlert
 import sweetalert from "sweetalert"
@@ -54,14 +55,17 @@ export class VentaComponent implements OnInit {
       _kit: new FormControl(''),
       _checkedDescuento: new FormControl(''),
       _disponible: new FormControl(''),
+      _pagoEfectivo: new FormControl(''),
     })
   }
+  @ViewChild('paginator', { static: false }) paginator: MatPaginator;
+  detalleVenta1 = new MatTableDataSource<Element[]>();
   meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
   dias = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
 
   sembrios: any[] = [];
   detalleVenta: any[] = [];
-  detalleVenta1: any[] = [];
+  //detalleVenta1: any[] = [];
   seccionKit = true;
   filteredOptions: Observable<string[]>;
   seleccionarPersona() {
@@ -86,8 +90,8 @@ export class VentaComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       console.log(result.Disponible);
       console.log(result);
-      
-      //this._idAsignarProductoLote 
+
+      //this._idAsignarProductoLote
       if (result != null) {
         if (result.Kit != null) {
           this.seccionKit = false;
@@ -102,16 +106,8 @@ export class VentaComponent implements OnInit {
         this._disponible.setValue(result.Disponible);
         var producto = result.Producto + ' ' + result.Presentacion + ' ' + result.ContenidoNeto
           + ' ' + result.Medida;
-        // this._idRelacionLogica.setValue(result.idRelacionLogica);
-        // this._perteneceKit.setValue(result.perteneceKit);
         this._producto.setValue(producto);
-        // this.consultarLotesDeUnProducto();
-        // this.buscarFechaYPrecio();
-        // this._fechaExpiracion.reset();
-        // this.dateIcon = true;
-        // this._lote.reset();
         this._cantidad.reset();
-        //this._precio.reset();
       }
     });
   }
@@ -147,6 +143,10 @@ export class VentaComponent implements OnInit {
   get _precio() {
     return this.myForm.get('_precio');
   }
+  get _pagoEfectivo() {
+    return this.myForm.get('_pagoEfectivo');
+  }
+
   get _cedula() {
     return this.myForm.get('_cedula');
   }
@@ -167,7 +167,7 @@ export class VentaComponent implements OnInit {
   }get _disponible() {
     return this.myForm.get('_disponible')
   }
-  
+
   get _idAsignarProductoLote() {
     return this.myForm.get('_idAsignarProductoLote')
   }
@@ -340,7 +340,7 @@ export class VentaComponent implements OnInit {
           var FechaExp: string;
           var Descuento: string;
           this.detalleVenta = [];
-          ok['respuesta'][0].DetalleVenta.map(
+          ok['respuesta'].DetalleVenta.map(
             DetalleVenta => {
               //console.log(DetalleVenta.IdAsignarProductoLote);
               if (DetalleVenta.AsignarProductoLote.IdLote != "") {
@@ -391,7 +391,8 @@ export class VentaComponent implements OnInit {
               this.detalleVenta.push(detalle);
             }
           )
-          this.detalleVenta1 = this.detalleVenta;
+          this.detalleVenta1.data = this.detalleVenta;
+          this.detalleVenta1.paginator = this.paginator;
           //console.log(ok['respuesta'][0].DetalleVenta);
           //console.log(this.detalleVenta);
         }

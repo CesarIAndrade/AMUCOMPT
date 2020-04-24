@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,ViewChild } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material';
 import { Observable } from 'rxjs';
 import { startWith, map } from 'rxjs/operators';
-
+import { MatPaginator, MatTableDataSource, MatPaginatorIntl } from '@angular/material';
 // Component
 import { ModalAsignacionConfiguracionProductoComponent } from '../modal-asignacion-configuracion-producto/modal-asignacion-configuracion-producto.component';
 
@@ -59,15 +59,19 @@ export class CompraComponent implements OnInit {
   buttonGenerarFactura = false;
   buttonSeleccionarProducto = true;
 
-  detalleCompra: any[] = [];
-  kits: any[] = [];
+  //detalleCompra: any[] = [];
+  kits: any[] = []
   lotes: any[] = [];
   listaProductosDeUnKit: any[] = [];
-  facturasNoFinalizadas: any[] = [];
+  //facturasNoFinalizadas: any[] = [];
   tipoCompra: any[] = [
     { tipo: 'Producto' },
     { tipo: 'Kit' }
   ]
+  @ViewChild('paginator', { static: false }) paginator: MatPaginator;
+  @ViewChild('paginator', { static: false }) paginator1: MatPaginator;
+  detalleCompra = new MatTableDataSource<Element[]>();
+  facturasNoFinalizadas = new MatTableDataSource<Element[]>();
 
   filteredOptions: Observable<string[]>;
 
@@ -308,6 +312,10 @@ export class CompraComponent implements OnInit {
   }
 
   consultarDetalleFactura() {
+    setTimeout(() => {
+      // this.facturasNoFinalizadas.paginator = null;
+      // this.paginator1 = null;
+    });
     this.inventarioService.consultarDetalleFactura(
       this._idCabecera.value,
       localStorage.getItem('miCuenta.getToken')
@@ -321,7 +329,7 @@ export class CompraComponent implements OnInit {
               var detalle: any;
               var datosKit: any;
               var estructuraFinal: any;
-              this.detalleCompra = [];
+              this.detalleCompra.data = [];
               item.DetalleFactura.map(
                 producto => {
                   perteneceLote = this.estructurarSiPerteneceALote(producto);
@@ -373,11 +381,12 @@ export class CompraComponent implements OnInit {
                     }
                   }
                   estructuraFinal = Object.assign(detalle, datosKit);
-                  this.detalleCompra.push(estructuraFinal);
+                  this.detalleCompra.data.push(estructuraFinal);
                 }
               )
             }
           )
+          //this.detalleCompra.paginator = this.paginator;
         }
       )
       .catch(
@@ -411,7 +420,12 @@ export class CompraComponent implements OnInit {
     )
       .then(
         ok => {
-          this.facturasNoFinalizadas = ok['respuesta'];
+          setTimeout(() => {
+            // this.detalleCompra.paginator = null;
+            // this.paginator1=null;
+          });
+          this.facturasNoFinalizadas.data = ok['respuesta'];
+          this.facturasNoFinalizadas.paginator = this.paginator1;
         }
       )
       .catch(
@@ -434,7 +448,7 @@ export class CompraComponent implements OnInit {
 
   crearCabeceraFactura() {
     this.limpiarCampos();
-    this.detalleCompra = [];
+    this.detalleCompra.data = [];
     this.inventarioService.crearCabeceraFactura(
       localStorage.getItem('miCuenta.idAsignacionTipoUsuario'),
       this._tipoTransaccion.value,
@@ -546,7 +560,7 @@ export class CompraComponent implements OnInit {
       .then(
         ok => {
           if (ok['respuesta'] == '0') {
-            this.detalleCompra = [];
+            this.detalleCompra.data = [];
             this._idCabecera.setValue('');
             this.consultarFacturasNoFinalizadas();
           } else {
@@ -574,7 +588,7 @@ export class CompraComponent implements OnInit {
             });
             this.consultarFacturasNoFinalizadas();
             this.limpiarCampos();
-            this.detalleCompra = [];
+            this.detalleCompra.data = [];
             this._fechaActual.reset();
             this._cabecera.reset();
           } else {
@@ -755,9 +769,12 @@ export class CompraComponent implements OnInit {
   }
 
   ngOnInit() {
+    //this.paginator=null;
     this.consultarKits();
     this.consultarTipoTransaccion();
-    this.consultarFacturasNoFinalizadas();
+    setTimeout(() => {
+      this.consultarFacturasNoFinalizadas();
+    });
     this.myForm.disable();
   }
 

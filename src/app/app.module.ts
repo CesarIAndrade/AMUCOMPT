@@ -14,7 +14,7 @@ import { MatListModule } from '@angular/material/list';
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatDialogModule } from "@angular/material/dialog";
 import { MatTabsModule } from "@angular/material/tabs";
-
+import { MatPaginatorModule } from '@angular/material/paginator';
 // Components
 import { UsuarioComponent } from './components/usuario/usuario.component';
 import { LoginComponent } from './components/login/login.component';
@@ -115,8 +115,9 @@ import { StockComponent } from './components/stock/stock.component';
     MatRadioModule,
     MatExpansionModule,
     MatCardModule,
+    MatPaginatorModule
   ],
-  entryComponents: [ 
+  entryComponents: [
     ModalDetallePersonaComponent,
     ModalAsignacionUsuarioPersonaComponent ,
     ModalAsignacionUsuarioTiposUsuarioComponent,

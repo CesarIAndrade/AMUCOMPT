@@ -4,7 +4,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 // Components
 import { ModalAsignacionUsuarioPersonaComponent } from '../modal-asignacion-usuario-persona/modal-asignacion-usuario-persona.component';
 import { ModalAsignacionUsuarioTiposUsuarioComponent } from '../modal-asignacion-usuario-tipos-usuario/modal-asignacion-usuario-tipos-usuario.component';
-
+import { MatPaginator, MatTableDataSource, MatPaginatorIntl } from '@angular/material';
 // Functional Components
 import { MatDialog } from "@angular/material/dialog";
 
@@ -40,6 +40,9 @@ export class UsuarioComponent implements OnInit {
       _contrasena: new FormControl('', [Validators.required]),
     })
   }
+  @ViewChild('paginator', { static: false }) paginator: MatPaginator;
+  usuarios = new MatTableDataSource<Element[]>();
+
 
   resultadoModal: any;
   botonInsertar = 'insertar';
@@ -48,13 +51,14 @@ export class UsuarioComponent implements OnInit {
   filterUsuario = '';
 
   personas: any[] = [];
-  usuarios: any[] = [];
+  //usuarios: any[] = [];
 
   consultarUsuarios() {
     this.usuarioService.consultarUsuarios(localStorage.getItem('miCuenta.getToken'))
       .then(
         ok => {
-          this.usuarios = ok['respuesta'];
+          this.usuarios.data = ok['respuesta'];
+          this.usuarios.paginator = this.paginator;
         }
       )
       .catch(

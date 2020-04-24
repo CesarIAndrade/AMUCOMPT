@@ -51,6 +51,7 @@
                     <tr mat-header-row *matHeaderRowDef="tablaStock; sticky: true"></tr>
                     <tr mat-row *matRowDef="let row; columns: tablaStock;"></tr>
                 </table>
+                <mat-paginator #paginator [pageSizeOptions]="[5]" showFirstLastButtons></mat-paginator>
             </div>
         </div>
     </div>
