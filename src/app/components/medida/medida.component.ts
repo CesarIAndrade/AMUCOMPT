@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-
+import { MatPaginator, MatTableDataSource, MatPaginatorIntl } from '@angular/material';
 // Services
 import { InventarioService } from 'src/app/services/inventario.service';
 
@@ -26,16 +26,18 @@ export class MedidaComponent implements OnInit {
   filterMedida = '';
   botonIngresar = 'ingresar';
 
-  medidas: any[] = [];
-
+  //medidas: any[] = [];
+  @ViewChild('paginator', { static: false }) paginator: MatPaginator;
+  medidas = new MatTableDataSource<Element[]>();
   consultarMedidas() {
     this.inventarioService.consultarMedidas(
       localStorage.getItem('miCuenta.getToken')
     )
       .then(
         ok => {
-          this.medidas = [];
-          this.medidas = ok['respuesta'];
+          this.medidas.data = [];
+          this.medidas.data = ok['respuesta'];
+          this.medidas.paginator = this.paginator;
         }
       )
       .catch(
@@ -69,7 +71,7 @@ export class MedidaComponent implements OnInit {
               icon: "warning",
             });
             this.myForm.reset();
-          } else if (ok['respuesta'] == '400') {  
+          } else if (ok['respuesta'] == '400') {
             sweetAlert("Medida ya existe!", {
               icon: "warning",
             });

@@ -6,6 +6,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 
 // SweetAlert
 import sweetalert from 'sweetalert';
+import { MatPaginator, MatTableDataSource, MatPaginatorIntl } from '@angular/material';
 
 @Component({
   selector: 'app-tipo-producto',
@@ -23,17 +24,20 @@ export class TipoProductoComponent implements OnInit {
       _idTipoProducto: new FormControl(''),
     })
   }
+  @ViewChild('paginator', { static: false }) paginator: MatPaginator;
+  tipoProductos = new MatTableDataSource<Element[]>();
 
   filterTipoProducto = '';
   botonIngresar = 'ingresar';
 
-  tipoProductos: any[] = [];
+  //tipoProductos: any[] = [];
 
   consultarTipoProductos() {
     this.inventarioService.consultarTipoProductos(localStorage.getItem('miCuenta.getToken'))
       .then(
         ok => {
-          this.tipoProductos = ok['respuesta'];
+          this.tipoProductos.data = ok['respuesta'];
+          this.tipoProductos.paginator = this.paginator;
         }
       )
       .catch(
@@ -146,7 +150,7 @@ export class TipoProductoComponent implements OnInit {
     .then((willDelete) => {
       if (willDelete) {
         this.inventarioService.eliminarTipoProducto(
-          idTipoProducto, 
+          idTipoProducto,
           localStorage.getItem('miCuenta.deleteToken')
         )
         .then(

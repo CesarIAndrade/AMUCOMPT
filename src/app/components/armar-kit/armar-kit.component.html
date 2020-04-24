@@ -22,7 +22,7 @@
                         </ng-container>
                         <ng-container matColumnDef="descripcion">
                             <th mat-header-cell *matHeaderCellDef> Descripción </th>
-                            <td mat-cell *matCellDef="let element"> 
+                            <td mat-cell *matCellDef="let element">
                                 {{element.ListaProductos.Producto.Nombre}}
                                 {{element.ListaProductos.Presentacion.Descripcion}}
                                 {{element.ListaProductos.CantidadMedida}}
@@ -32,7 +32,7 @@
                         <ng-container matColumnDef="tipoProducto">
                             <th mat-header-cell *matHeaderCellDef> Tipo Producto </th>
                             <td mat-cell *matCellDef="let element">
-                                {{element.ListaProductos.Producto.TipoProducto.Descripcion}} 
+                                {{element.ListaProductos.Producto.TipoProducto.Descripcion}}
                             </td>
                         </ng-container>
                         <ng-container matColumnDef="acciones">
@@ -57,6 +57,7 @@
                         <tr mat-header-row *matHeaderRowDef="tablaProductosDeUnKit; sticky: true"></tr>
                         <tr mat-row *matRowDef="let row; columns: tablaProductosDeUnKit;"></tr>
                     </table>
+                    <mat-paginator #paginator1 [pageSizeOptions]="[5]" showFirstLastButtons></mat-paginator>
                 </div>
             </div>
         </div>
@@ -78,8 +79,8 @@
                         </ng-container>
                         <ng-container matColumnDef="descripcion">
                             <th mat-header-cell *matHeaderCellDef> Descripción </th>
-                            <td mat-cell *matCellDef="let element"> 
-                                {{element.Producto.Nombre}} 
+                            <td mat-cell *matCellDef="let element">
+                                {{element.Producto.Nombre}}
                                 {{element.Presentacion.Descripcion}}
                                 {{element.CantidadMedida}}
                                 {{element.Medida.Descripcion}}
@@ -87,7 +88,7 @@
                         </ng-container>
                         <ng-container matColumnDef="tipoProducto">
                             <th mat-header-cell *matHeaderCellDef> Tipo Producto </th>
-                            <td mat-cell *matCellDef="let element"> 
+                            <td mat-cell *matCellDef="let element">
                                 {{element.Producto.TipoProducto.Descripcion}}
                             </td>
                         </ng-container>
@@ -111,6 +112,7 @@
                         <tr mat-header-row *matHeaderRowDef="tablaProductos; sticky: true"></tr>
                         <tr mat-row *matRowDef="let row; columns: tablaProductos;"></tr>
                     </table>
+                    <mat-paginator #paginator [pageSizeOptions]="[5]" showFirstLastButtons></mat-paginator>
                 </div>
             </div>
         </div>

@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-
+import { Component, OnInit ,ViewChild} from '@angular/core';
+import { MatPaginator, MatTableDataSource, MatPaginatorIntl } from '@angular/material';
 // Services
 import { InventarioService } from 'src/app/services/inventario.service';
 
@@ -12,8 +12,9 @@ export class StockComponent implements OnInit {
 
   constructor(private inventarioService: InventarioService) { }
 
-  listaProductosEnStock: any[] = [];
-
+  //listaProductosEnStock: any[] = [];
+  @ViewChild('paginator', { static: false }) paginator: MatPaginator;
+  listaProductosEnStock = new MatTableDataSource<Element[]>();
   estructurarSiPerteneceALote(producto) {
     var datosLote: any;
     if (producto.AsignarProductoLote.IdLote != '') {
@@ -27,6 +28,7 @@ export class StockComponent implements OnInit {
   }
 
   estructurarSiPerteneceAKit(producto) {
+    console.log("pertenece = ",producto)
     var datosKit: any;
     if (producto.AsignarProductoLote.AsignarProductoKits.IdKit != null) {
       datosKit = {
@@ -49,13 +51,12 @@ export class StockComponent implements OnInit {
     )
       .then(
         ok => {
-          console.log(ok['respuesta']);
           var perteneceKit: any;
           var perteneceLote: any;
           var detalle: any;
           var datosKit: any;
           var estructuraFinal: any;
-          this.listaProductosEnStock = [];
+          this.listaProductosEnStock.data = [];
           ok['respuesta'].map(
             producto => {
               perteneceLote = this.estructurarSiPerteneceALote(producto);
@@ -99,9 +100,10 @@ export class StockComponent implements OnInit {
                 }
               }
               estructuraFinal = Object.assign(detalle, datosKit);
-              this.listaProductosEnStock.push(estructuraFinal);
+              this.listaProductosEnStock.data.push(estructuraFinal);
             }
           )
+          this.listaProductosEnStock.paginator = this.paginator;
         }
       )
       .catch(

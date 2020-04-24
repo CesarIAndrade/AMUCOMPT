@@ -48,7 +48,7 @@
                     </div>
                     <div class="col-lg-3 col-md-2">
                         <button [disabled]="buttonSeleccionarProducto" tooltip="Seleccionar Producto" placement="top"
-                            type="button" mat-button class="mt-2 btn-outline-warning" 
+                            type="button" mat-button class="mt-2 btn-outline-warning"
                             (click)="seleccionarProducto()">
                             <mat-icon>add</mat-icon>
                         </button>
@@ -183,6 +183,7 @@
                 <tr mat-header-row *matHeaderRowDef="tablaDetalleCompra; sticky: true"></tr>
                 <tr mat-row *matRowDef="let row; columns: tablaDetalleCompra;"></tr>
             </table>
+            <!-- <mat-paginator #paginator [pageSizeOptions]="[5]" showFirstLastButtons></mat-paginator> -->
         </div>
     </div>
 <br>
@@ -226,6 +227,7 @@
                             <tr mat-header-row *matHeaderRowDef="tablaFacturasNoFinalidas; sticky: true"></tr>
                             <tr mat-row *matRowDef="let row; columns: tablaFacturasNoFinalidas;"></tr>
                         </table>
+                        <mat-paginator #paginator1 [pageSizeOptions]="[5]" showFirstLastButtons></mat-paginator>
                     </div>
                 </mat-expansion-panel>
             </mat-accordion>

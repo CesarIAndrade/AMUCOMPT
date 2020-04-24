@@ -4,7 +4,7 @@ import { ErrorStateMatcher } from '@angular/material/core';
 
 // Components
 import { ModalDetallePersonaComponent } from "src/app/components/modal-detalle-persona/modal-detalle-persona.component";
-
+import { MatPaginator, MatTableDataSource, MatPaginatorIntl } from '@angular/material';
 // Functional Components
 import { MatDialog } from "@angular/material/dialog";
 
@@ -47,6 +47,8 @@ export class PersonaComponent implements OnInit {
       _idTelefono2: new FormControl('')
     });
   }
+  @ViewChild('paginator', { static: false }) paginator: MatPaginator;
+  personas = new MatTableDataSource<Element[]>();
 
   botonInsertar = "insertar";
   contacto = 'Contacto ';
@@ -58,7 +60,7 @@ export class PersonaComponent implements OnInit {
   cantones: any[] = [];
   parroquias: any[] = [];
   personaModal: any = {};
-  personas: any[] = [];
+  //personas: any[] = [];
   provincias: any[] = [];
   telefonos: any[] = [];
   tipoDocumentos: any[] = [];
@@ -110,9 +112,8 @@ export class PersonaComponent implements OnInit {
     this.personaService.consultarPersonas(localStorage.getItem('miCuenta.getToken'))
       .then(
         ok => {
-          console.log(ok['respuesta']);
-          
-          this.personas = ok['respuesta'];
+          this.personas.data = ok['respuesta'];
+          this.personas.paginator = this.paginator;
         },
       )
       .catch(
@@ -237,7 +238,7 @@ export class PersonaComponent implements OnInit {
 
   validarFormulario() {
     console.log(this.botonInsertar);
-    
+
     if (this.myForm.valid) {
       if (this.botonInsertar == 'insertar') {
         this.crearPersona();

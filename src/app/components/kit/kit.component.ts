@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { startWith, map } from 'rxjs/operators';
-
+import { MatPaginator, MatTableDataSource, MatPaginatorIntl } from '@angular/material';
 // Services
 import { InventarioService } from 'src/app/services/inventario.service';
 
@@ -36,10 +36,12 @@ export class KitComponent implements OnInit {
   filterKit = '';
   botonIngresar = 'ingresar';
 
-  kits: any[] = [];
+  //kits: any[] = [];
   descuentos: any[] = [];
 
   filteredOptions: Observable<string[]>;
+  @ViewChild('paginator', { static: false }) paginator: MatPaginator;
+  kits = new MatTableDataSource<Element[]>();
 
   consultarKits() {
     this.inventarioService.consultarKits(
@@ -47,8 +49,9 @@ export class KitComponent implements OnInit {
     )
       .then(
         ok => {
-          this.kits = [];
-          this.kits = ok['respuesta'];
+          this.kits.data = [];
+          this.kits.data = ok['respuesta'];
+          this.kits.paginator = this.paginator;
         }
       )
       .catch(
@@ -163,7 +166,7 @@ export class KitComponent implements OnInit {
       )
   }
 
-  asignarDescuentoKit() {    
+  asignarDescuentoKit() {
     this.inventarioService.asignarDescuentoKit(
       this._idKit.value,
       this._idDescuento.value,

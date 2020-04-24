@@ -7,19 +7,19 @@ import { stringify } from 'querystring';
 export class FilterPipe implements PipeTransform {
   nombres:string;
 
-  transform(arreglo: any[],texto: string, columna:string, columna1:string,columna2:string,columna3:string,columna4:string): any {    
+  transform(arreglo: any[],texto: string, columna:string, columna1:string,columna2:string,columna3:string,columna4:string): any {
     if (texto=='') {
       return arreglo;
     }
     texto=texto.toUpperCase();
     if(columna1==null)
     {
-      return arreglo.filter(item=>{
+      return arreglo['data'].filter(item=>{
         return item[columna].toUpperCase().includes(texto);
       });
     }else
     {
-      return arreglo.filter(item=>{
+      return arreglo['data'].filter(item=>{
         this.nombres = item[columna].toUpperCase() +' '+ item[columna1].toUpperCase();
         texto = texto.replace(/ /g, "");
         return ((item[columna].toUpperCase()+item[columna1]
@@ -32,7 +32,7 @@ export class FilterPipe implements PipeTransform {
         //return item[columna].includes(texto);
       });
     }
-   
+
   }
 
 }
