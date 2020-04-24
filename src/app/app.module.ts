@@ -52,6 +52,7 @@ import { ModalDetalleProductoComponent } from './components/modal-detalle-produc
 import { CuentaComponent } from './components/cuenta/cuenta.component';
 import { ModalAsignacionConfiguracionProductoComponent } from './components/modal-asignacion-configuracion-producto/modal-asignacion-configuracion-producto.component';
 import { StockComponent } from './components/stock/stock.component';
+import { CreditosAbonosComponent } from './components/creditos-abonos/creditos-abonos.component';
 
 @NgModule({
   declarations: [
@@ -84,6 +85,7 @@ import { StockComponent } from './components/stock/stock.component';
     CuentaComponent,
     ModalAsignacionConfiguracionProductoComponent,
     StockComponent,
+    CreditosAbonosComponent,
   ],
   imports: [
     BrowserModule,

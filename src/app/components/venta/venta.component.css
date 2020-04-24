@@ -3,6 +3,16 @@
   overflow: auto;
 }
 
+.tablaFacturasNoFinalidas {
+  height: 20rem;
+  overflow: auto;
+}
+
+.tablaFacturasNoFinalidas td {
+background-color: #343a40 !important;
+color: white !important;
+}
+
 table {
   width: 100%;
 }
