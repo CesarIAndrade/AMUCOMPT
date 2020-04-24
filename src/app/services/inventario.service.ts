@@ -8,7 +8,7 @@ export class InventarioService {
 
   constructor(private http: HttpClient) { }
 
-  private apiUrl = "http://25.70.109.48:90/api/";
+  private apiUrl = "http://localhost:49962/api/";
 
   consultarTipoProductos(_token: string) {
     const body = new HttpParams()

@@ -15,6 +15,7 @@ import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatDialogModule } from "@angular/material/dialog";
 import { MatTabsModule } from "@angular/material/tabs";
 import { MatPaginatorModule } from '@angular/material/paginator';
+import {MatGridListModule} from '@angular/material'
 // Components
 import { UsuarioComponent } from './components/usuario/usuario.component';
 import { LoginComponent } from './components/login/login.component';
@@ -117,7 +118,8 @@ import { CreditosAbonosComponent } from './components/creditos-abonos/creditos-a
     MatRadioModule,
     MatExpansionModule,
     MatCardModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    MatGridListModule
   ],
   entryComponents: [
     ModalDetallePersonaComponent,

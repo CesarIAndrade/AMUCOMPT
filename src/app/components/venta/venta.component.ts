@@ -71,7 +71,8 @@ export class VentaComponent implements OnInit {
   seleccionarPersona() {
     let dialogRef = this.modalAsignacionUsuarioPersona.open(ModalAsignacionUsuarioPersonaComponent, {
       width: '700px',
-      height: 'auto'
+      height: 'auto',
+      data: 'todos'
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result != null) {
@@ -88,10 +89,8 @@ export class VentaComponent implements OnInit {
       height: 'auto',
     });
     dialogRef.afterClosed().subscribe(result => {
-      console.log(result.Disponible);
-      console.log(result);
-
       //this._idAsignarProductoLote
+
       if (result != null) {
         if (result.Kit != null) {
           this.seccionKit = false;

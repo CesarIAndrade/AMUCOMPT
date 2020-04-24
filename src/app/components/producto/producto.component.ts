@@ -492,7 +492,7 @@ export class ProductoComponent implements OnInit {
     if (value == '') {
       this.productos.data = this.ArrayProductos;
     } else {
-      this.productos.data = this.ArrayProductos.filter(option => option['Producto']['Nombre'].trim().includes(filterValue.trim()));
+      this.productos.data = this.ArrayProductos.filter(option => (option['Producto']['Nombre']+option['Presentacion']['Descripcion']+option['Medida']['Descripcion']).trim().toUpperCase().includes(filterValue.trim().toUpperCase()));
     }
   }
 

@@ -310,18 +310,21 @@ export class CompraComponent implements OnInit {
     }
     return datosKit;
   }
-
+  detalleCompraLista:any[]=[];
   consultarDetalleFactura() {
     setTimeout(() => {
       // this.facturasNoFinalizadas.paginator = null;
       // this.paginator1 = null;
     });
+    this.detalleCompraLista = [];
+    this.detalleCompra.data = [];
     this.inventarioService.consultarDetalleFactura(
       this._idCabecera.value,
       localStorage.getItem('miCuenta.getToken')
     )
       .then(
         ok => {
+          // console.log(ok['respuesta'])
           ok['respuesta'].map(
             item => {
               var perteneceKit: any;
@@ -329,7 +332,6 @@ export class CompraComponent implements OnInit {
               var detalle: any;
               var datosKit: any;
               var estructuraFinal: any;
-              this.detalleCompra.data = [];
               item.DetalleFactura.map(
                 producto => {
                   perteneceLote = this.estructurarSiPerteneceALote(producto);
@@ -381,11 +383,12 @@ export class CompraComponent implements OnInit {
                     }
                   }
                   estructuraFinal = Object.assign(detalle, datosKit);
-                  this.detalleCompra.data.push(estructuraFinal);
+                  this.detalleCompraLista.push(estructuraFinal)
                 }
               )
             }
           )
+          this.detalleCompra.data = this.detalleCompraLista
           //this.detalleCompra.paginator = this.paginator;
         }
       )
@@ -425,7 +428,7 @@ export class CompraComponent implements OnInit {
             // this.paginator1=null;
           });
           this.facturasNoFinalizadas.data = ok['respuesta'];
-          this.facturasNoFinalizadas.paginator = this.paginator1;
+          // this.facturasNoFinalizadas.paginator = this.paginator1;
         }
       )
       .catch(
