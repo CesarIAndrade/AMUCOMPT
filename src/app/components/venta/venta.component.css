@@ -1,3 +1,14 @@
+mat-grid-tile {
+   background: lightblue;
+}
+.detalleResultado {
+  border: solid;
+  border-color: #343a40;
+  border-width: 1px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 .tablaDetalleCompra {
   height: auto;
   overflow: auto;

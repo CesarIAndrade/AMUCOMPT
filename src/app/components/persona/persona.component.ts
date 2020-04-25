@@ -109,13 +109,14 @@ export class PersonaComponent implements OnInit {
   }
 
   consultarPersonas() {
+    this.personas.data = [];
     this.personaService.consultarPersonas(localStorage.getItem('miCuenta.getToken'))
       .then(
         ok => {
           this.personas.data = ok['respuesta'];
           this.personas.paginator = this.paginator;
         },
-      )
+    )
       .catch(
         error => {
           console.log(error);
@@ -129,7 +130,7 @@ export class PersonaComponent implements OnInit {
         ok => {
           this.tipoDocumentos = ok['respuesta'];
         },
-      )
+    )
       .catch(
         error => {
           console.log(error);
@@ -143,7 +144,7 @@ export class PersonaComponent implements OnInit {
         ok => {
           this.tipoTelefonos = ok['respuesta'];
         },
-      )
+    )
       .catch(
         error => {
           console.log(error);
@@ -151,10 +152,9 @@ export class PersonaComponent implements OnInit {
       )
   }
 
-  consultarCantonesDeUnaProvincia(
-    idProvincia: string,
-    value?: string
-  ) {
+  consultarCantonesDeUnaProvincia(idProvincia: string, value?: string) {
+    this.cantones = [];
+    this.parroquias = [];
     this.personaService.consultarCantonesDeUnaProvincia(
       idProvincia,
       localStorage.getItem('miCuenta.getToken'))
@@ -167,7 +167,7 @@ export class PersonaComponent implements OnInit {
             this.parroquias = null;
           }
         },
-      )
+    )
       .catch(
         error => {
           console.log(error);
@@ -175,10 +175,8 @@ export class PersonaComponent implements OnInit {
       )
   }
 
-  consultarParroquiasDeUnCanton(
-    idCanton: string,
-    value?: string,
-  ) {
+  consultarParroquiasDeUnCanton(idCanton: string, value?: string) {
+    this.parroquias = [];
     this.personaService.consultarParroquiasDeUnCanton(
       idCanton, localStorage.getItem('miCuenta.getToken'))
       .then(
@@ -188,7 +186,7 @@ export class PersonaComponent implements OnInit {
             this._parroquia.setValue('0');
           }
         },
-      )
+    )
       .catch(
         error => {
           console.log(error);
@@ -251,7 +249,6 @@ export class PersonaComponent implements OnInit {
   }
 
   crearPersona() {
-    console.log(this.myForm.value);
     var validarNombress = {
       primerCampo: '',
       segundoCampo: '',
@@ -265,6 +262,7 @@ export class PersonaComponent implements OnInit {
     var dosNombres = this.validarNombres(validarNombress);
     var dosApellidos = this.validarApellidos(validarApellidos);
     if (dosNombres.valido == true && dosApellidos.valido == true) {
+      var ejecutado = false;
       this.personaService.crearPersona(
         this._numeroDocumento.value,
         this._tipoDocumento.value,
@@ -286,15 +284,20 @@ export class PersonaComponent implements OnInit {
               });
             } else {
               this._idPersona.setValue(ok['respuesta']);
-              this.crearTelefono(this._idPersona.value);
+              ejecutado = true;
             }
           },
-        )
+      )
         .catch(
           error => {
             console.log(error);
           }
         )
+        .finally(() => {
+          if (ejecutado == true) {
+            this.crearTelefono(this._idPersona.value);
+          }
+        });
     }
   }
 
@@ -332,7 +335,7 @@ export class PersonaComponent implements OnInit {
                 this._tipoTelefono2.setValue('');
               }
             },
-          )
+        )
           .catch(
             error => {
               console.log(error);
@@ -343,30 +346,39 @@ export class PersonaComponent implements OnInit {
   }
 
   crearCorreo(idPersona: string) {
-    this.personaService.crearCorreo(
-      idPersona,
-      this._correo.value,
-      localStorage.getItem('miCuenta.postToken'))
-      .then(
-        ok => {
-          if (ok['respuesta']) {
-            this.crearDireccion(this._idPersona.value);
-          } else {
-            sweetAlert("Ha ocurrido un error!", {
-              icon: "error",
-            });
-            this._correo.setValue('');
-          }
-        },
-      )
-      .catch(
+    if(this._correo !=null || this._correo.value.trim != ""){
+      var ejecutado=false;
+      this.personaService.crearCorreo(
+        idPersona,
+        this._correo.value,
+        localStorage.getItem('miCuenta.postToken'))
+        .then(
+          ok => {
+            if (ok['respuesta']) {
+              ejecutado = true;
+            } else {
+              sweetAlert("Ha ocurrido un error!", {
+                icon: "error",
+              });
+              this._correo.setValue('');
+            }
+          },
+      ).catch(
         error => {
           console.log(error);
         }
-      )
+      ).finally(() => {
+        if (ejecutado == true) {
+          this.crearDireccion(this._idPersona.value);
+        }
+      });
+    }else{
+      this.crearDireccion(this._idPersona.value);
+    }
   }
 
   crearDireccion(idPersona: string) {
+    var ejecutado = false;
     this.personaService.crearDireccion(
       idPersona,
       this._parroquia.value,
@@ -374,11 +386,7 @@ export class PersonaComponent implements OnInit {
       .then(
         ok => {
           if (ok['respuesta']) {
-            this.myForm.reset();
-            this.consultarPersonas();
-            sweetAlert("Se ingresó correctamente!", {
-              icon: "success",
-            });
+            ejecutado = true;
           } else {
             sweetAlert("Ha ocurrido un error!", {
               icon: "error",
@@ -388,12 +396,20 @@ export class PersonaComponent implements OnInit {
             this._parroquia.setValue('0');
           }
         },
-      )
+    )
       .catch(
         error => {
           console.log(error);
         }
-      )
+      ).finally(() => {
+        if (ejecutado == true) {
+          this.myForm.reset();
+          this.consultarPersonas();
+          sweetAlert("Se ingresó correctamente!", {
+            icon: "success",
+          });
+        }
+      });
   }
 
   eliminarPersona(idPersona: string) {
@@ -406,22 +422,27 @@ export class PersonaComponent implements OnInit {
     })
       .then((willDelete) => {
         if (willDelete) {
+          var ejecutado = false;
           this.personaService.eliminarPersona(
             idPersona,
             localStorage.getItem('miCuenta.deleteToken'))
             .then(
               ok => {
+                ejecutado = true;
                 sweetalert("Se ha eliminado correctamente!", {
                   icon: "success",
                 });
-                this.consultarPersonas();
               },
-            )
+          )
             .catch(
               error => {
                 console.log(error);
               }
-            )
+            ).finally(() => {
+              if (ejecutado == true) {
+                this.consultarPersonas();
+              }
+            });
         }
       });
   }
@@ -506,7 +527,7 @@ export class PersonaComponent implements OnInit {
               this.actualizarTelefono();
             }
           },
-        )
+      )
         .catch(
           error => {
             console.log(error);
@@ -548,7 +569,7 @@ export class PersonaComponent implements OnInit {
                 });
               }
             },
-          )
+        )
           .catch(
             error => {
               console.log(error);
@@ -558,10 +579,7 @@ export class PersonaComponent implements OnInit {
     )
   }
 
-  actualizarCorreo(
-    idPersona: string,
-    idCorreo: string
-  ) {
+  actualizarCorreo(idPersona: string, idCorreo: string) {
     this.personaService.actualizarCorreo(
       idPersona,
       idCorreo,
@@ -580,7 +598,7 @@ export class PersonaComponent implements OnInit {
             });
           }
         },
-      )
+    )
       .catch(
         error => {
           console.log(error);
@@ -588,10 +606,7 @@ export class PersonaComponent implements OnInit {
       )
   }
 
-  actualizarDireccion(
-    idPersona: string,
-    idAsignacionPC: string
-  ) {
+  actualizarDireccion(idPersona: string, idAsignacionPC: string) {
     this.personaService.actualizarDireccion(
       idPersona,
       idAsignacionPC,
@@ -616,7 +631,7 @@ export class PersonaComponent implements OnInit {
             });
           }
         },
-      )
+    )
       .catch(
         error => {
           console.log(error);

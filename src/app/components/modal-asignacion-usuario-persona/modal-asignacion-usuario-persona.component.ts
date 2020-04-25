@@ -1,6 +1,7 @@
 import { Component, OnInit, Inject,ViewChild } from '@angular/core';
 import { PersonaService } from 'src/app/services/persona.service';
 import { MatPaginator, MatTableDataSource, MatPaginatorIntl } from '@angular/material';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 @Component({
   selector: 'app-modal-asignacion-usuario-persona',
   templateUrl: './modal-asignacion-usuario-persona.component.html',
@@ -10,6 +11,7 @@ export class ModalAsignacionUsuarioPersonaComponent implements OnInit {
 
   constructor(
     private personaService: PersonaService,
+    @Inject(MAT_DIALOG_DATA) public data: any
   ) { }
   @ViewChild('paginator', { static: false }) paginator: MatPaginator;
   personas = new MatTableDataSource<Element[]>();
@@ -44,9 +46,26 @@ export class ModalAsignacionUsuarioPersonaComponent implements OnInit {
         }
       )
   }
-
+  consultarPersonasTodas() {
+    this.personaService.consultarPersonas(localStorage.getItem('miCuenta.getToken'))
+      .then(
+        ok => {
+          this.personas.data = ok['respuesta'];
+          this.personas.paginator = this.paginator;
+        },
+      )
+      .catch(
+        error => {
+          console.log(error);
+        }
+      )
+  }
   ngOnInit() {
-    this.consultarPersonas();
+    if(this.data == 'todos'){
+      this.consultarPersonasTodas();
+    }else{
+      this.consultarPersonas();
+    }
   }
 
   tablaPersonas = ['nombres', 'apellidos', 'documento', 'numeroDocumento', 'acciones'];

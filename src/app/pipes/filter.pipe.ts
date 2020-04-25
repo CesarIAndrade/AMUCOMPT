@@ -11,20 +11,20 @@ export class FilterPipe implements PipeTransform {
     if (texto=='') {
       return arreglo;
     }
-    texto=texto.toUpperCase();
+    texto=texto.trim().toUpperCase();
     if(columna1==null)
     {
       return arreglo['data'].filter(item=>{
-        return item[columna].toUpperCase().includes(texto);
+        return item[columna].trim().toUpperCase().includes(texto);
       });
     }else
     {
       return arreglo['data'].filter(item=>{
-        this.nombres = item[columna].toUpperCase() +' '+ item[columna1].toUpperCase();
+        this.nombres = item[columna].trim().toUpperCase() +' '+ item[columna1].trim().toUpperCase();
         texto = texto.replace(/ /g, "");
         return ((item[columna].toUpperCase()+item[columna1]
                 +item[columna2].toUpperCase()+item[columna3]
-                .toUpperCase()).toUpperCase().indexOf(texto)>-1)||item[columna4].toUpperCase().includes(texto);
+                .toUpperCase()).trim().toUpperCase().indexOf(texto)>-1)||item[columna4].trim().toUpperCase().includes(texto);
         // item[columna1].toLowerCase().includes(texto)||
         // item[columna2].toLowerCase().includes(texto)||
         // item[columna3].toLowerCase().includes(texto)||
