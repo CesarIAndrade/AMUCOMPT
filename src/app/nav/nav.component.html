@@ -1,11 +1,13 @@
 <mat-sidenav-container class="sidenav-container bg-white">
-  <mat-sidenav #drawer class="sidenav bg-dark" fixedTopGap [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
+  <mat-sidenav #drawer class="sidenav bg-light" fixedTopGap [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
     [mode]="(isHandset$ | async) ? 'over' : 'side'" [opened]="(isHandset$ | async) === false">
-    <mat-toolbar class="text-white bg-primary"><i class="fa fa-home"> MENU</i>
+    <mat-toolbar class="text-white" style="background-color: #f8f9fa;">
+      <img src="./assets/img/amucomt.png" width="45" height="60" style="margin-left: 1rem;" routerLink="/">
+      <h5 class="amucomt">AMUCOMT</h5>
     </mat-toolbar>
     <mat-nav-list>
-      <div style="padding: 2px;" *ngFor="let route of nav_items">
-        <a mat-button [routerLink]="route.url" routerLinkActive="active" style="color: white;">
+      <div class="test" *ngFor="let route of nav_items">
+        <a mat-button [routerLink]="route.url" routerLinkActive="active">
           <mat-icon mat-list-icon>{{route.icon}}</mat-icon>
           {{route.name}}
         </a> 
@@ -17,10 +19,9 @@
       <a (click)="drawer.toggle()" *ngIf="isHandset$ | async">
         <i class="fa fa-bars mr-3" style="background-color: white;"></i>
       </a>
-      <div class="row">
-        <img src="./assets/img/amucomt.png" width="45" height="60" style="margin-left: 1rem;" routerLink="/inicio">
-        <h5 class="amucomt">AMUCOMT</h5>
-      </div>
+      <span style="color: #f8f9fa;">
+        {{route}}
+      </span>
     </mat-toolbar>
     <router-outlet></router-outlet>
   </mat-sidenav-content>

@@ -1,8 +1,8 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, OnInit } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Observable } from 'rxjs';
 import { map, filter, withLatestFrom } from 'rxjs/operators';
-import { Router, NavigationEnd } from '@angular/router';
+import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
 import { MatSidenav } from '@angular/material';
 
 @Component({
@@ -10,7 +10,7 @@ import { MatSidenav } from '@angular/material';
   templateUrl: './nav.component.html',
   styleUrls: ['./nav.component.css']
 })
-export class NavComponent {
+export class NavComponent implements OnInit {
   @ViewChild('drawer', { static: true }) drawer: MatSidenav;
   @ViewChild('sidenav', {static:false}) sidenav: MatSidenav;
 
@@ -20,11 +20,18 @@ export class NavComponent {
     );
 
   constructor(private breakpointObserver: BreakpointObserver,
-    private router: Router) {
+    private router: Router, private activated_route: ActivatedRoute) {
     router.events.pipe(
       withLatestFrom(this.isHandset$),
       filter(([a, b]) => b && a instanceof NavigationEnd)
-    ).subscribe(_ => this.drawer.close());
+    ).subscribe(_ => {
+      this.drawer.close()
+      var temp_route: any = this.router.url.split('/')
+      temp_route = temp_route[1];
+      this.route = temp_route.toUpperCase();
+    });
+
+
   }
 
   nav_items = [
@@ -90,5 +97,18 @@ export class NavComponent {
     }
 
   ]
+
+  route = "Inicio"
+
+  ngOnInit() {
+    var temp_route: any = this.router.url.split('/')
+    temp_route = temp_route[1];
+    this.route = temp_route.toUpperCase();
+    this.router.events.subscribe(_ => {
+      var temp_route: any = this.router.url.split('/')
+      temp_route = temp_route[1];
+      this.route = temp_route.toUpperCase();
+    });
+  }
 
 }
