@@ -23,11 +23,12 @@
 }
 
 a {
-  padding: 10px 100% 10px 10%;
-  /* padding: 10px; */
+  /* margin: 3rem; */
+  /* width: 100%; */
+  margin: 10px 30% 10px 5%;
 }
 
 a.active {
-  background-color: #f61cc4;
-  color: #f8f9fa;
+  /* background-color: #f61cc4; */
+  color: #f61cc4;
 }

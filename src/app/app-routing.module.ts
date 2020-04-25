@@ -17,6 +17,9 @@ import { PanelAdministracionComponent } from './components/panel-administracion/
 import { ConfiguracionProductoComponent } from './components/configuracion-producto/configuracion-producto.component';
 import { CuentaComponent } from './components/cuenta/cuenta.component';
 import { StockComponent } from './components/stock/stock.component';
+import { CompraRubrosComponent } from './components/compra-rubros/compra-rubros.component';
+import { VentaRubrosComponent } from './components/venta-rubros/venta-rubros.component';
+import { CreditosAbonosComponent } from './components/creditos-abonos/creditos-abonos.component';
 
 const routes: Routes = [
   // { path: '', pathMatch: 'full', redirectTo: 'login' },
@@ -47,11 +50,23 @@ const routes: Routes = [
         // canActivate: [ValidarUsuarioGuard]
       },
       {
+        path: 'abonos', component: CreditosAbonosComponent,
+        // canActivate: [ValidarUsuarioGuard]
+      },
+      {
         path: 'compras', component: CompraComponent,
         // canActivate: [ValidarUsuarioGuard]
       },
       {
+        path: 'compras-rubros', component: CompraRubrosComponent,
+        // canActivate: [ValidarUsuarioGuard]
+      },
+      {
         path: 'ventas', component: VentaComponent,
+        // canActivate: [ValidarUsuarioGuard]
+      },
+      {
+        path: 'ventas-rubros', component: VentaRubrosComponent,
         // canActivate: [ValidarUsuarioGuard]
       },
       {

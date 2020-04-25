@@ -54,6 +54,8 @@ import { CuentaComponent } from './components/cuenta/cuenta.component';
 import { ModalAsignacionConfiguracionProductoComponent } from './components/modal-asignacion-configuracion-producto/modal-asignacion-configuracion-producto.component';
 import { StockComponent } from './components/stock/stock.component';
 import { CreditosAbonosComponent } from './components/creditos-abonos/creditos-abonos.component';
+import { CompraRubrosComponent } from './components/compra-rubros/compra-rubros.component';
+import { VentaRubrosComponent } from './components/venta-rubros/venta-rubros.component';
 
 @NgModule({
   declarations: [
@@ -87,6 +89,8 @@ import { CreditosAbonosComponent } from './components/creditos-abonos/creditos-a
     ModalAsignacionConfiguracionProductoComponent,
     StockComponent,
     CreditosAbonosComponent,
+    CompraRubrosComponent,
+    VentaRubrosComponent,
   ],
   imports: [
     BrowserModule,

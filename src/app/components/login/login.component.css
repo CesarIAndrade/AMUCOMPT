@@ -1,28 +1,54 @@
 body {
     margin: 0;
     padding: 0;
+}
+
+body::before {
+    content: '';
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
     background-image: url('../../../assets/img/fondo.jpg');
     background-position: center center;
     background-repeat: no-repeat;
     background-attachment: fixed;
+    -webkit-background-size: cover;
     background-size: cover;
+    -webkit-filter: blur(7px);
+    -moz-filter: blur(7px);
+    -o-filter: blur(7px);
+    -ms-filter: blur(7px);
+    filter: blur(7px);
 }
 
-.card {
-    padding: 3rem 2rem;
-    background-color: #343a40;  
+.login_form {
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);  
+    padding: 80px 40px;
+    box-sizing: border-box;
+    background: rgba(0,0,0,.5);  
 }
 
-::ng-deep .mat-select-value{    
-    color: white!important;  
+.credenciales {
+    width: 400px;
+    height: 400px;
 }
 
-::ng-deep .mat-focused .mat-form-field-label {
-    color: white !important;
+.roles {
+    width: 400px;
+    height: 350px;
+}
+
+.login_input {
+    width: 100%;
+    background: transparent;
+    color: #f8f9fa;
+}
+
+.login_input mat-label {
+    color: #f8f9fa;
 }
   
 ::ng-deep.mat-form-field-underline {
@@ -36,6 +62,16 @@ body {
 }
 
 .amucomt {
-    color: #fff;
     text-align: center;
+    color: #f8f9fa;
+    margin-top: -20px;
+    margin-bottom: 20px;
+}
+
+::ng-deep .mat-select-value{    
+    color: white!important;  
+}
+
+::ng-deep .mat-focused .mat-form-field-label {
+    color: white !important;
 }

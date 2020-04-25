@@ -61,6 +61,11 @@ export class NavComponent implements OnInit {
       url: "/stock"
     },
     {
+      name: "Abonos",
+      icon: "attach_money",
+      url: "/abonos"
+    },
+    {
       name: "Compra Inventario",
       icon: "shop",
       url: "/compras"
@@ -68,7 +73,7 @@ export class NavComponent implements OnInit {
     {
       name: "Compra Rubros",
       icon: "shopping_cart",
-      url: "/compras"
+      url: "/compras-rubros"
     },
     {
       name: "Venta Inventario",
@@ -78,7 +83,7 @@ export class NavComponent implements OnInit {
     {
       name: "Venta Rubros",
       icon: "shopping_cart",
-      url: "/ventas"
+      url: "/ventas-rubros"
     },
     {
       name: "Localidades",
@@ -89,15 +94,9 @@ export class NavComponent implements OnInit {
       name: "Cuenta",
       icon: "face",
       url: "/cuenta"
-    },
-    {
-      name: "Cerrar Sesión",
-      icon: "input",
-      url: "/login"
     }
-
   ]
-
+ 
   route = "Inicio"
 
   ngOnInit() {
