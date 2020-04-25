@@ -4,83 +4,13 @@
     <mat-toolbar class="text-white bg-primary"><i class="fa fa-home"> MENU</i>
     </mat-toolbar>
     <mat-nav-list>
-      <mat-list-item class="matItemHover">
-        <a mat-list-item routerLink="/inicio/usuarios">
-          <mat-icon mat-list-icon>person</mat-icon>
-          Usuarios
-        </a>
-      </mat-list-item>
-      <mat-list-item class="matItemHover">
-        <a mat-list-item routerLink="/inicio/personas">
-          <mat-icon mat-list-icon>contacts</mat-icon>
-          Persona
-        </a>
-      </mat-list-item>
-      <mat-list-item class="matItemHover">
-        <a mat-list-item routerLink="/inicio/configuracion-productos">
-          <mat-icon mat-list-icon>settings</mat-icon>
-          Configuración Productos
-        </a>
-      </mat-list-item>
-      <mat-list-item class="matItemHover">
-        <a mat-list-item routerLink="/inicio/inventarios">
-          <mat-icon mat-list-icon>storage</mat-icon>
-          Inventario
-        </a>
-      </mat-list-item>
-      <mat-list-item class="matItemHover">
-        <a mat-list-item routerLink="/inicio/stock">
-          <mat-icon mat-list-icon>list_alt</mat-icon>
-          Stock
-        </a>
-      </mat-list-item>
-      <mat-list-item class="matItemHover">
-        <a mat-list-item routerLink="/inicio/ventas">
-          <mat-icon mat-list-icon>attach_money</mat-icon>
-          Ventas
-        </a>
-      </mat-list-item>
-      <mat-list-item class="matItemHover">
-        <a mat-list-item routerLink="/inicio/localizaciones">
-          <mat-icon mat-list-icon>where_to_vote</mat-icon>
-          Localizaciones
-        </a>
-      </mat-list-item>
-      <mat-list-item class="matItemHover">
-        <a mat-list-item routerLink="/inicio/cuenta">
-          <mat-icon mat-list-icon>face</mat-icon>
-          Cuenta
-        </a>
-      </mat-list-item>
-      <mat-list-item class="matItemHover" (click)="showSubmenu = !showSubmenu" class="parent">
-        <span class="full-width" *ngIf="isExpanded || isShowing">Compras</span>
-        <mat-icon mat-list-icon>local_shipping</mat-icon>
-        <mat-icon class="menu-button" [ngClass]="{'rotated' : showSubmenu}" *ngIf="isExpanded || isShowing">expand_more
-        </mat-icon>
-      </mat-list-item>
-      <div class="submenu" [ngClass]="{'expanded' : showSubmenu}" *ngIf="isShowing || isExpanded">
-        <mat-list-item class="matItemHover">
-          <a mat-list-item routerLink="/inicio/compras">
-            <mat-icon mat-list-icon>shop</mat-icon>
-            Compras de Inventario
-          </a>
-        </mat-list-item>
-        <mat-list-item class="matItemHover">
-          <a mat-list-item routerLink="/inicio/compras">
-            <mat-icon mat-list-icon>shopping_cart</mat-icon>
-            Compras de Rubros
-          </a>
-        </mat-list-item>
+      <div style="padding: 2px;" *ngFor="let route of nav_items">
+        <a mat-button [routerLink]="route.url" routerLinkActive="active" style="color: white;">
+          <mat-icon mat-list-icon>{{route.icon}}</mat-icon>
+          {{route.name}}
+        </a> 
       </div>
-
-      <mat-list-item class="matItemHover">
-        <a mat-list-item>
-          <i style="margin-right: 10px;" class="fa fa-sign-out" aria-hidden="true"></i>
-          Cerrar Sesion
-        </a>
-      </mat-list-item>
     </mat-nav-list>
-
   </mat-sidenav>
   <mat-sidenav-content>
     <mat-toolbar class="bg-dark">

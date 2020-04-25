@@ -3,7 +3,7 @@
 }
 
 .sidenav {
-  width: 250px;
+  width: 275px;
 }
 
 .sidenav .mat-toolbar {
@@ -22,40 +22,12 @@
   color: #fff;
 }
 
-.matItemHover:hover{
-  background-color: #adb5bd;
-  color: #000;
-}
-
-.matItemHover a {
-  color: white;
-}
-
-span, mat-icon, a {
-  color: white;
-}
-
-.full-width {
+a {
   width: 100%;
+  padding: 10px;
 }
 
-.menu-button {
-  transition: 300ms ease-in-out;
-  transform: rotate(0deg);
-}
-
-.menu-button.rotated {
-  transform: rotate(180deg);
-}
-
-.submenu {
-  overflow-y: hidden;
-  transition: transform 300ms ease;
-  transform: scaleY(0);
-  transform-origin: top;
-  padding-left: 30px;
-}
-
-.submenu.expanded {
-  transform: scaleY(1);
+a.active {
+  background-color: #adb5bd;
+  color: rgb(129, 129, 129);
 }

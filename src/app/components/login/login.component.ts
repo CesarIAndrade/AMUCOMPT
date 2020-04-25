@@ -117,6 +117,11 @@ export class LoginComponent implements OnInit {
     return this.myForm.get('_tipoUsuario');
   }
 
+  full_screen = "max-width: 25%;";
+  small_screen = "max-width: auto;";
+
+  is_true = false;
+
   ngOnInit() {
   }
 

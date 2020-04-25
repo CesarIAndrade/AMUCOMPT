@@ -39,7 +39,7 @@
                             <ng-container *matCellDef="let element">
                                 <ng-container *ngIf="element.PresentacionUtilizado == '0'">
                                     <td mat-cell>
-                                        <button mat-icon class="btn-outline-danger"
+                                        <button mat-button class="btn-outline-danger"
                                             (click)="eliminarPresentacion(element.IdPresentacion)">
                                             <mat-icon>remove</mat-icon>
                                         </button>

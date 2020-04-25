@@ -19,10 +19,10 @@ import { CuentaComponent } from './components/cuenta/cuenta.component';
 import { StockComponent } from './components/stock/stock.component';
 
 const routes: Routes = [
-  { path: '', pathMatch: 'full', redirectTo: 'login' },
+  // { path: '', pathMatch: 'full', redirectTo: 'login' },
   { path: 'login', component: LoginComponent },
   {
-    path: 'inicio',
+    path: '',
     component: NavComponent,
     // canActivate: [ValidarUsuarioGuard],
     children: [

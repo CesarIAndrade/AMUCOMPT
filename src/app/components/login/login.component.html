@@ -1,6 +1,7 @@
 <body>
+
     <div [hidden]="ingresarCredenciales">
-        <div class="card">
+        <div class="card" style="max-width: 35%;" >
             <div class="card-body">
                 <h3 class="amucomt mb-3">AMUCOMT</h3>
                 <form [formGroup]="myForm" (ngSubmit)="login()" novalidate>
@@ -32,8 +33,10 @@
             </div>
         </div>
     </div>
+
+
     <div [hidden]="seleccionarTipoUsuario">
-        <div class="card">
+        <div class="card" style="max-width: 25%;">
             <div class="card-body">
                 <h3 class="amucomt mb-4">AMUCOMT</h3>
                 <form [formGroup]="myForm" (ngSubmit)="iniciarSesionSegunTipoUsuario()" novalidate>
