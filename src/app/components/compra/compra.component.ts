@@ -459,6 +459,8 @@ export class CompraComponent implements OnInit {
     )
       .then(
         ok => {
+          console.log(ok['respuesta']);
+          
           if (ok['respuesta'] == 'false') {
             sweetAlert("Ha ocurrido un error!", {
               icon: "error",

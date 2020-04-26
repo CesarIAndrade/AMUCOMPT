@@ -13,21 +13,6 @@
   color: white !important;
 }
 
-table {
-  width: 100%;
-}
-
-table th {
-  background-color: #343a40;
-  color: white;
-  text-align: center;
-  width: 8rem;
-}
-
-table td {
-  text-align: center;
-}
-
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   -webkit-appearance: none;

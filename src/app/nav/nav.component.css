@@ -19,16 +19,25 @@
 
 .amucomt{
   margin-left: 10px;
-  color: black;
+  color: #343a40;
 }
 
 a {
-  /* margin: 3rem; */
-  /* width: 100%; */
-  margin: 10px 30% 10px 5%;
+  margin: 10px 30% 10px 0%;
+  text-decoration: none;
+}
+
+a:hover{
+  background-color: #f8f9fa;
 }
 
 a.active {
-  /* background-color: #f61cc4; */
+  text-shadow: 1px 1px #343a40;  
   color: #f61cc4;
+  background-color: #f8f9fa;
+}
+
+.drawer_title {
+  text-shadow: 1px 1px #f61cc4;  
+  color: #343a40;
 }

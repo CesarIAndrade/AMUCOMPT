@@ -21,7 +21,7 @@
             </div>
         </div>
         <div class="col-lg-8">
-            <div class="card-body mat-elevation-z5">
+            <div>
                 <h5 style="text-align: center;">Lista Tipo Productos</h5>
                 <mat-form-field class="example-full-width">
                     <input matInput [(ngModel)]="filterTipoProducto" type="text" placeholder="Buscar Tipo Producto">
@@ -29,7 +29,7 @@
                         <mat-icon>search</mat-icon>
                     </button>
                 </mat-form-field>
-                <div class="tablaTipoProductos">
+                <div class="tablaTipoProductos table_all">
                     <table mat-table [dataSource]="tipoProductos|filter:filterTipoProducto:'Descripcion'">
                         <ng-container matColumnDef="descripcion">
                             <th mat-header-cell *matHeaderCellDef> Descripción </th>

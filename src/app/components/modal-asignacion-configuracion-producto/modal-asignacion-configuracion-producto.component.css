@@ -8,12 +8,6 @@
     text-align: center;
 }
 
-table {
-    width: 100%;
-}
-
-table th {
-    background-color: #343a40;
-    color: #fff;
-    text-align: center;
+th { 
+    background-color: #f8f9fa;
 }

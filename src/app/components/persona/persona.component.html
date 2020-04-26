@@ -174,14 +174,14 @@
   <br>
   <div class="row">
     <div class="col-lg-12">
-      <div class="card-body mat-elevation-z5">
+      <div>
         <mat-form-field class="example-full-width">
           <input matInput [(ngModel)]="filterPersona" type="text" placeholder="Buscar Persona">
           <button mat-button matPrefix mat-icon-button>
             <mat-icon>search</mat-icon>
           </button>
         </mat-form-field>
-        <div class="tablaPersonas">
+        <div class="tablaPersonas table_all">
           <table mat-table [dataSource]="personas|filter:filterPersona:'PrimerNombre':'SegundoNombre':'ApellidoPaterno':'ApellidoMaterno':'NumeroDocumento'">
             <ng-container matColumnDef="nombres">
               <th mat-header-cell *matHeaderCellDef> Nombres </th>

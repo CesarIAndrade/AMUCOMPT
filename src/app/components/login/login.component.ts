@@ -72,7 +72,7 @@ export class LoginComponent implements OnInit {
     } else {
       localStorage.setItem('miCuenta.idAsignacionTipoUsuario', this._tipoUsuario.value);
       console.log(localStorage.getItem('miCuenta.idAsignacionTipoUsuario'));
-      this.router.navigateByUrl('inicio');
+      this.router.navigateByUrl('/');
     }
   }
 

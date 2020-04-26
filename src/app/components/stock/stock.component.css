@@ -2,18 +2,3 @@
     height: 22rem;
     overflow: auto;
 }
-
-table {
-    width: 100%;
-}
-
-table th {
-    background-color: #343a40;
-    color: #fff;
-    text-align: center;
-    width: 8rem;
-}
-
-table td {
-    text-align: center;
-}

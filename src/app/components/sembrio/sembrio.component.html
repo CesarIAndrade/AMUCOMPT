@@ -21,7 +21,7 @@
                     </div>
                 </form>
             </div>
-            <div class="card-body">
+            <div>
                 <h5 style="text-align: center;">Lista Comunidades</h5>
                 <mat-form-field class="example-full-width">
                     <input matInput [(ngModel)]="filterComunidad" type="text" placeholder="Buscar Comunidad">
@@ -29,7 +29,7 @@
                         <mat-icon>search</mat-icon>
                     </button>
                 </mat-form-field>
-                <div class="tablaComunidades">
+                <div class="tablaComunidades table_all">
                     <table mat-table [dataSource]="comunidades|filter:filterComunidad:'Descripcion'">
                         <ng-container matColumnDef="comunidad">
                             <th mat-header-cell *matHeaderCellDef> Comunidad </th>
@@ -51,7 +51,7 @@
             </div>
         </div>
         <div class="col-lg-8">
-            <div class="card-body mat-elevation-z5">
+            <div>
                 <h5 style="text-align: center;">Lista Sembríos</h5>
                 <mat-form-field class="example-full-width">
                     <input matInput [(ngModel)]="filterSembrio" type="text" placeholder="Buscar Sembrío">
@@ -59,7 +59,7 @@
                         <mat-icon>search</mat-icon>
                     </button>
                 </mat-form-field>
-                <div class="tablaSembrios">
+                <div class="tablaSembrios table_all">
                     <table mat-table [dataSource]="sembrios|filter:filterSembrio:'Descripcion'">
                         <ng-container matColumnDef="sembrio">
                             <th mat-header-cell *matHeaderCellDef> Sembríos </th>

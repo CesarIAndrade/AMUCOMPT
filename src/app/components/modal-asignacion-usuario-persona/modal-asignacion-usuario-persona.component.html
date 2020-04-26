@@ -1,5 +1,5 @@
 <mat-dialog-content>
-  <div class="card-body">
+  <div>
     <h5 style="text-align: center;">Lista Personas</h5>
     <mat-form-field class="example-full-width">
       <input matInput [(ngModel)]="filterPersona" type="text" placeholder="Buscar Persona">
@@ -7,7 +7,7 @@
         <mat-icon>search</mat-icon>
       </button>
     </mat-form-field>
-    <div class="tablaPersonas">
+    <div class="tablaPersonas table_all">
       <table mat-table [dataSource]="personas | filter:filterPersona:'PrimerNombre':'SegundoNombre':'ApellidoPaterno':'ApellidoMaterno':'NumeroDocumento'">
         <ng-container matColumnDef="nombres">
           <th mat-header-cell *matHeaderCellDef> Nombres </th>

@@ -11018,3 +11018,18 @@
 .example-full-width {
   width: 100%;
 }
+
+.table_all table {
+  width: 100%;
+}
+
+.table_all th {
+  text-align: center;
+  color: #343a40;
+  background-color: #fff ;
+  font-size: 18px;
+}
+
+.table_all td {
+  text-align: center;
+}

@@ -7,11 +7,6 @@
     overflow: auto;
 }
 
-table {
-    width: 100%;
-}
-
-table th {
-    background-color: #343a40;
-    color: #fff;
+th { 
+    background-color: #f8f9fa;
 }

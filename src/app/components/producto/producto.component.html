@@ -102,7 +102,7 @@
             </div>
         </div>
         <div class="col-lg-7">
-            <div class="card-body mat-elevation-z5">
+            <div>
                 <h5 style="text-align: center;">Lista Productos</h5>
                 <mat-form-field class="example-full-width">
                     <input (keyup)="applyFilter($event.target.value, 'nombre')" matInput [(ngModel)]="filterProducto"
@@ -111,7 +111,7 @@
                         <mat-icon>search</mat-icon>
                     </button>
                 </mat-form-field>
-                <div class="tablaProductos">
+                <div class="tablaProductos table_all">
                     <table mat-table [dataSource]="productos">
                         <ng-container matColumnDef="codigo">
                             <th mat-header-cell *matHeaderCellDef> Código </th>

@@ -49,7 +49,7 @@
       </div>
     </div>
     <div class="col-lg-8">
-      <div class="card-body mat-elevation-z5">
+      <div>
         <h5 style="text-align: center;">Lista Usuarios</h5>
         <mat-form-field class="example-full-width">
           <input matInput [(ngModel)]="filterUsuario" type="text" placeholder="Buscar Usuario">
@@ -57,7 +57,7 @@
             <mat-icon>search</mat-icon>
           </button>
         </mat-form-field>
-        <div class="tablaUsuarios">
+        <div class="tablaUsuarios table_all"> 
           <table mat-table [dataSource]="usuarios |
                         filter:filterUsuario:'PrimerNombre':'SegundoNombre':'ApellidoPaterno':'ApellidoMaterno':'UsuarioLogin'">
             <ng-container matColumnDef="usuario">

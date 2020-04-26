@@ -1,5 +1,5 @@
 <mat-dialog-content>
-    <div class="card-body">
+    <div>
         <h5 style="text-align: center;">Lista Productos</h5>
         <mat-form-field class="example-full-width">
             <input matInput [(ngModel)]="filterDetalle" type="text" placeholder="Buscar Persona">
@@ -7,7 +7,7 @@
                 <mat-icon>search</mat-icon>
             </button>
         </mat-form-field>
-        <div [hidden]="areaTablaConfiguracionProducto" class="tablaConfiguracionProducto">
+        <div [hidden]="areaTablaConfiguracionProducto" class="tablaConfiguracionProducto table_all">
             <table mat-table [dataSource]="configuracionProductos">
                 <ng-container matColumnDef="descripcion">
                     <th mat-header-cell *matHeaderCellDef> Producto </th>
@@ -41,7 +41,7 @@
                 <tr mat-row *matRowDef="let row; columns: tablaConfiguracionProducto;"></tr>
             </table>
         </div>
-        <div [hidden]="areaTablaStock" class="tablaStock">
+        <div [hidden]="areaTablaStock" class="tablaStock table_all">
             <table mat-table [dataSource]="listaProductosEnStock">
                 <ng-container matColumnDef="codigo">
                     <th mat-header-cell *matHeaderCellDef> Código </th>

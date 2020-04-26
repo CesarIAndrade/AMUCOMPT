@@ -2,16 +2,6 @@
     overflow: hidden;
 }
 
-table {
-    width: 100%;
-}
-
-td {
-    text-align: center;
-}
-
-th {
-    background-color: #343a40;
-    color: #fff;
-    text-align: center;
+th { 
+    background-color: #f8f9fa;
 }

@@ -21,7 +21,7 @@
                     </div>
                 </form>
             </div>
-            <div class="card-body">
+            <div>
                 <h5 style="text-align: center;">Lista Cantones</h5>
                 <mat-form-field class="example-full-width">
                     <input matInput [(ngModel)]="filterCanton" type="text" placeholder="Buscar Canton">
@@ -29,7 +29,7 @@
                         <mat-icon>search</mat-icon>
                     </button>
                 </mat-form-field>
-                <div class="tablaCantones">
+                <div class="tablaCantones table_all">
                     <table mat-table [dataSource]="cantones|filter:filterCanton:'Descripcion'">
                         <ng-container matColumnDef="canton">
                             <th mat-header-cell *matHeaderCellDef> Cantón </th>
@@ -51,7 +51,7 @@
             </div>
         </div>
         <div class="col-lg-8">
-            <div class="card-body mat-elevation-z5">
+            <div>
                 <h5 style="text-align: center;">Lista Parroquias</h5>
                 <mat-form-field class="example-full-width">
                     <input matInput [(ngModel)]="filterParroquia" type="text" placeholder="Buscar Parroquia">
@@ -59,7 +59,7 @@
                         <mat-icon>search</mat-icon>
                     </button>
                 </mat-form-field>
-                <div class="tablaParroquias">
+                <div class="tablaParroquias table_all">
                     <table mat-table [dataSource]="parroquias|filter:filterParroquia:'Descripcion'">
                         <ng-container matColumnDef="parroquia">
                             <th mat-header-cell *matHeaderCellDef> Parroquia </th>
