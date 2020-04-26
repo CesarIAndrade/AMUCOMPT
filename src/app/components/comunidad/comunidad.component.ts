@@ -7,6 +7,8 @@ import { PersonaService } from 'src/app/services/persona.service';
 
 // SweetAlert
 import sweetalert from 'sweetalert';
+import { MatDialog } from '@angular/material';
+import { ModalLocalidadSuperiorComponent } from '../modal-localidad-superior/modal-localidad-superior.component';
 
 @Component({
   selector: 'app-comunidad',
@@ -20,7 +22,8 @@ export class ComunidadComponent implements OnInit {
 
   constructor(
     private panelAdministracionService: PanelAdministracionService,
-    private personaService: PersonaService
+    private personaService: PersonaService,
+    private modalLocalidadSuperior: MatDialog
   ) {
     this.myForm = new FormGroup({
       _idComunidad: new FormControl(''),
@@ -34,29 +37,13 @@ export class ComunidadComponent implements OnInit {
   filterParroquia = '';
   filterComunidad = '';
 
-  parroquias: any[] = [];
   comunidades: any[] = [];
-
-  consultarParroquias() {
-    this.personaService.consultarParroquias(localStorage.getItem('miCuenta.getToken'))
-      .then(
-        ok => {
-          this.parroquias = ok['respuesta'];
-        }
-      )
-      .catch(
-        error => {
-          console.log(error);
-        }
-      )
-  }
 
   consultarComunidades() {
     this.personaService.consultarComunidades(localStorage.getItem('miCuenta.getToken'))
       .then(
         ok => {
           this.comunidades = ok['respuesta'];
-          this.consultarParroquias();
         }
       )
       .catch(
@@ -199,10 +186,21 @@ export class ComunidadComponent implements OnInit {
       });
   }
 
-  setParroquia(parroquia) {
-    this._idParroquia.setValue(parroquia.IdParroquia);
-    this._parroquia.setValue(parroquia.Descripcion);
-  }
+  abrirModal() {
+    let dialogRef = this.modalLocalidadSuperior.open(ModalLocalidadSuperiorComponent, {
+      width: '400px',
+      height: 'auto',
+      data: {
+        ruta: 'comunidades'
+      }
+    }); 
+    dialogRef.afterClosed().subscribe(result => {
+      if (result != null) {
+        this._idParroquia.setValue(result.idLocalidad);
+        this._parroquia.setValue(result.descripcion);
+      }
+    });
+  } 
 
   get _idComunidad() {
     return this.myForm.get('_idComunidad');
@@ -225,6 +223,5 @@ export class ComunidadComponent implements OnInit {
   }
 
   tablaComunidades = ['comunidad', 'parroquia', 'acciones'];
-  tablaParroquias = ['parroquia', 'acciones'];
 
 }

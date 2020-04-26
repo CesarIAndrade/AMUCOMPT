@@ -7,6 +7,8 @@ import { PanelAdministracionService } from 'src/app/services/panel-administracio
 
 // SweetAlert
 import sweetalert from 'sweetalert';
+import { MatDialog } from '@angular/material';
+import { ModalLocalidadSuperiorComponent } from '../modal-localidad-superior/modal-localidad-superior.component';
 
 @Component({
   selector: 'app-sembrio',
@@ -20,7 +22,8 @@ export class SembrioComponent implements OnInit {
   
   constructor(
     private panelAdministracionService: PanelAdministracionService,
-    private personaService: PersonaService
+    private personaService: PersonaService,
+    private modalLocalidadSuperior: MatDialog
   ) {
     this.myForm = new FormGroup({
       _idSembrio: new FormControl(''),
@@ -35,28 +38,12 @@ export class SembrioComponent implements OnInit {
   filterSembrio = '';
 
   sembrios: any[] = [];
-  comunidades: any[] = [];
-
-  consultarComunidades() {
-    this.personaService.consultarComunidades(localStorage.getItem('miCuenta.getToken'))
-      .then(
-        ok => {
-          this.comunidades = ok['respuesta'];
-        }
-      )
-      .catch(
-        error => {
-          console.log(error);
-        }
-      )
-  }
 
   consultarSembrios() {
     this.personaService.consultarSembrios(localStorage.getItem('miCuenta.getToken'))
       .then(
         ok => {
           this.sembrios = ok['respuesta'];
-          this.consultarComunidades();
         }
       )
       .catch(
@@ -98,10 +85,21 @@ export class SembrioComponent implements OnInit {
       )
   }
 
-  setComunidad(comunidad) {
-    this._idComunidad.setValue(comunidad.IdComunidad);
-    this._comunidad.setValue(comunidad.Descripcion);
-  }
+  abrirModal() {
+    let dialogRef = this.modalLocalidadSuperior.open(ModalLocalidadSuperiorComponent, {
+      width: '400px',
+      height: 'auto',
+      data: {
+        ruta: 'sembrios'
+      }
+    }); 
+    dialogRef.afterClosed().subscribe(result => {
+      if (result != null) {
+        this._idComunidad.setValue(result.idLocalidad);
+        this._comunidad.setValue(result.descripcion);
+      }
+    });
+  } 
 
   mostrarSembrio(sembrio) {
     this._idComunidad.setValue(sembrio.Comunidad.IdComunidad);
@@ -183,6 +181,5 @@ get _idSembrio() {
   }
 
   tablaSembrios = ['sembrio', 'comunidad', 'acciones'];
-  tablaComunidades = ['comunidad', 'acciones'];
 
 }

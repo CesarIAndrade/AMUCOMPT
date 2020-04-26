@@ -7,6 +7,8 @@ import { PersonaService } from 'src/app/services/persona.service';
 
 // SweetAlert
 import sweetalert from 'sweetalert';
+import { MatDialog } from '@angular/material';
+import { ModalLocalidadSuperiorComponent } from '../modal-localidad-superior/modal-localidad-superior.component';
 
 @Component({
   selector: 'app-parroquia',
@@ -18,8 +20,10 @@ export class ParroquiaComponent implements OnInit {
   myForm: FormGroup;
   @Output() nuevaParroquiaCreada = new EventEmitter();
 
-  constructor(private panelAdministracionService: PanelAdministracionService,
-    private personaService: PersonaService
+  constructor(
+    private panelAdministracionService: PanelAdministracionService,
+    private personaService: PersonaService,
+    private modalLocalidadSuperior: MatDialog
   ) {
     this.myForm = new FormGroup({
       _idParroquia: new FormControl(''),
@@ -33,22 +37,7 @@ export class ParroquiaComponent implements OnInit {
   filterParroquia = '';
   filterCanton = '';
 
-  cantones: any[] = [];
   parroquias: any[] = [];
-
-  consultarCantones() {
-    this.personaService.consultarCantones(localStorage.getItem('miCuenta.getToken'))
-      .then(
-        ok => {
-          this.cantones = ok['respuesta'];
-        }
-      )
-      .catch(
-        error => {
-          console.log(error);
-        }
-      )
-  }
 
   consultarParroquias() {
     this.personaService.consultarParroquias(localStorage.getItem('miCuenta.getToken'))
@@ -56,7 +45,6 @@ export class ParroquiaComponent implements OnInit {
         ok => {
           this.parroquias = [];
           this.parroquias = ok['respuesta'];
-          this.consultarCantones();
         }
       )
       .catch(
@@ -199,10 +187,21 @@ export class ParroquiaComponent implements OnInit {
       });
   }
 
-  setCanton(canton) {
-    this._idCanton.setValue(canton.IdCanton);
-    this._canton.setValue(canton.Descripcion);
-  }
+  abrirModal() {
+    let dialogRef = this.modalLocalidadSuperior.open(ModalLocalidadSuperiorComponent, {
+      width: '400px',
+      height: 'auto',
+      data: {
+        ruta: 'parroquias'
+      }
+    }); 
+    dialogRef.afterClosed().subscribe(result => {
+      if (result != null) {
+        this._idCanton.setValue(result.idLocalidad);
+        this._canton.setValue(result.descripcion);
+      }
+    });
+  } 
 
   limpiarCampos() {
     this.myForm.reset();
@@ -230,6 +229,5 @@ export class ParroquiaComponent implements OnInit {
   }
 
   tablaParroquias = ['parroquia', 'canton', 'acciones'];
-  tablaCantones = ['canton', 'acciones'];
 
 }

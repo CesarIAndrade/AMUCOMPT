@@ -1,0 +1,8 @@
+.tabla {
+  height: 20rem;
+  overflow: auto;
+}
+
+th { 
+  background-color: #f8f9fa;
+}

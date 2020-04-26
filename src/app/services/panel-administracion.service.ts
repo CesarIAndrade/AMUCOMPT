@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, EventEmitter } from '@angular/core';
 import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 
 @Injectable({
@@ -8,6 +8,7 @@ export class PanelAdministracionService {
 
   constructor(private http: HttpClient) { }
 
+  refresh$ = new EventEmitter();
   private apiUrl = "http://25.39.0.74:90/api/";
 
   crearProvincia(provincia: string, _token: string) {

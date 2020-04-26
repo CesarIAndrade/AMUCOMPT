@@ -41,7 +41,6 @@ export class LoginComponent implements OnInit {
       )
         .then(
           ok => {
-            console.log(ok['respuesta']);
             if (ok['codigo'] == '200') {
               this.ingresarCredenciales = true;
               this.tipoUsuarios = ok['respuesta']['ListaTipoUsuario'];
@@ -71,7 +70,8 @@ export class LoginComponent implements OnInit {
       });
     } else {
       localStorage.setItem('miCuenta.idAsignacionTipoUsuario', this._tipoUsuario.value);
-      console.log(localStorage.getItem('miCuenta.idAsignacionTipoUsuario'));
+      var tipoUsuario = this.tipoUsuarios.filter(item => item.IdAsignacionTu == this._tipoUsuario.value)
+      localStorage.setItem('miCuenta.tipoUsuario', tipoUsuario[0].Identificacion);
       this.router.navigateByUrl('/');
     }
   }

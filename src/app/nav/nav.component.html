@@ -1,4 +1,7 @@
-<mat-sidenav-container class="sidenav-container bg-light">
+<mat-sidenav-container
+  class="sidenav-container"
+  style="background-color: rgb(245, 246, 247);"
+>
   <mat-sidenav
     #drawer
     class="sidenav"
@@ -16,7 +19,7 @@
         style="margin-left: 1rem;"
         routerLink="/"
       />
-      <h5 class="amucomt drawer_title">AMUCOMT</h5>
+      <h5 class="amucomt toolbar_title">AMUCOMT</h5>
     </mat-toolbar>
     <mat-list>
       <div>
@@ -32,8 +35,8 @@
       </div>
       <div>
         <a
+          mat-list-item
           style="color: #d9534f !important;"
-          mat-button
           routerLink="/login"
           routerLinkActive="active"
         >
