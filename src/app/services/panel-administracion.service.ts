@@ -8,8 +8,7 @@ export class PanelAdministracionService {
 
   constructor(private http: HttpClient) { }
 
-  refresh$ = new EventEmitter();
-  private apiUrl = "http://25.39.0.74:90/api/";
+  private apiUrl = "http://localhost:49962/api/";
 
   crearProvincia(provincia: string, _token: string) {
     const body = new HttpParams()

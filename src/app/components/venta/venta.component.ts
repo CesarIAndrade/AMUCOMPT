@@ -259,6 +259,30 @@ export class VentaComponent implements OnInit {
         console.log(error);
       });
   }
+  realizarVenta() {
+    this.inventarioService.FinalizarCabeceraFacturaVenta(
+      this._idCabecera.value,
+      localStorage.getItem('miCuenta.putToken')
+    )
+      .then(
+        ok => {
+          if (ok['respuesta']) {
+            sweetAlert("Se ingresó correctamente!", {
+              icon: "success",
+            });
+          } else {
+            sweetAlert("Ha ocurrido un error!", {
+              icon: "error",
+            });
+          }
+        }
+      )
+      .catch(
+        error => {
+          console.log(error);
+        }
+      )
+  }
 
   consultarDetalleDeUnaFactura() {
     this.inventarioService

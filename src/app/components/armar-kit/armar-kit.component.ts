@@ -82,6 +82,7 @@ export class ArmarKitComponent implements OnInit {
     )
       .then(
         ok => {
+          console.log(ok['respuesta'][0]['ListaAsignarProductoKit']);
           this.listaProductosDeUnKit.data = [];
           this.listaProductosDeUnKit.data = ok['respuesta'][0]['ListaAsignarProductoKit'];
           this.listaProductosDeUnKit.paginator = this.paginator1;
