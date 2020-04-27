@@ -6,10 +6,7 @@
         <form [formGroup]="myForm">
           <mat-form-field class="example-full-width">
             <mat-label>Kits</mat-label>
-            <mat-select
-              (selectionChange)="onChangeSelectKit()"
-              formControlName="_idKit"
-            >
+            <mat-select (selectionChange)="onChangeSelectKit()" formControlName="_idKit">
               <mat-option *ngFor="let item of kits" [value]="item.IdKit">
                 {{ item.Descripcion }}
               </mat-option>
@@ -44,42 +41,24 @@
               <ng-container *matCellDef="let element">
                 <ng-container>
                   <td mat-cell>
-                    <button
-                      mat-button
-                      class="btn-outline-info"
-                      (click)="
+                    <button mat-button class="btn-outline-info" (click)="
                         mostrarDetalleProducto(element, 'productoDeUnKit')
-                      "
-                    >
+                      ">
                       <mat-icon>visibility</mat-icon>
                     </button>
                   </td>
                   <td mat-cell>
-                    <button
-                      mat-button
-                      class="btn-outline-danger"
-                      (click)="eliminarAsignacionProductoKit(element)"
-                    >
+                    <button *ngIf="element.ListaProductos.ConfigurarProductosUtilizado == '0'"  mat-button class="btn-outline-danger" (click)="eliminarAsignacionProductoKit(element)">
                       <mat-icon>remove</mat-icon>
                     </button>
                   </td>
                 </ng-container>
               </ng-container>
             </ng-container>
-            <tr
-              mat-header-row
-              *matHeaderRowDef="tablaProductosDeUnKit; sticky: true"
-            ></tr>
-            <tr
-              mat-row
-              *matRowDef="let row; columns: tablaProductosDeUnKit"
-            ></tr>
+            <tr mat-header-row *matHeaderRowDef="tablaProductosDeUnKit; sticky: true"></tr>
+            <tr mat-row *matRowDef="let row; columns: tablaProductosDeUnKit"></tr>
           </table>
-          <mat-paginator
-            #paginator1
-            [pageSizeOptions]="[5]"
-            showFirstLastButtons
-          ></mat-paginator>
+          <mat-paginator #paginator1 [pageSizeOptions]="[5]" showFirstLastButtons></mat-paginator>
         </div>
       </div>
     </div>
@@ -87,13 +66,7 @@
       <div>
         <h5 style="text-align: center;">Lista Productos</h5>
         <mat-form-field class="example-full-width">
-          <input
-            matInput
-            (keyup)="applyFilter($event.target.value)"
-            [(ngModel)]="filterProducto"
-            type="text"
-            placeholder="Buscar Producto"
-          />
+          <input matInput (keyup)="applyFilter($event.target.value)" [(ngModel)]="filterProducto" type="text" placeholder="Buscar Producto" />
           <button mat-button matPrefix mat-icon-button>
             <mat-icon>search</mat-icon>
           </button>
@@ -123,36 +96,21 @@
               <th colspan="2" mat-header-cell *matHeaderCellDef>Acciones</th>
               <ng-container *matCellDef="let element">
                 <td mat-cell>
-                  <button
-                    mat-button
-                    class="btn-outline-info"
-                    (click)="mostrarDetalleProducto(element, 'productoSinkit')"
-                  >
+                  <button mat-button class="btn-outline-info" (click)="mostrarDetalleProducto(element, 'productoSinkit')">
                     <mat-icon>visibility</mat-icon>
                   </button>
                 </td>
                 <td mat-cell>
-                  <button
-                    mat-button
-                    class="btn-outline-warning"
-                    (click)="asignarProductoKit(element)"
-                  >
+                  <button mat-button class="btn-outline-warning" (click)="asignarProductoKit(element)">
                     <mat-icon>add</mat-icon>
                   </button>
                 </td>
               </ng-container>
             </ng-container>
-            <tr
-              mat-header-row
-              *matHeaderRowDef="tablaProductos; sticky: true"
-            ></tr>
+            <tr mat-header-row *matHeaderRowDef="tablaProductos; sticky: true"></tr>
             <tr mat-row *matRowDef="let row; columns: tablaProductos"></tr>
           </table>
-          <mat-paginator
-            #paginator
-            [pageSizeOptions]="[5]"
-            showFirstLastButtons
-          ></mat-paginator>
+          <mat-paginator #paginator [pageSizeOptions]="[5]" showFirstLastButtons></mat-paginator>
         </div>
       </div>
     </div>
