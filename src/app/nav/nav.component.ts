@@ -36,9 +36,8 @@ export class NavComponent implements OnInit {
       });
   }
 
-  nav_items = [];
-
   route = "";
+  nav_items = [];
 
   ngOnInit() {
     if (localStorage.getItem("miCuenta.tipoUsuario") == "1") {
@@ -171,7 +170,6 @@ export class NavComponent implements OnInit {
         }
       );
     }
-
     var temp_route: any = this.router.url.split("/");
     temp_route = temp_route[1];
     this.route = temp_route.toUpperCase();

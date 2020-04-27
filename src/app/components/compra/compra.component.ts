@@ -205,8 +205,8 @@ export class CompraComponent implements OnInit {
       localStorage.getItem('miCuenta.getToken')
     )
       .then(
-        ok => {
-          if (this.router.url === '/inicio/compras') {
+        ok => { 
+          if (this.router.url === '/compras') {
             ok['respuesta'].map(
               item => {
                 if (item.Descripcion == 'COMPRA') {
@@ -452,6 +452,8 @@ export class CompraComponent implements OnInit {
               icon: "error",
             });
           } else {
+            console.log(ok['respuesta']);
+            
             this._idCabecera.setValue(ok['respuesta'].IdCabeceraFactura);
             this._cabecera.setValue(ok['respuesta'].Codigo);
             this.myForm.enable();

@@ -802,8 +802,7 @@ export class InventarioService {
           reject(err);
         })
     })
-  }
-
+  } 
 
   crearCabeceraFactura(
     idAsignacionTU: string,
@@ -814,6 +813,9 @@ export class InventarioService {
       .set('IdAsignacionTU', idAsignacionTU)
       .set('IdTipoTransaccion', idTipoTransaccion)
       .set('encriptada', _token)
+
+    console.log(body);
+    
     return new Promise((resolve, reject) => {
       this.http.post(this.apiUrl + 'Factura/IngresoCabeceraFactura', body.toString(),
         {
@@ -927,8 +929,6 @@ export class InventarioService {
     })
   }
 
-
-
   crearConfiguracionVenta(
     idCabeceraFactura: string,
     IdPersona: string,
@@ -962,7 +962,6 @@ export class InventarioService {
         })
     })
   }
-
 
   quitarDetalleFactura(
     idDetalleFactura: string,
@@ -1007,8 +1006,6 @@ export class InventarioService {
         })
     })
   }
-
-
 
   consultarStock(_token: string) {
     const body = new HttpParams()
@@ -1136,6 +1133,7 @@ export class InventarioService {
         })
     })
   }
+
   modificarCantidadDeProductoEnDetalleVenta(
     IdDetalleVenta: string,
     Cantidad: string,
@@ -1181,7 +1179,6 @@ export class InventarioService {
         })
     })
   }
-
 
   buscarFechaYPrecio(
     idCabeceraFactura: string,
