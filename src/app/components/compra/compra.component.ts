@@ -21,6 +21,8 @@ import { Router } from '@angular/router';
 })
 export class CompraComponent implements OnInit {
 
+  @ViewChild('paginator', { static: false }) paginator: MatPaginator;
+
   myForm: FormGroup;
 
   constructor(
@@ -58,21 +60,20 @@ export class CompraComponent implements OnInit {
   selectTipoCompra = true;
   buttonGenerarFactura = false;
   buttonSeleccionarProducto = true;
+  loteEnDetalle = true;
 
-  //detalleCompra: any[] = [];
   kits: any[] = []
   lotes: any[] = [];
   listaProductosDeUnKit: any[] = [];
-  //facturasNoFinalizadas: any[] = [];
+  detalleCompraLista:any[] = [];
+
   tipoCompra: any[] = [
     { tipo: 'Producto' },
     { tipo: 'Kit' }
   ]
-  @ViewChild('paginator', { static: false }) paginator: MatPaginator;
-  @ViewChild('paginator', { static: false }) paginator1: MatPaginator;
+
   detalleCompra = new MatTableDataSource<Element[]>();
   facturasNoFinalizadas = new MatTableDataSource<Element[]>();
-
   filteredOptions: Observable<string[]>;
 
   buscarFechaYPrecio() {
@@ -119,8 +120,6 @@ export class CompraComponent implements OnInit {
     this._precio.setValue('');
     this.buscarFechaYPrecio();
   }
-
-  loteEnDetalle = true;
 
   onKeyUp() {
     this._precio.reset();
@@ -310,12 +309,8 @@ export class CompraComponent implements OnInit {
     }
     return datosKit;
   }
-  detalleCompraLista:any[]=[];
+  
   consultarDetalleFactura() {
-    setTimeout(() => {
-      // this.facturasNoFinalizadas.paginator = null;
-      // this.paginator1 = null;
-    });
     this.detalleCompraLista = [];
     this.detalleCompra.data = [];
     this.inventarioService.consultarDetalleFactura(
@@ -324,7 +319,6 @@ export class CompraComponent implements OnInit {
     )
       .then(
         ok => {
-          // console.log(ok['respuesta'])
           ok['respuesta'].map(
             item => {
               var perteneceKit: any;
@@ -389,7 +383,6 @@ export class CompraComponent implements OnInit {
             }
           )
           this.detalleCompra.data = this.detalleCompraLista
-          //this.detalleCompra.paginator = this.paginator;
         }
       )
       .catch(
@@ -423,12 +416,7 @@ export class CompraComponent implements OnInit {
     )
       .then(
         ok => {
-          setTimeout(() => {
-            // this.detalleCompra.paginator = null;
-            // this.paginator1=null;
-          });
           this.facturasNoFinalizadas.data = ok['respuesta'];
-          // this.facturasNoFinalizadas.paginator = this.paginator1;
         }
       )
       .catch(
@@ -459,8 +447,6 @@ export class CompraComponent implements OnInit {
     )
       .then(
         ok => {
-          console.log(ok['respuesta']);
-          
           if (ok['respuesta'] == 'false') {
             sweetAlert("Ha ocurrido un error!", {
               icon: "error",
@@ -774,7 +760,6 @@ export class CompraComponent implements OnInit {
   }
 
   ngOnInit() {
-    //this.paginator=null;
     this.consultarKits();
     this.consultarTipoTransaccion();
     setTimeout(() => {

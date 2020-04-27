@@ -7,6 +7,8 @@ import { PersonaService } from 'src/app/services/persona.service';
 
 // SweetAlert
 import sweetalert from 'sweetalert';
+import { MatDialog } from '@angular/material';
+import { ModalLocalidadSuperiorComponent } from '../modal-localidad-superior/modal-localidad-superior.component';
 
 @Component({
   selector: 'app-canton',
@@ -18,8 +20,10 @@ export class CantonComponent implements OnInit {
   myForm: FormGroup;
   @Output() nuevoCantonCreado = new EventEmitter();
 
-  constructor(private panelAdministracionService: PanelAdministracionService,
-    private personaService: PersonaService
+  constructor(
+    private panelAdministracionService: PanelAdministracionService,
+    private personaService: PersonaService,
+    private modalLocalidadSuperior: MatDialog
   ) {
     this.myForm = new FormGroup({
       _idCanton: new FormControl(''),
@@ -33,22 +37,7 @@ export class CantonComponent implements OnInit {
   filterProvincia = '';
   filterCanton = '';
 
-  provincias: any[] = [];
   cantones: any[] = [];
-
-  consultarProvincias() {
-    this.personaService.consultarProvincias(localStorage.getItem('miCuenta.getToken'))
-      .then(
-        ok => {
-          this.provincias = ok['respuesta'];
-        }
-      )
-      .catch(
-        error => {
-          console.log(error);
-        }
-      )
-  }
 
   consultarCantones() {
     this.personaService.consultarCantones(localStorage.getItem('miCuenta.getToken'))
@@ -56,7 +45,6 @@ export class CantonComponent implements OnInit {
         ok => {
           this.cantones = [];
           this.cantones = ok['respuesta'];
-          this.consultarProvincias();
         }
       )
       .catch(
@@ -85,7 +73,6 @@ export class CantonComponent implements OnInit {
       localStorage.getItem('miCuenta.postToken'))
       .then(
         ok => {
-
           if (ok['respuesta'] == null) {
             sweetAlert("Inténtalo de nuevo!", {
               icon: "warning",
@@ -162,7 +149,6 @@ export class CantonComponent implements OnInit {
       )
   }
 
-
   eliminarCanton(idCanton: string) {
     sweetalert({
       title: "Advertencia",
@@ -199,10 +185,21 @@ export class CantonComponent implements OnInit {
       });
   }
 
-  setProvincia(provincia) {
-    this._provincia.setValue(provincia.Descripcion);
-    this._idProvincia.setValue(provincia.IdProvincia);
-  }
+  abrirModal() {
+    let dialogRef = this.modalLocalidadSuperior.open(ModalLocalidadSuperiorComponent, {
+      width: '400px',
+      height: 'auto',
+      data: {
+        ruta: 'cantones'
+      }
+    }); 
+    dialogRef.afterClosed().subscribe(result => {
+      if (result != null) {
+        this._idProvincia.setValue(result.idLocalidad);
+        this._provincia.setValue(result.descripcion);
+      }
+    });
+  }  
 
   get _idCanton() {
     return this.myForm.get('_idCanton');
@@ -225,6 +222,5 @@ export class CantonComponent implements OnInit {
   }
 
   tablaCantones = ['canton', 'provincia', 'acciones'];
-  tablaProvincias = ['provincia', 'acciones'];
 
 }

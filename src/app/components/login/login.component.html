@@ -1,66 +1,92 @@
 <body>
-    <div [hidden]="ingresarCredenciales">
-        <div class="login_form credenciales">
-            <div class="card-body">
-                <h3 class="amucomt">AMUCOMT</h3>
-                <form [formGroup]="myForm" (ngSubmit)="login()" novalidate>
-                    <mat-form-field class="login_input">
-                        <mat-label>Ingrese Usuario</mat-label>
-                        <input matInput formControlName="_usuario" type="text">
-                        <mat-error *ngIf="_usuario.invalid && (_usuario.dirty || _usuario.touched)">
-                            <mat-error *ngIf="_usuario.errors.required">
-                                Usuario Requerido
-                            </mat-error>
-                        </mat-error>
-                    </mat-form-field>
-                    <mat-form-field class="login_input">
-                        <mat-label>Ingrese Contraseña</mat-label>
-                        <input matInput formControlName="_contrasena" type="password">
-                        <mat-error *ngIf="_contrasena.invalid && (_contrasena.dirty || _contrasena.touched)">
-                            <mat-error *ngIf="_contrasena.errors.required">
-                                Contraseña Requerida
-                            </mat-error>
-                        </mat-error>
-                    </mat-form-field>
-                    <div class="mt-3">
-                        <button type="submit" mat-raised-button [disabled]="myForm.invalid"
-                            class="bg-warning mt-3 text-white btn-block">
-                            Continuar
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
+  <div [hidden]="ingresarCredenciales">
+    <div class="login_form credenciales">
+      <div class="card-body">
+        <h3 class="amucomt">AMUCOMT</h3>
+        <form [formGroup]="myForm" (ngSubmit)="login()" novalidate>
+          <mat-form-field class="login_input">
+            <mat-label>Ingrese Usuario</mat-label>
+            <input matInput formControlName="_usuario" type="text" />
+            <mat-error
+              *ngIf="_usuario.invalid && (_usuario.dirty || _usuario.touched)"
+            >
+              <mat-error *ngIf="_usuario.errors.required">
+                Usuario Requerido
+              </mat-error>
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field class="login_input">
+            <mat-label>Ingrese Contraseña</mat-label>
+            <input matInput formControlName="_contrasena" type="password" />
+            <mat-error
+              *ngIf="
+                _contrasena.invalid &&
+                (_contrasena.dirty || _contrasena.touched)
+              "
+            >
+              <mat-error *ngIf="_contrasena.errors.required">
+                Contraseña Requerida
+              </mat-error>
+            </mat-error>
+          </mat-form-field>
+          <div class="mt-3">
+            <button
+              type="submit"
+              mat-raised-button
+              [disabled]="myForm.invalid"
+              class="bg-warning mt-3 text-white btn-block"
+            >
+              Continuar
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
-    <div [hidden]="seleccionarTipoUsuario">
-        <div class="login_form roles">
-            <div class="card-body">
-                <h3 class="amucomt">AMUCOMT</h3>
-                <form [formGroup]="myForm" (ngSubmit)="iniciarSesionSegunTipoUsuario()" novalidate>
-                    <mat-form-field class="login_input">
-                        <mat-label>Roles</mat-label>
-                        <mat-select formControlName="_tipoUsuario">
-                            <mat-option *ngFor="let item of tipoUsuarios" [value]="item.IdAsignacionTu">
-                                {{item.Descripcion}}
-                            </mat-option>
-                        </mat-select>
-                        <mat-error *ngIf="_tipoUsuario.invalid && (_tipoUsuario.dirty || _tipoUsuario.touched)">
-                            <mat-error *ngIf="_tipoUsuario.errors.required">
-                                Tipo Usuario Requerido
-                            </mat-error>
-                        </mat-error>
-                    </mat-form-field>
-                    <div class="mt-3">
-                        <button type="submit" mat-raised-button [disabled]="myForm.invalid"
-                            class="bg-danger mt-3 text-white btn-block">
-                            Iniciar Sesion
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
+  </div>
+  <div [hidden]="seleccionarTipoUsuario">
+    <div class="login_form roles">
+      <div class="card-body">
+        <h3 class="amucomt">AMUCOMT</h3>
+        <form
+          [formGroup]="myForm"
+          (ngSubmit)="iniciarSesionSegunTipoUsuario()"
+          novalidate
+        >
+          <mat-form-field class="login_input">
+            <mat-label>Roles</mat-label>
+            <mat-select
+              formControlName="_tipoUsuario"
+            >
+              <mat-option
+                *ngFor="let item of tipoUsuarios"
+                [value]="item.IdAsignacionTu"
+              >
+                {{ item.Descripcion }}
+              </mat-option>
+            </mat-select>
+            <mat-error
+              *ngIf="
+                _tipoUsuario.invalid &&
+                (_tipoUsuario.dirty || _tipoUsuario.touched)
+              "
+            >
+              <mat-error *ngIf="_tipoUsuario.errors.required">
+                Tipo Usuario Requerido
+              </mat-error>
+            </mat-error>
+          </mat-form-field>
+          <div class="mt-3">
+            <button
+              type="submit"
+              mat-raised-button
+              [disabled]="myForm.invalid"
+              class="bg-danger mt-3 text-white btn-block"
+            >
+              Iniciar Sesion
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
+  </div>
 </body>
-
-
-

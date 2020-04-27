@@ -82,6 +82,7 @@ export class ProvinciaComponent implements OnInit {
             sweetAlert("Se ingresó correctamente!", {
               icon: "success",
             });
+            // this.panelAdministracionService.refresh$.emit();
             this.myForm.reset();
             this.consultarProvincias();
             this.nuevaProvinciaCreada.emit(true);

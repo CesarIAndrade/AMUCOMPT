@@ -23,21 +23,26 @@
 }
 
 a {
-  margin: 10px 30% 10px 0%;
+  margin: 0 30% 0 0;
   text-decoration: none;
 }
 
 a:hover{
-  background-color: #f8f9fa;
+  background-color: rgb(245, 246, 247);
 }
 
 a.active {
+  text-shadow: 1px 1px #f61cc4;  
+  color: #343a40;
+  background-color: rgb(225, 226, 227);
+}
+
+.toolbar_title {
   text-shadow: 1px 1px #343a40;  
   color: #f61cc4;
-  background-color: #f8f9fa;
 }
 
 .drawer_title {
-  text-shadow: 1px 1px #f61cc4;  
+  text-shadow: 1px 1px #f8f9fa;  
   color: #343a40;
 }

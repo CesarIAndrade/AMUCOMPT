@@ -56,6 +56,7 @@ import { StockComponent } from './components/stock/stock.component';
 import { CreditosAbonosComponent } from './components/creditos-abonos/creditos-abonos.component';
 import { CompraRubrosComponent } from './components/compra-rubros/compra-rubros.component';
 import { VentaRubrosComponent } from './components/venta-rubros/venta-rubros.component';
+import { ModalLocalidadSuperiorComponent } from './components/modal-localidad-superior/modal-localidad-superior.component';
 
 @NgModule({
   declarations: [
@@ -91,6 +92,7 @@ import { VentaRubrosComponent } from './components/venta-rubros/venta-rubros.com
     CreditosAbonosComponent,
     CompraRubrosComponent,
     VentaRubrosComponent,
+    ModalLocalidadSuperiorComponent,
   ],
   imports: [
     BrowserModule,
@@ -131,6 +133,7 @@ import { VentaRubrosComponent } from './components/venta-rubros/venta-rubros.com
     ModalAsignacionUsuarioTiposUsuarioComponent,
     ModalDetalleProductoComponent,
     ModalAsignacionConfiguracionProductoComponent,
+    ModalLocalidadSuperiorComponent
   ],
   providers: [],
   bootstrap: [AppComponent]

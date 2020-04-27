@@ -11,7 +11,7 @@ export class ModalAsignacionUsuarioPersonaComponent implements OnInit {
 
   constructor(
     private personaService: PersonaService,
-    @Inject(MAT_DIALOG_DATA) public data: any
+    @Inject(MAT_DIALOG_DATA) public data: any 
   ) { }
   @ViewChild('paginator', { static: false }) paginator: MatPaginator;
   personas = new MatTableDataSource<Element[]>();
@@ -46,6 +46,7 @@ export class ModalAsignacionUsuarioPersonaComponent implements OnInit {
         }
       )
   }
+
   consultarPersonasTodas() {
     this.personaService.consultarPersonas(localStorage.getItem('miCuenta.getToken'))
       .then(
@@ -60,6 +61,7 @@ export class ModalAsignacionUsuarioPersonaComponent implements OnInit {
         }
       )
   }
+
   ngOnInit() {
     if(this.data == 'todos'){
       this.consultarPersonasTodas();
