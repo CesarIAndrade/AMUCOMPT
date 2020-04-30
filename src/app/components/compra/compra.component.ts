@@ -414,7 +414,9 @@ export class CompraComponent implements OnInit {
         error => {
           console.log(error);
         }
-      )
+      ).finally(() => {
+        this.buttonSeleccionarProducto = false;
+      })
   }
 
   consultarFacturasNoFinalizadas() {
@@ -435,7 +437,6 @@ export class CompraComponent implements OnInit {
 
   onChangeSelectKit(idKit) {
     this.consultarKitsYSusProductos(idKit);
-    this.buttonSeleccionarProducto = false;
   }
 
   validarFormulario() {
@@ -529,7 +530,7 @@ export class CompraComponent implements OnInit {
       height: 'auto',
       data: {
         listaProductosDeUnKit: this.listaProductosDeUnKit,
-      }
+      } 
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result != null) {

@@ -199,6 +199,10 @@ export class ProductoComponent implements OnInit {
               sweetAlert("Ha ocurrido un error!", {
                 icon: "error",
               });
+              console.log(ok['respuesta']);
+              console.log('error al crear producto');
+              
+              
             } else {
               this._idProducto.setValue(ok['respuesta']);
               this.crearConfiguracionProducto();
@@ -240,7 +244,10 @@ export class ProductoComponent implements OnInit {
             sweetAlert("Ha ocurrido un error!", {
               icon: "error",
             });
+            console.log(ok['respuesta']);
+            console.log('error al crear conf producto');
           } else {
+            console.log(ok['respuesta']);
             this._idConfiguracionProducto.setValue(ok['respuesta'].IdConfigurarProducto);
             this.crearPrecio();
           }
@@ -275,6 +282,8 @@ export class ProductoComponent implements OnInit {
           sweetAlert("Ha ocurrido un error!", {
             icon: "error",
           });
+          console.log(ok['respuesta']);
+          console.log('error al crear precio');
         }
       }
     )

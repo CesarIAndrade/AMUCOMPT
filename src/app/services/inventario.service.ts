@@ -889,6 +889,9 @@ export class InventarioService {
       .set('IdConfigurarProducto', idConfigurarProducto)
       .set('Precio', precio)
       .set('encriptada', _token)
+
+    console.log(body);
+    
     return new Promise((resolve, reject) => {
       this.http.post(this.apiUrl + 'Inventario/IngresoPrecioConfigurarProducto', body.toString(),
         {

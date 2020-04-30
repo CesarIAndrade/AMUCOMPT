@@ -61,14 +61,13 @@ export class ModalAsignacionConfiguracionProductoComponent implements OnInit {
             PerteneceKit: "False",
             IdKit: "",
             Kit: "",
-            Nombre: item.Producto.Nombre,
+            Producto: item.Producto.Nombre,
             Presentacion: item.Presentacion.Descripcion,
             ContenidoNeto: item.CantidadMedida,
             Medida: item.Medida.Descripcion,
           };
           this.configuracionProductos.push(producto);
         });
-        console.log(this.configuracionProductos);
       })
       .catch((error) => {
         console.log(error);
@@ -294,9 +293,29 @@ export class ModalAsignacionConfiguracionProductoComponent implements OnInit {
         this.listaProductosDeUnKit = this.estructurarData(temp_lista, true);
       }
     } else if (this.router.url == "/compras") {
+      console.log(this.data.listaProductosDeUnKit);
       this.areaTablaProductoDeUnKit = true;
       this.areaTablaStock = true;
       this.areaTablaConfiguracionProducto = false;
+      if (this.data.listaProductosDeUnKit.length == 0) {
+        this.consultarConfiguracionProducto();
+      } else {
+        this.configuracionProductos = [];
+        this.data.listaProductosDeUnKit.map(item => {
+          var producto = {
+            IdRelacionLogica: item.IdAsignarProductoKit,
+            PerteneceKit: "True",
+            IdKit: item.Kit.IdKit,
+            Kit: item.Kit.Descripcion,
+            Producto: item.ListaProductos.Producto.Nombre,
+            Presentacion: item.ListaProductos.Presentacion.Descripcion,
+            ContenidoNeto: item.ListaProductos.CantidadMedida,
+            Medida: item.ListaProductos.Medida.Descripcion,
+          } 
+          this.configuracionProductos.push(producto);
+        })
+      }
+
     }
   }
 
