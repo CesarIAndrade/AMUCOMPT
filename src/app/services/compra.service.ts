@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
-
+import { apiUrl } from "../../environments/environment";
 @Injectable({
   providedIn: 'root'
 })
@@ -9,10 +9,6 @@ export class CompraService {
   constructor(
     private http: HttpClient
   ) { }
-
-  // private apiUrl = "http://localhost:49962/api/";
-  private apiUrl = "http://25.39.0.74:90/api/";
-
   buscarFechaYPrecio(
     idCabeceraFactura: string,
     idRelacionLogica: string,
@@ -27,7 +23,7 @@ export class CompraService {
       .set('FechaExpiracion', fechaExpiracion)
       .set('encriptada', _token)
     return new Promise((resolve, reject) => {
-      this.http.post(this.apiUrl + 'Factura/BuscarInformacionDeUnDetalle', body.toString(),
+      this.http.post(apiUrl + 'Factura/BuscarInformacionDeUnDetalle', body.toString(),
         {
           headers: new HttpHeaders()
             .set('Content-Type', 'application/x-www-form-urlencoded')
@@ -51,7 +47,7 @@ export class CompraService {
       .set('Cantidad', cantidad)
       .set('encriptada', _token)
     return new Promise((resolve, reject) => {
-      this.http.post(this.apiUrl + 'Factura/AumentarDetalleFactura', body.toString(),
+      this.http.post(apiUrl + 'Factura/AumentarDetalleFactura', body.toString(),
         {
           headers: new HttpHeaders()
             .set('Content-Type', 'application/x-www-form-urlencoded')
@@ -70,7 +66,7 @@ export class CompraService {
       .set('IdCabeceraFactura', idCabecera)
       .set('encriptada', _token)
     return new Promise((resolve, reject) => {
-      this.http.post(this.apiUrl + 'Factura/ListaFacturaDetalle', body.toString(),
+      this.http.post(apiUrl + 'Factura/ListaFacturaDetalle', body.toString(),
         {
           headers: new HttpHeaders()
             .set('Content-Type', 'application/x-www-form-urlencoded')
@@ -102,7 +98,7 @@ export class CompraService {
       .set('Faltante', faltante)
       .set('encriptada', _token)
     return new Promise((resolve, reject) => {
-      this.http.post(this.apiUrl + 'Factura/IngresoDetalleFactura', body.toString(),
+      this.http.post(apiUrl + 'Factura/IngresoDetalleFactura', body.toString(),
         {
           headers: new HttpHeaders()
             .set('Content-Type', 'application/x-www-form-urlencoded')
@@ -125,7 +121,7 @@ export class CompraService {
       .set('IdCabeceraFactura', idCabeceraFactura)
       .set('encriptada', _token)
     return new Promise((resolve, reject) => {
-      this.http.post(this.apiUrl + 'Factura/EliminarDetalleFactura', body.toString(),
+      this.http.post(apiUrl + 'Factura/EliminarDetalleFactura', body.toString(),
         {
           headers: new HttpHeaders()
             .set('Content-Type', 'application/x-www-form-urlencoded')

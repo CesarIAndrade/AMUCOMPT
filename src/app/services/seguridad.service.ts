@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-
+import { apiUrl } from "../../environments/environment";
 @Injectable({
   providedIn: 'root'
 })
@@ -8,12 +8,9 @@ export class SeguridadService {
 
   constructor(private http: HttpClient) { }
 
-  // private apiUrl = "http://localhost:49962/api/";
-  private apiUrl = "http://25.39.0.74:90/api/";
-
   consultarTokens(){
     return new Promise((resolve, reject) => {
-      this.http.post(this.apiUrl + 'Seguridad/ConsultarClave',
+      this.http.post(apiUrl + 'Seguridad/ConsultarClave',
         {
           headers: new HttpHeaders()
             .set('Content-Type', 'application/x-www-form-urlencoded')

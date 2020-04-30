@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-
+import { apiUrl } from "../../environments/environment";
 @Injectable({
   providedIn: 'root'
 })
@@ -8,14 +8,11 @@ export class PersonaService {
 
   constructor(private http: HttpClient) { }
 
-  // private apiUrl = "http://localhost:49962/api/";
-  private apiUrl = "http://25.39.0.74:90/api/";
-
   consultarPersonas(_token: string) {
     const body = new HttpParams()
       .set('encriptada', _token)
     return new Promise((resolve, reject) => {
-      this.http.post(this.apiUrl + 'TalentoHumano/ListaUsuariosClientes/', body.toString(),
+      this.http.post(apiUrl + 'TalentoHumano/ListaUsuariosClientes/', body.toString(),
         {
           headers: new HttpHeaders()
             .set('Content-Type', 'application/x-www-form-urlencoded')
@@ -33,7 +30,7 @@ export class PersonaService {
     const body = new HttpParams()
       .set('encriptada', _token)
     return new Promise((resolve, reject) => {
-      this.http.post(this.apiUrl + 'TalentoHumano/ConsultarPersonasSinUsuario', body.toString(),
+      this.http.post(apiUrl + 'TalentoHumano/ConsultarPersonasSinUsuario', body.toString(),
         {
           headers: new HttpHeaders()
             .set('Content-Type', 'application/x-www-form-urlencoded')
@@ -51,7 +48,7 @@ export class PersonaService {
     const body = new HttpParams()
       .set('encriptada', _token)
     return new Promise((resolve, reject) => {
-      this.http.post(this.apiUrl + 'TalentoHumano/ConsultarTipoDocumento/',
+      this.http.post(apiUrl + 'TalentoHumano/ConsultarTipoDocumento/',
         body.toString(),
         {
           headers: new HttpHeaders()
@@ -69,7 +66,7 @@ export class PersonaService {
     const body = new HttpParams()
       .set('encriptada', _token)
     return new Promise((resolve, reject) => {
-      this.http.post(this.apiUrl + 'TalentoHumano/ListaTipoTelefono/',
+      this.http.post(apiUrl + 'TalentoHumano/ListaTipoTelefono/',
         body.toString(),
         {
           headers: new HttpHeaders()
@@ -101,7 +98,7 @@ export class PersonaService {
       .set('SegundoNombre', segundoNombre)
       .set('encriptada', _token)
     return new Promise((resolve, reject) => {
-      this.http.post(this.apiUrl + 'TalentoHumano/IngresoPersona', body.toString(),
+      this.http.post(apiUrl + 'TalentoHumano/IngresoPersona', body.toString(),
         {
           headers: new HttpHeaders()
             .set('Content-Type', 'application/x-www-form-urlencoded')
@@ -128,7 +125,7 @@ export class PersonaService {
       .set('encriptada', _token)
 
     return new Promise((resolve, reject) => {
-      this.http.post(this.apiUrl + 'TalentoHumano/IngresoTelefono', body.toString(),
+      this.http.post(apiUrl + 'TalentoHumano/IngresoTelefono', body.toString(),
         {
           headers: new HttpHeaders()
             .set('Content-Type', 'application/x-www-form-urlencoded')
@@ -152,7 +149,7 @@ export class PersonaService {
       .set('CorreoValor', correo)
       .set('encriptada', _token)
     return new Promise((resolve, reject) => {
-      this.http.post(this.apiUrl + 'TalentoHumano/IngresoCorreo', body.toString(),
+      this.http.post(apiUrl + 'TalentoHumano/IngresoCorreo', body.toString(),
         {
           headers: new HttpHeaders()
             .set('Content-Type', 'application/x-www-form-urlencoded')
@@ -176,7 +173,7 @@ export class PersonaService {
       .set('IdParroquia', parroquia)
       .set('encriptada', _token)
     return new Promise((resolve, reject) => {
-      this.http.post(this.apiUrl + 'TalentoHumano/IngresoAsignacionPersonaParroquia', body.toString(),
+      this.http.post(apiUrl + 'TalentoHumano/IngresoAsignacionPersonaParroquia', body.toString(),
         {
           headers: new HttpHeaders()
             .set('Content-Type', 'application/x-www-form-urlencoded')
@@ -198,7 +195,7 @@ export class PersonaService {
       .set('IdPersona', idPersona)
       .set('encriptada', _token)
     return new Promise((resolve, reject) => {
-      this.http.post(this.apiUrl + 'TalentoHumano/EliminarPersona', body.toString(),
+      this.http.post(apiUrl + 'TalentoHumano/EliminarPersona', body.toString(),
         {
           headers: new HttpHeaders()
             .set('Content-Type', 'application/x-www-form-urlencoded')
@@ -219,7 +216,7 @@ export class PersonaService {
       .set('IdPersona', idPersona)
       .set('encriptada', _token)
     return new Promise((resolve, reject) => {
-      this.http.post(this.apiUrl + 'TalentoHumano/BuscarPersona', body.toString(),
+      this.http.post(apiUrl + 'TalentoHumano/BuscarPersona', body.toString(),
         {
           headers: new HttpHeaders()
             .set('Content-Type', 'application/x-www-form-urlencoded')
@@ -253,7 +250,7 @@ export class PersonaService {
       .set('IdTipoDocumento', tipoDocumento)
       .set('encriptada', _token)
     return new Promise((resolve, reject) => {
-      this.http.post(this.apiUrl + 'TalentoHumano/ActualizarPersona', body.toString(),
+      this.http.post(apiUrl + 'TalentoHumano/ActualizarPersona', body.toString(),
         {
           headers: new HttpHeaders()
             .set('Content-Type', 'application/x-www-form-urlencoded')
@@ -282,7 +279,7 @@ export class PersonaService {
       .set('encriptada', _token)
 
     return new Promise((resolve, reject) => {
-      this.http.post(this.apiUrl + 'TalentoHumano/ActualizarTelefono', body.toString(),
+      this.http.post(apiUrl + 'TalentoHumano/ActualizarTelefono', body.toString(),
         {
           headers: new HttpHeaders()
             .set('Content-Type', 'application/x-www-form-urlencoded')
@@ -308,7 +305,7 @@ export class PersonaService {
       .set('CorreoValor', correoValor)
       .set('encriptada', _token)
     return new Promise((resolve, reject) => {
-      this.http.post(this.apiUrl + 'TalentoHumano/ActualizarCorreo', body.toString(),
+      this.http.post(apiUrl + 'TalentoHumano/ActualizarCorreo', body.toString(),
         {
           headers: new HttpHeaders()
             .set('Content-Type', 'application/x-www-form-urlencoded')
@@ -334,7 +331,7 @@ export class PersonaService {
       .set('IdParroquia', parroquia)
       .set('encriptada', _token)
     return new Promise((resolve, reject) => {
-      this.http.post(this.apiUrl + 'TalentoHumano/ActualizarAsignacionPersonaParroquia', body.toString(),
+      this.http.post(apiUrl + 'TalentoHumano/ActualizarAsignacionPersonaParroquia', body.toString(),
         {
           headers: new HttpHeaders()
             .set('Content-Type', 'application/x-www-form-urlencoded')
