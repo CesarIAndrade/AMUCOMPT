@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
-
+import { apiUrl } from "../../environments/environment";
 @Injectable({
   providedIn: 'root'
 })
@@ -9,9 +9,6 @@ export class VentaService {
   constructor(
     private http: HttpClient
   ) { }
-
-  // private apiUrl = "http://localhost:49962/api/";
-  private apiUrl = "http://25.39.0.74:90/api/";
 
   crearDetalleVenta(
     IdCabeceraFactura: string,
@@ -29,7 +26,7 @@ export class VentaService {
       .set('Cantidad', Cantidad)
       .set('encriptada', _token)
     return new Promise((resolve, reject) => {
-      this.http.post(this.apiUrl + 'Credito/IngresoDetalleVenta', body.toString(),
+      this.http.post(apiUrl + 'Credito/IngresoDetalleVenta', body.toString(),
         {
           headers: new HttpHeaders()
             .set('Content-Type', 'application/x-www-form-urlencoded')
@@ -41,7 +38,7 @@ export class VentaService {
           reject(err);
         })
     })
-  } 
+  }
 
   consultarDetalleDeUnaFacturasVenta(
     IdCabeceraFactura: string,
@@ -51,7 +48,7 @@ export class VentaService {
       .set('IdCabeceraFactura', IdCabeceraFactura)
       .set('encriptada', _token)
     return new Promise((resolve, reject) => {
-      this.http.post(this.apiUrl + 'Factura/ListaFacturaVenta', body.toString(),
+      this.http.post(apiUrl + 'Factura/ListaFacturaVenta', body.toString(),
         {
           headers: new HttpHeaders()
             .set('Content-Type', 'application/x-www-form-urlencoded')
@@ -69,7 +66,7 @@ export class VentaService {
     const body = new HttpParams()
       .set('encriptada', _token)
     return new Promise((resolve, reject) => {
-      this.http.post(this.apiUrl + 'Factura/ListaFacturasFinalizadasVenta', body.toString(),
+      this.http.post(apiUrl + 'Factura/ListaFacturasFinalizadasVenta', body.toString(),
         {
           headers: new HttpHeaders()
             .set('Content-Type', 'application/x-www-form-urlencoded')
@@ -88,7 +85,7 @@ export class VentaService {
       .set('IdCabeceraFactura', idCabecera)
       .set('encriptada', _token)
     return new Promise((resolve, reject) => {
-      this.http.post(this.apiUrl + 'Factura/FinalizarCabeceraFacturaVenta', body.toString(),
+      this.http.post(apiUrl + 'Factura/FinalizarCabeceraFacturaVenta', body.toString(),
         {
           headers: new HttpHeaders()
             .set('Content-Type', 'application/x-www-form-urlencoded')
@@ -122,7 +119,7 @@ export class VentaService {
       .set('Descuento', Descuento)
       .set('encriptada', _token)
     return new Promise((resolve, reject) => {
-      this.http.post(this.apiUrl + 'Factura/IngresoConfigurarVenta', body.toString(),
+      this.http.post(apiUrl + 'Factura/IngresoConfigurarVenta', body.toString(),
         {
           headers: new HttpHeaders()
             .set('Content-Type', 'application/x-www-form-urlencoded')
@@ -146,7 +143,7 @@ export class VentaService {
       .set('Cantidad', Cantidad)
       .set('encriptada', _token)
     return new Promise((resolve, reject) => {
-      this.http.post(this.apiUrl + 'Credito/AumentarDetalleVenta', body.toString(),
+      this.http.post(apiUrl + 'Credito/AumentarDetalleVenta', body.toString(),
         {
           headers: new HttpHeaders()
             .set('Content-Type', 'application/x-www-form-urlencoded')
@@ -167,7 +164,7 @@ export class VentaService {
       .set('IdDetalleVenta', IdDetalleVenta)
       .set('encriptada', _token)
     return new Promise((resolve, reject) => {
-      this.http.post(this.apiUrl + 'Credito/EliminarDetalleVenta', body.toString(),
+      this.http.post(apiUrl + 'Credito/EliminarDetalleVenta', body.toString(),
         {
           headers: new HttpHeaders()
             .set('Content-Type', 'application/x-www-form-urlencoded')
@@ -193,7 +190,7 @@ export class VentaService {
       .set('Cantidad', cantidad)
       .set('encriptada', _token)
     return new Promise((resolve, reject) => {
-      this.http.post(this.apiUrl + 'Credito/IngresoDetalleVentaPorKit', body.toString(),
+      this.http.post(apiUrl + 'Credito/IngresoDetalleVentaPorKit', body.toString(),
         {
           headers: new HttpHeaders()
             .set('Content-Type', 'application/x-www-form-urlencoded')

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
-
+import { apiUrl } from "../../environments/environment";
 @Injectable({
   providedIn: 'root'
 })
@@ -9,15 +9,11 @@ export class FacturaService {
   constructor(
     private http: HttpClient
   ) { }
-
-  // private apiUrl = "http://localhost:49962/api/";
-  private apiUrl = "http://25.39.0.74:90/api/";
-
   consultarTipoTransaccion(_token: string) {
     const body = new HttpParams()
       .set('encriptada', _token)
     return new Promise((resolve, reject) => {
-      this.http.post(this.apiUrl + 'Inventario/ListaTipoTransaccion', body.toString(),
+      this.http.post(apiUrl + 'Inventario/ListaTipoTransaccion', body.toString(),
         {
           headers: new HttpHeaders()
             .set('Content-Type', 'application/x-www-form-urlencoded')
@@ -41,7 +37,7 @@ export class FacturaService {
       .set('IdTipoTransaccion', idTipoTransaccion)
       .set('encriptada', _token)
     return new Promise((resolve, reject) => {
-      this.http.post(this.apiUrl + 'Factura/IngresoCabeceraFactura', body.toString(),
+      this.http.post(apiUrl + 'Factura/IngresoCabeceraFactura', body.toString(),
         {
           headers: new HttpHeaders()
             .set('Content-Type', 'application/x-www-form-urlencoded')
@@ -59,7 +55,7 @@ export class FacturaService {
     const body = new HttpParams()
       .set('encriptada', _token)
     return new Promise((resolve, reject) => {
-      this.http.post(this.apiUrl + 'Factura/ListaFacturasNoFinalizadas', body.toString(),
+      this.http.post(apiUrl + 'Factura/ListaFacturasNoFinalizadas', body.toString(),
         {
           headers: new HttpHeaders()
             .set('Content-Type', 'application/x-www-form-urlencoded')
@@ -71,14 +67,14 @@ export class FacturaService {
           reject(err);
         })
     })
-  } 
+  }
 
   finalizarFactura(idCabecera: string, _token: string) {
     const body = new HttpParams()
       .set('IdCabeceraFactura', idCabecera)
       .set('encriptada', _token)
     return new Promise((resolve, reject) => {
-      this.http.post(this.apiUrl + 'Factura/FinalizarCabeceraFactura', body.toString(),
+      this.http.post(apiUrl + 'Factura/FinalizarCabeceraFactura', body.toString(),
         {
           headers: new HttpHeaders()
             .set('Content-Type', 'application/x-www-form-urlencoded')

@@ -1,15 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-
+import { apiUrl } from "../../environments/environment";
 @Injectable({
   providedIn: 'root'
 })
 export class UsuarioService {
 
   constructor(private http: HttpClient) { }
-
-  // private apiUrl = "http://localhost:49962/api/";
-  private apiUrl = "http://25.39.0.74:90/api/";
 
   login(
     usuario: string,
@@ -21,7 +18,7 @@ export class UsuarioService {
       .set('contrasena', contrasena)
       .set('token', _token)
     return new Promise((resolve, reject) => {
-      this.http.post(this.apiUrl + 'TalentoHumano/Login/', body.toString(),
+      this.http.post(apiUrl + 'TalentoHumano/Login/', body.toString(),
         {
           headers: new HttpHeaders()
             .set('Content-Type', 'application/x-www-form-urlencoded')
@@ -39,7 +36,7 @@ export class UsuarioService {
     const body = new HttpParams()
     .set('encriptada', _token)
     return new Promise((resolve, reject) => {
-      this.http.post(this.apiUrl + 'TalentoHumano/ListaUsuariosSistema', body.toString(),
+      this.http.post(apiUrl + 'TalentoHumano/ListaUsuariosSistema', body.toString(),
       {
         headers: new HttpHeaders()
           .set('Content-Type', 'application/x-www-form-urlencoded')
@@ -57,7 +54,7 @@ export class UsuarioService {
       .set('IdTipoUsuario', idTipoUsuario)
       .set('encriptada', _token)
     return new Promise((resolve, reject) => {
-      this.http.post(this.apiUrl + 'Usuarios/ListaModulosDeUnTipoUsuario', body.toString(),
+      this.http.post(apiUrl + 'Usuarios/ListaModulosDeUnTipoUsuario', body.toString(),
         {
           headers: new HttpHeaders()
             .set('Content-Type', 'application/x-www-form-urlencoded')
@@ -76,7 +73,7 @@ export class UsuarioService {
       .set('IdModuloTipo', idModuloTipo)
       .set('encriptada', _token)
     return new Promise((resolve, reject) => {
-      this.http.post(this.apiUrl + 'TalentoHumano/ListaPrivilegioDeUnTipoDeModulo', body.toString(),
+      this.http.post(apiUrl + 'TalentoHumano/ListaPrivilegioDeUnTipoDeModulo', body.toString(),
         {
           headers: new HttpHeaders()
             .set('Content-Type', 'application/x-www-form-urlencoded')
@@ -94,7 +91,7 @@ export class UsuarioService {
     const body = new HttpParams()
     .set('encriptada', _token)
     return new Promise((resolve, reject) => {
-      this.http.post(this.apiUrl + 'Usuario/ListaTipoUsuario', body.toString(),
+      this.http.post(apiUrl + 'Usuario/ListaTipoUsuario', body.toString(),
       {
         headers: new HttpHeaders()
           .set('Content-Type', 'application/x-www-form-urlencoded')
@@ -112,7 +109,7 @@ export class UsuarioService {
     .set('IdUsuario', idUsuario)
     .set('encriptada', _token)
     return new Promise((resolve, reject) => {
-      this.http.post(this.apiUrl + 'Usuarios/ObtenerTipoUsuarioDeUnUsuario', body.toString(),
+      this.http.post(apiUrl + 'Usuarios/ObtenerTipoUsuarioDeUnUsuario', body.toString(),
       {
         headers: new HttpHeaders()
           .set('Content-Type', 'application/x-www-form-urlencoded')
@@ -129,7 +126,7 @@ export class UsuarioService {
     const body = new HttpParams()
     .set('encriptada', _token)
     return new Promise((resolve, reject) => {
-      this.http.post(this.apiUrl + 'TalentoHumano/ListaPrivilegio/',
+      this.http.post(apiUrl + 'TalentoHumano/ListaPrivilegio/',
       body.toString(),
       {
         headers: new HttpHeaders()
@@ -149,7 +146,7 @@ export class UsuarioService {
     .set('encriptada', _token)
 
     return new Promise((resolve, reject) => {
-      this.http.post(this.apiUrl + 'Usuarios/ListaModulos/', body.toString(),
+      this.http.post(apiUrl + 'Usuarios/ListaModulos/', body.toString(),
       {
         headers: new HttpHeaders()
           .set('Content-Type', 'application/x-www-form-urlencoded')
@@ -170,7 +167,7 @@ export class UsuarioService {
       .set('Contrasena',datosUsuario.contrasena)
       .set('encriptada', datosUsuario.token)
     return new Promise((resolve, reject) => {
-      this.http.post(this.apiUrl + 'TalentoHumano/IngresoCredencial', body.toString(),
+      this.http.post(apiUrl + 'TalentoHumano/IngresoCredencial', body.toString(),
         {
           headers: new HttpHeaders()
             .set('Content-Type', 'application/x-www-form-urlencoded')
@@ -192,7 +189,7 @@ export class UsuarioService {
       .set('IdUsuario', idUsuario)
       .set('encriptada', _token)
     return new Promise((resolve, reject) => {
-      this.http.post(this.apiUrl + 'Usuario/HabilitarUsuario', body.toString(),
+      this.http.post(apiUrl + 'Usuario/HabilitarUsuario', body.toString(),
         {
           headers: new HttpHeaders()
             .set('Content-Type', 'application/x-www-form-urlencoded')
@@ -217,7 +214,7 @@ export class UsuarioService {
       .set('encriptada', _token)
     console.log(body)
     return new Promise((resolve, reject) => {
-      this.http.post(this.apiUrl + 'TalentoHumano/IngresoTipoUsuario', body.toString(),
+      this.http.post(apiUrl + 'TalentoHumano/IngresoTipoUsuario', body.toString(),
         {
           headers: new HttpHeaders()
             .set('Content-Type', 'application/x-www-form-urlencoded')
@@ -243,7 +240,7 @@ export class UsuarioService {
     .set('IdTipoUsuario', idTipoUsuario)
     .set('encriptada', _token)
     return new Promise((resolve, reject) => {
-      this.http.post(this.apiUrl + 'TalentoHumano/ActualizarAsignacionTipoUsuario', body.toString(),
+      this.http.post(apiUrl + 'TalentoHumano/ActualizarAsignacionTipoUsuario', body.toString(),
         {
           headers: new HttpHeaders()
             .set('Content-Type', 'application/x-www-form-urlencoded')
@@ -263,7 +260,7 @@ export class UsuarioService {
       .set('IdAsignacionTU', idAsignacionTipoUsuario)
       .set('encriptada', _token)
     return new Promise((resolve, reject) => {
-      this.http.post(this.apiUrl + 'TalentoHumano/EliminarAsignacionTipoUsuario', body.toString(),
+      this.http.post(apiUrl + 'TalentoHumano/EliminarAsignacionTipoUsuario', body.toString(),
         {
           headers: new HttpHeaders()
             .set('Content-Type', 'application/x-www-form-urlencoded')
@@ -286,7 +283,7 @@ export class UsuarioService {
       .set('IdUsuario', idUsuario)
       .set('encriptada', _token)
     return new Promise((resolve, reject) => {
-      this.http.post(this.apiUrl + 'TalentoHumano/EliminarCredencial', body.toString(),
+      this.http.post(apiUrl + 'TalentoHumano/EliminarCredencial', body.toString(),
         {
           headers: new HttpHeaders()
             .set('Content-Type', 'application/x-www-form-urlencoded')
@@ -314,7 +311,7 @@ export class UsuarioService {
       .set('Contrasena', Contrasena)
       .set('encriptada', _token)
     return new Promise((resolve, reject) => {
-      this.http.post(this.apiUrl + 'TalentoHumano/ActualizarCredencial', body.toString(),
+      this.http.post(apiUrl + 'TalentoHumano/ActualizarCredencial', body.toString(),
         {
           headers: new HttpHeaders()
             .set('Content-Type', 'application/x-www-form-urlencoded')

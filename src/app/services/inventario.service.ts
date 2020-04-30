@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-
+import { apiUrl } from "../../environments/environment";
 @Injectable({
   providedIn: 'root'
 })
@@ -8,14 +8,13 @@ export class InventarioService {
 
   constructor(private http: HttpClient) { }
 
-  // private apiUrl = "http://localhost:49962/api/";
-  private apiUrl = "http://25.39.0.74:90/api/";
+   private apiUrl = apiUrl;
 
   consultarTipoProductos(_token: string) {
     const body = new HttpParams()
       .set('encriptada', _token)
     return new Promise((resolve, reject) => {
-      this.http.post(this.apiUrl + 'Inventario/ListaTipoProductos', body.toString(),
+      this.http.post(apiUrl + 'Inventario/ListaTipoProductos', body.toString(),
         {
           headers: new HttpHeaders()
             .set('Content-Type', 'application/x-www-form-urlencoded')
@@ -34,7 +33,7 @@ export class InventarioService {
       .set('Descripcion', tipoProducto)
       .set('encriptada', _token)
     return new Promise((resolve, reject) => {
-      this.http.post(this.apiUrl + 'Inventario/IngresoTipoProducto', body.toString(),
+      this.http.post(apiUrl + 'Inventario/IngresoTipoProducto', body.toString(),
         {
           headers: new HttpHeaders()
             .set('Content-Type', 'application/x-www-form-urlencoded')
@@ -58,7 +57,7 @@ export class InventarioService {
       .set('Descripcion', tipoProducto)
       .set('encriptada', _token)
     return new Promise((resolve, reject) => {
-      this.http.post(this.apiUrl + 'Inventario/ActualizarTipoProducto', body.toString(),
+      this.http.post(apiUrl + 'Inventario/ActualizarTipoProducto', body.toString(),
         {
           headers: new HttpHeaders()
             .set('Content-Type', 'application/x-www-form-urlencoded')
@@ -77,7 +76,7 @@ export class InventarioService {
       .set('IdTipoProducto', idTipoProducto)
       .set('encriptada', _token)
     return new Promise((resolve, reject) => {
-      this.http.post(this.apiUrl + 'Inventario/EliminarTipoProducto', body.toString(),
+      this.http.post(apiUrl + 'Inventario/EliminarTipoProducto', body.toString(),
         {
           headers: new HttpHeaders()
             .set('Content-Type', 'application/x-www-form-urlencoded')
@@ -95,7 +94,7 @@ export class InventarioService {
     const body = new HttpParams()
       .set('encriptada', _token)
     return new Promise((resolve, reject) => {
-      this.http.post(this.apiUrl + 'Inventario/ListaProductos', body.toString(),
+      this.http.post(apiUrl + 'Inventario/ListaProductos', body.toString(),
         {
           headers: new HttpHeaders()
             .set('Content-Type', 'application/x-www-form-urlencoded')
@@ -121,7 +120,7 @@ export class InventarioService {
       .set('IdTipoProducto', idTipoProducto)
       .set('encriptada', _token)
     return new Promise((resolve, reject) => {
-      this.http.post(this.apiUrl + 'Inventario/IngresoProducto', body.toString(),
+      this.http.post(apiUrl + 'Inventario/IngresoProducto', body.toString(),
         {
           headers: new HttpHeaders()
             .set('Content-Type', 'application/x-www-form-urlencoded')
@@ -149,7 +148,7 @@ export class InventarioService {
       .set('IdTipoProducto', idTipoProducto)
       .set('encriptada', _token)
     return new Promise((resolve, reject) => {
-      this.http.post(this.apiUrl + 'Inventario/ActualizarProducto', body.toString(),
+      this.http.post(apiUrl + 'Inventario/ActualizarProducto', body.toString(),
         {
           headers: new HttpHeaders()
             .set('Content-Type', 'application/x-www-form-urlencoded')
@@ -168,7 +167,7 @@ export class InventarioService {
       .set('IdProducto', idProducto)
       .set('encriptada', _token)
     return new Promise((resolve, reject) => {
-      this.http.post(this.apiUrl + 'Inventario/EliminarProducto', body.toString(),
+      this.http.post(apiUrl + 'Inventario/EliminarProducto', body.toString(),
         {
           headers: new HttpHeaders()
             .set('Content-Type', 'application/x-www-form-urlencoded')
@@ -186,7 +185,7 @@ export class InventarioService {
     const body = new HttpParams()
       .set('encriptada', _token)
     return new Promise((resolve, reject) => {
-      this.http.post(this.apiUrl + 'Inventario/ListaPresentacion', body.toString(),
+      this.http.post(apiUrl + 'Inventario/ListaPresentacion', body.toString(),
         {
           headers: new HttpHeaders()
             .set('Content-Type', 'application/x-www-form-urlencoded')
@@ -205,7 +204,7 @@ export class InventarioService {
       .set('Descripcion', presentacion)
       .set('encriptada', _token)
     return new Promise((resolve, reject) => {
-      this.http.post(this.apiUrl + 'Inventario/IngresoPresentacion', body.toString(),
+      this.http.post(apiUrl + 'Inventario/IngresoPresentacion', body.toString(),
         {
           headers: new HttpHeaders()
             .set('Content-Type', 'application/x-www-form-urlencoded')
@@ -229,7 +228,7 @@ export class InventarioService {
       .set('Descripcion', presentacion)
       .set('encriptada', _token)
     return new Promise((resolve, reject) => {
-      this.http.post(this.apiUrl + 'Inventario/ActualizarPresentacion', body.toString(),
+      this.http.post(apiUrl + 'Inventario/ActualizarPresentacion', body.toString(),
         {
           headers: new HttpHeaders()
             .set('Content-Type', 'application/x-www-form-urlencoded')
@@ -248,7 +247,7 @@ export class InventarioService {
       .set('IdPresentacion', idPresentacion)
       .set('encriptada', _token)
     return new Promise((resolve, reject) => {
-      this.http.post(this.apiUrl + 'Inventario/EliminarPresentacion', body.toString(),
+      this.http.post(apiUrl + 'Inventario/EliminarPresentacion', body.toString(),
         {
           headers: new HttpHeaders()
             .set('Content-Type', 'application/x-www-form-urlencoded')
@@ -266,7 +265,7 @@ export class InventarioService {
     const body = new HttpParams()
       .set('encriptada', _token)
     return new Promise((resolve, reject) => {
-      this.http.post(this.apiUrl + 'Inventario/ListaMedidas', body.toString(),
+      this.http.post(apiUrl + 'Inventario/ListaMedidas', body.toString(),
         {
           headers: new HttpHeaders()
             .set('Content-Type', 'application/x-www-form-urlencoded')
@@ -285,7 +284,7 @@ export class InventarioService {
       .set('Descripcion', medida)
       .set('encriptada', _token)
     return new Promise((resolve, reject) => {
-      this.http.post(this.apiUrl + 'Inventario/IngresoMedida', body.toString(),
+      this.http.post(apiUrl + 'Inventario/IngresoMedida', body.toString(),
         {
           headers: new HttpHeaders()
             .set('Content-Type', 'application/x-www-form-urlencoded')
@@ -309,7 +308,7 @@ export class InventarioService {
       .set('Descripcion', medida)
       .set('encriptada', _token)
     return new Promise((resolve, reject) => {
-      this.http.post(this.apiUrl + 'Inventario/ActualizarMedida', body.toString(),
+      this.http.post(apiUrl + 'Inventario/ActualizarMedida', body.toString(),
         {
           headers: new HttpHeaders()
             .set('Content-Type', 'application/x-www-form-urlencoded')
@@ -328,7 +327,7 @@ export class InventarioService {
       .set('IdMedida', idMedida)
       .set('encriptada', _token)
     return new Promise((resolve, reject) => {
-      this.http.post(this.apiUrl + 'Inventario/EliminarMedida', body.toString(),
+      this.http.post(apiUrl + 'Inventario/EliminarMedida', body.toString(),
         {
           headers: new HttpHeaders()
             .set('Content-Type', 'application/x-www-form-urlencoded')
@@ -346,7 +345,7 @@ export class InventarioService {
     const body = new HttpParams()
       .set('encriptada', _token)
     return new Promise((resolve, reject) => {
-      this.http.post(this.apiUrl + 'Inventario/ListaConfigurarProductosTodos', body.toString(),
+      this.http.post(apiUrl + 'Inventario/ListaConfigurarProductosTodos', body.toString(),
         {
           headers: new HttpHeaders()
             .set('Content-Type', 'application/x-www-form-urlencoded')
@@ -364,7 +363,7 @@ export class InventarioService {
     const body = new HttpParams()
       .set('encriptada', _token)
     return new Promise((resolve, reject) => {
-      this.http.post(this.apiUrl + 'Inventario/ListaConfigurarProductos', body.toString(),
+      this.http.post(apiUrl + 'Inventario/ListaConfigurarProductos', body.toString(),
         {
           headers: new HttpHeaders()
             .set('Content-Type', 'application/x-www-form-urlencoded')
@@ -396,7 +395,7 @@ export class InventarioService {
       .set('CantidadMedida', cantidadMedida)
       .set('encriptada', _token)
     return new Promise((resolve, reject) => {
-      this.http.post(this.apiUrl + 'Inventario/IngresoConfigurarProducto', body.toString(),
+      this.http.post(apiUrl + 'Inventario/IngresoConfigurarProducto', body.toString(),
         {
           headers: new HttpHeaders()
             .set('Content-Type', 'application/x-www-form-urlencoded')
@@ -430,7 +429,7 @@ export class InventarioService {
       .set('CantidadMedida', cantidadMedida)
       .set('encriptada', _token)
     return new Promise((resolve, reject) => {
-      this.http.post(this.apiUrl + 'Inventario/ActualizarConfigurarProducto', body.toString(),
+      this.http.post(apiUrl + 'Inventario/ActualizarConfigurarProducto', body.toString(),
         {
           headers: new HttpHeaders()
             .set('Content-Type', 'application/x-www-form-urlencoded')
@@ -454,7 +453,7 @@ export class InventarioService {
       .set('IdProducto', idProducto)
       .set('encriptada', _token)
     return new Promise((resolve, reject) => {
-      this.http.post(this.apiUrl + 'Inventario/EliminarConfigurarProducto', body.toString(),
+      this.http.post(apiUrl + 'Inventario/EliminarConfigurarProducto', body.toString(),
         {
           headers: new HttpHeaders()
             .set('Content-Type', 'application/x-www-form-urlencoded')
@@ -472,7 +471,7 @@ export class InventarioService {
     const body = new HttpParams()
       .set('encriptada', _token)
     return new Promise((resolve, reject) => {
-      this.http.post(this.apiUrl + 'Inventario/ListaKit', body.toString(),
+      this.http.post(apiUrl + 'Inventario/ListaKit', body.toString(),
         {
           headers: new HttpHeaders()
             .set('Content-Type', 'application/x-www-form-urlencoded')
@@ -496,7 +495,7 @@ export class InventarioService {
       .set('Codigo', codigo)
       .set('encriptada', _token)
     return new Promise((resolve, reject) => {
-      this.http.post(this.apiUrl + 'Inventario/IngresoKit', body.toString(),
+      this.http.post(apiUrl + 'Inventario/IngresoKit', body.toString(),
         {
           headers: new HttpHeaders()
             .set('Content-Type', 'application/x-www-form-urlencoded')
@@ -522,7 +521,7 @@ export class InventarioService {
       .set('Codigo', codigo)
       .set('encriptada', _token)
     return new Promise((resolve, reject) => {
-      this.http.post(this.apiUrl + 'Inventario/ActualizarKit', body.toString(),
+      this.http.post(apiUrl + 'Inventario/ActualizarKit', body.toString(),
         {
           headers: new HttpHeaders()
             .set('Content-Type', 'application/x-www-form-urlencoded')
@@ -541,7 +540,7 @@ export class InventarioService {
       .set('IdKit', idKit)
       .set('encriptada', _token)
     return new Promise((resolve, reject) => {
-      this.http.post(this.apiUrl + 'Inventario/EliminarKit', body.toString(),
+      this.http.post(apiUrl + 'Inventario/EliminarKit', body.toString(),
         {
           headers: new HttpHeaders()
             .set('Content-Type', 'application/x-www-form-urlencoded')
@@ -559,7 +558,7 @@ export class InventarioService {
     const body = new HttpParams()
       .set('encriptada', _token)
     return new Promise((resolve, reject) => {
-      this.http.post(this.apiUrl + 'Inventario/ListaDescuento', body.toString(),
+      this.http.post(apiUrl + 'Inventario/ListaDescuento', body.toString(),
         {
           headers: new HttpHeaders()
             .set('Content-Type', 'application/x-www-form-urlencoded')
@@ -581,7 +580,7 @@ export class InventarioService {
       .set('Porcentaje', descuento)
       .set('encriptada', _token)
     return new Promise((resolve, reject) => {
-      this.http.post(this.apiUrl + 'Inventario/IngresoDescuento', body.toString(),
+      this.http.post(apiUrl + 'Inventario/IngresoDescuento', body.toString(),
         {
           headers: new HttpHeaders()
             .set('Content-Type', 'application/x-www-form-urlencoded')
@@ -605,7 +604,7 @@ export class InventarioService {
       .set('IdDescuento', idDescuento)
       .set('encriptada', _token)
     return new Promise((resolve, reject) => {
-      this.http.post(this.apiUrl + 'Inventario/IngresoAsignarDescuentoKit', body.toString(),
+      this.http.post(apiUrl + 'Inventario/IngresoAsignarDescuentoKit', body.toString(),
         {
           headers: new HttpHeaders()
             .set('Content-Type', 'application/x-www-form-urlencoded')
@@ -631,7 +630,7 @@ export class InventarioService {
       .set('IdDescuento', idDescuento)
       .set('encriptada', _token)
     return new Promise((resolve, reject) => {
-      this.http.post(this.apiUrl + '', body.toString(),
+      this.http.post(apiUrl + '', body.toString(),
         {
           headers: new HttpHeaders()
             .set('Content-Type', 'application/x-www-form-urlencoded')
@@ -650,7 +649,7 @@ export class InventarioService {
       .set('IdKit', idKit)
       .set('encriptada', _token)
     return new Promise((resolve, reject) => {
-      this.http.post(this.apiUrl + url, body.toString(),
+      this.http.post(apiUrl + url, body.toString(),
         {
           headers: new HttpHeaders()
             .set('Content-Type', 'application/x-www-form-urlencoded')
@@ -669,7 +668,7 @@ export class InventarioService {
       .set('IdKit', idKit)
       .set('encriptada', _token)
     return new Promise((resolve, reject) => {
-      this.http.post(this.apiUrl + 'Inventario/ListaConfigurarProductosQueNoTieneUnKit', body.toString(),
+      this.http.post(apiUrl + 'Inventario/ListaConfigurarProductosQueNoTieneUnKit', body.toString(),
         {
           headers: new HttpHeaders()
             .set('Content-Type', 'application/x-www-form-urlencoded')
@@ -693,7 +692,7 @@ export class InventarioService {
       .set('IdAsignarDescuentoKit', idAsignarDescuentoKit)
       .set('encriptada', _token)
     return new Promise((resolve, reject) => {
-      this.http.post(this.apiUrl + 'Inventario/IngresoAsignarProductoKit', body.toString(),
+      this.http.post(apiUrl + 'Inventario/IngresoAsignarProductoKit', body.toString(),
         {
           headers: new HttpHeaders()
             .set('Content-Type', 'application/x-www-form-urlencoded')
@@ -715,7 +714,7 @@ export class InventarioService {
       .set('IdAsignarProductoKit', idAsignarProductoKit)
       .set('encriptada', _token)
     return new Promise((resolve, reject) => {
-      this.http.post(this.apiUrl + 'Inventario/EliminarAsignarProductoKit', body.toString(),
+      this.http.post(apiUrl + 'Inventario/EliminarAsignarProductoKit', body.toString(),
         {
           headers: new HttpHeaders()
             .set('Content-Type', 'application/x-www-form-urlencoded')
@@ -733,7 +732,7 @@ export class InventarioService {
     const body = new HttpParams()
       .set('encriptada', _token)
     return new Promise((resolve, reject) => {
-      this.http.post(this.apiUrl + 'Factura/ListarStock', body.toString(),
+      this.http.post(apiUrl + 'Factura/ListarStock', body.toString(),
         {
           headers: new HttpHeaders()
             .set('Content-Type', 'application/x-www-form-urlencoded')
@@ -758,7 +757,7 @@ export class InventarioService {
       .set('PerteneceKit', perteneceKit)
       .set('encriptada', _token)
     return new Promise((resolve, reject) => {
-      this.http.post(this.apiUrl + 'Factura/ListaLote', body.toString(),
+      this.http.post(apiUrl + 'Factura/ListaLote', body.toString(),
         {
           headers: new HttpHeaders()
             .set('Content-Type', 'application/x-www-form-urlencoded')
@@ -784,7 +783,7 @@ export class InventarioService {
       .set('FechaExpiracion', fechaExpiracion)
       .set('encriptada', _token)
     return new Promise((resolve, reject) => {
-      this.http.post(this.apiUrl + 'Factura/IngresoLote', body.toString(),
+      this.http.post(apiUrl + 'Factura/IngresoLote', body.toString(),
         {
           headers: new HttpHeaders()
             .set('Content-Type', 'application/x-www-form-urlencoded')
@@ -818,7 +817,7 @@ export class InventarioService {
       .set('IdLote', idLote)
       .set('FechaExpiracion', fechaExpiracion)
     return new Promise((resolve, reject) => {
-      this.http.post(this.apiUrl + 'Factura/IngresoAsignarProductoLote', body.toString(),
+      this.http.post(apiUrl + 'Factura/IngresoAsignarProductoLote', body.toString(),
         {
           headers: new HttpHeaders()
             .set('Content-Type', 'application/x-www-form-urlencoded')
@@ -840,7 +839,7 @@ export class InventarioService {
       .set('IdAsignarProductoLote', IdAsignarProductoLote)
       .set('encriptada', _token)
     return new Promise((resolve, reject) => {
-      this.http.post(this.apiUrl + 'Inventario/BuscarPrecioConfigurarProducto', body.toString(),
+      this.http.post(apiUrl + 'Inventario/BuscarPrecioConfigurarProducto', body.toString(),
         {
           headers: new HttpHeaders()
             .set('Content-Type', 'application/x-www-form-urlencoded')
@@ -866,7 +865,7 @@ export class InventarioService {
       .set('AsignarProductoLote.PerteneceKit', perteneceKit)
       .set('encriptada', _token)
     return new Promise((resolve, reject) => {
-      this.http.post(this.apiUrl + 'Factura/BuscarLote', body.toString(),
+      this.http.post(apiUrl + 'Factura/BuscarLote', body.toString(),
         {
           headers: new HttpHeaders()
             .set('Content-Type', 'application/x-www-form-urlencoded')
@@ -893,7 +892,7 @@ export class InventarioService {
     console.log(body);
     
     return new Promise((resolve, reject) => {
-      this.http.post(this.apiUrl + 'Inventario/IngresoPrecioConfigurarProducto', body.toString(),
+      this.http.post(apiUrl + 'Inventario/IngresoPrecioConfigurarProducto', body.toString(),
         {
           headers: new HttpHeaders()
             .set('Content-Type', 'application/x-www-form-urlencoded')
@@ -919,7 +918,7 @@ export class InventarioService {
       .set('Precio', precio)
       .set('encriptada', _token)
     return new Promise((resolve, reject) => {
-      this.http.post(this.apiUrl + 'Inventario/ActualizarPrecioConfigurarProducto', body.toString(),
+      this.http.post(apiUrl + 'Inventario/ActualizarPrecioConfigurarProducto', body.toString(),
         {
           headers: new HttpHeaders()
             .set('Content-Type', 'application/x-www-form-urlencoded')
