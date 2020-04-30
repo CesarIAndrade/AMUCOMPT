@@ -12,6 +12,9 @@ import { MatTableDataSource } from "@angular/material";
 
 // SweetAlert
 import sweetalert from "sweetalert";
+import { FacturaService } from 'src/app/services/factura.service';
+import { VentaService } from 'src/app/services/venta.service';
+import { PanelAdministracionService } from 'src/app/services/panel-administracion.service';
 
 @Component({
   selector: "app-venta",
@@ -19,13 +22,15 @@ import sweetalert from "sweetalert";
   styleUrls: ["./venta.component.css"],
 })
 export class VentaComponent implements OnInit {
-
   myForm: FormGroup;
 
   constructor(
     private modalAsignacionUsuarioPersona: MatDialog,
     private modalAsignacionConfiguracionProducto: MatDialog,
     private inventarioService: InventarioService,
+    private ventaService: VentaService,
+    private facturaService: FacturaService,
+    private panelAdministracionService: PanelAdministracionService,
     private router: Router
   ) {
     this.myForm = new FormGroup({
@@ -76,8 +81,69 @@ export class VentaComponent implements OnInit {
 
   sembrios: any[] = [];
   detalleVenta: any[] = [];
+  kits: any[] = [];
   seccionKit = true;
   filteredOptions: Observable<string[]>;
+  tipoCompra: any[] = [{ tipo: "Producto" }, { tipo: "Kit" }];
+  selected = "Producto";
+  buttonSeleccionarProducto = true;
+  buttonSeleccionarPersona = true;
+  listaProductosDeUnKit: any[] = [];
+  selectTipoCompra = true;
+
+  selecionarTipoCompra(tipoCompra) {
+    if (tipoCompra.value == "Kit") {
+      this.seccionKit = false;
+      this.buttonSeleccionarProducto = true;
+      this.limpiarCampos();
+    } else {
+      this.listaProductosDeUnKit = [];
+      this.seccionKit = true;
+      this.limpiarCampos();
+    }
+  }
+
+  consultarKits() {
+    this.inventarioService
+      .consultarKits(localStorage.getItem("miCuenta.getToken"))
+      .then((ok) => {
+        this.kits = [];
+        ok["respuesta"].map((item) => {
+          if (item.KitUtilizado == "1") {
+            this.kits.push(item);
+          }
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
+  consultarKitsYSusProductos(idKit) {
+    const url = "Stock/ListaAsignarProductoKitEnStock";
+    this.inventarioService
+      .consultarKitsYSusProductos(
+        idKit,
+        localStorage.getItem("miCuenta.getToken"),
+        url
+      )
+      .then((ok) => {
+        this.listaProductosDeUnKit = [];
+        this.listaProductosDeUnKit =
+          ok["respuesta"][0]["ListaAsignarProductoKit"];
+        this.buttonSeleccionarProducto = true;
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+      .finally(() => {
+        this.buttonSeleccionarProducto = false;
+      });
+  }
+
+  onChangeSelectKit(idKit) {
+    this.consultarKitsYSusProductos(idKit);
+  }
 
   seleccionarPersona() {
     let dialogRef = this.modalAsignacionUsuarioPersona.open(
@@ -104,12 +170,17 @@ export class VentaComponent implements OnInit {
       {
         width: "800px",
         height: "auto",
+        data: {
+          listaProductosDeUnKit: this.listaProductosDeUnKit,
+          idCabeceraFactura: this._idCabecera.value
+        },
       }
     );
     dialogRef.afterClosed().subscribe((result) => {
+      console.log(result);
+
       if (result != null) {
         if (result.Kit != null) {
-          this.seccionKit = false;
           this._kit.setValue(result.Kit + " (" + result.Porcentaje + ")");
         } else {
           this.seccionKit = true;
@@ -132,9 +203,9 @@ export class VentaComponent implements OnInit {
       }
     });
   }
+
   consultarSembios() {
-    this.inventarioService
-      .consultarSembios(localStorage.getItem("miCuenta.getToken"))
+    this.panelAdministracionService.consultarSembrios(localStorage.getItem("miCuenta.getToken"))
       .then((ok) => {
         this.sembrios = ok["respuesta"];
         this.filteredOptions = this._sembrio.valueChanges.pipe(
@@ -148,7 +219,7 @@ export class VentaComponent implements OnInit {
   }
 
   consultarTipoTransaccion() {
-    this.inventarioService
+    this.facturaService
       .consultarTipoTransaccion(localStorage.getItem("miCuenta.getToken"))
       .then((ok) => {
         if (this.router.url === "/ventas") {
@@ -169,7 +240,7 @@ export class VentaComponent implements OnInit {
   }
 
   crearCabeceraFactura() {
-    this.inventarioService
+    this.facturaService
       .crearCabeceraFactura(
         localStorage.getItem("miCuenta.idAsignacionTipoUsuario"),
         this._tipoTransaccion.value,
@@ -180,10 +251,10 @@ export class VentaComponent implements OnInit {
           sweetAlert("Ha ocurrido un error!", {
             icon: "error",
           });
-        } else {
+        } else if(ok['respuesta']) {
+          console.log(ok['respuesta']);
           this._idCabecera.setValue(ok["respuesta"].IdCabeceraFactura);
           this._cabecera.setValue(ok["respuesta"].Codigo);
-          this.myForm.enable();
           var fecha = new Date();
           var dia = this.dias[fecha.getDay()];
           var mes = this.meses[fecha.getMonth()];
@@ -194,6 +265,11 @@ export class VentaComponent implements OnInit {
       })
       .catch((error) => {
         console.log(error);
+      }).finally(() => {
+        this.buttonSeleccionarPersona = false;
+        this.buttonSeleccionarProducto = false;
+        this.selectTipoCompra = false;
+        this.myForm.enable();
       });
   }
 
@@ -204,7 +280,7 @@ export class VentaComponent implements OnInit {
     } else {
       EstadoCheck = "0";
     }
-    this.inventarioService
+    this.ventaService
       .crearDetalleVenta(
         this._idCabecera.value,
         this._idAsignarProductoLote.value,
@@ -233,7 +309,7 @@ export class VentaComponent implements OnInit {
   }
 
   consultarFacturasVentaFinalizadas() {
-    this.inventarioService
+    this.ventaService
       .consultarFacturasVentasFinalizadas(
         localStorage.getItem("miCuenta.getToken")
       )
@@ -259,33 +335,31 @@ export class VentaComponent implements OnInit {
         console.log(error);
       });
   }
+
   realizarVenta() {
-    this.inventarioService.FinalizarCabeceraFacturaVenta(
-      this._idCabecera.value,
-      localStorage.getItem('miCuenta.putToken')
-    )
-      .then(
-        ok => {
-          if (ok['respuesta']) {
-            sweetAlert("Se ingresó correctamente!", {
-              icon: "success",
-            });
-          } else {
-            sweetAlert("Ha ocurrido un error!", {
-              icon: "error",
-            });
-          }
-        }
+    this.ventaService
+      .FinalizarCabeceraFacturaVenta(
+        this._idCabecera.value,
+        localStorage.getItem("miCuenta.putToken")
       )
-      .catch(
-        error => {
-          console.log(error);
+      .then((ok) => {
+        if (ok["respuesta"]) {
+          sweetAlert("Se ingresó correctamente!", {
+            icon: "success",
+          });
+        } else {
+          sweetAlert("Ha ocurrido un error!", {
+            icon: "error",
+          });
         }
-      )
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }
 
   consultarDetalleDeUnaFactura() {
-    this.inventarioService
+    this.ventaService
       .consultarDetalleDeUnaFacturasVenta(
         this._idCabecera.value,
         localStorage.getItem("miCuenta.getToken")
@@ -384,7 +458,7 @@ export class VentaComponent implements OnInit {
       if (event.target.value <= 0) {
         event.target.value = cantidadAntigua;
       } else {
-        this.inventarioService
+        this.ventaService
           .modificarCantidadDeProductoEnDetalleVenta(
             element.IdDetalleVenta,
             event.target.value,
@@ -412,7 +486,7 @@ export class VentaComponent implements OnInit {
   }
 
   quitarDetalleFactura(DetalleFactura) {
-    this.inventarioService
+    this.ventaService
       .quitarDetalleFacturaVenta(
         DetalleFactura.IdDetalleVenta,
         localStorage.getItem("miCuenta.deleteToken")
@@ -434,7 +508,7 @@ export class VentaComponent implements OnInit {
     this._kit.reset();
     this._checkedDescuento.reset();
     this._precio.reset();
-    this.seccionKit = true;
+    // this.seccionKit = true;
   }
 
   seleccionarSembrioSiExiste(sembrio) {
@@ -506,8 +580,10 @@ export class VentaComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.consultarKits();
     this.consultarSembios();
     this.consultarTipoTransaccion();
+    this.myForm.disable();
   }
 
   private _filter(value: string): string[] {

@@ -4,11 +4,14 @@ import { MatDialog } from '@angular/material';
 import { Observable } from 'rxjs';
 import { startWith, map } from 'rxjs/operators';
 import { MatPaginator, MatTableDataSource, MatPaginatorIntl } from '@angular/material';
+
 // Component
 import { ModalAsignacionConfiguracionProductoComponent } from '../modal-asignacion-configuracion-producto/modal-asignacion-configuracion-producto.component';
 
 // Services
 import { InventarioService } from 'src/app/services/inventario.service';
+import { CompraService } from 'src/app/services/compra.service';
+import { FacturaService } from 'src/app/services/factura.service';
 
 // SweetAlert
 import sweetalert from "sweetalert"
@@ -28,6 +31,8 @@ export class CompraComponent implements OnInit {
   constructor(
     private modalAsignacionConfiguracionProducto: MatDialog,
     private inventarioService: InventarioService,
+    private compraService: CompraService,
+    private facturaService: FacturaService,
     private router: Router
   ) {
     this.myForm = new FormGroup({
@@ -78,7 +83,7 @@ export class CompraComponent implements OnInit {
 
   buscarFechaYPrecio() {
     if (this._idRelacionLogica.value != '' && this._perteneceKit.value != '') {
-      this.inventarioService.buscarFechaYPrecio(
+      this.compraService.buscarFechaYPrecio(
         this._idCabecera.value,
         this._idRelacionLogica.value,
         this._perteneceKit.value,
@@ -167,7 +172,7 @@ export class CompraComponent implements OnInit {
       if (event.target.value <= 0) {
         event.target.value = cantidadAntigua;
       } else {
-        this.inventarioService.modificarCantidadDeProductoEnDetalle(
+        this.compraService.modificarCantidadDeProductoEnDetalle(
           element.IdDetalleFactura,
           event.target.value,
           localStorage.getItem('miCuenta.putToken')
@@ -201,7 +206,7 @@ export class CompraComponent implements OnInit {
   }
 
   consultarTipoTransaccion() {
-    this.inventarioService.consultarTipoTransaccion(
+    this.facturaService.consultarTipoTransaccion(
       localStorage.getItem('miCuenta.getToken')
     )
       .then(
@@ -313,7 +318,7 @@ export class CompraComponent implements OnInit {
   consultarDetalleFactura() {
     this.detalleCompraLista = [];
     this.detalleCompra.data = [];
-    this.inventarioService.consultarDetalleFactura(
+    this.compraService.consultarDetalleFactura(
       this._idCabecera.value,
       localStorage.getItem('miCuenta.getToken')
     )
@@ -393,9 +398,11 @@ export class CompraComponent implements OnInit {
   }
 
   consultarKitsYSusProductos(idKit) {
+    const url = "Inventario/ListaAsignarProductoKit";
     this.inventarioService.consultarKitsYSusProductos(
       idKit,
-      localStorage.getItem('miCuenta.getToken')
+      localStorage.getItem('miCuenta.getToken'),
+      url
     )
       .then(
         ok => {
@@ -411,7 +418,7 @@ export class CompraComponent implements OnInit {
   }
 
   consultarFacturasNoFinalizadas() {
-    this.inventarioService.consultarFacturasNoFinalizadas(
+    this.facturaService.consultarFacturasNoFinalizadas(
       localStorage.getItem('miCuenta.getToken')
     )
       .then(
@@ -440,7 +447,7 @@ export class CompraComponent implements OnInit {
   crearCabeceraFactura() {
     this.limpiarCampos();
     this.detalleCompra.data = [];
-    this.inventarioService.crearCabeceraFactura(
+    this.facturaService.crearCabeceraFactura(
       localStorage.getItem('miCuenta.idAsignacionTipoUsuario'),
       this._tipoTransaccion.value,
       localStorage.getItem('miCuenta.postToken')
@@ -452,8 +459,6 @@ export class CompraComponent implements OnInit {
               icon: "error",
             });
           } else {
-            console.log(ok['respuesta']);
-            
             this._idCabecera.setValue(ok['respuesta'].IdCabeceraFactura);
             this._cabecera.setValue(ok['respuesta'].Codigo);
             this.myForm.enable();
@@ -489,7 +494,7 @@ export class CompraComponent implements OnInit {
   }
 
   crearDetalleFactura() {
-    this.inventarioService.crearDetalleFactura(
+    this.compraService.crearDetalleFactura(
       this._idCabecera.value,
       this._idAsignarProductoLote.value,
       this._cantidad.value,
@@ -517,7 +522,7 @@ export class CompraComponent implements OnInit {
         }
       )
   }
-
+ 
   seleccionarProducto() {
     let dialogRef = this.modalAsignacionConfiguracionProducto.open(ModalAsignacionConfiguracionProductoComponent, {
       width: '600px',
@@ -545,7 +550,7 @@ export class CompraComponent implements OnInit {
   }
 
   quitarDetalleFactura(DetalleFactura) {
-    this.inventarioService.quitarDetalleFactura(
+    this.compraService.quitarDetalleFactura(
       DetalleFactura.IdDetalleFactura,
       DetalleFactura.IdCabeceraFactura,
       localStorage.getItem('miCuenta.deleteToken')
@@ -569,7 +574,7 @@ export class CompraComponent implements OnInit {
   }
 
   realizarCompra() {
-    this.inventarioService.finalizarFactura(
+    this.facturaService.finalizarFactura(
       this._idCabecera.value,
       localStorage.getItem('miCuenta.putToken')
     )

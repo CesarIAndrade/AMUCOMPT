@@ -13,6 +13,7 @@ import { PersonaService } from "../../services/persona.service";
 
 // SweetAlert
 import sweetalert from "sweetalert"
+import { PanelAdministracionService } from 'src/app/services/panel-administracion.service';
 
 @Component({
   selector: 'app-persona',
@@ -25,6 +26,7 @@ export class PersonaComponent implements OnInit {
 
   constructor(
     private personaService: PersonaService,
+    private panelAdministracionService: PanelAdministracionService,
     private dialog: MatDialog,
   ) {
     this.myForm = new FormGroup({
@@ -67,7 +69,7 @@ export class PersonaComponent implements OnInit {
   tipoTelefonos: any[] = [];
 
   consultarProvincias() {
-    this.personaService.consultarProvincias(localStorage.getItem('miCuenta.getToken'))
+    this.panelAdministracionService.consultarProvincias(localStorage.getItem('miCuenta.getToken'))
       .then(
         ok => {
           this.provincias = ok['respuesta'];
@@ -81,7 +83,7 @@ export class PersonaComponent implements OnInit {
   }
 
   consultarCantones() {
-    this.personaService.consultarCantones(localStorage.getItem('miCuenta.getToken'))
+    this.panelAdministracionService.consultarCantones(localStorage.getItem('miCuenta.getToken'))
       .then(
         ok => {
           this.cantones = ok['respuesta'];
@@ -95,7 +97,7 @@ export class PersonaComponent implements OnInit {
   }
 
   consultarParroquias() {
-    this.personaService.consultarParroquias(localStorage.getItem('miCuenta.getToken'))
+    this.panelAdministracionService.consultarParroquias(localStorage.getItem('miCuenta.getToken'))
       .then(
         ok => {
           this.parroquias = ok['respuesta'];
@@ -155,7 +157,7 @@ export class PersonaComponent implements OnInit {
   consultarCantonesDeUnaProvincia(idProvincia: string, value?: string) {
     this.cantones = [];
     this.parroquias = [];
-    this.personaService.consultarCantonesDeUnaProvincia(
+    this.panelAdministracionService.consultarCantonesDeUnaProvincia(
       idProvincia,
       localStorage.getItem('miCuenta.getToken'))
       .then(
@@ -177,7 +179,7 @@ export class PersonaComponent implements OnInit {
 
   consultarParroquiasDeUnCanton(idCanton: string, value?: string) {
     this.parroquias = [];
-    this.personaService.consultarParroquiasDeUnCanton(
+    this.panelAdministracionService.consultarParroquiasDeUnCanton(
       idCanton, localStorage.getItem('miCuenta.getToken'))
       .then(
         ok => {

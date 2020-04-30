@@ -8,7 +8,8 @@ export class PersonaService {
 
   constructor(private http: HttpClient) { }
 
-  private apiUrl = "http://localhost:49962/api/";
+  // private apiUrl = "http://localhost:49962/api/";
+  private apiUrl = "http://25.39.0.74:90/api/";
 
   consultarPersonas(_token: string) {
     const body = new HttpParams()
@@ -46,7 +47,6 @@ export class PersonaService {
     })
   }
 
-
   consultarTipoDocumento(_token: string) {
     const body = new HttpParams()
       .set('encriptada', _token)
@@ -81,152 +81,6 @@ export class PersonaService {
           reject(err);
         })
     });
-  }
-
-  consultarProvincias(_token: string) {
-    const body = new HttpParams()
-      .set('encriptada', _token)
-    return new Promise((resolve, reject) => {
-      this.http.post(this.apiUrl + 'TalentoHumano/ListaProvincia/',
-        body.toString(),
-        {
-          headers: new HttpHeaders()
-            .set('Content-Type', 'application/x-www-form-urlencoded')
-        })
-        .subscribe(res => {
-          resolve(res);
-        }, (err) => {
-          reject(err);
-        })
-    })
-  }
-
-  consultarCantones(_token: string) {
-    const body = new HttpParams()
-      .set('encriptada', _token)
-    return new Promise((resolve, reject) => {
-      this.http.post(this.apiUrl + 'TalentoHumano/ListaCantones/',
-        body.toString(),
-        {
-          headers: new HttpHeaders()
-            .set('Content-Type', 'application/x-www-form-urlencoded')
-        })
-        .subscribe(res => {
-          resolve(res);
-        }, (err) => {
-          reject(err);
-        })
-    })
-  }
-
-  consultarParroquias(_token: string) {
-    const body = new HttpParams()
-      .set('encriptada', _token)
-    return new Promise((resolve, reject) => {
-      this.http.post(this.apiUrl + 'TalentoHumano/ListaParroquia/',
-        body.toString(),
-        {
-          headers: new HttpHeaders()
-            .set('Content-Type', 'application/x-www-form-urlencoded')
-        })
-        .subscribe(res => {
-          resolve(res);
-        }, (err) => {
-          reject(err);
-        })
-    })
-  }
-
-  consultarComunidades(_token: string) {
-    const body = new HttpParams()
-      .set('encriptada', _token)
-    return new Promise((resolve, reject) => {
-      this.http.post(this.apiUrl + 'TalentoHumano/ListaComunidad/',
-        body.toString(),
-        {
-          headers: new HttpHeaders()
-            .set('Content-Type', 'application/x-www-form-urlencoded')
-        })
-        .subscribe(res => {
-          resolve(res);
-        }, (err) => {
-          reject(err);
-        })
-    })
-  }
-
-  consultarSembrios(_token: string) {
-    const body = new HttpParams()
-      .set('encriptada', _token)
-    return new Promise((resolve, reject) => {
-      this.http.post(this.apiUrl + 'TalentoHumano/ListaSembrios', body.toString(),
-        {
-          headers: new HttpHeaders()
-            .set('Content-Type', 'application/x-www-form-urlencoded')
-        })
-        .subscribe(res => {
-          resolve(res);
-        }, (err) => {
-          reject(err);
-        })
-    });
-  }
-
-  consultarCantonesDeUnaProvincia(idProvincia: string, _token: string) {
-    const body = new HttpParams()
-      .set('IdProvincia', idProvincia)
-      .set('encriptada', _token)
-    return new Promise((resolve, reject) => {
-      this.http.post(this.apiUrl + 'TalentoHumano/ListaCantonesProvincia/', body.toString(),
-        {
-          headers: new HttpHeaders()
-            .set('Content-Type', 'application/x-www-form-urlencoded')
-        }
-      )
-        .subscribe(res => {
-          resolve(res);
-        }, (err) => {
-          reject(err);
-        })
-    })
-  }
-
-  consultarParroquiasDeUnCanton(idCanton: string, _token: string) {
-    const body = new HttpParams()
-      .set('IdCanton', idCanton)
-      .set('encriptada', _token)
-    return new Promise((resolve, reject) => {
-      this.http.post(this.apiUrl + 'TalentoHumano/ListaParroquiaCanton', body.toString(),
-        {
-          headers: new HttpHeaders()
-            .set('Content-Type', 'application/x-www-form-urlencoded')
-        }
-      )
-        .subscribe(res => {
-          resolve(res);
-        }, (err) => {
-          reject(err);
-        })
-    })
-  }
-
-  consultarComunidadesDeUnaParroquia(idParroquia: string, _token: string) {
-    const body = new HttpParams()
-      .set('IdParroquia', idParroquia)
-      .set('encriptada', _token)
-    return new Promise((resolve, reject) => {
-      this.http.post(this.apiUrl + 'TalentoHumano/ListaComunidadParroquia/', body.toString(),
-        {
-          headers: new HttpHeaders()
-            .set('Content-Type', 'application/x-www-form-urlencoded')
-        }
-      )
-        .subscribe(res => {
-          resolve(res);
-        }, (err) => {
-          reject(err);
-        })
-    })
   }
 
   crearPersona(

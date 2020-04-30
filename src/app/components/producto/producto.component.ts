@@ -150,7 +150,6 @@ export class ProductoComponent implements OnInit {
           }
           this.consultarConfiguracionProductoTodos();
           this.consultarTipoProductos();
-          console.log(ok['respuesta']);
           this.filteredOptions = this._nombre.valueChanges
             .pipe(
               startWith(''),
@@ -228,7 +227,6 @@ export class ProductoComponent implements OnInit {
     )
       .then(
         ok => {
-          console.log(ok['respuesta']);
           if (ok['respuesta'] == null) {
             sweetAlert("Inténtalo de nuevo!", {
               icon: "warning",

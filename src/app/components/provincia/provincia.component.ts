@@ -18,8 +18,8 @@ export class ProvinciaComponent implements OnInit {
   myForm: FormGroup;
   @Output() nuevaProvinciaCreada = new EventEmitter();
 
-  constructor(private panelAdministracionService: PanelAdministracionService,
-    private personaService: PersonaService
+  constructor(
+    private panelAdministracionService: PanelAdministracionService
   ) {
     this.myForm = new FormGroup({
       _idProvincia: new FormControl(''),
@@ -33,7 +33,7 @@ export class ProvinciaComponent implements OnInit {
   filterProvincia = '';
 
   consultarProvincias() {
-    this.personaService.consultarProvincias(localStorage.getItem('miCuenta.getToken'))
+    this.panelAdministracionService.consultarProvincias(localStorage.getItem('miCuenta.getToken'))
       .then(
         ok => {
           this.provincias = [];

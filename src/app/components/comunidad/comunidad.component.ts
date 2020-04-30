@@ -3,7 +3,6 @@ import { FormGroup, FormControl, Validators, } from '@angular/forms';
 
 // Services
 import { PanelAdministracionService } from 'src/app/services/panel-administracion.service';
-import { PersonaService } from 'src/app/services/persona.service';
 
 // SweetAlert
 import sweetalert from 'sweetalert';
@@ -22,7 +21,6 @@ export class ComunidadComponent implements OnInit {
 
   constructor(
     private panelAdministracionService: PanelAdministracionService,
-    private personaService: PersonaService,
     private modalLocalidadSuperior: MatDialog
   ) {
     this.myForm = new FormGroup({
@@ -40,7 +38,7 @@ export class ComunidadComponent implements OnInit {
   comunidades: any[] = [];
 
   consultarComunidades() {
-    this.personaService.consultarComunidades(localStorage.getItem('miCuenta.getToken'))
+    this.panelAdministracionService.consultarComunidades(localStorage.getItem('miCuenta.getToken'))
       .then(
         ok => {
           this.comunidades = ok['respuesta'];

@@ -2,7 +2,6 @@ import { Component, OnInit, ViewChild, ElementRef, Output, EventEmitter } from '
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 
 // Services
-import { PersonaService } from 'src/app/services/persona.service';
 import { PanelAdministracionService } from 'src/app/services/panel-administracion.service';
 
 // SweetAlert
@@ -22,7 +21,6 @@ export class SembrioComponent implements OnInit {
   
   constructor(
     private panelAdministracionService: PanelAdministracionService,
-    private personaService: PersonaService,
     private modalLocalidadSuperior: MatDialog
   ) {
     this.myForm = new FormGroup({
@@ -40,7 +38,7 @@ export class SembrioComponent implements OnInit {
   sembrios: any[] = [];
 
   consultarSembrios() {
-    this.personaService.consultarSembrios(localStorage.getItem('miCuenta.getToken'))
+    this.panelAdministracionService.consultarSembrios(localStorage.getItem('miCuenta.getToken'))
       .then(
         ok => {
           this.sembrios = ok['respuesta'];

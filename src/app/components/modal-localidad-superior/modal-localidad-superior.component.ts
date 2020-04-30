@@ -1,6 +1,8 @@
 import { Component, OnInit, Inject } from "@angular/core";
 import { MAT_DIALOG_DATA } from "@angular/material";
-import { PersonaService } from "src/app/services/persona.service";
+
+// Services
+import { PanelAdministracionService } from 'src/app/services/panel-administracion.service';
 
 @Component({
   selector: "app-modal-localidad-superior",
@@ -10,7 +12,7 @@ import { PersonaService } from "src/app/services/persona.service";
 export class ModalLocalidadSuperiorComponent implements OnInit {
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private personaService: PersonaService
+    private panelAdministracionService: PanelAdministracionService
   ) {}
 
   nombre_tabla = "";
@@ -23,7 +25,7 @@ export class ModalLocalidadSuperiorComponent implements OnInit {
   };
 
   consultarProvincias() {
-    this.personaService
+    this.panelAdministracionService
       .consultarProvincias(localStorage.getItem("miCuenta.getToken"))
       .then((ok) => {
         this.lista_tabla = [];
@@ -35,7 +37,7 @@ export class ModalLocalidadSuperiorComponent implements OnInit {
   } 
 
   consultarCantones() {
-    this.personaService
+    this.panelAdministracionService
       .consultarCantones(localStorage.getItem("miCuenta.getToken"))
       .then((ok) => {
         this.lista_tabla = [];
@@ -47,7 +49,7 @@ export class ModalLocalidadSuperiorComponent implements OnInit {
   }
 
   consultarParroquias() {
-    this.personaService.consultarParroquias(localStorage.getItem('miCuenta.getToken'))
+    this.panelAdministracionService.consultarParroquias(localStorage.getItem('miCuenta.getToken'))
       .then(
         ok => {
           this.lista_tabla = [];
@@ -62,7 +64,7 @@ export class ModalLocalidadSuperiorComponent implements OnInit {
   }
 
   consultarComunidades() {
-    this.personaService.consultarComunidades(localStorage.getItem('miCuenta.getToken'))
+    this.panelAdministracionService.consultarComunidades(localStorage.getItem('miCuenta.getToken'))
       .then(
         ok => {
           this.lista_tabla = [];

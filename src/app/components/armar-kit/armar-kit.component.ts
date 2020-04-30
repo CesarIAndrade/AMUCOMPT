@@ -76,13 +76,14 @@ export class ArmarKitComponent implements OnInit {
   }
 
   consultarKitsYSusProductos(idKit) {
+    const url = "Inventario/ListaAsignarProductoKit";
     this.inventarioService.consultarKitsYSusProductos(
       idKit,
-      localStorage.getItem('miCuenta.getToken')
+      localStorage.getItem('miCuenta.getToken'),
+      url
     )
       .then(
         ok => {
-          console.log(ok['respuesta'][0]['ListaAsignarProductoKit']);
           this.listaProductosDeUnKit.data = [];
           this.listaProductosDeUnKit.data = ok['respuesta'][0]['ListaAsignarProductoKit'];
           this.listaProductosDeUnKit.paginator = this.paginator1;
