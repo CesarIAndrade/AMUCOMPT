@@ -56,6 +56,7 @@ export class ModalAsignacionConfiguracionProductoComponent implements OnInit {
       .then((ok) => {
         this.configuracionProductos = [];
         ok["respuesta"].map((item) => {
+          console.log(item);
           var producto = {
             IdRelacionLogica: item.IdConfigurarProducto,
             PerteneceKit: "False",
@@ -79,7 +80,7 @@ export class ModalAsignacionConfiguracionProductoComponent implements OnInit {
     this.producto.PerteneceKit = producto.PerteneceKit;
     this.producto.IdKit = producto.IdKit;
     this.producto.Kit = producto.Kit;
-    this.producto.Producto = producto.Nombre;
+    this.producto.Producto = producto.Producto;
     this.producto.Presentacion = producto.Presentacion;
     this.producto.ContenidoNeto = producto.ContenidoNeto;
     this.producto.Medida = producto.Medida;
@@ -247,7 +248,11 @@ export class ModalAsignacionConfiguracionProductoComponent implements OnInit {
     this.inventarioService
       .consultarStock(localStorage.getItem("miCuenta.getToken"))
       .then((ok) => {
-        this.listaProductosEnStock = this.estructurarData(ok["respuesta"]);
+        ok['respuesta'].map(item => {
+          console.log(item);
+          
+        })
+        // this.listaProductosEnStock = this.estructurarData(ok["respuesta"]);
       })
       .catch((error) => {
         console.log(error);
@@ -261,6 +266,35 @@ export class ModalAsignacionConfiguracionProductoComponent implements OnInit {
       this.cantidad,
       localStorage.getItem('miCuenta.postToken')
     )
+  }
+
+  siElKitVieneDeCompra(listaProductos) {
+    this.configuracionProductos = [];
+    this.data.listaProductosDeUnKit.map(item => {
+      var producto = {
+        IdRelacionLogica: item.IdAsignarProductoKit,
+        PerteneceKit: "True",
+        IdKit: item.Kit.IdKit,
+        Kit: item.Kit.Descripcion,
+        Producto: item.ListaProductos.Producto.Nombre,
+        Presentacion: item.ListaProductos.Presentacion.Descripcion,
+        ContenidoNeto: item.ListaProductos.CantidadMedida,
+        Medida: item.ListaProductos.Medida.Descripcion,
+      }  
+      this.configuracionProductos.push(producto);
+    })
+  }
+
+  siElKitVieneDeVenta(listaProductos) {
+    console.log("hola desde venta");
+  }
+
+  estructurarProductosDeUnKit(listaProductos, ruta?) {
+    if(ruta == "compra") {
+      this.siElKitVieneDeCompra(listaProductos);
+    } else if (ruta == "venta") {
+      this.siElKitVieneDeVenta(listaProductos);
+    }
   }
 
   ngOnInit() {
@@ -300,22 +334,8 @@ export class ModalAsignacionConfiguracionProductoComponent implements OnInit {
       if (this.data.listaProductosDeUnKit.length == 0) {
         this.consultarConfiguracionProducto();
       } else {
-        this.configuracionProductos = [];
-        this.data.listaProductosDeUnKit.map(item => {
-          var producto = {
-            IdRelacionLogica: item.IdAsignarProductoKit,
-            PerteneceKit: "True",
-            IdKit: item.Kit.IdKit,
-            Kit: item.Kit.Descripcion,
-            Producto: item.ListaProductos.Producto.Nombre,
-            Presentacion: item.ListaProductos.Presentacion.Descripcion,
-            ContenidoNeto: item.ListaProductos.CantidadMedida,
-            Medida: item.ListaProductos.Medida.Descripcion,
-          } 
-          this.configuracionProductos.push(producto);
-        })
+        this.estructurarProductosDeUnKit(this.data.listaProductosDeUnKit, "compra");
       }
-
     }
   }
 

@@ -534,6 +534,8 @@ export class CompraComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result != null) {
+        console.log(result);
+        
         var producto = result.Producto + ' ' + result.Presentacion + ' ' + result.ContenidoNeto
           + ' ' + result.Medida;
         this._idRelacionLogica.setValue(result.IdRelacionLogica);
