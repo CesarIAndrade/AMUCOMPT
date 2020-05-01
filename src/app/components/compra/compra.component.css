@@ -8,11 +8,6 @@
     overflow: auto;
 }
 
-.tablaFacturasNoFinalidas td {
-  background-color: #343a40 !important;
-  color: white !important;
-}
-
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   -webkit-appearance: none;
