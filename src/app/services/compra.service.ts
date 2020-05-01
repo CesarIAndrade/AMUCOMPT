@@ -89,8 +89,6 @@ export class CompraService {
     faltante: string,
     _token: string
   ) {
-    console.log("ID ASIGNAR PRODUCTO LOTE");
-    console.log(idAsignarProductoLote);
     const body = new HttpParams()
       .set('IdCabeceraFactura', idCabeceraFactura)
       .set('IdAsignarProductoLote', idAsignarProductoLote)

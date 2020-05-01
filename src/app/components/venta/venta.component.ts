@@ -91,6 +91,7 @@ export class VentaComponent implements OnInit {
   buttonSeleccionarPersona = true;
   listaProductosDeUnKit: any[] = [];
   selectTipoCompra = true;
+  permitirAnadir: any;
 
   selecionarTipoCompra(tipoCompra) {
     this.aplicaDescuento = true;
@@ -121,7 +122,6 @@ export class VentaComponent implements OnInit {
       });
   }
 
-  permitirAnadir: any;
   consultarKitsYSusProductos(idKit) {
     const url = "Stock/ListaAsignarProductoKitEnStock";
     this.inventarioService
@@ -131,8 +131,6 @@ export class VentaComponent implements OnInit {
         url
       )
       .then((ok) => {        
-        console.log(ok['respuesta']);
-        
         this.listaProductosDeUnKit = [];
         this.listaProductosDeUnKit =
           ok["respuesta"][0]["ListaAsignarProductoKit"];
