@@ -28,7 +28,7 @@
                         <mat-icon>search</mat-icon>
                     </button>
                 </mat-form-field>
-                <div class="tablaPresentaciones table_all">
+                <div class="table_all">
                     <table mat-table [dataSource]="presentaciones|filter:filterPresentacion:'Descripcion'">
                         <ng-container matColumnDef="descripcion">
                             <th mat-header-cell *matHeaderCellDef> Descripción </th>

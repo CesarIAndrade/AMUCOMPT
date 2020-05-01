@@ -29,6 +29,7 @@ export class MedidaComponent implements OnInit {
   //medidas: any[] = [];
   @ViewChild('paginator', { static: false }) paginator: MatPaginator;
   medidas = new MatTableDataSource<Element[]>();
+  
   consultarMedidas() {
     this.inventarioService.consultarMedidas(
       localStorage.getItem('miCuenta.getToken')

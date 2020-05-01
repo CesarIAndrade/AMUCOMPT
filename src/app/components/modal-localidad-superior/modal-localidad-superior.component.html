@@ -1,4 +1,4 @@
-<mat-dialog-content>
+<mat-dialog-content style="overflow: hidden;">
   <div>
     <h5 style="text-align: center;">Lista {{nombre_tabla}}</h5>
     <mat-form-field class="example-full-width">
@@ -7,7 +7,7 @@
             <mat-icon>search</mat-icon>
         </button>
     </mat-form-field>
-    <div class="tabla table_all">
+    <div class="table_all">
         <table mat-table [dataSource]="lista_tabla|filter:filter_tabla:'Descripcion'">
             <ng-container matColumnDef="localidad">
                 <th mat-header-cell *matHeaderCellDef> {{nombre_tabla}} </th>
@@ -25,6 +25,7 @@
             <tr mat-header-row *matHeaderRowDef="tabla; sticky: true"></tr>
             <tr mat-row *matRowDef="let row; columns: tabla;"></tr>
         </table>
+        <mat-paginator #paginator [pageSizeOptions]="[5]" showFirstLastButtons></mat-paginator>
     </div>
 </div>
 </mat-dialog-content>

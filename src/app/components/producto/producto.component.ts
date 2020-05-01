@@ -55,6 +55,8 @@ export class ProductoComponent implements OnInit {
   presentaciones: any[] = [];
   medidas: any[] = [];
   ArrayProductos: any[] = [];
+
+  // Para la paginacion
   @ViewChild('paginator', { static: false }) paginator: MatPaginator;
   productos = new MatTableDataSource<Element[]>();
 
@@ -176,7 +178,6 @@ export class ProductoComponent implements OnInit {
   }
 
   crearProducto() {
-    console.log("idProducto: "+this._idProducto.value);
     if (this._idProducto.value == '' && this._productoExistente.value == '') {
       this.inventarioService.crearProducto(
         this._nombre.value,
@@ -186,7 +187,6 @@ export class ProductoComponent implements OnInit {
       )
         .then(
           ok => {
-            console.log(ok['respuesta']);
             if (ok['respuesta'] == null) {
               sweetAlert("Inténtalo de nuevo!", {
                 icon: "warning",
@@ -217,7 +217,6 @@ export class ProductoComponent implements OnInit {
   }
 
   crearConfiguracionProducto() {
-    
     this.inventarioService.crearConfiguracionProducto(
       localStorage.getItem('miCuenta.idAsignacionTipoUsuario'),
       this._idProducto.value,

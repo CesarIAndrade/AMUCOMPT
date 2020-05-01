@@ -26,9 +26,10 @@ export class PresentacionComponent implements OnInit {
   botonIngresar = 'ingresar';
   filterPresentacion = '';
 
-  //presentaciones: any[] = [];
+  // Para la paginacion
   @ViewChild('paginator', { static: false }) paginator: MatPaginator;
   presentaciones = new MatTableDataSource<Element[]>();
+  
   consultarPresentaciones() {
     this.inventarioService.consultarPresentaciones(
       localStorage.getItem('miCuenta.getToken')

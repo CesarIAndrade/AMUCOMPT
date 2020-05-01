@@ -28,7 +28,7 @@
                         <mat-icon>search</mat-icon>
                     </button>
                 </mat-form-field>
-                <div class="tablaProvincias table_all">
+                <div class="table_all">
                     <table mat-table [dataSource]="provincias|filter:filterProvincia:'Descripcion'">
                         <ng-container matColumnDef="provincia">
                             <th mat-header-cell *matHeaderCellDef> Provincia </th>
@@ -64,6 +64,7 @@
                         <tr mat-header-row *matHeaderRowDef="tablaProvincias; sticky: true"></tr>
                         <tr mat-row *matRowDef="let row; columns: tablaProvincias;"></tr>
                     </table>
+                    <mat-paginator #paginator [pageSizeOptions]="[5]" showFirstLastButtons></mat-paginator> 
                 </div>
             </div>
         </div>

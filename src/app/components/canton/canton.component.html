@@ -36,7 +36,7 @@
                         <mat-icon>search</mat-icon>
                     </button>
                 </mat-form-field>
-                <div class="tablaCantones table_all">
+                <div class="table_all">
                     <table mat-table [dataSource]="cantones|filter:filterCanton:'Descripcion'">
                         <ng-container matColumnDef="canton">
                             <th mat-header-cell *matHeaderCellDef> Cantón </th>
@@ -74,8 +74,9 @@
                             </ng-container>
                         </ng-container>
                         <tr mat-header-row *matHeaderRowDef="tablaCantones; sticky: true"></tr>
-                        <tr mat-row *matRowDef="let row; columns: tablaCantones;"></tr>
+                        <tr mat-row *matRowDef="let row; columns: tablaCantones;"></tr> 
                     </table>
+                    <mat-paginator #paginator [pageSizeOptions]="[5]" showFirstLastButtons></mat-paginator>
                 </div>
             </div>
         </div>

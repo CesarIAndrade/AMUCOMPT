@@ -136,7 +136,6 @@ export class InventarioService {
       .set("Descripcion", descripcion)
       .set("IdTipoProducto", idTipoProducto)
       .set("encriptada", _token);
-    console.log(body);
     return new Promise((resolve, reject) => {
       this.http
         .post(apiUrl + "Inventario/IngresoProducto", body.toString(), {
@@ -460,7 +459,6 @@ export class InventarioService {
       .set("Codigo", codigo)
       .set("CantidadMedida", cantidadMedida)
       .set("encriptada", _token);
-    console.log(body);
     return new Promise((resolve, reject) => {
       this.http
         .post(
@@ -1037,7 +1035,6 @@ export class InventarioService {
       .set("IdConfigurarProducto", idConfigurarProducto)
       .set("Precio", precio)
       .set("encriptada", _token);
-    console.log(body);
     return new Promise((resolve, reject) => {
       this.http
         .post(

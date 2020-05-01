@@ -6,7 +6,7 @@ import { PanelAdministracionService } from 'src/app/services/panel-administracio
 
 // SweetAlert
 import sweetalert from 'sweetalert';
-import { MatDialog } from '@angular/material';
+import { MatDialog, MatPaginator, MatTableDataSource } from '@angular/material';
 import { ModalLocalidadSuperiorComponent } from '../modal-localidad-superior/modal-localidad-superior.component';
 
 @Component({
@@ -17,7 +17,6 @@ import { ModalLocalidadSuperiorComponent } from '../modal-localidad-superior/mod
 export class ParroquiaComponent implements OnInit {
 
   myForm: FormGroup;
-  @Output() nuevaParroquiaCreada = new EventEmitter();
 
   constructor(
     private panelAdministracionService: PanelAdministracionService,
@@ -33,16 +32,18 @@ export class ParroquiaComponent implements OnInit {
 
   botonIngresar = 'ingresar';
   filterParroquia = '';
-  filterCanton = '';
 
-  parroquias: any[] = [];
-
+  // Para la paginacion
+  @ViewChild('paginator', { static: false }) paginator: MatPaginator;
+  parroquias = new MatTableDataSource<Element[]>();
+  
   consultarParroquias() {
     this.panelAdministracionService.consultarParroquias(localStorage.getItem('miCuenta.getToken'))
       .then(
         ok => {
-          this.parroquias = [];
-          this.parroquias = ok['respuesta'];
+          this.parroquias.data = [];
+          this.parroquias.data = ok['respuesta'];
+          this.parroquias.paginator = this.paginator;
         }
       )
       .catch(
@@ -91,7 +92,6 @@ export class ParroquiaComponent implements OnInit {
             });
             this.limpiarCampos();
             this.consultarParroquias();
-            this.nuevaParroquiaCreada.emit(true);
           }
         }
       )
@@ -100,14 +100,6 @@ export class ParroquiaComponent implements OnInit {
           console.log(error);
         }
       )
-  }
-
-  mostrarParroquia(parroquia) {
-    this._idCanton.setValue(parroquia.Canton.IdCanton);
-    this._canton.setValue(parroquia.Canton.Descripcion);
-    this._idParroquia.setValue(parroquia.IdParroquia);
-    this._parroquia.setValue(parroquia.Descripcion)
-    this.botonIngresar = 'modificar';
   }
 
   actualizarParroquia() {

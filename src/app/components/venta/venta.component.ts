@@ -8,7 +8,7 @@ import { ModalAsignacionConfiguracionProductoComponent } from "../modal-asignaci
 import { Observable } from "rxjs";
 import { startWith, map } from "rxjs/operators";
 import { InventarioService } from "src/app/services/inventario.service";
-import { MatTableDataSource } from "@angular/material";
+import { MatTableDataSource, MatPaginator } from "@angular/material";
 
 // SweetAlert
 import sweetalert from "sweetalert";
@@ -22,6 +22,7 @@ import { PanelAdministracionService } from 'src/app/services/panel-administracio
   styleUrls: ["./venta.component.css"],
 })
 export class VentaComponent implements OnInit {
+
   myForm: FormGroup;
 
   constructor(
@@ -54,7 +55,9 @@ export class VentaComponent implements OnInit {
     });
   }
 
-  detalleVenta1 = new MatTableDataSource<Element[]>();
+  sembrios: any[] = [];
+  kits: any[] = [];
+  listaProductosDeUnKit: any[] = [];
   meses = [
     "Enero",
     "Febrero",
@@ -78,26 +81,28 @@ export class VentaComponent implements OnInit {
     "Viernes",
     "Sábado",
   ];
+  tipoCompra: any[] = [{ tipo: "Producto" }, { tipo: "Kit" }];
+  permitirAnadir: any;
 
-  sembrios: any[] = [];
-  detalleVenta: any[] = [];
-  kits: any[] = [];
+  selected = "Producto";
+
   seccionKit = true;
   aplicaDescuento = true;
-  filteredOptions: Observable<string[]>;
-  tipoCompra: any[] = [{ tipo: "Producto" }, { tipo: "Kit" }];
-  selected = "Producto";
   buttonSeleccionarProducto = true;
-  buttonSeleccionarPersona = true;
-  listaProductosDeUnKit: any[] = [];
   selectTipoCompra = true;
-  permitirAnadir: any;
+  buttonSeleccionarPersona = true;
+
+  filteredOptions: Observable<string[]>;
+
+  // Para la paginacion
+  @ViewChild('paginator', { static: false }) paginator: MatPaginator;
+  detalleVenta = new MatTableDataSource<Element[]>();
+
 
   selecionarTipoCompra(tipoCompra) {
     this.aplicaDescuento = true;
     if (tipoCompra.value == "Kit") {
-      this.seccionKit = false;
-      this.buttonSeleccionarProducto = true;
+      this.consultarKits();
       this.limpiarCampos();
     } else {
       this.listaProductosDeUnKit = [];
@@ -119,6 +124,9 @@ export class VentaComponent implements OnInit {
       })
       .catch((error) => {
         console.log(error);
+      }).finally(() => {
+        this.seccionKit = false;
+        this.buttonSeleccionarProducto = true;
       });
   }
 
@@ -373,7 +381,7 @@ export class VentaComponent implements OnInit {
         var lote: string;
         var FechaExp: string;
         var Descuento: string;
-        this.detalleVenta = [];
+        var detalleVenta = [];
         ok["respuesta"].DetalleVenta.map((DetalleVenta) => {
           if (DetalleVenta.AsignarProductoLote.IdLote != "") {
             lote = DetalleVenta.AsignarProductoLote.Lote.Codigo;
@@ -447,9 +455,10 @@ export class VentaComponent implements OnInit {
               Subtotal: DetalleVenta.Subtotal,
             };
           }
-          this.detalleVenta.push(detalle);
+          detalleVenta.push(detalle);
         });
-        this.detalleVenta1.data = this.detalleVenta;
+        this.detalleVenta.data = detalleVenta;
+        this.detalleVenta.paginator = this.paginator;
       })
       .catch((error) => {
         console.log(error);
@@ -512,7 +521,6 @@ export class VentaComponent implements OnInit {
     this._kit.reset();
     this._checkedDescuento.reset();
     this._precio.reset();
-    // this.seccionKit = true;
   }
 
   seleccionarSembrioSiExiste(sembrio) {
@@ -584,7 +592,6 @@ export class VentaComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.consultarKits();
     this.consultarSembios();
     this.consultarTipoTransaccion();
     this.myForm.disable();
@@ -614,3 +621,4 @@ export class VentaComponent implements OnInit {
     "acciones",
   ];
 }
+ 

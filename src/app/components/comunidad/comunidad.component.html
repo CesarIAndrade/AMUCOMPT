@@ -36,7 +36,7 @@
                         <mat-icon>search</mat-icon>
                     </button>
                 </mat-form-field>
-                <div class="tablaComunidades table_all">
+                <div class="table_all">
                     <table mat-table [dataSource]="comunidades|filter:filterComunidad:'Descripcion'">
                         <ng-container matColumnDef="comunidad">
                             <th mat-header-cell *matHeaderCellDef> Comunidad </th>
@@ -79,6 +79,7 @@
                         <tr mat-header-row *matHeaderRowDef="tablaComunidades; sticky: true"></tr>
                         <tr mat-row *matRowDef="let row; columns: tablaComunidades;"></tr>
                     </table>
+                    <mat-paginator #paginator [pageSizeOptions]="[5]" showFirstLastButtons></mat-paginator>
                 </div>
             </div>
         </div>

@@ -6,7 +6,7 @@ import { PanelAdministracionService } from 'src/app/services/panel-administracio
 
 // SweetAlert
 import sweetalert from 'sweetalert';
-import { MatDialog } from '@angular/material';
+import { MatDialog, MatPaginator, MatTableDataSource } from '@angular/material';
 import { ModalLocalidadSuperiorComponent } from '../modal-localidad-superior/modal-localidad-superior.component';
 
 @Component({
@@ -17,7 +17,6 @@ import { ModalLocalidadSuperiorComponent } from '../modal-localidad-superior/mod
 export class SembrioComponent implements OnInit {
 
   myForm: FormGroup;
-  @Output() nuevoSembrioCreado = new EventEmitter();
   
   constructor(
     private panelAdministracionService: PanelAdministracionService,
@@ -32,16 +31,20 @@ export class SembrioComponent implements OnInit {
   }
 
   botonIngresar = 'ingresar';
-  filterComunidad = '';
   filterSembrio = '';
 
-  sembrios: any[] = [];
+  // Para la paginacion
+  @ViewChild('paginator', { static: false }) paginator: MatPaginator;
+  sembrios = new MatTableDataSource<Element[]>();
+  
 
   consultarSembrios() {
     this.panelAdministracionService.consultarSembrios(localStorage.getItem('miCuenta.getToken'))
       .then(
         ok => {
-          this.sembrios = ok['respuesta'];
+          this.sembrios.data = [];
+          this.sembrios.data = ok['respuesta'];
+          this.sembrios.paginator = this.paginator;
         }
       )
       .catch(
@@ -71,7 +74,6 @@ export class SembrioComponent implements OnInit {
     )
       .then(
         ok => {
-          this.nuevoSembrioCreado.emit(true);
           this.myForm.reset();
           this.consultarSembrios();
         }
@@ -98,14 +100,6 @@ export class SembrioComponent implements OnInit {
       }
     });
   } 
-
-  mostrarSembrio(sembrio) {
-    this._idComunidad.setValue(sembrio.Comunidad.IdComunidad);
-    this._comunidad.setValue(sembrio.Comunidad.Descripcion);
-    this._idSembrio.setValue(sembrio.IdSembrio);
-    this._sembrio.setValue(sembrio.Descripcion)
-    this.botonIngresar = 'modificar';
-  }
 
   actualizarSembrio() {
     this.panelAdministracionService.actualizarSembrio(

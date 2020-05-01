@@ -6,7 +6,7 @@ import { PanelAdministracionService } from 'src/app/services/panel-administracio
 
 // SweetAlert
 import sweetalert from 'sweetalert';
-import { MatDialog } from '@angular/material';
+import { MatDialog, MatTableDataSource, MatPaginator } from '@angular/material';
 import { ModalLocalidadSuperiorComponent } from '../modal-localidad-superior/modal-localidad-superior.component';
 
 @Component({
@@ -17,7 +17,6 @@ import { ModalLocalidadSuperiorComponent } from '../modal-localidad-superior/mod
 export class CantonComponent implements OnInit {
 
   myForm: FormGroup;
-  @Output() nuevoCantonCreado = new EventEmitter();
 
   constructor(
     private panelAdministracionService: PanelAdministracionService,
@@ -35,14 +34,19 @@ export class CantonComponent implements OnInit {
   filterProvincia = '';
   filterCanton = '';
 
-  cantones: any[] = [];
+  // cantones: any[] = [];
+
+  // Para la paginacion
+  @ViewChild('paginator', { static: false }) paginator: MatPaginator;
+  cantones = new MatTableDataSource<Element[]>();
 
   consultarCantones() {
     this.panelAdministracionService.consultarCantones(localStorage.getItem('miCuenta.getToken'))
       .then(
         ok => {
-          this.cantones = [];
-          this.cantones = ok['respuesta'];
+          this.cantones.data = [];
+          this.cantones.data = ok['respuesta'];
+          this.cantones.paginator = this.paginator;
         }
       )
       .catch(
@@ -90,7 +94,6 @@ export class CantonComponent implements OnInit {
             });
             this.myForm.reset();
             this.consultarCantones();
-            this.nuevoCantonCreado.emit();
           }
         }
       )
@@ -99,14 +102,6 @@ export class CantonComponent implements OnInit {
           console.log(error);
         }
       )
-  }
-
-  mostrarCanton(canton) {
-    this._idProvincia.setValue(canton.Provincia.IdProvincia);
-    this._provincia.setValue(canton.Provincia.Descripcion);
-    this._idCanton.setValue(canton.IdCanton);
-    this._canton.setValue(canton.Descripcion);
-    this.botonIngresar = 'modificar';
   }
 
   actualizarCanton() {

@@ -35,11 +35,11 @@ export class KitComponent implements OnInit {
 
   filterKit = '';
   botonIngresar = 'ingresar';
-
-  //kits: any[] = [];
   descuentos: any[] = [];
 
   filteredOptions: Observable<string[]>;
+
+  // Para la paginacion
   @ViewChild('paginator', { static: false }) paginator: MatPaginator;
   kits = new MatTableDataSource<Element[]>();
 

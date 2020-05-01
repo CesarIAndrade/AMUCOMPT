@@ -35,7 +35,7 @@
                         <mat-icon>search</mat-icon>
                     </button>
                 </mat-form-field>
-                <div class="tablaSembrios table_all">
+                <div class="table_all">
                     <table mat-table [dataSource]="sembrios|filter:filterSembrio:'Descripcion'">
                         <ng-container matColumnDef="sembrio">
                             <th mat-header-cell *matHeaderCellDef> Sembríos </th>
@@ -67,6 +67,7 @@
                         <tr mat-header-row *matHeaderRowDef="tablaSembrios; sticky: true"></tr>
                         <tr mat-row *matRowDef="let row; columns: tablaSembrios;"></tr>
                     </table>
+                    <mat-paginator #paginator [pageSizeOptions]="[5]" showFirstLastButtons></mat-paginator>
                 </div>
             </div>
         </div>

@@ -35,7 +35,7 @@
                         <mat-icon>search</mat-icon>
                     </button>
                 </mat-form-field>
-                <div class="tablaParroquias table_all">
+                <div class="table_all">
                     <table mat-table [dataSource]="parroquias|filter:filterParroquia:'Descripcion'">
                         <ng-container matColumnDef="parroquia">
                             <th mat-header-cell *matHeaderCellDef> Parroquia </th>
@@ -76,6 +76,7 @@
                                     ; sticky: true"></tr>
                         <tr mat-row *matRowDef="let row; columns: tablaParroquias;"></tr>
                     </table>
+                    <mat-paginator #paginator [pageSizeOptions]="[5]" showFirstLastButtons></mat-paginator>
                 </div>
             </div>
         </div>

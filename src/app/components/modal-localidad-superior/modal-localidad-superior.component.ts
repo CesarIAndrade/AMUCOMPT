@@ -1,5 +1,5 @@
-import { Component, OnInit, Inject } from "@angular/core";
-import { MAT_DIALOG_DATA } from "@angular/material";
+import { Component, OnInit, Inject, ViewChild } from "@angular/core";
+import { MAT_DIALOG_DATA, MatPaginator, MatTableDataSource } from "@angular/material";
 
 // Services
 import { PanelAdministracionService } from 'src/app/services/panel-administracion.service';
@@ -10,6 +10,7 @@ import { PanelAdministracionService } from 'src/app/services/panel-administracio
   styleUrls: ["./modal-localidad-superior.component.css"],
 })
 export class ModalLocalidadSuperiorComponent implements OnInit {
+
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     private panelAdministracionService: PanelAdministracionService
@@ -17,19 +18,24 @@ export class ModalLocalidadSuperiorComponent implements OnInit {
 
   nombre_tabla = "";
   filter_tabla = "";
-  lista_tabla: any[] = [];
+  // lista_tabla: any[] = [];
 
   datosLocalidad = {
     idLocalidad: "",
     descripcion: "",
   };
 
+  // Para la paginacion
+  @ViewChild('paginator', { static: false }) paginator: MatPaginator;
+  lista_tabla = new MatTableDataSource<Element[]>();
+
   consultarProvincias() {
     this.panelAdministracionService
       .consultarProvincias(localStorage.getItem("miCuenta.getToken"))
       .then((ok) => {
-        this.lista_tabla = [];
-        this.lista_tabla = ok["respuesta"];
+        this.lista_tabla.data = [];
+        this.lista_tabla.data = ok["respuesta"];
+        this.lista_tabla.paginator = this.paginator;
       })
       .catch((error) => {
         console.log(error);
@@ -40,8 +46,9 @@ export class ModalLocalidadSuperiorComponent implements OnInit {
     this.panelAdministracionService
       .consultarCantones(localStorage.getItem("miCuenta.getToken"))
       .then((ok) => {
-        this.lista_tabla = [];
-        this.lista_tabla = ok["respuesta"];
+        this.lista_tabla.data = [];
+        this.lista_tabla.data = ok["respuesta"];
+        this.lista_tabla.paginator = this.paginator;
       })
       .catch((error) => {
         console.log(error);
@@ -52,8 +59,9 @@ export class ModalLocalidadSuperiorComponent implements OnInit {
     this.panelAdministracionService.consultarParroquias(localStorage.getItem('miCuenta.getToken'))
       .then(
         ok => {
-          this.lista_tabla = [];
-          this.lista_tabla = ok['respuesta'];
+          this.lista_tabla.data = [];
+          this.lista_tabla.data = ok["respuesta"];
+          this.lista_tabla.paginator = this.paginator;
         }
       )
       .catch(
@@ -67,8 +75,9 @@ export class ModalLocalidadSuperiorComponent implements OnInit {
     this.panelAdministracionService.consultarComunidades(localStorage.getItem('miCuenta.getToken'))
       .then(
         ok => {
-          this.lista_tabla = [];
-          this.lista_tabla = ok['respuesta'];
+          this.lista_tabla.data = [];
+          this.lista_tabla.data = ok["respuesta"];
+          this.lista_tabla.paginator = this.paginator;
         }
       )
       .catch(

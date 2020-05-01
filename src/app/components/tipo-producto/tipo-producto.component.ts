@@ -24,18 +24,19 @@ export class TipoProductoComponent implements OnInit {
       _idTipoProducto: new FormControl(''),
     })
   }
-  @ViewChild('paginator', { static: false }) paginator: MatPaginator;
-  tipoProductos = new MatTableDataSource<Element[]>();
 
   filterTipoProducto = '';
   botonIngresar = 'ingresar';
-
-  //tipoProductos: any[] = [];
+  
+  // PAra la paginacion
+  @ViewChild('paginator', { static: false }) paginator: MatPaginator;
+  tipoProductos = new MatTableDataSource<Element[]>();
 
   consultarTipoProductos() {
     this.inventarioService.consultarTipoProductos(localStorage.getItem('miCuenta.getToken'))
       .then(
         ok => {
+          this.tipoProductos.data = [];
           this.tipoProductos.data = ok['respuesta'];
           this.tipoProductos.paginator = this.paginator;
         }

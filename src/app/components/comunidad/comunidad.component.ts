@@ -6,7 +6,7 @@ import { PanelAdministracionService } from 'src/app/services/panel-administracio
 
 // SweetAlert
 import sweetalert from 'sweetalert';
-import { MatDialog } from '@angular/material';
+import { MatDialog, MatPaginator, MatTableDataSource } from '@angular/material';
 import { ModalLocalidadSuperiorComponent } from '../modal-localidad-superior/modal-localidad-superior.component';
 
 @Component({
@@ -17,7 +17,6 @@ import { ModalLocalidadSuperiorComponent } from '../modal-localidad-superior/mod
 export class ComunidadComponent implements OnInit {
 
   myForm: FormGroup;
-  @Output() nuevaCaomunidadCreada = new EventEmitter();
 
   constructor(
     private panelAdministracionService: PanelAdministracionService,
@@ -32,16 +31,19 @@ export class ComunidadComponent implements OnInit {
   }
 
   botonIngresar = 'ingresar';
-  filterParroquia = '';
   filterComunidad = '';
 
-  comunidades: any[] = [];
+  // Para la paginacion
+  @ViewChild('paginator', { static: false }) paginator: MatPaginator;
+  comunidades = new MatTableDataSource<Element[]>();
 
   consultarComunidades() {
     this.panelAdministracionService.consultarComunidades(localStorage.getItem('miCuenta.getToken'))
       .then(
         ok => {
-          this.comunidades = ok['respuesta'];
+          this.comunidades.data = [];
+          this.comunidades.data = ok['respuesta'];
+          this.comunidades.paginator = this.paginator;
         }
       )
       .catch(
@@ -90,7 +92,6 @@ export class ComunidadComponent implements OnInit {
             });
             this.myForm.reset();
             this.consultarComunidades();
-            this.nuevaCaomunidadCreada.emit(true);
           }
         }
       )
@@ -99,14 +100,6 @@ export class ComunidadComponent implements OnInit {
           console.log(error);
         }
       )
-  }
-
-  mostrarComunidad(comunidad) {
-    this._idParroquia.setValue(comunidad.Parroquia.IdParroquia);
-    this._parroquia.setValue(comunidad.Parroquia.Descripcion);
-    this._idComunidad.setValue(comunidad.IdComunidad);
-    this._comunidad.setValue(comunidad.Descripcion)
-    this.botonIngresar = 'modificar';
   }
 
   actualizarComunidad() {

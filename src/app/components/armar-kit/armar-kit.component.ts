@@ -44,15 +44,13 @@ export class ArmarKitComponent implements OnInit {
    get _idAsignarDescuentoKit() {
     return this.myForm.get('_idAsignarDescuentoKit');
   }
+
+  // Para la paginacion
   @ViewChild('paginator', { static: false }) paginator: MatPaginator;
-  @ViewChild('paginator1', { static: false }) paginator1: MatPaginator;
   productos = new MatTableDataSource<Element[]>();
   listaProductosDeUnKit = new MatTableDataSource<Element[]>();
 
-  //productos: any[] = [];
   kits: any[] = [];
-
-  //listaProductosDeUnKit: any[] = [];
   Arrayproductos: any[] = [];
 
   onChangeSelectKit() {
@@ -86,7 +84,7 @@ export class ArmarKitComponent implements OnInit {
         ok => {
           this.listaProductosDeUnKit.data = [];
           this.listaProductosDeUnKit.data = ok['respuesta'][0]['ListaAsignarProductoKit'];
-          this.listaProductosDeUnKit.paginator = this.paginator1;
+          this.listaProductosDeUnKit.paginator = this.paginator;
         }
       )
       .catch(

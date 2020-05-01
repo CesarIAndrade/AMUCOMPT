@@ -28,7 +28,6 @@ import { Router } from "@angular/router";
 })
 export class CompraComponent implements OnInit {
 
-  @ViewChild("paginator", { static: false }) paginator: MatPaginator;
   myForm: FormGroup;
 
   constructor(
@@ -57,6 +56,21 @@ export class CompraComponent implements OnInit {
     });
   }
 
+
+  selected = "Producto";
+  seccionKit = true;
+  realizarCompraButton = true;
+  panelOpenState = false;
+  dateIcon = true;
+  selectTipoCompra = true;
+  buttonGenerarFactura = false;
+  buttonSeleccionarProducto = true;
+  loteEnDetalle = true;
+
+  kits: any[] = [];
+  lotes: any[] = [];
+  listaProductosDeUnKit: any[] = [];
+  detalleCompraLista: any[] = [];
   meses = [
     "Enero",
     "Febrero",
@@ -80,27 +94,13 @@ export class CompraComponent implements OnInit {
     "Viernes",
     "Sábado",
   ];
-
-  selected = "Producto";
-  seccionKit = true;
-  realizarCompraButton = true;
-  panelOpenState = false;
-  dateIcon = true;
-  selectTipoCompra = true;
-  buttonGenerarFactura = false;
-  buttonSeleccionarProducto = true;
-  loteEnDetalle = true;
-
-  kits: any[] = [];
-  lotes: any[] = [];
-  listaProductosDeUnKit: any[] = [];
-  detalleCompraLista: any[] = [];
-
   tipoCompra: any[] = [{ tipo: "Producto" }, { tipo: "Kit" }];
-
-  facturasNoFinalizadas = new MatTableDataSource<Element[]>();
   filteredOptions: Observable<string[]>;
-  detalleCompra: any[] = [];
+
+  // Para la paginacion
+  @ViewChild("paginator", { static: false }) paginator: MatPaginator;
+  detalleCompra = new MatTableDataSource<Element[]>();
+  facturasNoFinalizadas = new MatTableDataSource<Element[]>();
 
   buscarFechaYPrecio() {
     if (this._idRelacionLogica.value != "" && this._perteneceKit.value != "") {
@@ -214,8 +214,6 @@ export class CompraComponent implements OnInit {
   selecionarTipoCompra(tipoCompra) {
     if (tipoCompra.value == "Kit") {
       this.consultarKits();
-      this.seccionKit = false;
-      this.buttonSeleccionarProducto = true;
       this.limpiarCampos();
     } else {
       this.listaProductosDeUnKit = [];
@@ -254,6 +252,9 @@ export class CompraComponent implements OnInit {
       })
       .catch((error) => {
         console.log(error);
+      }).finally(() => {
+        this.seccionKit = false;
+        this.buttonSeleccionarProducto = true;
       });
   }
 
@@ -296,7 +297,8 @@ export class CompraComponent implements OnInit {
         localStorage.getItem("miCuenta.getToken")
       ) 
       .then((ok) => {
-        this.detalleCompra = [];
+        var detalleCompra = [];
+        this.detalleCompra.data = [];
         ok["respuesta"][0].DetalleFactura.map((item) => {
           var lote = "";
           var idLote = "";
@@ -349,10 +351,10 @@ export class CompraComponent implements OnInit {
             Medida: medida,
             Precio: item.AsignarProductoLote[0].ValorUnitario
           }
-          console.log(producto);
-          
-          this.detalleCompra.push(producto);
+          detalleCompra.push(producto);          
         });
+        this.detalleCompra.data.push(detalleCompra);
+        this.detalleCompra.paginator = this.paginator;
       })
       .catch((error) => {
         console.log(error);
@@ -385,6 +387,7 @@ export class CompraComponent implements OnInit {
       .consultarFacturasNoFinalizadas(localStorage.getItem("miCuenta.getToken"))
       .then((ok) => {
         this.facturasNoFinalizadas.data = ok["respuesta"];
+        this.facturasNoFinalizadas.paginator = this.paginator;
       })
       .catch((error) => {
         console.log(error);
@@ -543,7 +546,7 @@ export class CompraComponent implements OnInit {
           });
           this.consultarFacturasNoFinalizadas();
           this.limpiarCampos();
-          this.detalleCompra = [];
+          this.detalleCompra.data = [];
           this._fechaActual.reset();
           this._cabecera.reset();
         } else {

@@ -3,10 +3,10 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 
 // Services
 import { PanelAdministracionService } from 'src/app/services/panel-administracion.service';
-import { PersonaService } from 'src/app/services/persona.service';
 
 // SweetAlert
 import sweetalert from 'sweetalert';
+import { MatTableDataSource, MatPaginator } from '@angular/material';
 
 @Component({
   selector: 'app-provincia',
@@ -16,7 +16,6 @@ import sweetalert from 'sweetalert';
 export class ProvinciaComponent implements OnInit {
 
   myForm: FormGroup;
-  @Output() nuevaProvinciaCreada = new EventEmitter();
 
   constructor(
     private panelAdministracionService: PanelAdministracionService
@@ -28,16 +27,19 @@ export class ProvinciaComponent implements OnInit {
   }
 
   botonIngresar = 'ingresar';
-
-  provincias: any[] = [];
   filterProvincia = '';
+
+  // Para la paginacion
+  @ViewChild('paginator', { static: false }) paginator: MatPaginator;
+  provincias = new MatTableDataSource<Element[]>();
 
   consultarProvincias() {
     this.panelAdministracionService.consultarProvincias(localStorage.getItem('miCuenta.getToken'))
       .then(
         ok => {
-          this.provincias = [];
-          this.provincias = ok['respuesta'];
+          this.provincias.data = [];
+          this.provincias.data = ok['respuesta'];
+          this.provincias.paginator = this.paginator;
         }
       )
       .catch(
@@ -65,6 +67,7 @@ export class ProvinciaComponent implements OnInit {
       localStorage.getItem('miCuenta.postToken'))
       .then(
         ok => {
+          console.log(ok['respuesta']);
           if (ok['respuesta'] == null) {
             sweetAlert("Inténtalo de nuevo!", {
               icon: "warning",
@@ -82,10 +85,8 @@ export class ProvinciaComponent implements OnInit {
             sweetAlert("Se ingresó correctamente!", {
               icon: "success",
             });
-            // this.panelAdministracionService.refresh$.emit();
             this.myForm.reset();
             this.consultarProvincias();
-            this.nuevaProvinciaCreada.emit(true);
           }
         }
       )
@@ -96,20 +97,13 @@ export class ProvinciaComponent implements OnInit {
       )
   }
 
-  setProvincia(provincia) {
-    this._idProvincia.setValue(provincia.IdProvincia);
-    this._provincia.setValue(provincia.Descripcion)
-    this.botonIngresar = 'modificar';
-  }
-
   actualizarProvincia() {
     this.panelAdministracionService.actualizarProvincia(
       this._idProvincia.value,
       this._provincia.value,
       localStorage.getItem('miCuenta.putToken'))
       .then(
-        ok => {
-          
+        ok => {       
           if (ok['respuesta'] == null) {
             sweetAlert("Inténtalo de nuevo!", {
               icon: "warning",
@@ -185,7 +179,6 @@ export class ProvinciaComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.provincias = [];
     this.consultarProvincias();
   }
 
