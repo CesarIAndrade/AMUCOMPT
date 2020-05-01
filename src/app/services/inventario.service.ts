@@ -1,50 +1,56 @@
-import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { Injectable } from "@angular/core";
+import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
 import { apiUrl } from "../../environments/environment";
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root",
 })
 export class InventarioService {
+  constructor(private http: HttpClient) {}
 
-  constructor(private http: HttpClient) { }
-
-   private apiUrl = apiUrl;
+  private apiUrl = apiUrl;
 
   consultarTipoProductos(_token: string) {
-    const body = new HttpParams()
-      .set('encriptada', _token)
+    const body = new HttpParams().set("encriptada", _token);
     return new Promise((resolve, reject) => {
-      this.http.post(apiUrl + 'Inventario/ListaTipoProductos', body.toString(),
-        {
-          headers: new HttpHeaders()
-            .set('Content-Type', 'application/x-www-form-urlencoded')
-        }
-      )
-        .subscribe(res => {
-          resolve(res);
-        }, (err) => {
-          reject(err);
+      this.http
+        .post(apiUrl + "Inventario/ListaTipoProductos", body.toString(), {
+          headers: new HttpHeaders().set(
+            "Content-Type",
+            "application/x-www-form-urlencoded"
+          ),
         })
-    })
+        .subscribe(
+          (res) => {
+            resolve(res);
+          },
+          (err) => {
+            reject(err);
+          }
+        );
+    });
   }
 
   crearTipoProducto(tipoProducto: string, _token: string) {
     const body = new HttpParams()
-      .set('Descripcion', tipoProducto)
-      .set('encriptada', _token)
+      .set("Descripcion", tipoProducto)
+      .set("encriptada", _token);
     return new Promise((resolve, reject) => {
-      this.http.post(apiUrl + 'Inventario/IngresoTipoProducto', body.toString(),
-        {
-          headers: new HttpHeaders()
-            .set('Content-Type', 'application/x-www-form-urlencoded')
-        }
-      )
-        .subscribe(res => {
-          resolve(res);
-        }, (err) => {
-          reject(err);
+      this.http
+        .post(apiUrl + "Inventario/IngresoTipoProducto", body.toString(), {
+          headers: new HttpHeaders().set(
+            "Content-Type",
+            "application/x-www-form-urlencoded"
+          ),
         })
-    })
+        .subscribe(
+          (res) => {
+            resolve(res);
+          },
+          (err) => {
+            reject(err);
+          }
+        );
+    });
   }
 
   actualizarTipoProducto(
@@ -53,59 +59,70 @@ export class InventarioService {
     _token: string
   ) {
     const body = new HttpParams()
-      .set('IdTipoProducto', idTipoProducto)
-      .set('Descripcion', tipoProducto)
-      .set('encriptada', _token)
+      .set("IdTipoProducto", idTipoProducto)
+      .set("Descripcion", tipoProducto)
+      .set("encriptada", _token);
     return new Promise((resolve, reject) => {
-      this.http.post(apiUrl + 'Inventario/ActualizarTipoProducto', body.toString(),
-        {
-          headers: new HttpHeaders()
-            .set('Content-Type', 'application/x-www-form-urlencoded')
-        }
-      )
-        .subscribe(res => {
-          resolve(res);
-        }, (err) => {
-          reject(err);
+      this.http
+        .post(apiUrl + "Inventario/ActualizarTipoProducto", body.toString(), {
+          headers: new HttpHeaders().set(
+            "Content-Type",
+            "application/x-www-form-urlencoded"
+          ),
         })
-    })
+        .subscribe(
+          (res) => {
+            resolve(res);
+          },
+          (err) => {
+            reject(err);
+          }
+        );
+    });
   }
 
   eliminarTipoProducto(idTipoProducto: string, _token: string) {
     const body = new HttpParams()
-      .set('IdTipoProducto', idTipoProducto)
-      .set('encriptada', _token)
+      .set("IdTipoProducto", idTipoProducto)
+      .set("encriptada", _token);
     return new Promise((resolve, reject) => {
-      this.http.post(apiUrl + 'Inventario/EliminarTipoProducto', body.toString(),
-        {
-          headers: new HttpHeaders()
-            .set('Content-Type', 'application/x-www-form-urlencoded')
-        }
-      )
-        .subscribe(res => {
-          resolve(res);
-        }, (err) => {
-          reject(err);
+      this.http
+        .post(apiUrl + "Inventario/EliminarTipoProducto", body.toString(), {
+          headers: new HttpHeaders().set(
+            "Content-Type",
+            "application/x-www-form-urlencoded"
+          ),
         })
-    })
+        .subscribe(
+          (res) => {
+            resolve(res);
+          },
+          (err) => {
+            reject(err);
+          }
+        );
+    });
   }
 
   consultarProductos(_token: string) {
-    const body = new HttpParams()
-      .set('encriptada', _token)
+    const body = new HttpParams().set("encriptada", _token);
     return new Promise((resolve, reject) => {
-      this.http.post(apiUrl + 'Inventario/ListaProductos', body.toString(),
-        {
-          headers: new HttpHeaders()
-            .set('Content-Type', 'application/x-www-form-urlencoded')
-        }
-      )
-        .subscribe(res => {
-          resolve(res);
-        }, (err) => {
-          reject(err);
+      this.http
+        .post(apiUrl + "Inventario/ListaProductos", body.toString(), {
+          headers: new HttpHeaders().set(
+            "Content-Type",
+            "application/x-www-form-urlencoded"
+          ),
         })
-    })
+        .subscribe(
+          (res) => {
+            resolve(res);
+          },
+          (err) => {
+            reject(err);
+          }
+        );
+    });
   }
 
   crearProducto(
@@ -115,23 +132,28 @@ export class InventarioService {
     _token: string
   ) {
     const body = new HttpParams()
-      .set('Nombre', nombre)
-      .set('Descripcion', descripcion)
-      .set('IdTipoProducto', idTipoProducto)
-      .set('encriptada', _token)
+      .set("Nombre", nombre)
+      .set("Descripcion", descripcion)
+      .set("IdTipoProducto", idTipoProducto)
+      .set("encriptada", _token);
+    console.log(body);
     return new Promise((resolve, reject) => {
-      this.http.post(apiUrl + 'Inventario/IngresoProducto', body.toString(),
-        {
-          headers: new HttpHeaders()
-            .set('Content-Type', 'application/x-www-form-urlencoded')
-        }
-      )
-        .subscribe(res => {
-          resolve(res);
-        }, (err) => {
-          reject(err);
+      this.http
+        .post(apiUrl + "Inventario/IngresoProducto", body.toString(), {
+          headers: new HttpHeaders().set(
+            "Content-Type",
+            "application/x-www-form-urlencoded"
+          ),
         })
-    })
+        .subscribe(
+          (res) => {
+            resolve(res);
+          },
+          (err) => {
+            reject(err);
+          }
+        );
+    });
   }
 
   actualizarProducto(
@@ -142,80 +164,95 @@ export class InventarioService {
     _token: string
   ) {
     const body = new HttpParams()
-      .set('IdProducto', idProducto)
-      .set('Nombre', nombre)
-      .set('Descripcion', descripcion)
-      .set('IdTipoProducto', idTipoProducto)
-      .set('encriptada', _token)
+      .set("IdProducto", idProducto)
+      .set("Nombre", nombre)
+      .set("Descripcion", descripcion)
+      .set("IdTipoProducto", idTipoProducto)
+      .set("encriptada", _token);
     return new Promise((resolve, reject) => {
-      this.http.post(apiUrl + 'Inventario/ActualizarProducto', body.toString(),
-        {
-          headers: new HttpHeaders()
-            .set('Content-Type', 'application/x-www-form-urlencoded')
-        }
-      )
-        .subscribe(res => {
-          resolve(res);
-        }, (err) => {
-          reject(err);
+      this.http
+        .post(apiUrl + "Inventario/ActualizarProducto", body.toString(), {
+          headers: new HttpHeaders().set(
+            "Content-Type",
+            "application/x-www-form-urlencoded"
+          ),
         })
-    })
+        .subscribe(
+          (res) => {
+            resolve(res);
+          },
+          (err) => {
+            reject(err);
+          }
+        );
+    });
   }
 
   eliminarProducto(idProducto: string, _token: string) {
     const body = new HttpParams()
-      .set('IdProducto', idProducto)
-      .set('encriptada', _token)
+      .set("IdProducto", idProducto)
+      .set("encriptada", _token);
     return new Promise((resolve, reject) => {
-      this.http.post(apiUrl + 'Inventario/EliminarProducto', body.toString(),
-        {
-          headers: new HttpHeaders()
-            .set('Content-Type', 'application/x-www-form-urlencoded')
-        }
-      )
-        .subscribe(res => {
-          resolve(res);
-        }, (err) => {
-          reject(err);
+      this.http
+        .post(apiUrl + "Inventario/EliminarProducto", body.toString(), {
+          headers: new HttpHeaders().set(
+            "Content-Type",
+            "application/x-www-form-urlencoded"
+          ),
         })
-    })
+        .subscribe(
+          (res) => {
+            resolve(res);
+          },
+          (err) => {
+            reject(err);
+          }
+        );
+    });
   }
 
   consultarPresentaciones(_token: string) {
-    const body = new HttpParams()
-      .set('encriptada', _token)
+    const body = new HttpParams().set("encriptada", _token);
     return new Promise((resolve, reject) => {
-      this.http.post(apiUrl + 'Inventario/ListaPresentacion', body.toString(),
-        {
-          headers: new HttpHeaders()
-            .set('Content-Type', 'application/x-www-form-urlencoded')
-        }
-      )
-        .subscribe(res => {
-          resolve(res);
-        }, (err) => {
-          reject(err);
+      this.http
+        .post(apiUrl + "Inventario/ListaPresentacion", body.toString(), {
+          headers: new HttpHeaders().set(
+            "Content-Type",
+            "application/x-www-form-urlencoded"
+          ),
         })
-    })
+        .subscribe(
+          (res) => {
+            resolve(res);
+          },
+          (err) => {
+            reject(err);
+          }
+        );
+    });
   }
 
   crearPresentacion(presentacion: string, _token: string) {
     const body = new HttpParams()
-      .set('Descripcion', presentacion)
-      .set('encriptada', _token)
+      .set("Descripcion", presentacion)
+      .set("encriptada", _token);
     return new Promise((resolve, reject) => {
-      this.http.post(apiUrl + 'Inventario/IngresoPresentacion', body.toString(),
-        {
-          headers: new HttpHeaders()
-            .set('Content-Type', 'application/x-www-form-urlencoded')
-        }
-      )
-        .subscribe(res => {
-          resolve(res);
-        }, (err) => {
-          reject(err);
+      this.http
+        .post(apiUrl + "Inventario/IngresoPresentacion", body.toString(), {
+          headers: new HttpHeaders().set(
+            "Content-Type",
+            "application/x-www-form-urlencoded"
+          ),
         })
-    })
+        .subscribe(
+          (res) => {
+            resolve(res);
+          },
+          (err) => {
+            reject(err);
+          }
+        );
+    });
   }
 
   actualizarPresentacion(
@@ -224,157 +261,186 @@ export class InventarioService {
     _token: string
   ) {
     const body = new HttpParams()
-      .set('IdPresentacion', idPresentacion)
-      .set('Descripcion', presentacion)
-      .set('encriptada', _token)
+      .set("IdPresentacion", idPresentacion)
+      .set("Descripcion", presentacion)
+      .set("encriptada", _token);
     return new Promise((resolve, reject) => {
-      this.http.post(apiUrl + 'Inventario/ActualizarPresentacion', body.toString(),
-        {
-          headers: new HttpHeaders()
-            .set('Content-Type', 'application/x-www-form-urlencoded')
-        }
-      )
-        .subscribe(res => {
-          resolve(res);
-        }, (err) => {
-          reject(err);
+      this.http
+        .post(apiUrl + "Inventario/ActualizarPresentacion", body.toString(), {
+          headers: new HttpHeaders().set(
+            "Content-Type",
+            "application/x-www-form-urlencoded"
+          ),
         })
-    })
+        .subscribe(
+          (res) => {
+            resolve(res);
+          },
+          (err) => {
+            reject(err);
+          }
+        );
+    });
   }
 
   eliminarPresentacion(idPresentacion: string, _token: string) {
     const body = new HttpParams()
-      .set('IdPresentacion', idPresentacion)
-      .set('encriptada', _token)
+      .set("IdPresentacion", idPresentacion)
+      .set("encriptada", _token);
     return new Promise((resolve, reject) => {
-      this.http.post(apiUrl + 'Inventario/EliminarPresentacion', body.toString(),
-        {
-          headers: new HttpHeaders()
-            .set('Content-Type', 'application/x-www-form-urlencoded')
-        }
-      )
-        .subscribe(res => {
-          resolve(res);
-        }, (err) => {
-          reject(err);
+      this.http
+        .post(apiUrl + "Inventario/EliminarPresentacion", body.toString(), {
+          headers: new HttpHeaders().set(
+            "Content-Type",
+            "application/x-www-form-urlencoded"
+          ),
         })
-    })
+        .subscribe(
+          (res) => {
+            resolve(res);
+          },
+          (err) => {
+            reject(err);
+          }
+        );
+    });
   }
 
   consultarMedidas(_token: string) {
-    const body = new HttpParams()
-      .set('encriptada', _token)
+    const body = new HttpParams().set("encriptada", _token);
     return new Promise((resolve, reject) => {
-      this.http.post(apiUrl + 'Inventario/ListaMedidas', body.toString(),
-        {
-          headers: new HttpHeaders()
-            .set('Content-Type', 'application/x-www-form-urlencoded')
-        }
-      )
-        .subscribe(res => {
-          resolve(res);
-        }, (err) => {
-          reject(err);
+      this.http
+        .post(apiUrl + "Inventario/ListaMedidas", body.toString(), {
+          headers: new HttpHeaders().set(
+            "Content-Type",
+            "application/x-www-form-urlencoded"
+          ),
         })
-    })
+        .subscribe(
+          (res) => {
+            resolve(res);
+          },
+          (err) => {
+            reject(err);
+          }
+        );
+    });
   }
 
   crearMedida(medida: string, _token: string) {
     const body = new HttpParams()
-      .set('Descripcion', medida)
-      .set('encriptada', _token)
+      .set("Descripcion", medida)
+      .set("encriptada", _token);
     return new Promise((resolve, reject) => {
-      this.http.post(apiUrl + 'Inventario/IngresoMedida', body.toString(),
-        {
-          headers: new HttpHeaders()
-            .set('Content-Type', 'application/x-www-form-urlencoded')
-        }
-      )
-        .subscribe(res => {
-          resolve(res);
-        }, (err) => {
-          reject(err);
+      this.http
+        .post(apiUrl + "Inventario/IngresoMedida", body.toString(), {
+          headers: new HttpHeaders().set(
+            "Content-Type",
+            "application/x-www-form-urlencoded"
+          ),
         })
-    })
+        .subscribe(
+          (res) => {
+            resolve(res);
+          },
+          (err) => {
+            reject(err);
+          }
+        );
+    });
   }
 
-  actualizarMedida(
-    idMedida: string,
-    medida: string,
-    _token: string
-  ) {
+  actualizarMedida(idMedida: string, medida: string, _token: string) {
     const body = new HttpParams()
-      .set('IdMedida', idMedida)
-      .set('Descripcion', medida)
-      .set('encriptada', _token)
+      .set("IdMedida", idMedida)
+      .set("Descripcion", medida)
+      .set("encriptada", _token);
     return new Promise((resolve, reject) => {
-      this.http.post(apiUrl + 'Inventario/ActualizarMedida', body.toString(),
-        {
-          headers: new HttpHeaders()
-            .set('Content-Type', 'application/x-www-form-urlencoded')
-        }
-      )
-        .subscribe(res => {
-          resolve(res);
-        }, (err) => {
-          reject(err);
+      this.http
+        .post(apiUrl + "Inventario/ActualizarMedida", body.toString(), {
+          headers: new HttpHeaders().set(
+            "Content-Type",
+            "application/x-www-form-urlencoded"
+          ),
         })
-    })
+        .subscribe(
+          (res) => {
+            resolve(res);
+          },
+          (err) => {
+            reject(err);
+          }
+        );
+    });
   }
 
   eliminarMedida(idMedida: string, _token: string) {
     const body = new HttpParams()
-      .set('IdMedida', idMedida)
-      .set('encriptada', _token)
+      .set("IdMedida", idMedida)
+      .set("encriptada", _token);
     return new Promise((resolve, reject) => {
-      this.http.post(apiUrl + 'Inventario/EliminarMedida', body.toString(),
-        {
-          headers: new HttpHeaders()
-            .set('Content-Type', 'application/x-www-form-urlencoded')
-        }
-      )
-        .subscribe(res => {
-          resolve(res);
-        }, (err) => {
-          reject(err);
+      this.http
+        .post(apiUrl + "Inventario/EliminarMedida", body.toString(), {
+          headers: new HttpHeaders().set(
+            "Content-Type",
+            "application/x-www-form-urlencoded"
+          ),
         })
-    })
+        .subscribe(
+          (res) => {
+            resolve(res);
+          },
+          (err) => {
+            reject(err);
+          }
+        );
+    });
   }
 
   consultarConfiguracionProductoTodos(_token: string) {
-    const body = new HttpParams()
-      .set('encriptada', _token)
+    const body = new HttpParams().set("encriptada", _token);
     return new Promise((resolve, reject) => {
-      this.http.post(apiUrl + 'Inventario/ListaConfigurarProductosTodos', body.toString(),
-        {
-          headers: new HttpHeaders()
-            .set('Content-Type', 'application/x-www-form-urlencoded')
-        }
-      )
-        .subscribe(res => {
-          resolve(res);
-        }, (err) => {
-          reject(err);
-        })
-    })
+      this.http
+        .post(
+          apiUrl + "Inventario/ListaConfigurarProductosTodos",
+          body.toString(),
+          {
+            headers: new HttpHeaders().set(
+              "Content-Type",
+              "application/x-www-form-urlencoded"
+            ),
+          }
+        )
+        .subscribe(
+          (res) => {
+            resolve(res);
+          },
+          (err) => {
+            reject(err);
+          }
+        );
+    });
   }
 
   consultarConfiguracionProducto(_token: string) {
-    const body = new HttpParams()
-      .set('encriptada', _token)
+    const body = new HttpParams().set("encriptada", _token);
     return new Promise((resolve, reject) => {
-      this.http.post(apiUrl + 'Inventario/ListaConfigurarProductos', body.toString(),
-        {
-          headers: new HttpHeaders()
-            .set('Content-Type', 'application/x-www-form-urlencoded')
-        }
-      )
-        .subscribe(res => {
-          resolve(res);
-        }, (err) => {
-          reject(err);
+      this.http
+        .post(apiUrl + "Inventario/ListaConfigurarProductos", body.toString(), {
+          headers: new HttpHeaders().set(
+            "Content-Type",
+            "application/x-www-form-urlencoded"
+          ),
         })
-    })
+        .subscribe(
+          (res) => {
+            resolve(res);
+          },
+          (err) => {
+            reject(err);
+          }
+        );
+    });
   }
 
   crearConfiguracionProducto(
@@ -387,26 +453,35 @@ export class InventarioService {
     _token: string
   ) {
     const body = new HttpParams()
-      .set('IdAsignacionTu', idAsignacionTu)
-      .set('IdProducto', idProducto)
-      .set('IdMedida', idMedida)
-      .set('IdPresentacion', idPresentacion)
-      .set('Codigo', codigo)
-      .set('CantidadMedida', cantidadMedida)
-      .set('encriptada', _token)
+      .set("IdAsignacionTu", idAsignacionTu)
+      .set("IdProducto", idProducto)
+      .set("IdMedida", idMedida)
+      .set("IdPresentacion", idPresentacion)
+      .set("Codigo", codigo)
+      .set("CantidadMedida", cantidadMedida)
+      .set("encriptada", _token);
+    console.log(body);
     return new Promise((resolve, reject) => {
-      this.http.post(apiUrl + 'Inventario/IngresoConfigurarProducto', body.toString(),
-        {
-          headers: new HttpHeaders()
-            .set('Content-Type', 'application/x-www-form-urlencoded')
-        }
-      )
-        .subscribe(res => {
-          resolve(res);
-        }, (err) => {
-          reject(err);
-        })
-    })
+      this.http
+        .post(
+          apiUrl + "Inventario/IngresoConfigurarProducto",
+          body.toString(),
+          {
+            headers: new HttpHeaders().set(
+              "Content-Type",
+              "application/x-www-form-urlencoded"
+            ),
+          }
+        )
+        .subscribe(
+          (res) => {
+            resolve(res);
+          },
+          (err) => {
+            reject(err);
+          }
+        );
+    });
   }
 
   actualizarConfiguracionProducto(
@@ -420,27 +495,35 @@ export class InventarioService {
     _token: string
   ) {
     const body = new HttpParams()
-      .set('IdConfigurarProducto', idConfigurarProducto)
-      .set('IdAsignacionTu', idAsignacionTu)
-      .set('IdProducto', idProducto)
-      .set('IdMedida', idMedida)
-      .set('IdPresentacion', idPresentacion)
-      .set('Codigo', codigo)
-      .set('CantidadMedida', cantidadMedida)
-      .set('encriptada', _token)
+      .set("IdConfigurarProducto", idConfigurarProducto)
+      .set("IdAsignacionTu", idAsignacionTu)
+      .set("IdProducto", idProducto)
+      .set("IdMedida", idMedida)
+      .set("IdPresentacion", idPresentacion)
+      .set("Codigo", codigo)
+      .set("CantidadMedida", cantidadMedida)
+      .set("encriptada", _token);
     return new Promise((resolve, reject) => {
-      this.http.post(apiUrl + 'Inventario/ActualizarConfigurarProducto', body.toString(),
-        {
-          headers: new HttpHeaders()
-            .set('Content-Type', 'application/x-www-form-urlencoded')
-        }
-      )
-        .subscribe(res => {
-          resolve(res);
-        }, (err) => {
-          reject(err);
-        })
-    })
+      this.http
+        .post(
+          apiUrl + "Inventario/ActualizarConfigurarProducto",
+          body.toString(),
+          {
+            headers: new HttpHeaders().set(
+              "Content-Type",
+              "application/x-www-form-urlencoded"
+            ),
+          }
+        )
+        .subscribe(
+          (res) => {
+            resolve(res);
+          },
+          (err) => {
+            reject(err);
+          }
+        );
+    });
   }
 
   eliminarConfiguracionProducto(
@@ -449,173 +532,193 @@ export class InventarioService {
     _token: string
   ) {
     const body = new HttpParams()
-      .set('IdConfigurarProducto', idConfigurarProducto)
-      .set('IdProducto', idProducto)
-      .set('encriptada', _token)
+      .set("IdConfigurarProducto", idConfigurarProducto)
+      .set("IdProducto", idProducto)
+      .set("encriptada", _token);
     return new Promise((resolve, reject) => {
-      this.http.post(apiUrl + 'Inventario/EliminarConfigurarProducto', body.toString(),
-        {
-          headers: new HttpHeaders()
-            .set('Content-Type', 'application/x-www-form-urlencoded')
-        }
-      )
-        .subscribe(res => {
-          resolve(res);
-        }, (err) => {
-          reject(err);
-        })
-    })
+      this.http
+        .post(
+          apiUrl + "Inventario/EliminarConfigurarProducto",
+          body.toString(),
+          {
+            headers: new HttpHeaders().set(
+              "Content-Type",
+              "application/x-www-form-urlencoded"
+            ),
+          }
+        )
+        .subscribe(
+          (res) => {
+            resolve(res);
+          },
+          (err) => {
+            reject(err);
+          }
+        );
+    });
   }
 
   consultarKits(_token: string) {
-    const body = new HttpParams()
-      .set('encriptada', _token)
+    const body = new HttpParams().set("encriptada", _token);
     return new Promise((resolve, reject) => {
-      this.http.post(apiUrl + 'Inventario/ListaKit', body.toString(),
-        {
-          headers: new HttpHeaders()
-            .set('Content-Type', 'application/x-www-form-urlencoded')
-        }
-      )
-        .subscribe(res => {
-          resolve(res);
-        }, (err) => {
-          reject(err);
+      this.http
+        .post(apiUrl + "Inventario/ListaKit", body.toString(), {
+          headers: new HttpHeaders().set(
+            "Content-Type",
+            "application/x-www-form-urlencoded"
+          ),
         })
-    })
+        .subscribe(
+          (res) => {
+            resolve(res);
+          },
+          (err) => {
+            reject(err);
+          }
+        );
+    });
   }
 
-  crearKit(
-    kit: string,
-    codigo: string,
-    _token: string
-  ) {
+  crearKit(kit: string, codigo: string, _token: string) {
     const body = new HttpParams()
-      .set('Descripcion', kit)
-      .set('Codigo', codigo)
-      .set('encriptada', _token)
+      .set("Descripcion", kit)
+      .set("Codigo", codigo)
+      .set("encriptada", _token);
     return new Promise((resolve, reject) => {
-      this.http.post(apiUrl + 'Inventario/IngresoKit', body.toString(),
-        {
-          headers: new HttpHeaders()
-            .set('Content-Type', 'application/x-www-form-urlencoded')
-        }
-      )
-        .subscribe(res => {
-          resolve(res);
-        }, (err) => {
-          reject(err);
+      this.http
+        .post(apiUrl + "Inventario/IngresoKit", body.toString(), {
+          headers: new HttpHeaders().set(
+            "Content-Type",
+            "application/x-www-form-urlencoded"
+          ),
         })
-    })
+        .subscribe(
+          (res) => {
+            resolve(res);
+          },
+          (err) => {
+            reject(err);
+          }
+        );
+    });
   }
 
-  actualizarKit(
-    idKit: string,
-    kit: string,
-    codigo: string,
-    _token: string
-  ) {
+  actualizarKit(idKit: string, kit: string, codigo: string, _token: string) {
     const body = new HttpParams()
-      .set('IdKit', idKit)
-      .set('Descripcion', kit)
-      .set('Codigo', codigo)
-      .set('encriptada', _token)
+      .set("IdKit", idKit)
+      .set("Descripcion", kit)
+      .set("Codigo", codigo)
+      .set("encriptada", _token);
     return new Promise((resolve, reject) => {
-      this.http.post(apiUrl + 'Inventario/ActualizarKit', body.toString(),
-        {
-          headers: new HttpHeaders()
-            .set('Content-Type', 'application/x-www-form-urlencoded')
-        }
-      )
-        .subscribe(res => {
-          resolve(res);
-        }, (err) => {
-          reject(err);
+      this.http
+        .post(apiUrl + "Inventario/ActualizarKit", body.toString(), {
+          headers: new HttpHeaders().set(
+            "Content-Type",
+            "application/x-www-form-urlencoded"
+          ),
         })
-    })
+        .subscribe(
+          (res) => {
+            resolve(res);
+          },
+          (err) => {
+            reject(err);
+          }
+        );
+    });
   }
 
   eliminarKit(idKit: string, _token: string) {
-    const body = new HttpParams()
-      .set('IdKit', idKit)
-      .set('encriptada', _token)
+    const body = new HttpParams().set("IdKit", idKit).set("encriptada", _token);
     return new Promise((resolve, reject) => {
-      this.http.post(apiUrl + 'Inventario/EliminarKit', body.toString(),
-        {
-          headers: new HttpHeaders()
-            .set('Content-Type', 'application/x-www-form-urlencoded')
-        }
-      )
-        .subscribe(res => {
-          resolve(res);
-        }, (err) => {
-          reject(err);
+      this.http
+        .post(apiUrl + "Inventario/EliminarKit", body.toString(), {
+          headers: new HttpHeaders().set(
+            "Content-Type",
+            "application/x-www-form-urlencoded"
+          ),
         })
-    })
+        .subscribe(
+          (res) => {
+            resolve(res);
+          },
+          (err) => {
+            reject(err);
+          }
+        );
+    });
   }
 
   consultarDescuentos(_token: string) {
-    const body = new HttpParams()
-      .set('encriptada', _token)
+    const body = new HttpParams().set("encriptada", _token);
     return new Promise((resolve, reject) => {
-      this.http.post(apiUrl + 'Inventario/ListaDescuento', body.toString(),
-        {
-          headers: new HttpHeaders()
-            .set('Content-Type', 'application/x-www-form-urlencoded')
-        }
-      )
-        .subscribe(res => {
-          resolve(res);
-        }, (err) => {
-          reject(err);
+      this.http
+        .post(apiUrl + "Inventario/ListaDescuento", body.toString(), {
+          headers: new HttpHeaders().set(
+            "Content-Type",
+            "application/x-www-form-urlencoded"
+          ),
         })
-    })
+        .subscribe(
+          (res) => {
+            resolve(res);
+          },
+          (err) => {
+            reject(err);
+          }
+        );
+    });
   }
 
-  crearDescuentoKit(
-    descuento: string,
-    _token: string
-  ) {
+  crearDescuentoKit(descuento: string, _token: string) {
     const body = new HttpParams()
-      .set('Porcentaje', descuento)
-      .set('encriptada', _token)
+      .set("Porcentaje", descuento)
+      .set("encriptada", _token);
     return new Promise((resolve, reject) => {
-      this.http.post(apiUrl + 'Inventario/IngresoDescuento', body.toString(),
-        {
-          headers: new HttpHeaders()
-            .set('Content-Type', 'application/x-www-form-urlencoded')
-        }
-      )
-        .subscribe(res => {
-          resolve(res);
-        }, (err) => {
-          reject(err);
+      this.http
+        .post(apiUrl + "Inventario/IngresoDescuento", body.toString(), {
+          headers: new HttpHeaders().set(
+            "Content-Type",
+            "application/x-www-form-urlencoded"
+          ),
         })
-    })
+        .subscribe(
+          (res) => {
+            resolve(res);
+          },
+          (err) => {
+            reject(err);
+          }
+        );
+    });
   }
 
-  asignarDescuentoKit(
-    idKit: string,
-    idDescuento: string,
-    _token: string
-  ) {
+  asignarDescuentoKit(idKit: string, idDescuento: string, _token: string) {
     const body = new HttpParams()
-      .set('IdKit', idKit)
-      .set('IdDescuento', idDescuento)
-      .set('encriptada', _token)
+      .set("IdKit", idKit)
+      .set("IdDescuento", idDescuento)
+      .set("encriptada", _token);
     return new Promise((resolve, reject) => {
-      this.http.post(apiUrl + 'Inventario/IngresoAsignarDescuentoKit', body.toString(),
-        {
-          headers: new HttpHeaders()
-            .set('Content-Type', 'application/x-www-form-urlencoded')
-        }
-      )
-        .subscribe(res => {
-          resolve(res);
-        }, (err) => {
-          reject(err);
-        })
-    })
+      this.http
+        .post(
+          apiUrl + "Inventario/IngresoAsignarDescuentoKit",
+          body.toString(),
+          {
+            headers: new HttpHeaders().set(
+              "Content-Type",
+              "application/x-www-form-urlencoded"
+            ),
+          }
+        )
+        .subscribe(
+          (res) => {
+            resolve(res);
+          },
+          (err) => {
+            reject(err);
+          }
+        );
+    });
   }
 
   actualizarAsignacionDescuentoKit(
@@ -625,61 +728,73 @@ export class InventarioService {
     _token: string
   ) {
     const body = new HttpParams()
-      .set('IdAsignacionDescuentoKit', idAsignacionDescuentoKit)
-      .set('IdKit', idKit)
-      .set('IdDescuento', idDescuento)
-      .set('encriptada', _token)
+      .set("IdAsignacionDescuentoKit", idAsignacionDescuentoKit)
+      .set("IdKit", idKit)
+      .set("IdDescuento", idDescuento)
+      .set("encriptada", _token);
     return new Promise((resolve, reject) => {
-      this.http.post(apiUrl + '', body.toString(),
-        {
-          headers: new HttpHeaders()
-            .set('Content-Type', 'application/x-www-form-urlencoded')
-        }
-      )
-        .subscribe(res => {
-          resolve(res);
-        }, (err) => {
-          reject(err);
+      this.http
+        .post(apiUrl + "", body.toString(), {
+          headers: new HttpHeaders().set(
+            "Content-Type",
+            "application/x-www-form-urlencoded"
+          ),
         })
-    })
+        .subscribe(
+          (res) => {
+            resolve(res);
+          },
+          (err) => {
+            reject(err);
+          }
+        );
+    });
   }
 
   consultarKitsYSusProductos(idKit: string, _token: string, url: string) {
-    const body = new HttpParams()
-      .set('IdKit', idKit)
-      .set('encriptada', _token)
+    const body = new HttpParams().set("IdKit", idKit).set("encriptada", _token);
     return new Promise((resolve, reject) => {
-      this.http.post(apiUrl + url, body.toString(),
-        {
-          headers: new HttpHeaders()
-            .set('Content-Type', 'application/x-www-form-urlencoded')
-        }
-      )
-        .subscribe(res => {
-          resolve(res);
-        }, (err) => {
-          reject(err);
+      this.http
+        .post(apiUrl + url, body.toString(), {
+          headers: new HttpHeaders().set(
+            "Content-Type",
+            "application/x-www-form-urlencoded"
+          ),
         })
-    })
+        .subscribe(
+          (res) => {
+            resolve(res);
+          },
+          (err) => {
+            reject(err);
+          }
+        );
+    });
   }
 
   consultarProductosQueNoTieneUnKit(idKit: string, _token: string) {
-    const body = new HttpParams()
-      .set('IdKit', idKit)
-      .set('encriptada', _token)
+    const body = new HttpParams().set("IdKit", idKit).set("encriptada", _token);
     return new Promise((resolve, reject) => {
-      this.http.post(apiUrl + 'Inventario/ListaConfigurarProductosQueNoTieneUnKit', body.toString(),
-        {
-          headers: new HttpHeaders()
-            .set('Content-Type', 'application/x-www-form-urlencoded')
-        }
-      )
-        .subscribe(res => {
-          resolve(res);
-        }, (err) => {
-          reject(err);
-        })
-    })
+      this.http
+        .post(
+          apiUrl + "Inventario/ListaConfigurarProductosQueNoTieneUnKit",
+          body.toString(),
+          {
+            headers: new HttpHeaders().set(
+              "Content-Type",
+              "application/x-www-form-urlencoded"
+            ),
+          }
+        )
+        .subscribe(
+          (res) => {
+            resolve(res);
+          },
+          (err) => {
+            reject(err);
+          }
+        );
+    });
   }
 
   asignarProductoKit(
@@ -688,87 +803,108 @@ export class InventarioService {
     _token: string
   ) {
     const body = new HttpParams()
-      .set('IdConfigurarProducto', idConfigurarProducto)
-      .set('IdAsignarDescuentoKit', idAsignarDescuentoKit)
-      .set('encriptada', _token)
+      .set("IdConfigurarProducto", idConfigurarProducto)
+      .set("IdAsignarDescuentoKit", idAsignarDescuentoKit)
+      .set("encriptada", _token);
     return new Promise((resolve, reject) => {
-      this.http.post(apiUrl + 'Inventario/IngresoAsignarProductoKit', body.toString(),
-        {
-          headers: new HttpHeaders()
-            .set('Content-Type', 'application/x-www-form-urlencoded')
-        }
-      )
-        .subscribe(res => {
-          resolve(res);
-        }, (err) => {
-          reject(err);
-        })
-    })
+      this.http
+        .post(
+          apiUrl + "Inventario/IngresoAsignarProductoKit",
+          body.toString(),
+          {
+            headers: new HttpHeaders().set(
+              "Content-Type",
+              "application/x-www-form-urlencoded"
+            ),
+          }
+        )
+        .subscribe(
+          (res) => {
+            resolve(res);
+          },
+          (err) => {
+            reject(err);
+          }
+        );
+    });
   }
 
-  eliminarAsignacionProductoKit(
-    idAsignarProductoKit: string,
-    _token: string
-  ) {
+  eliminarAsignacionProductoKit(idAsignarProductoKit: string, _token: string) {
     const body = new HttpParams()
-      .set('IdAsignarProductoKit', idAsignarProductoKit)
-      .set('encriptada', _token)
+      .set("IdAsignarProductoKit", idAsignarProductoKit)
+      .set("encriptada", _token);
     return new Promise((resolve, reject) => {
-      this.http.post(apiUrl + 'Inventario/EliminarAsignarProductoKit', body.toString(),
-        {
-          headers: new HttpHeaders()
-            .set('Content-Type', 'application/x-www-form-urlencoded')
-        }
-      )
-        .subscribe(res => {
-          resolve(res);
-        }, (err) => {
-          reject(err);
-        })
-    })
+      this.http
+        .post(
+          apiUrl + "Inventario/EliminarAsignarProductoKit",
+          body.toString(),
+          {
+            headers: new HttpHeaders().set(
+              "Content-Type",
+              "application/x-www-form-urlencoded"
+            ),
+          }
+        )
+        .subscribe(
+          (res) => {
+            resolve(res);
+          },
+          (err) => {
+            reject(err);
+          }
+        );
+    });
   }
 
   consultarStock(_token: string) {
-    const body = new HttpParams()
-      .set('encriptada', _token)
+    const body = new HttpParams().set("encriptada", _token);
     return new Promise((resolve, reject) => {
-      this.http.post(apiUrl + 'Factura/ListarStock', body.toString(),
-        {
-          headers: new HttpHeaders()
-            .set('Content-Type', 'application/x-www-form-urlencoded')
-        }
-      )
-        .subscribe(res => {
-          resolve(res);
-        }, (err) => {
-          reject(err);
+      this.http
+        .post(apiUrl + "Factura/ListarStock", body.toString(), {
+          headers: new HttpHeaders().set(
+            "Content-Type",
+            "application/x-www-form-urlencoded"
+          ),
         })
-    })
+        .subscribe(
+          (res) => {
+            resolve(res);
+          },
+          (err) => {
+            reject(err);
+          }
+        );
+    });
   }
 
   consultarLotesDeUnProducto(
     idCabeceraFactura: string,
     idRelacionLogica: string,
     perteneceKit: string,
-    _token: string) {
+    _token: string
+  ) {
     const body = new HttpParams()
-      .set('IdCabeceraFactura', idCabeceraFactura)
-      .set('IdRelacionLogica', idRelacionLogica)
-      .set('PerteneceKit', perteneceKit)
-      .set('encriptada', _token)
+      .set("IdCabeceraFactura", idCabeceraFactura)
+      .set("IdRelacionLogica", idRelacionLogica)
+      .set("PerteneceKit", perteneceKit)
+      .set("encriptada", _token);
     return new Promise((resolve, reject) => {
-      this.http.post(apiUrl + 'Factura/ListaLote', body.toString(),
-        {
-          headers: new HttpHeaders()
-            .set('Content-Type', 'application/x-www-form-urlencoded')
-        }
-      )
-        .subscribe(res => {
-          resolve(res);
-        }, (err) => {
-          reject(err);
+      this.http
+        .post(apiUrl + "Factura/ListaLote", body.toString(), {
+          headers: new HttpHeaders().set(
+            "Content-Type",
+            "application/x-www-form-urlencoded"
+          ),
         })
-    })
+        .subscribe(
+          (res) => {
+            resolve(res);
+          },
+          (err) => {
+            reject(err);
+          }
+        );
+    });
   }
 
   crearLote(
@@ -778,23 +914,27 @@ export class InventarioService {
     _token: string
   ) {
     const body = new HttpParams()
-      .set('Codigo', codigo)
-      .set('Capacidad', capacidad)
-      .set('FechaExpiracion', fechaExpiracion)
-      .set('encriptada', _token)
+      .set("Codigo", codigo)
+      .set("Capacidad", capacidad)
+      .set("FechaExpiracion", fechaExpiracion)
+      .set("encriptada", _token);
     return new Promise((resolve, reject) => {
-      this.http.post(apiUrl + 'Factura/IngresoLote', body.toString(),
-        {
-          headers: new HttpHeaders()
-            .set('Content-Type', 'application/x-www-form-urlencoded')
-        }
-      )
-        .subscribe(res => {
-          resolve(res);
-        }, (err) => {
-          reject(err);
+      this.http
+        .post(apiUrl + "Factura/IngresoLote", body.toString(), {
+          headers: new HttpHeaders().set(
+            "Content-Type",
+            "application/x-www-form-urlencoded"
+          ),
         })
-    })
+        .subscribe(
+          (res) => {
+            resolve(res);
+          },
+          (err) => {
+            reject(err);
+          }
+        );
+    });
   }
 
   asignarProductoLote(
@@ -805,52 +945,61 @@ export class InventarioService {
     precio: string,
     _token: string,
     idLote?: string,
-    fechaExpiracion?: string,
+    fechaExpiracion?: string
   ) {
     const body = new HttpParams()
-      .set('IdCabeceraFactura', idCabeceraFactura)
-      .set('Cantidad', cantidad)
-      .set('IdRelacionLogica', idRelacionLogica)
-      .set('PerteneceKit', perteneceKit)
-      .set('ValorUnitario', precio)
-      .set('encriptada', _token)
-      .set('IdLote', idLote)
-      .set('FechaExpiracion', fechaExpiracion)
+      .set("IdCabeceraFactura", idCabeceraFactura)
+      .set("Cantidad", cantidad)
+      .set("IdRelacionLogica", idRelacionLogica)
+      .set("PerteneceKit", perteneceKit)
+      .set("ValorUnitario", precio)
+      .set("encriptada", _token)
+      .set("IdLote", idLote)
+      .set("FechaExpiracion", fechaExpiracion);
     return new Promise((resolve, reject) => {
-      this.http.post(apiUrl + 'Factura/IngresoAsignarProductoLote', body.toString(),
-        {
-          headers: new HttpHeaders()
-            .set('Content-Type', 'application/x-www-form-urlencoded')
-        }
-      )
-        .subscribe(res => {
-          resolve(res);
-        }, (err) => {
-          reject(err);
+      this.http
+        .post(apiUrl + "Factura/IngresoAsignarProductoLote", body.toString(), {
+          headers: new HttpHeaders().set(
+            "Content-Type",
+            "application/x-www-form-urlencoded"
+          ),
         })
-    })
+        .subscribe(
+          (res) => {
+            resolve(res);
+          },
+          (err) => {
+            reject(err);
+          }
+        );
+    });
   }
 
-  buscarPrecioDeUnProducto(
-    IdAsignarProductoLote: string,
-    _token: string
-  ) {
+  buscarPrecioDeUnProducto(IdAsignarProductoLote: string, _token: string) {
     const body = new HttpParams()
-      .set('IdAsignarProductoLote', IdAsignarProductoLote)
-      .set('encriptada', _token)
+      .set("IdAsignarProductoLote", IdAsignarProductoLote)
+      .set("encriptada", _token);
     return new Promise((resolve, reject) => {
-      this.http.post(apiUrl + 'Inventario/BuscarPrecioConfigurarProducto', body.toString(),
-        {
-          headers: new HttpHeaders()
-            .set('Content-Type', 'application/x-www-form-urlencoded')
-        }
-      )
-        .subscribe(res => {
-          resolve(res);
-        }, (err) => {
-          reject(err);
-        })
-    })
+      this.http
+        .post(
+          apiUrl + "Inventario/BuscarPrecioConfigurarProducto",
+          body.toString(),
+          {
+            headers: new HttpHeaders().set(
+              "Content-Type",
+              "application/x-www-form-urlencoded"
+            ),
+          }
+        )
+        .subscribe(
+          (res) => {
+            resolve(res);
+          },
+          (err) => {
+            reject(err);
+          }
+        );
+    });
   }
 
   buscarLote(
@@ -860,50 +1009,56 @@ export class InventarioService {
     _token: string
   ) {
     const body = new HttpParams()
-      .set('Codigo', lote)
-      .set('AsignarProductoLote.IdRelacionLogica', idRelacionLogica)
-      .set('AsignarProductoLote.PerteneceKit', perteneceKit)
-      .set('encriptada', _token)
+      .set("Codigo", lote)
+      .set("AsignarProductoLote.IdRelacionLogica", idRelacionLogica)
+      .set("AsignarProductoLote.PerteneceKit", perteneceKit)
+      .set("encriptada", _token);
     return new Promise((resolve, reject) => {
-      this.http.post(apiUrl + 'Factura/BuscarLote', body.toString(),
-        {
-          headers: new HttpHeaders()
-            .set('Content-Type', 'application/x-www-form-urlencoded')
-        }
-      )
-        .subscribe(res => {
-          resolve(res);
-        }, (err) => {
-          reject(err);
+      this.http
+        .post(apiUrl + "Factura/BuscarLote", body.toString(), {
+          headers: new HttpHeaders().set(
+            "Content-Type",
+            "application/x-www-form-urlencoded"
+          ),
         })
-    })
+        .subscribe(
+          (res) => {
+            resolve(res);
+          },
+          (err) => {
+            reject(err);
+          }
+        );
+    });
   }
 
-  crearPrecio(
-    idConfigurarProducto: string,
-    precio: string,
-    _token: string
-  ) {
+  crearPrecio(idConfigurarProducto: string, precio: string, _token: string) {
     const body = new HttpParams()
-      .set('IdConfigurarProducto', idConfigurarProducto)
-      .set('Precio', precio)
-      .set('encriptada', _token)
-
+      .set("IdConfigurarProducto", idConfigurarProducto)
+      .set("Precio", precio)
+      .set("encriptada", _token);
     console.log(body);
-    
     return new Promise((resolve, reject) => {
-      this.http.post(apiUrl + 'Inventario/IngresoPrecioConfigurarProducto', body.toString(),
-        {
-          headers: new HttpHeaders()
-            .set('Content-Type', 'application/x-www-form-urlencoded')
-        }
-      )
-        .subscribe(res => {
-          resolve(res);
-        }, (err) => {
-          reject(err);
-        })
-    })
+      this.http
+        .post(
+          apiUrl + "Inventario/IngresoPrecioConfigurarProducto",
+          body.toString(),
+          {
+            headers: new HttpHeaders().set(
+              "Content-Type",
+              "application/x-www-form-urlencoded"
+            ),
+          }
+        )
+        .subscribe(
+          (res) => {
+            resolve(res);
+          },
+          (err) => {
+            reject(err);
+          }
+        );
+    });
   }
 
   actualizarPrecio(
@@ -913,23 +1068,30 @@ export class InventarioService {
     _token: string
   ) {
     const body = new HttpParams()
-      .set('IdPrecio', idPrecio)
-      .set('IdConfigurarProducto', idConfigurarProducto)
-      .set('Precio', precio)
-      .set('encriptada', _token)
+      .set("IdPrecio", idPrecio)
+      .set("IdConfigurarProducto", idConfigurarProducto)
+      .set("Precio", precio)
+      .set("encriptada", _token);
     return new Promise((resolve, reject) => {
-      this.http.post(apiUrl + 'Inventario/ActualizarPrecioConfigurarProducto', body.toString(),
-        {
-          headers: new HttpHeaders()
-            .set('Content-Type', 'application/x-www-form-urlencoded')
-        }
-      )
-        .subscribe(res => {
-          resolve(res);
-        }, (err) => {
-          reject(err);
-        })
-    })
+      this.http
+        .post(
+          apiUrl + "Inventario/ActualizarPrecioConfigurarProducto",
+          body.toString(),
+          {
+            headers: new HttpHeaders().set(
+              "Content-Type",
+              "application/x-www-form-urlencoded"
+            ),
+          }
+        )
+        .subscribe(
+          (res) => {
+            resolve(res);
+          },
+          (err) => {
+            reject(err);
+          }
+        );
+    });
   }
-
 }

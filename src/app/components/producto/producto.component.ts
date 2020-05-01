@@ -51,7 +51,6 @@ export class ProductoComponent implements OnInit {
   filteredOptions: Observable<string[]>;
 
   nombresDeProductos: any[] = [];
-  //productos: any[] = [];
   tipoProductos: any[] = [];
   presentaciones: any[] = [];
   medidas: any[] = [];
@@ -177,6 +176,7 @@ export class ProductoComponent implements OnInit {
   }
 
   crearProducto() {
+    console.log("idProducto: "+this._idProducto.value);
     if (this._idProducto.value == '' && this._productoExistente.value == '') {
       this.inventarioService.crearProducto(
         this._nombre.value,
@@ -186,6 +186,7 @@ export class ProductoComponent implements OnInit {
       )
         .then(
           ok => {
+            console.log(ok['respuesta']);
             if (ok['respuesta'] == null) {
               sweetAlert("Inténtalo de nuevo!", {
                 icon: "warning",
@@ -199,10 +200,6 @@ export class ProductoComponent implements OnInit {
               sweetAlert("Ha ocurrido un error!", {
                 icon: "error",
               });
-              console.log(ok['respuesta']);
-              console.log('error al crear producto');
-              
-              
             } else {
               this._idProducto.setValue(ok['respuesta']);
               this.crearConfiguracionProducto();
@@ -220,6 +217,7 @@ export class ProductoComponent implements OnInit {
   }
 
   crearConfiguracionProducto() {
+    
     this.inventarioService.crearConfiguracionProducto(
       localStorage.getItem('miCuenta.idAsignacionTipoUsuario'),
       this._idProducto.value,
@@ -244,10 +242,7 @@ export class ProductoComponent implements OnInit {
             sweetAlert("Ha ocurrido un error!", {
               icon: "error",
             });
-            console.log(ok['respuesta']);
-            console.log('error al crear conf producto');
           } else {
-            console.log(ok['respuesta']);
             this._idConfiguracionProducto.setValue(ok['respuesta'].IdConfigurarProducto);
             this.crearPrecio();
           }
@@ -273,6 +268,8 @@ export class ProductoComponent implements OnInit {
             icon: "success",
           });
           this.myForm.reset();
+          this._idProducto.setValue("");
+          this._productoExistente.setValue("");
           this.consultarProductos();
           this._nombre.enable();
           this._descripcion.enable();
@@ -282,8 +279,6 @@ export class ProductoComponent implements OnInit {
           sweetAlert("Ha ocurrido un error!", {
             icon: "error",
           });
-          console.log(ok['respuesta']);
-          console.log('error al crear precio');
         }
       }
     )

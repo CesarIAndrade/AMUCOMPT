@@ -11021,15 +11021,16 @@
 
 .table_all table {
   width: 100%;
+  text-align: center !important;
 }
 
 .table_all th {
-  text-align: center;
+  text-align: center !important;
   color: #343a40;
   background-color: #fff ;
   font-size: 18px;
 }
 
 .table_all td {
-  text-align: center;
+  text-align: center !important;
 }
