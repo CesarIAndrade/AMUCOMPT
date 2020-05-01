@@ -83,6 +83,7 @@ export class VentaComponent implements OnInit {
   detalleVenta: any[] = [];
   kits: any[] = [];
   seccionKit = true;
+  aplicaDescuento = true;
   filteredOptions: Observable<string[]>;
   tipoCompra: any[] = [{ tipo: "Producto" }, { tipo: "Kit" }];
   selected = "Producto";
@@ -92,6 +93,7 @@ export class VentaComponent implements OnInit {
   selectTipoCompra = true;
 
   selecionarTipoCompra(tipoCompra) {
+    this.aplicaDescuento = true;
     if (tipoCompra.value == "Kit") {
       this.seccionKit = false;
       this.buttonSeleccionarProducto = true;
@@ -101,7 +103,7 @@ export class VentaComponent implements OnInit {
       this.seccionKit = true;
       this.limpiarCampos();
     }
-  }
+  } 
 
   consultarKits() {
     this.inventarioService
@@ -119,6 +121,7 @@ export class VentaComponent implements OnInit {
       });
   }
 
+  permitirAnadir: any;
   consultarKitsYSusProductos(idKit) {
     const url = "Stock/ListaAsignarProductoKitEnStock";
     this.inventarioService
@@ -127,10 +130,13 @@ export class VentaComponent implements OnInit {
         localStorage.getItem("miCuenta.getToken"),
         url
       )
-      .then((ok) => {
+      .then((ok) => {        
+        console.log(ok['respuesta']);
+        
         this.listaProductosDeUnKit = [];
         this.listaProductosDeUnKit =
           ok["respuesta"][0]["ListaAsignarProductoKit"];
+        this.permitirAnadir = ok['respuesta'][0]["PermitirAnadir"];
         this.buttonSeleccionarProducto = true;
       })
       .catch((error) => {
@@ -172,18 +178,19 @@ export class VentaComponent implements OnInit {
         height: "auto",
         data: {
           listaProductosDeUnKit: this.listaProductosDeUnKit,
-          idCabeceraFactura: this._idCabecera.value
+          idCabeceraFactura: this._idCabecera.value,
+          permitirAnadir: this.permitirAnadir
         },
       }
     );
     dialogRef.afterClosed().subscribe((result) => {
       console.log(result);
-
       if (result != null) {
-        if (result.Kit != null) {
+        if (result.Kit != "") {
+          this.aplicaDescuento = false;
           this._kit.setValue(result.Kit + " (" + result.Porcentaje + ")");
         } else {
-          this.seccionKit = true;
+          this.aplicaDescuento = true;
           this._kit.setValue("");
           this._checkedDescuento.setValue(false);
         }
@@ -200,7 +207,7 @@ export class VentaComponent implements OnInit {
           result.Medida;
         this._producto.setValue(producto);
         this._cantidad.reset();
-      }
+      } 
     });
   }
 
@@ -252,7 +259,6 @@ export class VentaComponent implements OnInit {
             icon: "error",
           });
         } else if(ok['respuesta']) {
-          console.log(ok['respuesta']);
           this._idCabecera.setValue(ok["respuesta"].IdCabeceraFactura);
           this._cabecera.setValue(ok["respuesta"].Codigo);
           var fecha = new Date();
@@ -338,7 +344,7 @@ export class VentaComponent implements OnInit {
 
   realizarVenta() {
     this.ventaService
-      .FinalizarCabeceraFacturaVenta(
+      .finalizarCabeceraFacturaVenta(
         this._idCabecera.value,
         localStorage.getItem("miCuenta.putToken")
       )

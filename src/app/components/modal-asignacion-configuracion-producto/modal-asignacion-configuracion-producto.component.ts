@@ -56,7 +56,6 @@ export class ModalAsignacionConfiguracionProductoComponent implements OnInit {
       .then((ok) => {
         this.configuracionProductos = [];
         ok["respuesta"].map((item) => {
-          console.log(item);
           var producto = {
             IdRelacionLogica: item.IdConfigurarProducto,
             PerteneceKit: "False",
@@ -85,174 +84,83 @@ export class ModalAsignacionConfiguracionProductoComponent implements OnInit {
     this.producto.ContenidoNeto = producto.ContenidoNeto;
     this.producto.Medida = producto.Medida;
   }
-
+ 
   agregarDetalleParaVenta(producto) {
     this.producto.IdAsignarProductoLote = producto.IdAsignarProductoLote;
-    this.producto.IdKit = producto.IdKit;
     this.producto.Kit = producto.Kit;
-    this.producto.IdLote = producto.IdLote;
-    this.producto.Lote = producto.Lote;
-    this.producto.Codigo = producto.Codigo;
     this.producto.Producto = producto.Producto;
-    this.producto.FechaExpiracion = producto.FechaExpiracion;
     this.producto.Presentacion = producto.Presentacion;
     this.producto.ContenidoNeto = producto.ContenidoNeto;
     this.producto.Medida = producto.Medida;
     this.producto.Porcentaje = producto.Porcentaje;
-    this.producto.Disponible = producto.Cantidad;
-  }
-
-  validarSiPerteneceALote(producto) {
-    var datosLote: any;
-    try {
-      datosLote = {
-        IdLote: producto.AsignarProductoLote.IdLote,
-        Lote: producto.AsignarProductoLote.Lote.Codigo,
-        FechaExpiracion: producto.AsignarProductoLote.Lote.FechaExpiracion,
-      };
-    } catch (error) {
-      datosLote = null;
-    }
-    return datosLote;
-  }
-
-  validarSiPerteneceAKit(producto) {
-    var datosKit: any;
-    try {
-      datosKit = {
-        IdKit: producto.AsignarProductoLote.AsignarProductoKits.IdKit,
-        Kit: producto.AsignarProductoLote.AsignarProductoKits.Descripcion,
-        IdProducto:
-          producto.AsignarProductoLote.AsignarProductoKits
-            .ListaAsignarProductoKit[0].ListaProductos.IdConfigurarProducto,
-        Codigo:
-          producto.AsignarProductoLote.AsignarProductoKits
-            .ListaAsignarProductoKit[0].ListaProductos.Codigo,
-        Producto:
-          producto.AsignarProductoLote.AsignarProductoKits
-            .ListaAsignarProductoKit[0].ListaProductos.Producto.Nombre,
-        Presentacion:
-          producto.AsignarProductoLote.AsignarProductoKits
-            .ListaAsignarProductoKit[0].ListaProductos.Presentacion.Descripcion,
-        ContenidoNeto:
-          producto.AsignarProductoLote.AsignarProductoKits
-            .ListaAsignarProductoKit[0].ListaProductos.CantidadMedida,
-        Medida:
-          producto.AsignarProductoLote.AsignarProductoKits
-            .ListaAsignarProductoKit[0].ListaProductos.Medida.Descripcion,
-      };
-    } catch (error) {
-      datosKit = null;
-    }
-    return datosKit;
-  }
-
-  estructurarSiPerteneceKit(producto) {
-    var perteneceKit: any;
-    var datosKit: any;
-    perteneceKit = this.validarSiPerteneceAKit(producto);
-    if (perteneceKit != null) {
-      datosKit = {
-        IdKit: perteneceKit.IdKit,
-        Kit: perteneceKit.Kit,
-        IdProducto: perteneceKit.IdProducto,
-        Codigo: perteneceKit.Codigo,
-        Producto: perteneceKit.Producto,
-        Presentacion: perteneceKit.Presentacion,
-        ContenidoNeto: perteneceKit.ContenidoNeto,
-        Medida: perteneceKit.Medida,
-        Porcentaje:
-          producto.AsignarProductoLote.AsignarProductoKits
-            .ListaAsignarProductoKit[0].Kit.AsignarDescuentoKit.Descuento
-            .Porcentaje + "%",
-      };
-    } else {
-      datosKit = {
-        Codigo: producto.AsignarProductoLote.ConfigurarProductos.Codigo,
-        IdKit: producto.AsignarProductoLote.AsignarProductoKits.IdKit,
-        Kit: producto.AsignarProductoLote.AsignarProductoKits.Descripcion,
-        IdProducto:
-          producto.AsignarProductoLote.ConfigurarProductos.IdConfigurarProducto,
-        Producto:
-          producto.AsignarProductoLote.ConfigurarProductos.Producto.Nombre,
-        Presentacion:
-          producto.AsignarProductoLote.ConfigurarProductos.Presentacion
-            .Descripcion,
-        ContenidoNeto:
-          producto.AsignarProductoLote.ConfigurarProductos.CantidadMedida,
-        Medida:
-          producto.AsignarProductoLote.ConfigurarProductos.Medida.Descripcion,
-        Porcentaje: "",
-      };
-    }
-    return datosKit;
-  }
-
-  estructurarSiPerteneceLote(producto) {
-    var perteneceLote: any;
-    var datosLote: any;
-    perteneceLote = this.validarSiPerteneceALote(producto);
-    if (perteneceLote != null) {
-      datosLote = {
-        IdAsignarProductoLote:
-          producto.AsignarProductoLote.IdAsignarProductoLote,
-        Cantidad: producto.Cantidad,
-        IdLote: perteneceLote.IdLote,
-        Lote: perteneceLote.Lote,
-        FechaExpiracion: perteneceLote.FechaExpiracion,
-        Porcentaje: "",
-      };
-    } else {
-      datosLote = {
-        IdAsignarProductoLote:
-          producto.AsignarProductoLote.IdAsignarProductoLote,
-        Cantidad: producto.Cantidad,
-        IdLote: "",
-        Lote: "",
-        FechaExpiracion: producto.AsignarProductoLote.FechaExpiracion,
-        Porcentaje: "",
-      };
-    }
-    return datosLote;
-  }
-
-  estructurarData(listaProductos, deUnKit?) {
-    var estructuraFinal: any;
-    var listaProductosFinal: any[] = [];
-    var datosKit: any;
-    var datosLote: any;
-    listaProductos.map((producto) => {
-      if (deUnKit){
-        datosKit = {
-          Codigo: producto.ListaProductos.Codigo,
-          Producto: producto.ListaProductos.Producto.Nombre,
-          ContenidoNeto: producto.ListaProductos.CantidadMedida,
-          Medida: producto.ListaProductos.Medida.Descripcion
-        };
-        datosLote = {
-          Lote: producto.Stock.AsignarProductoLote.Lote.Codigo,
-          FechaExpiracion: producto.Stock.AsignarProductoLote.Lote.FechaExpiracion,
-          Disponible: producto.Stock.Cantidad
-        };
-      } else {
-        datosKit = this.estructurarSiPerteneceKit(producto);
-        datosLote = this.estructurarSiPerteneceLote(producto);
-      }
-      estructuraFinal = Object.assign(datosKit, datosLote);
-      listaProductosFinal.push(estructuraFinal);
-    });
-    return listaProductosFinal;
+    this.producto.Disponible = producto.Disponible;
   }
 
   consultarStock() {
     this.inventarioService
       .consultarStock(localStorage.getItem("miCuenta.getToken"))
       .then((ok) => {
+        this.listaProductosEnStock = [];
         ok['respuesta'].map(item => {
-          console.log(item);
-          
+          var lote = "";
+          var idLote = "";
+          var kit = "";
+          var idKit = "";
+          var fechaExpiracion = "";
+          var nombreProducto = "";
+          var presentacion = "";
+          var contenidoNeto = "";
+          var medida = "";
+          var codigo = "";
+          var porcentaje = "";
+          if (item.AsignarProductoLote.Lote) {  
+            lote = item.AsignarProductoLote.Lote.Codigo;
+            idLote = item.AsignarProductoLote.Lote.IdLote;
+            fechaExpiracion = item.AsignarProductoLote.Lote.FechaExpiracion;
+          } else {
+            lote = "";
+            idLote = "";
+            fechaExpiracion = item.AsignarProductoLote.FechaExpiracion;
+          }
+          if (item.AsignarProductoLote.PerteneceKit != "False") {     
+            kit = item.AsignarProductoLote.AsignarProductoKit.Kit.Descripcion;
+            idKit = item.AsignarProductoLote.AsignarProductoKit.Kit.IdKit;
+            nombreProducto = item.AsignarProductoLote.AsignarProductoKit.ListaProductos.Producto.Nombre;
+            contenidoNeto = item.AsignarProductoLote.AsignarProductoKit.ListaProductos.CantidadMedida;
+            medida = item.AsignarProductoLote.AsignarProductoKit.ListaProductos.Medida.Descripcion;
+            codigo = item.AsignarProductoLote.AsignarProductoKit.ListaProductos.Codigo;
+            porcentaje = item.AsignarProductoLote.AsignarProductoKit.Kit.AsignarDescuentoKit.Descuento.Porcentaje;
+            presentacion = item.AsignarProductoLote.AsignarProductoKit.ListaProductos.Presentacion.Descripcion;
+          } else {
+            kit = "";
+            idKit = "";
+            nombreProducto = item.AsignarProductoLote.ConfigurarProductos.Producto.Nombre;
+            contenidoNeto = item.AsignarProductoLote.ConfigurarProductos.CantidadMedida;
+            medida = item.AsignarProductoLote.ConfigurarProductos.Medida.Descripcion;
+            codigo = item.AsignarProductoLote.ConfigurarProductos.Codigo;
+            porcentaje = "";
+            presentacion = item.AsignarProductoLote.ConfigurarProductos.Presentacion.Descripcion;
+          }
+          var producto = {
+            Codigo: codigo,
+            IdAsignarProductoLote: item.AsignarProductoLote.IdAsignarProductoLote,
+            IdKit: idKit,
+            Kit: kit,
+            IdLote: idLote,
+            Lote: lote,
+            FechaExpiracion: fechaExpiracion,
+            Disponible: item.Cantidad,
+            Producto: nombreProducto,
+            Presentacion: presentacion,
+            ContenidoNeto: contenidoNeto,
+            Medida: medida,
+            Porcentaje: porcentaje,
+            Precio: item.AsignarProductoLote.ValorUnitario
+          }
+          if(producto.Disponible != 0) {
+            this.listaProductosEnStock.push(producto)
+          }
         })
-        // this.listaProductosEnStock = this.estructurarData(ok["respuesta"]);
       })
       .catch((error) => {
         console.log(error);
@@ -270,7 +178,7 @@ export class ModalAsignacionConfiguracionProductoComponent implements OnInit {
 
   siElKitVieneDeCompra(listaProductos) {
     this.configuracionProductos = [];
-    this.data.listaProductosDeUnKit.map(item => {
+    listaProductos.map(item => {
       var producto = {
         IdRelacionLogica: item.IdAsignarProductoKit,
         PerteneceKit: "True",
@@ -285,8 +193,44 @@ export class ModalAsignacionConfiguracionProductoComponent implements OnInit {
     })
   }
 
+  permitirAnadir: boolean;
   siElKitVieneDeVenta(listaProductos) {
-    console.log("hola desde venta");
+    this.listaProductosDeUnKit = [];
+    listaProductos.map(item => {
+      var lote = "";
+      var idLote = "";
+      var fechaExpiracion = "";
+      var cantidad = "";
+      if(item.Stock) {
+        if (item.Stock.AsignarProductoLote.Lote) {
+          lote = item.Stock.AsignarProductoLote.Lote.Codigo;
+          idLote = item.Stock.AsignarProductoLote.Lote.IdLote;
+          fechaExpiracion = item.Stock.AsignarProductoLote.Lote.FechaExpiracion;
+        } else {
+          lote = "";
+          fechaExpiracion = item.Stock.AsignarProductoLote.FechaExpiracion;
+        }      
+        cantidad = item.Stock.Cantidad;
+      } else {
+        var lote = "";
+        var idLote = "";
+        var fechaExpiracion = "";
+        var cantidad = "0";
+      }
+      var producto = {
+        IdKit: item.Kit.IdKit,
+        Kit: item.Kit.Descripcion,
+        Codigo: item.ListaProductos.Codigo,
+        Producto: item.ListaProductos.Producto.Nombre,
+        ContenidoNeto: item.ListaProductos.CantidadMedida,
+        Medida: item.ListaProductos.Medida.Descripcion,
+        IdLote: idLote,
+        Lote: lote,
+        FechaExpiracion: fechaExpiracion,
+        Disponible: cantidad
+      }
+      this.listaProductosDeUnKit.push(producto);
+    })
   }
 
   estructurarProductosDeUnKit(listaProductos, ruta?) {
@@ -309,7 +253,6 @@ export class ModalAsignacionConfiguracionProductoComponent implements OnInit {
         this.areaTablaStock = true;
         this.areaTablaProductoDeUnKit = false;
         this.idCabeceraFactura = this.data.idCabeceraFactura;
-        var temp_lista = [];
         try {
           this.nombreKit = this.data.listaProductosDeUnKit[0].Kit.Descripcion;
           this.idKit = this.data.listaProductosDeUnKit[0].Kit.IdKit;
@@ -317,17 +260,14 @@ export class ModalAsignacionConfiguracionProductoComponent implements OnInit {
           this.nombreKit = "";
           this.idKit = "";
         }
-        this.data.listaProductosDeUnKit.map((producto) => {
-          try {
-            if (producto.Stock) {
-              temp_lista.push(producto);
-            }
-          } catch (error) {}
-        });
-        this.listaProductosDeUnKit = this.estructurarData(temp_lista, true);
+        if (this.data.permitirAnadir) {
+          this.permitirAnadir = false;
+        } else {
+          this.permitirAnadir = true;
+        }
+        this.estructurarProductosDeUnKit(this.data.listaProductosDeUnKit, "venta");
       }
     } else if (this.router.url == "/compras") {
-      console.log(this.data.listaProductosDeUnKit);
       this.areaTablaProductoDeUnKit = true;
       this.areaTablaStock = true;
       this.areaTablaConfiguracionProducto = false;
