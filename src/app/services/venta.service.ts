@@ -60,7 +60,7 @@ export class VentaService {
           reject(err);
         })
     })
-  }
+  } 
 
   consultarFacturasVentasFinalizadas(_token: string) {
     const body = new HttpParams()
@@ -80,7 +80,10 @@ export class VentaService {
     })
   }
 
-  FinalizarCabeceraFacturaVenta(idCabecera: string, _token: string) {
+  finalizarCabeceraFacturaVenta(
+    idCabecera: string,
+    _token: string
+  ) {
     const body = new HttpParams()
       .set('IdCabeceraFactura', idCabecera)
       .set('encriptada', _token)
