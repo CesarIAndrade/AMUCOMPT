@@ -354,6 +354,10 @@ export class VentaComponent implements OnInit {
           sweetAlert("Se ingresó correctamente!", {
             icon: "success",
           });
+          this.consultarFacturasNoFinalizadas();
+          this.consultarFacturasFinalizadas();
+          this.myForm.reset();
+          this.detalleVenta.data = [];
         } else {
           sweetAlert("Ha ocurrido un error!", {
             icon: "error",
@@ -493,14 +497,19 @@ export class VentaComponent implements OnInit {
     }
   }
 
-  quitarDetalleFactura(DetalleFactura) {
+  quitarDetalleFactura(detalleFactura) {
     this.ventaService
       .quitarDetalleFactura(
-        DetalleFactura.IdDetalleVenta,
+        detalleFactura.IdDetalleVenta,
         localStorage.getItem("miCuenta.deleteToken")
       )
       .then((ok) => {
-        if (ok["respuesta"]) {
+        if (ok["respuesta"] == "0") {
+          this._idCabecera.setValue("");
+          this.myForm.reset();
+          this.consultarFacturasNoFinalizadas();
+          this.consultarFacturasFinalizadas();
+        } else {
           this.consultarDetalleFactura();
         }
       })
@@ -541,6 +550,7 @@ export class VentaComponent implements OnInit {
         url,
         localStorage.getItem("miCuenta.getToken"))
       .then((ok) => {
+        console.log(ok['respuesta']);
         this.facturasNoFinalizadas.data = [];
         this.facturasNoFinalizadas.data = ok["respuesta"];
         this.facturasNoFinalizadas.paginator = this.fnf_paginator;
@@ -575,7 +585,6 @@ export class VentaComponent implements OnInit {
         url,
         localStorage.getItem("miCuenta.getToken"))
       .then((ok) => {
-        console.log(ok['respuesta']);
         this.facturasFinalizadas.data = [];
         this.facturasFinalizadas.data = ok["respuesta"];
         this.facturasFinalizadas.paginator = this.ff_paginator;

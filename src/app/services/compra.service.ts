@@ -121,6 +121,8 @@ export class CompraService {
       .set('IdDetalleFactura', idDetalleFactura)
       .set('IdCabeceraFactura', idCabeceraFactura)
       .set('encriptada', _token)
+    console.log(body);
+    
     return new Promise((resolve, reject) => {
       this.http.post(apiUrl + 'Factura/EliminarDetalleFactura', body.toString(),
         {
