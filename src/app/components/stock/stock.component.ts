@@ -14,16 +14,15 @@ export class StockComponent implements OnInit {
     private inventarioService: InventarioService,
   ) { }
 
+  // Para la paginacion
   @ViewChild('paginator', { static: false }) paginator: MatPaginator;
-  // listaProductosEnStock = new MatTableDataSource<Element[]>();
-
-  listaProductosEnStock: any[] = [];
+  listaProductosEnStock = new MatTableDataSource<Element[]>();
 
   consultarStock() {
     this.inventarioService
       .consultarStock(localStorage.getItem("miCuenta.getToken"))
       .then((ok) => {
-        this.listaProductosEnStock = [];
+        var listaProductosEnStock = [];
         ok['respuesta'].map(item => {
           var lote = "";
           var kit = "";
@@ -67,8 +66,10 @@ export class StockComponent implements OnInit {
             ContenidoNeto: contenidoNeto,
             Medida: medida,
           }
-          this.listaProductosEnStock.push(producto)
+          listaProductosEnStock.push(producto)
         })
+        this.listaProductosEnStock.data = listaProductosEnStock;
+        this.listaProductosEnStock.paginator = this.paginator;
       })
       .catch((error) => {
         console.log(error);

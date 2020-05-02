@@ -20,6 +20,7 @@ import { FacturaService } from "src/app/services/factura.service";
 // SweetAlert
 import sweetalert from "sweetalert";
 import { Router } from "@angular/router";
+import { ModalLotesComponent } from '../modal-lotes/modal-lotes.component';
 
 @Component({
   selector: "app-compra",
@@ -35,7 +36,8 @@ export class CompraComponent implements OnInit {
     private inventarioService: InventarioService,
     private compraService: CompraService,
     private facturaService: FacturaService,
-    private router: Router
+    private router: Router,
+    private modalLotes: MatDialog
   ) {
     this.myForm = new FormGroup({
       _idCabecera: new FormControl(""),
@@ -66,6 +68,7 @@ export class CompraComponent implements OnInit {
   buttonGenerarFactura = false;
   buttonSeleccionarProducto = true;
   loteEnDetalle = true;
+  buttonSeleccionarLote = true;
 
   kits: any[] = [];
   lotes: any[] = [];
@@ -290,6 +293,28 @@ export class CompraComponent implements OnInit {
     this._precio.disable();
   }
 
+  seleccionarLote() {
+    let dialogRef = this.modalLotes.open(ModalLotesComponent, {
+      width: '500px',
+      height: 'auto',
+      data: {
+        idCabecera: this._idCabecera.value,
+        idRelacionLogica: this._idRelacionLogica.value,
+        perteneceKit: this._perteneceKit.value
+      }
+    }); 
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(result);      
+      if (result != null) {
+        this._fechaExpiracion.setValue(result.fechaExpiracion);
+        this._lote.setValue(result.nombreLote);
+        this._idLote.setValue(result.idLote);
+      //   this._idProvincia.setValue(result.idLocalidad);
+      //   this._provincia.setValue(result.descripcion);
+      }
+    });
+  }   
+
   consultarDetalleFactura() {
     this.compraService
       .consultarDetalleFactura(
@@ -472,6 +497,7 @@ export class CompraComponent implements OnInit {
           this.buttonSeleccionarProducto = true;
         }
         this.buttonGenerarFactura = false;
+        this.buttonSeleccionarLote = true;
       })
       .catch((error) => {
         console.log(error);
@@ -509,6 +535,7 @@ export class CompraComponent implements OnInit {
         this._lote.reset();
         this._cantidad.reset();
         this._precio.reset();
+        this.buttonSeleccionarLote = false;
       }
     });
   }

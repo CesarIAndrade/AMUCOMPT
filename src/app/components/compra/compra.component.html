@@ -86,47 +86,36 @@
                   <mat-icon>add</mat-icon>
                 </button>
               </div>
-              <mat-form-field class="example-full-width">
-                <input
-                  type="text"
-                  (keyup)="onKeyUp()"
-                  placeholder="Lote"
-                  matInput
-                  formControlName="_lote"
-                  [matAutocomplete]="auto"
-                />
-                <mat-autocomplete #auto="matAutocomplete">
-                  <mat-option
-                    (onSelectionChange)="seleccionarLoteSiExiste(option)"
-                    *ngFor="let option of filteredOptions | async"
-                    [value]="option.Codigo"
-                  >
-                    {{ option.Codigo }}
-                  </mat-option>
-                </mat-autocomplete>
-                <mat-hint [hidden]="loteEnDetalle" style="color: red;">
-                  Este Lote ya está en el Detalle
-                </mat-hint>
-              </mat-form-field>
+            </div>
+            <div class="row mt-2">
+              <div class="col-lg-9 col-md-10">
+                <mat-form-field class="example-full-width">
+                  <input
+                    type="text"
+                    placeholder="Lote"
+                    readonly
+                    matInput
+                    formControlName="_lote"
+                  />
+                </mat-form-field>
+              </div>
+              <div class="col-lg-3 col-md-2">
+                <button mat-button type="button" [disabled]="buttonSeleccionarLote" (click)="seleccionarLote()"
+                    class="mt-2 btn-outline-danger">
+                    <mat-icon>add</mat-icon>
+                  </button>
+              </div>
             </div>
           </div>
           <div class="col-lg-4">
-            <mat-form-field class="example-full-width">
+            <mat-form-field class="example-full-width fechaExpiracion">
               <input
                 readonly
                 matInput
-                (dateInput)="addEvent()"
                 formControlName="_fechaExpiracion"
                 [matDatepicker]="picker"
                 placeholder="Fecha Expiración"
               />
-              <button type="button" mat-button matPrefix mat-icon-button>
-                <mat-icon [hidden]="dateIcon" (click)="clearDate()"
-                  >clear</mat-icon
-                >
-              </button>
-              <mat-datepicker-toggle matSuffix [for]="picker">
-              </mat-datepicker-toggle>
               <mat-datepicker #picker></mat-datepicker>
             </mat-form-field>
             <div class="row">
