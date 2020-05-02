@@ -98,8 +98,10 @@ export class VentaComponent implements OnInit {
   // Para la paginacion
   @ViewChild('paginator', { static: false }) paginator: MatPaginator;
   @ViewChild('fnf_paginator', { static: false }) fnf_paginator: MatPaginator;
+  @ViewChild('ff_paginator', { static: false }) ff_paginator: MatPaginator;
   detalleVenta = new MatTableDataSource<Element[]>();
   facturasNoFinalizadas = new MatTableDataSource<Element[]>();
+  facturasFinalizadas = new MatTableDataSource<Element[]>();
 
   selecionarTipoCompra(tipoCompra) {
     this.aplicaDescuento = true;
@@ -294,6 +296,7 @@ export class VentaComponent implements OnInit {
       .then((ok) => {
         if (ok["respuesta"] == "true") {
           this.consultarDetalleFactura();
+          this.realizarVentaButton = false;
           this.limpiarCampos();
         }
         if (ok["respuesta"] == "false") {
@@ -565,6 +568,22 @@ export class VentaComponent implements OnInit {
     );
   }
 
+  consultarFacturasFinalizadas() {
+    const url = "Factura/ListaFacturasFinalizadasVenta";
+    this.facturaService
+      .consultarFacturasNoFinalizadas(
+        url,
+        localStorage.getItem("miCuenta.getToken"))
+      .then((ok) => {
+        console.log(ok['respuesta']);
+        this.facturasFinalizadas.data = [];
+        this.facturasFinalizadas.data = ok["respuesta"];
+        this.facturasFinalizadas.paginator = this.ff_paginator;
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
 
   get _producto() {
     return this.myForm.get("_producto");
@@ -635,8 +654,9 @@ export class VentaComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.consultarFacturasNoFinalizadas();
     this.consultarTipoTransaccion();
+    this.consultarFacturasNoFinalizadas();
+    this.consultarFacturasFinalizadas();
     this.myForm.disable();
   }
 
@@ -655,6 +675,7 @@ export class VentaComponent implements OnInit {
     "acciones",
   ];
   tablaFacturasNoFinalidas = ["codigo", "usuario", "fecha", "acciones"];
+  tablaFacturasFinalidas = ["codigo", "usuario", "fecha", "acciones"];
 
 }
  

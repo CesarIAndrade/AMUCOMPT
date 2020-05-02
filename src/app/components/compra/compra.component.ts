@@ -97,8 +97,10 @@ export class CompraComponent implements OnInit {
   // Para la paginacion
   @ViewChild("paginator", { static: false }) paginator: MatPaginator;
   @ViewChild('fnf_paginator', { static: false }) fnf_paginator: MatPaginator;
+  @ViewChild('ff_paginator', { static: false }) ff_paginator: MatPaginator;
   detalleCompra = new MatTableDataSource<Element[]>();
   facturasNoFinalizadas = new MatTableDataSource<Element[]>();
+  facturasFinalizadas = new MatTableDataSource<Element[]>();
 
   buscarFechaYPrecio() {
     if (this._idRelacionLogica.value != "" && this._perteneceKit.value != "") {
@@ -454,6 +456,23 @@ export class CompraComponent implements OnInit {
       });
   }
 
+  consultarFacturasFinalizadas() {
+    const url = "Factura/ListaFacturasFinalizadas";
+    this.facturaService
+      .consultarFacturasNoFinalizadas(
+        url,
+        localStorage.getItem("miCuenta.getToken"))
+      .then((ok) => {
+        console.log(ok['respuesta']);
+        this.facturasFinalizadas.data = [];
+        this.facturasFinalizadas.data = ok["respuesta"];
+        this.facturasFinalizadas.paginator = this.ff_paginator;
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
   onChangeSelectKit(idKit) {
     this.consultarKitsYSusProductos(idKit);
   }
@@ -793,6 +812,7 @@ export class CompraComponent implements OnInit {
   ngOnInit() {
     this.consultarTipoTransaccion();
     this.consultarFacturasNoFinalizadas();
+    this.consultarFacturasFinalizadas();
     this.myForm.disable();
   }
 
@@ -818,4 +838,5 @@ export class CompraComponent implements OnInit {
     "acciones",
   ];
   tablaFacturasNoFinalidas = ["codigo", "usuario", "fecha", "acciones"];
+  tablaFacturasFinalidas = ["codigo", "usuario", "fecha", "acciones"];
 }
