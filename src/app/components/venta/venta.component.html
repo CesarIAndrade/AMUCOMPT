@@ -190,39 +190,37 @@
                 </button>
               </div>
             </div>
+            <mat-form-field class="example-full-width">
+              <input
+                matInput
+                formControlName="_nombres"
+                placeholder="Persona"
+                type="text"
+                readonly
+              />
+            </mat-form-field>
             <div class="row">
-              <div class="col-lg-12">
-                <mat-form-field class="example-full-width">
-                  <input
-                    matInput
-                    formControlName="_nombres"
-                    placeholder="Persona"
-                    type="text"
-                    readonly
-                  />
-                </mat-form-field>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-lg-12">
+              <div class="col-lg-9 col-md-10">
                 <mat-form-field class="example-full-width">
                   <input
                     type="text"
                     placeholder="Sembrío"
+                    readonly
                     matInput
                     formControlName="_sembrio"
-                    [matAutocomplete]="auto"
                   />
-                  <mat-autocomplete #auto="matAutocomplete">
-                    <mat-option
-                      (onSelectionChange)="seleccionarSembrioSiExiste(option)"
-                      *ngFor="let option of filteredOptions | async"
-                      [value]="option.Descripcion"
-                    >
-                      {{ option.Descripcion }}
-                    </mat-option>
-                  </mat-autocomplete>
                 </mat-form-field>
+              </div>
+              <div class="col-lg-3 col-md-2">
+                <button
+                  mat-button
+                  [disabled]="buttonSeleccionarSembrio"
+                  type="button"
+                  (click)="seleccionarSembrio()"
+                  class="mt-2 btn-outline-danger"
+                >
+                  <mat-icon>where_to_vote</mat-icon>
+                </button>
               </div>
             </div>
           </div>
@@ -242,7 +240,7 @@
             <button
               type="button"
               mat-raised-button
-              [disabled]="realizarCompraButton"
+              [disabled]="realizarVentaButton"
               (click)="realizarCompra()"
               class="mt-2 mb-2 btn-block bg-primary text-white"
             >
@@ -256,19 +254,8 @@
         <div class="col-lg-12 table_all">
           <table mat-table [dataSource]="detalleVenta">
             <ng-container matColumnDef="codigo">
-              <th mat-header-cell *matHeaderCellDef>Código</th>
+              <th mat-header-cell *matHeaderCellDef>C.</th>
               <td mat-cell *matCellDef="let element">{{ element.Codigo }}</td>
-            </ng-container>
-            <ng-container matColumnDef="kit">
-              <th mat-header-cell *matHeaderCellDef>Kit</th>
-              <ng-container *matCellDef="let element">
-                <ng-container *ngIf="element.IdKit == ''">
-                  <td mat-cell></td>
-                </ng-container>
-                <ng-container *ngIf="element.IdKit != ''">
-                  <td mat-cell>{{ element.Kit }}</td>
-                </ng-container>
-              </ng-container>
             </ng-container>
             <ng-container matColumnDef="descripcion">
               <th mat-header-cell *matHeaderCellDef>Descripción</th>
@@ -279,6 +266,10 @@
               <td mat-cell *matCellDef="let element">
                 {{ element.Presentacion }}
               </td>
+            </ng-container>
+            <ng-container matColumnDef="kit">
+              <th mat-header-cell *matHeaderCellDef>Kit</th>
+              <td mat-cell *matCellDef="let element">{{ element.Kit }}</td>
             </ng-container>
             <ng-container matColumnDef="lote">
               <th mat-header-cell *matHeaderCellDef>Lote</th>
@@ -291,13 +282,13 @@
               </td>
             </ng-container>
             <ng-container matColumnDef="valorUnitario">
-              <th mat-header-cell *matHeaderCellDef>V. Unitario</th>
+              <th mat-header-cell *matHeaderCellDef>V. Unit</th>
               <td mat-cell *matCellDef="let element">
                 {{ element.ValorUnidad }}
               </td>
             </ng-container>
             <ng-container matColumnDef="cantidad">
-              <th mat-header-cell *matHeaderCellDef>Cantidad</th>
+              <th mat-header-cell *matHeaderCellDef>Cant</th>
               <input
                 mat-cell
                 *matCellDef="let element"
@@ -309,7 +300,7 @@
               />
             </ng-container>
             <ng-container matColumnDef="Descuento">
-              <th mat-header-cell *matHeaderCellDef>Descuento</th>
+              <th mat-header-cell *matHeaderCellDef>% Desc</th>
               <td mat-cell *matCellDef="let element">
                 {{ element.AplicaDescuento }}
               </td>
@@ -325,7 +316,9 @@
               <td mat-cell *matCellDef="let element">{{ element.Total }}</td>
             </ng-container>
             <ng-container matColumnDef="acciones">
-              <th mat-header-cell *matHeaderCellDef>Acciones</th>
+              <th mat-header-cell *matHeaderCellDef>
+                <mat-icon class="mt-1">delete_outline</mat-icon>
+              </th>
               <ng-container *matCellDef="let element">
                 <td mat-cell>
                   <button
@@ -380,6 +373,64 @@
       </div>
     </div>
   </mat-tab>
-  <mat-tab label="Facturas no finalizadas"> </mat-tab>
+  <mat-tab label="Facturas no finalizadas"> 
+    <br/>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="table_all">
+            <table mat-table [dataSource]="facturasNoFinalizadas">
+              <ng-container matColumnDef="codigo">
+                <th mat-header-cell *matHeaderCellDef>Código</th>
+                <td mat-cell *matCellDef="let element">{{ element.Codigo }}</td>
+              </ng-container>
+              <ng-container matColumnDef="usuario">
+                <th mat-header-cell *matHeaderCellDef>Usuario</th>
+                <td mat-cell *matCellDef="let element">
+                  {{ element.PersonaEntidad.PrimerNombre }}
+                  {{ element.PersonaEntidad.ApellidoPaterno }}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="fecha">
+                <th mat-header-cell *matHeaderCellDef>Fecha</th>
+                <td mat-cell *matCellDef="let element">
+                  {{ element.FechaGeneracion }}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="acciones">
+                <th mat-header-cell *matHeaderCellDef>Acciones</th>
+                <ng-container *matCellDef="let element">
+                  <td mat-cell>
+                    <button
+                      mat-button
+                      class="btn-outline-primary"
+                      tooltip="Modificar"
+                      placement="top"
+                      (click)="mostrarDetallesFactura(element)"
+                    >
+                      <mat-icon>format_line_spacing</mat-icon>
+                    </button>
+                  </td>
+                </ng-container>
+              </ng-container>
+              <tr
+                mat-header-row
+                *matHeaderRowDef="tablaFacturasNoFinalidas; sticky: true"
+              ></tr>
+              <tr
+                mat-row
+                *matRowDef="let row; columns: tablaFacturasNoFinalidas"
+              ></tr>
+            </table>
+            <mat-paginator
+              #fnf_paginator
+              [pageSizeOptions]="[8]"
+              showFirstLastButtons
+            ></mat-paginator>
+          </div>
+        </div>
+      </div>
+    </div>
+  </mat-tab>
   <mat-tab label="Facturas finalizadas"> </mat-tab>
 </mat-tab-group>

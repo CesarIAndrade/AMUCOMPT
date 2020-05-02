@@ -203,12 +203,8 @@
         <div class="col-lg-12 table_all">
           <table mat-table [dataSource]="detalleCompra">
             <ng-container matColumnDef="codigo">
-              <th mat-header-cell *matHeaderCellDef>Código</th>
+              <th mat-header-cell *matHeaderCellDef>C.</th>
               <td mat-cell *matCellDef="let element">{{ element.Codigo }}</td>
-            </ng-container>
-            <ng-container matColumnDef="kit">
-              <th mat-header-cell *matHeaderCellDef>Kit</th>
-              <td mat-cell *matCellDef="let element">{{ element.Kit }}</td>
             </ng-container>
             <ng-container matColumnDef="descripcion">
               <th mat-header-cell *matHeaderCellDef>Descripción</th>
@@ -219,6 +215,10 @@
               <td mat-cell *matCellDef="let element">
                 {{ element.ContenidoNeto }} {{ element.Medida }}
               </td>
+            </ng-container>
+            <ng-container matColumnDef="kit">
+              <th mat-header-cell *matHeaderCellDef>Kit</th>
+              <td mat-cell *matCellDef="let element">{{ element.Kit }}</td>
             </ng-container>
             <ng-container matColumnDef="lote">
               <th mat-header-cell *matHeaderCellDef>Lote</th>
@@ -231,13 +231,13 @@
               </td>
             </ng-container>
             <ng-container matColumnDef="valorUnitario">
-              <th mat-header-cell *matHeaderCellDef>V. Unitario</th>
+              <th mat-header-cell *matHeaderCellDef>V. Unit</th>
               <td mat-cell *matCellDef="let element">
                 {{ element.Precio }}
               </td>
             </ng-container>
             <ng-container matColumnDef="cantidad">
-              <th mat-header-cell *matHeaderCellDef>Cantidad</th>
+              <th mat-header-cell *matHeaderCellDef>Cant</th>
               <input
                 mat-cell
                 *matCellDef="let element"
@@ -253,7 +253,9 @@
               <td mat-cell *matCellDef="let element">{{ element.Total }}</td>
             </ng-container>
             <ng-container matColumnDef="acciones">
-              <th mat-header-cell *matHeaderCellDef>Acciones</th>
+              <th mat-header-cell *matHeaderCellDef>
+                <mat-icon class="mt-1">delete_outline</mat-icon>
+              </th>
               <ng-container *matCellDef="let element">
                 <td mat-cell>
                   <button
@@ -331,8 +333,8 @@
               ></tr>
             </table>
             <mat-paginator
-              #paginator
-              [pageSizeOptions]="[5]"
+              #fnf_paginator
+              [pageSizeOptions]="[8]"
               showFirstLastButtons
             ></mat-paginator>
           </div>

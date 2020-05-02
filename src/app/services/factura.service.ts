@@ -52,11 +52,14 @@ export class FacturaService {
     })
   }
 
-  consultarFacturasNoFinalizadas(_token: string) {
+  consultarFacturasNoFinalizadas(
+    url: string, 
+    _token: string
+  ) {
     const body = new HttpParams()
       .set('encriptada', _token)
     return new Promise((resolve, reject) => {
-      this.http.post(apiUrl + 'Factura/ListaFacturasNoFinalizadas', body.toString(),
+      this.http.post(apiUrl + url, body.toString(),
         {
           headers: new HttpHeaders()
             .set('Content-Type', 'application/x-www-form-urlencoded')

@@ -96,6 +96,7 @@ export class CompraComponent implements OnInit {
 
   // Para la paginacion
   @ViewChild("paginator", { static: false }) paginator: MatPaginator;
+  @ViewChild('fnf_paginator', { static: false }) fnf_paginator: MatPaginator;
   detalleCompra = new MatTableDataSource<Element[]>();
   facturasNoFinalizadas = new MatTableDataSource<Element[]>();
 
@@ -438,12 +439,15 @@ export class CompraComponent implements OnInit {
   }
 
   consultarFacturasNoFinalizadas() {
+    const url = "Factura/ListaFacturasNoFinalizadas";
     this.facturaService
-      .consultarFacturasNoFinalizadas(localStorage.getItem("miCuenta.getToken"))
+      .consultarFacturasNoFinalizadas(
+        url,
+        localStorage.getItem("miCuenta.getToken"))
       .then((ok) => {
         this.facturasNoFinalizadas.data = [];
         this.facturasNoFinalizadas.data = ok["respuesta"];
-        this.facturasNoFinalizadas.paginator = this.paginator;
+        this.facturasNoFinalizadas.paginator = this.fnf_paginator;
       })
       .catch((error) => {
         console.log(error);
@@ -803,9 +807,9 @@ export class CompraComponent implements OnInit {
 
   tablaDetalleCompra = [
     "codigo",
-    "kit",
     "descripcion",
     "presentacion",
+    "kit",
     "lote",
     "fechaExpiracion",
     "valorUnitario",

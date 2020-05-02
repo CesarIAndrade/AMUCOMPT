@@ -1,17 +1,16 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { Router } from "@angular/router";
-
-import { ModalAsignacionUsuarioPersonaComponent } from "../modal-asignacion-usuario-persona/modal-asignacion-usuario-persona.component";
-import { MatDialog } from "@angular/material/dialog";
-import { ModalAsignacionConfiguracionProductoComponent } from "../modal-asignacion-configuracion-producto/modal-asignacion-configuracion-producto.component";
-import { Observable } from "rxjs";
-import { startWith, map } from "rxjs/operators";
-import { InventarioService } from "src/app/services/inventario.service";
 import { MatTableDataSource, MatPaginator } from "@angular/material";
+import { MatDialog } from "@angular/material/dialog";
 
-// SweetAlert
-import sweetalert from "sweetalert";
+// Components
+import { ModalAsignacionUsuarioPersonaComponent } from "../modal-asignacion-usuario-persona/modal-asignacion-usuario-persona.component";
+import { ModalAsignacionConfiguracionProductoComponent } from "../modal-asignacion-configuracion-producto/modal-asignacion-configuracion-producto.component";
+import { ModalLocalidadSuperiorComponent } from '../modal-localidad-superior/modal-localidad-superior.component';
+
+// Services
+import { InventarioService } from "src/app/services/inventario.service";
 import { FacturaService } from 'src/app/services/factura.service';
 import { VentaService } from 'src/app/services/venta.service';
 import { PanelAdministracionService } from 'src/app/services/panel-administracion.service';
@@ -32,6 +31,7 @@ export class VentaComponent implements OnInit {
     private ventaService: VentaService,
     private facturaService: FacturaService,
     private panelAdministracionService: PanelAdministracionService,
+    private modalLocalidadSuperior: MatDialog,
     private router: Router
   ) {
     this.myForm = new FormGroup({
@@ -46,6 +46,7 @@ export class VentaComponent implements OnInit {
       _cedula: new FormControl(""),
       _idPersona: new FormControl(""),
       _nombres: new FormControl(""),
+      _idSembrio: new FormControl(""),
       _sembrio: new FormControl(""),
       _idAsignarProductoLote: new FormControl(""),
       _kit: new FormControl(""),
@@ -55,7 +56,6 @@ export class VentaComponent implements OnInit {
     });
   }
 
-  sembrios: any[] = [];
   kits: any[] = [];
   listaProductosDeUnKit: any[] = [];
   meses = [
@@ -91,12 +91,15 @@ export class VentaComponent implements OnInit {
   buttonSeleccionarProducto = true;
   selectTipoCompra = true;
   buttonSeleccionarPersona = true;
-
-  filteredOptions: Observable<string[]>;
+  buttonSeleccionarSembrio = true;
+  buttonGenerarFactura = false;
+  realizarVentaButton = true;
 
   // Para la paginacion
   @ViewChild('paginator', { static: false }) paginator: MatPaginator;
+  @ViewChild('fnf_paginator', { static: false }) fnf_paginator: MatPaginator;
   detalleVenta = new MatTableDataSource<Element[]>();
+  facturasNoFinalizadas = new MatTableDataSource<Element[]>();
 
   selecionarTipoCompra(tipoCompra) {
     this.aplicaDescuento = true;
@@ -216,20 +219,6 @@ export class VentaComponent implements OnInit {
     });
   }
 
-  consultarSembios() {
-    this.panelAdministracionService.consultarSembrios(localStorage.getItem("miCuenta.getToken"))
-      .then((ok) => {
-        this.sembrios = ok["respuesta"];
-        this.filteredOptions = this._sembrio.valueChanges.pipe(
-          startWith(""),
-          map((value) => this._filter(value))
-        );
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }
-
   consultarTipoTransaccion() {
     this.facturaService
       .consultarTipoTransaccion(localStorage.getItem("miCuenta.getToken"))
@@ -276,9 +265,11 @@ export class VentaComponent implements OnInit {
       })
       .catch((error) => {
         console.log(error);
-      }).finally(() => {
+      }).finally(() => { 
+        this.buttonGenerarFactura = true;
         this.buttonSeleccionarPersona = false;
         this.buttonSeleccionarProducto = false;
+        this.buttonSeleccionarSembrio = false;
         this.selectTipoCompra = false;
         this.myForm.enable();
       });
@@ -302,7 +293,7 @@ export class VentaComponent implements OnInit {
       )
       .then((ok) => {
         if (ok["respuesta"] == "true") {
-          this.consultarDetalleDeUnaFactura();
+          this.consultarDetalleFactura();
           this.limpiarCampos();
         }
         if (ok["respuesta"] == "false") {
@@ -371,7 +362,7 @@ export class VentaComponent implements OnInit {
       });
   }
 
-  consultarDetalleDeUnaFactura() {
+  consultarDetalleFactura() {
     this.ventaService
       .consultarDetalleFactura(
         this._idCabecera.value,
@@ -383,77 +374,77 @@ export class VentaComponent implements OnInit {
         var FechaExp: string;
         var Descuento: string;
         var detalleVenta = [];
-        ok["respuesta"].DetalleVenta.map((DetalleVenta) => {
-          if (DetalleVenta.AsignarProductoLote.IdLote != "") {
-            lote = DetalleVenta.AsignarProductoLote.Lote.Codigo;
-            FechaExp = DetalleVenta.AsignarProductoLote.Lote.FechaExpiracion;
+        ok["respuesta"].DetalleVenta.map((item) => {
+          if (item.AsignarProductoLote.IdLote != "") {
+            lote = item.AsignarProductoLote.Lote.Codigo;
+            FechaExp = item.AsignarProductoLote.Lote.FechaExpiracion;
           } else {
             lote = "";
-            FechaExp = DetalleVenta.AsignarProductoLote.FechaExpiracion;
+            FechaExp = item.AsignarProductoLote.FechaExpiracion;
           }
-          if (DetalleVenta.AplicaDescuento == "True") {
+          if (item.AplicaDescuento == "True") {
             Descuento =
-              DetalleVenta.AsignarProductoLote.AsignarProductoKits
+            item.AsignarProductoLote.AsignarProductoKits
                 .ListaAsignarProductoKit[0].Kit.AsignarDescuentoKit.Descuento
                 .Porcentaje + "%";
           } else {
             Descuento = "";
           }
-          if (DetalleVenta.AsignarProductoLote.PerteneceKit == "False") {
+          if (item.AsignarProductoLote.PerteneceKit == "False") {
             detalle = {
               Codigo:
-                DetalleVenta.AsignarProductoLote.ConfigurarProductos.Codigo,
-              IdDetalleVenta: DetalleVenta.IdDetalleVenta,
-              Cantidad: DetalleVenta.Cantidad,
+              item.AsignarProductoLote.ConfigurarProductos.Codigo,
+              IdDetalleVenta: item.IdDetalleVenta,
+              Cantidad: item.Cantidad,
               Producto:
-                DetalleVenta.AsignarProductoLote.ConfigurarProductos.Producto
+              item.AsignarProductoLote.ConfigurarProductos.Producto
                   .Nombre,
               Presentacion:
-                DetalleVenta.AsignarProductoLote.ConfigurarProductos
+              item.AsignarProductoLote.ConfigurarProductos
                   .Presentacion.Descripcion +
                 " " +
-                DetalleVenta.AsignarProductoLote.ConfigurarProductos
+                item.AsignarProductoLote.ConfigurarProductos
                   .CantidadMedida +
                 " " +
-                DetalleVenta.AsignarProductoLote.ConfigurarProductos.Medida
+                item.AsignarProductoLote.ConfigurarProductos.Medida
                   .Descripcion,
               Lote: lote,
               FechaExpiracion: FechaExp,
               Kit: "",
               AplicaDescuento: Descuento,
-              ValorUnidad: DetalleVenta.ValorUnitario,
-              Total: DetalleVenta.Total,
-              Subtotal: DetalleVenta.Subtotal,
+              ValorUnidad: item.ValorUnitario,
+              Total: item.Total,
+              Subtotal: item.Subtotal,
             };
           } else {
             detalle = {
               Codigo:
-                DetalleVenta.AsignarProductoLote.AsignarProductoKits
+              item.AsignarProductoLote.AsignarProductoKits
                   .ListaAsignarProductoKit[0].ListaProductos.Codigo,
-              IdDetalleVenta: DetalleVenta.IdDetalleVenta,
-              Cantidad: DetalleVenta.Cantidad,
+              IdDetalleVenta: item.IdDetalleVenta,
+              Cantidad: item.Cantidad,
               Producto:
-                DetalleVenta.AsignarProductoLote.AsignarProductoKits
+                item.AsignarProductoLote.AsignarProductoKits
                   .ListaAsignarProductoKit[0].ListaProductos.Producto.Nombre,
               Presentacion:
-                DetalleVenta.AsignarProductoLote.AsignarProductoKits
+              item.AsignarProductoLote.AsignarProductoKits
                   .ListaAsignarProductoKit[0].ListaProductos.Presentacion
                   .Descripcion +
                 " " +
-                DetalleVenta.AsignarProductoLote.AsignarProductoKits
+                item.AsignarProductoLote.AsignarProductoKits
                   .ListaAsignarProductoKit[0].ListaProductos.CantidadMedida +
                 " " +
-                DetalleVenta.AsignarProductoLote.AsignarProductoKits
+                item.AsignarProductoLote.AsignarProductoKits
                   .ListaAsignarProductoKit[0].ListaProductos.Medida.Descripcion,
               Lote: lote,
               FechaExpiracion: FechaExp,
               Kit:
-                DetalleVenta.AsignarProductoLote.AsignarProductoKits
+              item.AsignarProductoLote.AsignarProductoKits
                   .Descripcion,
               AplicaDescuento: Descuento,
-              ValorUnidad: DetalleVenta.ValorUnitario,
-              Total: DetalleVenta.Total,
-              Subtotal: DetalleVenta.Subtotal,
+              ValorUnidad: item.ValorUnitario,
+              Total: item.Total,
+              Subtotal: item.Subtotal,
             };
           }
           detalleVenta.push(detalle);
@@ -480,7 +471,7 @@ export class VentaComponent implements OnInit {
           )
           .then((ok) => {
             if (ok["respuesta"] == "true") {
-              this.consultarDetalleDeUnaFactura();
+              this.consultarDetalleFactura();
             }
             if (ok["respuesta"] == "false") {
               console.log("error en el servidor");
@@ -507,7 +498,7 @@ export class VentaComponent implements OnInit {
       )
       .then((ok) => {
         if (ok["respuesta"]) {
-          this.consultarDetalleDeUnaFactura();
+          this.consultarDetalleFactura();
         }
       })
       .catch((error) => {
@@ -524,9 +515,56 @@ export class VentaComponent implements OnInit {
     this._precio.reset();
   }
 
-  seleccionarSembrioSiExiste(sembrio) {
-    console.log(sembrio);
+  seleccionarSembrio() {
+    let dialogRef = this.modalLocalidadSuperior.open(ModalLocalidadSuperiorComponent, {
+      width: '400px',
+      height: 'auto',
+      data: {
+        ruta: 'ventas'
+      }
+    }); 
+    dialogRef.afterClosed().subscribe(result => {
+      if (result != null) {
+        this._idSembrio.setValue(result.idLocalidad);
+        this._sembrio.setValue(result.descripcion);
+      }
+    });
+  }  
+
+  consultarFacturasNoFinalizadas() {
+    const url = "Factura/FacturasNoFinalizadasVenta";
+    this.facturaService
+      .consultarFacturasNoFinalizadas(
+        url,
+        localStorage.getItem("miCuenta.getToken"))
+      .then((ok) => {
+        this.facturasNoFinalizadas.data = [];
+        this.facturasNoFinalizadas.data = ok["respuesta"];
+        this.facturasNoFinalizadas.paginator = this.fnf_paginator;
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }
+
+  mostrarDetallesFactura(factura) {
+    this.myForm.reset();
+    this.realizarVentaButton = false;
+    this._idCabecera.setValue(factura.IdCabeceraFactura);
+    this.consultarDetalleFactura();
+    this._cabecera.setValue(factura.Codigo);
+    this.myForm.enable();
+    this.buttonSeleccionarProducto = false;
+    this.selectTipoCompra = false;
+    this.buttonGenerarFactura = false;
+    var fecha = new Date(factura.FechaGeneracion);
+    var dia = this.dias[fecha.getDay()];
+    var mes = this.meses[fecha.getMonth()];
+    this._fechaActual.setValue(
+      dia + ", " + fecha.getDate() + " " + mes + " " + fecha.getFullYear()
+    );
+  }
+
 
   get _producto() {
     return this.myForm.get("_producto");
@@ -554,6 +592,10 @@ export class VentaComponent implements OnInit {
 
   get _idPersona() {
     return this.myForm.get("_idPersona");
+  }
+
+  get _idSembrio() {
+    return this.myForm.get("_idSembrio");
   }
 
   get _sembrio() {
@@ -593,25 +635,16 @@ export class VentaComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.consultarSembios();
+    this.consultarFacturasNoFinalizadas();
     this.consultarTipoTransaccion();
     this.myForm.disable();
   }
 
-  private _filter(value: string): string[] {
-    try {
-      const filterValue = value.toLowerCase();
-      return this.sembrios.filter((option) =>
-        option.Descripcion.toLowerCase().includes(filterValue)
-      );
-    } catch (error) {}
-  }
-
   tablaDetalleCompra = [
     "codigo",
-    "kit",
     "descripcion",
     "presentacion",
+    "kit",
     "lote",
     "fechaExpiracion",
     "valorUnitario",
@@ -621,5 +654,7 @@ export class VentaComponent implements OnInit {
     "total",
     "acciones",
   ];
+  tablaFacturasNoFinalidas = ["codigo", "usuario", "fecha", "acciones"];
+
 }
  

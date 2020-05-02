@@ -87,8 +87,19 @@ export class ModalLocalidadSuperiorComponent implements OnInit {
       )
   }
 
+  consultarSembios() {
+    this.panelAdministracionService.consultarSembrios(localStorage.getItem("miCuenta.getToken"))
+      .then((ok) => {
+        this.lista_tabla.data = [];
+        this.lista_tabla.data = ok["respuesta"];
+        this.lista_tabla.paginator = this.paginator;
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
   setLocalidad(localidad) {
-    console.log(localidad);
     if (this.nombre_tabla == "Provincias") {
       this.datosLocalidad.idLocalidad = localidad.IdProvincia;
     } else if (this.nombre_tabla == "Cantones") {
@@ -97,6 +108,8 @@ export class ModalLocalidadSuperiorComponent implements OnInit {
       this.datosLocalidad.idLocalidad = localidad.IdParroquia;
     } else if (this.nombre_tabla == "Comunidades") {
       this.datosLocalidad.idLocalidad = localidad.IdComunidad;
+    } else if (this.nombre_tabla == "Sembrios") {
+      this.datosLocalidad.idLocalidad = localidad.IdSembrio;
     }
     this.datosLocalidad.descripcion = localidad.Descripcion;
   } 
@@ -115,7 +128,10 @@ export class ModalLocalidadSuperiorComponent implements OnInit {
     } else if (this.data.ruta == "sembrios") {
       this.nombre_tabla = "Comunidades";
       this.consultarComunidades();
-    } 
+    } else if (this.data.ruta == "ventas") {
+      this.nombre_tabla = "Sembrios";
+      this.consultarSembios();
+    }
   }
 
   tabla = ["localidad", "acciones"];
