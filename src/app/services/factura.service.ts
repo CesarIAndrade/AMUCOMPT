@@ -9,6 +9,7 @@ export class FacturaService {
   constructor(
     private http: HttpClient
   ) { }
+
   consultarTipoTransaccion(_token: string) {
     const body = new HttpParams()
       .set('encriptada', _token)
@@ -69,12 +70,16 @@ export class FacturaService {
     })
   }
 
-  finalizarFactura(idCabecera: string, _token: string) {
+  finalizarFactura(
+    idCabecera: string, 
+    url: string,
+    _token: string
+  ) {
     const body = new HttpParams()
       .set('IdCabeceraFactura', idCabecera)
       .set('encriptada', _token)
     return new Promise((resolve, reject) => {
-      this.http.post(apiUrl + 'Factura/FinalizarCabeceraFactura', body.toString(),
+      this.http.post(apiUrl + url, body.toString(),
         {
           headers: new HttpHeaders()
             .set('Content-Type', 'application/x-www-form-urlencoded')

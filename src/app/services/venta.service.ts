@@ -10,7 +10,7 @@ export class VentaService {
     private http: HttpClient
   ) { }
 
-  crearDetalleVenta(
+  crearDetalleFactura(
     IdCabeceraFactura: string,
     IdAsignarProductoLote: string,
     AplicaDescuento: string,
@@ -40,7 +40,7 @@ export class VentaService {
     })
   }
 
-  consultarDetalleDeUnaFacturasVenta(
+  consultarDetalleFactura(
     IdCabeceraFactura: string,
     _token: string
     ) {
@@ -67,28 +67,6 @@ export class VentaService {
       .set('encriptada', _token)
     return new Promise((resolve, reject) => {
       this.http.post(apiUrl + 'Factura/ListaFacturasFinalizadasVenta', body.toString(),
-        {
-          headers: new HttpHeaders()
-            .set('Content-Type', 'application/x-www-form-urlencoded')
-        }
-      )
-        .subscribe(res => {
-          resolve(res);
-        }, (err) => {
-          reject(err);
-        })
-    })
-  }
-
-  finalizarCabeceraFacturaVenta(
-    idCabecera: string,
-    _token: string
-  ) {
-    const body = new HttpParams()
-      .set('IdCabeceraFactura', idCabecera)
-      .set('encriptada', _token)
-    return new Promise((resolve, reject) => {
-      this.http.post(apiUrl + 'Factura/FinalizarCabeceraFacturaVenta', body.toString(),
         {
           headers: new HttpHeaders()
             .set('Content-Type', 'application/x-www-form-urlencoded')
@@ -160,11 +138,12 @@ export class VentaService {
     })
   }
 
-  quitarDetalleFacturaVenta(
-    IdDetalleVenta: string,
-    _token: string) {
+  quitarDetalleFactura(
+    idDetalleVenta: string,
+    _token: string
+  ) {
     const body = new HttpParams()
-      .set('IdDetalleVenta', IdDetalleVenta)
+      .set('IdDetalleVenta', idDetalleVenta)
       .set('encriptada', _token)
     return new Promise((resolve, reject) => {
       this.http.post(apiUrl + 'Credito/EliminarDetalleVenta', body.toString(),

@@ -98,7 +98,6 @@ export class VentaComponent implements OnInit {
   @ViewChild('paginator', { static: false }) paginator: MatPaginator;
   detalleVenta = new MatTableDataSource<Element[]>();
 
-
   selecionarTipoCompra(tipoCompra) {
     this.aplicaDescuento = true;
     if (tipoCompra.value == "Kit") {
@@ -293,7 +292,7 @@ export class VentaComponent implements OnInit {
       EstadoCheck = "0";
     }
     this.ventaService
-      .crearDetalleVenta(
+      .crearDetalleFactura(
         this._idCabecera.value,
         this._idAsignarProductoLote.value,
         EstadoCheck,
@@ -349,9 +348,11 @@ export class VentaComponent implements OnInit {
   }
 
   realizarVenta() {
-    this.ventaService
-      .finalizarCabeceraFacturaVenta(
+    const url = "Factura/FinalizarCabeceraFacturaVenta"
+    this.facturaService
+      .finalizarFactura(
         this._idCabecera.value,
+        url,
         localStorage.getItem("miCuenta.putToken")
       )
       .then((ok) => {
@@ -372,7 +373,7 @@ export class VentaComponent implements OnInit {
 
   consultarDetalleDeUnaFactura() {
     this.ventaService
-      .consultarDetalleDeUnaFacturasVenta(
+      .consultarDetalleFactura(
         this._idCabecera.value,
         localStorage.getItem("miCuenta.getToken")
       )
@@ -500,7 +501,7 @@ export class VentaComponent implements OnInit {
 
   quitarDetalleFactura(DetalleFactura) {
     this.ventaService
-      .quitarDetalleFacturaVenta(
+      .quitarDetalleFactura(
         DetalleFactura.IdDetalleVenta,
         localStorage.getItem("miCuenta.deleteToken")
       )

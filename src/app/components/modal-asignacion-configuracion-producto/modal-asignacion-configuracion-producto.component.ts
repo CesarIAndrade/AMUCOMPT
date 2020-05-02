@@ -48,8 +48,6 @@ export class ModalAsignacionConfiguracionProductoComponent implements OnInit {
 
   // Para la paginacion
   @ViewChild('paginator', { static: false }) paginator: MatPaginator;
-  // @ViewChild('paginator2', { static: false }) paginator2: MatPaginator;
-
   listaProductosEnStock = new MatTableDataSource<Element[]>();
   configuracionProductos = new MatTableDataSource<Element[]>();
   listaProductosDeUnKit = new MatTableDataSource<Element[]>();

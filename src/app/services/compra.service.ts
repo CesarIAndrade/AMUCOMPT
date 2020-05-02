@@ -9,6 +9,7 @@ export class CompraService {
   constructor(
     private http: HttpClient
   ) { }
+
   buscarFechaYPrecio(
     idCabeceraFactura: string,
     idRelacionLogica: string,
@@ -36,7 +37,7 @@ export class CompraService {
         })
     })
   }
-
+ 
   modificarCantidadDeProductoEnDetalle(
     idDetalleFactura: string,
     cantidad: string,
@@ -61,7 +62,10 @@ export class CompraService {
     })
   }
 
-  consultarDetalleFactura(idCabecera: string, _token: string) {
+  consultarDetalleFactura(
+    idCabecera: string, 
+    _token: string
+  ) {
     const body = new HttpParams()
       .set('IdCabeceraFactura', idCabecera)
       .set('encriptada', _token)
@@ -79,8 +83,6 @@ export class CompraService {
         })
     })
   }
-
-
 
   crearDetalleFactura(
     idCabeceraFactura: string,
@@ -113,7 +115,8 @@ export class CompraService {
   quitarDetalleFactura(
     idDetalleFactura: string,
     idCabeceraFactura: string,
-    _token: string) {
+    _token: string
+  ) {
     const body = new HttpParams()
       .set('IdDetalleFactura', idDetalleFactura)
       .set('IdCabeceraFactura', idCabeceraFactura)

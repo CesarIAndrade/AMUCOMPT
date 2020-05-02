@@ -3,11 +3,7 @@ import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { MatDialog } from "@angular/material";
 import { Observable } from "rxjs";
 import { startWith, map } from "rxjs/operators";
-import {
-  MatPaginator,
-  MatTableDataSource,
-  MatPaginatorIntl,
-} from "@angular/material";
+import { MatPaginator, MatTableDataSource } from "@angular/material";
 
 // Component
 import { ModalAsignacionConfiguracionProductoComponent } from "../modal-asignacion-configuracion-producto/modal-asignacion-configuracion-producto.component";
@@ -20,7 +16,7 @@ import { FacturaService } from "src/app/services/factura.service";
 // SweetAlert
 import sweetalert from "sweetalert";
 import { Router } from "@angular/router";
-import { ModalLotesComponent } from '../modal-lotes/modal-lotes.component';
+import { ModalLotesComponent } from "../modal-lotes/modal-lotes.component";
 
 @Component({
   selector: "app-compra",
@@ -28,7 +24,6 @@ import { ModalLotesComponent } from '../modal-lotes/modal-lotes.component';
   styleUrls: ["./compra.component.css"],
 })
 export class CompraComponent implements OnInit {
-
   myForm: FormGroup;
 
   constructor(
@@ -157,7 +152,7 @@ export class CompraComponent implements OnInit {
     this._precio.setValue("");
     this._precio.disable();
   }
-  
+
   onKeyUp() {
     this._precio.reset();
     this._precio.enable();
@@ -208,6 +203,8 @@ export class CompraComponent implements OnInit {
             localStorage.getItem("miCuenta.putToken")
           )
           .then((ok) => {
+            console.log(ok['respuesta']);
+            
             if (ok["respuesta"]) {
               this.consultarDetalleFactura();
             }
@@ -260,7 +257,8 @@ export class CompraComponent implements OnInit {
       })
       .catch((error) => {
         console.log(error);
-      }).finally(() => {
+      })
+      .finally(() => {
         this.seccionKit = false;
         this.buttonSeleccionarProducto = true;
       });
@@ -300,20 +298,21 @@ export class CompraComponent implements OnInit {
 
   seleccionarLote() {
     let dialogRef = this.modalLotes.open(ModalLotesComponent, {
-      width: '500px',
-      height: 'auto',
+      width: "500px",
+      height: "auto",
       data: {
         idCabecera: this._idCabecera.value,
         idRelacionLogica: this._idRelacionLogica.value,
-        perteneceKit: this._perteneceKit.value
-      }
-    }); 
-    dialogRef.afterClosed().subscribe(result => {
+        perteneceKit: this._perteneceKit.value,
+      },
+    });
+    dialogRef.afterClosed().subscribe((result) => {
       if (result != null) {
         if (result.idLote != "") {
           this._idLote.setValue(result.idLote);
           this._precio.setValue(result.precio);
           this._precio.disable();
+          this._fechaExpiracion.disable();
         } else {
           this._lote.enable();
           this._fechaExpiracion.enable();
@@ -325,15 +324,16 @@ export class CompraComponent implements OnInit {
         this.clearFieldLote = false;
       }
     });
-  }   
+  }
 
   consultarDetalleFactura() {
     var detalleCompra = [];
+    this.detalleCompra.data = [];
     this.compraService
       .consultarDetalleFactura(
         this._idCabecera.value,
         localStorage.getItem("miCuenta.getToken")
-      ) 
+      )
       .then((ok) => {
         ok["respuesta"][0].DetalleFactura.map((item) => {
           var lote = "";
@@ -346,7 +346,7 @@ export class CompraComponent implements OnInit {
           var contenidoNeto = "";
           var medida = "";
           var codigo = "";
-          if (item.AsignarProductoLote[0].Lote) {  
+          if (item.AsignarProductoLote[0].Lote) {
             lote = item.AsignarProductoLote[0].Lote.Codigo;
             idLote = item.AsignarProductoLote[0].Lote.IdLote;
             fechaExpiracion = item.AsignarProductoLote[0].Lote.FechaExpiracion;
@@ -355,26 +355,45 @@ export class CompraComponent implements OnInit {
             idLote = "";
             fechaExpiracion = item.AsignarProductoLote[0].FechaExpiracion;
           }
-          if (item.AsignarProductoLote[0].PerteneceKit != "False") {      
-            kit = item.AsignarProductoLote[0].AsignarProductoKit.Kit.Descripcion;
+          if (item.AsignarProductoLote[0].PerteneceKit != "False") {
+            kit =
+              item.AsignarProductoLote[0].AsignarProductoKit.Kit.Descripcion;
             idKit = item.AsignarProductoLote[0].AsignarProductoKit.Kit.IdKit;
-            nombreProducto = item.AsignarProductoLote[0].AsignarProductoKit.ListaProductos.Producto.Nombre;
-            contenidoNeto = item.AsignarProductoLote[0].AsignarProductoKit.ListaProductos.CantidadMedida;
-            medida = item.AsignarProductoLote[0].AsignarProductoKit.ListaProductos.Medida.Descripcion;
-            codigo = item.AsignarProductoLote[0].AsignarProductoKit.ListaProductos.Codigo;
-            presentacion = item.AsignarProductoLote[0].AsignarProductoKit.ListaProductos.Presentacion.Descripcion;
+            nombreProducto =
+              item.AsignarProductoLote[0].AsignarProductoKit.ListaProductos
+                .Producto.Nombre;
+            contenidoNeto =
+              item.AsignarProductoLote[0].AsignarProductoKit.ListaProductos
+                .CantidadMedida;
+            medida =
+              item.AsignarProductoLote[0].AsignarProductoKit.ListaProductos
+                .Medida.Descripcion;
+            codigo =
+              item.AsignarProductoLote[0].AsignarProductoKit.ListaProductos
+                .Codigo;
+            presentacion =
+              item.AsignarProductoLote[0].AsignarProductoKit.ListaProductos
+                .Presentacion.Descripcion;
           } else {
             kit = "";
             idKit = "";
-            nombreProducto = item.AsignarProductoLote[0].ConfigurarProductos.Producto.Nombre;
-            contenidoNeto = item.AsignarProductoLote[0].ConfigurarProductos.CantidadMedida;
-            medida = item.AsignarProductoLote[0].ConfigurarProductos.Medida.Descripcion;
+            nombreProducto =
+              item.AsignarProductoLote[0].ConfigurarProductos.Producto.Nombre;
+            contenidoNeto =
+              item.AsignarProductoLote[0].ConfigurarProductos.CantidadMedida;
+            medida =
+              item.AsignarProductoLote[0].ConfigurarProductos.Medida
+                .Descripcion;
             codigo = item.AsignarProductoLote[0].ConfigurarProductos.Codigo;
-            presentacion = item.AsignarProductoLote[0].ConfigurarProductos.Presentacion.Descripcion;
+            presentacion =
+              item.AsignarProductoLote[0].ConfigurarProductos.Presentacion
+                .Descripcion;
           }
           var producto = {
+            IdDetalleFactura: item.IdDetalleFactura,
             Codigo: codigo,
-            IdAsignarProductoLote: item.AsignarProductoLote[0].IdAsignarProductoLote,
+            IdAsignarProductoLote:
+              item.AsignarProductoLote[0].IdAsignarProductoLote,
             IdKit: idKit,
             Kit: kit,
             IdLote: idLote,
@@ -385,11 +404,11 @@ export class CompraComponent implements OnInit {
             Presentacion: presentacion,
             ContenidoNeto: contenidoNeto,
             Medida: medida,
-            Precio: item.AsignarProductoLote[0].ValorUnitario
-          }
-          detalleCompra.push(producto);       
-        });     
-        this.detalleCompra.data.push(detalleCompra);
+            Precio: item.AsignarProductoLote[0].ValorUnitario,
+          };
+          detalleCompra.push(producto);
+        });
+        this.detalleCompra.data = detalleCompra;
         this.detalleCompra.paginator = this.paginator;
       })
       .catch((error) => {
@@ -489,9 +508,8 @@ export class CompraComponent implements OnInit {
     this._lote.reset();
     this._idAsignarProductoLote.reset();
   }
- 
+
   crearDetalleFactura() {
-    console.log('creando detalle...');
     this.compraService
       .crearDetalleFactura(
         this._idCabecera.value,
@@ -511,6 +529,8 @@ export class CompraComponent implements OnInit {
         }
         this.buttonGenerarFactura = false;
         this.buttonSeleccionarLote = true;
+        this.clearFieldFecha = true;
+        this.clearFieldLote = true;
       })
       .catch((error) => {
         console.log(error);
@@ -544,6 +564,7 @@ export class CompraComponent implements OnInit {
         this.consultarLotesDeUnProducto();
         this.buscarFechaYPrecio();
         this._fechaExpiracion.reset();
+        this._fechaExpiracion.enable();
         this._lote.reset();
         this._cantidad.reset();
         this._precio.reset();
@@ -552,17 +573,17 @@ export class CompraComponent implements OnInit {
     });
   }
 
-  quitarDetalleFactura(DetalleFactura) {
+  quitarDetalleFactura(detalleFactura) {
     this.compraService
       .quitarDetalleFactura(
-        DetalleFactura.IdDetalleFactura,
-        DetalleFactura.IdCabeceraFactura,
+        detalleFactura.IdDetalleFactura,
+        detalleFactura.IdCabeceraFactura,
         localStorage.getItem("miCuenta.deleteToken")
       )
       .then((ok) => {
+        console.log(ok["respuesta"]);
         if (ok["respuesta"] == "0") {
           this._idCabecera.setValue("");
-          this.consultarFacturasNoFinalizadas();
         } else {
           this.consultarDetalleFactura();
         }
@@ -573,9 +594,11 @@ export class CompraComponent implements OnInit {
   }
 
   realizarCompra() {
+    const url = "Factura/FinalizarCabeceraFactura"
     this.facturaService
       .finalizarFactura(
         this._idCabecera.value,
+        url,
         localStorage.getItem("miCuenta.putToken")
       )
       .then((ok) => {
@@ -618,7 +641,6 @@ export class CompraComponent implements OnInit {
   }
 
   crearLote() {
-    console.log('creando lote...');
     this.inventarioService
       .crearLote(
         this._lote.value,
@@ -682,7 +704,6 @@ export class CompraComponent implements OnInit {
   }
 
   asignarProductoLote(idLote?: string, fecha?: string) {
-    console.log('asignando lote...');
     this.inventarioService
       .asignarProductoLote(
         this._idCabecera.value,
