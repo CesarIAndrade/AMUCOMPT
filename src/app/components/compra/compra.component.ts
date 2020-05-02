@@ -96,8 +96,8 @@ export class CompraComponent implements OnInit {
 
   // Para la paginacion
   @ViewChild("paginator", { static: false }) paginator: MatPaginator;
-  @ViewChild('fnf_paginator', { static: false }) fnf_paginator: MatPaginator;
-  @ViewChild('ff_paginator', { static: false }) ff_paginator: MatPaginator;
+  @ViewChild("fnf_paginator", { static: false }) fnf_paginator: MatPaginator;
+  @ViewChild("ff_paginator", { static: false }) ff_paginator: MatPaginator;
   detalleCompra = new MatTableDataSource<Element[]>();
   facturasNoFinalizadas = new MatTableDataSource<Element[]>();
   facturasFinalizadas = new MatTableDataSource<Element[]>();
@@ -206,8 +206,8 @@ export class CompraComponent implements OnInit {
             localStorage.getItem("miCuenta.putToken")
           )
           .then((ok) => {
-            console.log(ok['respuesta']);
-            
+            console.log(ok["respuesta"]);
+
             if (ok["respuesta"]) {
               this.consultarDetalleFactura();
             }
@@ -244,6 +244,8 @@ export class CompraComponent implements OnInit {
       })
       .catch((error) => {
         console.log(error);
+      }).finally(() => {
+        this.consultarFacturasNoFinalizadas();
       });
   }
 
@@ -445,28 +447,39 @@ export class CompraComponent implements OnInit {
     this.facturaService
       .consultarFacturasNoFinalizadas(
         url,
-        localStorage.getItem("miCuenta.getToken"))
+        localStorage.getItem("miCuenta.getToken")
+      )
       .then((ok) => {
-        console.log(ok['respuesta']);
-        this.facturasNoFinalizadas.data = [];
-        this.facturasNoFinalizadas.data = ok["respuesta"];
-        this.facturasNoFinalizadas.paginator = this.fnf_paginator;
+        try {
+          this.facturasNoFinalizadas.data = [];
+          this.facturasNoFinalizadas.data = ok["respuesta"];
+          this.facturasNoFinalizadas.paginator = this.fnf_paginator;
+        } catch (error) {
+          this.consultarFacturasNoFinalizadas();
+        }
       })
       .catch((error) => {
         console.log(error);
+      }).finally(() => {
+        this.consultarFacturasFinalizadas();
       });
   }
 
   consultarFacturasFinalizadas() {
     const url = "Factura/ListaFacturasFinalizadas";
     this.facturaService
-      .consultarFacturasNoFinalizadas(
+      .consultarFacturasFinalizadas(
         url,
-        localStorage.getItem("miCuenta.getToken"))
+        localStorage.getItem("miCuenta.getToken")
+      )
       .then((ok) => {
-        this.facturasFinalizadas.data = [];
-        this.facturasFinalizadas.data = ok["respuesta"];
-        this.facturasFinalizadas.paginator = this.ff_paginator;
+        try {
+          this.facturasFinalizadas.data = [];
+          this.facturasFinalizadas.data = ok["respuesta"];
+          this.facturasFinalizadas.paginator = this.ff_paginator;
+        } catch (error) {
+          this.consultarFacturasFinalizadas();
+        }
       })
       .catch((error) => {
         console.log(error);
@@ -607,19 +620,21 @@ export class CompraComponent implements OnInit {
         if (ok["respuesta"] == "0") {
           this._idCabecera.setValue("");
           this.myForm.reset();
-          this.consultarFacturasNoFinalizadas();
-          this.consultarFacturasFinalizadas();
+          this.detalleCompra.data = [];
         } else {
           this.consultarDetalleFactura();
         }
       })
       .catch((error) => {
         console.log(error);
+      })
+      .finally(() => {
+        this.consultarFacturasNoFinalizadas();
       });
   }
 
   realizarCompra() {
-    const url = "Factura/FinalizarCabeceraFactura"
+    const url = "Factura/FinalizarCabeceraFactura";
     this.facturaService
       .finalizarFactura(
         this._idCabecera.value,
@@ -673,12 +688,18 @@ export class CompraComponent implements OnInit {
         localStorage.getItem("miCuenta.postToken")
       )
       .then((ok) => {
-        if (typeof ok["respuesta"] == "string") {
-          this._idLote.setValue(ok["respuesta"]);
+        this._idLote.setValue(ok["respuesta"].IdLote);
+        if (this._idLote.value) {
+          console.log("id");
           this.asignarProductoLote(this._idLote.value, this.validarFecha());
+        } else if (ok["respuesta"] == "False") {
+          sweetAlert("Ha ocurrido un error!", {
+            icon: "error",
+          });
         } else {
-          this._idLote.setValue(ok["respuesta"].IdLote);
-          this.asignarProductoLote(this._idLote.value, this.validarFecha());
+          sweetAlert(ok["respuesta"], {
+            icon: "warning",
+          });
         }
       })
       .catch((error) => {
@@ -812,8 +833,6 @@ export class CompraComponent implements OnInit {
 
   ngOnInit() {
     this.consultarTipoTransaccion();
-    this.consultarFacturasNoFinalizadas();
-    this.consultarFacturasFinalizadas();
     this.myForm.disable();
   }
 

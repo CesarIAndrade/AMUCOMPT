@@ -58,7 +58,6 @@ export class FacturaService {
   ) {
     const body = new HttpParams()
       .set('encriptada', _token)
-    console.log(url);
     return new Promise((resolve, reject) => {
       this.http.post(apiUrl + url, body.toString(),
         {

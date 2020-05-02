@@ -235,6 +235,8 @@ export class VentaComponent implements OnInit {
       })
       .catch((error) => {
         console.log(error);
+      }).finally(() => {
+        this.consultarFacturasNoFinalizadas();
       });
   }
 
@@ -307,20 +309,6 @@ export class VentaComponent implements OnInit {
             icon: "error",
           });
         }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }
-
-  consultarFacturasVentaFinalizadas() {
-    this.ventaService
-      .consultarFacturasVentasFinalizadas(
-        localStorage.getItem("miCuenta.getToken")
-      )
-      .then((ok) => {
-        //console.log(ok['respuesta']);
-        //this.facturasNoFinalizadas = ok['respuesta'];
       })
       .catch((error) => {
         console.log(error);
@@ -507,14 +495,15 @@ export class VentaComponent implements OnInit {
         if (ok["respuesta"] == "0") {
           this._idCabecera.setValue("");
           this.myForm.reset();
-          this.consultarFacturasNoFinalizadas();
-          this.consultarFacturasFinalizadas();
+          this.detalleVenta.data = [];
         } else {
           this.consultarDetalleFactura();
         }
       })
       .catch((error) => {
         console.log(error);
+      }).finally(() => {
+        this.consultarFacturasNoFinalizadas();
       });
   }
 
@@ -550,13 +539,18 @@ export class VentaComponent implements OnInit {
         url,
         localStorage.getItem("miCuenta.getToken"))
       .then((ok) => {
-        console.log(ok['respuesta']);
-        this.facturasNoFinalizadas.data = [];
-        this.facturasNoFinalizadas.data = ok["respuesta"];
-        this.facturasNoFinalizadas.paginator = this.fnf_paginator;
+        try {
+          this.facturasNoFinalizadas.data = [];
+          this.facturasNoFinalizadas.data = ok["respuesta"];
+          this.facturasNoFinalizadas.paginator = this.fnf_paginator;
+        } catch (error) {
+          this.consultarFacturasNoFinalizadas();
+        }
       })
       .catch((error) => {
         console.log(error);
+      }).finally(() => {
+        this.consultarFacturasFinalizadas();
       });
   }
 
@@ -581,7 +575,7 @@ export class VentaComponent implements OnInit {
   consultarFacturasFinalizadas() {
     const url = "Factura/ListaFacturasFinalizadasVenta";
     this.facturaService
-      .consultarFacturasNoFinalizadas(
+      .consultarFacturasFinalizadas(
         url,
         localStorage.getItem("miCuenta.getToken"))
       .then((ok) => {
@@ -590,7 +584,7 @@ export class VentaComponent implements OnInit {
         this.facturasFinalizadas.paginator = this.ff_paginator;
       })
       .catch((error) => {
-        console.log(error);
+        this.consultarFacturasFinalizadas();
       });
   }
 
@@ -664,8 +658,6 @@ export class VentaComponent implements OnInit {
 
   ngOnInit() {
     this.consultarTipoTransaccion();
-    this.consultarFacturasNoFinalizadas();
-    this.consultarFacturasFinalizadas();
     this.myForm.disable();
   }
 
