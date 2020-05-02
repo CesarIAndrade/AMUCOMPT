@@ -47,6 +47,8 @@ export class ArmarKitComponent implements OnInit {
 
   // Para la paginacion
   @ViewChild('paginator', { static: false }) paginator: MatPaginator;
+  @ViewChild('paginator1', { static: false }) paginator1: MatPaginator;
+
   productos = new MatTableDataSource<Element[]>();
   listaProductosDeUnKit = new MatTableDataSource<Element[]>();
 
@@ -120,7 +122,7 @@ export class ArmarKitComponent implements OnInit {
         ok => {
           this.productos.data = [];
           this.productos.data = ok['respuesta'];
-          this.productos.paginator = this.paginator;
+          this.productos.paginator = this.paginator1;
           this.Arrayproductos = ok['respuesta'];
         }
       )
