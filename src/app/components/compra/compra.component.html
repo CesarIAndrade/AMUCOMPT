@@ -93,10 +93,14 @@
                   <input
                     type="text"
                     placeholder="Lote"
-                    readonly
                     matInput
                     formControlName="_lote"
                   />
+                  <button type="button" [hidden]="clearFieldLote" mat-button matPrefix mat-icon-button>
+                    <mat-icon (click)="clearLote()"
+                      >clear</mat-icon
+                    >
+                  </button>
                 </mat-form-field>
               </div>
               <div class="col-lg-3 col-md-2">
@@ -110,13 +114,19 @@
           <div class="col-lg-4">
             <mat-form-field class="example-full-width fechaExpiracion">
               <input
-                readonly
                 matInput
                 formControlName="_fechaExpiracion"
                 [matDatepicker]="picker"
                 placeholder="Fecha Expiración"
               />
               <mat-datepicker #picker></mat-datepicker>
+              <mat-datepicker-toggle matSuffix [for]="picker">
+              </mat-datepicker-toggle>
+              <button type="button" [hidden]="clearFieldFecha" mat-button matPrefix mat-icon-button>
+                <mat-icon (click)="clearDate()"
+                  >clear</mat-icon
+                >
+              </button>
             </mat-form-field>
             <div class="row">
               <div class="col-lg-6">
@@ -198,14 +208,7 @@
             </ng-container>
             <ng-container matColumnDef="kit">
               <th mat-header-cell *matHeaderCellDef>Kit</th>
-              <ng-container *matCellDef="let element">
-                <ng-container *ngIf="element.IdKit == ''">
-                  <td mat-cell></td>
-                </ng-container>
-                <ng-container *ngIf="element.IdKit != ''">
-                  <td mat-cell>{{ element.Kit }}</td>
-                </ng-container>
-              </ng-container>
+              <td mat-cell *matCellDef="let element">{{ element.Kit }}</td>
             </ng-container>
             <ng-container matColumnDef="descripcion">
               <th mat-header-cell *matHeaderCellDef>Descripción</th>

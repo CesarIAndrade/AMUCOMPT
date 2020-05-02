@@ -58,22 +58,21 @@ export class CompraComponent implements OnInit {
     });
   }
 
-
   selected = "Producto";
   seccionKit = true;
   realizarCompraButton = true;
   panelOpenState = false;
-  dateIcon = true;
   selectTipoCompra = true;
   buttonGenerarFactura = false;
   buttonSeleccionarProducto = true;
   loteEnDetalle = true;
   buttonSeleccionarLote = true;
+  clearFieldLote = true;
+  clearFieldFecha = true;
 
   kits: any[] = [];
   lotes: any[] = [];
   listaProductosDeUnKit: any[] = [];
-  detalleCompraLista: any[] = [];
   meses = [
     "Enero",
     "Febrero",
@@ -137,20 +136,28 @@ export class CompraComponent implements OnInit {
     }
   }
 
-  addEvent() {
-    this.dateIcon = false;
-    if (this._lote.value == null || this._lote.value == "") {
-      this.buscarFechaYPrecio();
-    }
+  clearDate() {
+    this.clearFieldFecha = true;
+    this._fechaExpiracion.setValue("");
+    this._fechaExpiracion.disable();
+    this.clearFieldLote = true;
+    this._lote.setValue("");
+    this._lote.disable();
+    this._precio.setValue("");
+    this._precio.disable();
   }
 
-  clearDate() {
-    this.dateIcon = true;
+  clearLote() {
+    this.clearFieldLote = true;
+    this._lote.setValue("");
+    this._lote.disable();
+    this.clearFieldFecha = true;
+    this._fechaExpiracion.disable();
     this._fechaExpiracion.setValue("");
     this._precio.setValue("");
-    this.buscarFechaYPrecio();
+    this._precio.disable();
   }
-
+  
   onKeyUp() {
     this._precio.reset();
     this._precio.enable();
@@ -173,13 +180,11 @@ export class CompraComponent implements OnInit {
             this._idLote.setValue(ok["respuesta"].Lote.IdLote);
             var fecha = new Date(ok["respuesta"].Lote.FechaExpiracion);
             this._fechaExpiracion.setValue(fecha);
-            this.dateIcon = false;
             this._precio.setValue(ok["respuesta"].ValorUnitario);
             this._fechaExpiracion.disable();
             this._precio.disable();
           } catch (error) {
             this._fechaExpiracion.reset();
-            this.dateIcon = true;
             this._cantidad.reset();
             this._precio.reset();
           }
@@ -304,26 +309,32 @@ export class CompraComponent implements OnInit {
       }
     }); 
     dialogRef.afterClosed().subscribe(result => {
-      console.log(result);      
       if (result != null) {
+        if (result.idLote != "") {
+          this._idLote.setValue(result.idLote);
+          this._precio.setValue(result.precio);
+          this._precio.disable();
+        } else {
+          this._lote.enable();
+          this._fechaExpiracion.enable();
+          this._precio.enable();
+        }
         this._fechaExpiracion.setValue(result.fechaExpiracion);
         this._lote.setValue(result.nombreLote);
-        this._idLote.setValue(result.idLote);
-      //   this._idProvincia.setValue(result.idLocalidad);
-      //   this._provincia.setValue(result.descripcion);
+        this.clearFieldFecha = false;
+        this.clearFieldLote = false;
       }
     });
   }   
 
   consultarDetalleFactura() {
+    var detalleCompra = [];
     this.compraService
       .consultarDetalleFactura(
         this._idCabecera.value,
         localStorage.getItem("miCuenta.getToken")
       ) 
       .then((ok) => {
-        var detalleCompra = [];
-        this.detalleCompra.data = [];
         ok["respuesta"][0].DetalleFactura.map((item) => {
           var lote = "";
           var idLote = "";
@@ -376,8 +387,8 @@ export class CompraComponent implements OnInit {
             Medida: medida,
             Precio: item.AsignarProductoLote[0].ValorUnitario
           }
-          detalleCompra.push(producto);          
-        });
+          detalleCompra.push(producto);       
+        });     
         this.detalleCompra.data.push(detalleCompra);
         this.detalleCompra.paginator = this.paginator;
       })
@@ -411,6 +422,7 @@ export class CompraComponent implements OnInit {
     this.facturaService
       .consultarFacturasNoFinalizadas(localStorage.getItem("miCuenta.getToken"))
       .then((ok) => {
+        this.facturasNoFinalizadas.data = [];
         this.facturasNoFinalizadas.data = ok["respuesta"];
         this.facturasNoFinalizadas.paginator = this.paginator;
       })
@@ -446,6 +458,8 @@ export class CompraComponent implements OnInit {
           this._idCabecera.setValue(ok["respuesta"].IdCabeceraFactura);
           this._cabecera.setValue(ok["respuesta"].Codigo);
           this.myForm.enable();
+          this._lote.disable();
+          this._fechaExpiracion.disable();
           this.selectTipoCompra = false;
           this.buttonSeleccionarProducto = false;
           this.buttonGenerarFactura = true;
@@ -475,8 +489,9 @@ export class CompraComponent implements OnInit {
     this._lote.reset();
     this._idAsignarProductoLote.reset();
   }
-
+ 
   crearDetalleFactura() {
+    console.log('creando detalle...');
     this.compraService
       .crearDetalleFactura(
         this._idCabecera.value,
@@ -488,11 +503,9 @@ export class CompraComponent implements OnInit {
       .then((ok) => {
         this.limpiarCampos();
         this.consultarDetalleFactura();
-        this.dateIcon = true;
         this.realizarCompraButton = false;
         this._precio.enable();
         this._fechaExpiracion.clearValidators();
-        this._fechaExpiracion.enable();
         if (!this.seccionKit) {
           this.buttonSeleccionarProducto = true;
         }
@@ -531,7 +544,6 @@ export class CompraComponent implements OnInit {
         this.consultarLotesDeUnProducto();
         this.buscarFechaYPrecio();
         this._fechaExpiracion.reset();
-        this.dateIcon = true;
         this._lote.reset();
         this._cantidad.reset();
         this._precio.reset();
@@ -606,6 +618,7 @@ export class CompraComponent implements OnInit {
   }
 
   crearLote() {
+    console.log('creando lote...');
     this.inventarioService
       .crearLote(
         this._lote.value,
@@ -669,6 +682,7 @@ export class CompraComponent implements OnInit {
   }
 
   asignarProductoLote(idLote?: string, fecha?: string) {
+    console.log('asignando lote...');
     this.inventarioService
       .asignarProductoLote(
         this._idCabecera.value,

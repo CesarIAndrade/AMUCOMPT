@@ -23,6 +23,7 @@ export class ModalLotesComponent implements OnInit {
     nombreLote: "",
     fechaExpiracion: "",
     idLote: "",
+    precio: ""
   };
 
   // Para la paginacion
@@ -39,7 +40,6 @@ export class ModalLotesComponent implements OnInit {
       )
       .then((ok) => {
         if (ok["respuesta"]) {
-          console.log(ok["respuesta"]);
           this.lotes.data = [];
           this.lotes.data = ok["respuesta"];
           this.lotes.paginator = this.paginator;
@@ -62,57 +62,11 @@ export class ModalLotesComponent implements OnInit {
     }
   }
 
-  validarFormulario() {
-    if(this.lote.nombreLote == "" || this.lote.fechaExpiracion == "") {
-
-    } else {
-      this.crearLote();
-    }
-  }
-
-  crearLote() {
-    this.inventarioService
-      .crearLote(
-        this.lote.nombreLote,
-        "0",
-        this.validarFecha(),
-        localStorage.getItem("miCuenta.postToken")
-      )
-      .then((ok) => {
-        if (ok["respuesta"]) {
-          this.lote.idLote = ok["respuesta"];
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }
-
-  validarFecha(fecha?) {
-    var fechaExpiracion: any;
-    if (fecha) {
-      fechaExpiracion = fecha;
-    } else {
-      fechaExpiracion = new Date(this.lote.fechaExpiracion);
-    }
-    var fechaActual = new Date();
-    try {
-      if (fechaExpiracion.getFullYear() < fechaActual.getFullYear()) {
-        fechaExpiracion = null;
-      } else {
-        fechaExpiracion = fechaExpiracion.toJSON();
-        fechaExpiracion = fechaExpiracion.split("T")[0];
-        return fechaExpiracion;
-      }
-    } catch (error) {
-      return (fechaExpiracion = null);
-    }
-  }
-
   setLote(lote) {
     this.lote.idLote = lote.IdLote;
     this.lote.nombreLote = lote.Codigo;
     this.lote.fechaExpiracion = lote.FechaExpiracion;
+    this.lote.precio = lote.AsignarProductoLote.ValorUnitario;
   }
 
   ngOnInit() {
