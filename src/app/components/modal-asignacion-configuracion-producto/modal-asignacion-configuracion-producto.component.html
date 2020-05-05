@@ -36,7 +36,7 @@
           <th mat-header-cell *matHeaderCellDef>Acciones</th>
           <ng-container *matCellDef="let element">
             <td mat-cell>
-              <button
+              <button 
                 mat-button
                 color="warn"
                 [mat-dialog-close]="producto"
@@ -56,7 +56,7 @@
           *matRowDef="let row; columns: tablaConfiguracionProducto"
         ></tr>
       </table>
-      <mat-paginator #paginator [pageSizeOptions]="[5]" showFirstLastButtons></mat-paginator>
+      <mat-paginator #paginator1 [pageSizeOptions]="[5]" showFirstLastButtons></mat-paginator>
     </div>
     <div [hidden]="areaTablaStock" class="table_all">
       <table mat-table [dataSource]="listaProductosEnStock">
@@ -110,7 +110,7 @@
         <tr mat-header-row *matHeaderRowDef="tablaStock; sticky: true"></tr>
         <tr mat-row *matRowDef="let row; columns: tablaStock"></tr>
       </table>
-      <mat-paginator #paginator [pageSizeOptions]="[5]" showFirstLastButtons></mat-paginator>
+      <mat-paginator #paginator2 [pageSizeOptions]="[5]" showFirstLastButtons></mat-paginator>
     </div>
     <div [hidden]="areaTablaProductoDeUnKit" class="table_all">
       <table mat-table [dataSource]="listaProductosDeUnKit">
@@ -148,7 +148,7 @@
         ></tr>
         <tr mat-row *matRowDef="let row; columns: tablaProductosDeUnKit"></tr>
       </table>
-      <mat-paginator #paginator [pageSizeOptions]="[5]" showFirstLastButtons></mat-paginator>
+      <mat-paginator #paginator3 [pageSizeOptions]="[5]" showFirstLastButtons></mat-paginator>
       <br>
       <div class="row" [hidden]="permitirAnadir">
         <div class="col-lg-6">

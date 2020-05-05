@@ -47,7 +47,9 @@ export class ModalAsignacionConfiguracionProductoComponent implements OnInit {
   };
 
   // Para la paginacion
-  @ViewChild('paginator', { static: false }) paginator: MatPaginator;
+  @ViewChild('paginator1', { static: false }) paginator1: MatPaginator;
+  @ViewChild('paginator2', { static: false }) paginator2: MatPaginator;
+  @ViewChild('paginator3', { static: false }) paginator3: MatPaginator;
   listaProductosEnStock = new MatTableDataSource<Element[]>();
   configuracionProductos = new MatTableDataSource<Element[]>();
   listaProductosDeUnKit = new MatTableDataSource<Element[]>();
@@ -73,7 +75,7 @@ export class ModalAsignacionConfiguracionProductoComponent implements OnInit {
           configuracionProductos.push(producto);
         });
         this.configuracionProductos.data = configuracionProductos;
-        this.configuracionProductos.paginator = this.paginator;
+        this.configuracionProductos.paginator = this.paginator1;
       })
       .catch((error) => {
         console.log(error);
@@ -168,7 +170,7 @@ export class ModalAsignacionConfiguracionProductoComponent implements OnInit {
           }
         })
         this.listaProductosEnStock.data = listaProductosEnStock;
-        this.listaProductosEnStock.paginator = this.paginator
+        this.listaProductosEnStock.paginator = this.paginator2;
       })
       .catch((error) => {
         console.log(error);
@@ -200,7 +202,7 @@ export class ModalAsignacionConfiguracionProductoComponent implements OnInit {
       configuracionProductos.push(producto);
     })
     this.configuracionProductos.data = configuracionProductos;
-    this.configuracionProductos.paginator = this.paginator;
+    this.configuracionProductos.paginator = this.paginator1;
   }
 
   siElKitVieneDeVenta(listaProductos) {
@@ -241,7 +243,7 @@ export class ModalAsignacionConfiguracionProductoComponent implements OnInit {
       listaProductosDeUnKit.push(producto);
     })
     this.listaProductosDeUnKit.data = listaProductosDeUnKit;
-    this.listaProductosDeUnKit.paginator = this.paginator;
+    this.listaProductosDeUnKit.paginator = this.paginator3;
   }
 
   estructurarProductosDeUnKit(listaProductos, ruta?) {
