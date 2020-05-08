@@ -18,9 +18,11 @@ input[type="number"] {
 }
 
 .tableButton:focus {
-  border-color: #343a40;
+  border-color: #fff;
   text-align: center;
   font-weight: bold;
+  font-size: large;
+  background-color: #f0ad4e;
 }
 
 .descuento {

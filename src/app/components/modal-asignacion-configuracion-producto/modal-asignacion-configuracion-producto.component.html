@@ -1,4 +1,4 @@
-<mat-dialog-content style="overflow: hidden;">
+<mat-dialog-content>
   <div>
     <h5 style="text-align: center;">Lista Productos {{ nombreKit }}</h5>
     <mat-form-field class="example-full-width">
@@ -56,7 +56,7 @@
           *matRowDef="let row; columns: tablaConfiguracionProducto"
         ></tr>
       </table>
-      <mat-paginator #paginator1 [pageSizeOptions]="[5]" showFirstLastButtons></mat-paginator>
+      <mat-paginator #paginator1 [pageSizeOptions]="[4]" showFirstLastButtons></mat-paginator>
     </div>
     <div [hidden]="areaTablaStock" class="table_all">
       <table mat-table [dataSource]="listaProductosEnStock">
@@ -110,7 +110,7 @@
         <tr mat-header-row *matHeaderRowDef="tablaStock; sticky: true"></tr>
         <tr mat-row *matRowDef="let row; columns: tablaStock"></tr>
       </table>
-      <mat-paginator #paginator2 [pageSizeOptions]="[5]" showFirstLastButtons></mat-paginator>
+      <mat-paginator #paginator2 [pageSizeOptions]="[4]" showFirstLastButtons></mat-paginator>
     </div>
     <div [hidden]="areaTablaProductoDeUnKit" class="table_all">
       <table mat-table [dataSource]="listaProductosDeUnKit">
@@ -148,15 +148,14 @@
         ></tr>
         <tr mat-row *matRowDef="let row; columns: tablaProductosDeUnKit"></tr>
       </table>
-      <mat-paginator #paginator3 [pageSizeOptions]="[5]" showFirstLastButtons></mat-paginator>
-      <br>
+      <mat-paginator #paginator3 [pageSizeOptions]="[4]" showFirstLastButtons></mat-paginator>
       <div class="row" [hidden]="permitirAnadir">
-        <div class="col-lg-6">
+        <div class="col-lg-6 col-md-6 col-sm-6">
           <mat-form-field class="example-full-width">
             <input matInput type="number" placeholder="Cantidad" [(ngModel)]="cantidad"/>
           </mat-form-field>
         </div>
-        <div class="col-lg-6" style="padding-top: 1%">
+        <div class="col-lg-6 col-md-6 col-sm-6" style="padding-top: 1%">
           <button
             mat-button
             mat-dialog-close

@@ -96,18 +96,27 @@
                     matInput
                     formControlName="_lote"
                   />
-                  <button type="button" [hidden]="clearFieldLote" mat-button matPrefix mat-icon-button>
-                    <mat-icon (click)="clearLote()"
-                      >clear</mat-icon
-                    >
+                  <button
+                    type="button"
+                    [hidden]="clearFieldLote"
+                    mat-button
+                    matPrefix
+                    mat-icon-button
+                  >
+                    <mat-icon (click)="clearLote()">clear</mat-icon>
                   </button>
                 </mat-form-field>
               </div>
               <div class="col-lg-3 col-md-2">
-                <button mat-button type="button" [disabled]="buttonSeleccionarLote" (click)="seleccionarLote()"
-                    class="mt-2 btn-outline-danger">
-                    <mat-icon>add</mat-icon>
-                  </button>
+                <button
+                  mat-button
+                  type="button"
+                  [disabled]="buttonSeleccionarLote"
+                  (click)="seleccionarLote()"
+                  class="mt-2 btn-outline-danger"
+                >
+                  <mat-icon>add</mat-icon>
+                </button>
               </div>
             </div>
           </div>
@@ -122,10 +131,14 @@
               <mat-datepicker #picker></mat-datepicker>
               <mat-datepicker-toggle matSuffix [for]="picker">
               </mat-datepicker-toggle>
-              <button type="button" [hidden]="clearFieldFecha" mat-button matPrefix mat-icon-button>
-                <mat-icon (click)="clearDate()"
-                  >clear</mat-icon
-                >
+              <button
+                type="button"
+                [hidden]="clearFieldFecha"
+                mat-button
+                matPrefix
+                mat-icon-button
+              >
+                <mat-icon (click)="clearDate()">clear</mat-icon>
               </button>
             </mat-form-field>
             <div class="row">
@@ -227,7 +240,7 @@
             <ng-container matColumnDef="fechaExpiracion">
               <th mat-header-cell *matHeaderCellDef>Expira</th>
               <td mat-cell *matCellDef="let element">
-                {{ element.FechaExpiracion | date: 'yyyy-MM-dd' }}                
+                {{ element.FechaExpiracion | date: "yyyy-MM-dd" }}
               </td>
             </ng-container>
             <ng-container matColumnDef="valorUnitario">
@@ -238,15 +251,17 @@
             </ng-container>
             <ng-container matColumnDef="cantidad">
               <th mat-header-cell *matHeaderCellDef>Cant</th>
-              <input
-                mat-cell
-                *matCellDef="let element"
-                matInput
-                class="p-4 tableButton"
-                (keyup)="modificarCantidadDeProductoEnDetalle($event, element)"
-                type="number"
-                value="{{ element.Cantidad }}"
-              />
+              <td mat-cell *matCellDef="let element">
+                <input
+                  matInput
+                  class="tableButton"
+                  (keyup)="
+                    modificarCantidadDeProductoEnDetalle($event, element)
+                  "
+                  type="number"
+                  value="{{ element.Cantidad }}"
+                />
+              </td>
             </ng-container>
             <ng-container matColumnDef="total">
               <th mat-header-cell *matHeaderCellDef>Total</th>
@@ -256,17 +271,15 @@
               <th mat-header-cell *matHeaderCellDef>
                 <mat-icon class="mt-1">delete_outline</mat-icon>
               </th>
-              <ng-container *matCellDef="let element">
-                <td mat-cell>
-                  <button
-                    mat-button
-                    class="btn-outline-danger"
-                    (click)="quitarDetalleFactura(element)"
-                  >
-                    <mat-icon>remove</mat-icon>
-                  </button>
-                </td>
-              </ng-container>
+              <td mat-cell *matCellDef="let element">
+                <button
+                  mat-button
+                  class="btn-outline-danger"
+                  (click)="quitarDetalleFactura(element)"
+                >
+                  <mat-icon>remove</mat-icon>
+                </button>
+              </td>
             </ng-container>
             <tr
               mat-header-row
@@ -284,7 +297,7 @@
     </div>
   </mat-tab>
   <mat-tab label="Facturas no finalizadas">
-    <br/>
+    <br />
     <div class="container">
       <div class="row">
         <div class="col-lg-12">
@@ -304,7 +317,7 @@
               <ng-container matColumnDef="fecha">
                 <th mat-header-cell *matHeaderCellDef>Fecha</th>
                 <td mat-cell *matCellDef="let element">
-                  {{ element.FechaGeneracion | date: 'yyyy-MM-dd' }}                
+                  {{ element.FechaGeneracion | date: "yyyy-MM-dd" }}
                 </td>
               </ng-container>
               <ng-container matColumnDef="acciones">
@@ -342,8 +355,8 @@
       </div>
     </div>
   </mat-tab>
-  <mat-tab label="Facturas finalizadas"> 
-    <br/>
+  <mat-tab label="Facturas finalizadas">
+    <br />
     <div class="container">
       <div class="row">
         <div class="col-lg-12">
@@ -363,17 +376,14 @@
               <ng-container matColumnDef="fecha">
                 <th mat-header-cell *matHeaderCellDef>Fecha</th>
                 <td mat-cell *matCellDef="let element">
-                  {{ element.FechaGeneracion | date: 'yyyy-MM-dd' }}                
+                  {{ element.FechaGeneracion | date: "yyyy-MM-dd" }}
                 </td>
               </ng-container>
               <ng-container matColumnDef="acciones">
                 <th mat-header-cell *matHeaderCellDef>Acciones</th>
                 <ng-container *matCellDef="let element">
                   <td mat-cell>
-                    <button
-                      mat-button
-                      class="btn-outline-primary"
-                    >
+                    <button mat-button class="btn-outline-primary">
                       <mat-icon>visibility</mat-icon>
                     </button>
                   </td>
@@ -396,6 +406,6 @@
           </div>
         </div>
       </div>
-    </div>  
+    </div>
   </mat-tab>
 </mat-tab-group>

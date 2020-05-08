@@ -7,13 +7,13 @@ import { MatDialog } from "@angular/material/dialog";
 // Components
 import { ModalAsignacionUsuarioPersonaComponent } from "../modal-asignacion-usuario-persona/modal-asignacion-usuario-persona.component";
 import { ModalAsignacionConfiguracionProductoComponent } from "../modal-asignacion-configuracion-producto/modal-asignacion-configuracion-producto.component";
-import { ModalLocalidadSuperiorComponent } from '../modal-localidad-superior/modal-localidad-superior.component';
+import { ModalLocalidadSuperiorComponent } from "../modal-localidad-superior/modal-localidad-superior.component";
 
 // Services
 import { InventarioService } from "src/app/services/inventario.service";
-import { FacturaService } from 'src/app/services/factura.service';
-import { VentaService } from 'src/app/services/venta.service';
-import { PanelAdministracionService } from 'src/app/services/panel-administracion.service';
+import { FacturaService } from "src/app/services/factura.service";
+import { VentaService } from "src/app/services/venta.service";
+import { PanelAdministracionService } from "src/app/services/panel-administracion.service";
 
 @Component({
   selector: "app-venta",
@@ -21,7 +21,6 @@ import { PanelAdministracionService } from 'src/app/services/panel-administracio
   styleUrls: ["./venta.component.css"],
 })
 export class VentaComponent implements OnInit {
-
   myForm: FormGroup;
 
   constructor(
@@ -96,9 +95,9 @@ export class VentaComponent implements OnInit {
   realizarVentaButton = true;
 
   // Para la paginacion
-  @ViewChild('paginator', { static: false }) paginator: MatPaginator;
-  @ViewChild('fnf_paginator', { static: false }) fnf_paginator: MatPaginator;
-  @ViewChild('ff_paginator', { static: false }) ff_paginator: MatPaginator;
+  @ViewChild("paginator", { static: false }) paginator: MatPaginator;
+  @ViewChild("fnf_paginator", { static: false }) fnf_paginator: MatPaginator;
+  @ViewChild("ff_paginator", { static: false }) ff_paginator: MatPaginator;
   detalleVenta = new MatTableDataSource<Element[]>();
   facturasNoFinalizadas = new MatTableDataSource<Element[]>();
   facturasFinalizadas = new MatTableDataSource<Element[]>();
@@ -113,7 +112,7 @@ export class VentaComponent implements OnInit {
       this.seccionKit = true;
       this.limpiarCampos();
     }
-  } 
+  }
 
   consultarKits() {
     this.inventarioService
@@ -128,7 +127,8 @@ export class VentaComponent implements OnInit {
       })
       .catch((error) => {
         console.log(error);
-      }).finally(() => {
+      })
+      .finally(() => {
         this.seccionKit = false;
         this.buttonSeleccionarProducto = true;
       });
@@ -142,11 +142,11 @@ export class VentaComponent implements OnInit {
         localStorage.getItem("miCuenta.getToken"),
         url
       )
-      .then((ok) => {        
+      .then((ok) => {
         this.listaProductosDeUnKit = [];
         this.listaProductosDeUnKit =
           ok["respuesta"][0]["ListaAsignarProductoKit"];
-        this.permitirAnadir = ok['respuesta'][0]["PermitirAnadir"];
+        this.permitirAnadir = ok["respuesta"][0]["PermitirAnadir"];
         this.buttonSeleccionarProducto = true;
       })
       .catch((error) => {
@@ -189,7 +189,7 @@ export class VentaComponent implements OnInit {
         data: {
           listaProductosDeUnKit: this.listaProductosDeUnKit,
           idCabeceraFactura: this._idCabecera.value,
-          permitirAnadir: this.permitirAnadir
+          permitirAnadir: this.permitirAnadir,
         },
       }
     );
@@ -217,7 +217,7 @@ export class VentaComponent implements OnInit {
           result.Medida;
         this._producto.setValue(producto);
         this._cantidad.reset();
-      } 
+      }
     });
   }
 
@@ -235,7 +235,8 @@ export class VentaComponent implements OnInit {
       })
       .catch((error) => {
         console.log(error);
-      }).finally(() => {
+      })
+      .finally(() => {
         this.consultarFacturasNoFinalizadas();
       });
   }
@@ -256,7 +257,7 @@ export class VentaComponent implements OnInit {
           sweetAlert("Ha ocurrido un error!", {
             icon: "error",
           });
-        } else if(ok['respuesta']) {
+        } else if (ok["respuesta"]) {
           this._idCabecera.setValue(ok["respuesta"].IdCabeceraFactura);
           this._cabecera.setValue(ok["respuesta"].Codigo);
           var fecha = new Date();
@@ -269,7 +270,8 @@ export class VentaComponent implements OnInit {
       })
       .catch((error) => {
         console.log(error);
-      }).finally(() => { 
+      })
+      .finally(() => {
         this.buttonGenerarFactura = true;
         this.buttonSeleccionarPersona = false;
         this.buttonSeleccionarProducto = false;
@@ -330,7 +332,7 @@ export class VentaComponent implements OnInit {
   }
 
   realizarVenta() {
-    const url = "Factura/FinalizarCabeceraFacturaVenta"
+    const url = "Factura/FinalizarCabeceraFacturaVenta";
     this.facturaService
       .finalizarFactura(
         this._idCabecera.value,
@@ -364,88 +366,68 @@ export class VentaComponent implements OnInit {
         localStorage.getItem("miCuenta.getToken")
       )
       .then((ok) => {
-        var detalle: any;
-        var lote: string;
-        var FechaExp: string;
-        var Descuento: string;
+        var codigo = "";        
+        var idLote = "";
+        var lote = "";
+        var idKit = "";
+        var kit = "";
+        var nombreProducto = "";
+        var presentacion = "";
+        var descuento = "";
+        var perteneceKitCompleto = false; 
         var detalleVenta = [];
+        console.log(ok["respuesta"].DetalleVenta);
         ok["respuesta"].DetalleVenta.map((item) => {
-          if (item.AsignarProductoLote.IdLote != "") {
+          if (item.PerteneceKitCompleto) {
+            perteneceKitCompleto = true;
+          } else {
+            perteneceKitCompleto = false;
+          }
+          if (item.AsignarProductoLote.Lote) {
+            idLote = item.AsignarProductoLote.Lote.IdLote;
             lote = item.AsignarProductoLote.Lote.Codigo;
-            FechaExp = item.AsignarProductoLote.Lote.FechaExpiracion;
           } else {
+            idLote = "";
             lote = "";
-            FechaExp = item.AsignarProductoLote.FechaExpiracion;
           }
-          if (item.AplicaDescuento == "True") {
-            Descuento =
-            item.AsignarProductoLote.AsignarProductoKits
-                .ListaAsignarProductoKit[0].Kit.AsignarDescuentoKit.Descuento
-                .Porcentaje + "%";
+          if (item.AsignarProductoLote.PerteneceKit == "True") {
+            codigo = item.AsignarProductoLote.AsignarProductoKit.ListaProductos.Codigo;
+            nombreProducto = item.AsignarProductoLote.AsignarProductoKit.ListaProductos.Producto.Nombre;
+            presentacion = item.AsignarProductoLote.AsignarProductoKit.ListaProductos.Presentacion.Descripcion +" "+ item.AsignarProductoLote.AsignarProductoKit.ListaProductos.CantidadMedida +" " + item.AsignarProductoLote.AsignarProductoKit.ListaProductos.Medida.Descripcion;
+            idKit = item.AsignarProductoLote.AsignarProductoKit.Kit.IdKit;
+            kit = item.AsignarProductoLote.AsignarProductoKit.Kit.Descripcion;
           } else {
-            Descuento = "";
+            codigo = item.AsignarProductoLote.ConfigurarProductos.Codigo;
+            nombreProducto = item.AsignarProductoLote.ConfigurarProductos.Producto.Nombre;
+            presentacion = item.AsignarProductoLote.ConfigurarProductos.Presentacion.Descripcion +" "+ item.AsignarProductoLote.ConfigurarProductos.CantidadMedida +" " + item.AsignarProductoLote.ConfigurarProductos.Medida.Descripcion;
+            idKit = ""
+            kit = ""
           }
-          if (item.AsignarProductoLote.PerteneceKit == "False") {
-            detalle = {
-              Codigo:
-              item.AsignarProductoLote.ConfigurarProductos.Codigo,
-              IdDetalleVenta: item.IdDetalleVenta,
-              Cantidad: item.Cantidad,
-              Producto:
-              item.AsignarProductoLote.ConfigurarProductos.Producto
-                  .Nombre,
-              Presentacion:
-              item.AsignarProductoLote.ConfigurarProductos
-                  .Presentacion.Descripcion +
-                " " +
-                item.AsignarProductoLote.ConfigurarProductos
-                  .CantidadMedida +
-                " " +
-                item.AsignarProductoLote.ConfigurarProductos.Medida
-                  .Descripcion,
-              Lote: lote,
-              FechaExpiracion: FechaExp,
-              Kit: "",
-              AplicaDescuento: Descuento,
-              ValorUnidad: item.ValorUnitario,
-              Total: item.Total,
-              Subtotal: item.Subtotal,
-            };
-          } else {
-            detalle = {
-              Codigo:
-              item.AsignarProductoLote.AsignarProductoKits
-                  .ListaAsignarProductoKit[0].ListaProductos.Codigo,
-              IdDetalleVenta: item.IdDetalleVenta,
-              Cantidad: item.Cantidad,
-              Producto:
-                item.AsignarProductoLote.AsignarProductoKits
-                  .ListaAsignarProductoKit[0].ListaProductos.Producto.Nombre,
-              Presentacion:
-              item.AsignarProductoLote.AsignarProductoKits
-                  .ListaAsignarProductoKit[0].ListaProductos.Presentacion
-                  .Descripcion +
-                " " +
-                item.AsignarProductoLote.AsignarProductoKits
-                  .ListaAsignarProductoKit[0].ListaProductos.CantidadMedida +
-                " " +
-                item.AsignarProductoLote.AsignarProductoKits
-                  .ListaAsignarProductoKit[0].ListaProductos.Medida.Descripcion,
-              Lote: lote,
-              FechaExpiracion: FechaExp,
-              Kit:
-              item.AsignarProductoLote.AsignarProductoKits
-                  .Descripcion,
-              AplicaDescuento: Descuento,
-              ValorUnidad: item.ValorUnitario,
-              Total: item.Total,
-              Subtotal: item.Subtotal,
-            };
-          }
-          detalleVenta.push(detalle);
+          if (item.PorcentajeDescuento) {
+            descuento = item.PorcentajeDescuento
+          } else { descuento = "" }
+          var producto = {
+            IdDetalleVenta: item.IdDetalleVenta,
+            Codigo: codigo,
+            Cantidad: item.Cantidad,
+            Producto: nombreProducto,
+            Presentacion: presentacion,
+            IdLote: idLote,
+            Lote: lote,
+            FechaExpiracion: item.AsignarProductoLote.FechaExpiracion,
+            IdKit: idKit,
+            Kit: kit,
+            AplicaDescuento: descuento,
+            ValorUnidad: item.ValorUnitario,
+            Total: item.Total,
+            Subtotal: item.Subtotal,
+            PerteneceKitCompleto: perteneceKitCompleto
+          };
+          detalleVenta.push(producto);
         });
         this.detalleVenta.data = detalleVenta;
         this.detalleVenta.paginator = this.paginator;
+        console.log(this.detalleVenta.data);
       })
       .catch((error) => {
         console.log(error);
@@ -502,7 +484,8 @@ export class VentaComponent implements OnInit {
       })
       .catch((error) => {
         console.log(error);
-      }).finally(() => {
+      })
+      .finally(() => {
         this.consultarFacturasNoFinalizadas();
       });
   }
@@ -517,27 +500,31 @@ export class VentaComponent implements OnInit {
   }
 
   seleccionarSembrio() {
-    let dialogRef = this.modalLocalidadSuperior.open(ModalLocalidadSuperiorComponent, {
-      width: '400px',
-      height: 'auto',
-      data: {
-        ruta: 'ventas'
+    let dialogRef = this.modalLocalidadSuperior.open(
+      ModalLocalidadSuperiorComponent,
+      {
+        width: "400px",
+        height: "auto",
+        data: {
+          ruta: "ventas",
+        },
       }
-    }); 
-    dialogRef.afterClosed().subscribe(result => {
+    );
+    dialogRef.afterClosed().subscribe((result) => {
       if (result != null) {
         this._idSembrio.setValue(result.idLocalidad);
         this._sembrio.setValue(result.descripcion);
       }
     });
-  }  
+  }
 
   consultarFacturasNoFinalizadas() {
     const url = "Factura/FacturasNoFinalizadasVenta";
     this.facturaService
       .consultarFacturasNoFinalizadas(
         url,
-        localStorage.getItem("miCuenta.getToken"))
+        localStorage.getItem("miCuenta.getToken")
+      )
       .then((ok) => {
         try {
           this.facturasNoFinalizadas.data = [];
@@ -549,7 +536,8 @@ export class VentaComponent implements OnInit {
       })
       .catch((error) => {
         console.log(error);
-      }).finally(() => {
+      })
+      .finally(() => {
         this.consultarFacturasFinalizadas();
       });
   }
@@ -577,7 +565,8 @@ export class VentaComponent implements OnInit {
     this.facturaService
       .consultarFacturasFinalizadas(
         url,
-        localStorage.getItem("miCuenta.getToken"))
+        localStorage.getItem("miCuenta.getToken")
+      )
       .then((ok) => {
         this.facturasFinalizadas.data = [];
         this.facturasFinalizadas.data = ok["respuesta"];
@@ -677,6 +666,4 @@ export class VentaComponent implements OnInit {
   ];
   tablaFacturasNoFinalidas = ["codigo", "usuario", "fecha", "acciones"];
   tablaFacturasFinalidas = ["codigo", "usuario", "fecha", "acciones"];
-
 }
- 
