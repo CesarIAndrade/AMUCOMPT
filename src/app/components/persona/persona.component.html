@@ -1,10 +1,20 @@
 <br />
 <div class="container">
   <form [formGroup]="myForm" (ngSubmit)="validarFormulario()" novalidate>
-    <div class="row">
-      <div class="col-lg-4">
-        <div class="card-body">
+    <div class="card-body">
+      <div class="row">
+        <div class="col-lg-4">
           <h5 style="text-align: center;">{{ nuevaPersona }}</h5>
+        </div>
+        <div class="col-lg-4">
+          <h5 style="text-align: center;">{{ contacto }}</h5>
+        </div>
+        <div class="col-lg-4">
+          <h5 style="text-align: center;">{{ direccion }}</h5>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-4">
           <mat-form-field class="example-full-width">
             <input
               matInput
@@ -23,55 +33,8 @@
               </mat-error>
             </mat-error>
           </mat-form-field>
-          <mat-form-field class="example-full-width">
-            <input
-              matInput
-              type="text"
-              formControlName="_apellidos"
-              placeholder="Ingrese Apellidos"
-            />
-            <button disabled mat-button matPrefix mat-icon-button>
-              <mat-icon>*</mat-icon>
-            </button>
-            <mat-error
-              *ngIf="
-                _apellidos.invalid && (_apellidos.dirty || _apellidos.touched)
-              "
-            >
-              <mat-error *ngIf="_apellidos.errors.required">
-                Apellidos Requeridos
-              </mat-error>
-            </mat-error>
-          </mat-form-field>
-          <mat-form-field class="example-full-width">
-            <mat-label>Seleccione Tipo Documento</mat-label>
-            <mat-select formControlName="_tipoDocumento">
-              <mat-option
-                *ngFor="let item of tipoDocumentos"
-                [value]="item.IdTipoDocumento"
-              >
-                {{ item.Documento }}
-              </mat-option>
-            </mat-select>
-            <button disabled mat-button matPrefix mat-icon-button>
-              <mat-icon>*</mat-icon>
-            </button>
-            <mat-error
-              *ngIf="
-                _tipoDocumento.invalid &&
-                (_tipoDocumento.dirty || _tipoDocumento.touched)
-              "
-            >
-              <mat-error *ngIf="_tipoDocumento.errors.required">
-                Tipo Documento Requerido
-              </mat-error>
-            </mat-error>
-          </mat-form-field>
         </div>
-      </div>
-      <div class="col-lg-4">
-        <div class="card-body">
-          <h5 style="text-align: center;">{{ contacto }}</h5>
+        <div class="col-lg-4">
           <div class="row">
             <div class="col-lg-6">
               <mat-form-field class="example-full-width">
@@ -87,8 +50,7 @@
                 </button>
                 <mat-error
                   *ngIf="
-                    _telefono1.invalid &&
-                    (_telefono1.dirty || _telefono1.touched)
+                    _telefono1.invalid && (_telefono1.dirty || _telefono1.touched)
                   "
                 >
                   <mat-error *ngIf="_telefono1.errors.required">
@@ -127,6 +89,60 @@
               </mat-form-field>
             </div>
           </div>
+        </div>
+        <div class="col-lg-4">
+          <mat-form-field class="example-full-width">
+            <mat-label>Seleccionar Provincia</mat-label>
+            <mat-select
+              formControlName="_provincia"
+              (selectionChange)="consultarCantonesDeUnaProvincia($event.value)"
+            >
+              <mat-option
+                *ngFor="let item of provincias"
+                [value]="item.IdProvincia"
+              >
+                {{ item.Descripcion }}
+              </mat-option>
+            </mat-select>
+            <button disabled mat-button matPrefix mat-icon-button>
+              <mat-icon>*</mat-icon>
+            </button>
+            <mat-error
+              *ngIf="
+                _provincia.invalid && (_provincia.dirty || _provincia.touched)
+              "
+            >
+              <mat-error *ngIf="_provincia.errors.required">
+                Provincia Requerida
+              </mat-error>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-4">
+          <mat-form-field class="example-full-width">
+            <input
+              matInput
+              type="text"
+              formControlName="_apellidos"
+              placeholder="Ingrese Apellidos"
+            />
+            <button disabled mat-button matPrefix mat-icon-button>
+              <mat-icon>*</mat-icon>
+            </button>
+            <mat-error
+              *ngIf="
+                _apellidos.invalid && (_apellidos.dirty || _apellidos.touched)
+              "
+            >
+              <mat-error *ngIf="_apellidos.errors.required">
+                Apellidos Requeridos
+              </mat-error>
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-lg-4">
           <div class="row">
             <div class="col-lg-6">
               <mat-form-field class="example-full-width">
@@ -141,8 +157,7 @@
                 </button>
                 <mat-error
                   *ngIf="
-                    _telefono2.invalid &&
-                    (_telefono2.dirty || _telefono2.touched)
+                    _telefono2.invalid && (_telefono2.dirty || _telefono2.touched)
                   "
                 >
                   <mat-error *ngIf="_telefono2.errors.required">
@@ -181,48 +196,8 @@
               </mat-form-field>
             </div>
           </div>
-          <mat-form-field class="example-full-width">
-            <input
-              matInput
-              placeholder="Ingrese Correo"
-              formControlName="_correo"
-              [errorStateMatcher]="matcher"
-            />
-            <mat-error *ngIf="_correo.hasError('email')">
-              Ingrese Dirección de Correo Válida
-            </mat-error>
-          </mat-form-field>
         </div>
-      </div>
-      <div class="col-lg-4">
-        <div class="card-body">
-          <h5 style="text-align: center;">{{ direccion }}</h5>
-          <mat-form-field class="example-full-width">
-            <mat-label>Seleccionar Provincia</mat-label>
-            <mat-select
-              formControlName="_provincia"
-              (selectionChange)="consultarCantonesDeUnaProvincia($event.value)"
-            >
-              <mat-option
-                *ngFor="let item of provincias"
-                [value]="item.IdProvincia"
-              >
-                {{ item.Descripcion }}
-              </mat-option>
-            </mat-select>
-            <button disabled mat-button matPrefix mat-icon-button>
-              <mat-icon>*</mat-icon>
-            </button>
-            <mat-error
-              *ngIf="
-                _provincia.invalid && (_provincia.dirty || _provincia.touched)
-              "
-            >
-              <mat-error *ngIf="_provincia.errors.required">
-                Provincia Requerida
-              </mat-error>
-            </mat-error>
-          </mat-form-field>
+        <div class="col-lg-4">
           <mat-form-field class="example-full-width">
             <mat-label>Seleccionar Cantón</mat-label>
             <mat-select
@@ -244,6 +219,49 @@
               </mat-error>
             </mat-error>
           </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-4">
+          <mat-form-field class="example-full-width">
+            <mat-label>Seleccione Tipo Documento</mat-label>
+            <mat-select formControlName="_tipoDocumento">
+              <mat-option
+                *ngFor="let item of tipoDocumentos"
+                [value]="item.IdTipoDocumento"
+              >
+                {{ item.Documento }}
+              </mat-option>
+            </mat-select>
+            <button disabled mat-button matPrefix mat-icon-button>
+              <mat-icon>*</mat-icon>
+            </button>
+            <mat-error
+              *ngIf="
+                _tipoDocumento.invalid &&
+                (_tipoDocumento.dirty || _tipoDocumento.touched)
+              "
+            >
+              <mat-error *ngIf="_tipoDocumento.errors.required">
+                Tipo Documento Requerido
+              </mat-error>
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-lg-4">
+          <mat-form-field class="example-full-width">
+            <input
+              matInput
+              placeholder="Ingrese Correo"
+              formControlName="_correo"
+              [errorStateMatcher]="matcher"
+            />
+            <mat-error *ngIf="_correo.hasError('email')">
+              Ingrese Dirección de Correo Válida
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-lg-4">
           <mat-form-field class="example-full-width">
             <mat-label>Seleccionar Parroquia</mat-label>
             <mat-select formControlName="_parroquia">
@@ -269,183 +287,174 @@
           </mat-form-field>
         </div>
       </div>
-    </div>
-    <div class="row">
-      <div class="col-lg-12">
-        <div class="card-body">
-          <div class="col-lg-4">
-            <mat-form-field class="example-full-width">
-              <input
-                matInput
-                formControlName="_numeroDocumento"
-                placeholder="Ingrese Número Documento"
-              />
-              <button disabled mat-button matPrefix mat-icon-button>
-                <mat-icon>*</mat-icon>
-              </button>
-              <mat-error
-                *ngIf="
-                  _numeroDocumento.invalid &&
-                  (_numeroDocumento.dirty || _numeroDocumento.touched)
-                "
-              >
-                <mat-error *ngIf="_numeroDocumento.errors.required">
-                  Número de Documento Requerido
-                </mat-error>
-                <mat-error *ngIf="_numeroDocumento.errors.maxlength">
-                  Máximo 10 Dígitos
-                </mat-error>
+      <div class="row">
+        <div class="col-lg-4">
+          <mat-form-field class="example-full-width">
+            <input
+              matInput
+              formControlName="_numeroDocumento"
+              placeholder="Ingrese Número Documento"
+            />
+            <button disabled mat-button matPrefix mat-icon-button>
+              <mat-icon>*</mat-icon>
+            </button>
+            <mat-error
+              *ngIf="
+                _numeroDocumento.invalid &&
+                (_numeroDocumento.dirty || _numeroDocumento.touched)
+              "
+            >
+              <mat-error *ngIf="_numeroDocumento.errors.required">
+                Número de Documento Requerido
               </mat-error>
-            </mat-form-field>
-          </div>
-          <div class="col-lg-8">
-            <div>
-              <button
-                mat-button
-                type="submit"
-                [disabled]="myForm.invalid"
-                class="bg-success btn-block text-white"
-                [value]="botonInsertar"
-              >
-                {{ guardar }}
-              </button>
-            </div>
-          </div>
+              <mat-error *ngIf="_numeroDocumento.errors.maxlength">
+                Máximo 10 Dígitos
+              </mat-error>
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-lg-8">
+          <button
+            mat-button
+            type="submit"
+            [disabled]="myForm.invalid"
+            class="mt-2 bg-success btn-block text-white"
+            [value]="botonInsertar"
+          >
+            {{ guardar }}
+          </button>
         </div>
       </div>
     </div>
   </form>
-  <br />
   <div class="row">
     <div class="col-lg-12">
-      <div>
-        <mat-form-field class="example-full-width">
-          <input
-            matInput
-            [(ngModel)]="filterPersona"
-            type="text"
-            placeholder="Buscar Persona"
-          />
-          <button mat-button matPrefix mat-icon-button>
-            <mat-icon>search</mat-icon>
-          </button>
-        </mat-form-field>
-        <div class="tablaPersonas table_all">
-          <table
-            mat-table
-            [dataSource]="
-              personas
-                | filter
-                  : filterPersona
-                  : 'PrimerNombre'
-                  : 'SegundoNombre'
-                  : 'ApellidoPaterno'
-                  : 'ApellidoMaterno'
-                  : 'NumeroDocumento'
-            "
-          >
-            <ng-container matColumnDef="nombres">
-              <th mat-header-cell *matHeaderCellDef>Nombres</th>
-              <td mat-cell *matCellDef="let element">
-                {{ element.PrimerNombre }}
-                {{ element.SegundoNombre }}
-              </td>
-            </ng-container>
-            <ng-container matColumnDef="apellidos">
-              <th mat-header-cell *matHeaderCellDef>Apellidos</th>
-              <td mat-cell *matCellDef="let element">
-                {{ element.ApellidoPaterno }} {{ element.ApellidoMaterno }}
-              </td>
-            </ng-container>
-            <ng-container matColumnDef="documento">
-              <th mat-header-cell *matHeaderCellDef>Documento</th>
-              <td mat-cell *matCellDef="let element">
-                {{ element.TipoDocumento }}
-              </td>
-            </ng-container>
-            <ng-container matColumnDef="numeroDocumento">
-              <th mat-header-cell *matHeaderCellDef>No. Documento</th>
-              <td mat-cell *matCellDef="let element">
-                {{ element.NumeroDocumento }}
-              </td>
-            </ng-container>
-            <ng-container matColumnDef="acciones">
-              <th colspan="3" mat-header-cell *matHeaderCellDef>Acciones</th>
-              <ng-container *matCellDef="let element">
-                <ng-container *ngIf="element.IdUsuario == ''">
-                  <td mat-cell>
-                    <button
-                      mat-button
-                      tooltip="Ver Información"
-                      placement="top"
-                      class="btn-outline-info"
-                      (click)="abrirModal(element)"
-                    >
-                      <mat-icon>visibility</mat-icon>
-                    </button>
-                  </td>
-                  <td mat-cell>
-                    <button
-                      mat-button
-                      tooltip="Modificar"
-                      placement="top"
-                      class="btn-outline-primary"
-                      (click)="mostrarPersona(element)"
-                    >
-                      <mat-icon>edit</mat-icon>
-                    </button>
-                  </td>
-                  <td mat-cell>
-                    <button
-                      mat-button
-                      tooltip="Eliminar"
-                      placement="top"
-                      class="btn-outline-danger"
-                      (click)="eliminarPersona(element.IdPersona)"
-                    >
-                      <mat-icon>remove</mat-icon>
-                    </button>
-                  </td>
-                </ng-container>
-                <ng-container *ngIf="element.IdUsuario != ''">
-                  <td mat-cell>
-                    <button
-                      mat-button
-                      tooltip="Ver Información"
-                      placement="top"
-                      class="btn-outline-info"
-                      (click)="abrirModal(element)"
-                    >
-                      <mat-icon>visibility</mat-icon>
-                    </button>
-                  </td>
-                  <td mat-cell>
-                    <button
-                      mat-button
-                      tooltip="Modificar"
-                      placement="top"
-                      class="btn-outline-primary"
-                      (click)="mostrarPersona(element)"
-                    >
-                      <mat-icon>edit</mat-icon>
-                    </button>
-                  </td>
-                  <td mat-cell></td>
-                </ng-container>
+      <mat-form-field class="example-full-width">
+        <input
+          matInput
+          [(ngModel)]="filterPersona"
+          type="text"
+          placeholder="Buscar Persona"
+        />
+        <button mat-button matPrefix mat-icon-button>
+          <mat-icon>search</mat-icon>
+        </button>
+      </mat-form-field>
+      <div class="tablaPersonas table_all">
+        <table
+          mat-table
+          [dataSource]="
+            personas
+              | filter
+                : filterPersona
+                : 'PrimerNombre'
+                : 'SegundoNombre'
+                : 'ApellidoPaterno'
+                : 'ApellidoMaterno'
+                : 'NumeroDocumento'
+          "
+        >
+          <ng-container matColumnDef="nombres">
+            <th mat-header-cell *matHeaderCellDef>Nombres</th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.PrimerNombre }}
+              {{ element.SegundoNombre }}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="apellidos">
+            <th mat-header-cell *matHeaderCellDef>Apellidos</th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.ApellidoPaterno }} {{ element.ApellidoMaterno }}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="documento">
+            <th mat-header-cell *matHeaderCellDef>Documento</th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.TipoDocumento }}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="numeroDocumento">
+            <th mat-header-cell *matHeaderCellDef>No. Documento</th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.NumeroDocumento }}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="acciones">
+            <th colspan="3" mat-header-cell *matHeaderCellDef>Acciones</th>
+            <ng-container *matCellDef="let element">
+              <ng-container *ngIf="element.IdUsuario == ''">
+                <td mat-cell>
+                  <button
+                    mat-button
+                    tooltip="Ver Información"
+                    placement="top"
+                    class="btn-outline-info"
+                    (click)="abrirModal(element)"
+                  >
+                    <mat-icon>visibility</mat-icon>
+                  </button>
+                </td>
+                <td mat-cell>
+                  <button
+                    mat-button
+                    tooltip="Modificar"
+                    placement="top"
+                    class="btn-outline-primary"
+                    (click)="mostrarPersona(element)"
+                  >
+                    <mat-icon>edit</mat-icon>
+                  </button>
+                </td>
+                <td mat-cell>
+                  <button
+                    mat-button
+                    tooltip="Eliminar"
+                    placement="top"
+                    class="btn-outline-danger"
+                    (click)="eliminarPersona(element.IdPersona)"
+                  >
+                    <mat-icon>remove</mat-icon>
+                  </button>
+                </td>
+              </ng-container>
+              <ng-container *ngIf="element.IdUsuario != ''">
+                <td mat-cell>
+                  <button
+                    mat-button
+                    tooltip="Ver Información"
+                    placement="top"
+                    class="btn-outline-info"
+                    (click)="abrirModal(element)"
+                  >
+                    <mat-icon>visibility</mat-icon>
+                  </button>
+                </td>
+                <td mat-cell>
+                  <button
+                    mat-button
+                    tooltip="Modificar"
+                    placement="top"
+                    class="btn-outline-primary"
+                    (click)="mostrarPersona(element)"
+                  >
+                    <mat-icon>edit</mat-icon>
+                  </button>
+                </td>
+                <td mat-cell></td>
               </ng-container>
             </ng-container>
-            <tr
-              mat-header-row
-              *matHeaderRowDef="tablaPersonas; sticky: true"
-            ></tr>
-            <tr mat-row *matRowDef="let row; columns: tablaPersonas"></tr>
-          </table>
-          <mat-paginator
-            #paginator
-            [pageSizeOptions]="[5]"
-            showFirstLastButtons
-          ></mat-paginator>
-        </div>
+          </ng-container>
+          <tr
+            mat-header-row
+            *matHeaderRowDef="tablaPersonas; sticky: true"
+          ></tr>
+          <tr mat-row *matRowDef="let row; columns: tablaPersonas"></tr>
+        </table>
+        <mat-paginator
+          #paginator
+          [pageSizeOptions]="[5]"
+          showFirstLastButtons
+        ></mat-paginator>
       </div>
     </div>
   </div>
