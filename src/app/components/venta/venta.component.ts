@@ -29,7 +29,6 @@ export class VentaComponent implements OnInit {
     private inventarioService: InventarioService,
     private ventaService: VentaService,
     private facturaService: FacturaService,
-    private panelAdministracionService: PanelAdministracionService,
     private modalLocalidadSuperior: MatDialog,
     private router: Router
   ) {
@@ -217,6 +216,8 @@ export class VentaComponent implements OnInit {
           result.Medida;
         this._producto.setValue(producto);
         this._cantidad.reset();
+      } else {
+        this.consultarDetalleFactura();
       }
     });
   }
@@ -366,7 +367,7 @@ export class VentaComponent implements OnInit {
         localStorage.getItem("miCuenta.getToken")
       )
       .then((ok) => {
-        var codigo = "";        
+        var codigo = "";
         var idLote = "";
         var lote = "";
         var idKit = "";
@@ -374,7 +375,7 @@ export class VentaComponent implements OnInit {
         var nombreProducto = "";
         var presentacion = "";
         var descuento = "";
-        var perteneceKitCompleto = false; 
+        var perteneceKitCompleto = false;
         var detalleVenta = [];
         console.log(ok["respuesta"].DetalleVenta);
         ok["respuesta"].DetalleVenta.map((item) => {
@@ -391,21 +392,41 @@ export class VentaComponent implements OnInit {
             lote = "";
           }
           if (item.AsignarProductoLote.PerteneceKit == "True") {
-            codigo = item.AsignarProductoLote.AsignarProductoKit.ListaProductos.Codigo;
-            nombreProducto = item.AsignarProductoLote.AsignarProductoKit.ListaProductos.Producto.Nombre;
-            presentacion = item.AsignarProductoLote.AsignarProductoKit.ListaProductos.Presentacion.Descripcion +" "+ item.AsignarProductoLote.AsignarProductoKit.ListaProductos.CantidadMedida +" " + item.AsignarProductoLote.AsignarProductoKit.ListaProductos.Medida.Descripcion;
+            codigo =
+              item.AsignarProductoLote.AsignarProductoKit.ListaProductos.Codigo;
+            nombreProducto =
+              item.AsignarProductoLote.AsignarProductoKit.ListaProductos
+                .Producto.Nombre;
+            presentacion =
+              item.AsignarProductoLote.AsignarProductoKit.ListaProductos
+                .Presentacion.Descripcion +
+              " " +
+              item.AsignarProductoLote.AsignarProductoKit.ListaProductos
+                .CantidadMedida +
+              " " +
+              item.AsignarProductoLote.AsignarProductoKit.ListaProductos.Medida
+                .Descripcion;
             idKit = item.AsignarProductoLote.AsignarProductoKit.Kit.IdKit;
             kit = item.AsignarProductoLote.AsignarProductoKit.Kit.Descripcion;
           } else {
             codigo = item.AsignarProductoLote.ConfigurarProductos.Codigo;
-            nombreProducto = item.AsignarProductoLote.ConfigurarProductos.Producto.Nombre;
-            presentacion = item.AsignarProductoLote.ConfigurarProductos.Presentacion.Descripcion +" "+ item.AsignarProductoLote.ConfigurarProductos.CantidadMedida +" " + item.AsignarProductoLote.ConfigurarProductos.Medida.Descripcion;
-            idKit = ""
-            kit = ""
+            nombreProducto =
+              item.AsignarProductoLote.ConfigurarProductos.Producto.Nombre;
+            presentacion =
+              item.AsignarProductoLote.ConfigurarProductos.Presentacion
+                .Descripcion +
+              " " +
+              item.AsignarProductoLote.ConfigurarProductos.CantidadMedida +
+              " " +
+              item.AsignarProductoLote.ConfigurarProductos.Medida.Descripcion;
+            idKit = "";
+            kit = "";
           }
           if (item.PorcentajeDescuento) {
-            descuento = item.PorcentajeDescuento
-          } else { descuento = "" }
+            descuento = item.PorcentajeDescuento;
+          } else {
+            descuento = "";
+          }
           var producto = {
             IdDetalleVenta: item.IdDetalleVenta,
             Codigo: codigo,
@@ -421,7 +442,7 @@ export class VentaComponent implements OnInit {
             ValorUnidad: item.ValorUnitario,
             Total: item.Total,
             Subtotal: item.Subtotal,
-            PerteneceKitCompleto: perteneceKitCompleto
+            PerteneceKitCompleto: perteneceKitCompleto,
           };
           detalleVenta.push(producto);
         });

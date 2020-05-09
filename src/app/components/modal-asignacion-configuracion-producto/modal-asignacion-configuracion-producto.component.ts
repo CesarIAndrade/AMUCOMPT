@@ -1,6 +1,6 @@
 import { Component, OnInit, Inject, ViewChild } from "@angular/core";
 import { InventarioService } from "src/app/services/inventario.service";
-import { MAT_DIALOG_DATA } from "@angular/material/dialog";
+import { MAT_DIALOG_DATA, MatDialog } from "@angular/material/dialog";
 import { Router } from "@angular/router";
 import { VentaService } from "src/app/services/venta.service";
 import { MatPaginator, MatTableDataSource } from "@angular/material";
@@ -15,6 +15,7 @@ export class ModalAsignacionConfiguracionProductoComponent implements OnInit {
     private inventarioService: InventarioService,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private ventaService: VentaService,
+    private modalAsignacionConfiguracionProducto: MatDialog,
     private router: Router
   ) {}
 
@@ -27,6 +28,7 @@ export class ModalAsignacionConfiguracionProductoComponent implements OnInit {
   idKit = "";
   cantidad = "";
   idCabeceraFactura = "";
+  kitCompleto = true;
 
   producto = {
     IdRelacionLogica: "",
@@ -43,7 +45,7 @@ export class ModalAsignacionConfiguracionProductoComponent implements OnInit {
     Codigo: "",
     FechaExpiracion: "",
     Porcentaje: "",
-    Disponible: "",
+    Disponible: ""
   };
 
   // Para la paginacion
@@ -200,7 +202,12 @@ export class ModalAsignacionConfiguracionProductoComponent implements OnInit {
       this.idKit,
       this.cantidad,
       localStorage.getItem("miCuenta.postToken")
-    );
+    ).then( ok => {
+      console.log(ok['respuesta']);
+      if (ok['respuesta'] == "true") {
+        this.modalAsignacionConfiguracionProducto.closeAll();
+      }
+    })
   }
 
   siElKitVieneDeCompra(listaProductos) {
