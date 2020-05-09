@@ -50,7 +50,7 @@ export class VentaComponent implements OnInit {
       _kit: new FormControl(""),
       _checkedDescuento: new FormControl(""),
       _disponible: new FormControl(""),
-      _pagoEfectivo: new FormControl(""),
+      _checkedCredito: new FormControl(""),      
     });
   }
 
@@ -80,14 +80,18 @@ export class VentaComponent implements OnInit {
     "Sábado",
   ];
   tipoCompra: any[] = [{ tipo: "Producto" }, { tipo: "Kit" }];
+  tipoPago: any[] = [{ tipo: "Efectivo" }, { tipo: "Crédito" }];
   permitirAnadir: any;
 
   selected = "Producto";
+  pago = "Efectivo";
 
   seccionKit = true;
+  seccionSembrio = true;
   aplicaDescuento = true;
   buttonSeleccionarProducto = true;
   selectTipoCompra = true;
+  selectTipoPago = true;
   buttonSeleccionarPersona = true;
   buttonSeleccionarSembrio = true;
   buttonGenerarFactura = false;
@@ -110,6 +114,19 @@ export class VentaComponent implements OnInit {
       this.listaProductosDeUnKit = [];
       this.seccionKit = true;
       this.limpiarCampos();
+    }
+  }
+
+  selecionarTipoPago(tipoPago) {
+    this.aplicaDescuento = true;
+    if (tipoPago.value == "Efectivo") {
+      this.seccionSembrio = true;
+      this._sembrio.setValidators([]);
+      this._sembrio.updateValueAndValidity();
+    } else {
+      this.seccionSembrio = false;
+      this._sembrio.setValidators([Validators.required]);
+      this._sembrio.updateValueAndValidity();
     }
   }
 
@@ -189,11 +206,10 @@ export class VentaComponent implements OnInit {
           listaProductosDeUnKit: this.listaProductosDeUnKit,
           idCabeceraFactura: this._idCabecera.value,
           permitirAnadir: this.permitirAnadir,
-        },
+        }
       }
     );
     dialogRef.afterClosed().subscribe((result) => {
-      console.log(result);
       if (result != null) {
         if (result.Kit != "") {
           this.aplicaDescuento = false;
@@ -278,6 +294,7 @@ export class VentaComponent implements OnInit {
         this.buttonSeleccionarProducto = false;
         this.buttonSeleccionarSembrio = false;
         this.selectTipoCompra = false;
+        this.selectTipoPago = false;
         this.myForm.enable();
       });
   }
@@ -377,7 +394,6 @@ export class VentaComponent implements OnInit {
         var descuento = "";
         var perteneceKitCompleto = false;
         var detalleVenta = [];
-        console.log(ok["respuesta"].DetalleVenta);
         ok["respuesta"].DetalleVenta.map((item) => {
           if (item.PerteneceKitCompleto) {
             perteneceKitCompleto = true;
@@ -448,7 +464,6 @@ export class VentaComponent implements OnInit {
         });
         this.detalleVenta.data = detalleVenta;
         this.detalleVenta.paginator = this.paginator;
-        console.log(this.detalleVenta.data);
       })
       .catch((error) => {
         console.log(error);
@@ -571,8 +586,10 @@ export class VentaComponent implements OnInit {
     this._cabecera.setValue(factura.Codigo);
     this.myForm.enable();
     this.buttonSeleccionarProducto = false;
+    this.buttonSeleccionarSembrio = false;
     this.selectTipoCompra = false;
     this.buttonGenerarFactura = false;
+    this.selectTipoPago = false;
     var fecha = new Date(factura.FechaGeneracion);
     var dia = this.dias[fecha.getDay()];
     var mes = this.meses[fecha.getMonth()];
@@ -626,6 +643,10 @@ export class VentaComponent implements OnInit {
     return this.myForm.get("_idPersona");
   }
 
+  get _checkedCredito() {
+    return this.myForm.get("_checkedCredito");
+  }
+
   get _idSembrio() {
     return this.myForm.get("_idSembrio");
   }
@@ -653,7 +674,7 @@ export class VentaComponent implements OnInit {
   get _cabecera() {
     return this.myForm.get("_cabecera");
   }
-
+  
   get _fechaActual() {
     return this.myForm.get("_fechaActual");
   }

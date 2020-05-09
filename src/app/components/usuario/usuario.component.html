@@ -9,6 +9,9 @@
             <div class="col-lg-9 col-md-10">
               <mat-form-field class="example-full-width">
                 <input matInput formControlName="_cedula" type="text" placeholder="Cédula" readonly aria-disabled="true">
+                <button disabled mat-button matPrefix mat-icon-button>
+                  <mat-icon>*</mat-icon>
+                </button>
               </mat-form-field>
             </div>
             <div class="col-lg-3 col-md-2">
@@ -19,12 +22,21 @@
           </div>
           <mat-form-field class="example-full-width">
             <input matInput formControlName="_nombres" placeholder="Nombres" type="text" readonly>
+            <button disabled mat-button matPrefix mat-icon-button>
+              <mat-icon>*</mat-icon>
+            </button>
           </mat-form-field>
           <mat-form-field class="example-full-width">
             <input matInput formControlName="_apellidos" placeholder="Apellidos" type="text" readonly>
+            <button disabled mat-button matPrefix mat-icon-button>
+              <mat-icon>*</mat-icon>
+            </button>
           </mat-form-field>
           <mat-form-field class="example-full-width">
             <input matInput formControlName="_valorUsuario" type="text" placeholder="Ingrese Usuario">
+            <button disabled mat-button matPrefix mat-icon-button>
+              <mat-icon>*</mat-icon>
+            </button>
             <mat-error *ngIf="_valorUsuario.invalid && (_valorUsuario.dirty || _valorUsuario.touched)">
               <mat-error *ngIf="_valorUsuario.errors.required">
                 Usuario Requerido
@@ -33,6 +45,9 @@
           </mat-form-field>
           <mat-form-field class="example-full-width">
             <input matInput formControlName="_contrasena" type="password" [type]="inputType" placeholder="Ingrese Contraseña">
+            <button disabled mat-button matPrefix mat-icon-button>
+              <mat-icon>*</mat-icon>
+            </button>
             <button mat-button matSuffix mat-icon-button (click)="mostrarContrasena()">
               <mat-icon>visibility</mat-icon>
             </button>

@@ -74,6 +74,9 @@
                     placeholder="Producto"
                     formControlName="_producto"
                   />
+                  <button disabled mat-button matPrefix mat-icon-button>
+                    <mat-icon>*</mat-icon>
+                  </button>
                 </mat-form-field>
               </div>
               <div class="col-lg-3 col-md-2">
@@ -125,6 +128,9 @@
                     formControlName="_cantidad"
                     placeholder="Cantidad"
                   />
+                  <button disabled mat-button matPrefix mat-icon-button>
+                    <mat-icon>*</mat-icon>
+                  </button>
                   <mat-error
                     *ngIf="
                       _cantidad.invalid &&
@@ -148,9 +154,6 @@
                     formControlName="_precio"
                     placeholder="Precio"
                   />
-                  <button mat-button matPrefix mat-icon-button>
-                    <mat-icon>attach_money</mat-icon>
-                  </button>
                   <mat-error
                     *ngIf="
                       _precio.invalid && (_precio.dirty || _precio.touched)
@@ -174,6 +177,9 @@
                     placeholder="Cédula"
                     formControlName="_cedula"
                   />
+                  <button disabled mat-button matPrefix mat-icon-button>
+                    <mat-icon>*</mat-icon>
+                  </button>
                 </mat-form-field>
               </div>
               <div class="col-lg-3 col-md-2">
@@ -198,6 +204,20 @@
                 type="text"
                 readonly
               />
+              <button disabled mat-button matPrefix mat-icon-button>
+                <mat-icon>*</mat-icon>
+              </button>
+            </mat-form-field>
+            <mat-form-field class="example-full-width">
+              <mat-select
+                [disabled]="selectTipoPago"
+                [(value)]="pago"
+                (selectionChange)="selecionarTipoPago($event)"
+              >
+                <mat-option *ngFor="let item of tipoPago" [value]="item.tipo">
+                  {{ item.tipo }}
+                </mat-option>
+              </mat-select>
             </mat-form-field>
             <div class="row">
               <div class="col-lg-9 col-md-10">
@@ -209,6 +229,9 @@
                     matInput
                     formControlName="_sembrio"
                   />
+                  <button disabled [hidden]="seccionSembrio" mat-button matPrefix mat-icon-button>
+                    <mat-icon>*</mat-icon>
+                  </button>
                 </mat-form-field>
               </div>
               <div class="col-lg-3 col-md-2">
@@ -298,12 +321,14 @@
                 <ng-container *ngIf="!element.PerteneceKitCompleto">
                   <td mat-cell>
                     <input
-                    matInput
-                    class="tableButton"
-                    (keyup)="modificarCantidadDeProductoEnDetalle($event, element)"
-                    type="number"
-                    value="{{ element.Cantidad }}"
-                  />
+                      matInput
+                      class="tableButton"
+                      (keyup)="
+                        modificarCantidadDeProductoEnDetalle($event, element)
+                      "
+                      type="number"
+                      value="{{ element.Cantidad }}"
+                    />
                   </td>
                 </ng-container>
               </ng-container>

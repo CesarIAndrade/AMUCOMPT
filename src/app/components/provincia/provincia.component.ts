@@ -67,7 +67,6 @@ export class ProvinciaComponent implements OnInit {
       localStorage.getItem('miCuenta.postToken'))
       .then(
         ok => {
-          console.log(ok['respuesta']);
           if (ok['respuesta'] == null) {
             sweetAlert("Inténtalo de nuevo!", {
               icon: "warning",

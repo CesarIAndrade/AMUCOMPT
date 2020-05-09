@@ -7,6 +7,9 @@
           <h5 style="text-align: center;">{{ nuevaPersona }}</h5>
           <mat-form-field class="example-full-width">
             <input matInput type="text" formControlName="_nombres" placeholder="Ingrese Nombres">
+            <button disabled mat-button matPrefix mat-icon-button>
+              <mat-icon>*</mat-icon>
+            </button>
             <mat-error *ngIf="_nombres.invalid && (_nombres.dirty || _nombres.touched)">
               <mat-error *ngIf="_nombres.errors.required">
                 Nombres Requeridos
@@ -15,6 +18,9 @@
           </mat-form-field>
           <mat-form-field class="example-full-width">
             <input matInput type="text" formControlName="_apellidos" placeholder="Ingrese Apellidos">
+            <button disabled mat-button matPrefix mat-icon-button>
+              <mat-icon>*</mat-icon>
+            </button>
             <mat-error *ngIf="_apellidos.invalid && (_apellidos.dirty || _apellidos.touched)">
               <mat-error *ngIf="_apellidos.errors.required">
                 Apellidos Requeridos
@@ -28,6 +34,9 @@
                 {{item.Documento}}
               </mat-option>
             </mat-select>
+            <button disabled mat-button matPrefix mat-icon-button>
+              <mat-icon>*</mat-icon>
+            </button>
             <mat-error *ngIf="_tipoDocumento.invalid && (_tipoDocumento.dirty || _tipoDocumento.touched)">
               <mat-error *ngIf="_tipoDocumento.errors.required">
                 Tipo Documento Requerido
@@ -36,6 +45,9 @@
           </mat-form-field>
           <mat-form-field class="example-full-width">
             <input matInput formControlName="_numeroDocumento" placeholder="Ingrese Número Documento">
+            <button disabled mat-button matPrefix mat-icon-button>
+              <mat-icon>*</mat-icon>
+            </button>
             <mat-error *ngIf="_numeroDocumento.invalid && (_numeroDocumento.dirty || _numeroDocumento.touched)">
               <mat-error *ngIf="_numeroDocumento.errors.required">
                 Número de Documento Requerido

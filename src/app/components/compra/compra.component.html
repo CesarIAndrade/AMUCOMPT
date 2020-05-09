@@ -71,6 +71,9 @@
                     placeholder="Producto"
                     formControlName="_producto"
                   />
+                  <button disabled mat-button matPrefix mat-icon-button>
+                    <mat-icon>*</mat-icon>
+                  </button>
                 </mat-form-field>
               </div>
               <div class="col-lg-3 col-md-2">
@@ -150,6 +153,9 @@
                     formControlName="_cantidad"
                     placeholder="Cantidad"
                   />
+                  <button disabled mat-button matPrefix mat-icon-button>
+                    <mat-icon>*</mat-icon>
+                  </button>
                   <mat-error
                     *ngIf="
                       _cantidad.invalid &&
@@ -170,8 +176,8 @@
                     formControlName="_precio"
                     placeholder="Precio"
                   />
-                  <button mat-button matPrefix mat-icon-button>
-                    <mat-icon>attach_money</mat-icon>
+                  <button disabled mat-button matPrefix mat-icon-button>
+                    <mat-icon>*</mat-icon>
                   </button>
                   <mat-error
                     *ngIf="
