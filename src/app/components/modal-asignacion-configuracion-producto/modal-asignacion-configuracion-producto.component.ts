@@ -47,6 +47,7 @@ export class ModalAsignacionConfiguracionProductoComponent implements OnInit {
     Porcentaje: "",
     Disponible: ""
   };
+  buttonComprarKitCompleto = false;
 
   // Para la paginacion
   @ViewChild("paginator1", { static: false }) paginator1: MatPaginator;
@@ -197,6 +198,7 @@ export class ModalAsignacionConfiguracionProductoComponent implements OnInit {
   }
 
   cerrarModal() {
+    this.buttonComprarKitCompleto = true;
     this.ventaService.ingresoDetalleVentaPorKit(
       this.idCabeceraFactura,
       this.idKit,

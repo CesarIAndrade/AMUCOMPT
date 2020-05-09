@@ -1,62 +1,98 @@
 <div class="container">
-    <div class="row">
-        <div class="col-lg-4">
-            <div class="card-body">
-                <h5 style="text-align: center;">Nueva Medida</h5>
-                <form [formGroup]="myForm" (ngSubmit)="validarFormulario()" novalidate>
-                    <mat-form-field class="example-full-width">
-                        <input matInput formControlName="_medida" type="text" placeholder="Ingrese Medida">
-                        <mat-error *ngIf="_medida.invalid && (_medida.dirty || _medida.touched)">
-                            <mat-error *ngIf="_medida.errors.required">
-                                Medida Requerida
-                            </mat-error>
-                        </mat-error>
-                    </mat-form-field>
-                    <div>
-                        <button mat-button type="submit" [value]="botonIngresar" [disabled]="myForm.invalid"
-                            class="bg-success text-white btn-block mt-2">Guardar</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-        <div class="col-lg-8">
-            <div>
-                <h5 style="text-align: center;">Lista Medidas</h5>
-                <mat-form-field class="example-full-width">
-                    <input matInput [(ngModel)]="filterMedida" type="text" placeholder="Buscar Medida">
-                    <button mat-button matPrefix mat-icon-button>
-                        <mat-icon>search</mat-icon>
-                    </button>
-                </mat-form-field>
-                <div class="table_all">
-                    <table mat-table [dataSource]="medidas|filter:filterMedida:'Descripcion'">
-                        <ng-container matColumnDef="descripcion">
-                            <th mat-header-cell *matHeaderCellDef> Descripción </th>
-                            <td mat-cell *matCellDef="let element"> {{element.Descripcion}} </td>
-                        </ng-container>
-                        <ng-container matColumnDef="acciones">
-                            <th mat-header-cell *matHeaderCellDef> Acciones </th>
-                            <ng-container *matCellDef="let element">
-                                <ng-container *ngIf="element.MedidaUtilizado == '0'">
-                                    <td mat-cell>
-                                        <button mat-button class="btn-outline-danger"
-                                            (click)="eliminarMedida(element.IdMedida)">
-                                            <mat-icon>remove</mat-icon>
-                                        </button>
-                                    </td>
-                                </ng-container>
-                                <ng-container *ngIf="element.MedidaUtilizado == '1'">
-                                    <td mat-cell>
-                                    </td>
-                                </ng-container>
-                            </ng-container>
-                        </ng-container>
-                        <tr mat-header-row *matHeaderRowDef="tablaMedidas; sticky: true"></tr>
-                        <tr mat-row *matRowDef="let row; columns: tablaMedidas;"></tr>
-                    </table>
-                    <mat-paginator #paginator [pageSizeOptions]="[5]" showFirstLastButtons></mat-paginator>
-                </div>
-            </div>
-        </div>
+  <div class="row">
+    <div class="col-lg-4">
+      <div class="card-body">
+        <h5 style="text-align: center;">Nueva Medida</h5>
+        <form [formGroup]="myForm" (ngSubmit)="validarFormulario()" novalidate>
+          <mat-form-field class="example-full-width">
+            <input
+              matInput
+              formControlName="_medida"
+              type="text"
+              placeholder="Ingrese Medida"
+            />
+            <button disabled mat-button matPrefix mat-icon-button>
+              <mat-icon>*</mat-icon>
+            </button>
+            <mat-error
+              *ngIf="_medida.invalid && (_medida.dirty || _medida.touched)"
+            >
+              <mat-error *ngIf="_medida.errors.required">
+                Medida Requerida
+              </mat-error>
+            </mat-error>
+          </mat-form-field>
+          <div>
+            <button
+              mat-button
+              type="submit"
+              [value]="botonIngresar"
+              [disabled]="myForm.invalid"
+              class="bg-success text-white btn-block mt-2"
+            >
+              Guardar
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
+    <div class="col-lg-8">
+      <div>
+        <h5 style="text-align: center;">Lista Medidas</h5>
+        <mat-form-field class="example-full-width">
+          <input
+            matInput
+            [(ngModel)]="filterMedida"
+            type="text"
+            placeholder="Buscar Medida"
+          />
+          <button mat-button matPrefix mat-icon-button>
+            <mat-icon>search</mat-icon>
+          </button>
+        </mat-form-field>
+        <div class="table_all">
+          <table
+            mat-table
+            [dataSource]="medidas | filter: filterMedida:'Descripcion'"
+          >
+            <ng-container matColumnDef="descripcion">
+              <th mat-header-cell *matHeaderCellDef>Descripción</th>
+              <td mat-cell *matCellDef="let element">
+                {{ element.Descripcion }}
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="acciones">
+              <th mat-header-cell *matHeaderCellDef>Acciones</th>
+              <ng-container *matCellDef="let element">
+                <ng-container *ngIf="element.MedidaUtilizado == '0'">
+                  <td mat-cell>
+                    <button
+                      mat-button
+                      class="btn-outline-danger"
+                      (click)="eliminarMedida(element.IdMedida)"
+                    >
+                      <mat-icon>remove</mat-icon>
+                    </button>
+                  </td>
+                </ng-container>
+                <ng-container *ngIf="element.MedidaUtilizado == '1'">
+                  <td mat-cell></td>
+                </ng-container>
+              </ng-container>
+            </ng-container>
+            <tr
+              mat-header-row
+              *matHeaderRowDef="tablaMedidas; sticky: true"
+            ></tr>
+            <tr mat-row *matRowDef="let row; columns: tablaMedidas"></tr>
+          </table>
+          <mat-paginator
+            #paginator
+            [pageSizeOptions]="[5]"
+            showFirstLastButtons
+          ></mat-paginator>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

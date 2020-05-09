@@ -65,7 +65,10 @@
           <div class="row">
             <div class="col-lg-6">
               <mat-form-field class="example-full-width">
-                <input matInput type="number" formControlName="_telefono1" placeholder="Primer Telefono" maxlength="10">
+                <input matInput type="number" formControlName="_telefono1" placeholder="Número #1" maxlength="10">
+                <button disabled mat-button matPrefix mat-icon-button>
+                  <mat-icon>*</mat-icon>
+                </button>
                 <mat-error *ngIf="_telefono1.invalid && (_telefono1.dirty || _telefono1.touched)">
                   <mat-error *ngIf="_telefono1.errors.required">
                     Primer Telefono Requerido
@@ -84,6 +87,9 @@
                     {{item.Descripcion}}
                   </mat-option>
                 </mat-select>
+                <button disabled mat-button matPrefix mat-icon-button>
+                  <mat-icon>*</mat-icon>
+                </button>
                 <mat-error *ngIf="_tipoTelefono1.invalid && (_tipoTelefono1.dirty || _tipoTelefono1.touched)">
                   <mat-error *ngIf="_tipoTelefono1.errors.required">
                     Tipo Teléfono Requerido
@@ -95,7 +101,10 @@
           <div class="row">
             <div class="col-lg-6">
               <mat-form-field class="example-full-width">
-                <input matInput type="number" formControlName="_telefono2" placeholder="Segundo Telefono">
+                <input matInput type="number" formControlName="_telefono2" placeholder="Número #2">
+                <button disabled mat-button matPrefix mat-icon-button>
+                  <mat-icon>*</mat-icon>
+                </button>
                 <mat-error *ngIf="_telefono2.invalid && (_telefono2.dirty || _telefono2.touched)">
                   <mat-error *ngIf="_telefono2.errors.required">
                     Segundo Telefono Requerido
@@ -114,6 +123,9 @@
                     {{item.Descripcion}}
                   </mat-option>
                 </mat-select>
+                <button disabled mat-button matPrefix mat-icon-button>
+                  <mat-icon>*</mat-icon>
+                </button>
                 <mat-error *ngIf="_tipoTelefono2.invalid && (_tipoTelefono2.dirty || _tipoTelefono2.touched)">
                   <mat-error *ngIf="_tipoTelefono2.errors.required">
                     Tipo Teléfono Requerido
@@ -140,6 +152,9 @@
                 {{item.Descripcion}}
               </mat-option>
             </mat-select>
+            <button disabled mat-button matPrefix mat-icon-button>
+              <mat-icon>*</mat-icon>
+            </button>
             <mat-error *ngIf="_provincia.invalid && (_provincia.dirty || _provincia.touched)">
               <mat-error *ngIf="_provincia.errors.required">
                 Provincia Requerida
@@ -153,6 +168,9 @@
                 {{item.Descripcion}}
               </mat-option>
             </mat-select>
+            <button disabled mat-button matPrefix mat-icon-button>
+              <mat-icon>*</mat-icon>
+            </button>
             <mat-error *ngIf="_canton.invalid && (_canton.dirty || _canton.touched)">
               <mat-error *ngIf="_canton.errors.required">
                 Cantón Requerido
@@ -166,6 +184,9 @@
                 {{item.Descripcion}}
               </mat-option>
             </mat-select>
+            <button disabled mat-button matPrefix mat-icon-button>
+              <mat-icon>*</mat-icon>
+            </button>
             <mat-error *ngIf="_parroquia.invalid && (_parroquia.dirty || _parroquia.touched)">
               <mat-error *ngIf="_parroquia.errors.required">
                 Parroquia Requerida

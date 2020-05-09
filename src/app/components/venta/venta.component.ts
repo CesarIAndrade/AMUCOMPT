@@ -50,7 +50,7 @@ export class VentaComponent implements OnInit {
       _kit: new FormControl(""),
       _checkedDescuento: new FormControl(""),
       _disponible: new FormControl(""),
-      _checkedCredito: new FormControl(""),      
+      _checkedCredito: new FormControl(""),
     });
   }
 
@@ -206,7 +206,7 @@ export class VentaComponent implements OnInit {
           listaProductosDeUnKit: this.listaProductosDeUnKit,
           idCabeceraFactura: this._idCabecera.value,
           permitirAnadir: this.permitirAnadir,
-        }
+        },
       }
     );
     dialogRef.afterClosed().subscribe((result) => {
@@ -442,8 +442,9 @@ export class VentaComponent implements OnInit {
             descuento = item.PorcentajeDescuento;
           } else {
             descuento = "";
-          }
+          }          
           var producto = {
+            IdCabeceraFactura: item.IdCabeceraFactura,
             IdDetalleVenta: item.IdDetalleVenta,
             Codigo: codigo,
             Cantidad: item.Cantidad,
@@ -504,26 +505,40 @@ export class VentaComponent implements OnInit {
   }
 
   quitarDetalleFactura(detalleFactura) {
-    this.ventaService
-      .quitarDetalleFactura(
-        detalleFactura.IdDetalleVenta,
+    if (detalleFactura.PerteneceKitCompleto) {
+      this.ventaService.quitarDetalleVentaPorKit(
+        detalleFactura.IdCabeceraFactura,
+        detalleFactura.IdKit,
         localStorage.getItem("miCuenta.deleteToken")
-      )
-      .then((ok) => {
-        if (ok["respuesta"] == "0") {
-          this._idCabecera.setValue("");
-          this.myForm.reset();
-          this.detalleVenta.data = [];
-        } else {
-          this.consultarDetalleFactura();
+      ).then(
+        ok => {
+          if (ok['respuesta']) {
+            this.consultarDetalleFactura();
+          }
         }
-      })
-      .catch((error) => {
-        console.log(error);
-      })
-      .finally(() => {
-        this.consultarFacturasNoFinalizadas();
-      });
+      )
+    } else {
+      this.ventaService
+        .quitarDetalleFactura(
+          detalleFactura.IdDetalleVenta,
+          localStorage.getItem("miCuenta.deleteToken")
+        )
+        .then((ok) => {
+          if (ok["respuesta"] == "0") {
+            this._idCabecera.setValue("");
+            this.myForm.reset();
+            this.detalleVenta.data = [];
+          } else {
+            this.consultarDetalleFactura();
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        })
+        .finally(() => {
+          this.consultarFacturasNoFinalizadas();
+        });
+    }
   }
 
   limpiarCampos() {
@@ -674,7 +689,7 @@ export class VentaComponent implements OnInit {
   get _cabecera() {
     return this.myForm.get("_cabecera");
   }
-  
+
   get _fechaActual() {
     return this.myForm.get("_fechaActual");
   }
