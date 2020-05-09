@@ -118,7 +118,6 @@ export class VentaComponent implements OnInit {
   }
 
   selecionarTipoPago(tipoPago) {
-    this.aplicaDescuento = true;
     if (tipoPago.value == "Efectivo") {
       this.seccionSembrio = true;
       this._sembrio.setValidators([]);
@@ -317,12 +316,16 @@ export class VentaComponent implements OnInit {
       )
       .then((ok) => {
         if (ok["respuesta"] == "true") {
-          this.consultarDetalleFactura();
           this.realizarVentaButton = false;
+          this.aplicaDescuento = true;
+          this.seccionKit = true;
+          this.selected = "Producto"
           this.limpiarCampos();
         }
         if (ok["respuesta"] == "false") {
-          console.log("error en el servidor");
+          sweetAlert(ok["respuesta"], {
+            icon: "error",
+          });
         }
         if (ok["respuesta"] != "true" && ok["respuesta"] != "false") {
           sweetAlert(ok["respuesta"], {
@@ -332,6 +335,8 @@ export class VentaComponent implements OnInit {
       })
       .catch((error) => {
         console.log(error);
+      }).finally(() => {
+        this.consultarDetalleFactura();
       });
   }
 
@@ -362,10 +367,7 @@ export class VentaComponent implements OnInit {
           sweetAlert("Se ingresó correctamente!", {
             icon: "success",
           });
-          this.consultarFacturasNoFinalizadas();
-          this.consultarFacturasFinalizadas();
-          this.myForm.reset();
-          this.detalleVenta.data = [];
+          this.crearConfiguracionVenta();
         } else {
           sweetAlert("Ha ocurrido un error!", {
             icon: "error",
@@ -374,7 +376,26 @@ export class VentaComponent implements OnInit {
       })
       .catch((error) => {
         console.log(error);
+      }).finally(() => {
+        this.consultarFacturasNoFinalizadas();
+        this.consultarFacturasFinalizadas();
+        this.myForm.reset();
+        this.detalleVenta.data = [];
       });
+  }
+
+  crearConfiguracionVenta() {
+    var efectivo: any;
+    this.seccionSembrio ? efectivo = "1" : efectivo = "0";
+    this.ventaService.crearConfiguracionVenta(
+      this._idCabecera.value,
+      this._idPersona.value,
+      this._idSembrio.value,
+      efectivo,
+      localStorage.getItem("miCuenta.postToken")
+    )
+    .then(ok => console.log(ok['respuesta']))
+    .catch(error => console.log(error))
   }
 
   consultarDetalleFactura() {
@@ -548,6 +569,7 @@ export class VentaComponent implements OnInit {
     this._kit.reset();
     this._checkedDescuento.reset();
     this._precio.reset();
+    this._disponible.reset();
   }
 
   seleccionarSembrio() {
