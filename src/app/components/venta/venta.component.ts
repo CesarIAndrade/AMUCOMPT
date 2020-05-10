@@ -367,7 +367,6 @@ export class VentaComponent implements OnInit {
           sweetAlert("Se ingresó correctamente!", {
             icon: "success",
           });
-          this.crearConfiguracionVenta();
         } else {
           sweetAlert("Ha ocurrido un error!", {
             icon: "error",
@@ -394,7 +393,9 @@ export class VentaComponent implements OnInit {
       efectivo,
       localStorage.getItem("miCuenta.postToken")
     )
-    .then(ok => console.log(ok['respuesta']))
+    .then(ok => {
+      this.realizarVenta();
+    })
     .catch(error => console.log(error))
   }
 
