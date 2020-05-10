@@ -95,7 +95,7 @@ export class VentaComponent implements OnInit {
   buttonSeleccionarPersona = true;
   buttonSeleccionarSembrio = true;
   buttonGenerarFactura = false;
-  realizarVentaButton = true;
+  buttonRealizarVenta = true;
 
   // Para la paginacion
   @ViewChild("paginator", { static: false }) paginator: MatPaginator;
@@ -316,7 +316,7 @@ export class VentaComponent implements OnInit {
       )
       .then((ok) => {
         if (ok["respuesta"] == "true") {
-          this.realizarVentaButton = false;
+          this.buttonRealizarVenta = false;
           this.aplicaDescuento = true;
           this.seccionKit = true;
           this.selected = "Producto"
@@ -614,10 +614,10 @@ export class VentaComponent implements OnInit {
         this.consultarFacturasFinalizadas();
       });
   }
-
+  
   mostrarDetallesFactura(factura) {
     this.myForm.reset();
-    this.realizarVentaButton = false;
+    this.buttonRealizarVenta = false;
     this._idCabecera.setValue(factura.IdCabeceraFactura);
     this.consultarDetalleFactura();
     this._cabecera.setValue(factura.Codigo);

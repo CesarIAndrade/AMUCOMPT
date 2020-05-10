@@ -106,7 +106,7 @@ export class NavComponent implements OnInit {
           url: "/cuenta",
         }
       );
-      this.router.navigateByUrl("/usuarios")
+      // this.router.navigateByUrl("/usuarios")
     } else if (localStorage.getItem("miCuenta.tipoUsuario") == "2") {
       this.nav_items.push(
         {
@@ -130,7 +130,7 @@ export class NavComponent implements OnInit {
           url: "/cuenta",
         }
       );
-      this.router.navigateByUrl("/stock")
+      // this.router.navigateByUrl("/stock")
     } else if (localStorage.getItem("miCuenta.tipoUsuario") == "3") {
       this.nav_items.push(
         {
@@ -174,8 +174,13 @@ export class NavComponent implements OnInit {
           url: "/cuenta",
         }
       );
-      this.router.navigateByUrl("/configuracion-productos")
+      // this.router.navigateByUrl("/configuracion-productos")
     }
+
+    if (this.router.url == "/") {
+      this.router.navigateByUrl(this.nav_items[0].url);
+    }
+
     var temp_route: any = this.router.url.split("/");
     temp_route = temp_route[1];
     this.route = temp_route.toUpperCase();

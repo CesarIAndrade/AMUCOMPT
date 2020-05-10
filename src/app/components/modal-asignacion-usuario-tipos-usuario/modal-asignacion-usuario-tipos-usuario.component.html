@@ -1,17 +1,23 @@
 <mat-dialog-content>
     <div>
         <h5 style="text-align: center;">Asignar Role(s)</h5>
-        <mat-form-field class="example-full-width">
-            <mat-label>Tipos Usuario</mat-label>
-            <mat-select (selectionChange)="agregarTipoUsuarioALista($event)" [(ngModel)]="tipoUsuario">
-                <mat-option *ngFor="let item of tipoUsuarios" [value]="item.IdTipoUsuario">
-                    {{item.Descripcion}}
-                </mat-option>
-            </mat-select>
-        </mat-form-field>
-        <button mat-button type="button" class="mb-3 btn-block btn-outline-warning" (click)="asignarTipoUsuario()">
-            <mat-icon>add</mat-icon>
-        </button>
+        <div class="row">
+            <div class="col-lg-9 col-md-10">
+                <mat-form-field class="example-full-width">
+                    <mat-label>Tipos Usuario</mat-label>
+                    <mat-select (selectionChange)="agregarTipoUsuarioALista($event)" [(ngModel)]="tipoUsuario">
+                        <mat-option *ngFor="let item of tipoUsuarios" [value]="item.IdTipoUsuario">
+                            {{item.Descripcion}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>                
+            </div>
+            <div class="col-lg-3 col-md-2">
+                <button [disabled]="tipoUsuarioSelecionado" mat-button type="button" class="mt-2 btn-outline-warning" (click)="asignarTipoUsuario()">
+                    <mat-icon>add</mat-icon>
+                </button>
+            </div>
+        </div>
         <div class="table_all">
             <table mat-table [dataSource]="listaTipoUsuario">
                 <ng-container matColumnDef="tipoUsuario">

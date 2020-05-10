@@ -20,8 +20,10 @@ export class ModalAsignacionUsuarioTiposUsuarioComponent implements OnInit {
   tipoUsuarios: any[] = [];
   listaTipoUsuario = this.data.listaTipoUsuario;
   descripcion: string;
+  tipoUsuarioSelecionado = true;
 
   agregarTipoUsuarioALista(tipoUsuario) {
+    this.tipoUsuarioSelecionado = false;
     var descripcion = this.tipoUsuarios.find(item => item.IdTipoUsuario == tipoUsuario.value);
     this.tipoUsuario = tipoUsuario.value;
     this.descripcion = descripcion.Descripcion;
@@ -44,7 +46,7 @@ export class ModalAsignacionUsuarioTiposUsuarioComponent implements OnInit {
             })
             this.tipoUsuario = '0';
             this.botonEliminar = false;
-            this.consultarAsignacionTipoUsuario();
+            this.tipoUsuarioSelecionado = true;
           };
         }
       )
@@ -52,7 +54,9 @@ export class ModalAsignacionUsuarioTiposUsuarioComponent implements OnInit {
         error => {
           console.log(error);
         }
-      )
+      ).finally(() => {
+        this.consultarAsignacionTipoUsuario();
+      })
   }
 
   eliminarTipoUsuarioDeLista(tipoUsuario) {
