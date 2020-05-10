@@ -17,7 +17,6 @@
         width="45"
         height="60"
         style="margin-left: 1rem;"
-        routerLink="/"
       />
       <h5 class="amucomt toolbar_title">AMUCOMT</h5>
     </mat-toolbar>
@@ -39,6 +38,7 @@
           style="color: #d9534f !important;"
           routerLink="/login"
           routerLinkActive="active"
+          (click)="salir()"
         >
           <mat-icon mat-list-icon>input</mat-icon>
           Salir

@@ -20,9 +20,8 @@ export class NavComponent implements OnInit {
 
   constructor(
     private breakpointObserver: BreakpointObserver,
-    private router: Router,
-    private activated_route: ActivatedRoute
-  ) {
+    private router: Router
+    ) {
     router.events
       .pipe(
         withLatestFrom(this.isHandset$),
@@ -34,6 +33,10 @@ export class NavComponent implements OnInit {
         temp_route = temp_route[1];
         this.route = temp_route.toUpperCase();
       });
+  }
+
+  salir() {
+    localStorage.clear();
   }
 
   route = "";
@@ -103,6 +106,7 @@ export class NavComponent implements OnInit {
           url: "/cuenta",
         }
       );
+      this.router.navigateByUrl("/usuarios")
     } else if (localStorage.getItem("miCuenta.tipoUsuario") == "2") {
       this.nav_items.push(
         {
@@ -111,19 +115,9 @@ export class NavComponent implements OnInit {
           url: "/stock",
         },
         {
-          name: "Compra Inventario",
-          icon: "shop",
-          url: "/compras",
-        },
-        {
           name: "Compra Rubros",
           icon: "shopping_cart",
           url: "/compras-rubros",
-        },
-        {
-          name: "Venta Inventario",
-          icon: "shop",
-          url: "/ventas",
         },
         {
           name: "Venta Rubros",
@@ -136,6 +130,7 @@ export class NavComponent implements OnInit {
           url: "/cuenta",
         }
       );
+      this.router.navigateByUrl("/stock")
     } else if (localStorage.getItem("miCuenta.tipoUsuario") == "3") {
       this.nav_items.push(
         {
@@ -164,11 +159,22 @@ export class NavComponent implements OnInit {
           url: "/localizaciones",
         },
         {
+          name: "Compra Inventario",
+          icon: "shop",
+          url: "/compras",
+        },
+        {
+          name: "Venta Inventario",
+          icon: "shop",
+          url: "/ventas",
+        },
+        {
           name: "Cuenta",
           icon: "face",
           url: "/cuenta",
         }
       );
+      this.router.navigateByUrl("/configuracion-productos")
     }
     var temp_route: any = this.router.url.split("/");
     temp_route = temp_route[1];
