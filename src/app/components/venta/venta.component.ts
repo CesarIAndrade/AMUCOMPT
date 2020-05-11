@@ -380,6 +380,7 @@ export class VentaComponent implements OnInit {
         this.consultarFacturasFinalizadas();
         this.myForm.reset();
         this.detalleVenta.data = [];
+        this.buttonGenerarFactura = false;
       });
   }
 
@@ -394,6 +395,7 @@ export class VentaComponent implements OnInit {
       localStorage.getItem("miCuenta.postToken")
     )
     .then(ok => {
+      console.log(ok["respuesta"]);
       this.realizarVenta();
     })
     .catch(error => console.log(error))
@@ -625,6 +627,7 @@ export class VentaComponent implements OnInit {
     this.myForm.enable();
     this.buttonSeleccionarProducto = false;
     this.buttonSeleccionarSembrio = false;
+    this.buttonSeleccionarPersona = false;
     this.selectTipoCompra = false;
     this.buttonGenerarFactura = false;
     this.selectTipoPago = false;
@@ -644,6 +647,7 @@ export class VentaComponent implements OnInit {
         localStorage.getItem("miCuenta.getToken")
       )
       .then((ok) => {
+        console.log(ok['respuesta']);
         this.facturasFinalizadas.data = [];
         this.facturasFinalizadas.data = ok["respuesta"];
         this.facturasFinalizadas.paginator = this.ff_paginator;

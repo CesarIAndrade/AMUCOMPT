@@ -42,10 +42,7 @@ export class LoginComponent implements OnInit {
         .then(
           ok => {
             if (ok['codigo'] == '200') {
-              this.ingresarCredenciales = true;
               this.tipoUsuarios = ok['respuesta']['ListaTipoUsuario'];
-              this.seleccionarTipoUsuario = false;
-              this.consultarTokens();
             } else {
               sweetAlert("Credenciales Incorrectas", {
                 icon: "error",
@@ -57,7 +54,9 @@ export class LoginComponent implements OnInit {
           error => {
             console.log(error);
           }
-        )
+        ).finally(() => {
+          this.consultarTokens();
+        })
     } else {
       console.log('Algo salio mal');
     }
@@ -80,6 +79,8 @@ export class LoginComponent implements OnInit {
     this.seguridadService.consultarTokens()
       .then(
         ok => {
+          this.ingresarCredenciales = true;
+          this.seleccionarTipoUsuario = false;
           localStorage.setItem('miCuenta.getToken', ok['respuesta']['ClaveGetEncrip']);
           localStorage.setItem('miCuenta.postToken', ok['respuesta']['ClavePostEncrip']);
           localStorage.setItem('miCuenta.putToken', ok['respuesta']['ClavePutEncrip']);

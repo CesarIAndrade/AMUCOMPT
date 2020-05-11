@@ -22,7 +22,7 @@ import { VentaRubrosComponent } from './components/venta-rubros/venta-rubros.com
 import { CreditosAbonosComponent } from './components/creditos-abonos/creditos-abonos.component';
 
 const routes: Routes = [
-  // { path: '', pathMatch: 'full', redirectTo: 'login' },
+  { path: '', pathMatch: 'full', redirectTo: 'login' },
   { path: 'login', component: LoginComponent },
   {
     path: '',
