@@ -156,43 +156,6 @@ export class CompraComponent implements OnInit {
     this._precio.disable();
   }
 
-  onKeyUp() {
-    this._precio.reset();
-    this._precio.enable();
-    this._fechaExpiracion.setValidators([Validators.required]);
-    this._fechaExpiracion.updateValueAndValidity();
-    this._idAsignarProductoLote.setValue("");
-    if (this._idRelacionLogica.value != null) {
-      this.inventarioService
-        .buscarLote(
-          this._lote.value,
-          this._idRelacionLogica.value,
-          this._perteneceKit.value,
-          localStorage.getItem("miCuenta.getToken")
-        )
-        .then((ok) => {
-          try {
-            this._idAsignarProductoLote.setValue(
-              ok["respuesta"].IdAsignarProductoLote
-            );
-            this._idLote.setValue(ok["respuesta"].Lote.IdLote);
-            var fecha = new Date(ok["respuesta"].Lote.FechaExpiracion);
-            this._fechaExpiracion.setValue(fecha);
-            this._precio.setValue(ok["respuesta"].ValorUnitario);
-            this._fechaExpiracion.disable();
-            this._precio.disable();
-          } catch (error) {
-            this._fechaExpiracion.reset();
-            this._cantidad.reset();
-            this._precio.reset();
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    }
-  }
-
   modificarCantidadDeProductoEnDetalle(event, element) {
     if (event.key == "Enter") {
       var cantidadAntigua = element.Cantidad;
@@ -206,8 +169,6 @@ export class CompraComponent implements OnInit {
             localStorage.getItem("miCuenta.putToken")
           )
           .then((ok) => {
-            console.log(ok["respuesta"]);
-
             if (ok["respuesta"]) {
               this.consultarDetalleFactura();
             }
@@ -401,7 +362,7 @@ export class CompraComponent implements OnInit {
               item.AsignarProductoLote[0].IdAsignarProductoLote,
             IdKit: idKit,
             Kit: kit,
-            IdLote: idLote,
+            IdLote: idLote, 
             Lote: lote,
             FechaExpiracion: fechaExpiracion,
             Cantidad: item.Cantidad,
@@ -409,12 +370,13 @@ export class CompraComponent implements OnInit {
             Presentacion: presentacion,
             ContenidoNeto: contenidoNeto,
             Medida: medida,
-            Precio: item.AsignarProductoLote[0].ValorUnitario,
+            Precio: item.AsignarProductoLote[0].ValorUnitario
           };
           detalleCompra.push(producto);
         });
         this.detalleCompra.data = detalleCompra;
         this.detalleCompra.paginator = this.paginator;
+        console.log(this.detalleCompra.data);
       })
       .catch((error) => {
         console.log(error);
@@ -488,6 +450,11 @@ export class CompraComponent implements OnInit {
 
   onChangeSelectKit(idKit) {
     this.consultarKitsYSusProductos(idKit);
+  }
+
+  onChangeFecha() {
+    this._precio.reset();
+    this._precio.enable();
   }
 
   validarFormulario() {
@@ -646,10 +613,9 @@ export class CompraComponent implements OnInit {
           sweetAlert("Se ingresó correctamente!", {
             icon: "success",
           });
-          this.consultarFacturasNoFinalizadas();
-          this.consultarFacturasFinalizadas();
+          var tipoTransaccion = this._tipoTransaccion.value;
           this.myForm.reset();
-          this.detalleCompra.data = [];
+          this._tipoTransaccion.setValue(tipoTransaccion);
         } else {
           sweetAlert("Ha ocurrido un error!", {
             icon: "error",
@@ -658,6 +624,10 @@ export class CompraComponent implements OnInit {
       })
       .catch((error) => {
         console.log(error);
+      }).finally(() => {
+        this.consultarFacturasNoFinalizadas();
+        this.consultarFacturasFinalizadas();
+        this.detalleCompra.data = [];
       });
   }
 
@@ -690,7 +660,6 @@ export class CompraComponent implements OnInit {
       .then((ok) => {
         this._idLote.setValue(ok["respuesta"].IdLote);
         if (this._idLote.value) {
-          console.log("id");
           this.asignarProductoLote(this._idLote.value, this.validarFecha());
         } else if (ok["respuesta"] == "False") {
           sweetAlert("Ha ocurrido un error!", {
@@ -725,27 +694,36 @@ export class CompraComponent implements OnInit {
   }
 
   validarSiPerteneceALote() {
-    if (
-      this._lote.value == "" ||
-      this._lote.value == null ||
-      this._lote.value == "null"
-    ) {
-      this.asignarProductoLote("", this.validarFecha());
+    if(this._idLote.value) {
+      this.asignarProductoLote(this._idLote.value, this.validarFecha());
+    } else  if (this._lote.value){
+      this.crearLote();
     } else {
-      if (
-        this._idAsignarProductoLote.value == "" ||
-        this._idAsignarProductoLote.value == null ||
-        this._idAsignarProductoLote.value == "null"
-      ) {
-        if (this.loteEnDetalle) {
-          this.crearLote();
-        } else {
-          return;
-        }
-      } else {
-        this.crearLote();
-      }
+      this.asignarProductoLote("", this.validarFecha());
     }
+
+
+    // if (
+    //   this._lote.value == "" ||
+    //   this._lote.value == null ||
+    //   this._lote.value == "null"
+    // ) {
+    //   this.asignarProductoLote("", this.validarFecha());
+    // } else {
+    //   if (
+    //     this._idAsignarProductoLote.value == "" ||
+    //     this._idAsignarProductoLote.value == null ||
+    //     this._idAsignarProductoLote.value == "null"
+    //   ) {
+    //     if (this.loteEnDetalle) {
+    //       this.crearLote();
+    //     } else {
+    //       return;
+    //     }
+    //   } else {
+    //     this.crearLote();
+    //   }
+    // }
   }
 
   asignarProductoLote(idLote?: string, fecha?: string) {

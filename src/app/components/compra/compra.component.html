@@ -128,6 +128,7 @@
               <input
                 matInput
                 formControlName="_fechaExpiracion"
+                (dateInput)="onChangeFecha()"
                 [matDatepicker]="picker"
                 placeholder="Fecha Expiración"
               />
@@ -271,7 +272,7 @@
             </ng-container>
             <ng-container matColumnDef="total">
               <th mat-header-cell *matHeaderCellDef>Total</th>
-              <td mat-cell *matCellDef="let element">{{ element.Total }}</td>
+              <td mat-cell *matCellDef="let element">{{ element.Cantidad }} * {{ element.Precio }} </td>
             </ng-container>
             <ng-container matColumnDef="acciones">
               <th mat-header-cell *matHeaderCellDef>

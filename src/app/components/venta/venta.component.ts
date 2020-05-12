@@ -367,6 +367,9 @@ export class VentaComponent implements OnInit {
           sweetAlert("Se ingresó correctamente!", {
             icon: "success",
           });
+          var tipoTransaccion = this._tipoTransaccion.value;
+          this.myForm.reset();
+          this._tipoTransaccion.setValue(tipoTransaccion);
         } else {
           sweetAlert("Ha ocurrido un error!", {
             icon: "error",
@@ -378,7 +381,6 @@ export class VentaComponent implements OnInit {
       }).finally(() => {
         this.consultarFacturasNoFinalizadas();
         this.consultarFacturasFinalizadas();
-        this.myForm.reset();
         this.detalleVenta.data = [];
         this.buttonGenerarFactura = false;
       });
@@ -395,7 +397,6 @@ export class VentaComponent implements OnInit {
       localStorage.getItem("miCuenta.postToken")
     )
     .then(ok => {
-      console.log(ok["respuesta"]);
       this.realizarVenta();
     })
     .catch(error => console.log(error))
@@ -647,7 +648,6 @@ export class VentaComponent implements OnInit {
         localStorage.getItem("miCuenta.getToken")
       )
       .then((ok) => {
-        console.log(ok['respuesta']);
         this.facturasFinalizadas.data = [];
         this.facturasFinalizadas.data = ok["respuesta"];
         this.facturasFinalizadas.paginator = this.ff_paginator;
