@@ -701,29 +701,6 @@ export class CompraComponent implements OnInit {
     } else {
       this.asignarProductoLote("", this.validarFecha());
     }
-
-
-    // if (
-    //   this._lote.value == "" ||
-    //   this._lote.value == null ||
-    //   this._lote.value == "null"
-    // ) {
-    //   this.asignarProductoLote("", this.validarFecha());
-    // } else {
-    //   if (
-    //     this._idAsignarProductoLote.value == "" ||
-    //     this._idAsignarProductoLote.value == null ||
-    //     this._idAsignarProductoLote.value == "null"
-    //   ) {
-    //     if (this.loteEnDetalle) {
-    //       this.crearLote();
-    //     } else {
-    //       return;
-    //     }
-    //   } else {
-    //     this.crearLote();
-    //   }
-    // }
   }
 
   asignarProductoLote(idLote?: string, fecha?: string) {

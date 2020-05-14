@@ -21,7 +21,8 @@ export class VentaService {
       .set("AplicaDescuento", AplicaDescuento)
       .set("Faltante", Faltante)
       .set("Cantidad", Cantidad)
-      .set("encriptada", _token);
+      .set("encriptada", _token)
+    console.log(body);
     return new Promise((resolve, reject) => {
       this.http
         .post(apiUrl + "Credito/IngresoDetalleVenta", body.toString(), {

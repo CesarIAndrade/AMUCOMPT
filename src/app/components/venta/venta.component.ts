@@ -85,6 +85,10 @@ export class VentaComponent implements OnInit {
 
   selected = "Producto";
   pago = "Efectivo";
+  
+  totalDescontado: string;
+  subTotalFactura: string;
+  totalFactura: string;
 
   seccionKit = true;
   seccionSembrio = true;
@@ -252,9 +256,6 @@ export class VentaComponent implements OnInit {
       .catch((error) => {
         console.log(error);
       })
-      .finally(() => {
-        this.consultarFacturasNoFinalizadas();
-      });
   }
 
   validarFormulario() {
@@ -419,6 +420,9 @@ export class VentaComponent implements OnInit {
         var descuento = "";
         var perteneceKitCompleto = false;
         var detalleVenta = [];
+        this.subTotalFactura = ok['respuesta'].Total;
+        this.totalDescontado = ok['respuesta'].TotalDescuento;
+        this.totalFactura = String(((ok['respuesta'].Total*12)/100)+ok['respuesta'].Total);
         ok["respuesta"].DetalleVenta.map((item) => {
           if (item.PerteneceKitCompleto) {
             perteneceKitCompleto = true;
@@ -603,13 +607,9 @@ export class VentaComponent implements OnInit {
         localStorage.getItem("miCuenta.getToken")
       )
       .then((ok) => {
-        try {
           this.facturasNoFinalizadas.data = [];
           this.facturasNoFinalizadas.data = ok["respuesta"];
           this.facturasNoFinalizadas.paginator = this.fnf_paginator;
-        } catch (error) {
-          this.consultarFacturasNoFinalizadas();
-        }
       })
       .catch((error) => {
         console.log(error);
@@ -652,9 +652,6 @@ export class VentaComponent implements OnInit {
         this.facturasFinalizadas.data = ok["respuesta"];
         this.facturasFinalizadas.paginator = this.ff_paginator;
       })
-      .catch((error) => {
-        this.consultarFacturasFinalizadas();
-      });
   }
 
   get _producto() {
@@ -731,6 +728,8 @@ export class VentaComponent implements OnInit {
 
   ngOnInit() {
     this.consultarTipoTransaccion();
+    this.consultarFacturasNoFinalizadas();
+    setTimeout(()=> this.consultarFacturasFinalizadas(), 5000)
     this.myForm.disable();
   }
 
