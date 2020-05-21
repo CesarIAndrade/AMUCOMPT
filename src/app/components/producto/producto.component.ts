@@ -42,6 +42,7 @@ export class ProductoComponent implements OnInit {
       _idConfiguracionProducto: new FormControl(''),
       _precio: new FormControl('', [Validators.required]),
       _idPrecio: new FormControl(''),
+      _iva: new FormControl(''),
     })
   }
 
@@ -224,6 +225,7 @@ export class ProductoComponent implements OnInit {
       this._presentacion.value,
       this._codigo.value,
       this._contenidoNeto.value,
+      this._iva.value,
       localStorage.getItem('miCuenta.postToken')
     )
       .then(
@@ -289,6 +291,8 @@ export class ProductoComponent implements OnInit {
   }
 
   mostrarProducto(producto) {
+    console.log(producto);
+    
     this._nombre.disable();
     this._descripcion.disable();
     this._tipoProducto.disable();
@@ -303,6 +307,7 @@ export class ProductoComponent implements OnInit {
     this._idProducto.setValue(producto.Producto.IdProducto);
     this._precio.setValue(producto.PrecioConfigurarProducto.Precio);
     this._idConfiguracionProducto.setValue(producto.PrecioConfigurarProducto.IdConfigurarProducto);
+    this._iva.setValue(producto.Iva);
     this.botonIngresar = 'modificar';
   }
 
@@ -315,6 +320,7 @@ export class ProductoComponent implements OnInit {
       this._presentacion.value,
       this._codigo.value,
       this._contenidoNeto.value,
+      this._iva.value,
       localStorage.getItem('miCuenta.putToken')
     )
       .then(
@@ -467,6 +473,10 @@ export class ProductoComponent implements OnInit {
 
   get _idConfiguracionProducto() {
     return this.myForm.get('_idConfiguracionProducto');
+  }
+
+  get _iva() {
+    return this.myForm.get('_iva');
   }
 
   seleccionarProductoSiExiste(producto) {

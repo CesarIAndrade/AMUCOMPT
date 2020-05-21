@@ -99,7 +99,7 @@
             </mat-error>
           </mat-form-field>
           <div class="row">
-            <div class="col-lg-6">
+            <div class="col-lg-6 col-md-6">
               <mat-form-field class="example-full-width">
                 <input
                   matInput
@@ -122,7 +122,7 @@
                 </mat-error>
               </mat-form-field>
             </div>
-            <div class="col-lg-6">
+            <div class="col-lg-6 col-md-6">
               <mat-form-field class="example-full-width">
                 <mat-label>Medida</mat-label>
                 <mat-select formControlName="_medida">
@@ -146,24 +146,43 @@
               </mat-form-field>
             </div>
           </div>
-          <mat-form-field class="example-full-width">
-            <input
-              matInput
-              formControlName="_precio"
-              type="text"
-              placeholder="Ingrese Precio Producto"
-            />
-            <button disabled mat-button matPrefix mat-icon-button>
-              <mat-icon>*</mat-icon>
-            </button>
-            <mat-error
-              *ngIf="_precio.invalid && (_precio.dirty || _precio.touched)"
-            >
-              <mat-error *ngIf="_precio.errors.required">
-                Precio Requerido
-              </mat-error>
-            </mat-error>
-          </mat-form-field>
+
+          <div class="row">
+            <div class="col-lg-6 col-md-6">
+              <mat-form-field class="example-full-width">
+                <input
+                  matInput
+                  formControlName="_precio"
+                  type="number"
+                  placeholder="Precio"
+                />
+                <button disabled mat-button matPrefix mat-icon-button>
+                  <mat-icon>*</mat-icon>
+                </button>
+                <mat-error
+                  *ngIf="_precio.invalid && (_precio.dirty || _precio.touched)"
+                >
+                  <mat-error *ngIf="_precio.errors.required">
+                    Precio Requerido
+                  </mat-error>
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div class="col-lg-6 col-md-6">
+              <mat-form-field class="example-full-width">
+                <input
+                  matInput
+                  formControlName="_iva"
+                  type="number"
+                  placeholder="IVA"
+                />
+              </mat-form-field>
+            </div>
+          </div>
+
+
+
+
           <mat-form-field class="example-full-width">
             <input
               matInput

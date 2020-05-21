@@ -1,5 +1,4 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { TipoProductoComponent } from '../tipo-producto/tipo-producto.component';
 import { ProductoComponent } from '../producto/producto.component';
 
 @Component({

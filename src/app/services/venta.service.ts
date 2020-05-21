@@ -8,19 +8,21 @@ export class VentaService {
   constructor(private http: HttpClient) {}
 
   crearDetalleFactura(
-    IdCabeceraFactura: string,
-    IdAsignarProductoLote: string,
-    AplicaDescuento: string,
-    Faltante: string,
-    Cantidad: string,
+    idCabeceraFactura: string,
+    idAsignarProductoLote: string,
+    aplicaDescuento: string,
+    faltante: string,
+    cantidad: string,
+    descuento: string,
     _token: string
   ) {
     const body = new HttpParams()
-      .set("IdCabeceraFactura", IdCabeceraFactura)
-      .set("IdAsignarProductoLote", IdAsignarProductoLote)
-      .set("AplicaDescuento", AplicaDescuento)
-      .set("Faltante", Faltante)
-      .set("Cantidad", Cantidad)
+      .set("IdCabeceraFactura", idCabeceraFactura)
+      .set("IdAsignarProductoLote", idAsignarProductoLote)
+      .set("AplicaDescuento", aplicaDescuento)
+      .set("Faltante", faltante)
+      .set("Cantidad", cantidad)
+      .set("PorcentajeDescuento", descuento)
       .set("encriptada", _token)
     console.log(body);
     return new Promise((resolve, reject) => {

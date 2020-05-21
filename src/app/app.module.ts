@@ -29,11 +29,7 @@ import { ModalDetallePersonaComponent } from "./components/modal-detalle-persona
 import { ModalAsignacionUsuarioPersonaComponent } from "./components/modal-asignacion-usuario-persona/modal-asignacion-usuario-persona.component";
 import { ModalAsignacionUsuarioTiposUsuarioComponent } from "./components/modal-asignacion-usuario-tipos-usuario/modal-asignacion-usuario-tipos-usuario.component";
 import { ProductoComponent } from "./components/producto/producto.component";
-import { TipoProductoComponent } from "./components/tipo-producto/tipo-producto.component";
-import { PresentacionComponent } from "./components/presentacion/presentacion.component";
-import { MedidaComponent } from "./components/medida/medida.component";
 import { ConfiguracionProductoComponent } from "./components/configuracion-producto/configuracion-producto.component";
-import { KitComponent } from "./components/kit/kit.component";
 import { ArmarKitComponent } from "./components/armar-kit/armar-kit.component";
 import { ModalDetalleProductoComponent } from "./components/modal-detalle-producto/modal-detalle-producto.component";
 import { CuentaComponent } from "./components/cuenta/cuenta.component";
@@ -67,11 +63,7 @@ import { MaterialModule } from './material.module';
     ModalAsignacionUsuarioTiposUsuarioComponent,
     SembrioComponent,
     ProductoComponent,
-    TipoProductoComponent,
-    PresentacionComponent,
-    MedidaComponent,
     ConfiguracionProductoComponent,
-    KitComponent,
     ArmarKitComponent,
     ModalDetalleProductoComponent,
     CuentaComponent,

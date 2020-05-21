@@ -53,34 +53,6 @@ export class InventarioService {
     });
   }
 
-  actualizarTipoProducto(
-    idTipoProducto: string,
-    tipoProducto: string,
-    _token: string
-  ) {
-    const body = new HttpParams()
-      .set("IdTipoProducto", idTipoProducto)
-      .set("Descripcion", tipoProducto)
-      .set("encriptada", _token);
-    return new Promise((resolve, reject) => {
-      this.http
-        .post(apiUrl + "Inventario/ActualizarTipoProducto", body.toString(), {
-          headers: new HttpHeaders().set(
-            "Content-Type",
-            "application/x-www-form-urlencoded"
-          ),
-        })
-        .subscribe(
-          (res) => {
-            resolve(res);
-          },
-          (err) => {
-            reject(err);
-          }
-        );
-    });
-  }
-
   eliminarTipoProducto(idTipoProducto: string, _token: string) {
     const body = new HttpParams()
       .set("IdTipoProducto", idTipoProducto)
@@ -254,34 +226,6 @@ export class InventarioService {
     });
   }
 
-  actualizarPresentacion(
-    idPresentacion: string,
-    presentacion: string,
-    _token: string
-  ) {
-    const body = new HttpParams()
-      .set("IdPresentacion", idPresentacion)
-      .set("Descripcion", presentacion)
-      .set("encriptada", _token);
-    return new Promise((resolve, reject) => {
-      this.http
-        .post(apiUrl + "Inventario/ActualizarPresentacion", body.toString(), {
-          headers: new HttpHeaders().set(
-            "Content-Type",
-            "application/x-www-form-urlencoded"
-          ),
-        })
-        .subscribe(
-          (res) => {
-            resolve(res);
-          },
-          (err) => {
-            reject(err);
-          }
-        );
-    });
-  }
-
   eliminarPresentacion(idPresentacion: string, _token: string) {
     const body = new HttpParams()
       .set("IdPresentacion", idPresentacion)
@@ -333,30 +277,6 @@ export class InventarioService {
     return new Promise((resolve, reject) => {
       this.http
         .post(apiUrl + "Inventario/IngresoMedida", body.toString(), {
-          headers: new HttpHeaders().set(
-            "Content-Type",
-            "application/x-www-form-urlencoded"
-          ),
-        })
-        .subscribe(
-          (res) => {
-            resolve(res);
-          },
-          (err) => {
-            reject(err);
-          }
-        );
-    });
-  }
-
-  actualizarMedida(idMedida: string, medida: string, _token: string) {
-    const body = new HttpParams()
-      .set("IdMedida", idMedida)
-      .set("Descripcion", medida)
-      .set("encriptada", _token);
-    return new Promise((resolve, reject) => {
-      this.http
-        .post(apiUrl + "Inventario/ActualizarMedida", body.toString(), {
           headers: new HttpHeaders().set(
             "Content-Type",
             "application/x-www-form-urlencoded"
@@ -449,6 +369,7 @@ export class InventarioService {
     idPresentacion: string,
     codigo: string,
     cantidadMedida: string,
+    iva: string,
     _token: string
   ) {
     const body = new HttpParams()
@@ -458,6 +379,7 @@ export class InventarioService {
       .set("IdPresentacion", idPresentacion)
       .set("Codigo", codigo)
       .set("CantidadMedida", cantidadMedida)
+      .set("Iva", iva)
       .set("encriptada", _token);
     return new Promise((resolve, reject) => {
       this.http
@@ -490,6 +412,7 @@ export class InventarioService {
     idPresentacion: string,
     codigo: string,
     cantidadMedida: string,
+    iva: string,
     _token: string
   ) {
     const body = new HttpParams()
@@ -500,6 +423,7 @@ export class InventarioService {
       .set("IdPresentacion", idPresentacion)
       .set("Codigo", codigo)
       .set("CantidadMedida", cantidadMedida)
+      .set("Iva", iva)
       .set("encriptada", _token);
     return new Promise((resolve, reject) => {
       this.http
@@ -601,31 +525,6 @@ export class InventarioService {
     });
   }
 
-  actualizarKit(idKit: string, kit: string, codigo: string, _token: string) {
-    const body = new HttpParams()
-      .set("IdKit", idKit)
-      .set("Descripcion", kit)
-      .set("Codigo", codigo)
-      .set("encriptada", _token);
-    return new Promise((resolve, reject) => {
-      this.http
-        .post(apiUrl + "Inventario/ActualizarKit", body.toString(), {
-          headers: new HttpHeaders().set(
-            "Content-Type",
-            "application/x-www-form-urlencoded"
-          ),
-        })
-        .subscribe(
-          (res) => {
-            resolve(res);
-          },
-          (err) => {
-            reject(err);
-          }
-        );
-    });
-  }
-
   eliminarKit(idKit: string, _token: string) {
     const body = new HttpParams().set("IdKit", idKit).set("encriptada", _token);
     return new Promise((resolve, reject) => {
@@ -708,36 +607,6 @@ export class InventarioService {
             ),
           }
         )
-        .subscribe(
-          (res) => {
-            resolve(res);
-          },
-          (err) => {
-            reject(err);
-          }
-        );
-    });
-  }
-
-  actualizarAsignacionDescuentoKit(
-    idAsignacionDescuentoKit: string,
-    idKit: string,
-    idDescuento: string,
-    _token: string
-  ) {
-    const body = new HttpParams()
-      .set("IdAsignacionDescuentoKit", idAsignacionDescuentoKit)
-      .set("IdKit", idKit)
-      .set("IdDescuento", idDescuento)
-      .set("encriptada", _token);
-    return new Promise((resolve, reject) => {
-      this.http
-        .post(apiUrl + "", body.toString(), {
-          headers: new HttpHeaders().set(
-            "Content-Type",
-            "application/x-www-form-urlencoded"
-          ),
-        })
         .subscribe(
           (res) => {
             resolve(res);

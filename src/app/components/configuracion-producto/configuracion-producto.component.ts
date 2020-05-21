@@ -19,6 +19,7 @@ export class ConfiguracionProductoComponent implements OnInit {
       _campo: new FormControl("", [Validators.required]),
       _idCampo: new FormControl(""),
       // Solo para kit
+      _idKit: new FormControl(''),
       _codigo: new FormControl(''),
       _descuento: new FormControl(''),
       _idDescuento: new FormControl(''),
@@ -40,6 +41,10 @@ export class ConfiguracionProductoComponent implements OnInit {
 
   get _idCampo() {
     return this.myForm.get("_idCampo");
+  }
+
+  get _idKit() {
+    return this.myForm.get("_idKit");
   }
 
   get _codigo() {
@@ -83,7 +88,8 @@ export class ConfiguracionProductoComponent implements OnInit {
     codigo: "",
     descuento: ""
   }
-
+  descuentos:any[] = [];
+  filteredDescuento: Observable<string[]>;
 
   // PAra la paginacion
   @ViewChild('paginator', { static: false }) paginator: MatPaginator;
@@ -347,7 +353,7 @@ export class ConfiguracionProductoComponent implements OnInit {
             sweetAlert("Se ingresó correctamente!", {
               icon: "success",
             });
-            this.myForm.reset();
+            this._campo.reset();
             this.myForm.setErrors( { invalid: true } )
             this.consultarMedidas();
           }
@@ -451,7 +457,7 @@ export class ConfiguracionProductoComponent implements OnInit {
             sweetAlert("Se ingresó correctamente!", {
               icon: "success",
             });
-            this._idCampo.setValue(ok['respuesta']);
+            this._idKit.setValue(ok['respuesta']);
             this.crearDescuento();
           }
         }
@@ -468,8 +474,6 @@ export class ConfiguracionProductoComponent implements OnInit {
     return this.descuentos.filter(option => option.Porcentaje.toLowerCase().includes(filterValue));
   }
 
-  descuentos = [];
-  filteredDescuento: Observable<string[]>;
   consultarDescuentos() {
     this.inventarioService.consultarDescuentos(
       localStorage.getItem('miCuenta.getToken')
@@ -523,23 +527,26 @@ export class ConfiguracionProductoComponent implements OnInit {
 
   asignarDescuentoKit() {
     this.inventarioService.asignarDescuentoKit(
-      this._idCampo.value,
+      this._idKit.value,
       this._idDescuento.value,
       localStorage.getItem('miCuenta.postToken')
     )
       .then(
         ok => {
-          this.myForm.reset();
+          this._campo.reset();
+          this._codigo.reset();
+          this._descuento.reset();
           this.myForm.setErrors( { invalid: true } )
-          this.consultarKits();
-          this.consultarDescuentos();
         }
       )
       .catch(
         error => {
           console.log(error);
         }
-      )
+      ).finally(() => {
+        this.consultarKits();
+        this.consultarDescuentos();
+      })
   }
 
   eliminarKit(idKit) {

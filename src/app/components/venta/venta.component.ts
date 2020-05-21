@@ -51,6 +51,7 @@ export class VentaComponent implements OnInit {
       _checkedDescuento: new FormControl(""),
       _disponible: new FormControl(""),
       _checkedCredito: new FormControl(""),
+      _descuento: new FormControl(""),
     });
   }
 
@@ -100,6 +101,7 @@ export class VentaComponent implements OnInit {
   buttonSeleccionarSembrio = true;
   buttonGenerarFactura = false;
   buttonRealizarVenta = true;
+  inputDescuento = true;
 
   // Para la paginacion
   @ViewChild("paginator", { static: false }) paginator: MatPaginator;
@@ -214,9 +216,11 @@ export class VentaComponent implements OnInit {
     );
     dialogRef.afterClosed().subscribe((result) => {
       if (result != null) {
+        console.log(result);
         if (result.Kit != "") {
           this.aplicaDescuento = false;
-          this._kit.setValue(result.Kit + " (" + result.Porcentaje + ")");
+          this._kit.setValue(result.Kit);
+          this._descuento.setValue(result.Porcentaje);
         } else {
           this.aplicaDescuento = true;
           this._kit.setValue("");
@@ -235,10 +239,16 @@ export class VentaComponent implements OnInit {
           result.Medida;
         this._producto.setValue(producto);
         this._cantidad.reset();
+        this._checkedDescuento.enable();
       } else {
         this.consultarDetalleFactura();
       }
     });
+  }
+
+  aplicarDescuento(event) {
+    console.log(event);
+    event.checked ? this.inputDescuento = false : this.inputDescuento = true;
   }
 
   consultarTipoTransaccion() {
@@ -296,6 +306,7 @@ export class VentaComponent implements OnInit {
         this.selectTipoCompra = false;
         this.selectTipoPago = false;
         this.myForm.enable();
+        this._checkedDescuento.disable();
       });
   }
 
@@ -313,6 +324,7 @@ export class VentaComponent implements OnInit {
         EstadoCheck,
         "0",
         this._cantidad.value,
+        this._descuento.value,
         localStorage.getItem("miCuenta.postToken")
       )
       .then((ok) => {
@@ -403,6 +415,8 @@ export class VentaComponent implements OnInit {
     .catch(error => console.log(error))
   }
 
+  totalIva: string;
+
   consultarDetalleFactura() {
     this.ventaService
       .consultarDetalleFactura(
@@ -420,9 +434,11 @@ export class VentaComponent implements OnInit {
         var descuento = "";
         var perteneceKitCompleto = false;
         var detalleVenta = [];
-        this.subTotalFactura = ok['respuesta'].Total;
+        this.subTotalFactura = ok['respuesta'].Subtotal;
         this.totalDescontado = ok['respuesta'].TotalDescuento;
-        this.totalFactura = String(((ok['respuesta'].Total*12)/100)+ok['respuesta'].Total);
+        this.totalIva = ok['respuesta'].TotalIva;
+        this.totalFactura = ok['respuesta'].Total;
+        console.log(ok["respuesta"]);
         ok["respuesta"].DetalleVenta.map((item) => {
           if (item.PerteneceKitCompleto) {
             perteneceKitCompleto = true;
@@ -578,6 +594,7 @@ export class VentaComponent implements OnInit {
     this._checkedDescuento.reset();
     this._precio.reset();
     this._disponible.reset();
+    this._descuento.reset();
   }
 
   seleccionarSembrio() {
@@ -626,6 +643,7 @@ export class VentaComponent implements OnInit {
     this.consultarDetalleFactura();
     this._cabecera.setValue(factura.Codigo);
     this.myForm.enable();
+    this._checkedDescuento.disable();
     this.buttonSeleccionarProducto = false;
     this.buttonSeleccionarSembrio = false;
     this.buttonSeleccionarPersona = false;
@@ -724,6 +742,10 @@ export class VentaComponent implements OnInit {
 
   get _checkedDescuento() {
     return this.myForm.get("_checkedDescuento");
+  }
+  
+  get _descuento() {
+    return this.myForm.get("_descuento");
   }
 
   ngOnInit() {
