@@ -303,13 +303,7 @@
             </ng-container>
             <ng-container matColumnDef="descripcion">
               <th mat-header-cell *matHeaderCellDef>Descripción</th>
-              <td mat-cell *matCellDef="let element">{{ element.Producto }}</td>
-            </ng-container>
-            <ng-container matColumnDef="presentacion">
-              <th mat-header-cell *matHeaderCellDef>Presentación</th>
-              <td mat-cell *matCellDef="let element">
-                {{ element.Presentacion }}
-              </td>
+              <td mat-cell *matCellDef="let element">{{ element.Producto }} {{ element.Presentacion }}</td>
             </ng-container>
             <ng-container matColumnDef="kit">
               <th mat-header-cell *matHeaderCellDef>Kit</th>
@@ -354,21 +348,33 @@
                 </ng-container>
               </ng-container>
             </ng-container>
-            <ng-container matColumnDef="Descuento">
+            <ng-container matColumnDef="iva">
+              <th mat-header-cell *matHeaderCellDef>V. IVA</th>
+              <td mat-cell *matCellDef="let element">
+                ${{ element.Iva }}
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="porcentajeDescuento">
               <th mat-header-cell *matHeaderCellDef>% Desc</th>
               <td mat-cell *matCellDef="let element">
-                {{ element.AplicaDescuento }}
+                {{ element.PorcentajeDescuento }}%
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="descuento">
+              <th mat-header-cell *matHeaderCellDef>V. Desc</th>
+              <td mat-cell *matCellDef="let element">
+                ${{ element.Descuento }}
               </td>
             </ng-container>
             <ng-container matColumnDef="Subtotal">
               <th mat-header-cell *matHeaderCellDef>Subtotal</th>
               <td mat-cell *matCellDef="let element">
-                {{ element.Subtotal }}
+                ${{ element.Subtotal }}
               </td>
             </ng-container>
             <ng-container matColumnDef="total">
               <th mat-header-cell *matHeaderCellDef>Total</th>
-              <td mat-cell *matCellDef="let element">{{ element.Total }}</td>
+              <td mat-cell *matCellDef="let element">${{ element.Total }}</td>
             </ng-container>
             <ng-container matColumnDef="acciones">
               <th mat-header-cell *matHeaderCellDef>
@@ -414,7 +420,6 @@
               Subtotal: {{subTotalFactura}}$
             </div>
           </div>
-
           <div class="row">
             <div
               style="

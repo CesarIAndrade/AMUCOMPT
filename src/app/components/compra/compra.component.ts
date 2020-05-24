@@ -14,7 +14,6 @@ import { CompraService } from "src/app/services/compra.service";
 import { FacturaService } from "src/app/services/factura.service";
 
 // SweetAlert
-import sweetalert from "sweetalert";
 import { Router } from "@angular/router";
 import { ModalLotesComponent } from "../modal-lotes/modal-lotes.component";
 
@@ -317,8 +316,6 @@ export class CompraComponent implements OnInit {
             idLote = item.AsignarProductoLote[0].Lote.IdLote;
             fechaExpiracion = item.AsignarProductoLote[0].Lote.FechaExpiracion;
           } else {
-            lote = "";
-            idLote = "";
             fechaExpiracion = item.AsignarProductoLote[0].FechaExpiracion;
           }
           if (item.AsignarProductoLote[0].PerteneceKit != "False") {
@@ -341,8 +338,6 @@ export class CompraComponent implements OnInit {
               item.AsignarProductoLote[0].AsignarProductoKit.ListaProductos
                 .Presentacion.Descripcion;
           } else {
-            kit = "";
-            idKit = "";
             nombreProducto =
               item.AsignarProductoLote[0].ConfigurarProductos.Producto.Nombre;
             contenidoNeto =
@@ -376,7 +371,6 @@ export class CompraComponent implements OnInit {
         });
         this.detalleCompra.data = detalleCompra;
         this.detalleCompra.paginator = this.paginator;
-        console.log(this.detalleCompra.data);
       })
       .catch((error) => {
         console.log(error);
@@ -803,7 +797,6 @@ export class CompraComponent implements OnInit {
   tablaDetalleCompra = [
     "codigo",
     "descripcion",
-    "presentacion",
     "kit",
     "lote",
     "fechaExpiracion",

@@ -228,13 +228,7 @@
             </ng-container>
             <ng-container matColumnDef="descripcion">
               <th mat-header-cell *matHeaderCellDef>Descripción</th>
-              <td mat-cell *matCellDef="let element">{{ element.Producto }}</td>
-            </ng-container>
-            <ng-container matColumnDef="presentacion">
-              <th mat-header-cell *matHeaderCellDef>Presentación</th>
-              <td mat-cell *matCellDef="let element">
-                {{ element.ContenidoNeto }} {{ element.Medida }}
-              </td>
+              <td mat-cell *matCellDef="let element">{{ element.Producto }} {{ element.ContenidoNeto }} {{ element.Medida }} </td>
             </ng-container>
             <ng-container matColumnDef="kit">
               <th mat-header-cell *matHeaderCellDef>Kit</th>

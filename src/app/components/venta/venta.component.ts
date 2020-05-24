@@ -431,15 +431,16 @@ export class VentaComponent implements OnInit {
         var kit = "";
         var nombreProducto = "";
         var presentacion = "";
-        var descuento = "";
+        var descuento = "0";
+        var porcentajeDescuento = "0";
         var perteneceKitCompleto = false;
         var detalleVenta = [];
         this.subTotalFactura = ok['respuesta'].Subtotal;
         this.totalDescontado = ok['respuesta'].TotalDescuento;
         this.totalIva = ok['respuesta'].TotalIva;
         this.totalFactura = ok['respuesta'].Total;
-        console.log(ok["respuesta"]);
         ok["respuesta"].DetalleVenta.map((item) => {
+          console.log(item);
           if (item.PerteneceKitCompleto) {
             perteneceKitCompleto = true;
           } else {
@@ -448,9 +449,6 @@ export class VentaComponent implements OnInit {
           if (item.AsignarProductoLote.Lote) {
             idLote = item.AsignarProductoLote.Lote.IdLote;
             lote = item.AsignarProductoLote.Lote.Codigo;
-          } else {
-            idLote = "";
-            lote = "";
           }
           if (item.AsignarProductoLote.PerteneceKit == "True") {
             codigo =
@@ -480,14 +478,11 @@ export class VentaComponent implements OnInit {
               item.AsignarProductoLote.ConfigurarProductos.CantidadMedida +
               " " +
               item.AsignarProductoLote.ConfigurarProductos.Medida.Descripcion;
-            idKit = "";
-            kit = "";
           }
           if (item.PorcentajeDescuento) {
-            descuento = item.PorcentajeDescuento;
-          } else {
-            descuento = "";
-          }          
+            porcentajeDescuento = item.PorcentajeDescuento
+            descuento = item.CantidadDescontada;
+          }        
           var producto = {
             IdCabeceraFactura: item.IdCabeceraFactura,
             IdDetalleVenta: item.IdDetalleVenta,
@@ -500,11 +495,13 @@ export class VentaComponent implements OnInit {
             FechaExpiracion: item.AsignarProductoLote.FechaExpiracion,
             IdKit: idKit,
             Kit: kit,
-            AplicaDescuento: descuento,
+            Descuento: descuento,
             ValorUnidad: item.ValorUnitario,
             Total: item.Total,
             Subtotal: item.Subtotal,
             PerteneceKitCompleto: perteneceKitCompleto,
+            PorcentajeDescuento: porcentajeDescuento,
+            Iva: item.IvaAnadido,
           };
           detalleVenta.push(producto);
         });
@@ -758,13 +755,14 @@ export class VentaComponent implements OnInit {
   tablaDetalleCompra = [
     "codigo",
     "descripcion",
-    "presentacion",
     "kit",
     "lote",
     "fechaExpiracion",
     "valorUnitario",
     "cantidad",
-    "Descuento",
+    "iva",
+    "porcentajeDescuento",
+    "descuento",
     "Subtotal",
     "total",
     "acciones",

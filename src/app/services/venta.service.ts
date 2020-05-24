@@ -24,7 +24,6 @@ export class VentaService {
       .set("Cantidad", cantidad)
       .set("PorcentajeDescuento", descuento)
       .set("encriptada", _token)
-    console.log(body);
     return new Promise((resolve, reject) => {
       this.http
         .post(apiUrl + "Credito/IngresoDetalleVenta", body.toString(), {

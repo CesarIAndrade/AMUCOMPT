@@ -129,8 +129,6 @@ export class ModalAsignacionConfiguracionProductoComponent implements OnInit {
             idLote = item.AsignarProductoLote.Lote.IdLote;
             fechaExpiracion = item.AsignarProductoLote.Lote.FechaExpiracion;
           } else {
-            lote = "";
-            idLote = "";
             fechaExpiracion = item.AsignarProductoLote.FechaExpiracion;
           }
           if (item.AsignarProductoLote.PerteneceKit != "False") {
@@ -154,8 +152,6 @@ export class ModalAsignacionConfiguracionProductoComponent implements OnInit {
               item.AsignarProductoLote.AsignarProductoKit.ListaProductos
                 .Presentacion.Descripcion;
           } else {
-            kit = "";
-            idKit = "";
             nombreProducto =
               item.AsignarProductoLote.ConfigurarProductos.Producto.Nombre;
             contenidoNeto =
@@ -237,22 +233,16 @@ export class ModalAsignacionConfiguracionProductoComponent implements OnInit {
       var lote = "";
       var idLote = "";
       var fechaExpiracion = "";
-      var cantidad = "";
+      var cantidad = "0";
       if (item.Stock) {
         if (item.Stock.AsignarProductoLote.Lote) {
           lote = item.Stock.AsignarProductoLote.Lote.Codigo;
           idLote = item.Stock.AsignarProductoLote.Lote.IdLote;
           fechaExpiracion = item.Stock.AsignarProductoLote.Lote.FechaExpiracion;
         } else {
-          lote = "";
           fechaExpiracion = item.Stock.AsignarProductoLote.FechaExpiracion;
         }
         cantidad = item.Stock.Cantidad;
-      } else {
-        var lote = "";
-        var idLote = "";
-        var fechaExpiracion = "";
-        var cantidad = "0";
       }
       var producto = {
         IdKit: item.Kit.IdKit,
@@ -295,10 +285,7 @@ export class ModalAsignacionConfiguracionProductoComponent implements OnInit {
         try {
           this.nombreKit = this.data.listaProductosDeUnKit[0].Kit.Descripcion;
           this.idKit = this.data.listaProductosDeUnKit[0].Kit.IdKit;
-        } catch (error) {
-          this.nombreKit = "";
-          this.idKit = "";
-        }
+        } catch (error) { }
         if (this.data.permitirAnadir) {
           this.permitirAnadir = false;
         } else {
