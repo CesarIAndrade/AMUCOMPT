@@ -277,75 +277,6 @@ export class PanelAdministracionService {
     })
   }
 
-  crearSembrio(
-    idComunidad: string,
-    sembrio: string,
-    _token: string
-  ) {
-    const body = new HttpParams()
-      .set('IdComunidad', idComunidad)
-      .set('Descripcion', sembrio)
-      .set('encriptada', _token)
-    return new Promise((resolve, reject) => {
-      this.http.post(apiUrl + 'TalentoHumano/IngresoSembrio', body.toString(),
-        {
-          headers: new HttpHeaders()
-            .set('Content-Type', 'application/x-www-form-urlencoded')
-        }
-      )
-        .subscribe(res => {
-          resolve(res);
-        }, (err) => {
-          reject(err);
-        })
-    })
-  }
-
-  actualizarSembrio(
-    idComunidad: string,
-    idSembrio: string,
-    sembrio: string,
-    _token: string
-  ){
-    const body = new HttpParams()
-      .set('IdComunidad', idComunidad)
-      .set('IdSembrio', idSembrio)
-      .set('Descripcion', sembrio)
-      .set('encriptada', _token)
-    return new Promise((resolve, reject) => {
-      this.http.post(apiUrl + 'TalentoHumano/ActualizarSembrio', body.toString(),
-        {
-          headers: new HttpHeaders()
-            .set('Content-Type', 'application/x-www-form-urlencoded')
-        }
-      )
-        .subscribe(res => {
-          resolve(res);
-        }, (err) => {
-          reject(err);
-        })
-    })
-  }
-
-  eliminarSembrio(idSembrio: string, _token: string){
-    const body = new HttpParams()
-      .set('IdSembrio', idSembrio)
-      .set('encriptada', _token)
-    return new Promise((resolve, reject) => {
-      this.http.post(apiUrl + 'TalentoHumano/EliminarSembrio', body.toString(),
-        {
-          headers: new HttpHeaders()
-            .set('Content-Type', 'application/x-www-form-urlencoded')
-        }
-      )
-        .subscribe(res => {
-          resolve(res);
-        }, (err) => {
-          reject(err);
-        })
-    })
-  }
-
   consultarProvincias(_token: string) {
     const body = new HttpParams()
       .set('encriptada', _token)
@@ -416,23 +347,6 @@ export class PanelAdministracionService {
           reject(err);
         })
     })
-  }
-
-  consultarSembrios(_token: string) {
-    const body = new HttpParams()
-      .set('encriptada', _token)
-    return new Promise((resolve, reject) => {
-      this.http.post(apiUrl + 'TalentoHumano/ListaSembrios', body.toString(),
-        {
-          headers: new HttpHeaders()
-            .set('Content-Type', 'application/x-www-form-urlencoded')
-        })
-        .subscribe(res => {
-          resolve(res);
-        }, (err) => {
-          reject(err);
-        })
-    });
   }
 
   consultarCantonesDeUnaProvincia(idProvincia: string, _token: string) {

@@ -34,8 +34,6 @@ export class CantonComponent implements OnInit {
   filterProvincia = '';
   filterCanton = '';
 
-  // cantones: any[] = [];
-
   // Para la paginacion
   @ViewChild('paginator', { static: false }) paginator: MatPaginator;
   cantones = new MatTableDataSource<Element[]>();

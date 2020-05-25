@@ -20,6 +20,7 @@ import { StockComponent } from './components/stock/stock.component';
 import { CompraRubrosComponent } from './components/compra-rubros/compra-rubros.component';
 import { VentaRubrosComponent } from './components/venta-rubros/venta-rubros.component';
 import { CreditosAbonosComponent } from './components/creditos-abonos/creditos-abonos.component';
+import { AsignarTecnicoClienteComponent } from './components/asignar-tecnico-cliente/asignar-tecnico-cliente.component';
 
 const routes: Routes = [
   // { path: '', pathMatch: 'full', redirectTo: 'login' },
@@ -48,6 +49,10 @@ const routes: Routes = [
       {
         path: 'stock', component: StockComponent,
         // canActivate: [ValidarUsuarioGuard]
+      },
+      {
+        path: 'asignar-tecnico-cliente', component: AsignarTecnicoClienteComponent,
+        // canActivate: [ValidarUsuarioGuard] 
       },
       {
         path: 'abonos', component: CreditosAbonosComponent,

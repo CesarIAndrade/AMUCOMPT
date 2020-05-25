@@ -1,7 +1,10 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { Router } from "@angular/router";
-import { MatTableDataSource, MatPaginator } from "@angular/material";
+import {
+  MatTableDataSource,
+  MatPaginator,
+} from "@angular/material";
 import { MatDialog } from "@angular/material/dialog";
 
 // Components
@@ -13,7 +16,6 @@ import { ModalLocalidadSuperiorComponent } from "../modal-localidad-superior/mod
 import { InventarioService } from "src/app/services/inventario.service";
 import { FacturaService } from "src/app/services/factura.service";
 import { VentaService } from "src/app/services/venta.service";
-import { PanelAdministracionService } from "src/app/services/panel-administracion.service";
 
 @Component({
   selector: "app-venta",
@@ -22,6 +24,33 @@ import { PanelAdministracionService } from "src/app/services/panel-administracio
 })
 export class VentaComponent implements OnInit {
   myForm: FormGroup;
+
+  visible = true;
+  selectable = true;
+  removable = true;
+  addOnBlur = true;
+  comunidades: any[] = [];
+
+  quitarAsignacionComunidadFactura(comunidad) {
+    this.ventaService
+      .quitarAsignacionComunidadFactura(
+        comunidad._idAsignarComunidadFactura,
+        localStorage.getItem("miCuenta.deleteToken")
+      )
+      .then((ok) => {
+        if (ok["respuesta"]) {
+          const index = this.comunidades.indexOf(comunidad);
+          if (index >= 0) {
+            this.comunidades.splice(index, 1);
+          }
+        } else {
+          sweetAlert("Inténtalo de nuevo!", {
+            icon: "error",
+          });
+        }
+      })
+      .catch((error) => console.log(error));
+  }
 
   constructor(
     private modalAsignacionUsuarioPersona: MatDialog,
@@ -44,14 +73,17 @@ export class VentaComponent implements OnInit {
       _cedula: new FormControl(""),
       _idPersona: new FormControl(""),
       _nombres: new FormControl(""),
-      _idSembrio: new FormControl(""),
-      _sembrio: new FormControl(""),
       _idAsignarProductoLote: new FormControl(""),
       _kit: new FormControl(""),
       _checkedDescuento: new FormControl(""),
       _disponible: new FormControl(""),
       _checkedCredito: new FormControl(""),
       _descuento: new FormControl(""),
+
+      _fechaFinalCredito: new FormControl(""),
+      _aplicaSeguro: new FormControl(false),
+      _valorSeguro: new FormControl(""),
+      _seguroCancelado: new FormControl(false),
     });
   }
 
@@ -86,22 +118,22 @@ export class VentaComponent implements OnInit {
 
   selected = "Producto";
   pago = "Efectivo";
-  
+
   totalDescontado: string;
   subTotalFactura: string;
   totalFactura: string;
 
   seccionKit = true;
-  seccionSembrio = true;
   aplicaDescuento = true;
   buttonSeleccionarProducto = true;
   selectTipoCompra = true;
   selectTipoPago = true;
   buttonSeleccionarPersona = true;
-  buttonSeleccionarSembrio = true;
+  buttonSeleccionarComunidad = true;
   buttonGenerarFactura = false;
   buttonRealizarVenta = true;
   inputDescuento = true;
+  siSePagaACredito = true;
 
   // Para la paginacion
   @ViewChild("paginator", { static: false }) paginator: MatPaginator;
@@ -125,14 +157,24 @@ export class VentaComponent implements OnInit {
 
   selecionarTipoPago(tipoPago) {
     if (tipoPago.value == "Efectivo") {
-      this.seccionSembrio = true;
-      this._sembrio.setValidators([]);
-      this._sembrio.updateValueAndValidity();
+      this.siSePagaACredito = true;
+      this._aplicaSeguro.setValue(false);
+      this._aplicaSeguro.enable();
+      this._valorSeguro.clearValidators();
+      this._fechaFinalCredito.clearValidators();
+      this._valorSeguro.updateValueAndValidity();
+      this._fechaFinalCredito.updateValueAndValidity();
     } else {
-      this.seccionSembrio = false;
-      this._sembrio.setValidators([Validators.required]);
-      this._sembrio.updateValueAndValidity();
+      this.siSePagaACredito = false;
+      this._aplicaSeguro.setValue(true);
+      this._aplicaSeguro.disable();
+      this._valorSeguro.setValidators([Validators.required]);
+      this._fechaFinalCredito.setValidators([Validators.required]);
+      this._valorSeguro.updateValueAndValidity();
+      this._fechaFinalCredito.updateValueAndValidity();
     }
+    this._fechaFinalCredito.reset();
+    this._valorSeguro.reset();
   }
 
   consultarKits() {
@@ -216,7 +258,6 @@ export class VentaComponent implements OnInit {
     );
     dialogRef.afterClosed().subscribe((result) => {
       if (result != null) {
-        console.log(result);
         if (result.Kit != "") {
           this.aplicaDescuento = false;
           this._kit.setValue(result.Kit);
@@ -247,8 +288,9 @@ export class VentaComponent implements OnInit {
   }
 
   aplicarDescuento(event) {
-    console.log(event);
-    event.checked ? this.inputDescuento = false : this.inputDescuento = true;
+    event.checked
+      ? (this.inputDescuento = false)
+      : (this.inputDescuento = true);
   }
 
   consultarTipoTransaccion() {
@@ -265,7 +307,7 @@ export class VentaComponent implements OnInit {
       })
       .catch((error) => {
         console.log(error);
-      })
+      });
   }
 
   validarFormulario() {
@@ -302,7 +344,7 @@ export class VentaComponent implements OnInit {
         this.buttonGenerarFactura = true;
         this.buttonSeleccionarPersona = false;
         this.buttonSeleccionarProducto = false;
-        this.buttonSeleccionarSembrio = false;
+        this.buttonSeleccionarComunidad = false;
         this.selectTipoCompra = false;
         this.selectTipoPago = false;
         this.myForm.enable();
@@ -332,7 +374,7 @@ export class VentaComponent implements OnInit {
           this.buttonRealizarVenta = false;
           this.aplicaDescuento = true;
           this.seccionKit = true;
-          this.selected = "Producto"
+          this.selected = "Producto";
           this.limpiarCampos();
         }
         if (ok["respuesta"] == "false") {
@@ -348,7 +390,8 @@ export class VentaComponent implements OnInit {
       })
       .catch((error) => {
         console.log(error);
-      }).finally(() => {
+      })
+      .finally(() => {
         this.consultarDetalleFactura();
       });
   }
@@ -382,7 +425,12 @@ export class VentaComponent implements OnInit {
           });
           var tipoTransaccion = this._tipoTransaccion.value;
           this.myForm.reset();
+          this.myForm.disable();
           this._tipoTransaccion.setValue(tipoTransaccion);
+          this.comunidades = [];
+          this.selectTipoPago = true;
+          this.pago = "Efectivo";
+          this.buttonSeleccionarComunidad = true;
         } else {
           sweetAlert("Ha ocurrido un error!", {
             icon: "error",
@@ -391,7 +439,8 @@ export class VentaComponent implements OnInit {
       })
       .catch((error) => {
         console.log(error);
-      }).finally(() => {
+      })
+      .finally(() => {
         this.consultarFacturasNoFinalizadas();
         this.consultarFacturasFinalizadas();
         this.detalleVenta.data = [];
@@ -399,20 +448,42 @@ export class VentaComponent implements OnInit {
       });
   }
 
+  validarFecha() {
+    var fechaFinalCredito: any = new Date(this._fechaFinalCredito.value);
+    var fechaActual = new Date();
+    try {
+      if (fechaFinalCredito.getFullYear() < fechaActual.getFullYear()) {
+        fechaFinalCredito = null;
+      } else {
+        fechaFinalCredito = fechaFinalCredito.toJSON();
+        fechaFinalCredito = fechaFinalCredito.split("T")[0];
+        return fechaFinalCredito;
+      }
+    } catch (error) {
+      return (fechaFinalCredito = null);
+    }
+  }
+
   crearConfiguracionVenta() {
     var efectivo: any;
-    this.seccionSembrio ? efectivo = "1" : efectivo = "0";
-    this.ventaService.crearConfiguracionVenta(
-      this._idCabecera.value,
-      this._idPersona.value,
-      this._idSembrio.value,
-      efectivo,
-      localStorage.getItem("miCuenta.postToken")
-    )
-    .then(ok => {
-      this.realizarVenta();
-    })
-    .catch(error => console.log(error))
+    this.siSePagaACredito ? (efectivo = "1") : (efectivo = "0");
+    if(this.myForm.valid) {
+      this.ventaService
+      .crearConfiguracionVenta(
+        this._idCabecera.value,
+        this._idPersona.value,
+        efectivo,
+        this.validarFecha(),
+        this._aplicaSeguro.value,
+        this._valorSeguro.value,
+        this._seguroCancelado.value,
+        localStorage.getItem("miCuenta.postToken")
+      )
+      .then((ok) => {
+        this.realizarVenta();
+      })
+      .catch((error) => console.log(error));
+    }
   }
 
   totalIva: string;
@@ -435,12 +506,11 @@ export class VentaComponent implements OnInit {
         var porcentajeDescuento = "0";
         var perteneceKitCompleto = false;
         var detalleVenta = [];
-        this.subTotalFactura = ok['respuesta'].Subtotal;
-        this.totalDescontado = ok['respuesta'].TotalDescuento;
-        this.totalIva = ok['respuesta'].TotalIva;
-        this.totalFactura = ok['respuesta'].Total;
+        this.subTotalFactura = ok["respuesta"].Subtotal;
+        this.totalDescontado = ok["respuesta"].TotalDescuento;
+        this.totalIva = ok["respuesta"].TotalIva;
+        this.totalFactura = ok["respuesta"].Total;
         ok["respuesta"].DetalleVenta.map((item) => {
-          console.log(item);
           if (item.PerteneceKitCompleto) {
             perteneceKitCompleto = true;
           } else {
@@ -480,9 +550,9 @@ export class VentaComponent implements OnInit {
               item.AsignarProductoLote.ConfigurarProductos.Medida.Descripcion;
           }
           if (item.PorcentajeDescuento) {
-            porcentajeDescuento = item.PorcentajeDescuento
+            porcentajeDescuento = item.PorcentajeDescuento;
             descuento = item.CantidadDescontada;
-          }        
+          }
           var producto = {
             IdCabeceraFactura: item.IdCabeceraFactura,
             IdDetalleVenta: item.IdDetalleVenta,
@@ -548,17 +618,17 @@ export class VentaComponent implements OnInit {
 
   quitarDetalleFactura(detalleFactura) {
     if (detalleFactura.PerteneceKitCompleto) {
-      this.ventaService.quitarDetalleVentaPorKit(
-        detalleFactura.IdCabeceraFactura,
-        detalleFactura.IdKit,
-        localStorage.getItem("miCuenta.deleteToken")
-      ).then(
-        ok => {
-          if (ok['respuesta']) {
+      this.ventaService
+        .quitarDetalleVentaPorKit(
+          detalleFactura.IdCabeceraFactura,
+          detalleFactura.IdKit,
+          localStorage.getItem("miCuenta.deleteToken")
+        )
+        .then((ok) => {
+          if (ok["respuesta"]) {
             this.consultarDetalleFactura();
           }
-        }
-      )
+        });
     } else {
       this.ventaService
         .quitarDetalleFactura(
@@ -594,7 +664,7 @@ export class VentaComponent implements OnInit {
     this._descuento.reset();
   }
 
-  seleccionarSembrio() {
+  seleccionarComunidad() {
     let dialogRef = this.modalLocalidadSuperior.open(
       ModalLocalidadSuperiorComponent,
       {
@@ -607,8 +677,27 @@ export class VentaComponent implements OnInit {
     );
     dialogRef.afterClosed().subscribe((result) => {
       if (result != null) {
-        this._idSembrio.setValue(result.idLocalidad);
-        this._sembrio.setValue(result.descripcion);
+        this.ventaService
+          .asignarComunidadFactura(
+            this._idCabecera.value,
+            result.idLocalidad,
+            localStorage.getItem("miCuenta.postToken")
+          )
+          .then((ok) => {
+            try {
+              this.comunidades.push({
+                _id: result.idLocalidad,
+                _idAsignarComunidadFactura:
+                  ok["respuesta"].IdAsignarComunidadFactura,
+                name: result.descripcion,
+              });
+            } catch (error) {
+              sweetAlert("Comunidad ya existe", {
+                icon: "error",
+              });
+            }
+          })
+          .catch((error) => console.log(error));
       }
     });
   }
@@ -621,9 +710,9 @@ export class VentaComponent implements OnInit {
         localStorage.getItem("miCuenta.getToken")
       )
       .then((ok) => {
-          this.facturasNoFinalizadas.data = [];
-          this.facturasNoFinalizadas.data = ok["respuesta"];
-          this.facturasNoFinalizadas.paginator = this.fnf_paginator;
+        this.facturasNoFinalizadas.data = [];
+        this.facturasNoFinalizadas.data = ok["respuesta"];
+        this.facturasNoFinalizadas.paginator = this.fnf_paginator;
       })
       .catch((error) => {
         console.log(error);
@@ -632,17 +721,18 @@ export class VentaComponent implements OnInit {
         this.consultarFacturasFinalizadas();
       });
   }
-  
+
   mostrarDetallesFactura(factura) {
     this.myForm.reset();
     this.buttonRealizarVenta = false;
     this._idCabecera.setValue(factura.IdCabeceraFactura);
+    this.listarComunidadesPorFactura();
     this.consultarDetalleFactura();
     this._cabecera.setValue(factura.Codigo);
     this.myForm.enable();
     this._checkedDescuento.disable();
     this.buttonSeleccionarProducto = false;
-    this.buttonSeleccionarSembrio = false;
+    this.buttonSeleccionarComunidad = false;
     this.buttonSeleccionarPersona = false;
     this.selectTipoCompra = false;
     this.buttonGenerarFactura = false;
@@ -666,7 +756,25 @@ export class VentaComponent implements OnInit {
         this.facturasFinalizadas.data = [];
         this.facturasFinalizadas.data = ok["respuesta"];
         this.facturasFinalizadas.paginator = this.ff_paginator;
+      });
+  }
+
+  listarComunidadesPorFactura() {
+    this.ventaService
+      .listarComunidadesPorFactura(
+        this._idCabecera.value,
+        localStorage.getItem("miCuenta.getToken")
+      )
+      .then((ok) => {
+        ok["respuesta"].map((item) => {
+          this.comunidades.push({
+            _id: item.Comunidad.IdComunidad,
+            _idAsignarComunidadFactura: item.IdAsignarComunidadFactura,
+            name: item.Comunidad.Descripcion,
+          });
+        });
       })
+      .catch((error) => console.log(error));
   }
 
   get _producto() {
@@ -701,14 +809,6 @@ export class VentaComponent implements OnInit {
     return this.myForm.get("_checkedCredito");
   }
 
-  get _idSembrio() {
-    return this.myForm.get("_idSembrio");
-  }
-
-  get _sembrio() {
-    return this.myForm.get("_sembrio");
-  }
-
   get _tipoTransaccion() {
     return this.myForm.get("_tipoTransaccion");
   }
@@ -740,15 +840,31 @@ export class VentaComponent implements OnInit {
   get _checkedDescuento() {
     return this.myForm.get("_checkedDescuento");
   }
-  
+
   get _descuento() {
     return this.myForm.get("_descuento");
+  }
+
+  get _fechaFinalCredito() {
+    return this.myForm.get("_fechaFinalCredito");
+  }
+
+  get _aplicaSeguro() {
+    return this.myForm.get("_aplicaSeguro");
+  }
+
+  get _valorSeguro() {
+    return this.myForm.get("_valorSeguro");
+  }
+
+  get _seguroCancelado() {
+    return this.myForm.get("_seguroCancelado");
   }
 
   ngOnInit() {
     this.consultarTipoTransaccion();
     this.consultarFacturasNoFinalizadas();
-    setTimeout(()=> this.consultarFacturasFinalizadas(), 5000)
+    setTimeout(() => this.consultarFacturasFinalizadas(), 5000);
     this.myForm.disable();
   }
 

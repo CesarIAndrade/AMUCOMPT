@@ -71,6 +71,11 @@ export class NavComponent implements OnInit {
           url: "/stock",
         },
         {
+          name: "Asginar Técnico Cliente",
+          icon: "list_alt",
+          url: "/asignar-tecnico-cliente",
+        },
+        {
           name: "Abonos",
           icon: "attach_money",
           url: "/abonos",
@@ -106,7 +111,6 @@ export class NavComponent implements OnInit {
           url: "/cuenta",
         }
       );
-      // this.router.navigateByUrl("/usuarios")
     } else if (localStorage.getItem("miCuenta.tipoUsuario") == "2") {
       this.nav_items.push(
         {
@@ -130,7 +134,6 @@ export class NavComponent implements OnInit {
           url: "/cuenta",
         }
       );
-      // this.router.navigateByUrl("/stock")
     } else if (localStorage.getItem("miCuenta.tipoUsuario") == "3") {
       this.nav_items.push(
         {
@@ -174,7 +177,6 @@ export class NavComponent implements OnInit {
           url: "/cuenta",
         }
       );
-      // this.router.navigateByUrl("/configuracion-productos")
     }
 
     if (this.router.url == "/") {

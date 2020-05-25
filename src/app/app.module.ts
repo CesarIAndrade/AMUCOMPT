@@ -19,7 +19,6 @@ import { NavComponent } from "./nav/nav.component";
 import { InventarioComponent } from "./components/inventario/inventario.component";
 import { CompraComponent } from "./components/compra/compra.component";
 import { VentaComponent } from "./components/venta/venta.component";
-import { SembrioComponent } from "./components/sembrio/sembrio.component";
 import { CantonComponent } from "./components/canton/canton.component";
 import { ComunidadComponent } from "./components/comunidad/comunidad.component";
 import { ParroquiaComponent } from "./components/parroquia/parroquia.component";
@@ -41,6 +40,7 @@ import { VentaRubrosComponent } from "./components/venta-rubros/venta-rubros.com
 import { ModalLocalidadSuperiorComponent } from "./components/modal-localidad-superior/modal-localidad-superior.component";
 import { ModalLotesComponent } from "./components/modal-lotes/modal-lotes.component";
 import { MaterialModule } from './material.module';
+import { AsignarTecnicoClienteComponent } from './components/asignar-tecnico-cliente/asignar-tecnico-cliente.component';
 
 @NgModule({
   declarations: [
@@ -61,7 +61,6 @@ import { MaterialModule } from './material.module';
     ParroquiaComponent,
     ProvinciaComponent,
     ModalAsignacionUsuarioTiposUsuarioComponent,
-    SembrioComponent,
     ProductoComponent,
     ConfiguracionProductoComponent,
     ArmarKitComponent,
@@ -74,6 +73,7 @@ import { MaterialModule } from './material.module';
     VentaRubrosComponent,
     ModalLocalidadSuperiorComponent,
     ModalLotesComponent,
+    AsignarTecnicoClienteComponent,
   ],
   imports: [
     BrowserModule,

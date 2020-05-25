@@ -4,9 +4,6 @@
     <div class="container">
       <form [formGroup]="myForm" (ngSubmit)="validarFormulario()" novalidate>
         <div class="row">
-          <div class="col-lg-4"></div>
-        </div>
-        <div class="row">
           <div class="col-lg-5">
             <mat-form-field class="example-full-width">
               <input
@@ -63,8 +60,6 @@
                 </mat-option>
               </mat-select>
             </mat-form-field>
-          </div>
-          <div class="col-lg-4">
             <div class="row">
               <div class="col-lg-9 col-md-10">
                 <mat-form-field class="example-full-width">
@@ -94,24 +89,28 @@
               </div>
             </div>
             <div [hidden]="aplicaDescuento">
-                <mat-form-field class="example-full-width">
-                  <input
-                    readonly
-                    matInput
-                    placeholder="Kit"
-                    formControlName="_kit"
-                  />
-                </mat-form-field>
+              <mat-form-field class="example-full-width">
+                <input
+                  readonly
+                  matInput
+                  placeholder="Kit"
+                  formControlName="_kit"
+                />
+              </mat-form-field>
             </div>
-
             <div class="row">
               <div class="col-lg-6 col-md-6 descuento">
-                <mat-checkbox formControlName="_checkedDescuento" (change)="aplicarDescuento($event)" 
+                <mat-checkbox
+                  formControlName="_checkedDescuento"
+                  (change)="aplicarDescuento($event)"
                   >Aplicar Descuento</mat-checkbox
                 >
               </div>
               <div class="col-lg-6 col-md-6">
-                <mat-form-field class="example-full-width" [hidden]="inputDescuento">
+                <mat-form-field
+                  class="example-full-width"
+                  [hidden]="inputDescuento"
+                >
                   <input
                     matInput
                     placeholder="Descuento"
@@ -124,9 +123,8 @@
                 </mat-form-field>
               </div>
             </div>
-
             <div class="row">
-              <div class="col-lg-12">
+              <div class="col-lg-6 col-md-6">
                 <mat-form-field class="example-full-width">
                   <input
                     matInput
@@ -136,6 +134,8 @@
                     placeholder="Disponible"
                   />
                 </mat-form-field>
+              </div>
+              <div class="col-lg-6 col-md-6">
                 <mat-form-field class="example-full-width">
                   <input
                     matInput
@@ -159,28 +159,22 @@
                 </mat-form-field>
               </div>
             </div>
-            <div class="row">
-              <div class="col-lg-12">
-                <mat-form-field class="example-full-width">
-                  <input
-                    matInput
-                    readonly
-                    type="number"
-                    formControlName="_precio"
-                    placeholder="Precio"
-                  />
-                  <mat-error
-                    *ngIf="
-                      _precio.invalid && (_precio.dirty || _precio.touched)
-                    "
-                  >
-                    <mat-error *ngIf="_precio.errors.required">
-                      Precio Requerido
-                    </mat-error>
-                  </mat-error>
-                </mat-form-field>
-              </div>
-            </div>
+            <mat-form-field class="example-full-width">
+              <input
+                matInput
+                readonly
+                type="number"
+                formControlName="_precio"
+                placeholder="Precio"
+              />
+              <mat-error
+                *ngIf="_precio.invalid && (_precio.dirty || _precio.touched)"
+              >
+                <mat-error *ngIf="_precio.errors.required">
+                  Precio Requerido
+                </mat-error>
+              </mat-error>
+            </mat-form-field>
           </div>
           <div class="col-lg-4">
             <div class="row">
@@ -235,36 +229,77 @@
               </mat-select>
             </mat-form-field>
             <div class="row">
-              <div class="col-lg-9 col-md-10">
+              <div class="col-lg-6 col-md-6">
                 <mat-form-field class="example-full-width">
                   <input
-                    type="text"
-                    placeholder="Sembrío"
-                    readonly
                     matInput
-                    formControlName="_sembrio"
+                    readonly
+                    formControlName="_fechaFinalCredito"
+                    [matDatepicker]="picker"
+                    placeholder="Fecha Final Crédito"
                   />
-                  <button
-                    disabled
-                    [hidden]="seccionSembrio"
-                    mat-button
-                    matPrefix
-                    mat-icon-button
-                  >
+                  <button disabled mat-button matPrefix mat-icon-button>
+                    <mat-icon>*</mat-icon>
+                  </button>
+                  <mat-datepicker #picker></mat-datepicker>
+                  <mat-datepicker-toggle matSuffix [for]="picker">
+                  </mat-datepicker-toggle>
+                </mat-form-field>
+              </div>
+              <div class="col-lg-6 col-md-6 descuento">
+                <mat-checkbox formControlName="_aplicaSeguro"
+                  >Aplica Seguro</mat-checkbox
+                >
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-lg-6 col-md-6">
+                <mat-form-field class="example-full-width">
+                  <input
+                    matInput
+                    type="number"
+                    formControlName="_valorSeguro"
+                    placeholder="Valor Seguro"
+                  />
+                  <button disabled mat-button matPrefix mat-icon-button>
                     <mat-icon>*</mat-icon>
                   </button>
                 </mat-form-field>
               </div>
-              <div class="col-lg-3 col-md-2">
-                <button
-                  mat-button
-                  [disabled]="buttonSeleccionarSembrio"
-                  type="button"
-                  (click)="seleccionarSembrio()"
-                  class="mt-2 btn-outline-danger"
+              <div class="col-lg-6 col-md-6 descuento">
+                <mat-checkbox formControlName="_seguroCancelado"
+                  >Seguro Cancelado</mat-checkbox
                 >
-                  <mat-icon>where_to_vote</mat-icon>
-                </button>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4">
+            <div>
+              <button
+                mat-button
+                [disabled]="buttonSeleccionarComunidad"
+                type="button"
+                (click)="seleccionarComunidad()"
+                class="mt-2 mb-4 text-white btn-block"
+                style="background-color: #868e96;"
+              >
+                Seleccionar Comunidad
+              </button>
+              <mat-label>
+                Comunidades:
+              </mat-label>
+              <div class="p-4">
+                <mat-chip-list>
+                  <mat-chip
+                    *ngFor="let item of comunidades"
+                    [selectable]="selectable"
+                    [removable]="removable"
+                    (removed)="quitarAsignacionComunidadFactura(item)"
+                  >
+                    {{ item.name }}
+                    <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+                  </mat-chip>
+                </mat-chip-list>
               </div>
             </div>
           </div>
@@ -303,7 +338,9 @@
             </ng-container>
             <ng-container matColumnDef="descripcion">
               <th mat-header-cell *matHeaderCellDef>Descripción</th>
-              <td mat-cell *matCellDef="let element">{{ element.Producto }} {{ element.Presentacion }}</td>
+              <td mat-cell *matCellDef="let element">
+                {{ element.Producto }} {{ element.Presentacion }}
+              </td>
             </ng-container>
             <ng-container matColumnDef="kit">
               <th mat-header-cell *matHeaderCellDef>Kit</th>
@@ -350,9 +387,7 @@
             </ng-container>
             <ng-container matColumnDef="iva">
               <th mat-header-cell *matHeaderCellDef>V. IVA</th>
-              <td mat-cell *matCellDef="let element">
-                ${{ element.Iva }}
-              </td>
+              <td mat-cell *matCellDef="let element">${{ element.Iva }}</td>
             </ng-container>
             <ng-container matColumnDef="porcentajeDescuento">
               <th mat-header-cell *matHeaderCellDef>% Desc</th>
@@ -406,7 +441,7 @@
       <div class="row m-4">
         <div class="col-md-8 detalleResultado">
           AMUCOMT
-        </div> 
+        </div>
         <div class="col-md-4">
           <div class="row">
             <div
@@ -417,7 +452,7 @@
               "
               class="col-sm-12 detalleResultado"
             >
-              Subtotal: {{subTotalFactura}}$
+              Subtotal: {{ subTotalFactura }}$
             </div>
           </div>
           <div class="row">
@@ -429,7 +464,7 @@
               "
               class="col-sm-12 detalleResultado"
             >
-              Total IVA: {{totalIva}}$
+              Total IVA: {{ totalIva }}$
             </div>
           </div>
 
@@ -442,16 +477,16 @@
               "
               class="col-sm-12 detalleResultado"
             >
-              Total Descuento: {{totalDescontado}}$
+              Total Descuento: {{ totalDescontado }}$
             </div>
           </div>
-          
+
           <div class="row bottom-right">
             <div
               style="border-inline-start-style: none; justify-content: left;"
               class="col-sm-12 detalleResultado"
             >
-              Total: {{totalFactura}}$
+              Total: {{ totalFactura }}$
             </div>
           </div>
         </div>
