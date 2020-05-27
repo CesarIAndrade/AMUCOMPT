@@ -1,8 +1,12 @@
 import { Component, OnInit, Inject, ViewChild } from "@angular/core";
-import { MAT_DIALOG_DATA, MatPaginator, MatTableDataSource } from "@angular/material";
+import {
+  MAT_DIALOG_DATA,
+  MatPaginator,
+  MatTableDataSource,
+} from "@angular/material";
 
 // Services
-import { PanelAdministracionService } from 'src/app/services/panel-administracion.service';
+import { PanelAdministracionService } from "src/app/services/panel-administracion.service";
 
 @Component({
   selector: "app-modal-localidad-superior",
@@ -10,7 +14,6 @@ import { PanelAdministracionService } from 'src/app/services/panel-administracio
   styleUrls: ["./modal-localidad-superior.component.css"],
 })
 export class ModalLocalidadSuperiorComponent implements OnInit {
-
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     private panelAdministracionService: PanelAdministracionService
@@ -25,7 +28,7 @@ export class ModalLocalidadSuperiorComponent implements OnInit {
   };
 
   // Para la paginacion
-  @ViewChild('paginator', { static: false }) paginator: MatPaginator;
+  @ViewChild("paginator", { static: false }) paginator: MatPaginator;
   lista_tabla = new MatTableDataSource<Element[]>();
 
   consultarProvincias() {
@@ -36,10 +39,8 @@ export class ModalLocalidadSuperiorComponent implements OnInit {
         this.lista_tabla.data = ok["respuesta"];
         this.lista_tabla.paginator = this.paginator;
       })
-      .catch((error) => {
-        console.log(error);
-      });
-  } 
+      .catch((error) => console.log(error));
+  }
 
   consultarCantones() {
     this.panelAdministracionService
@@ -49,41 +50,29 @@ export class ModalLocalidadSuperiorComponent implements OnInit {
         this.lista_tabla.data = ok["respuesta"];
         this.lista_tabla.paginator = this.paginator;
       })
-      .catch((error) => {
-        console.log(error);
-      });
+      .catch((error) => console.log(error));
   }
 
   consultarParroquias() {
-    this.panelAdministracionService.consultarParroquias(localStorage.getItem('miCuenta.getToken'))
-      .then(
-        ok => {
-          this.lista_tabla.data = [];
-          this.lista_tabla.data = ok["respuesta"];
-          this.lista_tabla.paginator = this.paginator;
-        }
-      )
-      .catch(
-        error => {
-          console.log(error);
-        }
-      )
+    this.panelAdministracionService
+      .consultarParroquias(localStorage.getItem("miCuenta.getToken"))
+      .then((ok) => {
+        this.lista_tabla.data = [];
+        this.lista_tabla.data = ok["respuesta"];
+        this.lista_tabla.paginator = this.paginator;
+      })
+      .catch((error) => console.log(error));
   }
 
   consultarComunidades() {
-    this.panelAdministracionService.consultarComunidades(localStorage.getItem('miCuenta.getToken'))
-      .then(
-        ok => {
-          this.lista_tabla.data = [];
-          this.lista_tabla.data = ok["respuesta"];
-          this.lista_tabla.paginator = this.paginator;
-        }
-      )
-      .catch(
-        error => {
-          console.log(error);
-        }
-      )
+    this.panelAdministracionService
+      .consultarComunidades(localStorage.getItem("miCuenta.getToken"))
+      .then((ok) => {
+        this.lista_tabla.data = [];
+        this.lista_tabla.data = ok["respuesta"];
+        this.lista_tabla.paginator = this.paginator;
+      })
+      .catch((error) => console.log(error));
   }
 
   setLocalidad(localidad) {
@@ -97,7 +86,7 @@ export class ModalLocalidadSuperiorComponent implements OnInit {
       this.datosLocalidad.idLocalidad = localidad.IdComunidad;
     }
     this.datosLocalidad.descripcion = localidad.Descripcion;
-  } 
+  }
 
   ngOnInit() {
     if (this.data.ruta == "cantones") {

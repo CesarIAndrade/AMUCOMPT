@@ -8,16 +8,8 @@ import { ProductoComponent } from '../producto/producto.component';
 })
 export class InventarioComponent implements OnInit {
 
-  @ViewChild(ProductoComponent, {static: false}) tabProducto: ProductoComponent; 
-
   constructor() { }
   
-  verificarNuevoTipoProductoCreado(event) {
-    if(event){
-      this.tabProducto.ngOnInit();
-    }
-  }
-
   ngOnInit() {
   }
 

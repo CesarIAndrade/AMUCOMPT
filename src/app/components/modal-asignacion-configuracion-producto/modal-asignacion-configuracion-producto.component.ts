@@ -45,7 +45,7 @@ export class ModalAsignacionConfiguracionProductoComponent implements OnInit {
     Codigo: "",
     FechaExpiracion: "",
     Porcentaje: "",
-    Disponible: ""
+    Disponible: "",
   };
   buttonComprarKitCompleto = false;
 
@@ -80,9 +80,7 @@ export class ModalAsignacionConfiguracionProductoComponent implements OnInit {
         this.configuracionProductos.data = configuracionProductos;
         this.configuracionProductos.paginator = this.paginator1;
       })
-      .catch((error) => {
-        console.log(error);
-      });
+      .catch((error) => console.log(error));
   }
 
   agregarDetalleParaCompra(producto) {
@@ -188,24 +186,24 @@ export class ModalAsignacionConfiguracionProductoComponent implements OnInit {
         this.listaProductosEnStock.data = listaProductosEnStock;
         this.listaProductosEnStock.paginator = this.paginator2;
       })
-      .catch((error) => {
-        console.log(error);
-      });
+      .catch((error) => console.log(error));
   }
 
   cerrarModal() {
     this.buttonComprarKitCompleto = true;
-    this.ventaService.ingresoDetalleVentaPorKit(
-      this.idCabeceraFactura,
-      this.idKit,
-      this.cantidad,
-      localStorage.getItem("miCuenta.postToken")
-    ).then( ok => {
-      console.log(ok['respuesta']);
-      if (ok['respuesta'] == "true") {
-        this.modalAsignacionConfiguracionProducto.closeAll();
-      }
-    })
+    this.ventaService
+      .ingresoDetalleVentaPorKit(
+        this.idCabeceraFactura,
+        this.idKit,
+        this.cantidad,
+        localStorage.getItem("miCuenta.postToken")
+      )
+      .then((ok) => {
+        if (ok["respuesta"] == "true") {
+          this.modalAsignacionConfiguracionProducto.closeAll();
+        }
+      })
+      .catch((error) => console.log(error));
   }
 
   siElKitVieneDeCompra(listaProductos) {
@@ -285,7 +283,7 @@ export class ModalAsignacionConfiguracionProductoComponent implements OnInit {
         try {
           this.nombreKit = this.data.listaProductosDeUnKit[0].Kit.Descripcion;
           this.idKit = this.data.listaProductosDeUnKit[0].Kit.IdKit;
-        } catch (error) { }
+        } catch (error) {}
         if (this.data.permitirAnadir) {
           this.permitirAnadir = false;
         } else {

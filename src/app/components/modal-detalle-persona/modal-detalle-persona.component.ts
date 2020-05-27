@@ -1,50 +1,51 @@
-import { Component, OnInit, Inject } from '@angular/core';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { IfStmt } from '@angular/compiler';
+import { Component, OnInit, Inject } from "@angular/core";
+import { MAT_DIALOG_DATA } from "@angular/material/dialog";
+import { IfStmt } from "@angular/compiler";
 
 @Component({
-  selector: 'app-modal-detalle-persona',
-  templateUrl: './modal-detalle-persona.component.html',
-  styleUrls: ['./modal-detalle-persona.component.css']
+  selector: "app-modal-detalle-persona",
+  templateUrl: "./modal-detalle-persona.component.html",
+  styleUrls: ["./modal-detalle-persona.component.css"],
 })
 export class ModalDetallePersonaComponent implements OnInit {
+  constructor(@Inject(MAT_DIALOG_DATA) public data: any) {}
 
-  constructor(
-    @Inject(MAT_DIALOG_DATA) public data: any,
-  ) { }
-
-  nombresCompletos = this.data.persona.PrimerNombre + ' ' +
-    this.data.persona.SegundoNombre + ' ' +
-    this.data.persona.ApellidoPaterno + ' ' +
+  nombresCompletos =
+    this.data.persona.PrimerNombre +
+    " " +
+    this.data.persona.SegundoNombre +
+    " " +
+    this.data.persona.ApellidoPaterno +
+    " " +
     this.data.persona.ApellidoMaterno;
 
-    provincia = this.data.persona.AsignacionPersonaParroquia[0].Parroquia.Canton.Provincia.Descripcion;
-    canton = this.data.persona.AsignacionPersonaParroquia[0].Parroquia.Canton.Descripcion;
-    parroquia = this.data.persona.AsignacionPersonaParroquia[0].Parroquia.Descripcion;
+  provincia = this.data.persona.AsignacionPersonaParroquia[0].Parroquia.Canton
+    .Provincia.Descripcion;
+  canton = this.data.persona.AsignacionPersonaParroquia[0].Parroquia.Canton
+    .Descripcion;
+  parroquia = this.data.persona.AsignacionPersonaParroquia[0].Parroquia
+    .Descripcion;
 
-    correo = '';
-    direccion = this.provincia + ' > ' +
-    this.canton + ' > ' +
-    this.parroquia;
+  correo = "";
+  direccion = this.provincia + " > " + this.canton + " > " + this.parroquia;
 
-  sinNumero = 'Sin Numero';
-  sinCorreo = 'Sin Correo';
+  sinNumero = "Sin Numero";
+  sinCorreo = "Sin Correo";
   sinDireccion: string;
 
   ngOnInit() {
-    console.log(this.correo);
-    if (this.data.persona.ListaCorreo == null ) {
-      this.correo = 'Sin Correo';
-    }else
-    {
-      console.log(this.data.persona.ListaCorreo[0].CorreoValor);
+    if (this.data.persona.ListaCorreo == null) {
+      this.correo = "Sin Correo";
+    } else {
       this.correo = this.data.persona.ListaCorreo[0].CorreoValor;
     }
 
-    if (this.provincia == null || this.canton == null ||
-      this.parroquia == null) {
-      this.direccion = 'Sin Direccion';
+    if (
+      this.provincia == null ||
+      this.canton == null ||
+      this.parroquia == null
+    ) {
+      this.direccion = "Sin Direccion";
     }
   }
-
 }

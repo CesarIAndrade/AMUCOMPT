@@ -1,188 +1,172 @@
-import { Component, OnInit,ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from "@angular/core";
 
 // Components
-import { ModalDetalleProductoComponent } from '../modal-detalle-producto/modal-detalle-producto.component';
-import { MatPaginator, MatTableDataSource, MatPaginatorIntl } from '@angular/material';
+import { ModalDetalleProductoComponent } from "../modal-detalle-producto/modal-detalle-producto.component";
+import {
+  MatPaginator,
+  MatTableDataSource,
+  MatPaginatorIntl,
+} from "@angular/material";
 // Functional Components
 import { MatDialog } from "@angular/material/dialog";
 
 // Services
-import { InventarioService } from 'src/app/services/inventario.service';
+import { InventarioService } from "src/app/services/inventario.service";
 
 // SweetAlert
-import sweetalert from 'sweetalert';
-import { FormGroup, FormControl } from '@angular/forms';
+import sweetalert from "sweetalert";
+import { FormGroup, FormControl } from "@angular/forms";
 
 export interface DetalleProducto {
-  presentacion: string,
-  contenidoNeto: string,
-  medida: string
+  presentacion: string;
+  contenidoNeto: string;
+  medida: string;
 }
 
 @Component({
-  selector: 'app-armar-kit',
-  templateUrl: './armar-kit.component.html',
-  styleUrls: ['./armar-kit.component.css']
+  selector: "app-armar-kit",
+  templateUrl: "./armar-kit.component.html",
+  styleUrls: ["./armar-kit.component.css"],
 })
 export class ArmarKitComponent implements OnInit {
-
-  myForm: FormGroup;
   constructor(
     private inventarioService: InventarioService,
-    private dialog: MatDialog,
+    private dialog: MatDialog
   ) {
     this.myForm = new FormGroup({
-      _idKit: new FormControl(''),
-      _idAsignarDescuentoKit: new FormControl('')
-    })
-   }
-
-   get _idKit() {
-     return this.myForm.get('_idKit');
-   }
-
-   get _idAsignarDescuentoKit() {
-    return this.myForm.get('_idAsignarDescuentoKit');
+      _idKit: new FormControl(""),
+      _idAsignarDescuentoKit: new FormControl(""),
+    });
   }
 
   // Para la paginacion
-  @ViewChild('paginator', { static: false }) paginator: MatPaginator;
-  @ViewChild('paginator1', { static: false }) paginator1: MatPaginator;
-
+  @ViewChild("paginator", { static: false }) paginator: MatPaginator;
+  @ViewChild("paginator1", { static: false }) paginator1: MatPaginator;
   productos = new MatTableDataSource<Element[]>();
   listaProductosDeUnKit = new MatTableDataSource<Element[]>();
 
+  myForm: FormGroup;
   kits: any[] = [];
   Arrayproductos: any[] = [];
 
   onChangeSelectKit() {
-    var kit = this.kits.find(kit => kit.IdKit == this._idKit.value);
-    this._idAsignarDescuentoKit.setValue(kit.AsignarDescuentoKit.IdAsignarDescuentoKit);
-    this.consultarKitsYSusProductos(this._idKit.value);
-    this.consultarProductos(this._idKit.value);
+    var kit = this.kits.find(
+      (kit) => kit.IdKit == this.myForm.get("_idKit").value
+    );
+    this.myForm
+      .get("_idAsignarDescuentoKit")
+      .setValue(kit.AsignarDescuentoKit.IdAsignarDescuentoKit);
+    this.consultarKitsYSusProductos(this.myForm.get("_idKit").value);
+    this.consultarProductos(this.myForm.get("_idKit").value);
   }
 
   applyFilter(event) {
-    this._filterTable(event,this.productos.data);
+    this._filterTable(event, this.productos.data);
   }
 
-  private _filterTable(value: string,arreglo: any[]) {
+  private _filterTable(value: string, arreglo: any[]) {
     const filterValue = value.toLowerCase();
-    if(value == '') {
+    if (value == "") {
       this.productos.data = this.Arrayproductos;
     } else {
-      this.productos.data = this.Arrayproductos.filter(option =>option['Producto']['Nombre'].trim().toLowerCase().includes(filterValue.trim()));
+      this.productos.data = this.Arrayproductos.filter((option) =>
+        option["Producto"]["Nombre"]
+          .trim()
+          .toLowerCase()
+          .includes(filterValue.trim())
+      );
     }
   }
 
   consultarKitsYSusProductos(idKit) {
     const url = "Inventario/ListaAsignarProductoKit";
-    this.inventarioService.consultarKitsYSusProductos(
-      idKit,
-      localStorage.getItem('miCuenta.getToken'),
-      url
-    )
-      .then(
-        ok => {
-          this.listaProductosDeUnKit.data = [];
-          this.listaProductosDeUnKit.data = ok['respuesta'][0]['ListaAsignarProductoKit'];
-          this.listaProductosDeUnKit.paginator = this.paginator;
-        }
+    this.inventarioService
+      .consultarKitsYSusProductos(
+        idKit,
+        localStorage.getItem("miCuenta.getToken"),
+        url
       )
-      .catch(
-        error => {
-          console.log(error);
-        }
-      )
+      .then((ok) => {
+        this.listaProductosDeUnKit.data = [];
+        this.listaProductosDeUnKit.data =
+          ok["respuesta"][0]["ListaAsignarProductoKit"];
+        this.listaProductosDeUnKit.paginator = this.paginator;
+      })
+      .catch((error) => console.log(error));
   }
 
   consultarKits() {
-    this.inventarioService.consultarKits(
-      localStorage.getItem('miCuenta.getToken')
-    )
-      .then(
-        ok => {
-          this.kits = [];
-          this.kits = ok['respuesta'];
-        }
-      )
-      .catch(
-        error => {
-          console.log(error);
-        }
-      )
+    this.inventarioService
+      .consultarKits(localStorage.getItem("miCuenta.getToken"))
+      .then((ok) => {
+        this.kits = [];
+        this.kits = ok["respuesta"];
+      })
+      .catch((error) => console.log(error));
   }
 
   consultarProductos(idKit) {
-    this.inventarioService.consultarProductosQueNoTieneUnKit(
-      idKit,
-      localStorage.getItem('miCuenta.getToken')
-    )
-      .then(
-        ok => {
-          this.productos.data = [];
-          this.productos.data = ok['respuesta'];
-          this.productos.paginator = this.paginator1;
-          this.Arrayproductos = ok['respuesta'];
-        }
+    this.inventarioService
+      .consultarProductosQueNoTieneUnKit(
+        idKit,
+        localStorage.getItem("miCuenta.getToken")
       )
-      .catch(
-        error => {
-          console.log(error);
-        }
-      )
+      .then((ok) => {
+        this.productos.data = [];
+        this.productos.data = ok["respuesta"];
+        this.productos.paginator = this.paginator1;
+        this.Arrayproductos = ok["respuesta"];
+      })
+      .catch((error) => console.log(error));
   }
 
   mostrarDetalleProducto(producto, estructura) {
     var detalleProducto: DetalleProducto;
-    if(estructura == 'productoDeUnKit') {
+    if (estructura == "productoDeUnKit") {
       detalleProducto = {
         presentacion: producto.ListaProductos.Presentacion.Descripcion,
         contenidoNeto: producto.ListaProductos.CantidadMedida,
-        medida: producto.ListaProductos.Medida.Descripcion
-      }
+        medida: producto.ListaProductos.Medida.Descripcion,
+      };
       let dialogRef = this.dialog.open(ModalDetalleProductoComponent, {
-        width: '400px',
-        height: 'auto',
+        width: "400px",
+        height: "auto",
         data: {
-          producto: detalleProducto
-        }
+          producto: detalleProducto,
+        },
       });
-    } else if(estructura == 'productoSinkit') {
+    } else if (estructura == "productoSinkit") {
       detalleProducto = {
         presentacion: producto.Presentacion.Descripcion,
         contenidoNeto: producto.CantidadMedida,
-        medida: producto.Medida.Descripcion
-      }
+        medida: producto.Medida.Descripcion,
+      };
       let dialogRef = this.dialog.open(ModalDetalleProductoComponent, {
-        width: '400px',
-        height: 'auto',
+        width: "400px",
+        height: "auto",
         data: {
-          producto: detalleProducto
-        }
+          producto: detalleProducto,
+        },
       });
     }
   }
 
   asignarProductoKit(producto) {
-    this.inventarioService.asignarProductoKit(
-      producto.IdConfigurarProducto,
-      this._idAsignarDescuentoKit.value,
-      localStorage.getItem('miCuenta.postToken')
-    )
-      .then(
-        ok => {
-          if (ok['respuesta']) {
-            this.consultarKitsYSusProductos(this._idKit.value);
-            this.consultarProductos(this._idKit.value);
-          }
-        }
+    this.inventarioService
+      .asignarProductoKit(
+        producto.IdConfigurarProducto,
+        this.myForm.get("_idAsignarDescuentoKit").value,
+        localStorage.getItem("miCuenta.postToken")
       )
-      .catch(
-        error => {
-          console.log(error);
+      .then((ok) => {
+        if (ok["respuesta"]) {
+          this.consultarKitsYSusProductos(this.myForm.get("_idKit").value);
+          this.consultarProductos(this.myForm.get("_idKit").value);
         }
-      )
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }
 
   eliminarAsignacionProductoKit(producto) {
@@ -190,37 +174,30 @@ export class ArmarKitComponent implements OnInit {
       title: "Advertencia",
       text: "¿Está seguro que desea quitar del Kit?",
       icon: "warning",
-      buttons: ['Cancelar', 'Ok'],
-      dangerMode: true
-    })
-      .then((willDelete) => {
-        if (willDelete) {
-          this.inventarioService.eliminarAsignacionProductoKit(
+      buttons: ["Cancelar", "Ok"],
+      dangerMode: true,
+    }).then((willDelete) => {
+      if (willDelete) {
+        this.inventarioService
+          .eliminarAsignacionProductoKit(
             producto.IdAsignarProductoKit,
-            localStorage.getItem('miCuenta.deleteToken')
+            localStorage.getItem("miCuenta.deleteToken")
           )
-            .then(
-              ok => {
-                if (ok['respuesta']) {
-                  this.consultarKitsYSusProductos(this._idKit.value);
-                  this.consultarProductos(this._idKit.value);
-                }
-              }
-            )
-            .catch(
-              error => {
-                console.log(error);
-              }
-            )
-        }
-      });
+          .then((ok) => {
+            if (ok["respuesta"]) {
+              this.consultarKitsYSusProductos(this.myForm.get("_idKit").value);
+              this.consultarProductos(this.myForm.get("_idKit").value);
+            }
+          })
+          .catch((error) => console.log(error));
+      }
+    });
   }
 
   ngOnInit() {
     this.consultarKits();
   }
 
-  tablaProductos = ['codigo', 'descripcion', 'tipoProducto', 'acciones'];
-  tablaProductosDeUnKit = ['codigo', 'descripcion', 'tipoProducto', 'acciones'];
-
+  tablaProductos = ["codigo", "descripcion", "tipoProducto", "acciones"];
+  tablaProductosDeUnKit = ["codigo", "descripcion", "tipoProducto", "acciones"];
 }

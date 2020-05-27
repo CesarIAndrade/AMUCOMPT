@@ -1,10 +1,7 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { Router } from "@angular/router";
-import {
-  MatTableDataSource,
-  MatPaginator,
-} from "@angular/material";
+import { MatTableDataSource, MatPaginator } from "@angular/material";
 import { MatDialog } from "@angular/material/dialog";
 
 // Components
@@ -75,11 +72,9 @@ export class VentaComponent implements OnInit {
       _nombres: new FormControl(""),
       _idAsignarProductoLote: new FormControl(""),
       _kit: new FormControl(""),
-      _checkedDescuento: new FormControl(""),
+      _checkedDescuento: new FormControl(false),
       _disponible: new FormControl(""),
-      _checkedCredito: new FormControl(""),
       _descuento: new FormControl(""),
-
       _fechaFinalCredito: new FormControl(""),
       _aplicaSeguro: new FormControl(false),
       _valorSeguro: new FormControl(""),
@@ -122,6 +117,7 @@ export class VentaComponent implements OnInit {
   totalDescontado: string;
   subTotalFactura: string;
   totalFactura: string;
+  totalIva: string;
 
   seccionKit = true;
   aplicaDescuento = true;
@@ -158,23 +154,25 @@ export class VentaComponent implements OnInit {
   selecionarTipoPago(tipoPago) {
     if (tipoPago.value == "Efectivo") {
       this.siSePagaACredito = true;
-      this._aplicaSeguro.setValue(false);
-      this._aplicaSeguro.enable();
-      this._valorSeguro.clearValidators();
-      this._fechaFinalCredito.clearValidators();
-      this._valorSeguro.updateValueAndValidity();
-      this._fechaFinalCredito.updateValueAndValidity();
+      this.myForm.get("_aplicaSeguro").setValue(false);
+      this.myForm.get("_aplicaSeguro").enable();
+      this.myForm.get("_valorSeguro").clearValidators();
+      this.myForm.get("_fechaFinalCredito").clearValidators();
+      this.myForm.get("_valorSeguro").updateValueAndValidity();
+      this.myForm.get("_fechaFinalCredito").updateValueAndValidity();
     } else {
       this.siSePagaACredito = false;
-      this._aplicaSeguro.setValue(true);
-      this._aplicaSeguro.disable();
-      this._valorSeguro.setValidators([Validators.required]);
-      this._fechaFinalCredito.setValidators([Validators.required]);
-      this._valorSeguro.updateValueAndValidity();
-      this._fechaFinalCredito.updateValueAndValidity();
+      this.myForm.get("_aplicaSeguro").setValue(true);
+      this.myForm.get("_aplicaSeguro").disable();
+      this.myForm.get("_valorSeguro").setValidators([Validators.required]);
+      this.myForm
+        .get("_fechaFinalCredito")
+        .setValidators([Validators.required]);
+      this.myForm.get("_valorSeguro").updateValueAndValidity();
+      this.myForm.get("_fechaFinalCredito").updateValueAndValidity();
     }
-    this._fechaFinalCredito.reset();
-    this._valorSeguro.reset();
+    this.myForm.get("_fechaFinalCredito").reset();
+    this.myForm.get("_valorSeguro").reset();
   }
 
   consultarKits() {
@@ -188,9 +186,7 @@ export class VentaComponent implements OnInit {
           }
         });
       })
-      .catch((error) => {
-        console.log(error);
-      })
+      .catch((error) => console.log(error))
       .finally(() => {
         this.seccionKit = false;
         this.buttonSeleccionarProducto = true;
@@ -212,12 +208,8 @@ export class VentaComponent implements OnInit {
         this.permitirAnadir = ok["respuesta"][0]["PermitirAnadir"];
         this.buttonSeleccionarProducto = true;
       })
-      .catch((error) => {
-        console.log(error);
-      })
-      .finally(() => {
-        this.buttonSeleccionarProducto = false;
-      });
+      .catch((error) => console.log(error))
+      .finally(() => (this.buttonSeleccionarProducto = false));
   }
 
   onChangeSelectKit(idKit) {
@@ -235,10 +227,10 @@ export class VentaComponent implements OnInit {
     );
     dialogRef.afterClosed().subscribe((result) => {
       if (result != null) {
-        this._cedula.setValue(result.cedula);
-        this._idPersona.setValue(result.idPersona);
+        this.myForm.get("_cedula").setValue(result.cedula);
+        this.myForm.get("_idPersona").setValue(result.idPersona);
         var nombres = result.nombres + " " + result.apellidos;
-        this._nombres.setValue(nombres);
+        this.myForm.get("_nombres").setValue(nombres);
       }
     });
   }
@@ -251,7 +243,7 @@ export class VentaComponent implements OnInit {
         height: "auto",
         data: {
           listaProductosDeUnKit: this.listaProductosDeUnKit,
-          idCabeceraFactura: this._idCabecera.value,
+          idCabeceraFactura: this.myForm.get("_idCabecera").value,
           permitirAnadir: this.permitirAnadir,
         },
       }
@@ -260,16 +252,18 @@ export class VentaComponent implements OnInit {
       if (result != null) {
         if (result.Kit != "") {
           this.aplicaDescuento = false;
-          this._kit.setValue(result.Kit);
-          this._descuento.setValue(result.Porcentaje);
+          this.myForm.get("_kit").setValue(result.Kit);
+          this.myForm.get("_descuento").setValue(result.Porcentaje);
         } else {
           this.aplicaDescuento = true;
-          this._kit.setValue("");
-          this._checkedDescuento.setValue(false);
+          this.myForm.get("_kit").setValue("");
+          this.myForm.get("_checkedDescuento").setValue(false);
         }
-        this._idAsignarProductoLote.setValue(result.IdAsignarProductoLote);
+        this.myForm
+          .get("_idAsignarProductoLote")
+          .setValue(result.IdAsignarProductoLote);
         this.consultarPrecioDeUnProducto();
-        this._disponible.setValue(result.Disponible);
+        this.myForm.get("_disponible").setValue(result.Disponible);
         var producto =
           result.Producto +
           " " +
@@ -278,9 +272,9 @@ export class VentaComponent implements OnInit {
           result.ContenidoNeto +
           " " +
           result.Medida;
-        this._producto.setValue(producto);
-        this._cantidad.reset();
-        this._checkedDescuento.enable();
+        this.myForm.get("_producto").setValue(producto);
+        this.myForm.get("_cantidad").reset();
+        this.myForm.get("_checkedDescuento").enable();
       } else {
         this.consultarDetalleFactura();
       }
@@ -300,14 +294,14 @@ export class VentaComponent implements OnInit {
         if (this.router.url === "/ventas") {
           ok["respuesta"].map((item) => {
             if (item.Descripcion == "VENTA") {
-              this._tipoTransaccion.setValue(item.IdTipoTransaccion);
+              this.myForm
+                .get("_tipoTransaccion")
+                .setValue(item.IdTipoTransaccion);
             }
           });
         }
       })
-      .catch((error) => {
-        console.log(error);
-      });
+      .catch((error) => console.log(error));
   }
 
   validarFormulario() {
@@ -318,7 +312,7 @@ export class VentaComponent implements OnInit {
     this.facturaService
       .crearCabeceraFactura(
         localStorage.getItem("miCuenta.idAsignacionTipoUsuario"),
-        this._tipoTransaccion.value,
+        this.myForm.get("_tipoTransaccion").value,
         localStorage.getItem("miCuenta.postToken")
       )
       .then((ok) => {
@@ -327,19 +321,27 @@ export class VentaComponent implements OnInit {
             icon: "error",
           });
         } else if (ok["respuesta"]) {
-          this._idCabecera.setValue(ok["respuesta"].IdCabeceraFactura);
-          this._cabecera.setValue(ok["respuesta"].Codigo);
+          this.myForm
+            .get("_idCabecera")
+            .setValue(ok["respuesta"].IdCabeceraFactura);
+          this.myForm.get("_cabecera").setValue(ok["respuesta"].Codigo);
           var fecha = new Date();
           var dia = this.dias[fecha.getDay()];
           var mes = this.meses[fecha.getMonth()];
-          this._fechaActual.setValue(
-            dia + ", " + fecha.getDate() + " " + mes + " " + fecha.getFullYear()
-          );
+          this.myForm
+            .get("_fechaActual")
+            .setValue(
+              dia +
+                ", " +
+                fecha.getDate() +
+                " " +
+                mes +
+                " " +
+                fecha.getFullYear()
+            );
         }
       })
-      .catch((error) => {
-        console.log(error);
-      })
+      .catch((error) => console.log(error))
       .finally(() => {
         this.buttonGenerarFactura = true;
         this.buttonSeleccionarPersona = false;
@@ -348,25 +350,19 @@ export class VentaComponent implements OnInit {
         this.selectTipoCompra = false;
         this.selectTipoPago = false;
         this.myForm.enable();
-        this._checkedDescuento.disable();
+        this.myForm.get("_checkedDescuento").disable();
       });
   }
 
   crearDetalleVenta() {
-    var EstadoCheck: string;
-    if (this._checkedDescuento.value == true) {
-      EstadoCheck = "1";
-    } else {
-      EstadoCheck = "0";
-    }
     this.ventaService
       .crearDetalleFactura(
-        this._idCabecera.value,
-        this._idAsignarProductoLote.value,
-        EstadoCheck,
+        this.myForm.get("_idCabecera").value,
+        this.myForm.get("_idAsignarProductoLote").value,
+        this.myForm.get("_checkedDescuento").value ? "1" : "0",
         "0",
-        this._cantidad.value,
-        this._descuento.value,
+        this.myForm.get("_cantidad").value,
+        this.myForm.get("_descuento").value,
         localStorage.getItem("miCuenta.postToken")
       )
       .then((ok) => {
@@ -388,33 +384,25 @@ export class VentaComponent implements OnInit {
           });
         }
       })
-      .catch((error) => {
-        console.log(error);
-      })
-      .finally(() => {
-        this.consultarDetalleFactura();
-      });
+      .catch((error) => console.log(error))
+      .finally(() => this.consultarDetalleFactura());
   }
 
   consultarPrecioDeUnProducto() {
     this.inventarioService
       .buscarPrecioDeUnProducto(
-        this._idAsignarProductoLote.value,
+        this.myForm.get("_idAsignarProductoLote").value,
         localStorage.getItem("miCuenta.getToken")
       )
-      .then((ok) => {
-        this._precio.setValue(ok["respuesta"].Precio);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+      .then((ok) => this.myForm.get("_precio").setValue(ok["respuesta"].Precio))
+      .catch((error) => console.log(error));
   }
 
   realizarVenta() {
     const url = "Factura/FinalizarCabeceraFacturaVenta";
     this.facturaService
       .finalizarFactura(
-        this._idCabecera.value,
+        this.myForm.get("_idCabecera").value,
         url,
         localStorage.getItem("miCuenta.putToken")
       )
@@ -423,10 +411,10 @@ export class VentaComponent implements OnInit {
           sweetAlert("Se ingresó correctamente!", {
             icon: "success",
           });
-          var tipoTransaccion = this._tipoTransaccion.value;
+          var tipoTransaccion = this.myForm.get("_tipoTransaccion").value;
           this.myForm.reset();
           this.myForm.disable();
-          this._tipoTransaccion.setValue(tipoTransaccion);
+          this.myForm.get("_tipoTransaccion").setValue(tipoTransaccion);
           this.comunidades = [];
           this.selectTipoPago = true;
           this.pago = "Efectivo";
@@ -437,9 +425,7 @@ export class VentaComponent implements OnInit {
           });
         }
       })
-      .catch((error) => {
-        console.log(error);
-      })
+      .catch((error) => console.log(error))
       .finally(() => {
         this.consultarFacturasNoFinalizadas();
         this.consultarFacturasFinalizadas();
@@ -449,7 +435,9 @@ export class VentaComponent implements OnInit {
   }
 
   validarFecha() {
-    var fechaFinalCredito: any = new Date(this._fechaFinalCredito.value);
+    var fechaFinalCredito: any = new Date(
+      this.myForm.get("_fechaFinalCredito").value
+    );
     var fechaActual = new Date();
     try {
       if (fechaFinalCredito.getFullYear() < fechaActual.getFullYear()) {
@@ -459,7 +447,7 @@ export class VentaComponent implements OnInit {
         fechaFinalCredito = fechaFinalCredito.split("T")[0];
         return fechaFinalCredito;
       }
-    } catch (error) {
+    } catch {
       return (fechaFinalCredito = null);
     }
   }
@@ -467,31 +455,27 @@ export class VentaComponent implements OnInit {
   crearConfiguracionVenta() {
     var efectivo: any;
     this.siSePagaACredito ? (efectivo = "1") : (efectivo = "0");
-    if(this.myForm.valid) {
+    if (this.myForm.valid) {
       this.ventaService
-      .crearConfiguracionVenta(
-        this._idCabecera.value,
-        this._idPersona.value,
-        efectivo,
-        this.validarFecha(),
-        this._aplicaSeguro.value,
-        this._valorSeguro.value,
-        this._seguroCancelado.value,
-        localStorage.getItem("miCuenta.postToken")
-      )
-      .then((ok) => {
-        this.realizarVenta();
-      })
-      .catch((error) => console.log(error));
+        .crearConfiguracionVenta(
+          this.myForm.get("_idCabecera").value,
+          this.myForm.get("_idPersona").value,
+          efectivo,
+          this.validarFecha(),
+          this.myForm.get("_aplicaSeguro").value ? "1" : "0",
+          this.myForm.get("_valorSeguro").value,
+          this.myForm.get("_seguroCancelado").value ? "1" : "0",
+          localStorage.getItem("miCuenta.postToken")
+        )
+        .then((ok) => this.realizarVenta())
+        .catch((error) => console.log(error));
     }
   }
-
-  totalIva: string;
 
   consultarDetalleFactura() {
     this.ventaService
       .consultarDetalleFactura(
-        this._idCabecera.value,
+        this.myForm.get("_idCabecera").value,
         localStorage.getItem("miCuenta.getToken")
       )
       .then((ok) => {
@@ -578,9 +562,7 @@ export class VentaComponent implements OnInit {
         this.detalleVenta.data = detalleVenta;
         this.detalleVenta.paginator = this.paginator;
       })
-      .catch((error) => {
-        console.log(error);
-      });
+      .catch((error) => console.log(error));
   }
 
   modificarCantidadDeProductoEnDetalle(event, element) {
@@ -600,7 +582,9 @@ export class VentaComponent implements OnInit {
               this.consultarDetalleFactura();
             }
             if (ok["respuesta"] == "false") {
-              console.log("error en el servidor");
+              sweetAlert("Ha ocurrido un error!", {
+                icon: "error",
+              });
             }
             if (ok["respuesta"] != "true" && ok["respuesta"] != "false") {
               event.target.value = cantidadAntigua;
@@ -609,9 +593,7 @@ export class VentaComponent implements OnInit {
               });
             }
           })
-          .catch((error) => {
-            console.log(error);
-          });
+          .catch((error) => console.log(error));
       }
     }
   }
@@ -637,31 +619,27 @@ export class VentaComponent implements OnInit {
         )
         .then((ok) => {
           if (ok["respuesta"] == "0") {
-            this._idCabecera.setValue("");
+            this.myForm.get("_idCabecera").setValue("");
             this.myForm.reset();
             this.detalleVenta.data = [];
           } else {
             this.consultarDetalleFactura();
           }
         })
-        .catch((error) => {
-          console.log(error);
-        })
-        .finally(() => {
-          this.consultarFacturasNoFinalizadas();
-        });
+        .catch((error) => console.log(error))
+        .finally(() => this.consultarFacturasNoFinalizadas());
     }
   }
 
   limpiarCampos() {
-    this._producto.reset();
-    this._cantidad.reset();
-    this._idAsignarProductoLote.reset();
-    this._kit.reset();
-    this._checkedDescuento.reset();
-    this._precio.reset();
-    this._disponible.reset();
-    this._descuento.reset();
+    this.myForm.get("_producto").reset();
+    this.myForm.get("_cantidad").reset();
+    this.myForm.get("_idAsignarProductoLote").reset();
+    this.myForm.get("_kit").reset();
+    this.myForm.get("_checkedDescuento").reset();
+    this.myForm.get("_precio").reset();
+    this.myForm.get("_disponible").reset();
+    this.myForm.get("_descuento").reset();
   }
 
   seleccionarComunidad() {
@@ -679,7 +657,7 @@ export class VentaComponent implements OnInit {
       if (result != null) {
         this.ventaService
           .asignarComunidadFactura(
-            this._idCabecera.value,
+            this.myForm.get("_idCabecera").value,
             result.idLocalidad,
             localStorage.getItem("miCuenta.postToken")
           )
@@ -714,23 +692,19 @@ export class VentaComponent implements OnInit {
         this.facturasNoFinalizadas.data = ok["respuesta"];
         this.facturasNoFinalizadas.paginator = this.fnf_paginator;
       })
-      .catch((error) => {
-        console.log(error);
-      })
-      .finally(() => {
-        this.consultarFacturasFinalizadas();
-      });
+      .catch((error) => console.log(error))
+      .finally(() => this.consultarFacturasFinalizadas());
   }
 
   mostrarDetallesFactura(factura) {
     this.myForm.reset();
     this.buttonRealizarVenta = false;
-    this._idCabecera.setValue(factura.IdCabeceraFactura);
+    this.myForm.get("_idCabecera").setValue(factura.IdCabeceraFactura);
     this.listarComunidadesPorFactura();
     this.consultarDetalleFactura();
-    this._cabecera.setValue(factura.Codigo);
+    this.myForm.get("_cabecera").setValue(factura.Codigo);
     this.myForm.enable();
-    this._checkedDescuento.disable();
+    this.myForm.get("_checkedDescuento").disable();
     this.buttonSeleccionarProducto = false;
     this.buttonSeleccionarComunidad = false;
     this.buttonSeleccionarPersona = false;
@@ -740,9 +714,11 @@ export class VentaComponent implements OnInit {
     var fecha = new Date(factura.FechaGeneracion);
     var dia = this.dias[fecha.getDay()];
     var mes = this.meses[fecha.getMonth()];
-    this._fechaActual.setValue(
-      dia + ", " + fecha.getDate() + " " + mes + " " + fecha.getFullYear()
-    );
+    this.myForm
+      .get("_fechaActual")
+      .setValue(
+        dia + ", " + fecha.getDate() + " " + mes + " " + fecha.getFullYear()
+      );
   }
 
   consultarFacturasFinalizadas() {
@@ -756,13 +732,14 @@ export class VentaComponent implements OnInit {
         this.facturasFinalizadas.data = [];
         this.facturasFinalizadas.data = ok["respuesta"];
         this.facturasFinalizadas.paginator = this.ff_paginator;
-      });
+      })
+      .catch((error) => console.log(error));
   }
 
   listarComunidadesPorFactura() {
     this.ventaService
       .listarComunidadesPorFactura(
-        this._idCabecera.value,
+        this.myForm.get("_idCabecera").value,
         localStorage.getItem("miCuenta.getToken")
       )
       .then((ok) => {
@@ -777,94 +754,10 @@ export class VentaComponent implements OnInit {
       .catch((error) => console.log(error));
   }
 
-  get _producto() {
-    return this.myForm.get("_producto");
-  }
-
-  get _cantidad() {
-    return this.myForm.get("_cantidad");
-  }
-
-  get _precio() {
-    return this.myForm.get("_precio");
-  }
-
-  get _pagoEfectivo() {
-    return this.myForm.get("_pagoEfectivo");
-  }
-
-  get _cedula() {
-    return this.myForm.get("_cedula");
-  }
-
-  get _nombres() {
-    return this.myForm.get("_nombres");
-  }
-
-  get _idPersona() {
-    return this.myForm.get("_idPersona");
-  }
-
-  get _checkedCredito() {
-    return this.myForm.get("_checkedCredito");
-  }
-
-  get _tipoTransaccion() {
-    return this.myForm.get("_tipoTransaccion");
-  }
-
-  get _idCabecera() {
-    return this.myForm.get("_idCabecera");
-  }
-
-  get _disponible() {
-    return this.myForm.get("_disponible");
-  }
-
-  get _idAsignarProductoLote() {
-    return this.myForm.get("_idAsignarProductoLote");
-  }
-
-  get _cabecera() {
-    return this.myForm.get("_cabecera");
-  }
-
-  get _fechaActual() {
-    return this.myForm.get("_fechaActual");
-  }
-
-  get _kit() {
-    return this.myForm.get("_kit");
-  }
-
-  get _checkedDescuento() {
-    return this.myForm.get("_checkedDescuento");
-  }
-
-  get _descuento() {
-    return this.myForm.get("_descuento");
-  }
-
-  get _fechaFinalCredito() {
-    return this.myForm.get("_fechaFinalCredito");
-  }
-
-  get _aplicaSeguro() {
-    return this.myForm.get("_aplicaSeguro");
-  }
-
-  get _valorSeguro() {
-    return this.myForm.get("_valorSeguro");
-  }
-
-  get _seguroCancelado() {
-    return this.myForm.get("_seguroCancelado");
-  }
-
   ngOnInit() {
     this.consultarTipoTransaccion();
     this.consultarFacturasNoFinalizadas();
-    setTimeout(() => this.consultarFacturasFinalizadas(), 5000);
+    this.consultarFacturasFinalizadas();
     this.myForm.disable();
   }
 

@@ -23,7 +23,7 @@ export class ModalLotesComponent implements OnInit {
     nombreLote: "",
     fechaExpiracion: "",
     idLote: "",
-    precio: ""
+    precio: "",
   };
 
   // Para la paginacion
@@ -45,19 +45,17 @@ export class ModalLotesComponent implements OnInit {
           this.lotes.paginator = this.paginator;
         }
       })
-      .catch((error) => {
-        console.log(error);
-      });
+      .catch((error) => console.log(error));
   }
 
-  keyUp(){
-    if(this.lote.nombreLote != "" && this.lote.fechaExpiracion != "") {
+  keyUp() {
+    if (this.lote.nombreLote != "" && this.lote.fechaExpiracion != "") {
       this.permitirCrearLote = false;
     }
   }
 
   change() {
-    if(this.lote.nombreLote != "" && this.lote.fechaExpiracion != "") {
+    if (this.lote.nombreLote != "" && this.lote.fechaExpiracion != "") {
       this.permitirCrearLote = false;
     }
   }

@@ -1,21 +1,22 @@
-import { Component, OnInit ,ViewChild} from '@angular/core';
-import { MatPaginator, MatTableDataSource, MatPaginatorIntl } from '@angular/material';
+import { Component, OnInit, ViewChild } from "@angular/core";
+import {
+  MatPaginator,
+  MatTableDataSource,
+  MatPaginatorIntl,
+} from "@angular/material";
 // Services
-import { InventarioService } from 'src/app/services/inventario.service';
+import { InventarioService } from "src/app/services/inventario.service";
 
 @Component({
-  selector: 'app-stock',
-  templateUrl: './stock.component.html',
-  styleUrls: ['./stock.component.css']
+  selector: "app-stock",
+  templateUrl: "./stock.component.html",
+  styleUrls: ["./stock.component.css"],
 })
 export class StockComponent implements OnInit {
-
-  constructor(
-    private inventarioService: InventarioService,
-  ) { }
+  constructor(private inventarioService: InventarioService) {}
 
   // Para la paginacion
-  @ViewChild('paginator', { static: false }) paginator: MatPaginator;
+  @ViewChild("paginator", { static: false }) paginator: MatPaginator;
   listaProductosEnStock = new MatTableDataSource<Element[]>();
 
   consultarStock() {
@@ -23,7 +24,7 @@ export class StockComponent implements OnInit {
       .consultarStock(localStorage.getItem("miCuenta.getToken"))
       .then((ok) => {
         var listaProductosEnStock = [];
-        ok['respuesta'].map(item => {
+        ok["respuesta"].map((item) => {
           var lote = "";
           var kit = "";
           var fechaExpiracion = "";
@@ -32,31 +33,46 @@ export class StockComponent implements OnInit {
           var contenidoNeto = "";
           var medida = "";
           var codigo = "";
-          if (item.AsignarProductoLote.Lote) {  
+          if (item.AsignarProductoLote.Lote) {
             lote = item.AsignarProductoLote.Lote.Codigo;
             fechaExpiracion = item.AsignarProductoLote.Lote.FechaExpiracion;
           } else {
             lote = "";
             fechaExpiracion = item.AsignarProductoLote.FechaExpiracion;
           }
-          if (item.AsignarProductoLote.PerteneceKit != "False") {     
+          if (item.AsignarProductoLote.PerteneceKit != "False") {
             kit = item.AsignarProductoLote.AsignarProductoKit.Kit.Descripcion;
-            nombreProducto = item.AsignarProductoLote.AsignarProductoKit.ListaProductos.Producto.Nombre;
-            contenidoNeto = item.AsignarProductoLote.AsignarProductoKit.ListaProductos.CantidadMedida;
-            medida = item.AsignarProductoLote.AsignarProductoKit.ListaProductos.Medida.Descripcion;
-            codigo = item.AsignarProductoLote.AsignarProductoKit.ListaProductos.Codigo;
-            presentacion = item.AsignarProductoLote.AsignarProductoKit.ListaProductos.Presentacion.Descripcion;
+            nombreProducto =
+              item.AsignarProductoLote.AsignarProductoKit.ListaProductos
+                .Producto.Nombre;
+            contenidoNeto =
+              item.AsignarProductoLote.AsignarProductoKit.ListaProductos
+                .CantidadMedida;
+            medida =
+              item.AsignarProductoLote.AsignarProductoKit.ListaProductos.Medida
+                .Descripcion;
+            codigo =
+              item.AsignarProductoLote.AsignarProductoKit.ListaProductos.Codigo;
+            presentacion =
+              item.AsignarProductoLote.AsignarProductoKit.ListaProductos
+                .Presentacion.Descripcion;
           } else {
             kit = "";
-            nombreProducto = item.AsignarProductoLote.ConfigurarProductos.Producto.Nombre;
-            contenidoNeto = item.AsignarProductoLote.ConfigurarProductos.CantidadMedida;
-            medida = item.AsignarProductoLote.ConfigurarProductos.Medida.Descripcion;
+            nombreProducto =
+              item.AsignarProductoLote.ConfigurarProductos.Producto.Nombre;
+            contenidoNeto =
+              item.AsignarProductoLote.ConfigurarProductos.CantidadMedida;
+            medida =
+              item.AsignarProductoLote.ConfigurarProductos.Medida.Descripcion;
             codigo = item.AsignarProductoLote.ConfigurarProductos.Codigo;
-            presentacion = item.AsignarProductoLote.ConfigurarProductos.Presentacion.Descripcion;
+            presentacion =
+              item.AsignarProductoLote.ConfigurarProductos.Presentacion
+                .Descripcion;
           }
           var producto = {
             Codigo: codigo,
-            IdAsignarProductoLote: item.AsignarProductoLote.IdAsignarProductoLote,
+            IdAsignarProductoLote:
+              item.AsignarProductoLote.IdAsignarProductoLote,
             Kit: kit,
             Lote: lote,
             FechaExpiracion: fechaExpiracion,
@@ -65,20 +81,26 @@ export class StockComponent implements OnInit {
             Presentacion: presentacion,
             ContenidoNeto: contenidoNeto,
             Medida: medida,
-          }
-          listaProductosEnStock.push(producto)
-        })
+          };
+          listaProductosEnStock.push(producto);
+        });
         this.listaProductosEnStock.data = listaProductosEnStock;
         this.listaProductosEnStock.paginator = this.paginator;
       })
-      .catch((error) => {
-        console.log(error);
-      });
+      .catch((error) => console.log(error));
   }
 
   ngOnInit() {
     this.consultarStock();
   }
 
-  tablaStock = ['codigo', 'kit', 'descripcion', 'presentacion', 'lote', 'fechaExpiracion', 'cantidad'];
+  tablaStock = [
+    "codigo",
+    "kit",
+    "descripcion",
+    "presentacion",
+    "lote",
+    "fechaExpiracion",
+    "cantidad",
+  ];
 }

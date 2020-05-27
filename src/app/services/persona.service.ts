@@ -123,7 +123,6 @@ export class PersonaService {
       .set('Numero', numero)
       .set('IdTipoTelefono', tipoTelefono)
       .set('encriptada', _token)
-
     return new Promise((resolve, reject) => {
       this.http.post(apiUrl + 'TalentoHumano/IngresoTelefono', body.toString(),
         {
@@ -277,7 +276,6 @@ export class PersonaService {
       .set('Numero', numero)
       .set('IdTipoTelefono', tipoTelefono)
       .set('encriptada', _token)
-
     return new Promise((resolve, reject) => {
       this.http.post(apiUrl + 'TalentoHumano/ActualizarTelefono', body.toString(),
         {
