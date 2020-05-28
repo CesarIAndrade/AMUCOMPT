@@ -64,7 +64,7 @@
           <mat-form-field class="example-full-width">
             <mat-label>Seleccionar Técnico</mat-label>
             <mat-select (selectionChange)="clientesAsignados($event.value)">
-              <mat-option *ngFor="let item of usuarios" [value]="item._id">
+              <mat-option *ngFor="let item of tecnicos" [value]="item._id">
                 {{ item.nombres }}
               </mat-option>
             </mat-select>

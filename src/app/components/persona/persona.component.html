@@ -25,13 +25,16 @@
             <button disabled mat-button matPrefix mat-icon-button>
               <mat-icon>*</mat-icon>
             </button>
-            <mat-error
-              *ngIf="_nombres.invalid && (_nombres.dirty || _nombres.touched)"
+            <button
+              tooltip="Necesita dos nombres"
+              placement="top"
+              type="button"
+              readonly
+              matSuffix
+              mat-icon-button
             >
-              <mat-error *ngIf="_nombres.errors.required">
-                Nombres Requeridos
-              </mat-error>
-            </mat-error>
+              <mat-icon>info</mat-icon>
+            </button>
           </mat-form-field>
         </div>
         <div class="col-lg-4">
@@ -48,18 +51,6 @@
                 <button disabled mat-button matPrefix mat-icon-button>
                   <mat-icon>*</mat-icon>
                 </button>
-                <mat-error
-                  *ngIf="
-                    _telefono1.invalid && (_telefono1.dirty || _telefono1.touched)
-                  "
-                >
-                  <mat-error *ngIf="_telefono1.errors.required">
-                    Primer Telefono Requerido
-                  </mat-error>
-                  <mat-error *ngIf="_telefono1.errors.maxlength">
-                    Máximo 10 Dígitos
-                  </mat-error>
-                </mat-error>
               </mat-form-field>
             </div>
             <div class="col-lg-6">
@@ -76,16 +67,6 @@
                 <button disabled mat-button matPrefix mat-icon-button>
                   <mat-icon>*</mat-icon>
                 </button>
-                <mat-error
-                  *ngIf="
-                    _tipoTelefono1.invalid &&
-                    (_tipoTelefono1.dirty || _tipoTelefono1.touched)
-                  "
-                >
-                  <mat-error *ngIf="_tipoTelefono1.errors.required">
-                    Tipo Teléfono Requerido
-                  </mat-error>
-                </mat-error>
               </mat-form-field>
             </div>
           </div>
@@ -107,15 +88,6 @@
             <button disabled mat-button matPrefix mat-icon-button>
               <mat-icon>*</mat-icon>
             </button>
-            <mat-error
-              *ngIf="
-                _provincia.invalid && (_provincia.dirty || _provincia.touched)
-              "
-            >
-              <mat-error *ngIf="_provincia.errors.required">
-                Provincia Requerida
-              </mat-error>
-            </mat-error>
           </mat-form-field>
         </div>
       </div>
@@ -131,15 +103,16 @@
             <button disabled mat-button matPrefix mat-icon-button>
               <mat-icon>*</mat-icon>
             </button>
-            <mat-error
-              *ngIf="
-                _apellidos.invalid && (_apellidos.dirty || _apellidos.touched)
-              "
+            <button
+              tooltip="Necesita dos apellidos"
+              placement="top"
+              type="button"
+              readonly
+              matSuffix
+              mat-icon-button
             >
-              <mat-error *ngIf="_apellidos.errors.required">
-                Apellidos Requeridos
-              </mat-error>
-            </mat-error>
+              <mat-icon>info</mat-icon>
+            </button>
           </mat-form-field>
         </div>
         <div class="col-lg-4">
@@ -155,18 +128,6 @@
                 <button disabled mat-button matPrefix mat-icon-button>
                   <mat-icon>*</mat-icon>
                 </button>
-                <mat-error
-                  *ngIf="
-                    _telefono2.invalid && (_telefono2.dirty || _telefono2.touched)
-                  "
-                >
-                  <mat-error *ngIf="_telefono2.errors.required">
-                    Segundo Telefono Requerido
-                  </mat-error>
-                  <mat-error *ngIf="_telefono2.errors.maxlength">
-                    Máximo 10 Dígitos
-                  </mat-error>
-                </mat-error>
               </mat-form-field>
             </div>
             <div class="col-lg-6">
@@ -183,16 +144,6 @@
                 <button disabled mat-button matPrefix mat-icon-button>
                   <mat-icon>*</mat-icon>
                 </button>
-                <mat-error
-                  *ngIf="
-                    _tipoTelefono2.invalid &&
-                    (_tipoTelefono2.dirty || _tipoTelefono2.touched)
-                  "
-                >
-                  <mat-error *ngIf="_tipoTelefono2.errors.required">
-                    Tipo Teléfono Requerido
-                  </mat-error>
-                </mat-error>
               </mat-form-field>
             </div>
           </div>
@@ -211,13 +162,6 @@
             <button disabled mat-button matPrefix mat-icon-button>
               <mat-icon>*</mat-icon>
             </button>
-            <mat-error
-              *ngIf="_canton.invalid && (_canton.dirty || _canton.touched)"
-            >
-              <mat-error *ngIf="_canton.errors.required">
-                Cantón Requerido
-              </mat-error>
-            </mat-error>
           </mat-form-field>
         </div>
       </div>
@@ -236,16 +180,6 @@
             <button disabled mat-button matPrefix mat-icon-button>
               <mat-icon>*</mat-icon>
             </button>
-            <mat-error
-              *ngIf="
-                _tipoDocumento.invalid &&
-                (_tipoDocumento.dirty || _tipoDocumento.touched)
-              "
-            >
-              <mat-error *ngIf="_tipoDocumento.errors.required">
-                Tipo Documento Requerido
-              </mat-error>
-            </mat-error>
           </mat-form-field>
         </div>
         <div class="col-lg-4">
@@ -275,15 +209,6 @@
             <button disabled mat-button matPrefix mat-icon-button>
               <mat-icon>*</mat-icon>
             </button>
-            <mat-error
-              *ngIf="
-                _parroquia.invalid && (_parroquia.dirty || _parroquia.touched)
-              "
-            >
-              <mat-error *ngIf="_parroquia.errors.required">
-                Parroquia Requerida
-              </mat-error>
-            </mat-error>
           </mat-form-field>
         </div>
       </div>
@@ -298,19 +223,6 @@
             <button disabled mat-button matPrefix mat-icon-button>
               <mat-icon>*</mat-icon>
             </button>
-            <mat-error
-              *ngIf="
-                _numeroDocumento.invalid &&
-                (_numeroDocumento.dirty || _numeroDocumento.touched)
-              "
-            >
-              <mat-error *ngIf="_numeroDocumento.errors.required">
-                Número de Documento Requerido
-              </mat-error>
-              <mat-error *ngIf="_numeroDocumento.errors.maxlength">
-                Máximo 10 Dígitos
-              </mat-error>
-            </mat-error>
           </mat-form-field>
         </div>
         <div class="col-lg-8">

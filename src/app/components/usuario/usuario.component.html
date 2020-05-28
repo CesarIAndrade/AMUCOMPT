@@ -37,11 +37,6 @@
             <button disabled mat-button matPrefix mat-icon-button>
               <mat-icon>*</mat-icon>
             </button>
-            <mat-error *ngIf="_valorUsuario.invalid && (_valorUsuario.dirty || _valorUsuario.touched)">
-              <mat-error *ngIf="_valorUsuario.errors.required">
-                Usuario Requerido
-              </mat-error>
-            </mat-error>
           </mat-form-field>
           <mat-form-field class="example-full-width">
             <input matInput formControlName="_contrasena" type="password" [type]="inputType" placeholder="Ingrese Contraseña">
@@ -51,11 +46,6 @@
             <button mat-button matSuffix mat-icon-button (click)="mostrarContrasena()">
               <mat-icon>visibility</mat-icon>
             </button>
-            <mat-error *ngIf="_contrasena.invalid && (_contrasena.dirty || _contrasena.touched)">
-              <mat-error *ngIf="_contrasena.errors.required">
-                Contrasena Requerida
-              </mat-error>
-            </mat-error>
           </mat-form-field>
           <div>
             <button mat-button class="bg-success text-white btn-block mt-2" type="submit" [disabled]="myForm.invalid" [value]="botonInsertar">Guardar</button>

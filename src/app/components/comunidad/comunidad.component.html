@@ -1,9 +1,9 @@
 <div class="container">
-  <div class="row">
-    <div class="col-lg-4">
-      <div class="card-body">
-        <h5 style="text-align: center;">Nueva Comunidad</h5>
-        <form [formGroup]="myForm" (ngSubmit)="validarFormulario()" novalidate>
+  <div class="card-body">
+    <form [formGroup]="myForm" (ngSubmit)="validarFormulario()" novalidate>
+      <div class="row">
+        <div class="col-lg-4">
+          <h5 style="text-align: center;">Nueva Comunidad</h5>
           <mat-form-field class="example-full-width">
             <input
               matInput
@@ -27,15 +27,6 @@
             <button disabled mat-button matPrefix mat-icon-button>
               <mat-icon>*</mat-icon>
             </button>
-            <mat-error
-              *ngIf="
-                _comunidad.invalid && (_comunidad.dirty || _comunidad.touched)
-              "
-            >
-              <mat-error *ngIf="_comunidad.errors.required">
-                Comunidad Requerida
-              </mat-error>
-            </mat-error>
           </mat-form-field>
           <div>
             <button
@@ -58,96 +49,105 @@
               Guardar
             </button>
           </div>
-        </form>
-      </div>
-    </div>
-    <div class="col-lg-8">
-      <div>
-        <h5 style="text-align: center;">Lista Comunidades</h5>
-        <mat-form-field class="example-full-width">
-          <input
-            matInput
-            [(ngModel)]="filterComunidad"
-            type="text"
-            placeholder="Buscar Comunidad"
-          />
-          <button mat-button matPrefix mat-icon-button>
-            <mat-icon>search</mat-icon>
-          </button>
-        </mat-form-field>
-        <div class="table_all">
-          <table
-            mat-table
-            [dataSource]="comunidades | filter: filterComunidad:'Descripcion'"
-          >
-            <ng-container matColumnDef="comunidad">
-              <th mat-header-cell *matHeaderCellDef>Comunidad</th>
-              <td mat-cell *matCellDef="let element">
-                {{ element.Descripcion }}
-              </td>
-            </ng-container>
-            <ng-container matColumnDef="parroquia">
-              <th mat-header-cell *matHeaderCellDef>Parroquia</th>
-              <td mat-cell *matCellDef="let element">
-                {{ element.Parroquia.Descripcion }}
-              </td>
-            </ng-container>
-            <ng-container matColumnDef="acciones">
-              <th colspan="2" mat-header-cell *matHeaderCellDef>Acciones</th>
-              <ng-container matColumnDef="acciones">
-                <th colspan="2" mat-header-cell *matHeaderCellDef>Acciones</th>
-                <ng-container *matCellDef="let element">
-                  <ng-container *ngIf="element.ComunidadUtilizado == '0'">
-                    <td mat-cell>
-                      <button
-                        mat-button
-                        tooltip="Modificar"
-                        placement="top"
-                        (click)="mostrarComunidad(element)"
-                        class="btn-outline-primary"
-                      >
-                        <mat-icon>edit</mat-icon>
-                      </button>
-                    </td>
-                    <td mat-cell>
-                      <button
-                        mat-button
-                        class="btn-outline-danger"
-                        (click)="eliminarComunidad(element.IdComunidad)"
-                      >
-                        <mat-icon>remove</mat-icon>
-                      </button>
-                    </td>
-                  </ng-container>
-                  <ng-container *ngIf="element.ComunidadUtilizado == '1'">
-                    <td mat-cell colspan="2">
-                      <button
-                        mat-button
-                        tooltip="Modificar"
-                        placement="top"
-                        (click)="mostrarComunidad(element)"
-                        class="btn-outline-primary btn-block"
-                      >
-                        <mat-icon>edit</mat-icon>
-                      </button>
-                    </td>
+        </div>
+        <div class="col-lg-8">
+          <div>
+            <h5 style="text-align: center;">Lista Comunidades</h5>
+            <mat-form-field class="example-full-width">
+              <input
+                matInput
+                [(ngModel)]="filterComunidad"
+                type="text"
+                placeholder="Buscar Comunidad"
+              />
+              <button mat-button matPrefix mat-icon-button>
+                <mat-icon>search</mat-icon>
+              </button>
+            </mat-form-field>
+            <div class="table_all">
+              <table
+                mat-table
+                [dataSource]="
+                  comunidades | filter: filterComunidad:'Descripcion'
+                "
+              >
+                <ng-container matColumnDef="comunidad">
+                  <th mat-header-cell *matHeaderCellDef>Comunidad</th>
+                  <td mat-cell *matCellDef="let element">
+                    {{ element.Descripcion }}
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="parroquia">
+                  <th mat-header-cell *matHeaderCellDef>Parroquia</th>
+                  <td mat-cell *matCellDef="let element">
+                    {{ element.Parroquia.Descripcion }}
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="acciones">
+                  <th colspan="2" mat-header-cell *matHeaderCellDef>
+                    Acciones
+                  </th>
+                  <ng-container matColumnDef="acciones">
+                    <th colspan="2" mat-header-cell *matHeaderCellDef>
+                      Acciones
+                    </th>
+                    <ng-container *matCellDef="let element">
+                      <ng-container *ngIf="element.ComunidadUtilizado == '0'">
+                        <td mat-cell>
+                          <button
+                            mat-button
+                            tooltip="Modificar"
+                            placement="top"
+                            (click)="mostrarComunidad(element)"
+                            class="btn-outline-primary"
+                          >
+                            <mat-icon>edit</mat-icon>
+                          </button>
+                        </td>
+                        <td mat-cell>
+                          <button
+                            mat-button
+                            class="btn-outline-danger"
+                            (click)="eliminarComunidad(element.IdComunidad)"
+                          >
+                            <mat-icon>remove</mat-icon>
+                          </button>
+                        </td>
+                      </ng-container>
+                      <ng-container *ngIf="element.ComunidadUtilizado == '1'">
+                        <td mat-cell colspan="2">
+                          <button
+                            mat-button
+                            tooltip="Modificar"
+                            placement="top"
+                            (click)="mostrarComunidad(element)"
+                            class="btn-outline-primary btn-block"
+                          >
+                            <mat-icon>edit</mat-icon>
+                          </button>
+                        </td>
+                      </ng-container>
+                    </ng-container>
                   </ng-container>
                 </ng-container>
-              </ng-container>
-            </ng-container>
-            <tr
-              mat-header-row
-              *matHeaderRowDef="tablaComunidades; sticky: true"
-            ></tr>
-            <tr mat-row *matRowDef="let row; columns: tablaComunidades"></tr>
-          </table>
-          <mat-paginator
-            #paginator
-            [pageSizeOptions]="[5]"
-            showFirstLastButtons
-          ></mat-paginator>
+                <tr
+                  mat-header-row
+                  *matHeaderRowDef="tablaComunidades; sticky: true"
+                ></tr>
+                <tr
+                  mat-row
+                  *matRowDef="let row; columns: tablaComunidades"
+                ></tr>
+              </table>
+              <mat-paginator
+                #paginator
+                [pageSizeOptions]="[5]"
+                showFirstLastButtons
+              ></mat-paginator>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
+    </form>
   </div>
 </div>

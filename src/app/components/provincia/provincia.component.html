@@ -1,9 +1,9 @@
 <div class="container">
-  <div class="row">
-    <div class="col-lg-4">
-      <div class="card-body">
-        <h5 style="text-align: center;">Nueva Provincia</h5>
-        <form [formGroup]="myForm" (ngSubmit)="validarFormulario()" novalidate>
+  <div class="card-body">
+  <form [formGroup]="myForm" (ngSubmit)="validarFormulario()" novalidate>
+    <div class="row">
+      <div class="col-lg-4">
+          <h5 style="text-align: center;">Nueva Provincia</h5>
           <mat-form-field class="example-full-width">
             <input
               matInput
@@ -14,15 +14,6 @@
             <button disabled mat-button matPrefix mat-icon-button>
               <mat-icon>*</mat-icon>
             </button>
-            <mat-error
-              *ngIf="
-                _provincia.invalid && (_provincia.dirty || _provincia.touched)
-              "
-            >
-              <mat-error *ngIf="_provincia.errors.required">
-                Provincia Requerida
-              </mat-error>
-            </mat-error>
           </mat-form-field>
           <div>
             <button
@@ -35,11 +26,8 @@
               Guardar
             </button>
           </div>
-        </form>
       </div>
-    </div>
-    <div class="col-lg-8">
-      <div>
+      <div class="col-lg-8">
         <h5 style="text-align: center;">Lista Provincias</h5>
         <mat-form-field class="example-full-width">
           <input
@@ -117,5 +105,6 @@
         </div>
       </div>
     </div>
+  </form>
   </div>
 </div>

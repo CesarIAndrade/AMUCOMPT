@@ -146,16 +146,6 @@
                   <button disabled mat-button matPrefix mat-icon-button>
                     <mat-icon>*</mat-icon>
                   </button>
-                  <mat-error
-                    *ngIf="
-                      _cantidad.invalid &&
-                      (_cantidad.dirty || _cantidad.touched)
-                    "
-                  >
-                    <mat-error *ngIf="_cantidad.errors.required">
-                      Cantidad Requerida
-                    </mat-error>
-                  </mat-error>
                 </mat-form-field>
               </div>
             </div>
@@ -167,13 +157,6 @@
                 formControlName="_precio"
                 placeholder="Precio"
               />
-              <mat-error
-                *ngIf="_precio.invalid && (_precio.dirty || _precio.touched)"
-              >
-                <mat-error *ngIf="_precio.errors.required">
-                  Precio Requerido
-                </mat-error>
-              </mat-error>
             </mat-form-field>
           </div>
           <div class="col-lg-4">

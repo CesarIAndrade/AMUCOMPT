@@ -24,13 +24,6 @@
                 {{ option.nombre }}
               </mat-option>
             </mat-autocomplete>
-            <mat-error
-              *ngIf="_nombre.invalid && (_nombre.dirty || _nombre.touched)"
-            >
-              <mat-error *ngIf="_nombre.errors.required">
-                Producto Requerido
-              </mat-error>
-            </mat-error>
           </mat-form-field>
           <mat-form-field class="example-full-width">
             <mat-label>Tipo Producto</mat-label>
@@ -45,16 +38,6 @@
             <button disabled mat-button matPrefix mat-icon-button>
               <mat-icon>*</mat-icon>
             </button>
-            <mat-error
-              *ngIf="
-                _tipoProducto.invalid &&
-                (_tipoProducto.dirty || _tipoProducto.touched)
-              "
-            >
-              <mat-error *ngIf="_tipoProducto.errors.required">
-                Tipo Producto Requerido
-              </mat-error>
-            </mat-error>
           </mat-form-field>
           <mat-form-field class="example-full-width">
             <input
@@ -66,13 +49,6 @@
             <button disabled mat-button matPrefix mat-icon-button>
               <mat-icon>*</mat-icon>
             </button>
-            <mat-error
-              *ngIf="_codigo.invalid && (_codigo.dirty || _codigo.touched)"
-            >
-              <mat-error *ngIf="_codigo.errors.required">
-                Código Requerido
-              </mat-error>
-            </mat-error>
           </mat-form-field>
           <mat-form-field class="example-full-width">
             <mat-label>Presentación</mat-label>
@@ -87,16 +63,6 @@
             <button disabled mat-button matPrefix mat-icon-button>
               <mat-icon>*</mat-icon>
             </button>
-            <mat-error
-              *ngIf="
-                _presentacion.invalid &&
-                (_presentacion.dirty || _presentacion.touched)
-              "
-            >
-              <mat-error *ngIf="_presentacion.errors.required">
-                Presentación Requerida
-              </mat-error>
-            </mat-error>
           </mat-form-field>
           <div class="row">
             <div class="col-lg-6 col-md-6">
@@ -110,16 +76,6 @@
                 <button disabled mat-button matPrefix mat-icon-button>
                   <mat-icon>*</mat-icon>
                 </button>
-                <mat-error
-                  *ngIf="
-                    _contenidoNeto.invalid &&
-                    (_contenidoNeto.dirty || _contenidoNeto.touched)
-                  "
-                >
-                  <mat-error *ngIf="_contenidoNeto.errors.required">
-                    Contenido Neto Requerido
-                  </mat-error>
-                </mat-error>
               </mat-form-field>
             </div>
             <div class="col-lg-6 col-md-6">
@@ -136,17 +92,9 @@
                 <button disabled mat-button matPrefix mat-icon-button>
                   <mat-icon>*</mat-icon>
                 </button>
-                <mat-error
-                  *ngIf="_medida.invalid && (_medida.dirty || _medida.touched)"
-                >
-                  <mat-error *ngIf="_medida.errors.required">
-                    Medida Requerida
-                  </mat-error>
-                </mat-error>
               </mat-form-field>
             </div>
           </div>
-
           <div class="row">
             <div class="col-lg-6 col-md-6">
               <mat-form-field class="example-full-width">
@@ -159,13 +107,6 @@
                 <button disabled mat-button matPrefix mat-icon-button>
                   <mat-icon>*</mat-icon>
                 </button>
-                <mat-error
-                  *ngIf="_precio.invalid && (_precio.dirty || _precio.touched)"
-                >
-                  <mat-error *ngIf="_precio.errors.required">
-                    Precio Requerido
-                  </mat-error>
-                </mat-error>
               </mat-form-field>
             </div>
             <div class="col-lg-6 col-md-6">
@@ -179,10 +120,6 @@
               </mat-form-field>
             </div>
           </div>
-
-
-
-
           <mat-form-field class="example-full-width">
             <input
               matInput

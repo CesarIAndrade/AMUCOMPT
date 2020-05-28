@@ -66,6 +66,8 @@ export class PersonaComponent implements OnInit {
     });
   }
 
+  get _correo() { return this.myForm.get("_correo") }
+
   // Para la paginacion
   @ViewChild("paginator", { static: false }) paginator: MatPaginator;
   personas = new MatTableDataSource<Element[]>();
