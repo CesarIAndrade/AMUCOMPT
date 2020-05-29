@@ -23,7 +23,7 @@ export class VentaService {
       .set("Faltante", faltante)
       .set("Cantidad", cantidad)
       .set("PorcentajeDescuento", descuento)
-      .set("encriptada", _token);
+      .set("encriptada", _token)
     return new Promise((resolve, reject) => {
       this.http
         .post(apiUrl + "Credito/IngresoDetalleVenta", body.toString(), {
@@ -46,7 +46,7 @@ export class VentaService {
   consultarDetalleFactura(IdCabeceraFactura: string, _token: string) {
     const body = new HttpParams()
       .set("IdCabeceraFactura", IdCabeceraFactura)
-      .set("encriptada", _token);
+      .set("encriptada", _token)
     return new Promise((resolve, reject) => {
       this.http
         .post(apiUrl + "Factura/ListaFacturaVenta", body.toString(), {
@@ -67,7 +67,7 @@ export class VentaService {
   }
 
   consultarFacturasVentasFinalizadas(_token: string) {
-    const body = new HttpParams().set("encriptada", _token);
+    const body = new HttpParams().set("encriptada", _token)
     return new Promise((resolve, reject) => {
       this.http
         .post(
@@ -109,7 +109,7 @@ export class VentaService {
       .set("AplicaSeguro", aplicaSeguro)
       .set("ValorSeguro", valorSeguro)
       .set("SeguroCancelado", seguroCancelado)
-      .set("encriptada", _token);
+      .set("encriptada", _token)
     return new Promise((resolve, reject) => {
       this.http
         .post(apiUrl + "Factura/IngresoConfigurarVenta", body.toString(), {
@@ -137,7 +137,7 @@ export class VentaService {
     const body = new HttpParams()
       .set("IdDetalleVenta", IdDetalleVenta)
       .set("Cantidad", Cantidad)
-      .set("encriptada", _token);
+      .set("encriptada", _token)
     return new Promise((resolve, reject) => {
       this.http
         .post(apiUrl + "Credito/AumentarDetalleVenta", body.toString(), {
@@ -160,7 +160,7 @@ export class VentaService {
   quitarDetalleFactura(idDetalleVenta: string, _token: string) {
     const body = new HttpParams()
       .set("IdDetalleVenta", idDetalleVenta)
-      .set("encriptada", _token);
+      .set("encriptada", _token)
     return new Promise((resolve, reject) => {
       this.http
         .post(apiUrl + "Credito/EliminarDetalleVenta", body.toString(), {
@@ -190,7 +190,7 @@ export class VentaService {
       .set("IdCabeceraFactura", idCabeceraFactura)
       .set("IdKit", idKit)
       .set("Cantidad", cantidad)
-      .set("encriptada", _token);
+      .set("encriptada", _token)
     return new Promise((resolve, reject) => {
       this.http
         .post(apiUrl + "Credito/IngresoDetalleVentaPorKit", body.toString(), {
@@ -218,7 +218,7 @@ export class VentaService {
     const body = new HttpParams()
       .set("IdCabeceraFactura", idCabeceraFactura)
       .set("IdKit", idKit)
-      .set("encriptada", _token);
+      .set("encriptada", _token)
     return new Promise((resolve, reject) => {
       this.http
         .post(
@@ -250,7 +250,7 @@ export class VentaService {
     const body = new HttpParams()
       .set("IdCabeceraFactura", idCabeceraFactura)
       .set("IdComunidad", idComunidad)
-      .set("encriptada", _token);
+      .set("encriptada", _token)
     return new Promise((resolve, reject) => {
       this.http
         .post(
@@ -280,7 +280,7 @@ export class VentaService {
   ) {
     const body = new HttpParams()
       .set("IdAsignarComunidadFactura", idAsignarComunidadFactura)
-      .set("encriptada", _token);
+      .set("encriptada", _token)
     return new Promise((resolve, reject) => {
       this.http
         .post(
@@ -307,7 +307,7 @@ export class VentaService {
   listarComunidadesPorFactura(idCabeceraFactura: string, _token: string) {
     const body = new HttpParams()
       .set("IdCabeceraFactura", idCabeceraFactura)
-      .set("encriptada", _token);
+      .set("encriptada", _token)
     return new Promise((resolve, reject) => {
       this.http
         .post(
@@ -339,7 +339,7 @@ export class VentaService {
   ) {
     const body = new HttpParams()
       .set(identificador, idLocalidad)
-      .set("encriptada", _token);
+      .set("encriptada", _token)
     return new Promise((resolve, reject) => {
       this.http
         .post(apiUrl + url, body.toString(), {
@@ -364,7 +364,6 @@ export class VentaService {
       .set("IdAsignarTUTecnico", idTecnico)
       .set("IdPersona", idPersona)
       .set("encriptada", _token)
-    console.log(body);
     return new Promise((resolve, reject) => {
       this.http
         .post(
@@ -377,6 +376,56 @@ export class VentaService {
             ),
           }
         )
+        .subscribe(
+          (res) => {
+            resolve(res);
+          },
+          (err) => {
+            reject(err);
+          }
+        );
+    });
+  }
+
+  desaignarClienteTecnico(idPersona: string, _token: string) {
+    const body = new HttpParams()
+      .set("IdPersona", idPersona)
+      .set("encriptada", _token);
+    return new Promise((resolve, reject) => {
+      this.http
+        .post(
+          apiUrl + "Credito/EliminarAsignarTecnicoPersonaComunidad",
+          body.toString(),
+          {
+            headers: new HttpHeaders().set(
+              "Content-Type",
+              "application/x-www-form-urlencoded"
+            ),
+          }
+        )
+        .subscribe(
+          (res) => {
+            resolve(res);
+          },
+          (err) => {
+            reject(err);
+          }
+        );
+    });
+  }
+
+  listarClientesTecnico(idTecnico: string, _token: string) {
+    const body = new HttpParams()
+      .set("IdAsignarTUTecnico", idTecnico)
+      .set("encriptada", _token);
+    return new Promise((resolve, reject) => {
+      this.http
+        .post(apiUrl + "Credito/ConsultarPersonasPorTecnico", body.toString(), {
+          headers: new HttpHeaders().set(
+            "Content-Type",
+            "application/x-www-form-urlencoded"
+          ),
+        })
         .subscribe(
           (res) => {
             resolve(res);

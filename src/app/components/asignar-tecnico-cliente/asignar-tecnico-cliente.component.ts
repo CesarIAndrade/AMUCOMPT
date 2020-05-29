@@ -30,6 +30,11 @@ export class AsignarTecnicoClienteComponent implements OnInit {
   comunidades: any[] = [];
   tecnicos: any[] = [];
 
+  // Para la paginacion
+  @ViewChild("paginator", { static: false }) paginator: MatPaginator;
+  clientes = new MatTableDataSource<Element[]>();
+  clientesTecnico = new MatTableDataSource<Element[]>();
+
   consultarCantones() {
     this.panelAdministracionService
       .consultarCantones(localStorage.getItem("miCuenta.getToken"))
@@ -79,10 +84,6 @@ export class AsignarTecnicoClienteComponent implements OnInit {
     this.consultarClientes(idComunidad, "IdComunidad", url);
   }
 
-  // Para la paginacion
-  @ViewChild("paginator", { static: false }) paginator: MatPaginator;
-  clientes = new MatTableDataSource<Element[]>();
-
   consultarClientes(idLocalidad, localidad, url) {
     this.ventaService
       .filtroClientes(
@@ -93,6 +94,7 @@ export class AsignarTecnicoClienteComponent implements OnInit {
       )
       .then((ok) => {
         var clientes = [];
+        this.clientes.data = [];
         ok["respuesta"].map((cliente) => {
           clientes.push({
             _id: cliente.IdPersona,
@@ -153,6 +155,32 @@ export class AsignarTecnicoClienteComponent implements OnInit {
 
   clientesAsignados(idTecnico) {
     this.myForm.get("_idTecnico").setValue(idTecnico);
+    this.ventaService
+      .listarClientesTecnico(
+        idTecnico,
+        localStorage.getItem("miCuenta.getToken")
+      )
+      .then((ok) => {
+        var clientesTecnico = [];
+        this.clientesTecnico.data = [];
+        ok["respuesta"].map((cliente) => {
+          clientesTecnico.push({
+            _id: cliente.IdPersona,
+            cedula: cliente.NumeroDocumento,
+            nombres:
+              cliente.PrimerNombre +
+              " " +
+              cliente.SegundoNombre +
+              " " +
+              cliente.ApellidoPaterno +
+              " " +
+              cliente.ApellidoMaterno,
+          });
+        });
+        this.clientesTecnico.data = clientesTecnico;
+        this.clientesTecnico.paginator = this.paginator;
+      })
+      .catch((error) => console.log(error));
   }
 
   asignarClienteTecnico(idPersona) {
@@ -164,7 +192,13 @@ export class AsignarTecnicoClienteComponent implements OnInit {
           localStorage.getItem("miCuenta.postToken")
         )
         .then((ok) => {
-          console.log(ok["respuesta"]);
+          if (ok["respuesta"]) {
+            this.myForm.get("_canton").setValue("0");
+            this.myForm.get("_parroquia").setValue("0");
+            this.myForm.get("_comunidad").setValue("0");
+            this.clientes.data = [];
+            this.clientesAsignados(this.myForm.get("_idTecnico").value);
+          }
         })
         .catch((error) => console.log(error));
     } else {
@@ -172,7 +206,21 @@ export class AsignarTecnicoClienteComponent implements OnInit {
     }
   }
 
-  desasignarClienteTecnico(idPersona) {}
+  desasignarClienteTecnico(idPersona) {
+    this.ventaService
+      .desaignarClienteTecnico(
+        idPersona,
+        localStorage.getItem("miCuenta.postToken")
+      )
+      .then((ok) => {
+        console.log(ok["respuesta"]);
+        
+        if (ok["respuesta"]) {
+          this.clientesAsignados(this.myForm.get("_idTecnico").value);
+        }
+      })
+      .catch((error) => console.log(error));
+  }
 
   ngOnInit() {
     this.consultarCantones();

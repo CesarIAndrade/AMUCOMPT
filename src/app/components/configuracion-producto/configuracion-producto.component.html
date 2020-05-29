@@ -82,6 +82,7 @@
               <input
                 matInput
                 [(ngModel)]="filterTipoProducto"
+                [ngModelOptions]="{standalone: true}"
                 type="text"
                 placeholder="Buscar {{ titulo }}"
               />
