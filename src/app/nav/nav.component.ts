@@ -51,61 +51,6 @@ export class NavComponent implements OnInit {
           url: "/usuarios",
         },
         {
-          name: "Personas",
-          icon: "contacts",
-          url: "/personas",
-        },
-        {
-          name: "Conf. Productos",
-          icon: "settings",
-          url: "/configuracion-productos",
-        },
-        {
-          name: "Inventario",
-          icon: "storage",
-          url: "/inventarios",
-        },
-        {
-          name: "Stock",
-          icon: "list_alt",
-          url: "/stock",
-        },
-        {
-          name: "Asginar Técnico Cliente",
-          icon: "list_alt",
-          url: "/asignar-tecnico-cliente",
-        },
-        {
-          name: "Abonos",
-          icon: "attach_money",
-          url: "/abonos",
-        },
-        {
-          name: "Compra Inventario",
-          icon: "shop",
-          url: "/compras",
-        },
-        {
-          name: "Compra Rubros",
-          icon: "shopping_cart",
-          url: "/compras-rubros",
-        },
-        {
-          name: "Venta Inventario",
-          icon: "shop",
-          url: "/ventas",
-        },
-        {
-          name: "Venta Rubros",
-          icon: "shopping_cart",
-          url: "/ventas-rubros",
-        },
-        {
-          name: "Localidades",
-          icon: "where_to_vote",
-          url: "/localizaciones",
-        },
-        {
           name: "Cuenta",
           icon: "face",
           url: "/cuenta",
@@ -114,11 +59,6 @@ export class NavComponent implements OnInit {
     } else if (localStorage.getItem("miCuenta.tipoUsuario") == "2") {
       this.nav_items.push(
         {
-          name: "Stock",
-          icon: "list_alt",
-          url: "/stock",
-        },
-        {
           name: "Compra Rubros",
           icon: "shopping_cart",
           url: "/compras-rubros",
@@ -127,6 +67,11 @@ export class NavComponent implements OnInit {
           name: "Venta Rubros",
           icon: "shopping_cart",
           url: "/ventas-rubros",
+        },
+        {
+          name: "Visitas",
+          icon: "chrome_reader_mode",
+          url: "/visitas",
         },
         {
           name: "Cuenta",

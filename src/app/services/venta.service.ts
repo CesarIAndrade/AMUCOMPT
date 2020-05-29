@@ -414,13 +414,15 @@ export class VentaService {
     });
   }
 
-  listarClientesTecnico(idTecnico: string, _token: string) {
+  listarClientesTecnico(url: string, idTecnico: string, _token: string) {
     const body = new HttpParams()
       .set("IdAsignarTUTecnico", idTecnico)
-      .set("encriptada", _token);
+      .set("encriptada", _token)
+    console.log(body);
+    console.log(url);
     return new Promise((resolve, reject) => {
       this.http
-        .post(apiUrl + "Credito/ConsultarPersonasPorTecnico", body.toString(), {
+        .post(apiUrl + url, body.toString(), {
           headers: new HttpHeaders().set(
             "Content-Type",
             "application/x-www-form-urlencoded"

@@ -41,6 +41,7 @@ import { ModalLocalidadSuperiorComponent } from "./components/modal-localidad-su
 import { ModalLotesComponent } from "./components/modal-lotes/modal-lotes.component";
 import { MaterialModule } from './material.module';
 import { AsignarTecnicoClienteComponent } from './components/asignar-tecnico-cliente/asignar-tecnico-cliente.component';
+import { VisitaComponent } from './components/visita/visita.component';
 
 @NgModule({
   declarations: [
@@ -74,6 +75,7 @@ import { AsignarTecnicoClienteComponent } from './components/asignar-tecnico-cli
     ModalLocalidadSuperiorComponent,
     ModalLotesComponent,
     AsignarTecnicoClienteComponent,
+    VisitaComponent,
   ],
   imports: [
     BrowserModule,

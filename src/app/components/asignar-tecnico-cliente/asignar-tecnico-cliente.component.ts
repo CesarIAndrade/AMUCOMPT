@@ -25,6 +25,9 @@ export class AsignarTecnicoClienteComponent implements OnInit {
   }
 
   myForm: FormGroup;
+  canton = false;
+  parroquia = false;
+  comunidad = false;
   cantones: any[] = [];
   parroquias: any[] = [];
   comunidades: any[] = [];
@@ -46,10 +49,6 @@ export class AsignarTecnicoClienteComponent implements OnInit {
       })
       .catch((error) => console.log(error));
   }
-
-  canton = false;
-  parroquia = false;
-  comunidad = false;
 
   consultarParroquiasDeUnCanton(idCanton) {
     const url = "Credito/ConsultarPersonasEnFacturasParaSeguimientoPorCanton";
@@ -161,9 +160,11 @@ export class AsignarTecnicoClienteComponent implements OnInit {
   }
 
   clientesAsignados(idTecnico) {
+    const url = "Credito/ConsultarPersonasPorTecnico";
     this.myForm.get("_idTecnico").setValue(idTecnico);
     this.ventaService
       .listarClientesTecnico(
+        url,
         idTecnico,
         localStorage.getItem("miCuenta.getToken")
       )
@@ -248,5 +249,5 @@ export class AsignarTecnicoClienteComponent implements OnInit {
     this.consultarTipoUsuario();
   }
 
-  tablaCantones = ["cedula", "cliente", "acciones"];
+  tablaClientes = ["cedula", "cliente", "acciones"];
 }

@@ -1,0 +1,131 @@
+<div class="container">
+  <div class="card-body">
+    <form [formGroup]="myForm" (ngSubmit)="validarFormulario()" novalidate>
+      <mat-form-field class="example-full-width mb-2">
+        <mat-label>Filtrar por?</mat-label>
+        <mat-select (selectionChange)="selecionarOpcion($event)">
+          <mat-option *ngFor="let item of opciones" [value]="item._id">
+            {{ item.descripcion }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <div class="row" [hidden]="combos">
+        <div class="col-lg-7">
+          <div class="row">
+            <div class="col-lg-4">
+              <mat-form-field class="example-full-width">
+                <mat-label>Seleccionar Cantón</mat-label>
+                <mat-select
+                  formControlName="_canton"
+                  (selectionChange)="
+                    consultarParroquiasDeUnCanton($event.value)
+                  "
+                >
+                  <mat-option
+                    *ngFor="let item of cantones"
+                    [value]="item.IdCanton"
+                  >
+                    {{ item.Descripcion }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div class="col-lg-4">
+              <mat-form-field class="example-full-width">
+                <mat-label>Seleccionar Parroquia</mat-label>
+                <mat-select
+                  formControlName="_parroquia"
+                  (selectionChange)="
+                    consultarComunidadesDeUnaParroquia($event.value)
+                  "
+                >
+                  <mat-option
+                    *ngFor="let item of parroquias"
+                    [value]="item.IdParroquia"
+                  >
+                    {{ item.Descripcion }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div class="col-lg-4">
+              <mat-form-field class="example-full-width">
+                <mat-label>Seleccionar Comunidad</mat-label>
+                <mat-select
+                  formControlName="_comunidad"
+                  (selectionChange)="
+                    consultarClientesDeUnaComunidad($event.value)
+                  "
+                >
+                  <mat-option
+                    *ngFor="let item of comunidades"
+                    [value]="item.IdComunidad"
+                  >
+                    {{ item.Descripcion }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+
+    <div class="row" [hidden]="tabla">
+      <div class="col-lg-7">
+        <h5 style="text-align: center;">Lista Clientes</h5>
+        <br />
+        <div class="table_all">
+          <table mat-table [dataSource]="clientes">
+            <ng-container matColumnDef="cedula">
+              <th mat-header-cell *matHeaderCellDef>Cédula</th>
+              <td mat-cell *matCellDef="let element">
+                {{ element.cedula }}
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="cliente">
+              <th mat-header-cell *matHeaderCellDef>Nombres</th>
+              <td mat-cell *matCellDef="let element">
+                {{ element.nombres }}
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="acciones">
+              <th mat-header-cell *matHeaderCellDef>Acciones</th>
+              <td mat-cell *matCellDef="let element">
+                <button
+                  mat-button
+                  type="button"
+                  class="btn-outline-success"
+                  (click)="asignarClienteTecnico(element._id)"
+                >
+                  <mat-icon>add</mat-icon>
+                </button>
+              </td>
+            </ng-container>
+            <tr
+              mat-header-row
+              *matHeaderRowDef="tablaClientes; sticky: true"
+            ></tr>
+            <tr mat-row *matRowDef="let row; columns: tablaClientes"></tr>
+          </table>
+          <mat-paginator
+            #paginator
+            [pageSizeOptions]="[7]"
+            showFirstLastButtons
+          ></mat-paginator>
+        </div>
+      </div>
+      <div class="col-lg-5">
+        <h5 style="text-align: center;">Comunidades</h5>
+        <mat-nav-list>
+          <mat-list-item *ngFor="let item of comunidades">
+            <button mat-icon-button (click)="registrarVisita(item)">
+              {{ item }}
+            </button>
+          </mat-list-item>
+        </mat-nav-list>
+      </div>
+    </div>
+  </div>
+</div>
