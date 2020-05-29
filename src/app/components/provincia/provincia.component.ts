@@ -153,9 +153,9 @@ export class ProvinciaComponent implements OnInit {
   }
 
   setProvincia(provincia) {
-    console.log(provincia);
     this.myForm.get("_idProvincia").setValue(provincia.IdProvincia);
     this.myForm.get("_provincia").setValue(provincia.Descripcion);
+    this.botonIngresar = "modificar";
   }
 
   ngOnInit() {

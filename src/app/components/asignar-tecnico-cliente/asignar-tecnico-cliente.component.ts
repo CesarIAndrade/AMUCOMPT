@@ -47,6 +47,10 @@ export class AsignarTecnicoClienteComponent implements OnInit {
       .catch((error) => console.log(error));
   }
 
+  canton = false;
+  parroquia = false;
+  comunidad = false;
+
   consultarParroquiasDeUnCanton(idCanton) {
     const url = "Credito/ConsultarPersonasEnFacturasParaSeguimientoPorCanton";
     this.panelAdministracionService
@@ -59,6 +63,7 @@ export class AsignarTecnicoClienteComponent implements OnInit {
         this.parroquias = ok["respuesta"];
         this.myForm.get("_comunidad").setValue("0");
         this.consultarClientes(idCanton, "IdCanton", url);
+        this.canton = true;
       })
       .catch((error) => console.log(error));
   }
@@ -75,6 +80,7 @@ export class AsignarTecnicoClienteComponent implements OnInit {
         this.comunidades = [];
         this.comunidades = ok["respuesta"];
         this.consultarClientes(idParroquia, "IdParroquia", url);
+        this.parroquia = true;
       })
       .catch((error) => console.log(error));
   }
@@ -82,6 +88,7 @@ export class AsignarTecnicoClienteComponent implements OnInit {
   consultarClientesDeUnaComunidad(idComunidad) {
     const url = "Credito/ConsultarPersonasParaSeguimientoPorComunidad";
     this.consultarClientes(idComunidad, "IdComunidad", url);
+    this.comunidad = true;
   }
 
   consultarClientes(idLocalidad, localidad, url) {
@@ -193,10 +200,11 @@ export class AsignarTecnicoClienteComponent implements OnInit {
         )
         .then((ok) => {
           if (ok["respuesta"]) {
-            this.myForm.get("_canton").setValue("0");
-            this.myForm.get("_parroquia").setValue("0");
-            this.myForm.get("_comunidad").setValue("0");
-            this.clientes.data = [];
+            var clientes = this.clientes.data;
+            var cliente = clientes.filter(cliente => cliente._id == idPersona);
+            const index = clientes.indexOf(cliente[0]);
+            clientes.splice(index, 1);
+            this.clientes.data = clientes;
             this.clientesAsignados(this.myForm.get("_idTecnico").value);
           }
         })
@@ -206,17 +214,30 @@ export class AsignarTecnicoClienteComponent implements OnInit {
     }
   }
 
-  desasignarClienteTecnico(idPersona) {
+  queConsulto() {
+    var url: string;
+    if(this.canton && this.parroquia && this.comunidad) {
+      url = "Credito/ConsultarPersonasParaSeguimientoPorComunidad";
+      this.consultarClientes(this.myForm.get("_comunidad").value, "IdComunidad", url);
+    } else if (this.canton && this.parroquia) {
+      url = "Credito/ConsultarPersonasEnFacturasParaSeguimientoPorParroquia";
+      this.consultarClientes(this.myForm.get("_parroquia").value, "IdParroquia", url);
+    } else if(this.canton) {
+      url = "Credito/ConsultarPersonasEnFacturasParaSeguimientoPorCanton";
+      this.consultarClientes(this.myForm.get("_canton").value, "IdCanton", url);
+    }
+  }
+
+  desasignarClienteTecnico(persona) {
     this.ventaService
       .desaignarClienteTecnico(
-        idPersona,
+        persona._id,
         localStorage.getItem("miCuenta.postToken")
       )
       .then((ok) => {
-        console.log(ok["respuesta"]);
-        
         if (ok["respuesta"]) {
           this.clientesAsignados(this.myForm.get("_idTecnico").value);
+          this.queConsulto();
         }
       })
       .catch((error) => console.log(error));

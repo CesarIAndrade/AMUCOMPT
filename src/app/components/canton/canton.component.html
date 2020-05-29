@@ -11,7 +11,6 @@
               placeholder="Provincia"
               type="text"
               readonly
-              aria-disabled="true"
             />
             <button disabled mat-button matPrefix mat-icon-button>
               <mat-icon>*</mat-icon>
@@ -89,8 +88,7 @@
                       <td mat-cell>
                         <button
                           mat-button
-                          tooltip="Modificar"
-                          placement="top"
+                          type="button"
                           class="btn-outline-primary"
                           (click)="mostrarCanton(element)"
                         >
@@ -100,6 +98,7 @@
                       <td mat-cell>
                         <button
                           mat-button
+                          type="button"
                           class="btn-outline-danger"
                           (click)="eliminarCanton(element.IdCanton)"
                         >
@@ -111,8 +110,7 @@
                       <td mat-cell colspan="2">
                         <button
                           mat-button
-                          tooltip="Modificar"
-                          placement="top"
+                          type="button"
                           class="btn-outline-primary btn-block"
                           (click)="mostrarCanton(element)"
                         >

@@ -184,6 +184,14 @@ export class ParroquiaComponent implements OnInit {
     this.myForm.get("_canton").setValue("Cantón");
   }
 
+  mostrarParroquia(parroquia) {
+    this.myForm.get("_idParroquia").setValue(parroquia.IdParroquia);
+    this.myForm.get("_parroquia").setValue(parroquia.Descripcion);
+    this.myForm.get("_idCanton").setValue(parroquia.Canton.IdCanton);
+    this.myForm.get("_canton").setValue(parroquia.Canton.Descripcion);
+    this.botonIngresar = "modificar";
+  }
+
   ngOnInit() {
     this.consultarParroquias();
   }

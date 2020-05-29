@@ -179,6 +179,14 @@ export class ComunidadComponent implements OnInit {
     });
   }
 
+  mostrarComunidad(comunidad) {
+    this.myForm.get("_idComunidad").setValue(comunidad.IdComunidad);
+    this.myForm.get("_comunidad").setValue(comunidad.Descripcion);
+    this.myForm.get("_idParroquia").setValue(comunidad.Parroquia.IdParroquia);
+    this.myForm.get("_parroquia").setValue(comunidad.Parroquia.Descripcion);
+    this.botonIngresar = "modificar";
+  }
+
   ngOnInit() {
     this.consultarComunidades();
   }

@@ -180,6 +180,14 @@ export class CantonComponent implements OnInit {
     });
   }
 
+  mostrarCanton(canton) {
+    this.myForm.get("_idCanton").setValue(canton.IdCanton);
+    this.myForm.get("_canton").setValue(canton.Descripcion);
+    this.myForm.get("_idProvincia").setValue(canton.Provincia.IdProvincia);
+    this.myForm.get("_provincia").setValue(canton.Provincia.Descripcion);
+    this.botonIngresar = "modificar";
+  }
+
   ngOnInit() {
     this.consultarCantones();
   }
