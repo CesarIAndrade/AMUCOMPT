@@ -1,0 +1,6 @@
+<mat-nav-list *ngFor="let comunidad of data.comunidades">
+    <a routerLink="/registrar-visita/{{comunidad._id}}" mat-list-item (click)="openLink()">
+      <span mat-line>{{comunidad.descripcion}}</span>
+      <span mat-line>Visitas: 1</span>
+    </a>  
+  </mat-nav-list>

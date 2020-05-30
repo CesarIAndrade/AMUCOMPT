@@ -121,23 +121,10 @@ export class AsignarTecnicoClienteComponent implements OnInit {
       .catch((error) => console.log(error));
   }
 
-  consultarTipoUsuario() {
-    this.usuarioService
-      .consultarTipoUsuario(localStorage.getItem("miCuenta.getToken"))
-      .then((ok) => {
-        ok["respuesta"].map((item) => {
-          if (item.Identificacion === "3") {
-            this.consultarTecnicos(item.IdTipoUsuario);
-          }
-        });
-      })
-      .catch((error) => console.log(error));
-  }
-
-  consultarTecnicos(idTipoUsuario) {
+  consultarTecnicos() {
     this.usuarioService
       .consultarTecnicos(
-        idTipoUsuario,
+        "2",
         localStorage.getItem("miCuenta.getToken")
       )
       .then((ok) => {
@@ -165,6 +152,7 @@ export class AsignarTecnicoClienteComponent implements OnInit {
     this.ventaService
       .listarClientesTecnico(
         url,
+        "IdAsignarTUTecnico",
         idTecnico,
         localStorage.getItem("miCuenta.getToken")
       )
@@ -202,7 +190,7 @@ export class AsignarTecnicoClienteComponent implements OnInit {
         .then((ok) => {
           if (ok["respuesta"]) {
             var clientes = this.clientes.data;
-            var cliente = clientes.filter(cliente => cliente._id == idPersona);
+            var cliente = clientes.filter(cliente => console.log(cliente));
             const index = clientes.indexOf(cliente[0]);
             clientes.splice(index, 1);
             this.clientes.data = clientes;
@@ -246,7 +234,7 @@ export class AsignarTecnicoClienteComponent implements OnInit {
 
   ngOnInit() {
     this.consultarCantones();
-    this.consultarTipoUsuario();
+    this.consultarTecnicos();
   }
 
   tablaClientes = ["cedula", "cliente", "acciones"];

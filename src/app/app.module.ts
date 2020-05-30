@@ -42,6 +42,8 @@ import { ModalLotesComponent } from "./components/modal-lotes/modal-lotes.compon
 import { MaterialModule } from './material.module';
 import { AsignarTecnicoClienteComponent } from './components/asignar-tecnico-cliente/asignar-tecnico-cliente.component';
 import { VisitaComponent } from './components/visita/visita.component';
+import { ComunidadesBottomSheet } from './components/visita/comunidades-bottom-sheet.component';
+import { RegistrarVisitaComponent } from './components/registrar-visita/registrar-visita.component';
 
 @NgModule({
   declarations: [
@@ -76,6 +78,8 @@ import { VisitaComponent } from './components/visita/visita.component';
     ModalLotesComponent,
     AsignarTecnicoClienteComponent,
     VisitaComponent,
+    ComunidadesBottomSheet,
+    RegistrarVisitaComponent
   ],
   imports: [
     BrowserModule,
@@ -98,6 +102,7 @@ import { VisitaComponent } from './components/visita/visita.component';
     ModalAsignacionConfiguracionProductoComponent,
     ModalLocalidadSuperiorComponent,
     ModalLotesComponent,
+    ComunidadesBottomSheet
   ],
   providers: [],
   bootstrap: [AppComponent],

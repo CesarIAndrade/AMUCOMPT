@@ -97,6 +97,11 @@ export class NavComponent implements OnInit {
           url: "/stock",
         },
         {
+          name: "Asignar Técnico Clientes",
+          icon: "assignment_ind",
+          url: "/asignar-tecnico-cliente",
+        },
+        {
           name: "Abonos",
           icon: "attach_money",
           url: "/abonos",

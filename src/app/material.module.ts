@@ -22,6 +22,7 @@ import {
   MatRadioModule,
   MatExpansionModule,
   MatCardModule,
+  MatBottomSheetModule,
 } from "@angular/material";
 import { MatChipsModule } from "@angular/material/chips";
 
@@ -49,6 +50,7 @@ import { MatChipsModule } from "@angular/material/chips";
     MatCardModule,
     MatPaginatorModule,
     MatGridListModule,
+    MatBottomSheetModule,
   ],
   exports: [
     MatToolbarModule,
@@ -73,6 +75,7 @@ import { MatChipsModule } from "@angular/material/chips";
     MatCardModule,
     MatPaginatorModule,
     MatGridListModule,
+    MatBottomSheetModule,
   ],
 })
 

@@ -10,9 +10,6 @@ import { InventarioComponent } from "./components/inventario/inventario.componen
 import { CompraComponent } from "./components/compra/compra.component";
 import { VentaComponent } from "./components/venta/venta.component";
 import { Page404Component } from "./components/page404/page404.component";
-
-// Guards
-import { ValidarUsuarioGuard } from "src/app/guards/validar-usuario.guard";
 import { PanelAdministracionComponent } from "./components/panel-administracion/panel-administracion.component";
 import { ConfiguracionProductoComponent } from "./components/configuracion-producto/configuracion-producto.component";
 import { CuentaComponent } from "./components/cuenta/cuenta.component";
@@ -22,6 +19,10 @@ import { VentaRubrosComponent } from "./components/venta-rubros/venta-rubros.com
 import { CreditosAbonosComponent } from "./components/creditos-abonos/creditos-abonos.component";
 import { AsignarTecnicoClienteComponent } from "./components/asignar-tecnico-cliente/asignar-tecnico-cliente.component";
 import { VisitaComponent } from "./components/visita/visita.component";
+
+// Guards
+import { ValidarUsuarioGuard } from "src/app/guards/validar-usuario.guard";
+import { RegistrarVisitaComponent } from './components/registrar-visita/registrar-visita.component';
 
 const routes: Routes = [
   // { path: '', pathMatch: 'full', redirectTo: 'login' },
@@ -64,6 +65,11 @@ const routes: Routes = [
       {
         path: "visitas",
         component: VisitaComponent,
+        // canActivate: [ValidarUsuarioGuard]
+      },
+      {
+        path: "registrar-visita/:id",
+        component: RegistrarVisitaComponent,
         // canActivate: [ValidarUsuarioGuard]
       },
       {

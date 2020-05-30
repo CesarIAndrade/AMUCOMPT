@@ -40,6 +40,8 @@ export class LoginComponent implements OnInit {
           localStorage.getItem("miCuenta.getToken")
         )
         .then((ok) => {
+          console.log(ok["respuesta"]);
+          
           if (ok["codigo"] == "200") {
             this.tipoUsuarios = ok["respuesta"]["ListaTipoUsuario"];
           } else {

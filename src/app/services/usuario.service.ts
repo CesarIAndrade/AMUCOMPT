@@ -393,8 +393,8 @@ export class UsuarioService {
 
   consultarTecnicos(idTipoUsuario: string, _token: string) {
     const body = new HttpParams()
-      .set("IdTipoUsuario", idTipoUsuario)
-      .set("encriptada", _token);
+      .set("Identificacion", idTipoUsuario)
+      .set("encriptada", _token)
     return new Promise((resolve, reject) => {
       this.http
         .post(

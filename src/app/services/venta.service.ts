@@ -414,12 +414,10 @@ export class VentaService {
     });
   }
 
-  listarClientesTecnico(url: string, idTecnico: string, _token: string) {
+  listarClientesTecnico(url: string, identificador: string, idTecnico: string, _token: string) {
     const body = new HttpParams()
-      .set("IdAsignarTUTecnico", idTecnico)
-      .set("encriptada", _token)
-    console.log(body);
-    console.log(url);
+      .set(identificador, idTecnico)
+      .set("encriptada", _token)    
     return new Promise((resolve, reject) => {
       this.http
         .post(apiUrl + url, body.toString(), {

@@ -1,6 +1,5 @@
-POST http://25.39.0.74:90/api/Usuario/ListaTipoUsuario
-Content-Type: application/json
-
+POST http://25.39.0.74:90/api/TalentoHumano/ConsultarPersonasConComunidadesPorTecnico
 {
+    Identificacion: "2"
     encriptada: "asd"
 }

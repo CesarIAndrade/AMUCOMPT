@@ -1,8 +1,9 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { FormGroup, FormControl } from "@angular/forms";
-import { MatTableDataSource, MatPaginator } from "@angular/material";
+import { MatTableDataSource, MatPaginator, MatBottomSheetRef, MatBottomSheet } from "@angular/material";
 import { VentaService } from "src/app/services/venta.service";
 import { PanelAdministracionService } from "src/app/services/panel-administracion.service";
+import { ComunidadesBottomSheet } from './comunidades-bottom-sheet.component';
 
 @Component({
   selector: "app-visita",
@@ -12,13 +13,29 @@ import { PanelAdministracionService } from "src/app/services/panel-administracio
 export class VisitaComponent implements OnInit {
   constructor(
     private panelAdministracionService: PanelAdministracionService,
-    private ventaService: VentaService
+    private ventaService: VentaService,
+    private bottomSheet: MatBottomSheet
   ) {
     this.myForm = new FormGroup({
       _canton: new FormControl(""),
       _parroquia: new FormControl(""),
       _comunidad: new FormControl(""),
     });
+  }
+
+  openBottomSheet(comunidades): void {
+    var comunidadesDeUnaPersona: any[] = [];
+    comunidades.map(comunidad => {
+      comunidadesDeUnaPersona.push({
+        _id: comunidad.IdAsignarTecnicoPersonaComunidad,
+        descripcion: comunidad.Comunidad.Descripcion,
+        idTecnico: comunidad.IdAsignarTUTecnico
+      })
+    })
+    const bottomSheetRef = this.bottomSheet.open(ComunidadesBottomSheet, {
+      data: { comunidades: comunidadesDeUnaPersona },
+    });
+    
   }
 
   myForm: FormGroup;
@@ -138,10 +155,32 @@ export class VisitaComponent implements OnInit {
     const url = "Credito/ConsultarPersonasConComunidadesPorTecnico"
     this.ventaService.listarClientesTecnico(
       url,
-      localStorage.getItem("miCuenta.tipoUsuario"),
+      "IdAsignarTUTecnico",
+      localStorage.getItem("miCuenta.idAsignacionTipoUsuario"),
       localStorage.getItem("miCuenta.getToken")
     ).then(ok => {
-      console.log(ok["respuesta"]);
+      var clientes = [];
+      this.clientes.data = [];
+      ok["respuesta"].map((cliente) => {
+        clientes.push({
+          _id: cliente.IdPersona,
+          cedula: cliente.NumeroDocumento,
+          nombres:
+            cliente.PrimerNombre +
+            " " +
+            cliente.SegundoNombre +
+            " " +
+            cliente.ApellidoPaterno +
+            " " +
+            cliente.ApellidoMaterno,
+          vivienda: cliente.AsignacionPersonaParroquia[0].Parroquia.Descripcion,
+          telefono1: cliente.ListaTelefono[0].Numero,
+          telefono2: cliente.ListaTelefono[1].Numero,
+          comunidades: cliente._AsignarTecnicoPersonaComunidad
+        });
+      });
+      this.clientes.data = clientes;
+      this.clientes.paginator = this.paginator;
     }).catch(error => console.log(error))
   }
 
@@ -149,5 +188,5 @@ export class VisitaComponent implements OnInit {
 
   ngOnInit() {}
 
-  tablaClientes = ["cedula", "cliente", "acciones"];
+  tablaClientes = ["cedula", "cliente", "vivienda", "telefonos","acciones"];
 }
