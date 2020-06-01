@@ -1,7 +1,12 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { InventarioService } from "src/app/services/inventario.service";
-import { MatTableDataSource, MatPaginator } from "@angular/material";
+import {
+  MatTableDataSource,
+  MatPaginator,
+  MatDialog,
+  MatSnackBar,
+} from "@angular/material";
 import sweetalert from "sweetalert";
 import { Observable } from "rxjs";
 import { map, startWith } from "rxjs/operators";
@@ -12,7 +17,10 @@ import { map, startWith } from "rxjs/operators";
   styleUrls: ["./configuracion-producto.component.css"],
 })
 export class ConfiguracionProductoComponent implements OnInit {
-  constructor(private inventarioService: InventarioService) {
+  constructor(
+    private inventarioService: InventarioService,
+    private _snackBar: MatSnackBar
+  ) {
     this.myForm = new FormGroup({
       _campo: new FormControl("", [Validators.required]),
       _idCampo: new FormControl(""),
@@ -25,7 +33,7 @@ export class ConfiguracionProductoComponent implements OnInit {
   }
 
   myForm: FormGroup;
-  filterTipoProducto: string = "";
+  filter = "";
   titulo: string;
   suffix: string;
   encabezadoTabla: string;
@@ -50,13 +58,6 @@ export class ConfiguracionProductoComponent implements OnInit {
       descripcion: "Kits",
     },
   ];
-  registroDataSource = {
-    _id: "",
-    descripcion: "",
-    utilizado: "",
-    codigo: "",
-    descuento: "",
-  };
   descuentos: any[] = [];
   filteredDescuento: Observable<string[]>;
 
@@ -64,313 +65,131 @@ export class ConfiguracionProductoComponent implements OnInit {
   @ViewChild("paginator", { static: false }) paginator: MatPaginator;
   dataSource = new MatTableDataSource<Element[]>();
 
-  consultarTipoProductos() {
-    this.inventarioService
-      .consultarTipoProductos(localStorage.getItem("miCuenta.getToken"))
-      .then((ok) => {
-        this.dataSource.data = [];
-        var listaDataSource = [];
-        ok["respuesta"].map((item) => {
-          this.registroDataSource = {
-            _id: item.IdTipoProducto,
-            descripcion: item.Descripcion,
-            utilizado: item.TipoUsuarioUtilizado,
-            codigo: "",
-            descuento: "",
-          };
-          listaDataSource.push(this.registroDataSource);
-        });
-        this.dataSource.data = listaDataSource;
-        this.dataSource.paginator = this.paginator;
-      })
-      .catch((error) => console.log(error));
-  }
-
-  crearTipoProducto() {
-    this.inventarioService
-      .crearTipoProducto(
-        this.myForm.get("_campo").value,
-        localStorage.getItem("miCuenta.postToken")
-      )
-      .then((ok) => {
-        if (ok["respuesta"] == null) {
-          sweetAlert("Inténtalo de nuevo!", {
-            icon: "warning",
-          });
-          this.myForm.reset();
-        } else if (ok["respuesta"] == "400") {
-          sweetAlert("Tipo Producto ya xiste!", {
-            icon: "warning",
-          });
-        } else if (ok["respuesta"] == "false") {
-          sweetAlert("Ha ocurrido un error!", {
-            icon: "error",
-          });
-        } else {
-          sweetAlert("Se ingresó correctamente!", {
-            icon: "success",
-          });
-          this.myForm.get("_campo").reset();
-          this.myForm.setErrors({ invalid: true });
-          this.consultarTipoProductos();
-        }
-      })
-      .catch((error) => console.log(error));
-  }
-
-  eliminarTipoProducto(idTipoProducto) {
-    sweetalert({
-      title: "Advertencia",
-      text: "¿Está seguro que desea eliminar?",
-      icon: "warning",
-      buttons: ["Cancelar", "Ok"],
-      dangerMode: true,
-    }).then((willDelete) => {
-      if (willDelete) {
-        this.inventarioService
-          .eliminarTipoProducto(
-            idTipoProducto,
-            localStorage.getItem("miCuenta.deleteToken")
-          )
-          .then((ok) => {
-            if (ok["respuesta"]) {
-              sweetAlert("Se a eliminado correctamente!", {
-                icon: "success",
-              });
-              this.consultarTipoProductos();
-            } else {
-              sweetAlert("No se ha podido elminiar!", {
-                icon: "error",
-              });
-            }
-          })
-          .catch((error) => console.log(error));
-      }
+  openSnackBar(message: string) {
+    this._snackBar.open(message, "Cerrar", {
+      duration: 2000,
+      horizontalPosition: "right",
     });
   }
 
-  consultarPresentaciones() {
-    this.inventarioService
-      .consultarPresentaciones(localStorage.getItem("miCuenta.getToken"))
-      .then((ok) => {
-        this.dataSource.data = [];
-        var listaDataSource = [];
-        ok["respuesta"].map((item) => {
-          this.registroDataSource = {
-            _id: item.IdPresentacion,
-            descripcion: item.Descripcion,
-            utilizado: item.PresentacionUtilizado,
-            codigo: "",
-            descuento: "",
-          };
-          listaDataSource.push(this.registroDataSource);
+  async consultarTipoProductos() {
+    var respuesta = await this.inventarioService.consultarTipoProductos();
+    if (respuesta["codigo"] == "200") {
+      var tipoProductos: any = [];
+      respuesta["respuesta"].map((item) => {
+        tipoProductos.push({
+          _id: item.IdTipoProducto,
+          descripcion: item.Descripcion,
+          utilizado: item.TipoUsuarioUtilizado,
+          codigo: "",
+          descuento: "",
         });
-        this.dataSource.data = listaDataSource;
+        this.dataSource.data = tipoProductos;
         this.dataSource.paginator = this.paginator;
-      })
-      .catch((error) => console.log(error));
+      });
+    }
   }
 
-  crearPresentacion() {
-    this.inventarioService
-      .crearPresentacion(
-        this.myForm.get("_campo").value,
-        localStorage.getItem("miCuenta.postToken")
-      )
-      .then((ok) => {
-        if (ok["respuesta"] == null) {
-          sweetAlert("Inténtalo de nuevo!", {
-            icon: "warning",
-          });
-          this.myForm.reset();
-        } else if (ok["respuesta"] == "400") {
-          sweetAlert("Presentación ya existe!", {
-            icon: "warning",
-          });
-        } else if (ok["respuesta"] == "false") {
-          sweetAlert("Ha ocurrido un error!", {
-            icon: "error",
-          });
-        } else {
-          sweetAlert("Se ingresó correctamente!", {
-            icon: "success",
-          });
-          this.myForm.get("_campo").reset();
-          this.myForm.setErrors({ invalid: true });
-          this.consultarPresentaciones();
-        }
-      })
-      .catch((error) => console.log(error));
+  async crearTipoProducto() {
+    var tipoProducto = await this.inventarioService.crearTipoProducto(
+      this.myForm.get("_campo").value
+    );
+    console.log(tipoProducto);
   }
 
-  eliminarPresentacion(idPresentacion) {
-    sweetalert({
-      title: "Advertencia",
-      text: "¿Está seguro que desea eliminar?",
-      icon: "warning",
-      buttons: ["Cancelar", "Ok"],
-      dangerMode: true,
-    }).then((willDelete) => {
-      if (willDelete) {
-        this.inventarioService
-          .eliminarPresentacion(
-            idPresentacion,
-            localStorage.getItem("miCuenta.deleteToken")
-          )
-          .then((ok) => {
-            if (ok["respuesta"]) {
-              sweetAlert("Se a eliminado correctamente!", {
-                icon: "success",
-              });
-              this.consultarPresentaciones();
-            } else {
-              sweetAlert("No se ha podido elminiar!", {
-                icon: "error",
-              });
-            }
-          })
-          .catch((error) => console.log(error));
-      }
-    });
+  async eliminarTipoProducto(idTipoProducto) {
+    var respuesta = await this.inventarioService.eliminarTipoProducto(
+      idTipoProducto
+    );
+    console.log(respuesta);
   }
 
-  consultarMedidas() {
-    this.inventarioService
-      .consultarMedidas(localStorage.getItem("miCuenta.getToken"))
-      .then((ok) => {
-        this.dataSource.data = [];
-        var listaDataSource = [];
-        ok["respuesta"].map((item) => {
-          this.registroDataSource = {
-            _id: item.IdMedida,
-            descripcion: item.Descripcion,
-            utilizado: item.MedidaUtilizado,
-            codigo: "",
-            descuento: "",
-          };
-          listaDataSource.push(this.registroDataSource);
+  async consultarPresentaciones() {
+    var respuesta = await this.inventarioService.consultarPresentaciones();
+    if (respuesta["codigo"] == "200") {
+      var presentaciones: any = [];
+      respuesta["respuesta"].map((item) => {
+        presentaciones.push({
+          _id: item.IdPresentacion,
+          descripcion: item.Descripcion,
+          utilizado: item.PresentacionUtilizado,
+          codigo: "",
+          descuento: "",
         });
-        this.dataSource.data = listaDataSource;
-        this.dataSource.paginator = this.paginator;
-      })
-      .catch((error) => console.log(error));
+      });
+      this.dataSource.data = presentaciones;
+      this.dataSource.paginator = this.paginator;
+    }
   }
 
-  crearMedida() {
-    this.inventarioService
-      .crearMedida(
-        this.myForm.get("_campo").value,
-        localStorage.getItem("miCuenta.postToken")
-      )
-      .then((ok) => {
-        if (ok["respuesta"] == null) {
-          sweetAlert("Inténtalo de nuevo!", {
-            icon: "warning",
-          });
-          this.myForm.reset();
-        } else if (ok["respuesta"] == "400") {
-          sweetAlert("Medida ya existe!", {
-            icon: "warning",
-          });
-        } else if (ok["respuesta"] == "false") {
-          sweetAlert("Ha ocurrido un error!", {
-            icon: "error",
-          });
-        } else {
-          sweetAlert("Se ingresó correctamente!", {
-            icon: "success",
-          });
-          this.myForm.get("_campo").reset();
-          this.myForm.setErrors({ invalid: true });
-          this.consultarMedidas();
-        }
-      })
-      .catch((error) => console.log(error));
+  async crearPresentacion() {
+    var respuesta = await this.inventarioService.crearPresentacion(
+      this.myForm.get("_campo").value
+    );
+    console.log(respuesta);
   }
 
-  eliminarMedida(idMedida) {
-    sweetalert({
-      title: "Advertencia",
-      text: "¿Está seguro que desea eliminar?",
-      icon: "warning",
-      buttons: ["Cancelar", "Ok"],
-      dangerMode: true,
-    }).then((willDelete) => {
-      if (willDelete) {
-        this.inventarioService
-          .eliminarMedida(
-            idMedida,
-            localStorage.getItem("miCuenta.deleteToken")
-          )
-          .then((ok) => {
-            if (ok["respuesta"]) {
-              sweetAlert("Se a eliminado correctamente!", {
-                icon: "success",
-              });
-              this.consultarMedidas();
-            } else {
-              sweetAlert("No se ha podido elminiar!", {
-                icon: "error",
-              });
-            }
-          })
-          .catch((error) => console.log(error));
-      }
-    });
+  async eliminarPresentacion(idPresentacion) {
+    var respuesta = await this.inventarioService.eliminarPresentacion(
+      idPresentacion
+    );
+    console.log(respuesta);
   }
 
-  consultarKits() {
-    this.inventarioService
-      .consultarKits(localStorage.getItem("miCuenta.getToken"))
-      .then((ok) => {
-        this.dataSource.data = [];
-        var listaDataSource = [];
-        ok["respuesta"].map((item) => {
-          this.registroDataSource = {
-            _id: item.IdKit,
-            descripcion: item.Descripcion,
-            utilizado: item.KitUtilizado,
-            codigo: item.Codigo,
-            descuento: item.AsignarDescuentoKit.Descuento.Porcentaje,
-          };
-          listaDataSource.push(this.registroDataSource);
+  async consultarMedidas() {
+    var respuesta = await this.inventarioService.consultarMedidas();
+    if (respuesta["codigo"] == "200") {
+      var medidas: any = [];
+      respuesta["respuesta"].map((item) => {
+        medidas.push({
+          _id: item.IdMedida,
+          descripcion: item.Descripcion,
+          utilizado: item.MedidaUtilizado,
+          codigo: "",
+          descuento: "",
         });
-        this.dataSource.data = listaDataSource;
-        this.dataSource.paginator = this.paginator;
-      })
-      .catch((error) => console.log(error));
+      });
+      this.dataSource.data = medidas;
+      this.dataSource.paginator = this.paginator;
+    }
   }
 
-  crearKit() {
-    this.inventarioService
-      .crearKit(
-        this.myForm.get("_campo").value,
-        this.myForm.get("_codigo").value,
-        localStorage.getItem("miCuenta.postToken")
-      )
-      .then((ok) => {
-        if (ok["respuesta"] == null) {
-          sweetAlert("Inténtalo de nuevo!", {
-            icon: "warning",
-          });
-        } else if (ok["respuesta"] == "400") {
-          sweetAlert("Kit ya existe!", {
-            icon: "warning",
-          });
-          this.myForm.reset();
-        } else if (ok["respuesta"] == "false") {
-          sweetAlert("Ha ocurrido un error!", {
-            icon: "error",
-          });
-        } else {
-          sweetAlert("Se ingresó correctamente!", {
-            icon: "success",
-          });
-          this.myForm.get("_idKit").setValue(ok["respuesta"]);
-          this.crearDescuento();
-        }
-      })
-      .catch((error) => console.log(error));
+  async crearMedida() {
+    var respuesta = await this.inventarioService.crearMedida(
+      this.myForm.get("_campo").value
+    );
+    console.log(respuesta);
+  }
+
+  async eliminarMedida(idMedida) {
+    var respuesta = await this.inventarioService.eliminarMedida(idMedida);
+    console.log(respuesta);
+  }
+
+  async consultarKits() {
+    var respuesta = await this.inventarioService.consultarKits();
+    if (respuesta["codigo"] == "200") {
+      var kits: any = [];
+      respuesta["respuesta"].map((item) => {
+        kits.push({
+          _id: item.IdKit,
+          descripcion: item.Descripcion,
+          utilizado: item.KitUtilizado,
+          codigo: item.Codigo,
+          descuento: item.AsignarDescuentoKit.Descuento.Porcentaje,
+        });
+      });
+      this.dataSource.data = kits;
+      this.dataSource.paginator = this.paginator;
+    }
+  }
+
+  async crearKit() {
+    var respuesta = await this.inventarioService.crearKit(
+      this.myForm.get("_campo").value,
+      this.myForm.get("_codigo").value
+    );
+    console.log(respuesta);
   }
 
   private _filter(value: string): string[] {
@@ -380,92 +199,70 @@ export class ConfiguracionProductoComponent implements OnInit {
     );
   }
 
-  consultarDescuentos() {
-    this.inventarioService
-      .consultarDescuentos(localStorage.getItem("miCuenta.getToken"))
-      .then((ok) => {
-        this.descuentos = [];
-        for (let index = 0; index < ok["respuesta"].length; index++) {
-          const element = ok["respuesta"][index];
-          this.descuentos[index] = {
-            IdDescuento: element.IdDescuento,
-            Porcentaje: String(element.Porcentaje),
-          };
-        }
-        this.filteredDescuento = this.myForm
-          .get("_descuento")
-          .valueChanges.pipe(
-            startWith(""),
-            map((value) => this._filter(value))
-          );
-      })
-      .catch((error) => console.log(error));
+  async consultarDescuentos() {
+    var respuesta = await this.inventarioService.consultarDescuentos();
+    console.log(respuesta);
+
+    // .then((ok) => {
+    //   this.descuentos = [];
+    //   for (let index = 0; index < ok["respuesta"].length; index++) {
+    //     const element = ok["respuesta"][index];
+    //     this.descuentos[index] = {
+    //       IdDescuento: element.IdDescuento,
+    //       Porcentaje: String(element.Porcentaje),
+    //     };
+    //   }
+    //   this.filteredDescuento = this.myForm
+    //     .get("_descuento")
+    //     .valueChanges.pipe(
+    //       startWith(""),
+    //       map((value) => this._filter(value))
+    //     );
+    // })
+    // .catch((error) => console.log(error));
   }
 
-  crearDescuento() {
-    this.inventarioService
-      .crearDescuentoKit(
-        this.myForm.get("_descuento").value,
-        localStorage.getItem("miCuenta.postToken")
-      )
-      .then((ok) => {
-        if (typeof ok["respuesta"] == "string") {
-          this.myForm.get("_idDescuento").setValue(ok["respuesta"]);
-          this.asignarDescuentoKit();
-        } else {
-          this.myForm.get("_idDescuento").setValue(ok["respuesta"].IdDescuento);
-          this.asignarDescuentoKit();
-        }
-      })
-      .catch((error) => console.log(error));
+  async crearDescuento() {
+    var respuesta = await this.inventarioService.crearDescuentoKit(
+      this.myForm.get("_descuento").value
+    );
+    console.log(respuesta);
+
+    // .then((ok) => {
+    //   if (typeof ok["respuesta"] == "string") {
+    //     this.myForm.get("_idDescuento").setValue(ok["respuesta"]);
+    //     this.asignarDescuentoKit();
+    //   } else {
+    //     this.myForm.get("_idDescuento").setValue(ok["respuesta"].IdDescuento);
+    //     this.asignarDescuentoKit();
+    //   }
+    // })
+    // .catch((error) => console.log(error));
   }
 
-  asignarDescuentoKit() {
-    this.inventarioService
-      .asignarDescuentoKit(
-        this.myForm.get("_idKit").value,
-        this.myForm.get("_idDescuento").value,
-        localStorage.getItem("miCuenta.postToken")
-      )
-      .then((ok) => {
-        this.myForm.get("_campo").reset();
-        this.myForm.get("_codigo").reset();
-        this.myForm.get("_descuento").reset();
-        this.myForm.setErrors({ invalid: true });
-      })
-      .catch((error) => console.log(error))
-      .finally(() => {
-        this.consultarKits();
-        this.consultarDescuentos();
-      });
+  async asignarDescuentoKit() {
+    var respuesta = await this.inventarioService.asignarDescuentoKit(
+      this.myForm.get("_idKit").value,
+      this.myForm.get("_idDescuento").value
+    );
+    console.log(respuesta);
+
+    // .then((ok) => {
+    //   this.myForm.get("_campo").reset();
+    //   this.myForm.get("_codigo").reset();
+    //   this.myForm.get("_descuento").reset();
+    //   this.myForm.setErrors({ invalid: true });
+    // })
+    // .catch((error) => console.log(error))
+    // .finally(() => {
+    //   this.consultarKits();
+    //   this.consultarDescuentos();
+    // });
   }
 
-  eliminarKit(idKit) {
-    sweetalert({
-      title: "Advertencia",
-      text: "¿Está seguro que desea eliminar?",
-      icon: "warning",
-      buttons: ["Cancelar", "Ok"],
-      dangerMode: true,
-    }).then((willDelete) => {
-      if (willDelete) {
-        this.inventarioService
-          .eliminarKit(idKit, localStorage.getItem("miCuenta.deleteToken"))
-          .then((ok) => {
-            if (ok["respuesta"]) {
-              sweetAlert("Se a eliminado correctamente!", {
-                icon: "success",
-              });
-              this.consultarKits();
-            } else {
-              sweetAlert("No se ha podido elminiar!", {
-                icon: "error",
-              });
-            }
-          })
-          .catch((error) => console.log(error));
-      }
-    });
+  async eliminarKit(idKit) {
+    var respuesta = await this.inventarioService.eliminarKit(idKit);
+    console.log(respuesta);
   }
 
   actualizarOpcion(titulo, suffix, encabezadoTabla, tabla) {
@@ -490,6 +287,7 @@ export class ConfiguracionProductoComponent implements OnInit {
   }
 
   selecionarOpcion(opcion) {
+    this.dataSource.data = [];
     if (opcion.value === "1") {
       this.actualizarOpcion("Tipo Producto", "o", "Tipo Productos", [
         "descripcion",

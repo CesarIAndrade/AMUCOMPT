@@ -81,8 +81,8 @@
             <mat-form-field class="example-full-width">
               <input
                 matInput
-                [(ngModel)]="filterTipoProducto"
-                [ngModelOptions]="{standalone: true}"
+                [(ngModel)]="filter"
+                [ngModelOptions]="{ standalone: true }"
                 type="text"
                 placeholder="Buscar {{ titulo }}"
               />
@@ -93,9 +93,7 @@
             <div class="table_all">
               <table
                 mat-table
-                [dataSource]="
-                  dataSource | filter: filterTipoProducto:'Descripcion'
-                "
+                [dataSource]="dataSource | filter: filter:'descripcion'"
               >
                 <ng-container matColumnDef="descripcion">
                   <th mat-header-cell *matHeaderCellDef>Descripción</th>

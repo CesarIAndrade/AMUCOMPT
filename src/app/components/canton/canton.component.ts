@@ -1,20 +1,13 @@
-import {
-  Component,
-  OnInit,
-  ViewChild,
-  ElementRef,
-  Output,
-  EventEmitter,
-} from "@angular/core";
+import { Component, OnInit, ViewChild } from "@angular/core";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
+import { MatDialog, MatTableDataSource, MatPaginator, MatSnackBar } from "@angular/material";
 
 // Services
 import { PanelAdministracionService } from "src/app/services/panel-administracion.service";
 
-// SweetAlert
-import sweetalert from "sweetalert";
-import { MatDialog, MatTableDataSource, MatPaginator } from "@angular/material";
+// Components
 import { ModalLocalidadSuperiorComponent } from "../modal-localidad-superior/modal-localidad-superior.component";
+import { DialogAlertComponent } from '../dialog-alert/dialog-alert.component';
 
 @Component({
   selector: "app-canton",
@@ -24,7 +17,9 @@ import { ModalLocalidadSuperiorComponent } from "../modal-localidad-superior/mod
 export class CantonComponent implements OnInit {
   constructor(
     private panelAdministracionService: PanelAdministracionService,
-    private modalLocalidadSuperior: MatDialog
+    private modalLocalidadSuperior: MatDialog,
+    private dialog: MatDialog,
+    private _snackBar: MatSnackBar
   ) {
     this.myForm = new FormGroup({
       _idCanton: new FormControl(""),
@@ -36,22 +31,32 @@ export class CantonComponent implements OnInit {
 
   myForm: FormGroup;
   botonIngresar = "ingresar";
-  filterProvincia = "";
   filterCanton = "";
 
   // Para la paginacion
   @ViewChild("paginator", { static: false }) paginator: MatPaginator;
   cantones = new MatTableDataSource<Element[]>();
 
-  consultarCantones() {
-    this.panelAdministracionService
-      .consultarCantones(localStorage.getItem("miCuenta.getToken"))
-      .then((ok) => {
-        this.cantones.data = [];
-        this.cantones.data = ok["respuesta"];
-        this.cantones.paginator = this.paginator;
-      })
-      .catch((error) => console.log(error));
+  openDialog(mensaje): void {
+    const dialogRef = this.dialog.open(DialogAlertComponent, {
+      width: "250px",
+      data: { mensaje: mensaje },
+    });
+  }
+
+  openSnackBar(message: string) {
+    this._snackBar.open(message, "Cerrar", {
+      duration: 2000,
+      horizontalPosition: "right",
+    });
+  }
+
+  async consultarCantones() {
+    var cantones = await this.panelAdministracionService.consultarCantones();
+    if (cantones["codigo"] == "200") {
+      this.cantones.data = cantones["respuesta"];
+      this.cantones.paginator = this.paginator;
+    }
   }
 
   validarFormulario() {
@@ -64,101 +69,72 @@ export class CantonComponent implements OnInit {
     }
   }
 
-  crearCanton() {
-    this.panelAdministracionService
-      .crearCanton(
-        this.myForm.get("_idProvincia").value,
-        this.myForm.get("_canton").value,
-        localStorage.getItem("miCuenta.postToken")
-      )
-      .then((ok) => {
-        if (ok["respuesta"] == null) {
-          sweetAlert("Inténtalo de nuevo!", {
-            icon: "warning",
-          });
-          this.myForm.reset();
-        } else if (ok["respuesta"] == "400") {
-          sweetAlert("Cantón ya existe!", {
-            icon: "warning",
-          });
-        } else if (ok["respuesta"] == "false") {
-          sweetAlert("Ha ocurrido un error!", {
-            icon: "error",
-          });
-        } else {
-          sweetAlert("Se ingresó correctamente!", {
-            icon: "success",
-          });
-          this.myForm.reset();
-          this.consultarCantones();
-        }
-      })
-      .catch((error) => console.log(error));
+  async crearCanton() {
+    var canton = await this.panelAdministracionService.crearCanton(
+      this.myForm.get("_idProvincia").value,
+      this.myForm.get("_canton").value
+    );
+    console.log(canton);
+    // .then((ok) => {
+    //   if (ok["respuesta"] == null) {
+    //     sweetAlert("Inténtalo de nuevo!", {
+    //       icon: "warning",
+    //     });
+    //     this.myForm.reset();
+    //   } else if (ok["respuesta"] == "400") {
+    //     sweetAlert("Cantón ya existe!", {
+    //       icon: "warning",
+    //     });
+    //   } else if (ok["respuesta"] == "false") {
+    //     sweetAlert("Ha ocurrido un error!", {
+    //       icon: "error",
+    //     });
+    //   } else {
+    //     sweetAlert("Se ingresó correctamente!", {
+    //       icon: "success",
+    //     });
+
+    //   }
+    // })
+    // .catch((error) => console.log(error));
   }
 
-  actualizarCanton() {
-    this.panelAdministracionService
-      .actualizarCanton(
-        this.myForm.get("_idProvincia").value,
-        this.myForm.get("_idCanton").value,
-        this.myForm.get("_canton").value,
-        localStorage.getItem("miCuenta.putToken")
-      )
-      .then((ok) => {
-        if (ok["respuesta"] == null) {
-          sweetAlert("Inténtalo de nuevo!", {
-            icon: "warning",
-          });
-          this.myForm.reset();
-        } else if (ok["respuesta"] == "400") {
-          sweetAlert("Cantón ya existe!", {
-            icon: "warning",
-          });
-        } else if (ok["respuesta"] == "false") {
-          sweetAlert("Ha ocurrido un error!", {
-            icon: "error",
-          });
-        } else {
-          sweetAlert("Se ingresó correctamente!", {
-            icon: "success",
-          });
-          this.botonIngresar = "ingresar";
-          this.myForm.reset();
-          this.consultarCantones();
-        }
-      })
-      .catch((error) => console.log(error));
+  async actualizarCanton() {
+    var canton = await this.panelAdministracionService.actualizarCanton(
+      this.myForm.get("_idProvincia").value,
+      this.myForm.get("_idCanton").value,
+      this.myForm.get("_canton").value
+    );
+    console.log(canton);
+    // .then((ok) => {
+    //   if (ok["respuesta"] == null) {
+    //     sweetAlert("Inténtalo de nuevo!", {
+    //       icon: "warning",
+    //     });
+    //     this.myForm.reset();
+    //   } else if (ok["respuesta"] == "400") {
+    //     sweetAlert("Cantón ya existe!", {
+    //       icon: "warning",
+    //     });
+    //   } else if (ok["respuesta"] == "false") {
+    //     sweetAlert("Ha ocurrido un error!", {
+    //       icon: "error",
+    //     });
+    //   } else {
+    //     sweetAlert("Se ingresó correctamente!", {
+    //       icon: "success",
+    //     });
+    //     this.botonIngresar = "ingresar";
+    //     this.myForm.reset();
+    //     this.consultarCantones();
+    //   }
+    // })
+    // .catch((error) => console.log(error));
   }
 
-  eliminarCanton(idCanton: string) {
-    sweetalert({
-      title: "Advertencia",
-      text: "¿Está seguro que desea eliminar?",
-      icon: "warning",
-      buttons: ["Cancelar", "Ok"],
-      dangerMode: true,
-    }).then((willDelete) => {
-      if (willDelete) {
-        this.panelAdministracionService
-          .eliminarCanton(
-            idCanton,
-            localStorage.getItem("miCuenta.deleteToken")
-          )
-          .then((ok) => {
-            if (ok["respuesta"]) {
-              sweetAlert("Se ha eliminado correctamente!", {
-                icon: "success",
-              });
-              this.consultarCantones();
-            } else {
-              sweetAlert("No se ha podido elminiar!", {
-                icon: "error",
-              });
-            }
-          })
-          .catch((error) => console.log(error));
-      }
-    });
+  async eliminarCanton(idCanton: string) {
+    var respuesta = await this.panelAdministracionService;
+    console.log(respuesta);
   }
 
   abrirModal() {

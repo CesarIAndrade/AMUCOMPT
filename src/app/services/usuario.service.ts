@@ -7,11 +7,11 @@ import { apiUrl } from "../../environments/environment";
 export class UsuarioService {
   constructor(private http: HttpClient) {}
 
-  login(usuario: string, contrasena: string, _token: string) {
+  login(usuario: string, contrasena: string) {
     const body = new HttpParams()
       .set("usuario", usuario)
       .set("contrasena", contrasena)
-      .set("token", _token);
+      .set("token", localStorage.getItem("miCuenta.getToken"));
     return new Promise((resolve, reject) => {
       this.http
         .post(apiUrl + "TalentoHumano/Login/", body.toString(), {
@@ -31,8 +31,11 @@ export class UsuarioService {
     });
   }
 
-  consultarUsuarios(_token: string) {
-    const body = new HttpParams().set("encriptada", _token);
+  consultarUsuarios() {
+    const body = new HttpParams().set(
+      "encriptada",
+      localStorage.getItem("miCuenta.getToken")
+    );
     return new Promise((resolve, reject) => {
       this.http
         .post(apiUrl + "TalentoHumano/ListaUsuariosSistema", body.toString(), {
@@ -52,10 +55,10 @@ export class UsuarioService {
     });
   }
 
-  moduloDeUnTipoDeUsuario(idTipoUsuario: string, _token: string) {
+  moduloDeUnTipoDeUsuario(idTipoUsuario: string) {
     const body = new HttpParams()
       .set("IdTipoUsuario", idTipoUsuario)
-      .set("encriptada", _token);
+      .set("encriptada", localStorage.getItem("miCuenta.getToken"));
     return new Promise((resolve, reject) => {
       this.http
         .post(
@@ -79,10 +82,10 @@ export class UsuarioService {
     });
   }
 
-  privilegiosDeUnModuloTipo(idModuloTipo: string, _token: string) {
+  privilegiosDeUnModuloTipo(idModuloTipo: string) {
     const body = new HttpParams()
       .set("IdModuloTipo", idModuloTipo)
-      .set("encriptada", _token);
+      .set("encriptada", localStorage.getItem("miCuenta.getToken"));
     return new Promise((resolve, reject) => {
       this.http
         .post(
@@ -106,8 +109,11 @@ export class UsuarioService {
     });
   }
 
-  consultarTipoUsuario(_token: string) {
-    const body = new HttpParams().set("encriptada", _token);
+  consultarTipoUsuario() {
+    const body = new HttpParams().set(
+      "encriptada",
+      localStorage.getItem("miCuenta.getToken")
+    );
     return new Promise((resolve, reject) => {
       this.http
         .post(apiUrl + "Usuario/ListaTipoUsuario", body.toString(), {
@@ -127,10 +133,10 @@ export class UsuarioService {
     });
   }
 
-  consultarAsignacionTipoUsuario(idUsuario: string, _token: string) {
+  consultarAsignacionTipoUsuario(idUsuario: string) {
     const body = new HttpParams()
       .set("IdUsuario", idUsuario)
-      .set("encriptada", _token);
+      .set("encriptada", localStorage.getItem("miCuenta.getToken"));
     return new Promise((resolve, reject) => {
       this.http
         .post(
@@ -154,8 +160,11 @@ export class UsuarioService {
     });
   }
 
-  consultarPrivilegios(_token: string) {
-    const body = new HttpParams().set("encriptada", _token);
+  consultarPrivilegios() {
+    const body = new HttpParams().set(
+      "encriptada",
+      localStorage.getItem("miCuenta.getToken")
+    );
     return new Promise((resolve, reject) => {
       this.http
         .post(apiUrl + "TalentoHumano/ListaPrivilegio/", body.toString(), {
@@ -175,8 +184,11 @@ export class UsuarioService {
     });
   }
 
-  consultarModulos(_token: string) {
-    const body = new HttpParams().set("encriptada", _token);
+  consultarModulos() {
+    const body = new HttpParams().set(
+      "encriptada",
+      localStorage.getItem("miCuenta.getToken")
+    );
     return new Promise((resolve, reject) => {
       this.http
         .post(apiUrl + "Usuarios/ListaModulos/", body.toString(), {
@@ -201,7 +213,7 @@ export class UsuarioService {
       .set("IdPersona", datosUsuario.idPersona)
       .set("UsuarioLogin", datosUsuario.usuario)
       .set("Contrasena", datosUsuario.contrasena)
-      .set("encriptada", datosUsuario.token);
+      .set("encriptada", localStorage.getItem("miCuenta.postToken"));
     return new Promise((resolve, reject) => {
       this.http
         .post(apiUrl + "TalentoHumano/IngresoCredencial", body.toString(), {
@@ -221,10 +233,10 @@ export class UsuarioService {
     });
   }
 
-  habilitarUsuario(idUsuario: string, _token: string) {
+  habilitarUsuario(idUsuario: string) {
     const body = new HttpParams()
       .set("IdUsuario", idUsuario)
-      .set("encriptada", _token);
+      .set("encriptada", localStorage.getItem("miCuenta.postToken"));
     return new Promise((resolve, reject) => {
       this.http
         .post(apiUrl + "Usuario/HabilitarUsuario", body.toString(), {
@@ -244,15 +256,11 @@ export class UsuarioService {
     });
   }
 
-  asignacionTipoUsuario(
-    idUsuario: string,
-    tipoUsuario: string,
-    _token: string
-  ) {
+  asignacionTipoUsuario(idUsuario: string, tipoUsuario: string) {
     const body = new HttpParams()
       .set("IdUsuario", idUsuario)
       .set("IdTipoUsuario", tipoUsuario)
-      .set("encriptada", _token);
+      .set("encriptada", localStorage.getItem("miCuenta.postToken"));
     return new Promise((resolve, reject) => {
       this.http
         .post(apiUrl + "TalentoHumano/IngresoTipoUsuario", body.toString(), {
@@ -275,14 +283,13 @@ export class UsuarioService {
   modificarAsignacionTipoUsuario(
     idAsignacionTU: string,
     idUsuario: string,
-    idTipoUsuario: string,
-    _token: string
+    idTipoUsuario: string
   ) {
     const body = new HttpParams()
       .set("IdAsignacionTU", idAsignacionTU)
       .set("IdUsuario", idUsuario)
       .set("IdTipoUsuario", idTipoUsuario)
-      .set("encriptada", _token);
+      .set("encriptada", localStorage.getItem("miCuenta.putToken"));
     return new Promise((resolve, reject) => {
       this.http
         .post(
@@ -306,13 +313,10 @@ export class UsuarioService {
     });
   }
 
-  eliminarAsignacionTipoUsuario(
-    idAsignacionTipoUsuario: string,
-    _token: string
-  ) {
+  eliminarAsignacionTipoUsuario(idAsignacionTipoUsuario: string) {
     const body = new HttpParams()
       .set("IdAsignacionTU", idAsignacionTipoUsuario)
-      .set("encriptada", _token);
+      .set("encriptada", localStorage.getItem("miCuenta.deleteToken"));
     return new Promise((resolve, reject) => {
       this.http
         .post(
@@ -336,10 +340,10 @@ export class UsuarioService {
     });
   }
 
-  eliminarUsuario(idUsuario: string, _token: string) {
+  eliminarUsuario(idUsuario: string) {
     const body = new HttpParams()
       .set("IdUsuario", idUsuario)
-      .set("encriptada", _token);
+      .set("encriptada", localStorage.getItem("miCuenta.deleteToken"));
     return new Promise((resolve, reject) => {
       this.http
         .post(apiUrl + "TalentoHumano/EliminarCredencial", body.toString(), {
@@ -363,15 +367,14 @@ export class UsuarioService {
     IdUsuario: string,
     IdPersona: string,
     UsuarioLogin: string,
-    Contrasena: string,
-    _token: string
+    Contrasena: string
   ) {
     const body = new HttpParams()
       .set("IdUsuario", IdUsuario)
       .set("IdPersona", IdPersona)
       .set("UsuarioLogin", UsuarioLogin)
       .set("Contrasena", Contrasena)
-      .set("encriptada", _token);
+      .set("encriptada", localStorage.getItem("miCuenta.putToken"));
     return new Promise((resolve, reject) => {
       this.http
         .post(apiUrl + "TalentoHumano/ActualizarCredencial", body.toString(), {
@@ -391,10 +394,10 @@ export class UsuarioService {
     });
   }
 
-  consultarTecnicos(idTipoUsuario: string, _token: string) {
+  consultarTecnicos(idTipoUsuario: string) {
     const body = new HttpParams()
       .set("Identificacion", idTipoUsuario)
-      .set("encriptada", _token)
+      .set("encriptada", localStorage.getItem("miCuenta.getToken"));
     return new Promise((resolve, reject) => {
       this.http
         .post(

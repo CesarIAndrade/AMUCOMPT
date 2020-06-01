@@ -1,20 +1,13 @@
-import {
-  Component,
-  OnInit,
-  ViewChild,
-  ElementRef,
-  Output,
-  EventEmitter,
-} from "@angular/core";
+import { Component, OnInit, ViewChild } from "@angular/core";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
+import { MatDialog, MatPaginator, MatTableDataSource, MatSnackBar } from "@angular/material";
 
 // Services
 import { PanelAdministracionService } from "src/app/services/panel-administracion.service";
 
-// SweetAlert
-import sweetalert from "sweetalert";
-import { MatDialog, MatPaginator, MatTableDataSource } from "@angular/material";
+// Components
 import { ModalLocalidadSuperiorComponent } from "../modal-localidad-superior/modal-localidad-superior.component";
+import { DialogAlertComponent } from '../dialog-alert/dialog-alert.component';
 
 @Component({
   selector: "app-comunidad",
@@ -24,7 +17,9 @@ import { ModalLocalidadSuperiorComponent } from "../modal-localidad-superior/mod
 export class ComunidadComponent implements OnInit {
   constructor(
     private panelAdministracionService: PanelAdministracionService,
-    private modalLocalidadSuperior: MatDialog
+    private modalLocalidadSuperior: MatDialog,
+    private dialog: MatDialog,
+    private _snackBar: MatSnackBar
   ) {
     this.myForm = new FormGroup({
       _idComunidad: new FormControl(""),
@@ -42,15 +37,26 @@ export class ComunidadComponent implements OnInit {
   @ViewChild("paginator", { static: false }) paginator: MatPaginator;
   comunidades = new MatTableDataSource<Element[]>();
 
-  consultarComunidades() {
-    this.panelAdministracionService
-      .consultarComunidades(localStorage.getItem("miCuenta.getToken"))
-      .then((ok) => {
-        this.comunidades.data = [];
-        this.comunidades.data = ok["respuesta"];
-        this.comunidades.paginator = this.paginator;
-      })
-      .catch((error) => console.log(error));
+  openDialog(mensaje): void {
+    const dialogRef = this.dialog.open(DialogAlertComponent, {
+      width: "250px",
+      data: { mensaje: mensaje },
+    });
+  }
+
+  openSnackBar(message: string) {
+    this._snackBar.open(message, "Cerrar", {
+      duration: 2000,
+      horizontalPosition: "right",
+    });
+  }
+
+  async consultarComunidades() {
+    var comunidades = await this.panelAdministracionService.consultarComunidades();
+    if (comunidades["codigo"] == "200") {
+      this.comunidades.data = comunidades["respuesta"];
+      this.comunidades.paginator = this.paginator;
+    }
   }
 
   validarFormulario() {
@@ -63,101 +69,28 @@ export class ComunidadComponent implements OnInit {
     }
   }
 
-  crearComunidad() {
-    this.panelAdministracionService
-      .crearComunidad(
-        this.myForm.get("_idParroquia").value,
-        this.myForm.get("_comunidad").value,
-        localStorage.getItem("miCuenta.postToken")
-      )
-      .then((ok) => {
-        if (ok["respuesta"] == null) {
-          sweetAlert("Inténtalo de nuevo!", {
-            icon: "warning",
-          });
-          this.myForm.reset();
-        } else if (ok["respuesta"] == "400") {
-          sweetAlert("Comunidad ya existe!", {
-            icon: "warning",
-          });
-        } else if (ok["respuesta"] == "false") {
-          sweetAlert("Ha ocurrido un error!", {
-            icon: "error",
-          });
-        } else {
-          sweetAlert("Se ingresó correctamente!", {
-            icon: "success",
-          });
-          this.myForm.reset();
-          this.consultarComunidades();
-        }
-      })
-      .catch((error) => console.log(error));
+  async crearComunidad() {
+    var comunidad = await this.panelAdministracionService.crearComunidad(
+      this.myForm.get("_idParroquia").value,
+      this.myForm.get("_comunidad").value
+    );
+    console.log(comunidad);
   }
 
-  actualizarComunidad() {
-    this.panelAdministracionService
-      .actualizarComunidad(
-        this.myForm.get("_idParroquia").value,
-        this.myForm.get("_idComunidad").value,
-        this.myForm.get("_comunidad").value,
-        localStorage.getItem("miCuenta.putToken")
-      )
-      .then((ok) => {
-        if (ok["respuesta"] == null) {
-          sweetAlert("Inténtalo de nuevo!", {
-            icon: "warning",
-          });
-          this.myForm.reset();
-        } else if (ok["respuesta"] == "400") {
-          sweetAlert("Comunidad ya existe!", {
-            icon: "warning",
-          });
-        } else if (ok["respuesta"] == "false") {
-          sweetAlert("Ha ocurrido un error!", {
-            icon: "error",
-          });
-        } else {
-          sweetAlert("Se ingresó correctamente!", {
-            icon: "success",
-          });
-          this.myForm.reset();
-          this.consultarComunidades();
-          this.botonIngresar = "ingresar";
-        }
-      })
-      .catch((error) => console.log(error));
+  async actualizarComunidad() {
+    var comunidad = await this.panelAdministracionService.actualizarComunidad(
+      this.myForm.get("_idParroquia").value,
+      this.myForm.get("_idComunidad").value,
+      this.myForm.get("_comunidad").value
+    );
+    console.log(comunidad);
   }
 
-  eliminarComunidad(idComunidad: string) {
-    sweetalert({
-      title: "Advertencia",
-      text: "¿Está seguro que desea eliminar?",
-      icon: "warning",
-      buttons: ["Cancelar", "Ok"],
-      dangerMode: true,
-    }).then((willDelete) => {
-      if (willDelete) {
-        this.panelAdministracionService
-          .eliminarComunidad(
-            idComunidad,
-            localStorage.getItem("miCuenta.deleteToken")
-          )
-          .then((ok) => {
-            if (ok["respuesta"]) {
-              sweetAlert("Se ha eliminado correctamente!", {
-                icon: "success",
-              });
-              this.consultarComunidades();
-            } else {
-              sweetAlert("No se ha podido elminiar!", {
-                icon: "error",
-              });
-            }
-          })
-          .catch((error) => console.log(error));
-      }
-    });
+  async eliminarComunidad(idComunidad: string) {
+    var respuesta = await this.panelAdministracionService.eliminarComunidad(
+      idComunidad
+    );
+    console.log(respuesta);
   }
 
   abrirModal() {

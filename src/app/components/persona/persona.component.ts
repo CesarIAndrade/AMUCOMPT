@@ -10,11 +10,7 @@ import { ErrorStateMatcher } from "@angular/material/core";
 
 // Components
 import { ModalDetallePersonaComponent } from "src/app/components/modal-detalle-persona/modal-detalle-persona.component";
-import {
-  MatPaginator,
-  MatTableDataSource,
-  MatPaginatorIntl,
-} from "@angular/material";
+import { MatPaginator, MatTableDataSource } from "@angular/material";
 // Functional Components
 import { MatDialog } from "@angular/material/dialog";
 
@@ -66,7 +62,9 @@ export class PersonaComponent implements OnInit {
     });
   }
 
-  get _correo() { return this.myForm.get("_correo") }
+  get _correo() {
+    return this.myForm.get("_correo");
+  }
 
   // Para la paginacion
   @ViewChild("paginator", { static: false }) paginator: MatPaginator;
@@ -90,34 +88,16 @@ export class PersonaComponent implements OnInit {
 
   consultarProvincias() {
     this.panelAdministracionService
-      .consultarProvincias(localStorage.getItem("miCuenta.getToken"))
+      .consultarProvincias()
       .then((ok) => {
         this.provincias = ok["respuesta"];
       })
       .catch((error) => console.log(error));
   }
 
-  consultarCantones() {
-    this.panelAdministracionService
-      .consultarCantones(localStorage.getItem("miCuenta.getToken"))
-      .then((ok) => {
-        this.cantones = ok["respuesta"];
-      })
-      .catch((error) => console.log(error));
-  }
-
-  consultarParroquias() {
-    this.panelAdministracionService
-      .consultarParroquias(localStorage.getItem("miCuenta.getToken"))
-      .then((ok) => {
-        this.parroquias = ok["respuesta"];
-      })
-      .catch((error) => console.log(error));
-  }
-
   consultarPersonas() {
     this.personaService
-      .consultarPersonas(localStorage.getItem("miCuenta.getToken"))
+      .consultarPersonas()
       .then((ok) => {
         this.personas.data = [];
         this.personas.data = ok["respuesta"];
@@ -128,7 +108,7 @@ export class PersonaComponent implements OnInit {
 
   consultarTipoDocumento() {
     this.personaService
-      .consultarTipoDocumento(localStorage.getItem("miCuenta.getToken"))
+      .consultarTipoDocumento()
       .then((ok) => {
         this.tipoDocumentos = ok["respuesta"];
       })
@@ -137,7 +117,7 @@ export class PersonaComponent implements OnInit {
 
   consultarTipoTelefono() {
     this.personaService
-      .consultarTipoTelefono(localStorage.getItem("miCuenta.getToken"))
+      .consultarTipoTelefono()
       .then((ok) => {
         this.tipoTelefonos = ok["respuesta"];
       })
@@ -148,10 +128,7 @@ export class PersonaComponent implements OnInit {
     this.cantones = [];
     this.parroquias = [];
     this.panelAdministracionService
-      .consultarCantonesDeUnaProvincia(
-        idProvincia,
-        localStorage.getItem("miCuenta.getToken")
-      )
+      .consultarCantonesDeUnaProvincia(idProvincia)
       .then((ok) => {
         this.cantones = ok["respuesta"];
         if (value == "ingresar") {
@@ -166,10 +143,7 @@ export class PersonaComponent implements OnInit {
   consultarParroquiasDeUnCanton(idCanton: string, value?: string) {
     this.parroquias = [];
     this.panelAdministracionService
-      .consultarParroquiasDeUnCanton(
-        idCanton,
-        localStorage.getItem("miCuenta.getToken")
-      )
+      .consultarParroquiasDeUnCanton(idCanton)
       .then((ok) => {
         this.parroquias = ok["respuesta"];
         if (value == "ingresar") {
@@ -251,8 +225,7 @@ export class PersonaComponent implements OnInit {
           dosApellidos.primerCampo,
           dosApellidos.segundoCampo,
           dosNombres.primerCampo,
-          dosNombres.segundoCampo,
-          localStorage.getItem("miCuenta.postToken")
+          dosNombres.segundoCampo
         )
         .then((ok) => {
           if (ok["respuesta"] == "false") {
@@ -293,12 +266,7 @@ export class PersonaComponent implements OnInit {
     );
     this.telefonos.map((item) => {
       this.personaService
-        .crearTelefono(
-          item.IdPersona,
-          item.Numero,
-          item.IdTipoTelefono,
-          localStorage.getItem("miCuenta.postToken")
-        )
+        .crearTelefono(item.IdPersona, item.Numero, item.IdTipoTelefono)
         .then((ok) => {
           if (ok["respuesta"]) {
             this.crearCorreo(this.myForm.get("_idPersona").value);
@@ -323,11 +291,7 @@ export class PersonaComponent implements OnInit {
     ) {
       var ejecutado = false;
       this.personaService
-        .crearCorreo(
-          idPersona,
-          this.myForm.get("_correo").value,
-          localStorage.getItem("miCuenta.postToken")
-        )
+        .crearCorreo(idPersona, this.myForm.get("_correo").value)
         .then((ok) => {
           if (ok["respuesta"]) {
             ejecutado = true;
@@ -352,11 +316,7 @@ export class PersonaComponent implements OnInit {
   crearDireccion(idPersona: string) {
     var ejecutado = false;
     this.personaService
-      .crearDireccion(
-        idPersona,
-        this.myForm.get("_parroquia").value,
-        localStorage.getItem("miCuenta.postToken")
-      )
+      .crearDireccion(idPersona, this.myForm.get("_parroquia").value)
       .then((ok) => {
         if (ok["respuesta"]) {
           ejecutado = true;
@@ -392,10 +352,7 @@ export class PersonaComponent implements OnInit {
       if (willDelete) {
         var ejecutado = false;
         this.personaService
-          .eliminarPersona(
-            idPersona,
-            localStorage.getItem("miCuenta.deleteToken")
-          )
+          .eliminarPersona(idPersona)
           .then((ok) => {
             ejecutado = true;
             sweetalert("Se ha eliminado correctamente!", {
@@ -501,8 +458,7 @@ export class PersonaComponent implements OnInit {
           dosApellidos.primerCampo,
           dosApellidos.segundoCampo,
           dosNombres.primerCampo,
-          dosNombres.segundoCampo,
-          localStorage.getItem("miCuenta.putToken")
+          dosNombres.segundoCampo
         )
         .then((ok) => {
           if (ok["respuesta"] == "false") {
@@ -542,8 +498,7 @@ export class PersonaComponent implements OnInit {
           item.IdPersona,
           item.IdTelefono,
           item.Numero,
-          item.IdTipoTelefono,
-          localStorage.getItem("miCuenta.putToken")
+          item.IdTipoTelefono
         )
         .then((ok) => {
           if (ok["respuesta"]) {
@@ -563,12 +518,7 @@ export class PersonaComponent implements OnInit {
 
   actualizarCorreo(idPersona: string, idCorreo: string) {
     this.personaService
-      .actualizarCorreo(
-        idPersona,
-        idCorreo,
-        this.myForm.get("_correo").value,
-        localStorage.getItem("miCuenta.putToken")
-      )
+      .actualizarCorreo(idPersona, idCorreo, this.myForm.get("_correo").value)
       .then((ok) => {
         if (ok["respuesta"]) {
           this.actualizarDireccion(
@@ -589,8 +539,7 @@ export class PersonaComponent implements OnInit {
       .actualizarDireccion(
         idPersona,
         idAsignacionPC,
-        this.myForm.get("_parroquia").value,
-        localStorage.getItem("miCuenta.putToken")
+        this.myForm.get("_parroquia").value
       )
       .then((ok) => {
         if (ok["respuesta"]) {

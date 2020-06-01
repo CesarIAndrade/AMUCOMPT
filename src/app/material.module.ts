@@ -9,7 +9,7 @@ import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatDialogModule } from "@angular/material/dialog";
 import { MatTabsModule } from "@angular/material/tabs";
 import { MatPaginatorModule } from "@angular/material/paginator";
-import { MatGridListModule } from "@angular/material";
+import { MatGridListModule, MatSnackBarModule } from "@angular/material";
 import {
   MatTableModule,
   MatOptionModule,
@@ -51,6 +51,7 @@ import { MatChipsModule } from "@angular/material/chips";
     MatPaginatorModule,
     MatGridListModule,
     MatBottomSheetModule,
+    MatSnackBarModule,
   ],
   exports: [
     MatToolbarModule,
@@ -76,6 +77,7 @@ import { MatChipsModule } from "@angular/material/chips";
     MatPaginatorModule,
     MatGridListModule,
     MatBottomSheetModule,
+    MatSnackBarModule,
   ],
 })
 

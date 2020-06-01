@@ -2,7 +2,6 @@ import { Component, OnInit, ViewChild } from "@angular/core";
 import {
   MatPaginator,
   MatTableDataSource,
-  MatPaginatorIntl,
 } from "@angular/material";
 // Services
 import { InventarioService } from "src/app/services/inventario.service";
@@ -21,7 +20,7 @@ export class StockComponent implements OnInit {
 
   consultarStock() {
     this.inventarioService
-      .consultarStock(localStorage.getItem("miCuenta.getToken"))
+      .consultarStock()
       .then((ok) => {
         var listaProductosEnStock = [];
         ok["respuesta"].map((item) => {

@@ -1,9 +1,15 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { FormGroup, FormControl } from "@angular/forms";
-import { MatTableDataSource, MatPaginator, MatBottomSheetRef, MatBottomSheet } from "@angular/material";
+import {
+  MatTableDataSource,
+  MatPaginator,
+  MatBottomSheetRef,
+  MatBottomSheet,
+} from "@angular/material";
 import { VentaService } from "src/app/services/venta.service";
 import { PanelAdministracionService } from "src/app/services/panel-administracion.service";
-import { ComunidadesBottomSheet } from './comunidades-bottom-sheet.component';
+import { ComunidadesBottomSheet } from "./comunidades-bottom-sheet.component";
+import { Router } from "@angular/router";
 
 @Component({
   selector: "app-visita",
@@ -12,30 +18,35 @@ import { ComunidadesBottomSheet } from './comunidades-bottom-sheet.component';
 })
 export class VisitaComponent implements OnInit {
   constructor(
-    private panelAdministracionService: PanelAdministracionService,
     private ventaService: VentaService,
-    private bottomSheet: MatBottomSheet
+    private bottomSheet: MatBottomSheet,
+    private router: Router
   ) {
     this.myForm = new FormGroup({
       _canton: new FormControl(""),
       _parroquia: new FormControl(""),
       _comunidad: new FormControl(""),
+      _idTecnico: new FormControl(""),
     });
   }
 
-  openBottomSheet(comunidades): void {
-    var comunidadesDeUnaPersona: any[] = [];
-    comunidades.map(comunidad => {
-      comunidadesDeUnaPersona.push({
-        _id: comunidad.IdAsignarTecnicoPersonaComunidad,
-        descripcion: comunidad.Comunidad.Descripcion,
-        idTecnico: comunidad.IdAsignarTUTecnico
-      })
-    })
-    const bottomSheetRef = this.bottomSheet.open(ComunidadesBottomSheet, {
-      data: { comunidades: comunidadesDeUnaPersona },
-    });
-    
+  openBottomSheet(comunidades, idComunidad): void {
+    if (comunidades) {
+      var comunidadesDeUnaPersona: any = [];
+      comunidades.map((comunidad) => {
+        comunidadesDeUnaPersona.push({
+          _id: comunidad.IdAsignarTecnicoPersonaComunidad,
+          descripcion: comunidad.Comunidad.Descripcion,
+          idTecnico: comunidad.IdAsignarTUTecnico,
+          visitas: comunidad.NumeroVisita,
+        });
+      });
+      const bottomSheetRef = this.bottomSheet.open(ComunidadesBottomSheet, {
+        data: { comunidades: comunidadesDeUnaPersona },
+      });
+    } else {
+      this.router.navigate(["/registrar-visita/", idComunidad]);
+    }
   }
 
   myForm: FormGroup;
@@ -61,107 +72,85 @@ export class VisitaComponent implements OnInit {
   clientes = new MatTableDataSource<Element[]>();
 
   selecionarOpcion(opcion) {
+    this.clientes.data = [];
     this.tabla = false;
     if (opcion.value === "1") {
       this.combos = false;
-      this.consultarCantones();
+      this.consultarClientesFiltrados();
     } else if (opcion.value === "2") {
       this.combos = true;
       this.listarClientesTecnico();
     }
   }
 
-  consultarCantones() {
-    this.panelAdministracionService
-      .consultarCantones(localStorage.getItem("miCuenta.getToken"))
-      .then((ok) => {
-        this.cantones = [];
-        this.cantones = ok["respuesta"];
-        this.myForm.get("_parroquia").setValue("0");
-        this.myForm.get("_comunidad").setValue("0");
-      })
-      .catch((error) => console.log(error));
-  }
-
   consultarParroquiasDeUnCanton(idCanton) {
-    const url = "Credito/ConsultarPersonasEnFacturasParaSeguimientoPorCanton";
-    this.panelAdministracionService
-      .consultarParroquiasDeUnCanton(
-        idCanton,
-        localStorage.getItem("miCuenta.getToken")
-      )
-      .then((ok) => {
-        this.parroquias = [];
-        this.parroquias = ok["respuesta"];
-        this.myForm.get("_comunidad").setValue("0");
-        this.consultarClientesFiltrados(idCanton, "IdCanton", url);
-      })
-      .catch((error) => console.log(error));
+    this.clientes.data = [];
+    var canton = this.cantones.filter((canton) => canton.IdCanton == idCanton);
+    this.parroquias = canton[0].ParroquiaPersonas;
+    this.myForm.get("_parroquia").setValue("0");
+    this.myForm.get("_comunidad").setValue("0");
   }
 
   consultarComunidadesDeUnaParroquia(idParroquia) {
-    const url =
-      "Credito/ConsultarPersonasEnFacturasParaSeguimientoPorParroquia";
-    this.panelAdministracionService
-      .consultarComunidadesDeUnaParroquia(
-        idParroquia,
-        localStorage.getItem("miCuenta.getToken")
-      )
-      .then((ok) => {
-        this.comunidades = [];
-        this.comunidades = ok["respuesta"];
-        this.consultarClientesFiltrados(idParroquia, "IdParroquia", url);
-      })
-      .catch((error) => console.log(error));
+    this.clientes.data = [];
+    var parroquia = this.parroquias.filter(
+      (parroquia) => parroquia.IdParroquia == idParroquia
+    );
+    this.comunidades = parroquia[0].ComunidadesPersonas;
+    this.myForm.get("_comunidad").setValue("0");
   }
 
-  consultarClientesDeUnaComunidad(idComunidad) {
-    const url = "Credito/ConsultarPersonasParaSeguimientoPorComunidad";
-    this.consultarClientesFiltrados(idComunidad, "IdComunidad", url);
+  mostrarClientesPorComunidad(idComunidad) {
+    this.clientes.data = [];
+    var comunidad = this.comunidades.filter(
+      (comunidad) => comunidad.IdComunidad == idComunidad
+    );
+    var data: any = [];
+    comunidad[0].PersonaEntidad.map((cliente) => {
+      data.push({
+        _id: cliente.Persona.IdPersona,
+        idComunidad: cliente.IdAsignarTecnicoPersonaComunidad,
+        cedula: cliente.Persona.NumeroDocumento,
+        nombres:
+          cliente.Persona.PrimerNombre +
+          " " +
+          cliente.Persona.SegundoNombre +
+          " " +
+          cliente.Persona.ApellidoPaterno +
+          " " +
+          cliente.Persona.ApellidoMaterno,
+        vivienda:
+          cliente.Persona.AsignacionPersonaParroquia[0].Parroquia.Descripcion,
+        telefono1: cliente.Persona.ListaTelefono[0].Numero,
+        telefono2: cliente.Persona.ListaTelefono[1].Numero,
+        comunidades: cliente.Persona._AsignarTecnicoPersonaComunidad,
+      });
+    });
+    this.clientes.data = data;
+    this.clientes.paginator = this.paginator;
   }
 
-  consultarClientesFiltrados(idLocalidad, localidad, url) {
-    this.ventaService
-      .filtroClientes(
-        url,
-        idLocalidad,
-        localidad,
-        localStorage.getItem("miCuenta.getToken")
-      )
-      .then((ok) => {
-        var clientes = [];
-        this.clientes.data = [];
-        ok["respuesta"].map((cliente) => {
-          clientes.push({
-            _id: cliente.IdPersona,
-            cedula: cliente.NumeroDocumento,
-            nombres:
-              cliente.PrimerNombre +
-              " " +
-              cliente.SegundoNombre +
-              " " +
-              cliente.ApellidoPaterno +
-              " " +
-              cliente.ApellidoMaterno,
-          });
-        });
-        this.clientes.data = clientes;
-        this.clientes.paginator = this.paginator;
-      })
-      .catch((error) => console.log(error));
+  async consultarClientesFiltrados() {
+    var clientes = await this.ventaService.filtroClientesEnVisitas(
+      this.myForm.get("_idTecnico").value
+    );
+    if (clientes["codigo"] == "200") {
+      clientes["respuesta"].map((provincia) => {
+        this.cantones = provincia.CantonPersonas;
+      });
+    }
   }
 
-  listarClientesTecnico() {
-    const url = "Credito/ConsultarPersonasConComunidadesPorTecnico"
-    this.ventaService.listarClientesTecnico(
-      url,
+  async listarClientesTecnico() {
+    var respuesta = await this.ventaService.listarClientesTecnico(
+      "Credito/ConsultarPersonasConComunidadesPorTecnico",
       "IdAsignarTUTecnico",
-      localStorage.getItem("miCuenta.idAsignacionTipoUsuario"),
-      localStorage.getItem("miCuenta.getToken")
-    ).then(ok => {
+      this.myForm.get("_idTecnico").value
+    );
+    if (respuesta["codigo"] == "200") {
       var clientes = [];
       this.clientes.data = [];
-      ok["respuesta"].map((cliente) => {
+      respuesta["respuesta"].map((cliente) => {
         clientes.push({
           _id: cliente.IdPersona,
           cedula: cliente.NumeroDocumento,
@@ -176,17 +165,26 @@ export class VisitaComponent implements OnInit {
           vivienda: cliente.AsignacionPersonaParroquia[0].Parroquia.Descripcion,
           telefono1: cliente.ListaTelefono[0].Numero,
           telefono2: cliente.ListaTelefono[1].Numero,
-          comunidades: cliente._AsignarTecnicoPersonaComunidad
+          comunidades: cliente._AsignarTecnicoPersonaComunidad,
         });
       });
       this.clientes.data = clientes;
       this.clientes.paginator = this.paginator;
-    }).catch(error => console.log(error))
+    }
   }
 
-  registrarVisita(comunidad) {}
+  ngOnInit() {
+    this.myForm
+      .get("_idTecnico")
+      .setValue(localStorage.getItem("miCuenta.idAsignacionTipoUsuario"));
+  }
 
-  ngOnInit() {}
-
-  tablaClientes = ["cedula", "cliente", "vivienda", "telefonos","acciones"];
+  tablaClientes = [
+    "cedula",
+    "cliente",
+    "vivienda",
+    "comunidad",
+    "telefonos",
+    "acciones",
+  ];
 }

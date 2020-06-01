@@ -50,89 +50,89 @@
           </div>
         </div>
         <div class="col-lg-8">
-          <div>
-            <h5 style="text-align: center;">Lista Cantones</h5>
-            <mat-form-field class="example-full-width">
-              <input
-                matInput
-                [(ngModel)]="filterCanton"
-                [ngModelOptions]="{standalone: true}"
-                type="text"
-                placeholder="Buscar Cantón"
-              />
-              <button mat-button matPrefix mat-icon-button>
-                <mat-icon>search</mat-icon>
-              </button>
-            </mat-form-field>
-            <div class="table_all">
-              <table
-                mat-table
-                [dataSource]="cantones | filter: filterCanton:'Descripcion'"
-              >
-                <ng-container matColumnDef="canton">
-                  <th mat-header-cell *matHeaderCellDef>Cantón</th>
-                  <td mat-cell *matCellDef="let element">
-                    {{ element.Descripcion }}
-                  </td>
-                </ng-container>
-                <ng-container matColumnDef="provincia">
-                  <th mat-header-cell *matHeaderCellDef>Provincia</th>
-                  <td mat-cell *matCellDef="let element">
-                    {{ element.Provincia.Descripcion }}
-                  </td>
-                </ng-container>
-                <ng-container matColumnDef="acciones">
-                  <th colspan="2" mat-header-cell *matHeaderCellDef>Acciones</th>
-                  <ng-container *matCellDef="let element">
-                    <ng-container *ngIf="element.PermitirEliminacion">
-                      <td mat-cell>
-                        <button
-                          mat-button
-                          type="button"
-                          class="btn-outline-primary"
-                          (click)="mostrarCanton(element)"
-                        >
-                          <mat-icon>edit</mat-icon>
-                        </button>
-                      </td>
-                      <td mat-cell>
-                        <button
-                          mat-button
-                          type="button"
-                          class="btn-outline-danger"
-                          (click)="eliminarCanton(element.IdCanton)"
-                        >
-                          <mat-icon>remove</mat-icon>
-                        </button>
-                      </td>
-                    </ng-container>
-                    <ng-container *ngIf="!element.PermitirEliminacion">
-                      <td mat-cell colspan="2">
-                        <button
-                          mat-button
-                          type="button"
-                          class="btn-outline-primary btn-block"
-                          (click)="mostrarCanton(element)"
-                        >
-                          <mat-icon>edit</mat-icon>
-                        </button>
-                      </td>
-                    </ng-container>
+          <h5 style="text-align: center;">Lista Cantones</h5>
+          <mat-form-field class="example-full-width">
+            <input
+              matInput
+              [(ngModel)]="filterCanton"
+              [ngModelOptions]="{ standalone: true }"
+              type="text"
+              placeholder="Buscar Cantón"
+            />
+            <button mat-button matPrefix mat-icon-button>
+              <mat-icon>search</mat-icon>
+            </button>
+          </mat-form-field>
+          <div class="table_all">
+            <table
+              mat-table
+              [dataSource]="cantones | filter: filterCanton:'Descripcion'"
+            >
+              <ng-container matColumnDef="canton">
+                <th mat-header-cell *matHeaderCellDef>Cantón</th>
+                <td mat-cell *matCellDef="let element">
+                  {{ element.Descripcion }}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="provincia">
+                <th mat-header-cell *matHeaderCellDef>Provincia</th>
+                <td mat-cell *matCellDef="let element">
+                  {{ element.Provincia.Descripcion }}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="acciones">
+                <th colspan="2" mat-header-cell *matHeaderCellDef>Acciones</th>
+                <ng-container *matCellDef="let element">
+                  <ng-container *ngIf="element.PermitirEliminacion">
+                    <td mat-cell>
+                      <button
+                        mat-button
+                        type="button"
+                        class="btn-outline-primary"
+                        (click)="mostrarCanton(element)"
+                      >
+                        <mat-icon>edit</mat-icon>
+                      </button>
+                    </td>
+                    <td mat-cell>
+                      <button
+                        mat-button
+                        type="button"
+                        class="btn-outline-danger"
+                        (click)="eliminarCanton(element.IdCanton)"
+                      >
+                        <mat-icon>remove</mat-icon>
+                      </button>
+                    </td>
+                  </ng-container>
+                  <ng-container *ngIf="!element.PermitirEliminacion">
+                    <td mat-cell colspan="2">
+                      <button
+                        mat-button
+                        type="button"
+                        class="btn-outline-primary btn-block"
+                        (click)="mostrarCanton(element)"
+                      >
+                        <mat-icon>edit</mat-icon>
+                      </button>
+                    </td>
                   </ng-container>
                 </ng-container>
-                <tr mat-header-row *matHeaderRowDef="tablaCantones; sticky: true"></tr>
-                <tr mat-row *matRowDef="let row; columns: tablaCantones"></tr>
-              </table>
-              <mat-paginator
-                #paginator
-                [pageSizeOptions]="[5]"
-                showFirstLastButtons
-              ></mat-paginator>
-            </div>
+              </ng-container>
+              <tr
+                mat-header-row
+                *matHeaderRowDef="tablaCantones; sticky: true"
+              ></tr>
+              <tr mat-row *matRowDef="let row; columns: tablaCantones"></tr>
+            </table>
+            <mat-paginator
+              #paginator
+              [pageSizeOptions]="[5]"
+              showFirstLastButtons
+            ></mat-paginator>
           </div>
         </div>
       </div>
     </form>
   </div>
 </div>
-

@@ -30,7 +30,6 @@ import { ModalAsignacionUsuarioTiposUsuarioComponent } from "./components/modal-
 import { ProductoComponent } from "./components/producto/producto.component";
 import { ConfiguracionProductoComponent } from "./components/configuracion-producto/configuracion-producto.component";
 import { ArmarKitComponent } from "./components/armar-kit/armar-kit.component";
-import { ModalDetalleProductoComponent } from "./components/modal-detalle-producto/modal-detalle-producto.component";
 import { CuentaComponent } from "./components/cuenta/cuenta.component";
 import { ModalAsignacionConfiguracionProductoComponent } from "./components/modal-asignacion-configuracion-producto/modal-asignacion-configuracion-producto.component";
 import { StockComponent } from "./components/stock/stock.component";
@@ -44,6 +43,7 @@ import { AsignarTecnicoClienteComponent } from './components/asignar-tecnico-cli
 import { VisitaComponent } from './components/visita/visita.component';
 import { ComunidadesBottomSheet } from './components/visita/comunidades-bottom-sheet.component';
 import { RegistrarVisitaComponent } from './components/registrar-visita/registrar-visita.component';
+import { DialogAlertComponent } from './components/dialog-alert/dialog-alert.component';
 
 @NgModule({
   declarations: [
@@ -67,7 +67,6 @@ import { RegistrarVisitaComponent } from './components/registrar-visita/registra
     ProductoComponent,
     ConfiguracionProductoComponent,
     ArmarKitComponent,
-    ModalDetalleProductoComponent,
     CuentaComponent,
     ModalAsignacionConfiguracionProductoComponent,
     StockComponent,
@@ -79,7 +78,8 @@ import { RegistrarVisitaComponent } from './components/registrar-visita/registra
     AsignarTecnicoClienteComponent,
     VisitaComponent,
     ComunidadesBottomSheet,
-    RegistrarVisitaComponent
+    RegistrarVisitaComponent,
+    DialogAlertComponent
   ],
   imports: [
     BrowserModule,
@@ -98,11 +98,11 @@ import { RegistrarVisitaComponent } from './components/registrar-visita/registra
     ModalDetallePersonaComponent,
     ModalAsignacionUsuarioPersonaComponent,
     ModalAsignacionUsuarioTiposUsuarioComponent,
-    ModalDetalleProductoComponent,
     ModalAsignacionConfiguracionProductoComponent,
     ModalLocalidadSuperiorComponent,
     ModalLotesComponent,
-    ComunidadesBottomSheet
+    ComunidadesBottomSheet,
+    DialogAlertComponent
   ],
   providers: [],
   bootstrap: [AppComponent],

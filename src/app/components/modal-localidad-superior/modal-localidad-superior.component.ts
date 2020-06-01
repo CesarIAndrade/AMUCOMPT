@@ -33,7 +33,7 @@ export class ModalLocalidadSuperiorComponent implements OnInit {
 
   consultarProvincias() {
     this.panelAdministracionService
-      .consultarProvincias(localStorage.getItem("miCuenta.getToken"))
+      .consultarProvincias()
       .then((ok) => {
         this.lista_tabla.data = [];
         this.lista_tabla.data = ok["respuesta"];
@@ -44,7 +44,7 @@ export class ModalLocalidadSuperiorComponent implements OnInit {
 
   consultarCantones() {
     this.panelAdministracionService
-      .consultarCantones(localStorage.getItem("miCuenta.getToken"))
+      .consultarCantones()
       .then((ok) => {
         this.lista_tabla.data = [];
         this.lista_tabla.data = ok["respuesta"];
@@ -55,7 +55,7 @@ export class ModalLocalidadSuperiorComponent implements OnInit {
 
   consultarParroquias() {
     this.panelAdministracionService
-      .consultarParroquias(localStorage.getItem("miCuenta.getToken"))
+      .consultarParroquias()
       .then((ok) => {
         this.lista_tabla.data = [];
         this.lista_tabla.data = ok["respuesta"];
@@ -66,7 +66,7 @@ export class ModalLocalidadSuperiorComponent implements OnInit {
 
   consultarComunidades() {
     this.panelAdministracionService
-      .consultarComunidades(localStorage.getItem("miCuenta.getToken"))
+      .consultarComunidades()
       .then((ok) => {
         this.lista_tabla.data = [];
         this.lista_tabla.data = ok["respuesta"];

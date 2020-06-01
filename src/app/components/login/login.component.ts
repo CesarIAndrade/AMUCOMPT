@@ -5,6 +5,8 @@ import { FormGroup, FormControl, Validators } from "@angular/forms";
 // Services
 import { UsuarioService } from "src/app/services/usuario.service";
 import { SeguridadService } from "../../services/seguridad.service";
+import { MatDialog } from "@angular/material";
+import { DialogAlertComponent } from "../dialog-alert/dialog-alert.component";
 
 @Component({
   selector: "app-login",
@@ -15,7 +17,8 @@ export class LoginComponent implements OnInit {
   constructor(
     private usuarioService: UsuarioService,
     private router: Router,
-    private seguridadService: SeguridadService
+    private seguridadService: SeguridadService,
+    public dialog: MatDialog
   ) {
     this.myForm = new FormGroup({
       _usuario: new FormControl("", [Validators.required]),
@@ -27,44 +30,35 @@ export class LoginComponent implements OnInit {
   myForm: FormGroup;
   seleccionarTipoUsuario = true;
   ingresarCredenciales = false;
-
-  usuarios: any[] = [];
   tipoUsuarios: any[] = [];
 
-  login() {
+  openDialog(mensaje): void {
+    const dialogRef = this.dialog.open(DialogAlertComponent, {
+      width: "250px",
+      data: { mensaje: mensaje },
+    });
+  }
+
+  async login() {
     if (this.myForm.valid) {
-      this.usuarioService
-        .login(
-          this.myForm.get("_usuario").value,
-          this.myForm.get("_contrasena").value,
-          localStorage.getItem("miCuenta.getToken")
-        )
-        .then((ok) => {
-          console.log(ok["respuesta"]);
-          
-          if (ok["codigo"] == "200") {
-            this.tipoUsuarios = ok["respuesta"]["ListaTipoUsuario"];
-          } else {
-            sweetAlert("Credenciales Incorrectas", {
-              icon: "error",
-            });
-            this.myForm.reset();
-          }
-        })
-        .catch((error) => console.log(error))
-        .finally(() => this.consultarTokens());
-    } else {
-      sweetAlert("Algo salio mal!", {
-        icon: "error",
-      });
+      var login = await this.usuarioService.login(
+        this.myForm.get("_usuario").value,
+        this.myForm.get("_contrasena").value
+      );
+      if (login["codigo"] == "200") {
+        this.tipoUsuarios = login["respuesta"]["ListaTipoUsuario"];
+        this.seleccionarTipoUsuario = false;
+        this.ingresarCredenciales = true;
+      } else {
+        this.myForm.reset();
+        this.openDialog("Credenciales Incorrectas!");
+      }
     }
   }
 
   iniciarSesionSegunTipoUsuario() {
     if (this.myForm.get("_tipoUsuario").value == "0") {
-      sweetAlert("Seleccione Tipo Usuario", {
-        icon: "warning",
-      });
+      this.openDialog("Seleccione Tipo Usuario!");
     } else {
       localStorage.setItem(
         "miCuenta.idAsignacionTipoUsuario",
@@ -81,40 +75,31 @@ export class LoginComponent implements OnInit {
     }
   }
 
-  consultarTokens() {
-    this.seguridadService
-      .consultarTokens()
-      .then((ok) => {
-        this.ingresarCredenciales = true;
-        this.seleccionarTipoUsuario = false;
-        localStorage.setItem(
-          "miCuenta.getToken",
-          ok["respuesta"]["ClaveGetEncrip"]
-        );
-        localStorage.setItem(
-          "miCuenta.postToken",
-          ok["respuesta"]["ClavePostEncrip"]
-        );
-        localStorage.setItem(
-          "miCuenta.putToken",
-          ok["respuesta"]["ClavePutEncrip"]
-        );
-        localStorage.setItem(
-          "miCuenta.deleteToken",
-          ok["respuesta"]["ClaveDeleteEncrip"]
-        );
-      })
-      .catch((error) => console.log(error));
-  }
+  async consultarTokens() {
+    var tokens = await this.seguridadService.consultarTokens();
+    console.log(tokens);
 
-  consultarUsuarios(_token: string) {
-    this.usuarioService
-      .consultarUsuarios(_token)
-      .then((ok) => {
-        this.usuarios = [];
-        this.usuarios = ok["respuesta"];
-      })
-      .catch((error) => console.log(error));
+    // .then((ok) => {
+    //   this.ingresarCredenciales = true;
+    //   this.seleccionarTipoUsuario = false;
+    //   localStorage.setItem(
+    //     "miCuenta.getToken",
+    //     ok["respuesta"]["ClaveGetEncrip"]
+    //   );
+    //   localStorage.setItem(
+    //     "miCuenta.postToken",
+    //     ok["respuesta"]["ClavePostEncrip"]
+    //   );
+    //   localStorage.setItem(
+    //     "miCuenta.putToken",
+    //     ok["respuesta"]["ClavePutEncrip"]
+    //   );
+    //   localStorage.setItem(
+    //     "miCuenta.deleteToken",
+    //     ok["respuesta"]["ClaveDeleteEncrip"]
+    //   );
+    // })
+    // .catch((error) => console.log(error));
   }
 
   ngOnInit() {}

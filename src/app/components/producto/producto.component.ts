@@ -2,12 +2,7 @@ import { Component, OnInit, ViewChild, ElementRef } from "@angular/core";
 import { FormGroup, Validators, FormControl } from "@angular/forms";
 
 // Components
-import { ModalDetalleProductoComponent } from "../modal-detalle-producto/modal-detalle-producto.component";
-import {
-  MatPaginator,
-  MatTableDataSource,
-  MatPaginatorIntl,
-} from "@angular/material";
+import { MatPaginator, MatTableDataSource } from "@angular/material";
 // Functional Components
 import { MatDialog } from "@angular/material/dialog";
 
@@ -18,7 +13,6 @@ import { InventarioService } from "src/app/services/inventario.service";
 import sweetalert from "sweetalert";
 import { Observable } from "rxjs";
 import { startWith, map } from "rxjs/operators";
-import { LoginComponent } from "../login/login.component";
 
 @Component({
   selector: "app-producto",
@@ -69,7 +63,7 @@ export class ProductoComponent implements OnInit {
 
   consultarTipoProductos() {
     this.inventarioService
-      .consultarTipoProductos(localStorage.getItem("miCuenta.getToken"))
+      .consultarTipoProductos()
       .then((ok) => {
         this.tipoProductos = [];
         this.tipoProductos = ok["respuesta"];
@@ -79,7 +73,7 @@ export class ProductoComponent implements OnInit {
 
   consultarPresentaciones() {
     this.inventarioService
-      .consultarPresentaciones(localStorage.getItem("miCuenta.getToken"))
+      .consultarPresentaciones()
       .then((ok) => {
         this.presentaciones = [];
         this.presentaciones = ok["respuesta"];
@@ -89,7 +83,7 @@ export class ProductoComponent implements OnInit {
 
   consultarMedidas() {
     this.inventarioService
-      .consultarMedidas(localStorage.getItem("miCuenta.getToken"))
+      .consultarMedidas()
       .then((ok) => {
         this.medidas = [];
         this.medidas = ok["respuesta"];
@@ -100,7 +94,7 @@ export class ProductoComponent implements OnInit {
   consultarConfiguracionProductoTodos() {
     this.inventarioService
       .consultarConfiguracionProductoTodos(
-        localStorage.getItem("miCuenta.getToken")
+        
       )
       .then((ok) => {
         this.productos.data = [];
@@ -113,7 +107,7 @@ export class ProductoComponent implements OnInit {
 
   consultarProductos() {
     this.inventarioService
-      .consultarConfiguracionProducto(localStorage.getItem("miCuenta.getToken"))
+      .consultarConfiguracionProducto()
       .then((ok) => {
         for (let index = 0; index < ok["respuesta"].length; index++) {
           const element = ok["respuesta"][index];
@@ -156,7 +150,7 @@ export class ProductoComponent implements OnInit {
           this.myForm.get("_nombre").value,
           this.myForm.get("_descripcion").value,
           this.myForm.get("_tipoProducto").value,
-          localStorage.getItem("miCuenta.postToken")
+          
         )
         .then((ok) => {
           if (ok["respuesta"] == null) {
@@ -193,7 +187,7 @@ export class ProductoComponent implements OnInit {
         this.myForm.get("_codigo").value,
         this.myForm.get("_contenidoNeto").value,
         this.myForm.get("_iva").value,
-        localStorage.getItem("miCuenta.postToken")
+        
       )
       .then((ok) => {
         if (ok["respuesta"] == null) {
@@ -224,7 +218,7 @@ export class ProductoComponent implements OnInit {
       .crearPrecio(
         this.myForm.get("_idConfiguracionProducto").value,
         this.myForm.get("_precio").value,
-        localStorage.getItem("miCuenta.postToken")
+        
       )
       .then((ok) => {
         if (ok["respuesta"]) {
@@ -288,7 +282,7 @@ export class ProductoComponent implements OnInit {
         this.myForm.get("_codigo").value,
         this.myForm.get("_contenidoNeto").value,
         this.myForm.get("_iva").value,
-        localStorage.getItem("miCuenta.putToken")
+        
       )
       .then((ok) => {
         if (ok["respuesta"] == null) {
@@ -320,7 +314,7 @@ export class ProductoComponent implements OnInit {
         this.myForm.get("_idPrecio").value,
         this.myForm.get("_idConfiguracionProducto").value,
         this.myForm.get("_precio").value,
-        localStorage.getItem("miCuenta.putToken")
+        
       )
       .then((ok) => {
         if (ok["respuesta"]) {
@@ -349,29 +343,13 @@ export class ProductoComponent implements OnInit {
           .eliminarConfiguracionProducto(
             producto.IdConfigurarProducto,
             producto.Producto.IdProducto,
-            localStorage.getItem("miCuenta.deleteToken")
+            
           )
           .then((ok) => {
             this.consultarProductos();
           })
           .catch((error) => console.log(error));
       }
-    });
-  }
-
-  mostrarDetalleProducto(producto) {
-    var detalleProducto: any;
-    detalleProducto = {
-      presentacion: producto.Presentacion.Descripcion,
-      contenidoNeto: producto.CantidadMedida,
-      medida: producto.Medida.Descripcion,
-    };
-    let dialogRef = this.dialog.open(ModalDetalleProductoComponent, {
-      width: "auto",
-      height: "auto",
-      data: {
-        producto: detalleProducto,
-      },
     });
   }
 

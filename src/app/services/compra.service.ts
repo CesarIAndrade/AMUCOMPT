@@ -14,15 +14,14 @@ export class CompraService {
     idCabeceraFactura: string,
     idRelacionLogica: string,
     perteneceKit: string,
-    fechaExpiracion: string,
-    _token: string
+    fechaExpiracion: string
   ) {
     const body = new HttpParams()
       .set('IdCabeceraFactura', idCabeceraFactura)
       .set('IdRelacionLogica', idRelacionLogica)
       .set('PerteneceKit', perteneceKit)
       .set('FechaExpiracion', fechaExpiracion)
-      .set('encriptada', _token)
+      .set('encriptada', localStorage.getItem("miCuenta.getToken"))
     return new Promise((resolve, reject) => {
       this.http.post(apiUrl + 'Factura/BuscarInformacionDeUnDetalle', body.toString(),
         {
@@ -40,13 +39,12 @@ export class CompraService {
  
   modificarCantidadDeProductoEnDetalle(
     idDetalleFactura: string,
-    cantidad: string,
-    _token: string
+    cantidad: string
   ) {
     const body = new HttpParams()
       .set('IdDetalleFactura', idDetalleFactura)
       .set('Cantidad', cantidad)
-      .set('encriptada', _token)
+      .set('encriptada', localStorage.getItem("miCuenta.putToken"))
     return new Promise((resolve, reject) => {
       this.http.post(apiUrl + 'Factura/AumentarDetalleFactura', body.toString(),
         {
@@ -63,12 +61,11 @@ export class CompraService {
   }
 
   consultarDetalleFactura(
-    idCabecera: string, 
-    _token: string
+    idCabecera: string
   ) {
     const body = new HttpParams()
       .set('IdCabeceraFactura', idCabecera)
-      .set('encriptada', _token)
+      .set('encriptada', localStorage.getItem("miCuenta.getToken"))
     return new Promise((resolve, reject) => {
       this.http.post(apiUrl + 'Factura/ListaFacturaDetalle', body.toString(),
         {
@@ -88,15 +85,14 @@ export class CompraService {
     idCabeceraFactura: string,
     idAsignarProductoLote: string,
     cantidad: string,
-    faltante: string,
-    _token: string
+    faltante: string
   ) {
     const body = new HttpParams()
       .set('IdCabeceraFactura', idCabeceraFactura)
       .set('IdAsignarProductoLote', idAsignarProductoLote)
       .set('Cantidad', cantidad)
       .set('Faltante', faltante)
-      .set('encriptada', _token)
+      .set('encriptada', localStorage.getItem("miCuenta.postToken"))
     return new Promise((resolve, reject) => {
       this.http.post(apiUrl + 'Factura/IngresoDetalleFactura', body.toString(),
         {
@@ -114,13 +110,12 @@ export class CompraService {
 
   quitarDetalleFactura(
     idDetalleFactura: string,
-    idCabeceraFactura: string,
-    _token: string
+    idCabeceraFactura: string
   ) {
     const body = new HttpParams()
       .set('IdDetalleFactura', idDetalleFactura)
       .set('IdCabeceraFactura', idCabeceraFactura)
-      .set('encriptada', _token)    
+      .set('encriptada', localStorage.getItem("miCuenta.deleteToken"))    
     return new Promise((resolve, reject) => {
       this.http.post(apiUrl + 'Factura/EliminarDetalleFactura', body.toString(),
         {

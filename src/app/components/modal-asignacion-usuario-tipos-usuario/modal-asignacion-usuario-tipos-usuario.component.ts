@@ -37,8 +37,7 @@ export class ModalAsignacionUsuarioTiposUsuarioComponent implements OnInit {
     this.usuarioService
       .asignacionTipoUsuario(
         this.idUsuario,
-        this.tipoUsuario,
-        localStorage.getItem("miCuenta.postToken")
+        this.tipoUsuario
       )
       .then((ok) => {
         if (ok["respuesta"]) {
@@ -66,8 +65,7 @@ export class ModalAsignacionUsuarioTiposUsuarioComponent implements OnInit {
   eliminarAsignacionTipoUsuario(tipoUsuario) {
     this.usuarioService
       .eliminarAsignacionTipoUsuario(
-        tipoUsuario.IdAsignacionTu,
-        localStorage.getItem("miCuenta.deleteToken")
+        tipoUsuario.IdAsignacionTu
       )
       .then((ok) => {
         this.consultarAsignacionTipoUsuario();
@@ -77,7 +75,7 @@ export class ModalAsignacionUsuarioTiposUsuarioComponent implements OnInit {
 
   consultarTipoUsuario() {
     this.usuarioService
-      .consultarTipoUsuario(localStorage.getItem("miCuenta.getToken"))
+      .consultarTipoUsuario()
       .then((ok) => {
         this.tipoUsuarios = [];
         ok["respuesta"].map((item) => {
@@ -96,7 +94,7 @@ export class ModalAsignacionUsuarioTiposUsuarioComponent implements OnInit {
     this.usuarioService
       .consultarAsignacionTipoUsuario(
         this.idUsuario,
-        localStorage.getItem("miCuenta.getToken")
+        
       )
       .then((ok) => {
         this.arrayIndexesTipoUsuario = [];

@@ -29,9 +29,7 @@ export class NavComponent implements OnInit {
       )
       .subscribe((_) => {
         this.drawer.close();
-        var temp_route: any = this.router.url.split("/");
-        temp_route = temp_route[1];
-        this.route = temp_route.toUpperCase();
+        this.route = this.router.url.split("/")[1].replace("-", " ").toUpperCase();
       });
   }
 
@@ -39,7 +37,7 @@ export class NavComponent implements OnInit {
     localStorage.clear();
   }
 
-  route = "";
+  route: any = "";
   nav_items = [];
 
   ngOnInit() {
@@ -133,13 +131,9 @@ export class NavComponent implements OnInit {
       this.router.navigateByUrl(this.nav_items[0].url);
     }
 
-    var temp_route: any = this.router.url.split("/");
-    temp_route = temp_route[1];
-    this.route = temp_route.toUpperCase();
+    this.route = this.router.url.split("/")[1].replace("-", " ").toUpperCase();
     this.router.events.subscribe((_) => {
-      var temp_route: any = this.router.url.split("/");
-      temp_route = temp_route[1];
-      this.route = temp_route.toUpperCase();
+      this.route = this.router.url.split("/")[1].replace("-", " ").toUpperCase();
     });
   }
 }

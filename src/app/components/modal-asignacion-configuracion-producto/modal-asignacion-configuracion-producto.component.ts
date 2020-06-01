@@ -59,9 +59,7 @@ export class ModalAsignacionConfiguracionProductoComponent implements OnInit {
 
   consultarConfiguracionProducto() {
     this.inventarioService
-      .consultarConfiguracionProductoTodos(
-        localStorage.getItem("miCuenta.getToken")
-      )
+      .consultarConfiguracionProductoTodos()
       .then((ok) => {
         var configuracionProductos = [];
         ok["respuesta"].map((item) => {
@@ -107,7 +105,7 @@ export class ModalAsignacionConfiguracionProductoComponent implements OnInit {
 
   consultarStock() {
     this.inventarioService
-      .consultarStock(localStorage.getItem("miCuenta.getToken"))
+      .consultarStock()
       .then((ok) => {
         var listaProductosEnStock = [];
         ok["respuesta"].map((item) => {
@@ -195,8 +193,7 @@ export class ModalAsignacionConfiguracionProductoComponent implements OnInit {
       .ingresoDetalleVentaPorKit(
         this.idCabeceraFactura,
         this.idKit,
-        this.cantidad,
-        localStorage.getItem("miCuenta.postToken")
+        this.cantidad
       )
       .then((ok) => {
         if (ok["respuesta"] == "true") {

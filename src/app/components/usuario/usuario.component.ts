@@ -4,20 +4,13 @@ import { FormGroup, FormControl, Validators } from "@angular/forms";
 // Components
 import { ModalAsignacionUsuarioPersonaComponent } from "../modal-asignacion-usuario-persona/modal-asignacion-usuario-persona.component";
 import { ModalAsignacionUsuarioTiposUsuarioComponent } from "../modal-asignacion-usuario-tipos-usuario/modal-asignacion-usuario-tipos-usuario.component";
-import {
-  MatPaginator,
-  MatTableDataSource,
-  MatPaginatorIntl,
-} from "@angular/material";
+import { MatPaginator, MatTableDataSource } from "@angular/material";
 // Functional Components
 import { MatDialog } from "@angular/material/dialog";
 
 // Services
 import { UsuarioService } from "src/app/services/usuario.service";
 import { PersonaService } from "src/app/services/persona.service";
-
-// SweetAlert
-import sweetalert from "sweetalert";
 
 @Component({
   selector: "app-usuario",
@@ -57,7 +50,7 @@ export class UsuarioComponent implements OnInit {
 
   consultarUsuarios() {
     this.usuarioService
-      .consultarUsuarios(localStorage.getItem("miCuenta.getToken"))
+      .consultarUsuarios()
       .then((ok) => {
         this.usuarios.data = ok["respuesta"];
         this.usuarios.paginator = this.paginator;
@@ -75,7 +68,7 @@ export class UsuarioComponent implements OnInit {
 
   consultarPersonas() {
     this.personaService
-      .consultarPersonas(localStorage.getItem("miCuenta.getToken"))
+      .consultarPersonas()
       .then((ok) => {
         this.personas = ok["respuesta"];
       })
@@ -99,22 +92,7 @@ export class UsuarioComponent implements OnInit {
       contrasena: this.myForm.get("_contrasena").value,
       token: localStorage.getItem("miCuenta.postToken"),
     };
-    this.usuarioService
-      .crearUsuario(datosUsuario)
-      .then((ok) => {
-        if (ok["respuesta"]) {
-          sweetAlert("Se ingresó correctamente!", {
-            icon: "success",
-          });
-          this.myForm.reset();
-          this.consultarUsuarios();
-        } else if (!ok["respuesta"]) {
-          sweetAlert("Ha ocurrido un error!", {
-            icon: "error",
-          });
-        }
-      })
-      .catch((error) => console.log(error));
+    this.usuarioService.crearUsuario(datosUsuario);
   }
 
   actualizarUsuario() {
@@ -123,8 +101,7 @@ export class UsuarioComponent implements OnInit {
         this.myForm.get("_idUsuario").value,
         this.myForm.get("_idPersona").value,
         this.myForm.get("_valorUsuario").value,
-        this.myForm.get("_contrasena").value,
-        localStorage.getItem("miCuenta.putToken")
+        this.myForm.get("_contrasena").value
       )
       .then((ok) => {
         if (ok["respuesta"]) {
@@ -139,10 +116,7 @@ export class UsuarioComponent implements OnInit {
 
   habilitarUsuario(usuario) {
     this.usuarioService
-      .habilitarUsuario(
-        usuario.IdUsuario,
-        localStorage.getItem("miCuenta.postToken")
-      )
+      .habilitarUsuario(usuario.IdUsuario)
       .then((ok) => this.consultarUsuarios())
       .catch((error) => console.log(error));
   }
@@ -181,37 +155,12 @@ export class UsuarioComponent implements OnInit {
   }
 
   eliminarUsuario(usuario) {
-    var listaAsignacionTipoUsuario = usuario.ListaTipoUsuario;
-    sweetalert({
-      title: "Advertencia",
-      text: "¿Está seguro que desea eliminar?",
-      icon: "warning",
-      buttons: ["Cancelar", "Ok"],
-      dangerMode: true,
-    }).then((willDelete) => {
-      if (willDelete) {
-        this.usuarioService
-          .eliminarUsuario(
-            usuario.IdUsuario,
-            localStorage.getItem("miCuenta.deleteToken")
-          )
-          .then((ok) => {
-            listaAsignacionTipoUsuario.map((item) => {
-              this.eliminarAsignacionTipoUsuario(item.IdAsignacionTu);
-            });
-            this.consultarUsuarios();
-          })
-          .catch((error) => console.log(error));
-      }
-    });
+    this.usuarioService.eliminarUsuario(usuario.IdUsuario);
   }
 
   eliminarAsignacionTipoUsuario(idAsignacionTipoUsuario) {
     this.usuarioService
-      .eliminarAsignacionTipoUsuario(
-        idAsignacionTipoUsuario,
-        localStorage.getItem("miCuenta.deleteToken")
-      )
+      .eliminarAsignacionTipoUsuario(idAsignacionTipoUsuario)
       .catch((error) => console.log(error));
   }
 

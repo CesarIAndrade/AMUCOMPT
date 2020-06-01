@@ -40,7 +40,7 @@ export class AsignarTecnicoClienteComponent implements OnInit {
 
   consultarCantones() {
     this.panelAdministracionService
-      .consultarCantones(localStorage.getItem("miCuenta.getToken"))
+      .consultarCantones()
       .then((ok) => {
         this.cantones = [];
         this.cantones = ok["respuesta"];
@@ -53,15 +53,12 @@ export class AsignarTecnicoClienteComponent implements OnInit {
   consultarParroquiasDeUnCanton(idCanton) {
     const url = "Credito/ConsultarPersonasEnFacturasParaSeguimientoPorCanton";
     this.panelAdministracionService
-      .consultarParroquiasDeUnCanton(
-        idCanton,
-        localStorage.getItem("miCuenta.getToken")
-      )
+      .consultarParroquiasDeUnCanton(idCanton)
       .then((ok) => {
         this.parroquias = [];
         this.parroquias = ok["respuesta"];
         this.myForm.get("_comunidad").setValue("0");
-        this.consultarClientes(idCanton, "IdCanton", url);
+        this.consultarClientesFiltrados(idCanton, "IdCanton", url);
         this.canton = true;
       })
       .catch((error) => console.log(error));
@@ -71,14 +68,11 @@ export class AsignarTecnicoClienteComponent implements OnInit {
     const url =
       "Credito/ConsultarPersonasEnFacturasParaSeguimientoPorParroquia";
     this.panelAdministracionService
-      .consultarComunidadesDeUnaParroquia(
-        idParroquia,
-        localStorage.getItem("miCuenta.getToken")
-      )
+      .consultarComunidadesDeUnaParroquia(idParroquia)
       .then((ok) => {
         this.comunidades = [];
         this.comunidades = ok["respuesta"];
-        this.consultarClientes(idParroquia, "IdParroquia", url);
+        this.consultarClientesFiltrados(idParroquia, "IdParroquia", url);
         this.parroquia = true;
       })
       .catch((error) => console.log(error));
@@ -86,47 +80,40 @@ export class AsignarTecnicoClienteComponent implements OnInit {
 
   consultarClientesDeUnaComunidad(idComunidad) {
     const url = "Credito/ConsultarPersonasParaSeguimientoPorComunidad";
-    this.consultarClientes(idComunidad, "IdComunidad", url);
+    this.consultarClientesFiltrados(idComunidad, "IdComunidad", url);
     this.comunidad = true;
   }
 
-  consultarClientes(idLocalidad, localidad, url) {
-    this.ventaService
-      .filtroClientes(
-        url,
-        idLocalidad,
-        localidad,
-        localStorage.getItem("miCuenta.getToken")
-      )
-      .then((ok) => {
-        var clientes = [];
-        this.clientes.data = [];
-        ok["respuesta"].map((cliente) => {
-          clientes.push({
-            _id: cliente.IdPersona,
-            cedula: cliente.NumeroDocumento,
-            nombres:
-              cliente.PrimerNombre +
-              " " +
-              cliente.SegundoNombre +
-              " " +
-              cliente.ApellidoPaterno +
-              " " +
-              cliente.ApellidoMaterno,
-          });
+  async consultarClientesFiltrados(idLocalidad, localidad, url) {
+    var clientes = await this.ventaService.filtroClientesEnAsignacion(
+      url,
+      idLocalidad,
+      localidad
+    );
+    if (clientes["codigo"] == "200") {
+      var data: any = [];
+      clientes["respuesta"].map((cliente) => {
+        data.push({
+          _id: cliente.IdPersona,
+          cedula: cliente.NumeroDocumento,
+          nombres:
+            cliente.PrimerNombre +
+            " " +
+            cliente.SegundoNombre +
+            " " +
+            cliente.ApellidoPaterno +
+            " " +
+            cliente.ApellidoMaterno,
         });
-        this.clientes.data = clientes;
-        this.clientes.paginator = this.paginator;
-      })
-      .catch((error) => console.log(error));
+      });
+      this.clientes.data = data;
+      this.clientes.paginator = this.paginator;
+    }
   }
 
   consultarTecnicos() {
     this.usuarioService
-      .consultarTecnicos(
-        "2",
-        localStorage.getItem("miCuenta.getToken")
-      )
+      .consultarTecnicos("2")
       .then((ok) => {
         this.tecnicos = [];
         ok["respuesta"].map((tecnico) => {
@@ -153,8 +140,7 @@ export class AsignarTecnicoClienteComponent implements OnInit {
       .listarClientesTecnico(
         url,
         "IdAsignarTUTecnico",
-        idTecnico,
-        localStorage.getItem("miCuenta.getToken")
+        idTecnico
       )
       .then((ok) => {
         var clientesTecnico = [];
@@ -184,13 +170,14 @@ export class AsignarTecnicoClienteComponent implements OnInit {
       this.ventaService
         .asignarClienteTecnico(
           this.myForm.get("_idTecnico").value,
-          idPersona,
-          localStorage.getItem("miCuenta.postToken")
+          idPersona
         )
         .then((ok) => {
           if (ok["respuesta"]) {
             var clientes = this.clientes.data;
-            var cliente = clientes.filter(cliente => console.log(cliente));
+            var cliente: any = clientes.filter(
+              (cliente) => cliente["_id"] == idPersona
+            );
             const index = clientes.indexOf(cliente[0]);
             clientes.splice(index, 1);
             this.clientes.data = clientes;
@@ -205,23 +192,34 @@ export class AsignarTecnicoClienteComponent implements OnInit {
 
   queConsulto() {
     var url: string;
-    if(this.canton && this.parroquia && this.comunidad) {
+    if (this.canton && this.parroquia && this.comunidad) {
       url = "Credito/ConsultarPersonasParaSeguimientoPorComunidad";
-      this.consultarClientes(this.myForm.get("_comunidad").value, "IdComunidad", url);
+      this.consultarClientesFiltrados(
+        this.myForm.get("_comunidad").value,
+        "IdComunidad",
+        url
+      );
     } else if (this.canton && this.parroquia) {
       url = "Credito/ConsultarPersonasEnFacturasParaSeguimientoPorParroquia";
-      this.consultarClientes(this.myForm.get("_parroquia").value, "IdParroquia", url);
-    } else if(this.canton) {
+      this.consultarClientesFiltrados(
+        this.myForm.get("_parroquia").value,
+        "IdParroquia",
+        url
+      );
+    } else if (this.canton) {
       url = "Credito/ConsultarPersonasEnFacturasParaSeguimientoPorCanton";
-      this.consultarClientes(this.myForm.get("_canton").value, "IdCanton", url);
+      this.consultarClientesFiltrados(
+        this.myForm.get("_canton").value,
+        "IdCanton",
+        url
+      );
     }
   }
 
   desasignarClienteTecnico(persona) {
     this.ventaService
       .desaignarClienteTecnico(
-        persona._id,
-        localStorage.getItem("miCuenta.postToken")
+        persona._id
       )
       .then((ok) => {
         if (ok["respuesta"]) {

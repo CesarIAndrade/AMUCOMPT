@@ -35,8 +35,7 @@ export class ModalLotesComponent implements OnInit {
       .consultarLotesDeUnProducto(
         this.data.idCabecera,
         this.data.idRelacionLogica,
-        this.data.perteneceKit,
-        localStorage.getItem("miCuenta.getToken")
+        this.data.perteneceKit
       )
       .then((ok) => {
         if (ok["respuesta"]) {

@@ -1,20 +1,13 @@
-import {
-  Component,
-  OnInit,
-  ViewChild,
-  ElementRef,
-  Output,
-  EventEmitter,
-} from "@angular/core";
+import { Component, OnInit, ViewChild } from "@angular/core";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
+import { MatDialog, MatPaginator, MatTableDataSource, MatSnackBar } from "@angular/material";
 
 // Services
 import { PanelAdministracionService } from "src/app/services/panel-administracion.service";
 
-// SweetAlert
-import sweetalert from "sweetalert";
-import { MatDialog, MatPaginator, MatTableDataSource } from "@angular/material";
+// Components
 import { ModalLocalidadSuperiorComponent } from "../modal-localidad-superior/modal-localidad-superior.component";
+import { DialogAlertComponent } from '../dialog-alert/dialog-alert.component';
 
 @Component({
   selector: "app-parroquia",
@@ -24,7 +17,9 @@ import { ModalLocalidadSuperiorComponent } from "../modal-localidad-superior/mod
 export class ParroquiaComponent implements OnInit {
   constructor(
     private panelAdministracionService: PanelAdministracionService,
-    private modalLocalidadSuperior: MatDialog
+    private modalLocalidadSuperior: MatDialog,
+    private dialog: MatDialog,
+    private _snackBar: MatSnackBar
   ) {
     this.myForm = new FormGroup({
       _idParroquia: new FormControl(""),
@@ -42,9 +37,23 @@ export class ParroquiaComponent implements OnInit {
   @ViewChild("paginator", { static: false }) paginator: MatPaginator;
   parroquias = new MatTableDataSource<Element[]>();
 
+  openDialog(mensaje): void {
+    const dialogRef = this.dialog.open(DialogAlertComponent, {
+      width: "250px",
+      data: { mensaje: mensaje },
+    });
+  }
+
+  openSnackBar(message: string) {
+    this._snackBar.open(message, "Cerrar", {
+      duration: 2000,
+      horizontalPosition: "right",
+    });
+  }
+
   consultarParroquias() {
     this.panelAdministracionService
-      .consultarParroquias(localStorage.getItem("miCuenta.getToken"))
+      .consultarParroquias()
       .then((ok) => {
         this.parroquias.data = [];
         this.parroquias.data = ok["respuesta"];
@@ -63,101 +72,28 @@ export class ParroquiaComponent implements OnInit {
     }
   }
 
-  crearParroquia() {
-    this.panelAdministracionService
-      .crearParroquia(
-        this.myForm.get("_idCanton").value,
-        this.myForm.get("_parroquia").value,
-        localStorage.getItem("miCuenta.postToken")
-      )
-      .then((ok) => {
-        if (ok["respuesta"] == null) {
-          sweetAlert("Inténtalo de nuevo!", {
-            icon: "warning",
-          });
-          this.limpiarCampos();
-        } else if (ok["respuesta"] == "400") {
-          sweetAlert("Cantón ya existe!", {
-            icon: "warning",
-          });
-        } else if (ok["respuesta"] == "false") {
-          sweetAlert("Ha ocurrido un error!", {
-            icon: "error",
-          });
-        } else {
-          sweetAlert("Se ingresó correctamente!", {
-            icon: "success",
-          });
-          this.limpiarCampos();
-          this.consultarParroquias();
-        }
-      })
-      .catch((error) => console.log(error));
+  async crearParroquia() {
+    var parroquia = await this.panelAdministracionService.crearParroquia(
+      this.myForm.get("_idCanton").value,
+      this.myForm.get("_parroquia").value
+    );
+    console.log(parroquia);
   }
 
-  actualizarParroquia() {
-    this.panelAdministracionService
-      .actualizarParroquia(
-        this.myForm.get("_idCanton").value,
-        this.myForm.get("_idParroquia").value,
-        this.myForm.get("_parroquia").value,
-        localStorage.getItem("miCuenta.putToken")
-      )
-      .then((ok) => {
-        if (ok["respuesta"] == null) {
-          sweetAlert("Inténtalo de nuevo!", {
-            icon: "warning",
-          });
-          this.limpiarCampos();
-        } else if (ok["respuesta"] == "400") {
-          sweetAlert("Cantón ya existe!", {
-            icon: "warning",
-          });
-        } else if (ok["respuesta"] == "false") {
-          sweetAlert("Ha ocurrido un error!", {
-            icon: "error",
-          });
-        } else {
-          sweetAlert("Se ingresó correctamente!", {
-            icon: "success",
-          });
-          this.limpiarCampos();
-          this.consultarParroquias();
-          this.botonIngresar = "ingresar";
-        }
-      })
-      .catch((error) => console.log(error));
+  async actualizarParroquia() {
+    var parroquia = await this.panelAdministracionService.actualizarParroquia(
+      this.myForm.get("_idCanton").value,
+      this.myForm.get("_idParroquia").value,
+      this.myForm.get("_parroquia").value
+    );
+    console.log(parroquia);
   }
 
-  eliminarParroquia(idParroquia: string) {
-    sweetalert({
-      title: "Advertencia",
-      text: "¿Está seguro que desea eliminar?",
-      icon: "warning",
-      buttons: ["Cancelar", "Ok"],
-      dangerMode: true,
-    }).then((willDelete) => {
-      if (willDelete) {
-        this.panelAdministracionService
-          .eliminarParroquia(
-            idParroquia,
-            localStorage.getItem("miCuenta.deleteToken")
-          )
-          .then((ok) => {
-            if (ok["respuesta"]) {
-              sweetAlert("Se ha eliminado correctamente!", {
-                icon: "success",
-              });
-              this.consultarParroquias();
-            } else {
-              sweetAlert("No se ha podido elminiar!", {
-                icon: "error",
-              });
-            }
-          })
-          .catch((error) => console.log(error));
-      }
-    });
+  async eliminarParroquia(idParroquia: string) {
+    var respuesta = await this.panelAdministracionService.eliminarParroquia(
+      idParroquia
+    );
+    console.log(respuesta);
   }
 
   abrirModal() {

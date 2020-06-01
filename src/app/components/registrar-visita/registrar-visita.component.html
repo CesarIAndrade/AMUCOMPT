@@ -1,1 +1,97 @@
-<p>registrar-visita works!</p>
+<div class="container">
+  <div class="card-body">
+    <form [formGroup]="myForm" (ngSubmit)="validarFormulario()" novalidate>
+      <div class="row">
+        <div class="col-lg-4">
+          <h5 style="text-align: center;">Nueva Visita</h5>
+          <mat-form-field class="example-full-width">
+            <input
+              matInput
+              formControlName="_observacion"
+              type="text"
+              placeholder="Ingrese Observacion"
+            />
+            <button disabled mat-button matPrefix mat-icon-button>
+              <mat-icon>*</mat-icon>
+            </button>
+          </mat-form-field>
+          <div>
+            <button
+              mat-button
+              type="submit"
+              [value]="botonIngresar"
+              [disabled]="myForm.invalid"
+              class="mt-2 bg-success text-white btn-block"
+            >
+              Guardar
+            </button>
+          </div>
+          <div>
+            <a 
+              mat-button
+              routerLink="/visitas"
+              type="button"
+              class="mt-2 btn-block"
+            >
+              Volver
+            </a>
+          </div>
+        </div>
+        <div class="col-lg-8">
+          <h5 style="text-align: center;">Visitas</h5>
+          <div class="table_all">
+            <table mat-table [dataSource]="visitas">
+              <ng-container matColumnDef="observacion">
+                <th mat-header-cell *matHeaderCellDef>Observacion</th>
+                <td mat-cell *matCellDef="let element">
+                  {{ element.observacion }}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="fecha">
+                <th mat-header-cell *matHeaderCellDef>Fecha</th>
+                <td mat-cell *matCellDef="let element">
+                  {{ element.fecha | date: "yyyy-MM-dd" }}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="acciones">
+                <th colspan="2" mat-header-cell *matHeaderCellDef>Acciones</th>
+                <ng-container *matCellDef="let element">
+                  <td mat-cell>
+                    <button
+                      mat-button
+                      type="button"
+                      class="btn-outline-primary"
+                      (click)="mostrarVisita(element)"
+                    >
+                      <mat-icon>edit</mat-icon>
+                    </button>
+                  </td>
+                  <td mat-cell>
+                    <button
+                      mat-button
+                      type="button"
+                      class="btn-outline-danger"
+                      (click)="eliminarVisita(element._id)"
+                    >
+                      <mat-icon>remove</mat-icon>
+                    </button>
+                  </td>
+                </ng-container>
+              </ng-container>
+              <tr
+                mat-header-row
+                *matHeaderRowDef="tablaVisitas; sticky: true"
+              ></tr>
+              <tr mat-row *matRowDef="let row; columns: tablaVisitas"></tr>
+            </table>
+            <mat-paginator
+              #paginator
+              [pageSizeOptions]="[5]"
+              showFirstLastButtons
+            ></mat-paginator>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

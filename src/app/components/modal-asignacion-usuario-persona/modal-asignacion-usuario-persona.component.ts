@@ -1,10 +1,6 @@
 import { Component, OnInit, Inject, ViewChild } from "@angular/core";
 import { PersonaService } from "src/app/services/persona.service";
-import {
-  MatPaginator,
-  MatTableDataSource,
-  MatPaginatorIntl,
-} from "@angular/material";
+import { MatPaginator, MatTableDataSource } from "@angular/material";
 import { MAT_DIALOG_DATA } from "@angular/material/dialog";
 @Component({
   selector: "app-modal-asignacion-usuario-persona",
@@ -40,7 +36,7 @@ export class ModalAsignacionUsuarioPersonaComponent implements OnInit {
 
   consultarPersonas() {
     this.personaService
-      .consultarPersonasSinUsuario(localStorage.getItem("miCuenta.getToken"))
+      .consultarPersonasSinUsuario()
       .then((ok) => {
         this.personas.data = ok["respuesta"];
         this.personas.paginator = this.paginator;
@@ -50,7 +46,7 @@ export class ModalAsignacionUsuarioPersonaComponent implements OnInit {
 
   consultarPersonasTodas() {
     this.personaService
-      .consultarPersonas(localStorage.getItem("miCuenta.getToken"))
+      .consultarPersonas()
       .then((ok) => {
         this.personas.data = ok["respuesta"];
         this.personas.paginator = this.paginator;
