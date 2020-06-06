@@ -938,37 +938,4 @@ export class InventarioService {
         );
     });
   }
-
-  actualizarPrecio(
-    idPrecio: string,
-    idConfigurarProducto: string,
-    precio: string
-  ) {
-    const body = new HttpParams()
-      .set("IdPrecio", idPrecio)
-      .set("IdConfigurarProducto", idConfigurarProducto)
-      .set("Precio", precio)
-      .set("encriptada", localStorage.getItem("miCuenta.putToken"));
-    return new Promise((resolve, reject) => {
-      this.http
-        .post(
-          apiUrl + "Inventario/ActualizarPrecioConfigurarProducto",
-          body.toString(),
-          {
-            headers: new HttpHeaders().set(
-              "Content-Type",
-              "application/x-www-form-urlencoded"
-            ),
-          }
-        )
-        .subscribe(
-          (res) => {
-            resolve(res);
-          },
-          (err) => {
-            reject(err);
-          }
-        );
-    });
-  }
 }

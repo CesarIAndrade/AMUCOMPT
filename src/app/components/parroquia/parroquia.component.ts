@@ -51,15 +51,22 @@ export class ParroquiaComponent implements OnInit {
     });
   }
 
-  consultarParroquias() {
-    this.panelAdministracionService
-      .consultarParroquias()
-      .then((ok) => {
-        this.parroquias.data = [];
-        this.parroquias.data = ok["respuesta"];
-        this.parroquias.paginator = this.paginator;
+  async consultarParroquias() {
+    var respuesta = await this.panelAdministracionService.consultarParroquias();
+    if(respuesta["codigo"] == "200") {
+      var parroquias: any = [];
+      respuesta["respuesta"].map((parroquia) => {
+        parroquias.push({
+          IdCanton: parroquia.Canton.IdCanton,
+          Canton: parroquia.Canton.Descripcion,
+          IdParroquia: parroquia.IdParroquia,
+          Descripcion: parroquia.Descripcion,
+          PermitirEliminacion: parroquia.PermitirEliminacion
+        })
       })
-      .catch((error) => console.log(error));
+      this.parroquias.data = parroquias;
+      this.parroquias.paginator = this.paginator;
+    }
   }
 
   validarFormulario() {
@@ -77,23 +84,83 @@ export class ParroquiaComponent implements OnInit {
       this.myForm.get("_idCanton").value,
       this.myForm.get("_parroquia").value
     );
-    console.log(parroquia);
+    if (parroquia["codigo"] == "200") {
+      var parroquias: any = this.parroquias.data;
+      parroquias.push({
+        IdCanton: parroquia["respuesta"].Canton.IdCanton,
+        Canton: parroquia["respuesta"].Canton.Descripcion,
+        IdParroquia: parroquia["respuesta"].IdParroquia,
+        Descripcion: parroquia["respuesta"].Descripcion,
+        PermitirEliminacion: parroquia["respuesta"].PermitirEliminacion
+      });
+      this.parroquias.data = parroquias;
+      this.myForm.reset();
+      this.panelAdministracionService.refresh$.emit();
+      this.openSnackBar("Se ingresó correctamente");
+    } else if (parroquia["codigo"] == "400") {
+      this.openDialog("Inténtalo de nuevo");
+    } else if (parroquia["codigo"] == "418") {
+      this.openDialog(parroquia["mensaje"]);
+    } else if (parroquia["codigo"] == "500") {
+      this.openDialog("Problemas con el servidor");
+    }
   }
 
   async actualizarParroquia() {
-    var parroquia = await this.panelAdministracionService.actualizarParroquia(
+    var respuesta = await this.panelAdministracionService.actualizarParroquia(
       this.myForm.get("_idCanton").value,
       this.myForm.get("_idParroquia").value,
       this.myForm.get("_parroquia").value
     );
-    console.log(parroquia);
+    if (respuesta["codigo"] == "200") {
+      var parroquias: any = this.parroquias.data;
+      var parroquia = parroquias.filter(
+        (parroquia) => parroquia["IdParroquia"] == this.myForm.get("_idParroquia").value
+      );
+      var index = parroquias.indexOf(parroquia[0]);
+      parroquias.splice(index, 1);
+      parroquias.push({
+        IdCanton: respuesta["respuesta"].Canton.IdCanton,
+        Canton: respuesta["respuesta"].Canton.Descripcion,
+        IdParroquia: respuesta["respuesta"].IdParroquia,
+        Descripcion: respuesta["respuesta"].Descripcion,
+        PermitirEliminacion: respuesta["respuesta"].PermitirEliminacion
+      });
+      this.parroquias.data = parroquias;
+      this.myForm.reset();
+      this.botonIngresar = "ingresar";
+      this.panelAdministracionService.refresh$.emit();
+      this.openSnackBar("Se actualizó correctamente");
+    } else if (respuesta["codigo"] == "400") {
+      this.openDialog("Inténtalo de nuevo");
+    } else if (respuesta["codigo"] == "418") {
+      this.openDialog(respuesta["mensaje"]);
+    } else if (respuesta["codigo"] == "500") {
+      this.openDialog("Problemas con el servidor");
+    }
   }
 
   async eliminarParroquia(idParroquia: string) {
     var respuesta = await this.panelAdministracionService.eliminarParroquia(
       idParroquia
     );
-    console.log(respuesta);
+    if (respuesta["codigo"] == "200") {
+      var parroquias: any = this.parroquias.data;
+      var parroquia = parroquias.filter(
+        (parroquia) => parroquia["IdParroquia"] == idParroquia
+      );
+      var index = parroquias.indexOf(parroquia[0]);
+      parroquias.splice(index, 1);
+      this.parroquias.data = parroquias;
+      this.panelAdministracionService.refresh$.emit();
+      this.openSnackBar("Se eliminó correctamente");
+    } else if (respuesta["codigo"] == "400") {
+      this.openDialog("Inténtalo de nuevo");
+    } else if (respuesta["codigo"] == "418") {
+      this.openDialog(respuesta["mensaje"]);
+    } else if (respuesta["codigo"] == "500") {
+      this.openDialog("Problemas con el servidor");
+    }
   }
 
   abrirModal() {
@@ -123,13 +190,16 @@ export class ParroquiaComponent implements OnInit {
   mostrarParroquia(parroquia) {
     this.myForm.get("_idParroquia").setValue(parroquia.IdParroquia);
     this.myForm.get("_parroquia").setValue(parroquia.Descripcion);
-    this.myForm.get("_idCanton").setValue(parroquia.Canton.IdCanton);
-    this.myForm.get("_canton").setValue(parroquia.Canton.Descripcion);
+    this.myForm.get("_idCanton").setValue(parroquia.IdCanton);
+    this.myForm.get("_canton").setValue(parroquia.Canton);
     this.botonIngresar = "modificar";
   }
-
+ 
   ngOnInit() {
     this.consultarParroquias();
+    this.panelAdministracionService.refresh$.subscribe(() => {
+      this.consultarParroquias();
+    });
   }
 
   tablaParroquias = ["parroquia", "canton", "acciones"];

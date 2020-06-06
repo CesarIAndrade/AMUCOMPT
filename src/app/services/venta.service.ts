@@ -23,6 +23,7 @@ export class VentaService {
       .set("Cantidad", cantidad)
       .set("PorcentajeDescuento", descuento)
       .set("encriptada", localStorage.getItem("miCuenta.postToken"));
+    console.log(body);
     return new Promise((resolve, reject) => {
       this.http
         .post(apiUrl + "Credito/IngresoDetalleVenta", body.toString(), {
@@ -70,9 +71,7 @@ export class VentaService {
     idPersona: string,
     efectivo: string,
     fechaFinalCredito: string,
-    aplicaSeguro: string,
-    valorSeguro: string,
-    seguroCancelado: string
+    aplicaSeguro: string
   ) {
     const body = new HttpParams()
       .set("IdCabeceraFactura", idCabeceraFactura)
@@ -80,8 +79,6 @@ export class VentaService {
       .set("Efectivo", efectivo)
       .set("FechaFinalCredito", fechaFinalCredito)
       .set("AplicaSeguro", aplicaSeguro)
-      .set("ValorSeguro", valorSeguro)
-      .set("SeguroCancelado", seguroCancelado)
       .set("encriptada", localStorage.getItem("miCuenta.postToken"));
     return new Promise((resolve, reject) => {
       this.http

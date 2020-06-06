@@ -31,14 +31,11 @@ export class FacturaService {
     });
   }
 
-  crearCabeceraFactura(
-    idAsignacionTU: string,
-    idTipoTransaccion: string
-  ) {
+  crearCabeceraFactura(idAsignacionTU: string, idTipoTransaccion: string) {
     const body = new HttpParams()
       .set("IdAsignacionTU", idAsignacionTU)
       .set("IdTipoTransaccion", idTipoTransaccion)
-      .set("encriptada", localStorage.getItem("miCuenta.putToken"))
+      .set("encriptada", localStorage.getItem("miCuenta.putToken"));
     return new Promise((resolve, reject) => {
       this.http
         .post(apiUrl + "Factura/IngresoCabeceraFactura", body.toString(), {
@@ -61,7 +58,7 @@ export class FacturaService {
   finalizarFactura(idCabecera: string, url: string) {
     const body = new HttpParams()
       .set("IdCabeceraFactura", idCabecera)
-      .set("encriptada", localStorage.getItem("miCuenta.putToken"))
+      .set("encriptada", localStorage.getItem("miCuenta.putToken"));
     return new Promise((resolve, reject) => {
       this.http
         .post(apiUrl + url, body.toString(), {

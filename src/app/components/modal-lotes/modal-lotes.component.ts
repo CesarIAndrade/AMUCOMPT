@@ -30,21 +30,16 @@ export class ModalLotesComponent implements OnInit {
   @ViewChild("paginator", { static: false }) paginator: MatPaginator;
   lotes = new MatTableDataSource<Element[]>();
 
-  consultarLotesDeUnProducto() {
-    this.inventarioService
-      .consultarLotesDeUnProducto(
-        this.data.idCabecera,
-        this.data.idRelacionLogica,
-        this.data.perteneceKit
-      )
-      .then((ok) => {
-        if (ok["respuesta"]) {
-          this.lotes.data = [];
-          this.lotes.data = ok["respuesta"];
-          this.lotes.paginator = this.paginator;
-        }
-      })
-      .catch((error) => console.log(error));
+  async consultarLotesDeUnProducto() {
+    var respuesta = await this.inventarioService.consultarLotesDeUnProducto(
+      this.data.idCabecera,
+      this.data.idRelacionLogica,
+      this.data.perteneceKit
+    );
+    if (respuesta["codigo"] == "200") {
+      this.lotes.data = respuesta["respuesta"];
+      this.lotes.paginator = this.paginator;
+    }
   }
 
   keyUp() {

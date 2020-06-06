@@ -7,9 +7,9 @@ import {
   MatDialog,
   MatSnackBar,
 } from "@angular/material";
-import sweetalert from "sweetalert";
 import { Observable } from "rxjs";
 import { map, startWith } from "rxjs/operators";
+import { DialogAlertComponent } from "../dialog-alert/dialog-alert.component";
 
 @Component({
   selector: "app-configuracion-producto",
@@ -19,6 +19,7 @@ import { map, startWith } from "rxjs/operators";
 export class ConfiguracionProductoComponent implements OnInit {
   constructor(
     private inventarioService: InventarioService,
+    private dialog: MatDialog,
     private _snackBar: MatSnackBar
   ) {
     this.myForm = new FormGroup({
@@ -59,11 +60,18 @@ export class ConfiguracionProductoComponent implements OnInit {
     },
   ];
   descuentos: any[] = [];
-  filteredDescuento: Observable<string[]>;
+  filteredOptions: Observable<string[]>;
 
   // PAra la paginacion
   @ViewChild("paginator", { static: false }) paginator: MatPaginator;
   dataSource = new MatTableDataSource<Element[]>();
+
+  openDialog(mensaje): void {
+    const dialogRef = this.dialog.open(DialogAlertComponent, {
+      width: "250px",
+      data: { mensaje: mensaje },
+    });
+  }
 
   openSnackBar(message: string) {
     this._snackBar.open(message, "Cerrar", {
@@ -74,13 +82,14 @@ export class ConfiguracionProductoComponent implements OnInit {
 
   async consultarTipoProductos() {
     var respuesta = await this.inventarioService.consultarTipoProductos();
+    console.log(respuesta);
     if (respuesta["codigo"] == "200") {
       var tipoProductos: any = [];
       respuesta["respuesta"].map((item) => {
         tipoProductos.push({
           _id: item.IdTipoProducto,
           descripcion: item.Descripcion,
-          utilizado: item.TipoUsuarioUtilizado,
+          utilizado: item.TipoProductoUtilizado,
           codigo: "",
           descuento: "",
         });
@@ -95,6 +104,25 @@ export class ConfiguracionProductoComponent implements OnInit {
       this.myForm.get("_campo").value
     );
     console.log(tipoProducto);
+    if (tipoProducto["codigo"] == "200") {
+      this.openSnackBar("Se ingresó correctamente");
+      var tipoProductos: any = this.dataSource.data;
+      tipoProductos.push({
+        _id: tipoProducto["respuesta"].IdTipoProducto,
+        descripcion: tipoProducto["respuesta"].Descripcion,
+        utilizado: tipoProducto["respuesta"].TipoProductoUtilizado,
+        codigo: "",
+        descuento: "",
+      });
+      this.dataSource.data = tipoProductos;
+      this.myForm.get("_campo").reset();
+    } else if (tipoProducto["codigo"] == "400") {
+      this.openDialog("Inténtalo de nuevo");
+    } else if (tipoProducto["codigo"] == "418") {
+      this.openDialog(tipoProducto["mensaje"]);
+    } else if (tipoProducto["codigo"] == "500") {
+      this.openDialog("Problemas con el servidor");
+    }
   }
 
   async eliminarTipoProducto(idTipoProducto) {
@@ -102,6 +130,22 @@ export class ConfiguracionProductoComponent implements OnInit {
       idTipoProducto
     );
     console.log(respuesta);
+    if (respuesta["codigo"] == "200") {
+      this.openSnackBar("Se eliminó correctamente");
+      var tipoProductos: any = this.dataSource.data;
+      var tipoProducto = tipoProductos.filter(
+        (tipoProducto) => tipoProducto["_id"] == idTipoProducto
+      );
+      var index = tipoProductos.indexOf(tipoProducto);
+      tipoProductos.splice(index, 1);
+      this.dataSource.data = tipoProductos;
+    } else if (respuesta["codigo"] == "400") {
+      this.openDialog("Inténtalo de nuevo");
+    } else if (respuesta["codigo"] == "418") {
+      this.openDialog(respuesta["mensaje"]);
+    } else if (respuesta["codigo"] == "500") {
+      this.openDialog("Problemas con el servidor");
+    }
   }
 
   async consultarPresentaciones() {
@@ -123,17 +167,50 @@ export class ConfiguracionProductoComponent implements OnInit {
   }
 
   async crearPresentacion() {
-    var respuesta = await this.inventarioService.crearPresentacion(
+    var presentacion = await this.inventarioService.crearPresentacion(
       this.myForm.get("_campo").value
     );
-    console.log(respuesta);
+    if (presentacion["codigo"] == "200") {
+      this.openSnackBar("Se ingresó correctamente");
+      var presentaciones: any = this.dataSource.data;
+      presentaciones.push({
+        _id: presentacion["respuesta"].IdPresentacion,
+        descripcion: presentacion["respuesta"].Descripcion,
+        utilizado: presentacion["respuesta"].PresentacionUtilizado,
+        codigo: "",
+        descuento: "",
+      });
+      this.dataSource.data = presentaciones;
+      this.myForm.get("_campo").reset();
+    } else if (presentacion["codigo"] == "400") {
+      this.openDialog("Inténtalo de nuevo");
+    } else if (presentacion["codigo"] == "418") {
+      this.openDialog(presentacion["mensaje"]);
+    } else if (presentacion["codigo"] == "500") {
+      this.openDialog("Problemas con el servidor");
+    }
   }
 
   async eliminarPresentacion(idPresentacion) {
     var respuesta = await this.inventarioService.eliminarPresentacion(
       idPresentacion
     );
-    console.log(respuesta);
+    if (respuesta["codigo"] == "200") {
+      this.openSnackBar("Se eliminó correctamente");
+      var presentaciones: any = this.dataSource.data;
+      var presentacion = presentaciones.filter(
+        (presentacion) => presentacion["_id"] == idPresentacion
+      );
+      var index = presentaciones.indexOf(presentacion[0]);
+      presentaciones.splice(index, 1);
+      this.dataSource.data = presentaciones;
+    } else if (respuesta["codigo"] == "400") {
+      this.openDialog("Inténtalo de nuevo");
+    } else if (respuesta["codigo"] == "418") {
+      this.openDialog(respuesta["mensaje"]);
+    } else if (respuesta["codigo"] == "500") {
+      this.openDialog("Problemas con el servidor");
+    }
   }
 
   async consultarMedidas() {
@@ -155,15 +232,46 @@ export class ConfiguracionProductoComponent implements OnInit {
   }
 
   async crearMedida() {
-    var respuesta = await this.inventarioService.crearMedida(
+    var medida = await this.inventarioService.crearMedida(
       this.myForm.get("_campo").value
     );
-    console.log(respuesta);
+    if (medida["codigo"] == "200") {
+      this.openSnackBar("Se ingresó correctamente");
+      var medidas: any = this.dataSource.data;
+      medidas.push({
+        _id: medida["respuesta"].IdMedida,
+        descripcion: medida["respuesta"].Descripcion,
+        utilizado: medida["respuesta"].MedidaUtilizado,
+        codigo: "",
+        descuento: "",
+      });
+      this.dataSource.data = medidas;
+      this.myForm.get("_campo").reset();
+    } else if (medida["codigo"] == "400") {
+      this.openDialog("Inténtalo de nuevo");
+    } else if (medida["codigo"] == "418") {
+      this.openDialog(medida["mensaje"]);
+    } else if (medida["codigo"] == "500") {
+      this.openDialog("Problemas con el servidor");
+    }
   }
 
   async eliminarMedida(idMedida) {
     var respuesta = await this.inventarioService.eliminarMedida(idMedida);
-    console.log(respuesta);
+    if (respuesta["codigo"] == "200") {
+      this.openSnackBar("Se eliminó correctamente");
+      var medidas: any = this.dataSource.data;
+      var medida = medidas.filter((medida) => medida["_id"] == idMedida);
+      var index = medidas.indexOf(medida[0]);
+      medidas.splice(index, 1);
+      this.dataSource.data = medidas;
+    } else if (respuesta["codigo"] == "400") {
+      this.openDialog("Inténtalo de nuevo");
+    } else if (respuesta["codigo"] == "418") {
+      this.openDialog(respuesta["mensaje"]);
+    } else if (respuesta["codigo"] == "500") {
+      this.openDialog("Problemas con el servidor");
+    }
   }
 
   async consultarKits() {
@@ -193,7 +301,7 @@ export class ConfiguracionProductoComponent implements OnInit {
   }
 
   private _filter(value: string): string[] {
-    const filterValue = value.toLowerCase();
+    const filterValue = String(value).toLowerCase();
     return this.descuentos.filter((option) =>
       option.Porcentaje.toLowerCase().includes(filterValue)
     );
@@ -201,25 +309,18 @@ export class ConfiguracionProductoComponent implements OnInit {
 
   async consultarDescuentos() {
     var respuesta = await this.inventarioService.consultarDescuentos();
-    console.log(respuesta);
-
-    // .then((ok) => {
-    //   this.descuentos = [];
-    //   for (let index = 0; index < ok["respuesta"].length; index++) {
-    //     const element = ok["respuesta"][index];
-    //     this.descuentos[index] = {
-    //       IdDescuento: element.IdDescuento,
-    //       Porcentaje: String(element.Porcentaje),
-    //     };
-    //   }
-    //   this.filteredDescuento = this.myForm
-    //     .get("_descuento")
-    //     .valueChanges.pipe(
-    //       startWith(""),
-    //       map((value) => this._filter(value))
-    //     );
-    // })
-    // .catch((error) => console.log(error));
+    if (respuesta["codigo"] == "200") {
+      respuesta["respuesta"].map((descuento) => {
+        this.descuentos.push({
+          IdDescuento: descuento.IdDescuento,
+          Porcentaje: String(descuento.Porcentaje),
+        });
+      });
+      this.filteredOptions = this.myForm.get("_descuento").valueChanges.pipe(
+        startWith(""),
+        map((value) => this._filter(value))
+      );
+    }
   }
 
   async crearDescuento() {

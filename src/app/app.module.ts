@@ -44,6 +44,7 @@ import { VisitaComponent } from './components/visita/visita.component';
 import { ComunidadesBottomSheet } from './components/visita/comunidades-bottom-sheet.component';
 import { RegistrarVisitaComponent } from './components/registrar-visita/registrar-visita.component';
 import { DialogAlertComponent } from './components/dialog-alert/dialog-alert.component';
+import { ModalPersonaComponent } from './components/modal-persona/modal-persona.component';
 
 @NgModule({
   declarations: [
@@ -79,7 +80,8 @@ import { DialogAlertComponent } from './components/dialog-alert/dialog-alert.com
     VisitaComponent,
     ComunidadesBottomSheet,
     RegistrarVisitaComponent,
-    DialogAlertComponent
+    DialogAlertComponent,
+    ModalPersonaComponent
   ],
   imports: [
     BrowserModule,
@@ -102,7 +104,8 @@ import { DialogAlertComponent } from './components/dialog-alert/dialog-alert.com
     ModalLocalidadSuperiorComponent,
     ModalLotesComponent,
     ComunidadesBottomSheet,
-    DialogAlertComponent
+    DialogAlertComponent,
+    ModalPersonaComponent
   ],
   providers: [],
   bootstrap: [AppComponent],

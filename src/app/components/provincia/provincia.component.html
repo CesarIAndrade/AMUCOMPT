@@ -34,7 +34,7 @@
             <input
               matInput
               [(ngModel)]="filterProvincia"
-              [ngModelOptions]="{standalone: true}"
+              [ngModelOptions]="{ standalone: true }"
               type="text"
               placeholder="Buscar Provincia"
             />
@@ -79,16 +79,17 @@
                     </td>
                   </ng-container>
                   <ng-container *ngIf="!element.PermitirEliminacion">
-                    <td mat-cell colspan="2">
+                    <td mat-cell>
                       <button
                         mat-button
                         type="button"
-                        class="btn-outline-primary btn-block"
+                        class="btn-outline-primary"
                         (click)="setProvincia(element)"
                       >
                         <mat-icon>edit</mat-icon>
                       </button>
                     </td>
+                    <td mat-cell></td>
                   </ng-container>
                 </ng-container>
               </ng-container>

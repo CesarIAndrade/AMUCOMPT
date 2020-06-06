@@ -52,9 +52,19 @@ export class ComunidadComponent implements OnInit {
   }
 
   async consultarComunidades() {
-    var comunidades = await this.panelAdministracionService.consultarComunidades();
-    if (comunidades["codigo"] == "200") {
-      this.comunidades.data = comunidades["respuesta"];
+    var respuesta = await this.panelAdministracionService.consultarComunidades();
+    if(respuesta["codigo"] == "200") {
+      var comunidades: any = [];
+      respuesta["respuesta"].map((comunidad) => {
+        comunidades.push({
+          IdParroquia: comunidad.Parroquia.IdParroquia,
+          Parroquia: comunidad.Parroquia.Descripcion,
+          IdComunidad: comunidad.IdComunidad,
+          Descripcion: comunidad.Descripcion,
+          PermitirEliminacion: comunidad.PermitirEliminacion
+        })
+      })
+      this.comunidades.data = comunidades;
       this.comunidades.paginator = this.paginator;
     }
   }
@@ -74,23 +84,84 @@ export class ComunidadComponent implements OnInit {
       this.myForm.get("_idParroquia").value,
       this.myForm.get("_comunidad").value
     );
-    console.log(comunidad);
+    if (comunidad["codigo"] == "200") {
+      var comunidades: any = this.comunidades.data;
+      comunidades.push({
+        IdParroquia: comunidad["respuesta"].Parroquia.IdParroquia,
+        Parroquia: comunidad["respuesta"].Parroquia.Descripcion,
+        IdComunidad: comunidad["respuesta"].IdComunidad,
+        Descripcion: comunidad["respuesta"].Descripcion,
+        PermitirEliminacion: comunidad["respuesta"].PermitirEliminacion
+      });
+      this.comunidades.data = comunidades;
+      this.myForm.reset();
+      this.panelAdministracionService.refresh$.emit();
+      this.openSnackBar("Se ingresó correctamente");
+    } else if (comunidad["codigo"] == "400") {
+      this.openDialog("Inténtalo de nuevo");
+    } else if (comunidad["codigo"] == "418") {
+      this.openDialog(comunidad["mensaje"]);
+    } else if (comunidad["codigo"] == "500") {
+      this.openDialog("Problemas con el servidor");
+    }
   }
 
   async actualizarComunidad() {
-    var comunidad = await this.panelAdministracionService.actualizarComunidad(
+    var respuesta = await this.panelAdministracionService.actualizarComunidad(
       this.myForm.get("_idParroquia").value,
       this.myForm.get("_idComunidad").value,
       this.myForm.get("_comunidad").value
     );
-    console.log(comunidad);
+    if (respuesta["codigo"] == "200") {
+      var comunidades: any = this.comunidades.data;
+      var comunidad  = comunidades.filter(
+        (comunidad) => comunidad["IdComunidad"] == this.myForm.get("_idComunidad").value
+      );
+      var index = comunidades.indexOf(comunidad[0]);
+      comunidades.splice(index, 1);
+      comunidades.push({
+        IdParroquia: respuesta["respuesta"].Parroquia.IdParroquia,
+        Parroquia: respuesta["respuesta"].Parroquia.Descripcion,
+        IdComunidad: respuesta["respuesta"].IdComunidad,
+        Descripcion: respuesta["respuesta"].Descripcion,
+        PermitirEliminacion: respuesta["respuesta"].PermitirEliminacion
+      });
+      this.comunidades.data = comunidades;
+      this.myForm.reset();
+      this.botonIngresar = "ingresar";
+      this.panelAdministracionService.refresh$.emit();
+      this.openSnackBar("Se actualizó correctamente");
+    } else if (respuesta["codigo"] == "400") {
+      this.openDialog("Inténtalo de nuevo");
+    } else if (respuesta["codigo"] == "418") {
+      this.openDialog(respuesta["mensaje"]);
+    } else if (respuesta["codigo"] == "500") {
+      this.openDialog("Problemas con el servidor");
+    }
   }
 
   async eliminarComunidad(idComunidad: string) {
     var respuesta = await this.panelAdministracionService.eliminarComunidad(
       idComunidad
     );
-    console.log(respuesta);
+    if (respuesta["codigo"] == "200") {
+      var comunidades: any = this.comunidades.data;
+      var comunidad  = comunidades.filter(
+        (comunidad) => comunidad["IdComunidad"] == this.myForm.get("_idComunidad").value
+      );
+      var index = comunidades.indexOf(comunidad[0]);
+      comunidades.splice(index, 1);
+      this.comunidades.data = comunidades;
+      this.myForm.reset();
+      this.panelAdministracionService.refresh$.emit();
+      this.openSnackBar("Se eliminó correctamente");
+    } else if (respuesta["codigo"] == "400") {
+      this.openDialog("Inténtalo de nuevo");
+    } else if (respuesta["codigo"] == "418") {
+      this.openDialog(respuesta["mensaje"]);
+    } else if (respuesta["codigo"] == "500") {
+      this.openDialog("Problemas con el servidor");
+    }
   }
 
   abrirModal() {
@@ -115,13 +186,16 @@ export class ComunidadComponent implements OnInit {
   mostrarComunidad(comunidad) {
     this.myForm.get("_idComunidad").setValue(comunidad.IdComunidad);
     this.myForm.get("_comunidad").setValue(comunidad.Descripcion);
-    this.myForm.get("_idParroquia").setValue(comunidad.Parroquia.IdParroquia);
-    this.myForm.get("_parroquia").setValue(comunidad.Parroquia.Descripcion);
+    this.myForm.get("_idParroquia").setValue(comunidad.IdParroquia);
+    this.myForm.get("_parroquia").setValue(comunidad.Parroquia);
     this.botonIngresar = "modificar";
   }
 
   ngOnInit() {
     this.consultarComunidades();
+    this.panelAdministracionService.refresh$.subscribe(() => {
+      this.consultarComunidades();
+    });
   }
 
   tablaComunidades = ["comunidad", "parroquia", "acciones"];

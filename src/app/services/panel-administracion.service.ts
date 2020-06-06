@@ -7,6 +7,8 @@ import { apiUrl } from "../../environments/environment";
 export class PanelAdministracionService {
   constructor(private http: HttpClient) {}
 
+  refresh$ = new EventEmitter();
+
   crearProvincia(provincia: string) {
     const body = new HttpParams()
       .set("Descripcion", provincia)

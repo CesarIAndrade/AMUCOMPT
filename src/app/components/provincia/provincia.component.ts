@@ -110,8 +110,8 @@ export class ProvinciaComponent implements OnInit {
         PermitirEliminacion: respuesta["respuesta"].PermitirEliminacion,
       });
       this.provincias.data = provincias;
-      this.botonIngresar = "ingresar";
       this.myForm.reset();
+      this.botonIngresar = "ingresar";
       this.openSnackBar("Se actualizó correctamente");
     } else if (respuesta["codigo"] == "400") {
       this.openDialog("Inténtalo de nuevo");
@@ -152,6 +152,9 @@ export class ProvinciaComponent implements OnInit {
 
   ngOnInit() {
     this.consultarProvincias();
+    this.panelAdministracionService.refresh$.subscribe(() => {
+      this.consultarProvincias();
+    })
   }
 
   tablaProvincias = ["provincia", "acciones"];

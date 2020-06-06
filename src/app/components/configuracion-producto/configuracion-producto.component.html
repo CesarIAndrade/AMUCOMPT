@@ -40,7 +40,7 @@
               </mat-form-field>
               <mat-form-field class="example-full-width">
                 <input
-                  type="text"
+                  type="number"
                   placeholder="Descuento"
                   [readonly]="soloParaKits"
                   matInput
@@ -123,6 +123,7 @@
                       <td mat-cell>
                         <button
                           mat-button
+                          type="button"
                           class="btn-outline-danger"
                           (click)="eliminarCampo(element._id)"
                         >

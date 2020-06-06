@@ -2,7 +2,11 @@ import { Component, OnInit, ViewChild, ElementRef } from "@angular/core";
 import { FormGroup, Validators, FormControl } from "@angular/forms";
 
 // Components
-import { MatPaginator, MatTableDataSource } from "@angular/material";
+import {
+  MatPaginator,
+  MatTableDataSource,
+  MatSnackBar,
+} from "@angular/material";
 // Functional Components
 import { MatDialog } from "@angular/material/dialog";
 
@@ -13,6 +17,7 @@ import { InventarioService } from "src/app/services/inventario.service";
 import sweetalert from "sweetalert";
 import { Observable } from "rxjs";
 import { startWith, map } from "rxjs/operators";
+import { DialogAlertComponent } from "../dialog-alert/dialog-alert.component";
 
 @Component({
   selector: "app-producto",
@@ -22,7 +27,8 @@ import { startWith, map } from "rxjs/operators";
 export class ProductoComponent implements OnInit {
   constructor(
     private inventarioService: InventarioService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private _snackBar: MatSnackBar
   ) {
     this.myForm = new FormGroup({
       _nombre: new FormControl("", [Validators.required]),
@@ -32,7 +38,6 @@ export class ProductoComponent implements OnInit {
       _contenidoNeto: new FormControl("", [Validators.required]),
       _medida: new FormControl("", [Validators.required]),
       _descripcion: new FormControl(""),
-      _productoExistente: new FormControl(""),
       _idProducto: new FormControl(""),
       _idConfiguracionProducto: new FormControl(""),
       _precio: new FormControl("", [Validators.required]),
@@ -44,90 +49,107 @@ export class ProductoComponent implements OnInit {
   myForm: FormGroup;
   botonIngresar = "ingresar";
   filterProducto = "";
-
-  filteredOptions: Observable<string[]>;
-
-  nombresDeProductos: any[] = [];
+  productosSeleccionado = false;
   tipoProductos: any[] = [];
   presentaciones: any[] = [];
   medidas: any[] = [];
-  ArrayProductos: any[] = [];
+  productosSeleccionables: any[] = [];
+  filteredOptions: Observable<string[]>;
 
   // Para la paginacion
   @ViewChild("paginator", { static: false }) paginator: MatPaginator;
   productos = new MatTableDataSource<Element[]>();
 
-  applyFilter(event) {
-    this._filterTable(event, this.productos.data);
+  openDialog(mensaje): void {
+    const dialogRef = this.dialog.open(DialogAlertComponent, {
+      width: "250px",
+      data: { mensaje: mensaje },
+    });
   }
 
-  consultarTipoProductos() {
-    this.inventarioService
-      .consultarTipoProductos()
-      .then((ok) => {
-        this.tipoProductos = [];
-        this.tipoProductos = ok["respuesta"];
-      })
-      .catch((error) => console.log(error));
+  openSnackBar(message: string) {
+    this._snackBar.open(message, "Cerrar", {
+      duration: 2000,
+      horizontalPosition: "right",
+    });
   }
 
-  consultarPresentaciones() {
-    this.inventarioService
-      .consultarPresentaciones()
-      .then((ok) => {
-        this.presentaciones = [];
-        this.presentaciones = ok["respuesta"];
-      })
-      .catch((error) => console.log(error));
+  async consultarTipoProductos() {
+    var tipoProductos = await this.inventarioService.consultarTipoProductos();
+    if (tipoProductos["codigo"] == "200") {
+      this.tipoProductos = tipoProductos["respuesta"];
+    }
   }
 
-  consultarMedidas() {
-    this.inventarioService
-      .consultarMedidas()
-      .then((ok) => {
-        this.medidas = [];
-        this.medidas = ok["respuesta"];
-      })
-      .catch((error) => console.log(error));
+  async consultarPresentaciones() {
+    var presentaciones = await this.inventarioService.consultarPresentaciones();
+    if (presentaciones["codigo"] == "200") {
+      this.presentaciones = presentaciones["respuesta"];
+    }
   }
 
-  consultarConfiguracionProductoTodos() {
-    this.inventarioService
-      .consultarConfiguracionProductoTodos(
-        
-      )
-      .then((ok) => {
-        this.productos.data = [];
-        this.productos.data = ok["respuesta"];
-        this.productos.paginator = this.paginator;
-        this.ArrayProductos = ok["respuesta"];
-      })
-      .catch((error) => console.log(error));
+  async consultarMedidas() {
+    var medidas = await this.inventarioService.consultarMedidas();
+    if (medidas["codigo"] == "200") {
+      this.medidas = medidas["respuesta"];
+    }
   }
 
-  consultarProductos() {
-    this.inventarioService
-      .consultarConfiguracionProducto()
-      .then((ok) => {
-        for (let index = 0; index < ok["respuesta"].length; index++) {
-          const element = ok["respuesta"][index];
-          this.nombresDeProductos[index] = {
-            idProducto: element.Producto.IdProducto,
-            nombre: element.Producto.Nombre,
-            idTipoProducto: element.Producto.TipoProducto.IdTipoProducto,
-            descripcion: element.Producto.Descripcion,
-            codigo: element.Producto.Codigo,
-            idMedida: element.Medida.IdMedida,
-          };
-        }
-        this.consultarConfiguracionProductoTodos();
-        this.consultarTipoProductos();
-        this.filteredOptions = this.myForm.get("_nombre").valueChanges.pipe(
-          startWith(""),
-          map((value) => this._filter(value))
-        );
-      })
-      .catch((error) => console.log(error));
+  async consultarConfiguracionProductoTodos() {
+    var respuesta = await this.inventarioService.consultarConfiguracionProductoTodos();
+  }
+
+  async consultarProductos() {
+    var respuesta = await this.inventarioService.consultarConfiguracionProducto();
+    if (respuesta["codigo"] == "200") {
+      var productos: any = [];
+      console.log(respuesta["respuesta"][0]);
+      respuesta["respuesta"].map((producto) => {
+        productos.push({
+          IdConfigurarProducto: producto.IdConfigurarProducto,
+          IdProducto: producto.Producto.IdProducto,
+          Codigo: producto.Codigo,
+          Producto: producto.Producto.Nombre,
+          Presentacion: producto.Presentacion.Descripcion,
+          Contenido: producto.CantidadMedida,
+          Medida: producto.Medida.Descripcion,
+          IdMedida: producto.Medida.IdMedida,
+          IdPresentacion: producto.Presentacion.IdPresentacion,
+          IdTipoProducto: producto.Producto.TipoProducto.IdTipoProducto,
+          TipoProducto: producto.Producto.TipoProducto.Descripcion,
+          IdPrecio:
+            producto.PrecioConfigurarProducto.IdPrecioConfigurarProducto,
+          Precio: producto.PrecioConfigurarProducto.Precio,
+          Descripcion: producto.Producto.Descripcion,
+          Iva: producto.Iva,
+          ConfigurarProductosUtilizado: producto.ConfigurarProductosUtilizado,
+        });
+      });
+      this.productosSeleccionables = productos;
+      this.productos.data = productos;
+      this.productos.paginator = this.paginator;
+      this.filteredOptions = this.myForm.get("_nombre").valueChanges.pipe(
+        startWith(""),
+        map((value) => this._filter(value))
+      );
+    }
+  }
+
+  private _filter(value: string): string[] {
+    const filterValue = value.toLowerCase();
+    return this.productosSeleccionables.filter((option) =>
+      option.Nombre.toLowerCase().includes(filterValue)
+    );
+  }
+
+  seleccionarProductoSiExiste(producto) {
+    this.myForm.get("_nombre").disable();
+    this.myForm.get("_tipoProducto").disable();
+    this.myForm.get("_idProducto").setValue(producto.IdProducto);
+    this.myForm.get("_tipoProducto").setValue(producto.IdTipoProducto);
+    this.myForm.get("_descripcion").setValue(producto.Observacion);
+    this.myForm.get("_codigo").setValue(producto.Codigo);
+    this.productosSeleccionado = true;
   }
 
   validarFormulario() {
@@ -140,268 +162,134 @@ export class ProductoComponent implements OnInit {
     }
   }
 
-  crearProducto() {
-    if (
-      this.myForm.get("_idProducto").value == "" &&
-      this.myForm.get("_productoExistente").value == ""
-    ) {
-      this.inventarioService
-        .crearProducto(
-          this.myForm.get("_nombre").value,
-          this.myForm.get("_descripcion").value,
-          this.myForm.get("_tipoProducto").value,
-          
-        )
-        .then((ok) => {
-          if (ok["respuesta"] == null) {
-            sweetAlert("Inténtalo de nuevo!", {
-              icon: "warning",
-            });
-            this.myForm.reset();
-          } else if (ok["respuesta"] == "400") {
-            sweetAlert("Producto Ya Existe!", {
-              icon: "warning",
-            });
-          } else if (ok["respuesta"] == "false") {
-            sweetAlert("Ha ocurrido un error!", {
-              icon: "error",
-            });
-          } else {
-            this.myForm.get("_idProducto").setValue(ok["respuesta"]);
-            this.crearConfiguracionProducto();
-          }
-        })
-        .catch((error) => console.log(error));
+  async crearProducto() {
+    if (!this.productosSeleccionado) {
+      var producto = await this.inventarioService.crearProducto(
+        this.myForm.get("_nombre").value,
+        this.myForm.get("_descripcion").value,
+        this.myForm.get("_tipoProducto").value
+      );
+      if (producto["codigo"] == "200") {
+        this.crearConfiguracionProducto(producto["respuesta"].IdProducto);
+      }
     } else {
-      this.crearConfiguracionProducto();
+      this.crearConfiguracionProducto(this.myForm.get("_idProducto").value);
     }
   }
 
-  crearConfiguracionProducto() {
-    this.inventarioService
-      .crearConfiguracionProducto(
-        localStorage.getItem("miCuenta.idAsignacionTipoUsuario"),
-        this.myForm.get("_idProducto").value,
-        this.myForm.get("_medida").value,
-        this.myForm.get("_presentacion").value,
-        this.myForm.get("_codigo").value,
-        this.myForm.get("_contenidoNeto").value,
-        this.myForm.get("_iva").value,
-        
-      )
-      .then((ok) => {
-        if (ok["respuesta"] == null) {
-          sweetAlert("Inténtalo de nuevo!", {
-            icon: "warning",
-          });
-          this.myForm.reset();
-        } else if (ok["respuesta"] == "400") {
-          sweetAlert("Producto Ya Existe!", {
-            icon: "warning",
-          });
-        } else if (ok["respuesta"] == "false") {
-          sweetAlert("Ha ocurrido un error!", {
-            icon: "error",
-          });
-        } else {
-          this.myForm
-            .get("_idConfiguracionProducto")
-            .setValue(ok["respuesta"].IdConfigurarProducto);
-          this.crearPrecio();
-        }
-      })
-      .catch((error) => console.log(error));
+  async crearConfiguracionProducto(idProducto) {
+    var configuracionProducto = await this.inventarioService.crearConfiguracionProducto(
+      localStorage.getItem("miCuenta.idAsignacionTipoUsuario"),
+      idProducto,
+      this.myForm.get("_medida").value,
+      this.myForm.get("_presentacion").value,
+      this.myForm.get("_codigo").value,
+      this.myForm.get("_contenidoNeto").value,
+      this.myForm.get("_iva").value
+    );
+    if (configuracionProducto["codigo"] == "200") {
+      this.crearPrecio(
+        configuracionProducto["respuesta"].IdConfigurarProducto,
+        true
+      );
+    }
   }
 
-  crearPrecio() {
-    this.inventarioService
-      .crearPrecio(
-        this.myForm.get("_idConfiguracionProducto").value,
-        this.myForm.get("_precio").value,
-        
-      )
-      .then((ok) => {
-        if (ok["respuesta"]) {
-          sweetAlert("Se ingresó correctamente!", {
-            icon: "success",
-          });
-          this.myForm.reset();
-          this.myForm.get("_idProducto").setValue("");
-          this.myForm.get("_productoExistente").setValue("");
-          this.consultarProductos();
-          this.myForm.get("_nombre").enable();
-          this.myForm.get("_descripcion").enable();
-          this.myForm.get("_codigo").enable();
-          this.myForm.get("_tipoProducto").enable();
-        } else {
-          sweetAlert("Ha ocurrido un error!", {
-            icon: "error",
-          });
-        }
-      })
-      .catch((error) => console.log(error));
+  async crearPrecio(idConfigurarProducto, flag) {
+    var precio = await this.inventarioService.crearPrecio(
+      idConfigurarProducto,
+      this.myForm.get("_precio").value
+    );
+    if (precio["codigo"] == "200") {
+      if (flag) {
+        this.openSnackBar("Se ingresó correctamente");
+      } else {
+        this.openSnackBar("Se actualizó correctamente");
+        this.botonIngresar = "ingresar";
+      }
+      this.myForm.reset();
+      this.consultarProductos();
+      this.productosSeleccionado = false;
+      this.myForm.get("_nombre").enable();
+      this.myForm.get("_tipoProducto").enable();
+    }
   }
 
   mostrarProducto(producto) {
-    this.myForm.get("_nombre").disable();
-    this.myForm.get("_descripcion").disable();
-    this.myForm.get("_tipoProducto").disable();
+    if (producto.ConfigurarProductosUtilizado == "0") {
+      this.myForm.enable();
+      this.myForm.get("_nombre").disable();
+      this.myForm.get("_tipoProducto").disable();
+    } else {
+      this.myForm.disable(), this.myForm.get("_precio").enable();
+      this.myForm.get("_iva").enable();
+    }
     this.myForm
       .get("_idConfiguracionProducto")
       .setValue(producto.IdConfigurarProducto);
-    this.myForm.get("_nombre").setValue(producto.Producto.Nombre);
-    this.myForm.get("_descripcion").setValue(producto.Producto.Descripcion);
+    this.myForm.get("_idProducto").setValue(producto.IdProducto);
+    this.myForm.get("_nombre").setValue(producto.Producto);
     this.myForm.get("_codigo").setValue(producto.Codigo);
-    this.myForm.get("_contenidoNeto").setValue(producto.CantidadMedida);
-    this.myForm
-      .get("_tipoProducto")
-      .setValue(producto.Producto.TipoProducto.IdTipoProducto);
-    this.myForm
-      .get("_presentacion")
-      .setValue(producto.Presentacion.IdPresentacion);
-    this.myForm.get("_medida").setValue(producto.Medida.IdMedida);
-    this.myForm.get("_idProducto").setValue(producto.Producto.IdProducto);
-    this.myForm
-      .get("_precio")
-      .setValue(producto.PrecioConfigurarProducto.Precio);
-    this.myForm
-      .get("_idConfiguracionProducto")
-      .setValue(producto.PrecioConfigurarProducto.IdConfigurarProducto);
+    this.myForm.get("_tipoProducto").setValue(producto.IdTipoProducto);
+    this.myForm.get("_presentacion").setValue(producto.IdPresentacion);
+    this.myForm.get("_contenidoNeto").setValue(producto.Contenido);
+    this.myForm.get("_medida").setValue(producto.IdMedida);
+    this.myForm.get("_precio").setValue(producto.Precio);
     this.myForm.get("_iva").setValue(producto.Iva);
+    this.myForm.get("_descripcion").setValue(producto.Descripcion);
     this.botonIngresar = "modificar";
   }
 
-  actualizarConfiguracionProducto() {
-    this.inventarioService
-      .actualizarConfiguracionProducto(
-        this.myForm.get("_idConfiguracionProducto").value,
-        localStorage.getItem("miCuenta.idAsignacionTipoUsuario"),
-        this.myForm.get("_idProducto").value,
-        this.myForm.get("_medida").value,
-        this.myForm.get("_presentacion").value,
-        this.myForm.get("_codigo").value,
-        this.myForm.get("_contenidoNeto").value,
-        this.myForm.get("_iva").value,
-        
-      )
-      .then((ok) => {
-        if (ok["respuesta"] == null) {
-          sweetAlert("Inténtalo de nuevo!", {
-            icon: "warning",
-          });
-          this.myForm.reset();
-        } else if (ok["respuesta"] == "400") {
-          sweetAlert("Producto Ya Existe!", {
-            icon: "warning",
-          });
-        } else if (ok["respuesta"] == "false") {
-          sweetAlert("Ha ocurrido un error!", {
-            icon: "error",
-          });
-        } else {
-          sweetAlert("Se ingresó correctamente!", {
-            icon: "success",
-          });
-          this.crearPrecio();
-        }
-      })
-      .catch((error) => console.log(error));
+  async actualizarConfiguracionProducto() {
+    var respuesta = await this.inventarioService.actualizarConfiguracionProducto(
+      this.myForm.get("_idConfiguracionProducto").value,
+      localStorage.getItem("miCuenta.idAsignacionTipoUsuario"),
+      this.myForm.get("_idProducto").value,
+      this.myForm.get("_medida").value,
+      this.myForm.get("_presentacion").value,
+      this.myForm.get("_codigo").value,
+      this.myForm.get("_contenidoNeto").value,
+      this.myForm.get("_iva").value
+    );
+    if (respuesta["codigo"] == "200") {
+      this.crearPrecio(respuesta["respuesta"].IdConfigurarProducto, false);
+    }
   }
 
-  actualizarPrecio() {
-    this.inventarioService
-      .actualizarPrecio(
-        this.myForm.get("_idPrecio").value,
-        this.myForm.get("_idConfiguracionProducto").value,
-        this.myForm.get("_precio").value,
-        
-      )
-      .then((ok) => {
-        if (ok["respuesta"]) {
-          this.myForm.reset();
-          this.botonIngresar = "ingresar";
-          this.consultarProductos();
-          this.myForm.get("_nombre").enable();
-          this.myForm.get("_descripcion").enable();
-          this.myForm.get("_codigo").enable();
-          this.myForm.get("_tipoProducto").enable();
-        }
-      })
-      .catch((error) => console.log(error));
-  }
-
-  eliminarConfiguracionProducto(producto) {
-    sweetalert({
-      title: "Advertencia",
-      text: "¿Está seguro que desea eliminar?",
-      icon: "warning",
-      buttons: ["Cancelar", "Ok"],
-      dangerMode: true,
-    }).then((willDelete) => {
-      if (willDelete) {
-        this.inventarioService
-          .eliminarConfiguracionProducto(
-            producto.IdConfigurarProducto,
-            producto.Producto.IdProducto,
-            
-          )
-          .then((ok) => {
-            this.consultarProductos();
-          })
-          .catch((error) => console.log(error));
-      }
-    });
-  }
-
-  seleccionarProductoSiExiste(producto) {
-    this.myForm.get("_nombre").disable();
-    this.myForm.get("_descripcion").disable();
-    this.myForm.get("_tipoProducto").disable();
-    this.myForm.get("_idProducto").setValue(producto.idProducto);
-    this.myForm.get("_productoExistente").setValue(producto.nombre);
-    this.myForm.get("_tipoProducto").setValue(producto.idTipoProducto);
-    this.myForm.get("_descripcion").setValue(producto.descripcion);
-    this.myForm.get("_codigo").setValue(producto.codigo);
+  async eliminarConfiguracionProducto(idConfigurarProducto, idProducto) {
+    var respuesta = await this.inventarioService.eliminarConfiguracionProducto(
+      idConfigurarProducto,
+      idProducto
+    );
+    if (respuesta["codigo"] == "200") {
+      this.openSnackBar("Se eliminó correctamente");
+      var productos = this.productos.data;
+      var producto = productos.filter(
+        (item) => item["IdConfigurarProducto"] == idConfigurarProducto
+      );
+      var index = productos.indexOf(producto[0]);
+      productos.splice(index, 1);
+      this.productos.data = productos;
+    }
   }
 
   ngOnInit() {
     this.consultarProductos();
+    this.consultarTipoProductos();
     this.consultarMedidas();
     this.consultarPresentaciones();
   }
 
   tablaProductos = [
     "codigo",
-    "descripcion",
+    "producto",
     "tipoProducto",
+    "presentacion",
+    "contenido",
+    "medida",
+    "descripcion",
     "precio",
+    "iva",
     "acciones",
   ];
-
-  private _filterTable(value: string, arreglo: any[]) {
-    const filterValue = value;
-    if (value == "") {
-      this.productos.data = this.ArrayProductos;
-    } else {
-      this.productos.data = this.ArrayProductos.filter((option) =>
-        (
-          option["Producto"]["Nombre"] +
-          option["Presentacion"]["Descripcion"] +
-          option["Medida"]["Descripcion"]
-        )
-          .trim()
-          .toUpperCase()
-          .includes(filterValue.trim().toUpperCase())
-      );
-    }
-  }
-
-  private _filter(value: string): string[] {
-    try {
-      const filterValue = value.toLowerCase();
-      return this.nombresDeProductos.filter((option) =>
-        option.nombre.toLowerCase().includes(filterValue)
-      );
-    } catch (error) {}
-  }
 }

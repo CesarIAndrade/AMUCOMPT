@@ -80,6 +80,11 @@ export class NavComponent implements OnInit {
     } else if (localStorage.getItem("miCuenta.tipoUsuario") == "3") {
       this.nav_items.push(
         {
+          name: "Personas",
+          icon: "supervisor_account",
+          url: "/personas",
+        },
+        {
           name: "Conf. Productos",
           icon: "settings",
           url: "/configuracion-productos",

@@ -30,7 +30,7 @@ input[type="number"] {
   padding-bottom: 17px;
 }
 
-@media screen and (max-width: 900px) {
+@media screen and (max-width: 990px) {
   .descuento {
     padding-top: 3%;
   }	

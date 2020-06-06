@@ -20,15 +20,16 @@ export class ModalAsignacionConfiguracionProductoComponent implements OnInit {
   ) {}
 
   filterDetalle = "";
-  areaTablaConfiguracionProducto = true;
-  areaTablaStock = true;
-  areaTablaProductoDeUnKit = true;
-  permitirAnadir: boolean;
   nombreKit = "";
   idKit = "";
   cantidad = "";
   idCabeceraFactura = "";
+  areaTablaConfiguracionProducto = true;
+  areaTablaStock = true;
+  areaTablaProductoDeUnKit = true;
   kitCompleto = true;
+  buttonComprarKitCompleto = false;
+  permitirAnadir: boolean;
 
   producto = {
     IdRelacionLogica: "",
@@ -47,7 +48,6 @@ export class ModalAsignacionConfiguracionProductoComponent implements OnInit {
     Porcentaje: "",
     Disponible: "",
   };
-  buttonComprarKitCompleto = false;
 
   // Para la paginacion
   @ViewChild("paginator1", { static: false }) paginator1: MatPaginator;
@@ -57,28 +57,25 @@ export class ModalAsignacionConfiguracionProductoComponent implements OnInit {
   configuracionProductos = new MatTableDataSource<Element[]>();
   listaProductosDeUnKit = new MatTableDataSource<Element[]>();
 
-  consultarConfiguracionProducto() {
-    this.inventarioService
-      .consultarConfiguracionProductoTodos()
-      .then((ok) => {
-        var configuracionProductos = [];
-        ok["respuesta"].map((item) => {
-          var producto = {
-            IdRelacionLogica: item.IdConfigurarProducto,
-            PerteneceKit: "False",
-            IdKit: "",
-            Kit: "",
-            Producto: item.Producto.Nombre,
-            Presentacion: item.Presentacion.Descripcion,
-            ContenidoNeto: item.CantidadMedida,
-            Medida: item.Medida.Descripcion,
-          };
-          configuracionProductos.push(producto);
+  async consultarConfiguracionProducto() {
+    var respuesta = await this.inventarioService.consultarConfiguracionProductoTodos();
+    if (respuesta["codigo"] == "200") {
+      var configuracionProductos: any = [];
+      respuesta["respuesta"].map((item) => {
+        configuracionProductos.push({
+          IdRelacionLogica: item.IdConfigurarProducto,
+          PerteneceKit: "False",
+          IdKit: "",
+          Kit: "",
+          Producto: item.Producto.Nombre,
+          Presentacion: item.Presentacion.Descripcion,
+          ContenidoNeto: item.CantidadMedida,
+          Medida: item.Medida.Descripcion,
         });
-        this.configuracionProductos.data = configuracionProductos;
-        this.configuracionProductos.paginator = this.paginator1;
-      })
-      .catch((error) => console.log(error));
+      });
+      this.configuracionProductos.data = configuracionProductos;
+      this.configuracionProductos.paginator = this.paginator1;
+    }
   }
 
   agregarDetalleParaCompra(producto) {
@@ -103,110 +100,108 @@ export class ModalAsignacionConfiguracionProductoComponent implements OnInit {
     this.producto.Disponible = producto.Disponible;
   }
 
-  consultarStock() {
-    this.inventarioService
-      .consultarStock()
-      .then((ok) => {
-        var listaProductosEnStock = [];
-        ok["respuesta"].map((item) => {
-          var lote = "";
-          var idLote = "";
-          var kit = "";
-          var idKit = "";
-          var fechaExpiracion = "";
-          var nombreProducto = "";
-          var presentacion = "";
-          var contenidoNeto = "";
-          var medida = "";
-          var codigo = "";
-          var porcentaje = "";
-          if (item.AsignarProductoLote.Lote) {
-            lote = item.AsignarProductoLote.Lote.Codigo;
-            idLote = item.AsignarProductoLote.Lote.IdLote;
-            fechaExpiracion = item.AsignarProductoLote.Lote.FechaExpiracion;
-          } else {
-            fechaExpiracion = item.AsignarProductoLote.FechaExpiracion;
-          }
-          if (item.AsignarProductoLote.PerteneceKit != "False") {
-            kit = item.AsignarProductoLote.AsignarProductoKit.Kit.Descripcion;
-            idKit = item.AsignarProductoLote.AsignarProductoKit.Kit.IdKit;
-            nombreProducto =
-              item.AsignarProductoLote.AsignarProductoKit.ListaProductos
-                .Producto.Nombre;
-            contenidoNeto =
-              item.AsignarProductoLote.AsignarProductoKit.ListaProductos
-                .CantidadMedida;
-            medida =
-              item.AsignarProductoLote.AsignarProductoKit.ListaProductos.Medida
-                .Descripcion;
-            codigo =
-              item.AsignarProductoLote.AsignarProductoKit.ListaProductos.Codigo;
-            porcentaje =
-              item.AsignarProductoLote.AsignarProductoKit.Kit
-                .AsignarDescuentoKit.Descuento.Porcentaje;
-            presentacion =
-              item.AsignarProductoLote.AsignarProductoKit.ListaProductos
-                .Presentacion.Descripcion;
-          } else {
-            nombreProducto =
-              item.AsignarProductoLote.ConfigurarProductos.Producto.Nombre;
-            contenidoNeto =
-              item.AsignarProductoLote.ConfigurarProductos.CantidadMedida;
-            medida =
-              item.AsignarProductoLote.ConfigurarProductos.Medida.Descripcion;
-            codigo = item.AsignarProductoLote.ConfigurarProductos.Codigo;
-            porcentaje = "";
-            presentacion =
-              item.AsignarProductoLote.ConfigurarProductos.Presentacion
-                .Descripcion;
-          }
-          var producto = {
-            Codigo: codigo,
-            IdAsignarProductoLote:
-              item.AsignarProductoLote.IdAsignarProductoLote,
-            IdKit: idKit,
-            Kit: kit,
-            IdLote: idLote,
-            Lote: lote,
-            FechaExpiracion: fechaExpiracion,
-            Disponible: item.Cantidad,
-            Producto: nombreProducto,
-            Presentacion: presentacion,
-            ContenidoNeto: contenidoNeto,
-            Medida: medida,
-            Porcentaje: porcentaje,
-            Precio: item.AsignarProductoLote.ValorUnitario,
-          };
-          if (producto.Disponible != 0) {
-            listaProductosEnStock.push(producto);
-          }
-        });
-        this.listaProductosEnStock.data = listaProductosEnStock;
-        this.listaProductosEnStock.paginator = this.paginator2;
-      })
-      .catch((error) => console.log(error));
+  async consultarStock() {
+    var respuesta = await this.inventarioService.consultarStock();
+    var listaProductosEnStock = [];
+    if (respuesta["codigo"] == "200") {
+      respuesta["respuesta"].map((item) => {
+        var lote = "";
+        var idLote = "";
+        var kit = "";
+        var idKit = "";
+        var fechaExpiracion = "";
+        var nombreProducto = "";
+        var presentacion = "";
+        var contenidoNeto = "";
+        var medida = "";
+        var codigo = "";
+        var porcentaje = "";
+        if (item.AsignarProductoLote.Lote) {
+          lote = item.AsignarProductoLote.Lote.Codigo;
+          idLote = item.AsignarProductoLote.Lote.IdLote;
+          fechaExpiracion = item.AsignarProductoLote.Lote.FechaExpiracion;
+        } else {
+          fechaExpiracion = item.AsignarProductoLote.FechaExpiracion;
+        }
+        if (item.AsignarProductoLote.PerteneceKit != "False") {
+          kit = item.AsignarProductoLote.AsignarProductoKit.Kit.Descripcion;
+          idKit = item.AsignarProductoLote.AsignarProductoKit.Kit.IdKit;
+          nombreProducto =
+            item.AsignarProductoLote.AsignarProductoKit.ListaProductos.Producto
+              .Nombre;
+          contenidoNeto =
+            item.AsignarProductoLote.AsignarProductoKit.ListaProductos
+              .CantidadMedida;
+          medida =
+            item.AsignarProductoLote.AsignarProductoKit.ListaProductos.Medida
+              .Descripcion;
+          codigo =
+            item.AsignarProductoLote.AsignarProductoKit.ListaProductos.Codigo;
+          porcentaje =
+            item.AsignarProductoLote.AsignarProductoKit.Kit.AsignarDescuentoKit
+              .Descuento.Porcentaje;
+          presentacion =
+            item.AsignarProductoLote.AsignarProductoKit.ListaProductos
+              .Presentacion.Descripcion;
+        } else {
+          nombreProducto =
+            item.AsignarProductoLote.ConfigurarProductos.Producto.Nombre;
+          contenidoNeto =
+            item.AsignarProductoLote.ConfigurarProductos.CantidadMedida;
+          medida =
+            item.AsignarProductoLote.ConfigurarProductos.Medida.Descripcion;
+          codigo = item.AsignarProductoLote.ConfigurarProductos.Codigo;
+          porcentaje = "";
+          presentacion =
+            item.AsignarProductoLote.ConfigurarProductos.Presentacion
+              .Descripcion;
+        }
+        var producto = {
+          Codigo: codigo,
+          IdAsignarProductoLote: item.AsignarProductoLote.IdAsignarProductoLote,
+          IdKit: idKit,
+          Kit: kit,
+          IdLote: idLote,
+          Lote: lote,
+          FechaExpiracion: fechaExpiracion,
+          Disponible: item.Cantidad,
+          Producto: nombreProducto,
+          Presentacion: presentacion,
+          ContenidoNeto: contenidoNeto,
+          Medida: medida,
+          Porcentaje: porcentaje,
+          Precio: item.AsignarProductoLote.ValorUnitario,
+        };
+        if (producto.Disponible != 0) {
+          listaProductosEnStock.push(producto);
+        } 
+      });
+      this.listaProductosEnStock.data = listaProductosEnStock;
+      this.listaProductosEnStock.paginator = this.paginator2;
+    }
   }
 
-  cerrarModal() {
+  async cerrarModal() {
     this.buttonComprarKitCompleto = true;
-    this.ventaService
-      .ingresoDetalleVentaPorKit(
-        this.idCabeceraFactura,
-        this.idKit,
-        this.cantidad
-      )
-      .then((ok) => {
-        if (ok["respuesta"] == "true") {
-          this.modalAsignacionConfiguracionProducto.closeAll();
-        }
-      })
-      .catch((error) => console.log(error));
+    var respuesta = await this.ventaService.ingresoDetalleVentaPorKit(
+      this.idCabeceraFactura,
+      this.idKit,
+      this.cantidad
+    );
+    console.log(respuesta);
+
+    // .then((ok) => {
+    //   if (ok["respuesta"] == "true") {
+    //     this.modalAsignacionConfiguracionProducto.closeAll();
+    //   }
+    // })
+    // .catch((error) => console.log(error));
   }
 
   siElKitVieneDeCompra(listaProductos) {
     var configuracionProductos = [];
     listaProductos.map((item) => {
-      var producto = {
+      configuracionProductos.push({
         IdRelacionLogica: item.IdAsignarProductoKit,
         PerteneceKit: "True",
         IdKit: item.Kit.IdKit,
@@ -215,8 +210,7 @@ export class ModalAsignacionConfiguracionProductoComponent implements OnInit {
         Presentacion: item.ListaProductos.Presentacion.Descripcion,
         ContenidoNeto: item.ListaProductos.CantidadMedida,
         Medida: item.ListaProductos.Medida.Descripcion,
-      };
-      configuracionProductos.push(producto);
+      });
     });
     this.configuracionProductos.data = configuracionProductos;
     this.configuracionProductos.paginator = this.paginator1;
