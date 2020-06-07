@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef } from "@angular/core";
+import { Component, OnInit, ViewChild, EventEmitter, Input, Output } from "@angular/core";
 import {
   FormGroup,
   Validators,
@@ -62,6 +62,8 @@ export class PersonaComponent implements OnInit {
     });
   }
 
+  @Input() llamadaModal = "false";
+
   get _correo() {
     return this.myForm.get("_correo");
   }
@@ -100,7 +102,12 @@ export class PersonaComponent implements OnInit {
       .consultarPersonas()
       .then((ok) => {
         this.personas.data = [];
-        this.personas.data = ok["respuesta"];
+        var personas: any = [];
+        ok["respuesta"].map((persona) => {
+          persona.Acciones = this.llamadaModal;
+          personas.push(persona);
+        });
+        this.personas.data = personas;
         this.personas.paginator = this.paginator;
       })
       .catch((error) => console.log(error));
@@ -560,6 +567,11 @@ export class PersonaComponent implements OnInit {
         }
       })
       .catch((error) => console.log(error));
+  }
+
+  @Output() obtenerPersona = new EventEmitter();
+  seleccionarPersona(persona) {
+    this.obtenerPersona.emit(persona);
   }
 
   ngOnInit() {

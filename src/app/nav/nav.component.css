@@ -46,3 +46,13 @@ a.active {
   text-shadow: 1px 1px #f8f9fa;  
   color: #343a40;
 }
+
+@media screen and (max-width: 990px) {
+  .example-spacer {
+    flex: 1 1 auto;
+  }
+}
+
+.example-icon {
+  padding: 0 14px;
+} 

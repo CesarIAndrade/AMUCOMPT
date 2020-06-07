@@ -48,14 +48,12 @@ export class UsuarioComponent implements OnInit {
 
   personas: any[] = [];
 
-  consultarUsuarios() {
-    this.usuarioService
-      .consultarUsuarios()
-      .then((ok) => {
-        this.usuarios.data = ok["respuesta"];
-        this.usuarios.paginator = this.paginator;
-      })
-      .catch((error) => console.log(error));
+  async consultarUsuarios() {
+    var usuarios = await this.usuarioService.consultarUsuarios();
+    if (usuarios["codigo"] == "200") {
+      this.usuarios.data = usuarios["respuesta"];
+      this.usuarios.paginator = this.paginator;
+    }
   }
 
   mostrarContrasena() {
@@ -64,15 +62,6 @@ export class UsuarioComponent implements OnInit {
     } else {
       this.inputType = "password";
     }
-  }
-
-  consultarPersonas() {
-    this.personaService
-      .consultarPersonas()
-      .then((ok) => {
-        this.personas = ok["respuesta"];
-      })
-      .catch((error) => console.log(error));
   }
 
   validacionFormulario() {
@@ -85,14 +74,13 @@ export class UsuarioComponent implements OnInit {
     }
   }
 
-  crearUsuario() {
-    var datosUsuario = {
-      idPersona: this.myForm.get("_idPersona").value,
-      usuario: this.myForm.get("_valorUsuario").value,
-      contrasena: this.myForm.get("_contrasena").value,
-      token: localStorage.getItem("miCuenta.postToken"),
-    };
-    this.usuarioService.crearUsuario(datosUsuario);
+  async crearUsuario() {
+    var respuesta = await this.usuarioService.crearUsuario(
+      this.myForm.get("_idPersona").value,
+      this.myForm.get("_valorUsuario").value,
+      this.myForm.get("_contrasena").value
+    );
+    console.log(respuesta);
   }
 
   actualizarUsuario() {

@@ -48,12 +48,16 @@
   </mat-sidenav>
   <mat-sidenav-content>
     <mat-toolbar style="background-color: white;">
-      <a (click)="drawer.toggle()" *ngIf="isHandset$ | async">
-        <i class="fa fa-bars mr-3"></i>
-      </a>
-      <span class="drawer_title">
-        {{ route }}
-      </span>
+      <mat-toolbar-row>
+        <mat-icon
+          (click)="drawer.toggle()"
+          *ngIf="isHandset$ | async"
+          class="example-icon"
+          >apps
+        </mat-icon>
+        <span class="example-spacer"></span>
+        <span class="drawer_title">{{ route }}</span>
+      </mat-toolbar-row>
     </mat-toolbar>
     <router-outlet></router-outlet>
   </mat-sidenav-content>

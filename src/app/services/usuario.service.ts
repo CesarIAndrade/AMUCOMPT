@@ -208,11 +208,15 @@ export class UsuarioService {
     });
   }
 
-  crearUsuario(datosUsuario) {
+  crearUsuario(
+    idPersona: string,
+    usuario: string,
+    contrasena: string
+  ) {
     const body = new HttpParams()
-      .set("IdPersona", datosUsuario.idPersona)
-      .set("UsuarioLogin", datosUsuario.usuario)
-      .set("Contrasena", datosUsuario.contrasena)
+      .set("IdPersona", idPersona)
+      .set("UsuarioLogin", usuario)
+      .set("Contrasena", contrasena)
       .set("encriptada", localStorage.getItem("miCuenta.postToken"));
     return new Promise((resolve, reject) => {
       this.http

@@ -513,10 +513,11 @@ export class InventarioService {
     });
   }
 
-  crearKit(kit: string, codigo: string) {
+  crearKit(kit: string, codigo: string, descuento: string) {
     const body = new HttpParams()
       .set("Descripcion", kit)
       .set("Codigo", codigo)
+      .set("AsignarDescuentoKit.Descuento.Porcentaje", descuento)
       .set("encriptada", localStorage.getItem("miCuenta.postToken"));
     return new Promise((resolve, reject) => {
       this.http
@@ -573,57 +574,6 @@ export class InventarioService {
             "application/x-www-form-urlencoded"
           ),
         })
-        .subscribe(
-          (res) => {
-            resolve(res);
-          },
-          (err) => {
-            reject(err);
-          }
-        );
-    });
-  }
-
-  crearDescuentoKit(descuento: string) {
-    const body = new HttpParams()
-      .set("Porcentaje", descuento)
-      .set("encriptada", localStorage.getItem("miCuenta.postToken"));
-    return new Promise((resolve, reject) => {
-      this.http
-        .post(apiUrl + "Inventario/IngresoDescuento", body.toString(), {
-          headers: new HttpHeaders().set(
-            "Content-Type",
-            "application/x-www-form-urlencoded"
-          ),
-        })
-        .subscribe(
-          (res) => {
-            resolve(res);
-          },
-          (err) => {
-            reject(err);
-          }
-        );
-    });
-  }
-
-  asignarDescuentoKit(idKit: string, idDescuento: string) {
-    const body = new HttpParams()
-      .set("IdKit", idKit)
-      .set("IdDescuento", idDescuento)
-      .set("encriptada", localStorage.getItem("miCuenta.postToken"));
-    return new Promise((resolve, reject) => {
-      this.http
-        .post(
-          apiUrl + "Inventario/IngresoAsignarDescuentoKit",
-          body.toString(),
-          {
-            headers: new HttpHeaders().set(
-              "Content-Type",
-              "application/x-www-form-urlencoded"
-            ),
-          }
-        )
         .subscribe(
           (res) => {
             resolve(res);

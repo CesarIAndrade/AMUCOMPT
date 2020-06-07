@@ -45,6 +45,7 @@ export class LoginComponent implements OnInit {
         this.myForm.get("_usuario").value,
         this.myForm.get("_contrasena").value
       );
+      console.log(login);
       if (login["codigo"] == "200") {
         this.tipoUsuarios = login["respuesta"]["ListaTipoUsuario"];
         this.seleccionarTipoUsuario = false;

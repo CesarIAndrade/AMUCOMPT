@@ -18,7 +18,7 @@ import { InventarioService } from "src/app/services/inventario.service";
 import { FacturaService } from "src/app/services/factura.service";
 import { VentaService } from "src/app/services/venta.service";
 import { DialogAlertComponent } from "../dialog-alert/dialog-alert.component";
-import { ModalPersonaComponent } from '../modal-persona/modal-persona.component';
+import { ModalPersonaComponent } from "../modal-persona/modal-persona.component";
 
 @Component({
   selector: "app-venta",
@@ -152,9 +152,9 @@ export class VentaComponent implements OnInit {
       localStorage.getItem("miCuenta.ventas")
     );
     if (respuesta["codigo"] == "200") {
+      this.consultarFacturas();
       this.limpiarCampos();
       this.detalleVenta.data = [];
-      this.consultarFacturas();
       this.myForm
         .get("_idCabecera")
         .setValue(respuesta["respuesta"].IdCabeceraFactura);
@@ -273,43 +273,21 @@ export class VentaComponent implements OnInit {
   }
 
   seleccionarPersona() {
-    // let dialogRef = this.modalAsignacionUsuarioPersona.open(
-    //   ModalAsignacionUsuarioPersonaComponent,
-    //   {
-    //     width: "700px",
-    //     height: "auto",
-    //     data: "todos",
-    //   }
-    // );
-    // dialogRef.afterClosed().subscribe((result) => {
-    //   if (result != null) {
-    //     this.myForm.get("_cedula").setValue(result.cedula);
-    //     this.myForm.get("_idPersona").setValue(result.idPersona);
-    //     var nombres = result.nombres + " " + result.apellidos;
-    //     this.myForm.get("_nombres").setValue(nombres);
-    //   }
-    // });
-
-
-
-
-
     let dialogRef = this.modalAsignacionUsuarioPersona.open(
       ModalPersonaComponent,
       {
         width: "auto",
         height: "auto",
-        // data: "todos",
       }
     );
-    // dialogRef.afterClosed().subscribe((result) => {
-    //   if (result != null) {
-    //     this.myForm.get("_cedula").setValue(result.cedula);
-    //     this.myForm.get("_idPersona").setValue(result.idPersona);
-    //     var nombres = result.nombres + " " + result.apellidos;
-    //     this.myForm.get("_nombres").setValue(nombres);
-    //   }
-    // });
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result != null) {
+        this.myForm.get("_cedula").setValue(result.cedula);
+        this.myForm.get("_idPersona").setValue(result.idPersona);
+        var nombres = result.nombres + " " + result.apellidos;
+        this.myForm.get("_nombres").setValue(nombres);
+      }
+    });
   }
 
   selecionarTipoPago(tipoPago) {
@@ -331,7 +309,7 @@ export class VentaComponent implements OnInit {
     this.myForm.get("_fechaFinalCredito").setValue("");
   }
 
-  async crearDetalleVenta() {    
+  async crearDetalleVenta() {
     if (this.myForm.valid) {
       var respuesta = await this.ventaService.crearDetalleFactura(
         this.myForm.get("_idCabecera").value,
@@ -339,7 +317,9 @@ export class VentaComponent implements OnInit {
         this.myForm.get("_checkedDescuento").value ? "1" : "0",
         "0",
         String(this.myForm.get("_cantidad").value),
-        this.myForm.get("_descuento").value == null ? "" : this.myForm.get("_descuento").value
+        this.myForm.get("_descuento").value == null
+          ? ""
+          : this.myForm.get("_descuento").value
       );
       if (respuesta["codigo"] == "200") {
         this.buttonRealizarVenta = false;
@@ -375,7 +355,6 @@ export class VentaComponent implements OnInit {
       this.totalIva = respuesta["respuesta"].TotalIva;
       this.totalFactura = respuesta["respuesta"].Total;
       respuesta["respuesta"].DetalleVenta.map((item) => {
-        console.log(item);
         if (item.PerteneceKitCompleto) {
           perteneceKitCompleto = true;
         } else {
@@ -455,10 +434,11 @@ export class VentaComponent implements OnInit {
         detalleFactura.IdCabeceraFactura,
         detalleFactura.IdKit
       );
-      console.log(respuesta);
       if (respuesta["codigo"] == "200") {
         this.consultarDetalleFactura();
       } else if (respuesta["codigo"] == "201") {
+        this.openSnackBar("Factura eliminada");
+        this.consultarFacturas();
         this.myForm.reset();
         this.detalleVenta.data = [];
       }
@@ -466,10 +446,11 @@ export class VentaComponent implements OnInit {
       respuesta = await this.ventaService.quitarDetalleFactura(
         detalleFactura.IdDetalleVenta
       );
-      console.log(respuesta);
       if (respuesta["codigo"] == "200") {
         this.consultarDetalleFactura();
       } else if (respuesta["codigo"] == "201") {
+        this.openSnackBar("Factura eliminada");
+        this.consultarFacturas();
         this.myForm.reset();
         this.detalleVenta.data = [];
       }
@@ -568,11 +549,11 @@ export class VentaComponent implements OnInit {
       idAsignarComunidadFactura
     );
     if (respuesta["codigo"] == "200") {
-      var comunidad = this.comunidades.filter(
+      var comunidad = this.comunidades.find(
         (comunidad) =>
           comunidad["idAsignarComunidadFactura"] == idAsignarComunidadFactura
       );
-      var index = this.comunidades.indexOf(comunidad[0]);
+      var index = this.comunidades.indexOf(comunidad);
       this.comunidades.splice(index, 1);
     }
   }

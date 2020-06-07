@@ -82,7 +82,6 @@ export class ConfiguracionProductoComponent implements OnInit {
 
   async consultarTipoProductos() {
     var respuesta = await this.inventarioService.consultarTipoProductos();
-    console.log(respuesta);
     if (respuesta["codigo"] == "200") {
       var tipoProductos: any = [];
       respuesta["respuesta"].map((item) => {
@@ -103,7 +102,6 @@ export class ConfiguracionProductoComponent implements OnInit {
     var tipoProducto = await this.inventarioService.crearTipoProducto(
       this.myForm.get("_campo").value
     );
-    console.log(tipoProducto);
     if (tipoProducto["codigo"] == "200") {
       this.openSnackBar("Se ingresó correctamente");
       var tipoProductos: any = this.dataSource.data;
@@ -129,11 +127,10 @@ export class ConfiguracionProductoComponent implements OnInit {
     var respuesta = await this.inventarioService.eliminarTipoProducto(
       idTipoProducto
     );
-    console.log(respuesta);
     if (respuesta["codigo"] == "200") {
       this.openSnackBar("Se eliminó correctamente");
       var tipoProductos: any = this.dataSource.data;
-      var tipoProducto = tipoProductos.filter(
+      var tipoProducto = tipoProductos.find(
         (tipoProducto) => tipoProducto["_id"] == idTipoProducto
       );
       var index = tipoProductos.indexOf(tipoProducto);
@@ -198,10 +195,10 @@ export class ConfiguracionProductoComponent implements OnInit {
     if (respuesta["codigo"] == "200") {
       this.openSnackBar("Se eliminó correctamente");
       var presentaciones: any = this.dataSource.data;
-      var presentacion = presentaciones.filter(
+      var presentacion = presentaciones.find(
         (presentacion) => presentacion["_id"] == idPresentacion
       );
-      var index = presentaciones.indexOf(presentacion[0]);
+      var index = presentaciones.indexOf(presentacion);
       presentaciones.splice(index, 1);
       this.dataSource.data = presentaciones;
     } else if (respuesta["codigo"] == "400") {
@@ -261,8 +258,8 @@ export class ConfiguracionProductoComponent implements OnInit {
     if (respuesta["codigo"] == "200") {
       this.openSnackBar("Se eliminó correctamente");
       var medidas: any = this.dataSource.data;
-      var medida = medidas.filter((medida) => medida["_id"] == idMedida);
-      var index = medidas.indexOf(medida[0]);
+      var medida = medidas.find((medida) => medida["_id"] == idMedida);
+      var index = medidas.indexOf(medida);
       medidas.splice(index, 1);
       this.dataSource.data = medidas;
     } else if (respuesta["codigo"] == "400") {
@@ -293,11 +290,30 @@ export class ConfiguracionProductoComponent implements OnInit {
   }
 
   async crearKit() {
-    var respuesta = await this.inventarioService.crearKit(
+    var kit = await this.inventarioService.crearKit(
       this.myForm.get("_campo").value,
-      this.myForm.get("_codigo").value
+      this.myForm.get("_codigo").value,
+      this.myForm.get("_descuento").value
     );
-    console.log(respuesta);
+    if(kit["codigo"] == "200") {
+      this.openSnackBar("Se ingresó correctamente");
+      var kits: any = this.dataSource.data;
+      kits.push({
+        _id: kit["respuesta"].IdKit,
+        descripcion: kit["respuesta"].Descripcion,
+        utilizado: kit["respuesta"].KitUtilizado,
+        codigo: kit["respuesta"].Codigo,
+        descuento: kit["respuesta"].AsignarDescuentoKit.Descuento.Porcentaje,
+      });
+      this.dataSource.data = kits;
+      this.limpiarCampos();
+    } else if (kit["codigo"] == "400") {
+      this.openDialog("Inténtalo de nuevo");
+    } else if (kit["codigo"] == "418") {
+      this.openDialog(kit["mensaje"]);
+    } else if (kit["codigo"] == "500") {
+      this.openDialog("Problemas con el servidor");
+    }
   }
 
   private _filter(value: string): string[] {
@@ -323,47 +339,26 @@ export class ConfiguracionProductoComponent implements OnInit {
     }
   }
 
-  async crearDescuento() {
-    var respuesta = await this.inventarioService.crearDescuentoKit(
-      this.myForm.get("_descuento").value
-    );
-    console.log(respuesta);
-
-    // .then((ok) => {
-    //   if (typeof ok["respuesta"] == "string") {
-    //     this.myForm.get("_idDescuento").setValue(ok["respuesta"]);
-    //     this.asignarDescuentoKit();
-    //   } else {
-    //     this.myForm.get("_idDescuento").setValue(ok["respuesta"].IdDescuento);
-    //     this.asignarDescuentoKit();
-    //   }
-    // })
-    // .catch((error) => console.log(error));
-  }
-
-  async asignarDescuentoKit() {
-    var respuesta = await this.inventarioService.asignarDescuentoKit(
-      this.myForm.get("_idKit").value,
-      this.myForm.get("_idDescuento").value
-    );
-    console.log(respuesta);
-
-    // .then((ok) => {
-    //   this.myForm.get("_campo").reset();
-    //   this.myForm.get("_codigo").reset();
-    //   this.myForm.get("_descuento").reset();
-    //   this.myForm.setErrors({ invalid: true });
-    // })
-    // .catch((error) => console.log(error))
-    // .finally(() => {
-    //   this.consultarKits();
-    //   this.consultarDescuentos();
-    // });
+  seleccionarDescuentoSiExiste(descuento) {
+    this.myForm.get("_descuento").setValue(descuento);
   }
 
   async eliminarKit(idKit) {
     var respuesta = await this.inventarioService.eliminarKit(idKit);
-    console.log(respuesta);
+    if (respuesta["codigo"] == "200") {
+      this.openSnackBar("Se eliminó correctamente");
+      var kits: any = this.dataSource.data;
+      var kit = kits.find(kit => kit["_id"] == idKit);
+      var index = kits.indexOf(kit)
+      kits.splice(index, 1);
+      this.dataSource.data = kits;
+    } else if (respuesta["codigo"] == "400") {
+      this.openDialog("Inténtalo de nuevo");
+    } else if (respuesta["codigo"] == "418") {
+      this.openDialog(respuesta["mensaje"]);
+    } else if (respuesta["codigo"] == "500") {
+      this.openDialog("Problemas con el servidor");
+    }
   }
 
   actualizarOpcion(titulo, suffix, encabezadoTabla, tabla) {
@@ -424,6 +419,7 @@ export class ConfiguracionProductoComponent implements OnInit {
       this.soloParaKits = true;
       this.clearValidators();
     }
+    this.filter = "";
     this.mostrarForm = false;
     this.myForm.reset();
     this.myForm.get("_idCampo").setValue(opcion.value);
@@ -454,6 +450,12 @@ export class ConfiguracionProductoComponent implements OnInit {
     } else if (this.myForm.get("_idCampo").value === "4") {
       this.eliminarKit(_id);
     }
+  }
+
+  limpiarCampos() {
+    this.myForm.get("_codigo").reset();
+    this.myForm.get("_descuento").reset();
+    this.myForm.get("_campo").reset();
   }
 
   ngOnInit() {}

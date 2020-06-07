@@ -151,6 +151,7 @@
           <input
             matInput
             [(ngModel)]="filterProducto"
+            [ngModelOptions]="{standalone: true}"
             type="text"
             placeholder="Buscar Producto"
           />
@@ -158,10 +159,12 @@
             <mat-icon>search</mat-icon>
           </button>
         </mat-form-field>
-        <div class="tablaProductos table_all">
+        <div class="table_all">
           <table
             mat-table
-            [dataSource]="productos | filter: filterProducto:'Nombre'"
+            [dataSource]="
+              productos | filter: filterProducto:'Producto':'Codigo'
+            "
           >
             <ng-container matColumnDef="codigo">
               <th mat-header-cell *matHeaderCellDef>Código</th>
@@ -205,15 +208,11 @@
             </ng-container>
             <ng-container matColumnDef="precio">
               <th mat-header-cell *matHeaderCellDef>Precio</th>
-              <td mat-cell *matCellDef="let element">
-                ${{ element.Precio }}
-              </td>
+              <td mat-cell *matCellDef="let element">${{ element.Precio }}</td>
             </ng-container>
             <ng-container matColumnDef="iva">
               <th mat-header-cell *matHeaderCellDef>IVA</th>
-              <td mat-cell *matCellDef="let element">
-                {{ element.Iva }}%
-              </td>
+              <td mat-cell *matCellDef="let element">{{ element.Iva }}%</td>
             </ng-container>
             <ng-container matColumnDef="acciones">
               <th colspan="2" mat-header-cell *matHeaderCellDef>Acciones</th>
@@ -224,8 +223,7 @@
                   <td mat-cell>
                     <button
                       mat-button
-                      tooltip="Modificar"
-                      placement="top"
+                      type="button"
                       class="btn-outline-primary"
                       (click)="mostrarProducto(element)"
                     >
@@ -235,8 +233,7 @@
                   <td mat-cell>
                     <button
                       mat-button
-                      tooltip="Eliminar"
-                      placement="top"
+                      type="button"
                       class="btn-outline-danger"
                       (click)="
                         eliminarConfiguracionProducto(
@@ -255,8 +252,7 @@
                   <td mat-cell>
                     <button
                       mat-button
-                      tooltip="Modificar"
-                      placement="top"
+                      type="button"
                       class="btn-outline-primary"
                       (click)="mostrarProducto(element)"
                     >

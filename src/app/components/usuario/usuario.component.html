@@ -1,115 +1,210 @@
-<br>
 <div class="container">
-  <div class="row">
-    <div class="col-lg-4" style="float: left;">
-      <div class="card-body">
-        <h5 style="text-align: center;">{{ nuevoUsuario }}</h5>
-        <form [formGroup]="myForm" (ngSubmit)="validacionFormulario()" novalidate>
+  <div class="card-body">
+    <form [formGroup]="myForm" (ngSubmit)="validacionFormulario()" novalidate>
+      <div class="row">
+        <div class="col-lg-4">
+          <h5 style="text-align: center;">{{ nuevoUsuario }}</h5>
           <div class="row">
             <div class="col-lg-9 col-md-10">
               <mat-form-field class="example-full-width">
-                <input matInput formControlName="_cedula" type="text" placeholder="Cédula" readonly aria-disabled="true">
+                <input
+                  matInput
+                  formControlName="_cedula"
+                  type="text"
+                  placeholder="Cédula"
+                  readonly
+                  aria-disabled="true"
+                />
                 <button disabled mat-button matPrefix mat-icon-button>
                   <mat-icon>*</mat-icon>
                 </button>
               </mat-form-field>
             </div>
             <div class="col-lg-3 col-md-2">
-              <button mat-button class="mt-2 btn-outline-warning" type="button" (click)="abrirModalAsignacionUsuarioPersona()">
+              <button
+                mat-button
+                class="mt-2 btn-outline-warning"
+                type="button"
+                (click)="abrirModalAsignacionUsuarioPersona()"
+              >
                 <mat-icon>person_add</mat-icon>
               </button>
             </div>
           </div>
           <mat-form-field class="example-full-width">
-            <input matInput formControlName="_nombres" placeholder="Nombres" type="text" readonly>
+            <input
+              matInput
+              formControlName="_nombres"
+              placeholder="Nombres"
+              type="text"
+              readonly
+            />
             <button disabled mat-button matPrefix mat-icon-button>
               <mat-icon>*</mat-icon>
             </button>
           </mat-form-field>
           <mat-form-field class="example-full-width">
-            <input matInput formControlName="_apellidos" placeholder="Apellidos" type="text" readonly>
+            <input
+              matInput
+              formControlName="_apellidos"
+              placeholder="Apellidos"
+              type="text"
+              readonly
+            />
             <button disabled mat-button matPrefix mat-icon-button>
               <mat-icon>*</mat-icon>
             </button>
           </mat-form-field>
           <mat-form-field class="example-full-width">
-            <input matInput formControlName="_valorUsuario" type="text" placeholder="Ingrese Usuario">
+            <input
+              matInput
+              formControlName="_valorUsuario"
+              type="text"
+              placeholder="Ingrese Usuario"
+            />
             <button disabled mat-button matPrefix mat-icon-button>
               <mat-icon>*</mat-icon>
             </button>
           </mat-form-field>
           <mat-form-field class="example-full-width">
-            <input matInput formControlName="_contrasena" type="password" [type]="inputType" placeholder="Ingrese Contraseña">
+            <input
+              matInput
+              formControlName="_contrasena"
+              type="password"
+              [type]="inputType"
+              placeholder="Ingrese Contraseña"
+            />
             <button disabled mat-button matPrefix mat-icon-button>
               <mat-icon>*</mat-icon>
             </button>
-            <button mat-button matSuffix mat-icon-button (click)="mostrarContrasena()">
+            <button
+              mat-button
+              matSuffix
+              mat-icon-button
+              (click)="mostrarContrasena()"
+            >
               <mat-icon>visibility</mat-icon>
             </button>
           </mat-form-field>
           <div>
-            <button mat-button class="bg-success text-white btn-block mt-2" type="submit" [disabled]="myForm.invalid" [value]="botonInsertar">Guardar</button>
+            <button
+              mat-button
+              class="bg-success text-white btn-block mt-2"
+              type="submit"
+              [disabled]="myForm.invalid"
+              [value]="botonInsertar"
+            >
+              Guardar
+            </button>
           </div>
-        </form>
-      </div>
-    </div>
-    <div class="col-lg-8">
-      <div>
-        <h5 style="text-align: center;">Lista Usuarios</h5>
-        <mat-form-field class="example-full-width">
-          <input matInput [(ngModel)]="filterUsuario" type="text" placeholder="Buscar Usuario">
-          <button mat-button matPrefix mat-icon-button>
-            <mat-icon>search</mat-icon>
-          </button>
-        </mat-form-field>
-        <div class="tablaUsuarios table_all"> 
-          <table mat-table [dataSource]="usuarios |
-                        filter:filterUsuario:'PrimerNombre':'SegundoNombre':'ApellidoPaterno':'ApellidoMaterno':'UsuarioLogin'">
-            <ng-container matColumnDef="usuario">
-              <th mat-header-cell *matHeaderCellDef> Usuario </th>
-              <td mat-cell *matCellDef="let element"> {{element.UsuarioLogin}} </td>
-            </ng-container>
-            <ng-container matColumnDef="nombres">
-              <th mat-header-cell *matHeaderCellDef> Nombres </th>
-              <td mat-cell *matCellDef="let element"> {{ element.PrimerNombre }}
-                {{ element.SegundoNombre }} {{ element.ApellidoPaterno }}
-                {{ element.ApellidoMaterno }} </td>
-            </ng-container>
-            <ng-container matColumnDef="acciones">
-              <th colspan="3" mat-header-cell *matHeaderCellDef> Acciones </th>
-              <ng-container *matCellDef="let element">
-                <ng-container *ngIf="element.EstadoUsuario">
-                  <td mat-cell>
-                    <button mat-button class="btn-outline-warning" tooltip="Asignar Roles" placement="top" (click)="abrirModalAsignacionUsuarioTiposUsuario(element)">
-                      <mat-icon>person</mat-icon>
-                    </button>
-                  </td>
-                  <td mat-cell>
-                    <button mat-button class="btn-outline-primary" tooltip="Modificar" placement="top" (click)="setUsuario(element)">
-                      <mat-icon>edit</mat-icon>
-                    </button>
-                  </td>
-                  <td mat-cell>
-                    <button mat-button class="btn-outline-danger" tooltip="Deshabilitar" placement="top" (click)="eliminarUsuario(element)">
-                      <mat-icon>remove</mat-icon>
-                    </button>
-                  </td>
-                </ng-container>
-                <ng-container *ngIf="!element.EstadoUsuario">
-                  <td mat-cell colspan="3">
-                    <button mat-button tooltip="Habilitar" placement="top" (click)="habilitarUsuario(element)" style="justify-content: center;" class="btn-outline-success btn-block">
-                      <mat-icon>how_to_reg</mat-icon>
-                    </button>
-                  </td>
+        </div>
+        <div class="col-lg-8">
+          <h5 style="text-align: center;">Lista Usuarios</h5>
+          <mat-form-field class="example-full-width">
+            <input
+              matInput
+              [(ngModel)]="filterUsuario"
+              [ngModelOptions]="{standalone: true}"
+              type="text"
+              placeholder="Buscar Usuario"
+            />
+            <button mat-button matPrefix mat-icon-button>
+              <mat-icon>search</mat-icon>
+            </button>
+          </mat-form-field>
+          <div class="table_all">
+            <table
+              mat-table
+              [dataSource]="
+                usuarios
+                  | filter
+                    : filterUsuario
+                    : 'PrimerNombre'
+                    : 'SegundoNombre'
+                    : 'ApellidoPaterno'
+                    : 'ApellidoMaterno'
+                    : 'UsuarioLogin'
+              "
+            > 
+              <ng-container matColumnDef="usuario">
+                <th mat-header-cell *matHeaderCellDef>Usuario</th>
+                <td mat-cell *matCellDef="let element">
+                  {{ element.UsuarioLogin }}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="nombres">
+                <th mat-header-cell *matHeaderCellDef>Nombres</th>
+                <td mat-cell *matCellDef="let element">
+                  {{ element.PrimerNombre }} {{ element.SegundoNombre }}
+                  {{ element.ApellidoPaterno }} {{ element.ApellidoMaterno }}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="acciones">
+                <th colspan="3" mat-header-cell *matHeaderCellDef>Acciones</th>
+                <ng-container *matCellDef="let element">
+                  <ng-container *ngIf="element.EstadoUsuario">
+                    <td mat-cell>
+                      <button
+                        mat-button
+                        class="btn-outline-warning"
+                        type="button"
+                        (click)="
+                          abrirModalAsignacionUsuarioTiposUsuario(element)
+                        "
+                      >
+                        <mat-icon>person</mat-icon>
+                      </button>
+                    </td>
+                    <td mat-cell>
+                      <button
+                        mat-button
+                        class="btn-outline-primary"
+                        type="button"
+                        (click)="setUsuario(element)"
+                      >
+                        <mat-icon>edit</mat-icon>
+                      </button>
+                    </td>
+                    <td mat-cell>
+                      <button
+                        mat-button
+                        class="btn-outline-danger"
+                        type="button"
+                        (click)="eliminarUsuario(element)"
+                      >
+                        <mat-icon>remove</mat-icon>
+                      </button>
+                    </td>
+                  </ng-container>
+                  <ng-container *ngIf="!element.EstadoUsuario">
+                    <td mat-cell colspan="3">
+                      <button
+                        mat-button
+                        type="button"
+                        (click)="habilitarUsuario(element)"
+                        style="justify-content: center;"
+                        class="btn-outline-success btn-block"
+                      >
+                        <mat-icon>how_to_reg</mat-icon>
+                      </button>
+                    </td>
+                  </ng-container>
                 </ng-container>
               </ng-container>
-            </ng-container>
-            <tr mat-header-row *matHeaderRowDef="tablaUsuarios; sticky: true"></tr>
-            <tr mat-row *matRowDef="let row; columns: tablaUsuarios;"></tr>
-          </table>
-          <mat-paginator #paginator [pageSizeOptions]="[5]" showFirstLastButtons></mat-paginator>
+              <tr
+                mat-header-row
+                *matHeaderRowDef="tablaUsuarios; sticky: true"
+              ></tr>
+              <tr mat-row *matRowDef="let row; columns: tablaUsuarios"></tr>
+            </table>
+            <mat-paginator
+              #paginator
+              [pageSizeOptions]="[8]"
+              showFirstLastButtons
+            ></mat-paginator>
+          </div>
         </div>
       </div>
-    </div>
+    </form>
   </div>
 </div>

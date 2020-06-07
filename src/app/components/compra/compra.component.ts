@@ -134,9 +134,9 @@ export class CompraComponent implements OnInit {
       localStorage.getItem("miCuenta.compras")
     );
     if (respuesta["codigo"] == "200") {
+      this.consultarFacturas();
       this.limpiarCampos();
       this.detalleCompra.data = [];
-      this.consultarFacturas();
       this.myForm
         .get("_idCabecera")
         .setValue(respuesta["respuesta"].IdCabeceraFactura);
@@ -244,7 +244,7 @@ export class CompraComponent implements OnInit {
       this.myForm.get("_precio").setValue(respuesta["respuesta"].ValorUnitario);
     }
   }
- 
+
   seleccionarLote() {
     let dialogRef = this.modalLotes.open(ModalLotesComponent, {
       width: "500px",
@@ -254,7 +254,7 @@ export class CompraComponent implements OnInit {
         idRelacionLogica: this.myForm.get("_idRelacionLogica").value,
         perteneceKit: this.myForm.get("_perteneceKit").value,
       },
-      disableClose: true
+      disableClose: true,
     });
     dialogRef.afterClosed().subscribe((result) => {
       if (result != null) {
@@ -351,15 +351,17 @@ export class CompraComponent implements OnInit {
       this.myForm.get("_cantidad").value,
       "0"
     );
-    this.limpiarCampos();
     if (respuesta["codigo"] == "200") {
       this.openSnackBar("Se ingresó correctamente");
+      this.limpiarCampos();
       this.consultarDetalleFactura();
       this.realizarCompraButton = false;
       this.myForm.get("_precio").enable();
       this.myForm.get("_fechaExpiracion").clearValidators();
       if (!this.seccionKit) {
         this.buttonSeleccionarProducto = true;
+        this.seccionKit = true;
+        this.selected = "Producto";
       }
       this.buttonGenerarFactura = false;
       this.buttonSeleccionarLote = true;
@@ -454,12 +456,12 @@ export class CompraComponent implements OnInit {
       idDetalleFactura,
       this.myForm.get("_idCabecera").value
     );
-    console.log(respuesta);
     if (respuesta["codigo"] == "200") {
       this.openSnackBar("Se eliminó correctamente");
       this.consultarDetalleFactura();
-    } else if(respuesta["codigo"] == "201") {
+    } else if (respuesta["codigo"] == "201") {
       this.openSnackBar("Factura eliminada");
+      this.consultarFacturas();
       this.myForm.reset();
       this.detalleCompra.data = [];
     }

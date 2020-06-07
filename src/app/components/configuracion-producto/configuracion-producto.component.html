@@ -52,7 +52,7 @@
                 </button>
                 <mat-autocomplete #auto="matAutocomplete">
                   <mat-option
-                    (onSelectionChange)="seleccionarDescuentoSiExiste(option)"
+                    (onSelectionChange)="seleccionarDescuentoSiExiste(option.Porcentaje)"
                     *ngFor="let option of filteredOptions | async"
                     [value]="option.Porcentaje"
                   >

@@ -174,7 +174,7 @@ export class ModalAsignacionConfiguracionProductoComponent implements OnInit {
         };
         if (producto.Disponible != 0) {
           listaProductosEnStock.push(producto);
-        } 
+        }
       });
       this.listaProductosEnStock.data = listaProductosEnStock;
       this.listaProductosEnStock.paginator = this.paginator2;
@@ -188,14 +188,9 @@ export class ModalAsignacionConfiguracionProductoComponent implements OnInit {
       this.idKit,
       this.cantidad
     );
-    console.log(respuesta);
-
-    // .then((ok) => {
-    //   if (ok["respuesta"] == "true") {
-    //     this.modalAsignacionConfiguracionProducto.closeAll();
-    //   }
-    // })
-    // .catch((error) => console.log(error));
+    if (respuesta["codigo"] == "200") {
+      this.modalAsignacionConfiguracionProducto.closeAll();
+    }
   }
 
   siElKitVieneDeCompra(listaProductos) {

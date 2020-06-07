@@ -13,8 +13,6 @@ import { MatDialog } from "@angular/material/dialog";
 // Services
 import { InventarioService } from "src/app/services/inventario.service";
 
-// SweetAlert
-import sweetalert from "sweetalert";
 import { Observable } from "rxjs";
 import { startWith, map } from "rxjs/operators";
 import { DialogAlertComponent } from "../dialog-alert/dialog-alert.component";
@@ -103,7 +101,6 @@ export class ProductoComponent implements OnInit {
     var respuesta = await this.inventarioService.consultarConfiguracionProducto();
     if (respuesta["codigo"] == "200") {
       var productos: any = [];
-      console.log(respuesta["respuesta"][0]);
       respuesta["respuesta"].map((producto) => {
         productos.push({
           IdConfigurarProducto: producto.IdConfigurarProducto,
