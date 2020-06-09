@@ -127,7 +127,8 @@ export class PersonaService {
     numeroTelefono2: string,
     tipoTelefono2: string,
     correo: string,
-    parroquia: string
+    parroquia: string,
+    referencia: string
   ) {
     const body = new HttpParams()
       .set("NumeroDocumento", String(numeroDocumento))
@@ -137,12 +138,15 @@ export class PersonaService {
       .set("PrimerNombre", primerNombre)
       .set("SegundoNombre", segundoNombre)
       .set("AsignacionPersonaComunidad.Parroquia.IdParroquia", parroquia)
+      .set("AsignacionPersonaComunidad.Referencia", referencia)
       .set("ListaTelefono[0].Numero", String(numeroTelefono1))
       .set("ListaTelefono[1].Numero", String(numeroTelefono2))
       .set("ListaTelefono[0].TipoTelefono.IdTipoTelefono", tipoTelefono1)
       .set("ListaTelefono[1].TipoTelefono.IdTipoTelefono", tipoTelefono2)
       .set("Correo", correo)
       .set("encriptada", localStorage.getItem("miCuenta.postToken"));
+    console.log(body);
+    
     return new Promise((resolve, reject) => {
       this.http
         .post(apiUrl + "TalentoHumano/IngresoPersona", body.toString(), {
@@ -200,7 +204,8 @@ export class PersonaService {
     numeroTelefono2: string,
     tipoTelefono2: string,
     correo: string,
-    parroquia: string
+    parroquia: string,
+    referencia: string
   ) {
     const body = new HttpParams()
       .set("IdPersona", idPersona)
@@ -211,6 +216,7 @@ export class PersonaService {
       .set("SegundoNombre", segundoNombre)
       .set("IdTipoDocumento", tipoDocumento)
       .set("AsignacionPersonaComunidad.Parroquia.IdParroquia", parroquia)
+      .set("AsignacionPersonaComunidad.Referencia", referencia)
       .set("ListaTelefono[0].IdTelefono", idTelefono1)
       .set("ListaTelefono[1].IdTelefono", idTelefono2)
       .set("ListaTelefono[0].Numero", String(numeroTelefono1))
@@ -229,95 +235,6 @@ export class PersonaService {
             "application/x-www-form-urlencoded"
           ),
         })
-        .subscribe(
-          (res) => {
-            resolve(res);
-          },
-          (err) => {
-            reject(err);
-          }
-        );
-    });
-  }
-
-  actualizarTelefono(
-    idPersona: string,
-    idTelefono: string,
-    numero: string,
-    tipoTelefono: string
-  ) {
-    const body = new HttpParams()
-      .set("IdPersona", idPersona)
-      .set("IdTelefono", idTelefono)
-      .set("Numero", numero)
-      .set("IdTipoTelefono", tipoTelefono)
-      .set("encriptada", localStorage.getItem("miCuenta.putToken"));
-    return new Promise((resolve, reject) => {
-      this.http
-        .post(apiUrl + "TalentoHumano/ActualizarTelefono", body.toString(), {
-          headers: new HttpHeaders().set(
-            "Content-Type",
-            "application/x-www-form-urlencoded"
-          ),
-        })
-        .subscribe(
-          (res) => {
-            resolve(res);
-          },
-          (err) => {
-            reject(err);
-          }
-        );
-    });
-  }
-
-  actualizarCorreo(idPersona: string, idCorreo: string, correoValor: string) {
-    const body = new HttpParams()
-      .set("IdPersona", idPersona)
-      .set("IdCorreo", idCorreo)
-      .set("CorreoValor", correoValor)
-      .set("encriptada", localStorage.getItem("miCuenta.putToken"));
-    return new Promise((resolve, reject) => {
-      this.http
-        .post(apiUrl + "TalentoHumano/ActualizarCorreo", body.toString(), {
-          headers: new HttpHeaders().set(
-            "Content-Type",
-            "application/x-www-form-urlencoded"
-          ),
-        })
-        .subscribe(
-          (res) => {
-            resolve(res);
-          },
-          (err) => {
-            reject(err);
-          }
-        );
-    });
-  }
-
-  actualizarDireccion(
-    idPersona: string,
-    idAsignacionPC: string,
-    parroquia: string
-  ) {
-    const body = new HttpParams()
-      .set("IdPersona", idPersona)
-      .set("IdAsignacionPC", idAsignacionPC)
-      .set("IdParroquia", parroquia)
-      .set("encriptada", localStorage.getItem("miCuenta.putToken"));
-    return new Promise((resolve, reject) => {
-      this.http
-        .post(
-          apiUrl + "TalentoHumano/ActualizarAsignacionPersonaParroquia",
-          body.toString(),
-          {
-            headers: new HttpHeaders().set(
-              "Content-Type",
-              "application/x-www-form-urlencoded"
-            ),
-          }
-        )
         .subscribe(
           (res) => {
             resolve(res);

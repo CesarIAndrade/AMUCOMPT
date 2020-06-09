@@ -27,9 +27,6 @@ import { MatDialog } from "@angular/material/dialog";
 
 // Services
 import { PersonaService } from "../../services/persona.service";
-
-// SweetAlert
-import sweetalert from "sweetalert";
 import { PanelAdministracionService } from "src/app/services/panel-administracion.service";
 import { DialogAlertComponent } from "../dialog-alert/dialog-alert.component";
 
@@ -72,6 +69,7 @@ export class PersonaComponent implements OnInit {
       _idPersona: new FormControl(""),
       _idTelefono1: new FormControl(""),
       _idTelefono2: new FormControl(""),
+      _referencia: new FormControl("", [Validators.required])
     });
   }
 
@@ -154,14 +152,11 @@ export class PersonaComponent implements OnInit {
       idProvincia
     );
     if (respuesta["codigo"] == "200") {
-      // this.cantones = [];
-      // this.parroquias = [];
       this.cantones = respuesta["respuesta"];
-      // if (flag) {
-      //   this.myForm.get("_canton").setValue("0");
-      //   this.myForm.get("_parroquia").setValue("0");
-      //   this.parroquias = null;
-      // }
+      if (flag) {
+        this.myForm.get("_canton").setValue("0");
+        this.myForm.get("_parroquia").setValue("0");
+      }
     }
   }
 
@@ -170,11 +165,10 @@ export class PersonaComponent implements OnInit {
       idCanton
     );
     if (respuesta["codigo"] == "200") {
-      // this.parroquias = [];      
       this.parroquias = respuesta["respuesta"];
-      // if (flag) {
-      //   this.myForm.get("_parroquia").setValue("0");
-      // }
+      if (flag) {
+        this.myForm.get("_parroquia").setValue("0");
+      }
     }
   }
 
@@ -230,14 +224,23 @@ export class PersonaComponent implements OnInit {
         this.myForm.get("_telefono2").value,
         this.myForm.get("_tipoTelefono2").value,
         this.myForm.get("_correo").value,
-        this.myForm.get("_parroquia").value
+        this.myForm.get("_parroquia").value,
+        this.myForm.get("_referencia").value,
       );
       console.log(respuesta);
       if (respuesta["codigo"] == "200") {
+        this.openSnackBar("Se ingresó correctamente");
         var personas: any = this.personas.data;
         respuesta["respuesta"].Acciones = this.llamadaModal;
         personas.push(respuesta["respuesta"]);
         this.personas.data = personas;
+        this.myForm.reset();
+      } else if (respuesta["codigo"] == "400") {
+        this.openDialog("Inténtalo de nuevo");
+      } else if (respuesta["codigo"] == "418") {
+        this.openDialog(respuesta["mensaje"]);
+      } else if (respuesta["codigo"] == "500") {
+        this.openDialog("Problemas con el servidor");
       }
     }
   }
@@ -300,10 +303,6 @@ export class PersonaComponent implements OnInit {
     this.myForm
       .get("_parroquia")
       .setValue(persona.AsignacionPersonaParroquia[0].Parroquia.IdParroquia);
-    console.log(this.provincias);
-    console.log(this.cantones);
-    console.log(this.parroquias);
-
     this.botonInsertar = "modificar";
   }
 
@@ -326,95 +325,35 @@ export class PersonaComponent implements OnInit {
         this.myForm.get("_telefono2").value,
         this.myForm.get("_tipoTelefono2").value,
         this.myForm.get("_correo").value,
-        this.myForm.get("_parroquia").value
+        this.myForm.get("_parroquia").value,
+        this.myForm.get("_referencia").value,
       );
       console.log(respuesta);
-    }
-  }
-
-  actualizarTelefono() {
-    this.telefonos.push(
-      {
-        IdPersona: this.myForm.get("_idPersona").value,
-        IdTelefono: this.myForm.get("_idTelefono1").value,
-        Numero: this.myForm.get("_telefono1").value,
-        IdTipoTelefono: this.myForm.get("_tipoTelefono1").value,
-      },
-      {
-        IdPersona: this.myForm.get("_idPersona").value,
-        IdTelefono: this.myForm.get("_idTelefono2").value,
-        Numero: this.myForm.get("_telefono2").value,
-        IdTipoTelefono: this.myForm.get("_tipoTelefono2").value,
+      if(respuesta["codigo"] == "200") {
+        this.openSnackBar("Se actualizó correctamente");
+        var personas: any = this.personas.data;
+        var persona = personas.find(
+          persona => persona["IdPersona"] == this.myForm.get("_idPersona").value
+        );
+        var index = personas.indexOf(persona);
+        personas.splice(index, 1);
+        respuesta["respuesta"].Acciones = this.llamadaModal;
+        personas.push(respuesta["respuesta"]);
+        this.personas.data = personas;
+        this.nuevaPersona = "Nueva Persona"
+        this.contacto = "Contacto ";
+        this.direccion = "Direccion";
+        this.guardar = "Guardar";
+        this.botonInsertar = "insertar";
+        this.myForm.reset();
+      } else if (respuesta["codigo"] == "400") {
+        this.openDialog("Inténtalo de nuevo");
+      } else if (respuesta["codigo"] == "418") {
+        this.openDialog(respuesta["mensaje"]);
+      } else if (respuesta["codigo"] == "500") {
+        this.openDialog("Problemas con el servidor");
       }
-    );
-    this.telefonos.map((item) => {
-      this.personaService
-        .actualizarTelefono(
-          item.IdPersona,
-          item.IdTelefono,
-          item.Numero,
-          item.IdTipoTelefono
-        )
-        .then((ok) => {
-          if (ok["respuesta"]) {
-            this.actualizarCorreo(
-              this.myForm.get("_idPersona").value,
-              this.myForm.get("_idCorreo").value
-            );
-          } else {
-            sweetAlert("Ha ocurrido un error!", {
-              icon: "error",
-            });
-          }
-        })
-        .catch((error) => console.log(error));
-    });
-  }
-
-  actualizarCorreo(idPersona: string, idCorreo: string) {
-    this.personaService
-      .actualizarCorreo(idPersona, idCorreo, this.myForm.get("_correo").value)
-      .then((ok) => {
-        if (ok["respuesta"]) {
-          this.actualizarDireccion(
-            this.myForm.get("_idPersona").value,
-            this.myForm.get("_idAsignacionPersonaParroquia").value
-          );
-        } else {
-          sweetAlert("Ha ocurrido un error!", {
-            icon: "error",
-          });
-        }
-      })
-      .catch((error) => console.log(error));
-  }
-
-  actualizarDireccion(idPersona: string, idAsignacionPC: string) {
-    this.personaService
-      .actualizarDireccion(
-        idPersona,
-        idAsignacionPC,
-        this.myForm.get("_parroquia").value
-      )
-      .then((ok) => {
-        if (ok["respuesta"]) {
-          this.myForm.reset();
-          this.botonInsertar = "insertar";
-          this.consultarPersonas();
-          this.nuevaPersona = "Nueva Persona";
-          this.contacto = "Contacto ";
-          this.direccion = "Direccion";
-          this.guardar = "Guardar";
-          sweetAlert("Se actualizó correctamente!", {
-            icon: "success",
-          });
-        } else {
-          sweetAlert("Ha ocurrido un error!", {
-            icon: "error",
-          });
-        }
-      })
-      .catch((error) => console.log(error));
+    }
   }
 
   @Output() obtenerPersona = new EventEmitter();
