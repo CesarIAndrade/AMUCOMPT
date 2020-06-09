@@ -1,4 +1,11 @@
-import { Component, OnInit, ViewChild, EventEmitter, Input, Output } from "@angular/core";
+import {
+  Component,
+  OnInit,
+  ViewChild,
+  EventEmitter,
+  Input,
+  Output,
+} from "@angular/core";
 import {
   FormGroup,
   Validators,
@@ -97,20 +104,18 @@ export class PersonaComponent implements OnInit {
       .catch((error) => console.log(error));
   }
 
-  consultarPersonas() {
-    this.personaService
-      .consultarPersonas()
-      .then((ok) => {
-        this.personas.data = [];
-        var personas: any = [];
-        ok["respuesta"].map((persona) => {
-          persona.Acciones = this.llamadaModal;
-          personas.push(persona);
-        });
-        this.personas.data = personas;
-        this.personas.paginator = this.paginator;
-      })
-      .catch((error) => console.log(error));
+  async consultarPersonas() {
+    var respuesta = await this.personaService.consultarPersonas();
+    console.log(respuesta);
+    if (respuesta["codigo"] == "200") {
+      var personas: any = [];
+      respuesta["respuesta"].map((persona) => {
+        persona.Acciones = this.llamadaModal;
+        personas.push(persona);
+      });
+      this.personas.data = personas;
+      this.personas.paginator = this.paginator;
+    }
   }
 
   consultarTipoDocumento() {
@@ -210,7 +215,7 @@ export class PersonaComponent implements OnInit {
     }
   }
 
-  crearPersona() {
+  async crearPersona() {
     var validarNombress = {
       primerCampo: "",
       segundoCampo: "",
@@ -224,156 +229,28 @@ export class PersonaComponent implements OnInit {
     var dosNombres = this.validarNombres(validarNombress);
     var dosApellidos = this.validarApellidos(validarApellidos);
     if (dosNombres.valido == true && dosApellidos.valido == true) {
-      var ejecutado = false;
-      this.personaService
-        .crearPersona(
-          this.myForm.get("_numeroDocumento").value,
-          this.myForm.get("_tipoDocumento").value,
-          dosApellidos.primerCampo,
-          dosApellidos.segundoCampo,
-          dosNombres.primerCampo,
-          dosNombres.segundoCampo
-        )
-        .then((ok) => {
-          if (ok["respuesta"] == "false") {
-            sweetAlert("Cédula ya existe!", {
-              icon: "warning",
-            });
-          } else if (ok["respuesta"] == "400") {
-            this.myForm.reset();
-            sweetAlert("Ha ocurrido un error!", {
-              icon: "error",
-            });
-          } else {
-            this.myForm.get("_idPersona").setValue(ok["respuesta"]);
-            ejecutado = true;
-          }
-        })
-        .catch((error) => console.log(error))
-        .finally(() => {
-          if (ejecutado == true) {
-            this.crearTelefono(this.myForm.get("_idPersona").value);
-          }
-        });
-    }
-  }
-
-  crearTelefono(idPersona: string) {
-    this.telefonos.push(
-      {
-        IdPersona: idPersona,
-        Numero: this.myForm.get("_telefono1").value,
-        IdTipoTelefono: this.myForm.get("_tipoTelefono1").value,
-      },
-      {
-        IdPersona: idPersona,
-        Numero: this.myForm.get("_telefono2").value,
-        IdTipoTelefono: this.myForm.get("_tipoTelefono2").value,
+      var respuesta = await this.personaService.crearPersona(
+        this.myForm.get("_numeroDocumento").value,
+        this.myForm.get("_tipoDocumento").value,
+        dosApellidos.primerCampo,
+        dosApellidos.segundoCampo,
+        dosNombres.primerCampo,
+        dosNombres.segundoCampo,
+        this.myForm.get("_telefono1").value,
+        this.myForm.get("_tipoTelefono1").value,
+        this.myForm.get("_telefono2").value,
+        this.myForm.get("_tipoTelefono2").value,
+        this.myForm.get("_correo").value,
+        this.myForm.get("_parroquia").value
+      );
+      console.log(respuesta);
+      if(respuesta["codigo"] == "200") {
+        var personas: any = this.personas.data;
+        respuesta["respuesta"].Acciones = this.llamadaModal;
+        personas.push(respuesta["respuesta"]);
+        this.personas.data = personas;
       }
-    );
-    this.telefonos.map((item) => {
-      this.personaService
-        .crearTelefono(item.IdPersona, item.Numero, item.IdTipoTelefono)
-        .then((ok) => {
-          if (ok["respuesta"]) {
-            this.crearCorreo(this.myForm.get("_idPersona").value);
-          } else {
-            sweetAlert("Ha ocurrido un error!", {
-              icon: "error",
-            });
-            this.myForm.get("_telefono1").setValue("");
-            this.myForm.get("_telefono2").setValue("");
-            this.myForm.get("_tipoTelefono1").setValue("");
-            this.myForm.get("_tipoTelefono2").setValue("");
-          }
-        })
-        .catch((error) => console.log(error));
-    });
-  }
-
-  crearCorreo(idPersona: string) {
-    if (
-      this.myForm.get("_correo") != null ||
-      this.myForm.get("_correo").value.trim != ""
-    ) {
-      var ejecutado = false;
-      this.personaService
-        .crearCorreo(idPersona, this.myForm.get("_correo").value)
-        .then((ok) => {
-          if (ok["respuesta"]) {
-            ejecutado = true;
-          } else {
-            sweetAlert("Ha ocurrido un error!", {
-              icon: "error",
-            });
-            this.myForm.get("_correo").setValue("");
-          }
-        })
-        .catch((error) => console.log(error))
-        .finally(() => {
-          if (ejecutado == true) {
-            this.crearDireccion(this.myForm.get("_idPersona").value);
-          }
-        });
-    } else {
-      this.crearDireccion(this.myForm.get("_idPersona").value);
     }
-  }
-
-  crearDireccion(idPersona: string) {
-    var ejecutado = false;
-    this.personaService
-      .crearDireccion(idPersona, this.myForm.get("_parroquia").value)
-      .then((ok) => {
-        if (ok["respuesta"]) {
-          ejecutado = true;
-        } else {
-          sweetAlert("Ha ocurrido un error!", {
-            icon: "error",
-          });
-          this.myForm.get("_provincia").setValue("0");
-          this.myForm.get("_canton").setValue("0");
-          this.myForm.get("_parroquia").setValue("0");
-        }
-      })
-      .catch((error) => console.log(error))
-      .finally(() => {
-        if (ejecutado == true) {
-          this.myForm.reset();
-          this.consultarPersonas();
-          sweetAlert("Se ingresó correctamente!", {
-            icon: "success",
-          });
-        }
-      });
-  }
-
-  eliminarPersona(idPersona: string) {
-    sweetalert({
-      title: "Advertencia",
-      text: "¿Está seguro que desea eliminar?",
-      icon: "warning",
-      buttons: ["Cancelar", "Ok"],
-      dangerMode: true,
-    }).then((willDelete) => {
-      if (willDelete) {
-        var ejecutado = false;
-        this.personaService
-          .eliminarPersona(idPersona)
-          .then((ok) => {
-            ejecutado = true;
-            sweetalert("Se ha eliminado correctamente!", {
-              icon: "success",
-            });
-          })
-          .catch((error) => console.log(error))
-          .finally(() => {
-            if (ejecutado == true) {
-              this.consultarPersonas();
-            }
-          });
-      }
-    });
   }
 
   abrirModal(persona) {
@@ -387,6 +264,8 @@ export class PersonaComponent implements OnInit {
   }
 
   mostrarPersona(persona) {
+    console.log(persona);
+    
     this.nuevaPersona = "Modificar Persona";
     this.contacto = "Modificar Contacto";
     this.direccion = "Modificar Direccion";
@@ -572,6 +451,10 @@ export class PersonaComponent implements OnInit {
   @Output() obtenerPersona = new EventEmitter();
   seleccionarPersona(persona) {
     this.obtenerPersona.emit(persona);
+  }
+
+  cancelar() {
+    this.myForm.reset();
   }
 
   ngOnInit() {

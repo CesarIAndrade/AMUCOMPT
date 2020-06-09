@@ -125,7 +125,7 @@ export class UsuarioComponent implements OnInit {
         this.myForm.get("_apellidos").setValue(result.apellidos);
       }
     });
-  }
+  } 
 
   abrirModalAsignacionUsuarioTiposUsuario(usuario) {
     var listaTipoUsuario = usuario.ListaTipoUsuario;
@@ -135,8 +135,7 @@ export class UsuarioComponent implements OnInit {
         width: "500px",
         height: "auto",
         data: {
-          idUsuario: usuario.IdUsuario,
-          listaTipoUsuario: listaTipoUsuario,
+          idUsuario: usuario.IdUsuario
         },
       }
     );
@@ -146,13 +145,9 @@ export class UsuarioComponent implements OnInit {
     this.usuarioService.eliminarUsuario(usuario.IdUsuario);
   }
 
-  eliminarAsignacionTipoUsuario(idAsignacionTipoUsuario) {
-    this.usuarioService
-      .eliminarAsignacionTipoUsuario(idAsignacionTipoUsuario)
-      .catch((error) => console.log(error));
-  }
-
-  setUsuario(usuario) {
+  mostrarUsuario(usuario) {
+    console.log(usuario);
+    
     this.nuevoUsuario = "Modificar Usuario";
     this.myForm.get("_idUsuario").setValue(usuario.IdUsuario);
     this.myForm.get("_idPersona").setValue(usuario.IdPersona);
@@ -166,6 +161,10 @@ export class UsuarioComponent implements OnInit {
     this.botonInsertar = "modificar";
     this.myForm.get("_valorUsuario").setValue(usuario.UsuarioLogin);
     this.myForm.get("_contrasena").setValue("");
+  }
+
+  cancelar(){
+    this.myForm.reset();
   }
 
   ngOnInit() {

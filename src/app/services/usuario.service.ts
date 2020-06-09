@@ -109,19 +109,22 @@ export class UsuarioService {
     });
   }
 
-  consultarTipoUsuario() {
-    const body = new HttpParams().set(
-      "encriptada",
-      localStorage.getItem("miCuenta.getToken")
-    );
+  consultarTipoUsuariosAsignados(idUsuario: string) {
+    const body = new HttpParams()
+      .set("IdUsuario", idUsuario)
+      .set("encriptada", localStorage.getItem("miCuenta.getToken"));
     return new Promise((resolve, reject) => {
       this.http
-        .post(apiUrl + "Usuario/ListaTipoUsuario", body.toString(), {
-          headers: new HttpHeaders().set(
-            "Content-Type",
-            "application/x-www-form-urlencoded"
-          ),
-        })
+        .post(
+          apiUrl + "Usuario/ConsultarTiposUsuarioQueTieneUnUsuario",
+          body.toString(),
+          {
+            headers: new HttpHeaders().set(
+              "Content-Type",
+              "application/x-www-form-urlencoded"
+            ),
+          }
+        )
         .subscribe(
           (res) => {
             resolve(res);
@@ -133,14 +136,14 @@ export class UsuarioService {
     });
   }
 
-  consultarAsignacionTipoUsuario(idUsuario: string) {
+  consultarTipoUsuariosSinAsignar(idUsuario: string) {
     const body = new HttpParams()
       .set("IdUsuario", idUsuario)
       .set("encriptada", localStorage.getItem("miCuenta.getToken"));
     return new Promise((resolve, reject) => {
       this.http
         .post(
-          apiUrl + "Usuarios/ObtenerTipoUsuarioDeUnUsuario",
+          apiUrl + "Usuario/ConsultarTiposUsuarioQueNoTieneUnUsuario",
           body.toString(),
           {
             headers: new HttpHeaders().set(
@@ -208,11 +211,7 @@ export class UsuarioService {
     });
   }
 
-  crearUsuario(
-    idPersona: string,
-    usuario: string,
-    contrasena: string
-  ) {
+  crearUsuario(idPersona: string, usuario: string, contrasena: string) {
     const body = new HttpParams()
       .set("IdPersona", idPersona)
       .set("UsuarioLogin", usuario)
@@ -317,7 +316,7 @@ export class UsuarioService {
     });
   }
 
-  eliminarAsignacionTipoUsuario(idAsignacionTipoUsuario: string) {
+  eliminarTipoUsuario(idAsignacionTipoUsuario: string) {
     const body = new HttpParams()
       .set("IdAsignacionTU", idAsignacionTipoUsuario)
       .set("encriptada", localStorage.getItem("miCuenta.deleteToken"));

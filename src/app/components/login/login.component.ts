@@ -39,7 +39,7 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  async login() {
+  async login() {    
     if (this.myForm.valid) {
       var login = await this.usuarioService.login(
         this.myForm.get("_usuario").value,
@@ -52,6 +52,7 @@ export class LoginComponent implements OnInit {
         this.ingresarCredenciales = true;
       } else {
         this.myForm.reset();
+        this.myForm.get("_tipoUsuario").setValue("0");
         this.openDialog("Credenciales Incorrectas!");
       }
     }

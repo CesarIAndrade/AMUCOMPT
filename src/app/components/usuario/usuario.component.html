@@ -97,6 +97,16 @@
               Guardar
             </button>
           </div>
+          <div>
+            <a 
+              mat-button
+              (click)="cancelar()"
+              type="button"
+              class="mt-2 btn-block"
+            >
+              Volver
+            </a>
+          </div>
         </div>
         <div class="col-lg-8">
           <h5 style="text-align: center;">Lista Usuarios</h5>
@@ -160,7 +170,7 @@
                         mat-button
                         class="btn-outline-primary"
                         type="button"
-                        (click)="setUsuario(element)"
+                        (click)="mostrarUsuario(element)"
                       >
                         <mat-icon>edit</mat-icon>
                       </button>

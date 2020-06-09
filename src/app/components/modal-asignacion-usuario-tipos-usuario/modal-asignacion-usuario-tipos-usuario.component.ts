@@ -14,106 +14,61 @@ export class ModalAsignacionUsuarioTiposUsuarioComponent implements OnInit {
   ) {}
 
   botonEliminar = false;
-  idUsuario = this.data.idUsuario;
-  tipoUsuario: string;
   tipoUsuarios: any[] = [];
-  listaTipoUsuario = this.data.listaTipoUsuario;
-  descripcion: string;
+  listaTipoUsuario: any[] = [];
+  tipoUsuario: string;
   tipoUsuarioSelecionado = true;
 
-  agregarTipoUsuarioALista(tipoUsuario) {
+  seleccionarTipoUsuario(event) {    
+    this.tipoUsuario = event.value;
     this.tipoUsuarioSelecionado = false;
-    var descripcion = this.tipoUsuarios.find(
-      (item) => item.IdTipoUsuario == tipoUsuario.value
+  }
+
+  async asignarTipoUsuario() {
+    var respuesta = await this.usuarioService.asignacionTipoUsuario(
+      this.data.idUsuario,
+      this.tipoUsuario
     );
-    this.tipoUsuario = tipoUsuario.value;
-    this.descripcion = descripcion.Descripcion;
-    if (tipoUsuario.value != 0) {
-      this.botonEliminar = true;
+    if (respuesta["codigo"] == "200") {
+      this.tipoUsuario = "0";
+      this.botonEliminar = false;
+      this.tipoUsuarioSelecionado = true;
+      this.consultarTipoUsuariosAsignados();
+      this.consultarTipoUsuariosSinAsignar();
     }
   }
 
-  asignarTipoUsuario() {
-    this.usuarioService
-      .asignacionTipoUsuario(
-        this.idUsuario,
-        this.tipoUsuario
-      )
-      .then((ok) => {
-        if (ok["respuesta"]) {
-          this.listaTipoUsuario.push({
-            IdTipoUsuario: this.tipoUsuario,
-            Descripcion: this.descripcion,
-          });
-          this.tipoUsuario = "0";
-          this.botonEliminar = false;
-          this.tipoUsuarioSelecionado = true;
-        }
-      })
-      .catch((error) => console.log(error))
-      .finally(() => this.consultarAsignacionTipoUsuario());
-  }
-
-  eliminarTipoUsuarioDeLista(tipoUsuario) {
-    const index = this.listaTipoUsuario.indexOf(tipoUsuario);
-    if (index >= 0) {
-      this.listaTipoUsuario.splice(index, 1);
+  async consultarTipoUsuariosAsignados() {
+    var tipoUsuarios = await this.usuarioService.consultarTipoUsuariosAsignados(
+      this.data.idUsuario
+    );
+    if (tipoUsuarios["codigo"] == "200") {
+      this.listaTipoUsuario = tipoUsuarios["respuesta"];
     }
-    this.eliminarAsignacionTipoUsuario(tipoUsuario);
   }
 
-  eliminarAsignacionTipoUsuario(tipoUsuario) {
-    this.usuarioService
-      .eliminarAsignacionTipoUsuario(
-        tipoUsuario.IdAsignacionTu
-      )
-      .then((ok) => {
-        this.consultarAsignacionTipoUsuario();
-      })
-      .catch((error) => console.log(error));
+  async consultarTipoUsuariosSinAsignar() {
+    var tipoUsuarios = await this.usuarioService.consultarTipoUsuariosSinAsignar(
+      this.data.idUsuario
+    );
+    if (tipoUsuarios["codigo"] == "200") {
+      this.tipoUsuarios = tipoUsuarios["respuesta"];
+    }
   }
 
-  consultarTipoUsuario() {
-    this.usuarioService
-      .consultarTipoUsuario()
-      .then((ok) => {
-        this.tipoUsuarios = [];
-        ok["respuesta"].map((item) => {
-          if (!this.arrayIndexesTipoUsuario.includes(item.Identificacion)) {
-            this.tipoUsuarios.push({
-              IdTipoUsuario: item.IdTipoUsuario,
-              Descripcion: item.Descripcion,
-            });
-          }
-        });
-      })
-      .catch((error) => console.log(error));
+  async eliminarTipoUsuario(idTipoUsuario) {
+    var respuesta = await this.usuarioService.eliminarTipoUsuario(
+      idTipoUsuario
+    );
+    if (respuesta["codigo"] == "200") {
+      this.consultarTipoUsuariosAsignados();
+      this.consultarTipoUsuariosSinAsignar();
+    }
   }
 
-  consultarAsignacionTipoUsuario() {
-    this.usuarioService
-      .consultarAsignacionTipoUsuario(
-        this.idUsuario,
-        
-      )
-      .then((ok) => {
-        this.arrayIndexesTipoUsuario = [];
-        this.listaTipoUsuario = [];
-        this.listaTipoUsuario = ok["respuesta"];
-        ok["respuesta"].map((item) => {
-          this.arrayIndexesTipoUsuario.push(item.Identificacion);
-        });
-        this.consultarTipoUsuario();
-      })
-      .catch((error) => console.log(error));
-  }
-
-  arrayIndexesTipoUsuario: string[] = [];
   ngOnInit() {
-    this.consultarTipoUsuario();
-    this.listaTipoUsuario.map((item) => {
-      this.arrayIndexesTipoUsuario.push(item.Identificacion);
-    });
+    this.consultarTipoUsuariosAsignados();
+    this.consultarTipoUsuariosSinAsignar();
   }
 
   tablaTipoUsuarios = ["tipoUsuario", "acciones"];

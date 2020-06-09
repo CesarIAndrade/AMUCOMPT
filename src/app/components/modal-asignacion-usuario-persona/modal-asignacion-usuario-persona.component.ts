@@ -34,24 +34,20 @@ export class ModalAsignacionUsuarioPersonaComponent implements OnInit {
       persona.ApellidoPaterno + " " + persona.ApellidoMaterno;
   }
 
-  consultarPersonas() {
-    this.personaService
-      .consultarPersonasSinUsuario()
-      .then((ok) => {
-        this.personas.data = ok["respuesta"];
-        this.personas.paginator = this.paginator;
-      })
-      .catch((error) => console.log(error));
+  async consultarPersonas() {
+    var personas = await this.personaService.consultarPersonasSinUsuario();
+    if (personas["codigo"] == "200") {
+      this.personas.data = personas["respuesta"];
+      this.personas.paginator = this.paginator;
+    }
   }
 
-  consultarPersonasTodas() {
-    this.personaService
-      .consultarPersonas()
-      .then((ok) => {
-        this.personas.data = ok["respuesta"];
-        this.personas.paginator = this.paginator;
-      })
-      .catch((error) => console.log(error));
+  async consultarPersonasTodas() {
+    var personas = await this.personaService.consultarPersonas();
+    if (personas["codigo"] == "200") {
+      this.personas.data = personas["respuesta"];
+      this.personas.paginator = this.paginator;
+    }
   }
 
   ngOnInit() {

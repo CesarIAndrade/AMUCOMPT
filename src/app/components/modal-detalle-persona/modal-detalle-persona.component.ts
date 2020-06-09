@@ -33,12 +33,11 @@ export class ModalDetallePersonaComponent implements OnInit {
   sinDireccion: string;
 
   ngOnInit() {
-    if (this.data.persona.ListaCorreo == null) {
+    if (this.data.persona.ListaCorreo.length == 0) {
       this.correo = "Sin Correo";
     } else {
       this.correo = this.data.persona.ListaCorreo[0].CorreoValor;
     }
-
     if (
       this.provincia == null ||
       this.canton == null ||

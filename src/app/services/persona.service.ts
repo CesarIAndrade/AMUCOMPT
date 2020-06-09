@@ -121,7 +121,13 @@ export class PersonaService {
     apellidoPaterno: string,
     apellidoMaterno: string,
     primerNombre: string,
-    segundoNombre: string
+    segundoNombre: string,
+    numeroTelefono1: string,
+    tipoTelefono1: string,
+    numeroTelefono2: string,
+    tipoTelefono2: string,
+    correo: string,
+    parroquia: string
   ) {
     const body = new HttpParams()
       .set("NumeroDocumento", numeroDocumento)
@@ -130,7 +136,15 @@ export class PersonaService {
       .set("ApellidoMaterno", apellidoMaterno)
       .set("PrimerNombre", primerNombre)
       .set("SegundoNombre", segundoNombre)
+      .set("AsignacionPersonaComunidad.Parroquia.IdParroquia", parroquia)
+      .set("ListaTelefono[0].Numero", String(numeroTelefono1))
+      .set("ListaTelefono[1].Numero", String(numeroTelefono2))
+      .set("ListaTelefono[0].TipoTelefono.IdTipoTelefono", tipoTelefono1)
+      .set("ListaTelefono[1].TipoTelefono.IdTipoTelefono", tipoTelefono2)
+      .set("Correo", correo)
       .set("encriptada", localStorage.getItem("miCuenta.postToken"));
+      console.log(body);
+      
     return new Promise((resolve, reject) => {
       this.http
         .post(apiUrl + "TalentoHumano/IngresoPersona", body.toString(), {
