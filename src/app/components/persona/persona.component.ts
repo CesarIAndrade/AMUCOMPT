@@ -17,7 +17,11 @@ import { ErrorStateMatcher } from "@angular/material/core";
 
 // Components
 import { ModalDetallePersonaComponent } from "src/app/components/modal-detalle-persona/modal-detalle-persona.component";
-import { MatPaginator, MatTableDataSource } from "@angular/material";
+import {
+  MatPaginator,
+  MatTableDataSource,
+  MatSnackBar,
+} from "@angular/material";
 // Functional Components
 import { MatDialog } from "@angular/material/dialog";
 
@@ -27,6 +31,7 @@ import { PersonaService } from "../../services/persona.service";
 // SweetAlert
 import sweetalert from "sweetalert";
 import { PanelAdministracionService } from "src/app/services/panel-administracion.service";
+import { DialogAlertComponent } from "../dialog-alert/dialog-alert.component";
 
 @Component({
   selector: "app-persona",
@@ -37,7 +42,8 @@ export class PersonaComponent implements OnInit {
   constructor(
     private personaService: PersonaService,
     private panelAdministracionService: PanelAdministracionService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private _snackBar: MatSnackBar
   ) {
     this.myForm = new FormGroup({
       _nombres: new FormControl("", [Validators.required]),
@@ -95,18 +101,29 @@ export class PersonaComponent implements OnInit {
   tipoDocumentos: any[] = [];
   tipoTelefonos: any[] = [];
 
-  consultarProvincias() {
-    this.panelAdministracionService
-      .consultarProvincias()
-      .then((ok) => {
-        this.provincias = ok["respuesta"];
-      })
-      .catch((error) => console.log(error));
+  openDialog(mensaje): void {
+    const dialogRef = this.dialog.open(DialogAlertComponent, {
+      width: "250px",
+      data: { mensaje: mensaje },
+    });
+  }
+
+  openSnackBar(message: string) {
+    this._snackBar.open(message, "Cerrar", {
+      duration: 2000,
+      horizontalPosition: "right",
+    });
+  }
+
+  async consultarProvincias() {
+    var provincias = await this.panelAdministracionService.consultarProvincias();
+    if (provincias["codigo"] == "200") {
+      this.provincias = provincias["respuesta"];
+    }
   }
 
   async consultarPersonas() {
     var respuesta = await this.personaService.consultarPersonas();
-    console.log(respuesta);
     if (respuesta["codigo"] == "200") {
       var personas: any = [];
       respuesta["respuesta"].map((persona) => {
@@ -118,89 +135,71 @@ export class PersonaComponent implements OnInit {
     }
   }
 
-  consultarTipoDocumento() {
-    this.personaService
-      .consultarTipoDocumento()
-      .then((ok) => {
-        this.tipoDocumentos = ok["respuesta"];
-      })
-      .catch((error) => console.log(error));
-  }
-
-  consultarTipoTelefono() {
-    this.personaService
-      .consultarTipoTelefono()
-      .then((ok) => {
-        this.tipoTelefonos = ok["respuesta"];
-      })
-      .catch((error) => console.log(error));
-  }
-
-  consultarCantonesDeUnaProvincia(idProvincia: string, value?: string) {
-    this.cantones = [];
-    this.parroquias = [];
-    this.panelAdministracionService
-      .consultarCantonesDeUnaProvincia(idProvincia)
-      .then((ok) => {
-        this.cantones = ok["respuesta"];
-        if (value == "ingresar") {
-          this.myForm.get("_canton").setValue("0");
-          this.myForm.get("_parroquia").setValue("0");
-          this.parroquias = null;
-        }
-      })
-      .catch((error) => console.log(error));
-  }
-
-  consultarParroquiasDeUnCanton(idCanton: string, value?: string) {
-    this.parroquias = [];
-    this.panelAdministracionService
-      .consultarParroquiasDeUnCanton(idCanton)
-      .then((ok) => {
-        this.parroquias = ok["respuesta"];
-        if (value == "ingresar") {
-          this.myForm.get("_parroquia").setValue("0");
-        }
-      })
-      .catch((error) => console.log(error));
-  }
-
-  validarNombres(validarDosNombres) {
-    var arrayNombres = this.myForm.get("_nombres").value.split(" ");
-    if (arrayNombres.length == 1) {
-      sweetAlert("Necesita dos Nombres!", {
-        icon: "warning",
-      });
-    } else if (arrayNombres.length >= 2) {
-      if (arrayNombres[0].length > 0 && arrayNombres[1].length > 0) {
-        validarDosNombres.primerCampo = arrayNombres[0];
-        validarDosNombres.segundoCampo = arrayNombres[1];
-        validarDosNombres.valido = true;
-        return validarDosNombres;
-      } else {
-        sweetAlert("Necesita dos Nombres!", {
-          icon: "warning",
-        });
-      }
+  async consultarTipoDocumento() {
+    var tipoDocumentos = await this.personaService.consultarTipoDocumento();
+    if (tipoDocumentos["codigo"] == "200") {
+      this.tipoDocumentos = tipoDocumentos["respuesta"];
     }
   }
 
-  validarApellidos(validarDosApellidos) {
-    var arrayApellidos = this.myForm.get("_apellidos").value.split(" ");
-    if (arrayApellidos.length == 1) {
-      sweetAlert("Necesita dos apellidos!", {
-        icon: "warning",
-      });
-    } else if (arrayApellidos.length >= 2) {
-      if (arrayApellidos[0].length > 0 && arrayApellidos[1].length > 0) {
-        validarDosApellidos.primerCampo = arrayApellidos[0];
-        validarDosApellidos.segundoCampo = arrayApellidos[1];
-        validarDosApellidos.valido = true;
-        return validarDosApellidos;
+  async consultarTipoTelefono() {
+    var tipoTelefonos = await this.personaService.consultarTipoTelefono();
+    if (tipoTelefonos["codigo"] == "200") {
+      this.tipoTelefonos = tipoTelefonos["respuesta"];
+    }
+  }
+
+  async consultarCantonesDeUnaProvincia(idProvincia: string, flag?) {
+    var respuesta = await this.panelAdministracionService.consultarCantonesDeUnaProvincia(
+      idProvincia
+    );
+    if (respuesta["codigo"] == "200") {
+      // this.cantones = [];
+      // this.parroquias = [];
+      this.cantones = respuesta["respuesta"];
+      // if (flag) {
+      //   this.myForm.get("_canton").setValue("0");
+      //   this.myForm.get("_parroquia").setValue("0");
+      //   this.parroquias = null;
+      // }
+    }
+  }
+
+  async consultarParroquiasDeUnCanton(idCanton: string, flag?) {
+    var respuesta = await this.panelAdministracionService.consultarParroquiasDeUnCanton(
+      idCanton
+    );
+    if (respuesta["codigo"] == "200") {
+      // this.parroquias = [];      
+      this.parroquias = respuesta["respuesta"];
+      // if (flag) {
+      //   this.myForm.get("_parroquia").setValue("0");
+      // }
+    }
+  }
+
+  validarNombresYApellidos(flag) {
+    var campos: any;
+    var tipo: string;
+    if (flag) {
+      campos = this.myForm.get("_nombres").value.split(" ");
+      tipo = "nombres";
+    } else {
+      campos = this.myForm.get("_apellidos").value.split(" ");
+      tipo = "apellidos";
+    }
+    if (campos.length == 1) {
+      this.openDialog(`Necesita dos ${tipo}`);
+    } else if (campos.length >= 2) {
+      if (campos[0].length > 0 && campos[1].length > 0) {
+        var nombresYApellidos = {
+          primerCampo: campos[0],
+          segundoCampo: campos[1],
+          valido: true,
+        };
+        return nombresYApellidos;
       } else {
-        sweetAlert("Necesita dos apellidos!", {
-          icon: "warning",
-        });
+        this.openDialog(`Necesita dos ${tipo}`);
       }
     }
   }
@@ -216,19 +215,9 @@ export class PersonaComponent implements OnInit {
   }
 
   async crearPersona() {
-    var validarNombress = {
-      primerCampo: "",
-      segundoCampo: "",
-      valido: Boolean,
-    };
-    var validarApellidos = {
-      primerCampo: "",
-      segundoCampo: "",
-      valido: Boolean,
-    };
-    var dosNombres = this.validarNombres(validarNombress);
-    var dosApellidos = this.validarApellidos(validarApellidos);
-    if (dosNombres.valido == true && dosApellidos.valido == true) {
+    var dosNombres = this.validarNombresYApellidos(true);
+    var dosApellidos = this.validarNombresYApellidos(false);
+    if (dosNombres && dosApellidos) {
       var respuesta = await this.personaService.crearPersona(
         this.myForm.get("_numeroDocumento").value,
         this.myForm.get("_tipoDocumento").value,
@@ -244,7 +233,7 @@ export class PersonaComponent implements OnInit {
         this.myForm.get("_parroquia").value
       );
       console.log(respuesta);
-      if(respuesta["codigo"] == "200") {
+      if (respuesta["codigo"] == "200") {
         var personas: any = this.personas.data;
         respuesta["respuesta"].Acciones = this.llamadaModal;
         personas.push(respuesta["respuesta"]);
@@ -265,7 +254,6 @@ export class PersonaComponent implements OnInit {
 
   mostrarPersona(persona) {
     console.log(persona);
-    
     this.nuevaPersona = "Modificar Persona";
     this.contacto = "Modificar Contacto";
     this.direccion = "Modificar Direccion";
@@ -273,7 +261,8 @@ export class PersonaComponent implements OnInit {
     this.myForm.get("_idPersona").setValue(persona.IdPersona);
     var nombres = persona.PrimerNombre + " " + persona.SegundoNombre;
     var apellidos = persona.ApellidoPaterno + " " + persona.ApellidoMaterno;
-    if (persona.ListaCorreo == null) {
+    if (persona.ListaCorreo.length == 0) {
+      this.myForm.get("_idCorreo").setValue("");
       this.myForm.get("_correo").setValue("");
     } else {
       this.myForm.get("_idCorreo").setValue(persona.ListaCorreo[0].IdCorreo);
@@ -303,63 +292,43 @@ export class PersonaComponent implements OnInit {
         persona.AsignacionPersonaParroquia[0].Parroquia.Canton.Provincia
           .IdProvincia
       );
-    this.consultarCantonesDeUnaProvincia(
-      this.myForm.get("_provincia").value,
-      ""
+    this.consultarCantonesDeUnaProvincia(this.myForm.get("_provincia").value);
+    this.myForm.get("_canton").setValue(
+      persona.AsignacionPersonaParroquia[0].Parroquia.Canton.IdCanton
     );
-    this.myForm
-      .get("_canton")
-      .setValue(
-        persona.AsignacionPersonaParroquia[0].Parroquia.Canton.IdCanton
-      );
-    this.consultarParroquiasDeUnCanton(this.myForm.get("_canton").value, "");
+    this.consultarParroquiasDeUnCanton(this.myForm.get("_canton").value);
     this.myForm
       .get("_parroquia")
       .setValue(persona.AsignacionPersonaParroquia[0].Parroquia.IdParroquia);
-    this.myForm
-      .get("_idAsignacionPersonaParroquia")
-      .setValue(persona.AsignacionPersonaParroquia[0].IdAsignacionPC);
+    console.log(this.provincias);
+    console.log(this.cantones);
+    console.log(this.parroquias);
+
     this.botonInsertar = "modificar";
   }
 
-  actualizarPersona() {
-    var validarNombress = {
-      primerCampo: "",
-      segundoCampo: "",
-      valido: Boolean,
-    };
-    var validarApellidos = {
-      primerCampo: "",
-      segundoCampo: "",
-      valido: Boolean,
-    };
-    var dosNombres = this.validarNombres(validarNombress);
-    var dosApellidos = this.validarApellidos(validarApellidos);
-    if (dosNombres.valido == true && dosApellidos.valido == true) {
-      this.personaService
-        .actualizarPersona(
-          this.myForm.get("_idPersona").value,
-          this.myForm.get("_numeroDocumento").value,
-          this.myForm.get("_tipoDocumento").value,
-          dosApellidos.primerCampo,
-          dosApellidos.segundoCampo,
-          dosNombres.primerCampo,
-          dosNombres.segundoCampo
-        )
-        .then((ok) => {
-          if (ok["respuesta"] == "false") {
-            sweetAlert("Cédula ya existe!", {
-              icon: "warning",
-            });
-          } else if (ok["respuesta"] == "400") {
-            sweetAlert("Ha ocurrido un error!", {
-              icon: "error",
-            });
-          } else {
-            this.actualizarTelefono();
-          }
-        })
-        .catch((error) => console.log(error));
+  async actualizarPersona() {
+    var dosNombres = this.validarNombresYApellidos(true);
+    var dosApellidos = this.validarNombresYApellidos(false);
+    if (dosNombres && dosApellidos) {
+      var respuesta = await this.personaService.actualizarPersona(
+        this.myForm.get("_idPersona").value,
+        this.myForm.get("_numeroDocumento").value,
+        this.myForm.get("_tipoDocumento").value,
+        dosApellidos.primerCampo,
+        dosApellidos.segundoCampo,
+        dosNombres.primerCampo,
+        dosNombres.segundoCampo,
+        this.myForm.get("_idTelefono1").value,
+        this.myForm.get("_telefono1").value,
+        this.myForm.get("_tipoTelefono1").value,
+        this.myForm.get("_idTelefono2").value,
+        this.myForm.get("_telefono2").value,
+        this.myForm.get("_tipoTelefono2").value,
+        this.myForm.get("_correo").value,
+        this.myForm.get("_parroquia").value
+      );
+      console.log(respuesta);
     }
   }
 
