@@ -45,9 +45,9 @@ export class VentaComponent implements OnInit {
       _cantidad: new FormControl(""),
       _precio: new FormControl(""),
       _persona: new FormControl(""),
-      _cedula: new FormControl(""),
-      _idPersona: new FormControl(""),
-      _nombres: new FormControl(""),
+      _cedula: new FormControl("", [Validators.required]),
+      _idPersona: new FormControl("", [Validators.required]),
+      _nombres: new FormControl("", [Validators.required]),
       _idAsignarProductoLote: new FormControl(""),
       _kit: new FormControl(""),
       _checkedDescuento: new FormControl(false),
@@ -471,9 +471,13 @@ export class VentaComponent implements OnInit {
   }
 
   validarFecha() {
-    var fechaFinalCredito: any = new Date(
-      this.myForm.get("_fechaFinalCredito").value
-    );
+    if(this.myForm.get("_fechaFinalCredito").value) {
+      var fechaFinalCredito: any = new Date(
+        this.myForm.get("_fechaFinalCredito").value
+      );      
+    } else {
+      return fechaFinalCredito = "";
+    }
     var fechaActual = new Date();
     if (fechaFinalCredito.getFullYear() < fechaActual.getFullYear()) {
       fechaFinalCredito = "";

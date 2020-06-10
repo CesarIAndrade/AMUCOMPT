@@ -49,13 +49,10 @@
   <mat-sidenav-content>
     <mat-toolbar style="background-color: white;">
       <mat-toolbar-row>
-        <button mat-button class="py-1">
-          <mat-icon
-            (click)="drawer.toggle()"
-            *ngIf="isHandset$ | async"
-            >apps
-          </mat-icon>
+        <button (click)="drawer.toggle()" *ngIf="isHandset$ | async" mat-button>
+          <mat-icon>apps </mat-icon>
         </button>
+
         <span class="example-spacer"></span>
         <span class="drawer_title">{{ route }}</span>
       </mat-toolbar-row>

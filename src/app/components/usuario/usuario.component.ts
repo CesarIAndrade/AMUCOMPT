@@ -169,8 +169,16 @@ export class UsuarioComponent implements OnInit {
         data: {
           idUsuario: usuario.IdUsuario,
         },
+        // disableClose: true,
       }
     );
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result != null) {
+        console.log(result);
+        this.openDialog(result);
+        this.consultarUsuarios();
+      }
+    });
   }
 
   async eliminarUsuario(usuario) {

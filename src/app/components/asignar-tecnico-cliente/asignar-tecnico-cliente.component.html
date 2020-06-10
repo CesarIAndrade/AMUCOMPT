@@ -4,14 +4,28 @@
       <div class="row">
         <div class="col-lg-6">
           <div class="row">
-            <div class="col-lg-4">
+            <div class="col-lg-6">
+              <mat-form-field class="example-full-width">
+                <mat-label>Seleccionar Provincia</mat-label>
+                <mat-select
+                  formControlName="_provincia"
+                  (selectionChange)="cantonesParaSeguimiento($event.value)"
+                >
+                  <mat-option
+                    *ngFor="let item of provincias"
+                    [value]="item.IdProvincia"
+                  >
+                    {{ item.Descripcion }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div class="col-lg-6">
               <mat-form-field class="example-full-width">
                 <mat-label>Seleccionar Cantón</mat-label>
                 <mat-select
                   formControlName="_canton"
-                  (selectionChange)="
-                    consultarParroquiasDeUnCanton($event.value)
-                  "
+                  (selectionChange)="parroquiasParaSeguimiento($event.value)"
                 >
                   <mat-option
                     *ngFor="let item of cantones"
@@ -22,14 +36,14 @@
                 </mat-select>
               </mat-form-field>
             </div>
-            <div class="col-lg-4">
+          </div>
+          <div class="row">
+            <div class="col-lg-6">
               <mat-form-field class="example-full-width">
                 <mat-label>Seleccionar Parroquia</mat-label>
                 <mat-select
                   formControlName="_parroquia"
-                  (selectionChange)="
-                    consultarComunidadesDeUnaParroquia($event.value)
-                  "
+                  (selectionChange)="comunidadesParaSeguimiento($event.value)"
                 >
                   <mat-option
                     *ngFor="let item of parroquias"
@@ -40,7 +54,7 @@
                 </mat-select>
               </mat-form-field>
             </div>
-            <div class="col-lg-4">
+            <div class="col-lg-6">
               <mat-form-field class="example-full-width">
                 <mat-label>Seleccionar Comunidad</mat-label>
                 <mat-select

@@ -3,7 +3,9 @@ import { FormGroup, FormControl } from "@angular/forms";
 import { PanelAdministracionService } from "src/app/services/panel-administracion.service";
 import { UsuarioService } from "src/app/services/usuario.service";
 import { VentaService } from "src/app/services/venta.service";
-import { MatPaginator, MatTableDataSource } from "@angular/material";
+import { MatPaginator, MatTableDataSource, MatDialog } from "@angular/material";
+import { SeguimientoService } from "src/app/services/seguimiento.service";
+import { DialogAlertComponent } from "../dialog-alert/dialog-alert.component";
 
 @Component({
   selector: "app-asignar-tecnico-cliente",
@@ -12,11 +14,13 @@ import { MatPaginator, MatTableDataSource } from "@angular/material";
 })
 export class AsignarTecnicoClienteComponent implements OnInit {
   constructor(
-    private panelAdministracionService: PanelAdministracionService,
     private usuarioService: UsuarioService,
-    private ventaService: VentaService
+    private ventaService: VentaService,
+    private seguimientoService: SeguimientoService,
+    private dialog: MatDialog
   ) {
     this.myForm = new FormGroup({
+      _provincia: new FormControl(""),
       _canton: new FormControl(""),
       _parroquia: new FormControl(""),
       _comunidad: new FormControl(""),
@@ -25,9 +29,11 @@ export class AsignarTecnicoClienteComponent implements OnInit {
   }
 
   myForm: FormGroup;
+  provincia = false;
   canton = false;
   parroquia = false;
   comunidad = false;
+  provincias: any[] = [];
   cantones: any[] = [];
   parroquias: any[] = [];
   comunidades: any[] = [];
@@ -38,50 +44,76 @@ export class AsignarTecnicoClienteComponent implements OnInit {
   clientes = new MatTableDataSource<Element[]>();
   clientesTecnico = new MatTableDataSource<Element[]>();
 
-  consultarCantones() {
-    this.panelAdministracionService
-      .consultarCantones()
-      .then((ok) => {
-        this.cantones = [];
-        this.cantones = ok["respuesta"];
-        this.myForm.get("_parroquia").setValue("0");
-        this.myForm.get("_comunidad").setValue("0");
-      })
-      .catch((error) => console.log(error));
+  openDialog(mensaje): void {
+    const dialogRef = this.dialog.open(DialogAlertComponent, {
+      width: "250px",
+      data: { mensaje: mensaje },
+    });
   }
 
-  consultarParroquiasDeUnCanton(idCanton) {
-    const url = "Credito/ConsultarPersonasEnFacturasParaSeguimientoPorCanton";
-    this.panelAdministracionService
-      .consultarParroquiasDeUnCanton(idCanton)
-      .then((ok) => {
-        this.parroquias = [];
-        this.parroquias = ok["respuesta"];
-        this.myForm.get("_comunidad").setValue("0");
-        this.consultarClientesFiltrados(idCanton, "IdCanton", url);
-        this.canton = true;
-      })
-      .catch((error) => console.log(error));
+  async provinciasParaSeguimiento() {
+    var respuesta = await this.seguimientoService.provinciasParaSeguimiento();
+    if (respuesta["codigo"] == "200") {
+      this.provincias = respuesta["respuesta"];
+    }
   }
 
-  consultarComunidadesDeUnaParroquia(idParroquia) {
-    const url =
-      "Credito/ConsultarPersonasEnFacturasParaSeguimientoPorParroquia";
-    this.panelAdministracionService
-      .consultarComunidadesDeUnaParroquia(idParroquia)
-      .then((ok) => {
-        this.comunidades = [];
-        this.comunidades = ok["respuesta"];
-        this.consultarClientesFiltrados(idParroquia, "IdParroquia", url);
-        this.parroquia = true;
-      })
-      .catch((error) => console.log(error));
+  async cantonesParaSeguimiento(idProvincia) {
+    var respuesta = await this.seguimientoService.cantonesParaSeguimiento(
+      idProvincia
+    );
+    console.log(idProvincia);
+    
+    this.myForm.get("_canton").setValue("0");
+    this.myForm.get("_parroquia").setValue("0");
+    this.myForm.get("_comunidad").setValue("0");
+    if (respuesta["codigo"] == "200") {
+      this.cantones = respuesta["respuesta"];
+      this.consultarClientesFiltrados(
+        idProvincia,
+        "IdProvincia",
+        "Credito/ConsultarPersonasParaSeguimientoPorProvincia"
+      );
+    }
+  }
+
+  async parroquiasParaSeguimiento(idCanton) {
+    var respuesta = await this.seguimientoService.parroquiasParaSeguimiento(
+      idCanton
+    );
+    this.myForm.get("_parroquia").setValue("0");
+    this.myForm.get("_comunidad").setValue("0");
+    if (respuesta["codigo"] == "200") {
+      this.parroquias = respuesta["respuesta"];
+      this.consultarClientesFiltrados(
+        idCanton,
+        "IdCanton",
+        "Credito/ConsultarPersonasEnFacturasParaSeguimientoPorCanton"
+      );
+    }
+  }
+
+  async comunidadesParaSeguimiento(idParroquia) {
+    var respuesta = await this.seguimientoService.comunidadesParaSeguimiento(
+      idParroquia
+    );
+    this.myForm.get("_comunidad").setValue("0");
+    if (respuesta["codigo"] == "200") {
+      this.comunidades = respuesta["respuesta"];
+      this.consultarClientesFiltrados(
+        idParroquia,
+        "IdParroquia",
+        "Credito/ConsultarPersonasEnFacturasParaSeguimientoPorParroquia"
+      );
+    }
   }
 
   consultarClientesDeUnaComunidad(idComunidad) {
-    const url = "Credito/ConsultarPersonasParaSeguimientoPorComunidad";
-    this.consultarClientesFiltrados(idComunidad, "IdComunidad", url);
-    this.comunidad = true;
+    this.consultarClientesFiltrados(
+      idComunidad,
+      "IdComunidad",
+      "Credito/ConsultarPersonasParaSeguimientoPorComunidad"
+    );
   }
 
   async consultarClientesFiltrados(idLocalidad, localidad, url) {
@@ -90,6 +122,7 @@ export class AsignarTecnicoClienteComponent implements OnInit {
       idLocalidad,
       localidad
     );
+    console.log(clientes);
     if (clientes["codigo"] == "200") {
       var data: any = [];
       clientes["respuesta"].map((cliente) => {
@@ -111,127 +144,116 @@ export class AsignarTecnicoClienteComponent implements OnInit {
     }
   }
 
-  consultarTecnicos() {
-    this.usuarioService
-      .consultarTecnicos("2")
-      .then((ok) => {
-        this.tecnicos = [];
-        ok["respuesta"].map((tecnico) => {
-          this.tecnicos.push({
-            _id: tecnico.AsignacionTipoUsuario.IdAsignacionTUEncriptada,
-            nombres:
-              tecnico.PrimerNombre +
-              " " +
-              tecnico.SegundoNombre +
-              " " +
-              tecnico.ApellidoPaterno +
-              " " +
-              tecnico.ApellidoMaterno,
-          });
+  async consultarTecnicos() {
+    var respuesta = await this.usuarioService.consultarTecnicos("2");
+    if (respuesta["codigo"] == "200") {
+      respuesta["respuesta"].map((tecnico) => {
+        this.tecnicos.push({
+          _id: tecnico.AsignacionTipoUsuario.IdAsignacionTUEncriptada,
+          nombres:
+            tecnico.PrimerNombre +
+            " " +
+            tecnico.SegundoNombre +
+            " " +
+            tecnico.ApellidoPaterno +
+            " " +
+            tecnico.ApellidoMaterno,
         });
-      })
-      .catch((error) => console.log(error));
+      });
+    }
   }
 
-  clientesAsignados(idTecnico) {
-    const url = "Credito/ConsultarPersonasPorTecnico";
+  async clientesAsignados(idTecnico) {
     this.myForm.get("_idTecnico").setValue(idTecnico);
-    this.ventaService
-      .listarClientesTecnico(
-        url,
-        "IdAsignarTUTecnico",
-        idTecnico
-      )
-      .then((ok) => {
-        var clientesTecnico = [];
-        this.clientesTecnico.data = [];
-        ok["respuesta"].map((cliente) => {
-          clientesTecnico.push({
-            _id: cliente.IdPersona,
-            cedula: cliente.NumeroDocumento,
-            nombres:
-              cliente.PrimerNombre +
-              " " +
-              cliente.SegundoNombre +
-              " " +
-              cliente.ApellidoPaterno +
-              " " +
-              cliente.ApellidoMaterno,
-          });
+    var respuesta = await this.ventaService.listarClientesTecnico(
+      "Credito/ConsultarPersonasPorTecnico",
+      "IdAsignarTUTecnico",
+      idTecnico
+    );
+    if (respuesta["codigo"] == "200") {
+      var clientesTecnico: any;
+      this.clientesTecnico.data = [];
+      respuesta["respuesta"].map((cliente) => {
+        clientesTecnico.push({
+          _id: cliente.IdPersona,
+          cedula: cliente.NumeroDocumento,
+          nombres:
+            cliente.PrimerNombre +
+            " " +
+            cliente.SegundoNombre +
+            " " +
+            cliente.ApellidoPaterno +
+            " " +
+            cliente.ApellidoMaterno,
         });
-        this.clientesTecnico.data = clientesTecnico;
-        this.clientesTecnico.paginator = this.paginator;
-      })
-      .catch((error) => console.log(error));
+      });
+      this.clientesTecnico.data = clientesTecnico;
+      this.clientesTecnico.paginator = this.paginator;
+    }
   }
 
-  asignarClienteTecnico(idPersona) {
+  async asignarClienteTecnico(idPersona) {
     if (this.myForm.get("_idTecnico").value != "") {
-      this.ventaService
-        .asignarClienteTecnico(
-          this.myForm.get("_idTecnico").value,
-          idPersona
-        )
-        .then((ok) => {
-          if (ok["respuesta"]) {
-            var clientes = this.clientes.data;
-            var cliente: any = clientes.filter(
-              (cliente) => cliente["_id"] == idPersona
-            );
-            const index = clientes.indexOf(cliente[0]);
-            clientes.splice(index, 1);
-            this.clientes.data = clientes;
-            this.clientesAsignados(this.myForm.get("_idTecnico").value);
-          }
-        })
-        .catch((error) => console.log(error));
+      var respuesta = await this.ventaService.asignarClienteTecnico(
+        this.myForm.get("_idTecnico").value,
+        idPersona
+      );
+      if (respuesta["codigo"] == "200") {
+        var clientes = this.clientes.data;
+        var cliente: any = clientes.filter(
+          (cliente) => cliente["_id"] == idPersona
+        );
+        const index = clientes.indexOf(cliente[0]);
+        clientes.splice(index, 1);
+        this.clientes.data = clientes;
+        this.clientesAsignados(this.myForm.get("_idTecnico").value);
+      }
     } else {
-      sweetAlert("Necesitas un técnnico", { icon: "warning" });
+      this.openDialog("Necesitas un técnnico");
     }
   }
 
   queConsulto() {
     var url: string;
-    if (this.canton && this.parroquia && this.comunidad) {
-      url = "Credito/ConsultarPersonasParaSeguimientoPorComunidad";
+    if (this.provincia && this.canton && this.parroquia && this.comunidad) {
       this.consultarClientesFiltrados(
         this.myForm.get("_comunidad").value,
         "IdComunidad",
-        url
+        "Credito/ConsultarPersonasParaSeguimientoPorComunidad"
       );
-    } else if (this.canton && this.parroquia) {
-      url = "Credito/ConsultarPersonasEnFacturasParaSeguimientoPorParroquia";
+    } else if (this.provincia && this.canton && this.parroquia) {
       this.consultarClientesFiltrados(
         this.myForm.get("_parroquia").value,
         "IdParroquia",
-        url
+        "Credito/ConsultarPersonasEnFacturasParaSeguimientoPorParroquia"
       );
-    } else if (this.canton) {
-      url = "Credito/ConsultarPersonasEnFacturasParaSeguimientoPorCanton";
+    } else if (this.provincia && this.canton) {
       this.consultarClientesFiltrados(
         this.myForm.get("_canton").value,
         "IdCanton",
-        url
+        "Credito/ConsultarPersonasEnFacturasParaSeguimientoPorCanton"
+      );
+    } else if (this.provincia) {
+      this.consultarClientesFiltrados(
+        this.myForm.get("_canton").value,
+        "IdCanton",
+        "Credito/ConsultarPersonasParaSeguimientoPorProvincia"
       );
     }
   }
 
-  desasignarClienteTecnico(persona) {
-    this.ventaService
-      .desaignarClienteTecnico(
-        persona._id
-      )
-      .then((ok) => {
-        if (ok["respuesta"]) {
-          this.clientesAsignados(this.myForm.get("_idTecnico").value);
-          this.queConsulto();
-        }
-      })
-      .catch((error) => console.log(error));
+  async desasignarClienteTecnico(persona) {
+    var respuesta = await this.ventaService.desaignarClienteTecnico(
+      persona._id
+    );
+    if (respuesta["codigo"] == "200") {
+      this.clientesAsignados(this.myForm.get("_idTecnico").value);
+      this.queConsulto();
+    }
   }
 
   ngOnInit() {
-    this.consultarCantones();
+    this.provinciasParaSeguimiento();
     this.consultarTecnicos();
   }
 
