@@ -303,6 +303,9 @@ export class PersonaComponent implements OnInit {
     this.myForm
       .get("_parroquia")
       .setValue(persona.AsignacionPersonaParroquia[0].Parroquia.IdParroquia);
+      this.myForm
+      .get("_referencia")
+      .setValue(persona.AsignacionPersonaParroquia[0].Referencia);
     this.botonInsertar = "modificar";
   }
 

@@ -29,6 +29,7 @@ export class ModalAsignacionUsuarioTiposUsuarioComponent implements OnInit {
       this.data.idUsuario,
       this.tipoUsuario
     );
+    console.log(respuesta);
     if (respuesta["codigo"] == "200") {
       this.tipoUsuario = "0";
       this.botonEliminar = false;
@@ -60,6 +61,7 @@ export class ModalAsignacionUsuarioTiposUsuarioComponent implements OnInit {
     var respuesta = await this.usuarioService.eliminarTipoUsuario(
       idTipoUsuario
     );
+    console.log(respuesta);
     if (respuesta["codigo"] == "200") {
       this.consultarTipoUsuariosAsignados();
       this.consultarTipoUsuariosSinAsignar();

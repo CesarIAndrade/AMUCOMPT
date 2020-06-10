@@ -4,13 +4,18 @@ import { FormGroup, FormControl, Validators } from "@angular/forms";
 // Components
 import { ModalAsignacionUsuarioPersonaComponent } from "../modal-asignacion-usuario-persona/modal-asignacion-usuario-persona.component";
 import { ModalAsignacionUsuarioTiposUsuarioComponent } from "../modal-asignacion-usuario-tipos-usuario/modal-asignacion-usuario-tipos-usuario.component";
-import { MatPaginator, MatTableDataSource } from "@angular/material";
+import {
+  MatPaginator,
+  MatTableDataSource,
+  MatSnackBar,
+} from "@angular/material";
 // Functional Components
 import { MatDialog } from "@angular/material/dialog";
 
 // Services
 import { UsuarioService } from "src/app/services/usuario.service";
 import { PersonaService } from "src/app/services/persona.service";
+import { DialogAlertComponent } from "../dialog-alert/dialog-alert.component";
 
 @Component({
   selector: "app-usuario",
@@ -22,7 +27,8 @@ export class UsuarioComponent implements OnInit {
     private modalAsignacionUsuarioPersona: MatDialog,
     private modalAsignacionUsuarioTiposUsuario: MatDialog,
     private usuarioService: UsuarioService,
-    private personaService: PersonaService
+    private dialog: MatDialog,
+    private _snackBar: MatSnackBar
   ) {
     this.myForm = new FormGroup({
       _idUsuario: new FormControl(""),
@@ -48,8 +54,23 @@ export class UsuarioComponent implements OnInit {
 
   personas: any[] = [];
 
+  openDialog(mensaje): void {
+    const dialogRef = this.dialog.open(DialogAlertComponent, {
+      width: "250px",
+      data: { mensaje: mensaje },
+    });
+  }
+
+  openSnackBar(message: string) {
+    this._snackBar.open(message, "Cerrar", {
+      duration: 2000,
+      horizontalPosition: "right",
+    });
+  }
+
   async consultarUsuarios() {
     var usuarios = await this.usuarioService.consultarUsuarios();
+    console.log(usuarios);
     if (usuarios["codigo"] == "200") {
       this.usuarios.data = usuarios["respuesta"];
       this.usuarios.paginator = this.paginator;
@@ -80,33 +101,45 @@ export class UsuarioComponent implements OnInit {
       this.myForm.get("_valorUsuario").value,
       this.myForm.get("_contrasena").value
     );
-    console.log(respuesta);
+    if (respuesta["codigo"] == "200") {
+      this.openSnackBar("Se ingresó correctamente");
+      var usuarios: any = this.usuarios.data;
+      usuarios.push(respuesta["respuesta"]);
+      this.usuarios.data = usuarios;
+      this.myForm.reset();
+    }
   }
 
-  actualizarUsuario() {
-    this.usuarioService
-      .actualizarUsuario(
-        this.myForm.get("_idUsuario").value,
-        this.myForm.get("_idPersona").value,
-        this.myForm.get("_valorUsuario").value,
-        this.myForm.get("_contrasena").value
-      )
-      .then((ok) => {
-        if (ok["respuesta"]) {
-          this.myForm.reset();
-          this.consultarUsuarios();
-          this.nuevoUsuario = "Nuevo Usuario";
-          this.botonInsertar = "insertar";
-        }
-      })
-      .catch((error) => console.log(error));
+  async actualizarUsuario() {
+    var respuesta = await this.usuarioService.actualizarUsuario(
+      this.myForm.get("_idUsuario").value,
+      this.myForm.get("_idPersona").value,
+      this.myForm.get("_valorUsuario").value,
+      this.myForm.get("_contrasena").value
+    );
+    if (respuesta["codigo"] == "200") {
+      this.openSnackBar("Se actualizó correctamente");
+      var usuarios: any = this.usuarios.data;
+      var usuario = usuarios.find(
+        (usuario) => usuario["IdUsuario"] == this.myForm.get("_idUsuario").value
+      );
+      var index = usuarios.indexOf(usuario);
+      usuarios.splice(index, 1);
+      usuarios.push(respuesta["respuesta"]);
+      this.usuarios.data = usuarios;
+      this.nuevoUsuario = "Nuevo Usuario";
+      this.botonInsertar = "insertar";
+      this.myForm.reset();
+    }
   }
 
-  habilitarUsuario(usuario) {
-    this.usuarioService
-      .habilitarUsuario(usuario.IdUsuario)
-      .then((ok) => this.consultarUsuarios())
-      .catch((error) => console.log(error));
+  async habilitarUsuario(usuario) {
+    var respuesta = await this.usuarioService.habilitarUsuario(
+      usuario.IdUsuario
+    );
+    if (respuesta["codigo"] == "200") {
+      this.consultarUsuarios();
+    }
   }
 
   abrirModalAsignacionUsuarioPersona() {
@@ -125,29 +158,31 @@ export class UsuarioComponent implements OnInit {
         this.myForm.get("_apellidos").setValue(result.apellidos);
       }
     });
-  } 
+  }
 
   abrirModalAsignacionUsuarioTiposUsuario(usuario) {
-    var listaTipoUsuario = usuario.ListaTipoUsuario;
     let dialogRef = this.modalAsignacionUsuarioTiposUsuario.open(
       ModalAsignacionUsuarioTiposUsuarioComponent,
       {
         width: "500px",
         height: "auto",
         data: {
-          idUsuario: usuario.IdUsuario
+          idUsuario: usuario.IdUsuario,
         },
       }
     );
   }
 
-  eliminarUsuario(usuario) {
-    this.usuarioService.eliminarUsuario(usuario.IdUsuario);
+  async eliminarUsuario(usuario) {
+    var respuesta = await this.usuarioService.eliminarUsuario(
+      usuario.IdUsuario
+    );
+    if(respuesta["codigo"] == "200") {
+      this.consultarUsuarios();
+    }
   }
 
   mostrarUsuario(usuario) {
-    console.log(usuario);
-    
     this.nuevoUsuario = "Modificar Usuario";
     this.myForm.get("_idUsuario").setValue(usuario.IdUsuario);
     this.myForm.get("_idPersona").setValue(usuario.IdPersona);
@@ -163,7 +198,7 @@ export class UsuarioComponent implements OnInit {
     this.myForm.get("_contrasena").setValue("");
   }
 
-  cancelar(){
+  cancelar() {
     this.myForm.reset();
   }
 
