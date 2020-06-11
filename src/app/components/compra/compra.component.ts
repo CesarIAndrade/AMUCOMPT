@@ -378,9 +378,9 @@ export class CompraComponent implements OnInit {
     this.detalleCompra.data = [];
     if (respuesta["codigo"] == "200") {
       respuesta["respuesta"][0].DetalleFactura.map((item) => {
-        var lote = "";
+        var lote = "N/A";
         var idLote = "";
-        var kit = "";
+        var kit = "N/A";
         var idKit = "";
         var fechaExpiracion = "";
         var nombreProducto = "";
@@ -393,7 +393,7 @@ export class CompraComponent implements OnInit {
           lote = item.AsignarProductoLote[0].Lote.Codigo;
           idLote = item.AsignarProductoLote[0].Lote.IdLote;
           fechaExpiracion = item.AsignarProductoLote[0].Lote.FechaExpiracion;
-        } else {
+        } else if (item.AsignarProductoLote[0].FechaExpiracion) {
           fechaExpiracion = item.AsignarProductoLote[0].FechaExpiracion;
         }
         if (item.AsignarProductoLote[0].PerteneceKit != "False") {
@@ -444,6 +444,8 @@ export class CompraComponent implements OnInit {
           Precio: item.AsignarProductoLote[0].ValorUnitario,
           Total: total,
         };
+        console.log(producto);
+        
         detalleCompra.push(producto);
       });
       this.detalleCompra.data = detalleCompra;
@@ -563,6 +565,7 @@ export class CompraComponent implements OnInit {
   tablaDetalleCompra = [
     "codigo",
     "descripcion",
+    "contenido",
     "kit",
     "lote",
     "fechaExpiracion",

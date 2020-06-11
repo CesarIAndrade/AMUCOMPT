@@ -17,7 +17,7 @@
   z-index: 1;
 }
 
-.amucomt{
+.amucomt {
   margin-left: 10px;
   color: #343a40;
 }
@@ -27,23 +27,23 @@ a {
   text-decoration: none;
 }
 
-a:hover{
+a:hover {
   background-color: rgb(245, 246, 247);
 }
 
 a.active {
-  text-shadow: 1px 1px #f61cc4;  
+  text-shadow: 1px 1px #f61cc4;
   color: #343a40;
   background-color: rgb(225, 226, 227);
 }
 
 .toolbar_title {
-  text-shadow: 1px 1px #343a40;  
+  text-shadow: 1px 1px #343a40;
   color: #f61cc4;
 }
 
 .drawer_title {
-  text-shadow: 1px 1px #f8f9fa;  
+  text-shadow: 1px 1px #f8f9fa;
   color: #343a40;
 }
 
@@ -52,3 +52,11 @@ a.active {
     flex: 1 1 auto;
   }
 }
+
+::ng-deep .mat-select-value {
+  color: black !important;
+}
+
+::ng-deep .mat-focused .mat-form-field-label {
+  color: black !important;
+} 

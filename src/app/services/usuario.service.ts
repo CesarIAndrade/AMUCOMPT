@@ -423,4 +423,28 @@ export class UsuarioService {
         );
     });
   }
+
+  reasignarClientes(idTecnicoViejo: string, idTecnicoNuevo: string) {
+    const body = new HttpParams()
+      .set("IdAsignarTUAntiguo", idTecnicoViejo)
+      .set("IdAsignarTUNuevo", idTecnicoNuevo)
+      .set("encriptada", localStorage.getItem("miCuenta.getToken"));
+    return new Promise((resolve, reject) => {
+      this.http
+        .post(apiUrl + "Credito/TransferirTecnico", body.toString(), {
+          headers: new HttpHeaders().set(
+            "Content-Type",
+            "application/x-www-form-urlencoded"
+          ),
+        })
+        .subscribe(
+          (res) => {
+            resolve(res);
+          },
+          (err) => {
+            reject(err);
+          }
+        );
+    });
+  }
 }

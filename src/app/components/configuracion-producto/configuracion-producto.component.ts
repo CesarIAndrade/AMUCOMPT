@@ -7,7 +7,7 @@ import {
   MatDialog,
   MatSnackBar,
 } from "@angular/material";
-import { Observable } from "rxjs";
+import { Observable, of } from "rxjs";
 import { map, startWith } from "rxjs/operators";
 import { DialogAlertComponent } from "../dialog-alert/dialog-alert.component";
 
@@ -290,29 +290,33 @@ export class ConfiguracionProductoComponent implements OnInit {
   }
 
   async crearKit() {
-    var kit = await this.inventarioService.crearKit(
-      this.myForm.get("_campo").value,
-      this.myForm.get("_codigo").value,
-      this.myForm.get("_descuento").value
-    );
-    if(kit["codigo"] == "200") {
-      this.openSnackBar("Se ingresó correctamente");
-      var kits: any = this.dataSource.data;
-      kits.push({
-        _id: kit["respuesta"].IdKit,
-        descripcion: kit["respuesta"].Descripcion,
-        utilizado: kit["respuesta"].KitUtilizado,
-        codigo: kit["respuesta"].Codigo,
-        descuento: kit["respuesta"].AsignarDescuentoKit.Descuento.Porcentaje,
-      });
-      this.dataSource.data = kits;
-      this.limpiarCampos();
-    } else if (kit["codigo"] == "400") {
-      this.openDialog("Inténtalo de nuevo");
-    } else if (kit["codigo"] == "418") {
-      this.openDialog(kit["mensaje"]);
-    } else if (kit["codigo"] == "500") {
-      this.openDialog("Problemas con el servidor");
+    if (this.myForm.get("_descuento").value % 1 === 0) {
+      var kit = await this.inventarioService.crearKit(
+        this.myForm.get("_campo").value,
+        this.myForm.get("_codigo").value,
+        this.myForm.get("_descuento").value
+      );
+      if (kit["codigo"] == "200") {
+        this.openSnackBar("Se ingresó correctamente");
+        var kits: any = this.dataSource.data;
+        kits.push({
+          _id: kit["respuesta"].IdKit,
+          descripcion: kit["respuesta"].Descripcion,
+          utilizado: kit["respuesta"].KitUtilizado,
+          codigo: kit["respuesta"].Codigo,
+          descuento: kit["respuesta"].AsignarDescuentoKit.Descuento.Porcentaje,
+        });
+        this.dataSource.data = kits;
+        this.limpiarCampos();
+      } else if (kit["codigo"] == "400") {
+        this.openDialog("Inténtalo de nuevo");
+      } else if (kit["codigo"] == "418") {
+        this.openDialog(kit["mensaje"]);
+      } else if (kit["codigo"] == "500") {
+        this.openDialog("Problemas con el servidor");
+      }
+    } else {
+      this.openDialog("El descuento debe ser entero");
     }
   }
 
@@ -348,8 +352,8 @@ export class ConfiguracionProductoComponent implements OnInit {
     if (respuesta["codigo"] == "200") {
       this.openSnackBar("Se eliminó correctamente");
       var kits: any = this.dataSource.data;
-      var kit = kits.find(kit => kit["_id"] == idKit);
-      var index = kits.indexOf(kit)
+      var kit = kits.find((kit) => kit["_id"] == idKit);
+      var index = kits.indexOf(kit);
       kits.splice(index, 1);
       this.dataSource.data = kits;
     } else if (respuesta["codigo"] == "400") {

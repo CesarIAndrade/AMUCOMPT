@@ -14,8 +14,8 @@ import { MatDialog } from "@angular/material/dialog";
 
 // Services
 import { UsuarioService } from "src/app/services/usuario.service";
-import { PersonaService } from "src/app/services/persona.service";
 import { DialogAlertComponent } from "../dialog-alert/dialog-alert.component";
+import { ModalReasignarClientesComponent } from "../modal-reasignar-clientes/modal-reasignar-clientes.component";
 
 @Component({
   selector: "app-usuario",
@@ -28,7 +28,8 @@ export class UsuarioComponent implements OnInit {
     private modalAsignacionUsuarioTiposUsuario: MatDialog,
     private usuarioService: UsuarioService,
     private dialog: MatDialog,
-    private _snackBar: MatSnackBar
+    private _snackBar: MatSnackBar,
+    private modalReasignarClientesComponent: MatDialog
   ) {
     this.myForm = new FormGroup({
       _idUsuario: new FormControl(""),
@@ -70,7 +71,6 @@ export class UsuarioComponent implements OnInit {
 
   async consultarUsuarios() {
     var usuarios = await this.usuarioService.consultarUsuarios();
-    console.log(usuarios);
     if (usuarios["codigo"] == "200") {
       this.usuarios.data = usuarios["respuesta"];
       this.usuarios.paginator = this.paginator;
@@ -169,7 +169,6 @@ export class UsuarioComponent implements OnInit {
         data: {
           idUsuario: usuario.IdUsuario,
         },
-        // disableClose: true,
       }
     );
     dialogRef.afterClosed().subscribe((result) => {
@@ -185,9 +184,29 @@ export class UsuarioComponent implements OnInit {
     var respuesta = await this.usuarioService.eliminarUsuario(
       usuario.IdUsuario
     );
-    if(respuesta["codigo"] == "200") {
+    console.log(respuesta);
+    if (respuesta["codigo"] == "200") {
       this.consultarUsuarios();
+    } else if (respuesta["codigo"] == "409") {
+      this.reasignarClientes(usuario);
     }
+  }
+
+  reasignarClientes(usuario) {
+    const dialogRef = this.dialog.open(ModalReasignarClientesComponent, {
+      width: "350px",
+      height: "auto",
+      data: {
+        usuario: usuario
+      },
+    });
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result != null) {
+        if(result.flag) {
+          this.eliminarUsuario(result.usuario);
+        }
+      }
+    });
   }
 
   mostrarUsuario(usuario) {

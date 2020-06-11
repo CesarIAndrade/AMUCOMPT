@@ -62,8 +62,7 @@ export class AsignarTecnicoClienteComponent implements OnInit {
     var respuesta = await this.seguimientoService.cantonesParaSeguimiento(
       idProvincia
     );
-    console.log(idProvincia);
-    
+    this.provincia = true;
     this.myForm.get("_canton").setValue("0");
     this.myForm.get("_parroquia").setValue("0");
     this.myForm.get("_comunidad").setValue("0");
@@ -81,6 +80,7 @@ export class AsignarTecnicoClienteComponent implements OnInit {
     var respuesta = await this.seguimientoService.parroquiasParaSeguimiento(
       idCanton
     );
+    this.canton = true;
     this.myForm.get("_parroquia").setValue("0");
     this.myForm.get("_comunidad").setValue("0");
     if (respuesta["codigo"] == "200") {
@@ -97,6 +97,7 @@ export class AsignarTecnicoClienteComponent implements OnInit {
     var respuesta = await this.seguimientoService.comunidadesParaSeguimiento(
       idParroquia
     );
+    this.parroquia = true;
     this.myForm.get("_comunidad").setValue("0");
     if (respuesta["codigo"] == "200") {
       this.comunidades = respuesta["respuesta"];
@@ -114,6 +115,7 @@ export class AsignarTecnicoClienteComponent implements OnInit {
       "IdComunidad",
       "Credito/ConsultarPersonasParaSeguimientoPorComunidad"
     );
+    this.comunidad = true;
   }
 
   async consultarClientesFiltrados(idLocalidad, localidad, url) {
@@ -171,7 +173,7 @@ export class AsignarTecnicoClienteComponent implements OnInit {
       idTecnico
     );
     if (respuesta["codigo"] == "200") {
-      var clientesTecnico: any;
+      var clientesTecnico: any = [];
       this.clientesTecnico.data = [];
       respuesta["respuesta"].map((cliente) => {
         clientesTecnico.push({
@@ -214,7 +216,7 @@ export class AsignarTecnicoClienteComponent implements OnInit {
   }
 
   queConsulto() {
-    var url: string;
+    console.log(this.myForm.get("_provincia").value);
     if (this.provincia && this.canton && this.parroquia && this.comunidad) {
       this.consultarClientesFiltrados(
         this.myForm.get("_comunidad").value,
@@ -235,8 +237,8 @@ export class AsignarTecnicoClienteComponent implements OnInit {
       );
     } else if (this.provincia) {
       this.consultarClientesFiltrados(
-        this.myForm.get("_canton").value,
-        "IdCanton",
+        this.myForm.get("_provincia").value,
+        "IdProvincia",
         "Credito/ConsultarPersonasParaSeguimientoPorProvincia"
       );
     }

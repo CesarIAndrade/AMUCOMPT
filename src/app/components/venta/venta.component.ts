@@ -45,9 +45,9 @@ export class VentaComponent implements OnInit {
       _cantidad: new FormControl(""),
       _precio: new FormControl(""),
       _persona: new FormControl(""),
-      _cedula: new FormControl("", [Validators.required]),
-      _idPersona: new FormControl("", [Validators.required]),
-      _nombres: new FormControl("", [Validators.required]),
+      _cedula: new FormControl(""),
+      _idPersona: new FormControl(""),
+      _nombres: new FormControl(""),
       _idAsignarProductoLote: new FormControl(""),
       _kit: new FormControl(""),
       _checkedDescuento: new FormControl(false),
@@ -341,11 +341,13 @@ export class VentaComponent implements OnInit {
     if (respuesta["codigo"] == "200") {
       var codigo = "";
       var idLote = "";
-      var lote = "";
+      var lote = "N/A";
       var idKit = "";
-      var kit = "";
+      var kit = "N/A";
       var nombreProducto = "";
       var presentacion = "";
+      var contenido = "";
+      var fechaExpiracion = "";
       var descuento = "0";
       var porcentajeDescuento = "0";
       var perteneceKitCompleto = false;
@@ -355,6 +357,9 @@ export class VentaComponent implements OnInit {
       this.totalIva = respuesta["respuesta"].TotalIva;
       this.totalFactura = respuesta["respuesta"].Total;
       respuesta["respuesta"].DetalleVenta.map((item) => {
+        if (item.AsignarProductoLote.FechaExpiracion) {
+          fechaExpiracion = item.AsignarProductoLote.FechaExpiracion;
+        }
         if (item.PerteneceKitCompleto) {
           perteneceKitCompleto = true;
         } else {
@@ -372,8 +377,8 @@ export class VentaComponent implements OnInit {
               .Nombre;
           presentacion =
             item.AsignarProductoLote.AsignarProductoKit.ListaProductos
-              .Presentacion.Descripcion +
-            " " +
+              .Presentacion.Descripcion;
+          contenido =
             item.AsignarProductoLote.AsignarProductoKit.ListaProductos
               .CantidadMedida +
             " " +
@@ -387,8 +392,8 @@ export class VentaComponent implements OnInit {
             item.AsignarProductoLote.ConfigurarProductos.Producto.Nombre;
           presentacion =
             item.AsignarProductoLote.ConfigurarProductos.Presentacion
-              .Descripcion +
-            " " +
+              .Descripcion;
+          contenido =
             item.AsignarProductoLote.ConfigurarProductos.CantidadMedida +
             " " +
             item.AsignarProductoLote.ConfigurarProductos.Medida.Descripcion;
@@ -407,9 +412,10 @@ export class VentaComponent implements OnInit {
           Cantidad: item.Cantidad,
           Producto: nombreProducto,
           Presentacion: presentacion,
+          Contenido: contenido,
           IdLote: idLote,
           Lote: lote,
-          FechaExpiracion: item.AsignarProductoLote.FechaExpiracion,
+          FechaExpiracion: fechaExpiracion,
           IdKit: idKit,
           Kit: kit,
           Descuento: descuento,
@@ -420,6 +426,7 @@ export class VentaComponent implements OnInit {
           PorcentajeDescuento: porcentajeDescuento,
           Iva: item.IvaAnadido,
         };
+        console.log(producto);
         detalleVenta.push(producto);
       });
       this.detalleVenta.data = detalleVenta;
@@ -471,12 +478,12 @@ export class VentaComponent implements OnInit {
   }
 
   validarFecha() {
-    if(this.myForm.get("_fechaFinalCredito").value) {
+    if (this.myForm.get("_fechaFinalCredito").value) {
       var fechaFinalCredito: any = new Date(
         this.myForm.get("_fechaFinalCredito").value
-      );      
+      );
     } else {
-      return fechaFinalCredito = "";
+      return (fechaFinalCredito = "");
     }
     var fechaActual = new Date();
     if (fechaFinalCredito.getFullYear() < fechaActual.getFullYear()) {
@@ -488,15 +495,23 @@ export class VentaComponent implements OnInit {
   }
 
   async crearConfiguracionVenta() {
-    var respuesta = await this.ventaService.crearConfiguracionVenta(
-      this.myForm.get("_idCabecera").value,
-      this.myForm.get("_idPersona").value,
-      this.siSePagaACredito ? "1" : "0",
-      this.validarFecha(),
-      this.myForm.get("_aplicaSeguro").value ? "1" : "0"
-    );
-    if (respuesta["codigo"] == "200") {
-      this.realizarVenta();
+    if (this.myForm.get("_nombres").value) {
+      if (this.pago == "Crédito" && this.comunidades.length == 0) {
+        this.openDialog("Necesitas lugar(es) de sembrío");
+      } else {
+        var respuesta = await this.ventaService.crearConfiguracionVenta(
+          this.myForm.get("_idCabecera").value,
+          this.myForm.get("_idPersona").value,
+          this.siSePagaACredito ? "1" : "0",
+          this.validarFecha(),
+          this.myForm.get("_aplicaSeguro").value ? "1" : "0"
+        );
+        if (respuesta["codigo"] == "200") {
+          this.realizarVenta();
+        }
+      }
+    } else {
+      this.openDialog("Necesitas un cliente");
     }
   }
 
@@ -630,11 +645,13 @@ export class VentaComponent implements OnInit {
     this.consultarTipoTransaccion();
     this.consultarFacturas();
     this.myForm.disable();
+    this.myForm.reset();
   }
 
   tablaDetalleCompra = [
     "codigo",
     "descripcion",
+    "contenido",
     "kit",
     "lote",
     "fechaExpiracion",
