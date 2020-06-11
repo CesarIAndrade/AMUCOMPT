@@ -173,7 +173,6 @@ export class UsuarioComponent implements OnInit {
     );
     dialogRef.afterClosed().subscribe((result) => {
       if (result != null) {
-        console.log(result);
         this.openDialog(result);
         this.consultarUsuarios();
       }
@@ -184,7 +183,6 @@ export class UsuarioComponent implements OnInit {
     var respuesta = await this.usuarioService.eliminarUsuario(
       usuario.IdUsuario
     );
-    console.log(respuesta);
     if (respuesta["codigo"] == "200") {
       this.consultarUsuarios();
     } else if (respuesta["codigo"] == "409") {
@@ -202,7 +200,6 @@ export class UsuarioComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe((result) => {
       if (result != null) {
-        console.log(result);
         if(result.flag) {
           this.eliminarUsuario(result.usuario);
         }
