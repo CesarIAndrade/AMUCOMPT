@@ -14,6 +14,8 @@ export class ModalReasignarClientesComponent implements OnInit {
     private modalReasignarClientesComponent: MatDialogRef<ModalReasignarClientesComponent>
   ) {}
 
+  idAsignacionTu: string;
+  idTecnico: string;
   tecnicos: any[] = [];
 
   async consultarTecnicos() {
@@ -39,10 +41,6 @@ export class ModalReasignarClientesComponent implements OnInit {
     }
   } 
 
-  idAsignacionTu: string;
-  idTecnico: string;
-
-
   async consultarTipoUsuariosAsignados() {
     var tipoUsuarios = await this.usuarioService.consultarTipoUsuariosAsignados(
       this.data.usuario.IdUsuario
@@ -56,17 +54,15 @@ export class ModalReasignarClientesComponent implements OnInit {
     }
   }
 
-
   seleccionarTecnico(idTecnico) {
     this.idTecnico = idTecnico;
   }
 
  async reasignarClientes() {
     var respuesta = await this.usuarioService.reasignarClientes(
-      this.idTecnico,
-      this.idAsignacionTu
+      this.idAsignacionTu,
+      this.idTecnico
     );
-    console.log(respuesta);
     if(respuesta["codigo"] == "200") {
       this.modalReasignarClientesComponent.close({
         flag: true,

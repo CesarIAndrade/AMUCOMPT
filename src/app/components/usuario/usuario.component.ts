@@ -202,6 +202,7 @@ export class UsuarioComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe((result) => {
       if (result != null) {
+        console.log(result);
         if(result.flag) {
           this.eliminarUsuario(result.usuario);
         }
