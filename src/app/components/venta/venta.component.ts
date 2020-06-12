@@ -228,13 +228,14 @@ export class VentaComponent implements OnInit {
     );
     dialogRef.afterClosed().subscribe((result) => {
       if (result != null) {
-        console.log(result);
+        console.log(result); 
         if (result.flag) {
           this.consultarDetalleFactura();
           this.kit = true;
           this.seccionKit = true;
           this.selected = "Producto";
           this.myForm.get("_producto").setValue("");
+          this.listaProductosDeUnKit = [];
         } else if (!result.flag) {
           if (result.Kit != "") {
             this.kit = false;
