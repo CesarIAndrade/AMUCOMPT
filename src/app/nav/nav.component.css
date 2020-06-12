@@ -52,11 +52,3 @@ a.active {
     flex: 1 1 auto;
   }
 }
-
-::ng-deep .mat-select-value {
-  color: black !important;
-}
-
-::ng-deep .mat-focused .mat-form-field-label {
-  color: black !important;
-} 

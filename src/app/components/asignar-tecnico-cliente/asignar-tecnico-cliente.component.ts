@@ -15,7 +15,6 @@ import { DialogAlertComponent } from "../dialog-alert/dialog-alert.component";
 export class AsignarTecnicoClienteComponent implements OnInit {
   constructor(
     private usuarioService: UsuarioService,
-    private ventaService: VentaService,
     private seguimientoService: SeguimientoService,
     private dialog: MatDialog
   ) {
@@ -119,7 +118,7 @@ export class AsignarTecnicoClienteComponent implements OnInit {
   }
 
   async consultarClientesFiltrados(idLocalidad, localidad, url) {
-    var clientes = await this.ventaService.filtroClientesEnAsignacion(
+    var clientes = await this.seguimientoService.filtroClientesEnAsignacion(
       url,
       idLocalidad,
       localidad
@@ -167,7 +166,7 @@ export class AsignarTecnicoClienteComponent implements OnInit {
 
   async clientesAsignados(idTecnico) {
     this.myForm.get("_idTecnico").setValue(idTecnico);
-    var respuesta = await this.ventaService.listarClientesTecnico(
+    var respuesta = await this.seguimientoService.listarClientesTecnico(
       "Credito/ConsultarPersonasPorTecnico",
       "IdAsignarTUTecnico",
       idTecnico
@@ -196,7 +195,7 @@ export class AsignarTecnicoClienteComponent implements OnInit {
 
   async asignarClienteTecnico(idPersona) {
     if (this.myForm.get("_idTecnico").value != "") {
-      var respuesta = await this.ventaService.asignarClienteTecnico(
+      var respuesta = await this.seguimientoService.asignarClienteTecnico(
         this.myForm.get("_idTecnico").value,
         idPersona
       );
@@ -245,7 +244,7 @@ export class AsignarTecnicoClienteComponent implements OnInit {
   }
 
   async desasignarClienteTecnico(persona) {
-    var respuesta = await this.ventaService.desaignarClienteTecnico(
+    var respuesta = await this.seguimientoService.desaignarClienteTecnico(
       persona._id
     );
     if (respuesta["codigo"] == "200") {

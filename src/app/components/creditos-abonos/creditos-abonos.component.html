@@ -1,1 +1,18 @@
-<p>creditos-abonos works!</p>
+<div class="container">
+  <div class="card-body">
+    <form [formGroup]="myForm" (ngSubmit)="validarFormulario()" novalidate>
+      <div class="row">
+        <div class="col-lg-10 col-md-10">
+          <mat-form-field class="example-full-width">
+            <input matInput formControlName="_cliente" type="text" placeholder="Buscar Cliente"/>
+          </mat-form-field>
+        </div>
+        <div class="col-lg-2 col-md-2">
+          <button mat-button class="mt-2 bg-success text-white">
+            <mat-icon>search</mat-icon>
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

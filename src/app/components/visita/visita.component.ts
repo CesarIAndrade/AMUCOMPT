@@ -3,13 +3,11 @@ import { FormGroup, FormControl } from "@angular/forms";
 import {
   MatTableDataSource,
   MatPaginator,
-  MatBottomSheetRef,
   MatBottomSheet,
 } from "@angular/material";
-import { VentaService } from "src/app/services/venta.service";
-import { PanelAdministracionService } from "src/app/services/panel-administracion.service";
 import { ComunidadesBottomSheet } from "./comunidades-bottom-sheet.component";
 import { Router } from "@angular/router";
+import { SeguimientoService } from 'src/app/services/seguimiento.service';
 
 @Component({
   selector: "app-visita",
@@ -18,7 +16,7 @@ import { Router } from "@angular/router";
 })
 export class VisitaComponent implements OnInit {
   constructor(
-    private ventaService: VentaService,
+    private seguimientoService: SeguimientoService,
     private bottomSheet: MatBottomSheet,
     private router: Router
   ) {
@@ -131,7 +129,7 @@ export class VisitaComponent implements OnInit {
   }
 
   async consultarClientesFiltrados() {
-    var clientes = await this.ventaService.filtroClientesEnVisitas(
+    var clientes = await this.seguimientoService.filtroClientesEnVisitas(
       this.myForm.get("_idTecnico").value
     );
     if (clientes["codigo"] == "200") {
@@ -142,7 +140,7 @@ export class VisitaComponent implements OnInit {
   }
 
   async listarClientesTecnico() {
-    var respuesta = await this.ventaService.listarClientesTecnico(
+    var respuesta = await this.seguimientoService.listarClientesTecnico(
       "Credito/ConsultarPersonasConComunidadesPorTecnico",
       "IdAsignarTUTecnico",
       this.myForm.get("_idTecnico").value

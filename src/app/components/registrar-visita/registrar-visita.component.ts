@@ -1,12 +1,12 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-import { VentaService } from "src/app/services/venta.service";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import {
   MatTableDataSource,
   MatPaginator,
   MatSnackBar,
 } from "@angular/material";
+import { SeguimientoService } from 'src/app/services/seguimiento.service';
 
 @Component({
   selector: "app-registrar-visita",
@@ -16,7 +16,7 @@ import {
 export class RegistrarVisitaComponent implements OnInit {
   constructor(
     private activatedRoute: ActivatedRoute,
-    private ventaService: VentaService,
+    private seguimientoService: SeguimientoService,
     private _snackBar: MatSnackBar
   ) {
     this.myForm = new FormGroup({
@@ -31,7 +31,7 @@ export class RegistrarVisitaComponent implements OnInit {
   botonIngresar = "ingresar";
 
   async visitasClienteComunidad(idComunidad) {
-    var respuesta = await this.ventaService.visitasClienteComunidad(
+    var respuesta = await this.seguimientoService.visitasClienteComunidad(
       idComunidad
     );
     if (respuesta["codigo"] == "200") {
@@ -72,7 +72,7 @@ export class RegistrarVisitaComponent implements OnInit {
   }
 
   async registrarVisita() {
-    var visita = await this.ventaService.registrarVisita(
+    var visita = await this.seguimientoService.registrarVisita(
       this.myForm.get("_idComunidad").value,
       localStorage.getItem("miCuenta.idAsignacionTipoUsuario"),
       this.myForm.get("_observacion").value
@@ -102,7 +102,7 @@ export class RegistrarVisitaComponent implements OnInit {
   }
 
   async actualizarVisita() {
-    var respuesta = await this.ventaService.actualizarVisita(
+    var respuesta = await this.seguimientoService.actualizarVisita(
       this.myForm.get("_idVisita").value,
       this.myForm.get("_idTecnico").value,
       this.myForm.get("_observacion").value
@@ -129,7 +129,7 @@ export class RegistrarVisitaComponent implements OnInit {
   }
 
   async eliminarVisita(idVisita) {
-    var respuesta = await this.ventaService.eliminarVisita(idVisita);
+    var respuesta = await this.seguimientoService.eliminarVisita(idVisita);
     if (respuesta["codigo"] == "200") {
       var visitas = this.visitas.data;
       var visita: any = visitas.filter((visita) => visita["_id"] == idVisita);
