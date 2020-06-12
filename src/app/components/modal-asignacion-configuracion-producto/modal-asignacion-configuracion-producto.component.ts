@@ -47,6 +47,7 @@ export class ModalAsignacionConfiguracionProductoComponent implements OnInit {
     FechaExpiracion: "",
     Porcentaje: "",
     Disponible: "",
+    flag: false,
   };
 
   // Para la paginacion
@@ -190,7 +191,7 @@ export class ModalAsignacionConfiguracionProductoComponent implements OnInit {
     );
     console.log(respuesta);
     if (respuesta["codigo"] == "200") {
-      this.modalAsignacionConfiguracionProducto.close(true);
+      this.modalAsignacionConfiguracionProducto.close({flag: true});
     }
   }
 

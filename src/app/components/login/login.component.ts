@@ -50,6 +50,7 @@ export class LoginComponent implements OnInit {
         this.tipoUsuarios = login["respuesta"]["ListaTipoUsuario"];
         this.seleccionarTipoUsuario = false;
         this.ingresarCredenciales = true;
+        localStorage.setItem("miCuenta.usuario", login["respuesta"].IdUsuario);
       } else {
         this.myForm.reset();
         this.myForm.get("_tipoUsuario").setValue("0");

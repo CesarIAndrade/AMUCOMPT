@@ -35,7 +35,7 @@ export class CreditosAbonosComponent implements OnInit {
       var facturas: any = [];
       respuesta["respuesta"].map((factura) => {
         var p = 100;
-        var fechaActual = new Date("2020-07-08T00:00:00.00");
+        var fechaActual = new Date("2020-06-14T00:00:00.00");
         var fechaFactura = new Date(factura.FechaGeneracion);
         var fechaFinalCredito = new Date(
           factura.ConfigurarVenta.FechaFinalCredito
@@ -51,13 +51,13 @@ export class CreditosAbonosComponent implements OnInit {
         var filtroEstado: string;
         if (Math.round(intervalo) <= 50) {
           estado = "badge badge-success";
-          filtroEstado = "0";
+          filtroEstado = "Normal";
         } else if (Math.round(intervalo) > 50 && Math.round(intervalo) <= 80) {
           estado = "badge badge-warning";
-          filtroEstado = "1";
+          filtroEstado = "Observación";
         } else if (Math.round(intervalo) > 80) {
           estado = "badge badge-danger";
-          filtroEstado = "2";
+          filtroEstado = "Urgente";
         }
         facturas.push({
           Codigo: factura.Codigo,

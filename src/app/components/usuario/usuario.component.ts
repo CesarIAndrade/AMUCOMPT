@@ -70,9 +70,17 @@ export class UsuarioComponent implements OnInit {
   }
 
   async consultarUsuarios() {
-    var usuarios = await this.usuarioService.consultarUsuarios();
-    if (usuarios["codigo"] == "200") {
-      this.usuarios.data = usuarios["respuesta"];
+    var respuesta = await this.usuarioService.consultarUsuarios();
+    if (respuesta["codigo"] == "200") {
+      var usuarios: any = [];
+      for (let usuario of respuesta["respuesta"]) {
+        if(usuario.IdUsuario == localStorage.getItem("miCuenta.usuario")) {
+          continue;
+        } else {
+          usuarios.push(usuario);
+        }
+      }
+      this.usuarios.data = usuarios;
       this.usuarios.paginator = this.paginator;
     }
   }

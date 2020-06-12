@@ -9,7 +9,6 @@ import {
 import { MatDialog } from "@angular/material/dialog";
 
 // Components
-import { ModalAsignacionUsuarioPersonaComponent } from "../modal-asignacion-usuario-persona/modal-asignacion-usuario-persona.component";
 import { ModalAsignacionConfiguracionProductoComponent } from "../modal-asignacion-configuracion-producto/modal-asignacion-configuracion-producto.component";
 import { ModalLocalidadSuperiorComponent } from "../modal-localidad-superior/modal-localidad-superior.component";
 
@@ -19,7 +18,6 @@ import { FacturaService } from "src/app/services/factura.service";
 import { VentaService } from "src/app/services/venta.service";
 import { DialogAlertComponent } from "../dialog-alert/dialog-alert.component";
 import { ModalPersonaComponent } from "../modal-persona/modal-persona.component";
-import { runInThisContext } from 'vm';
 
 @Component({
   selector: "app-venta",
@@ -230,34 +228,40 @@ export class VentaComponent implements OnInit {
     );
     dialogRef.afterClosed().subscribe((result) => {
       if (result != null) {
-        if(result) {
+        console.log(result);
+        if (result.flag) {
           this.consultarDetalleFactura();
-        }
-        if (result.Kit != "") {
-          this.kit = false;
-          this.myForm.get("_kit").setValue(result.Kit);
-          this.myForm.get("_descuento").setValue(result.Porcentaje);
-        } else {
           this.kit = true;
-          this.myForm.get("_kit").setValue("");
-          this.myForm.get("_checkedDescuento").setValue(false);
+          this.seccionKit = true;
+          this.selected = "Producto";
+          this.myForm.get("_producto").setValue("");
+        } else if (!result.flag) {
+          if (result.Kit != "") {
+            this.kit = false;
+            this.myForm.get("_kit").setValue(result.Kit);
+            this.myForm.get("_descuento").setValue(result.Porcentaje);
+          } else if (result.Kit == "") {
+            this.kit = true;
+            this.myForm.get("_kit").setValue("");
+            this.myForm.get("_checkedDescuento").setValue(false);
+          }
+          this.myForm
+            .get("_idAsignarProductoLote")
+            .setValue(result.IdAsignarProductoLote);
+          this.consultarPrecioDeUnProducto();
+          this.myForm.get("_disponible").setValue(result.Disponible);
+          var producto =
+            result.Producto +
+            " " +
+            result.Presentacion +
+            " " +
+            result.ContenidoNeto +
+            " " +
+            result.Medida;
+          this.myForm.get("_producto").setValue(producto);
+          this.myForm.get("_cantidad").reset();
+          this.myForm.get("_checkedDescuento").enable();
         }
-        this.myForm
-          .get("_idAsignarProductoLote")
-          .setValue(result.IdAsignarProductoLote);
-        this.consultarPrecioDeUnProducto();
-        this.myForm.get("_disponible").setValue(result.Disponible);
-        var producto =
-          result.Producto +
-          " " +
-          result.Presentacion +
-          " " +
-          result.ContenidoNeto +
-          " " +
-          result.Medida;
-        this.myForm.get("_producto").setValue(producto);
-        this.myForm.get("_cantidad").reset();
-        this.myForm.get("_checkedDescuento").enable();
       }
     });
   }
@@ -445,7 +449,6 @@ export class VentaComponent implements OnInit {
         detalleFactura.IdCabeceraFactura,
         detalleFactura.IdKit
       );
-      console.log(respuesta);
       if (respuesta["codigo"] == "200") {
         this.consultarDetalleFactura();
       } else if (respuesta["codigo"] == "201") {
