@@ -226,7 +226,7 @@ export class VentaComponent implements OnInit {
         },
       }
     );
-    dialogRef.afterClosed().subscribe((result) => {
+    dialogRef.afterClosed().subscribe((result) => { 
       if (result != null) {
         console.log(result); 
         if (result.flag) {
