@@ -19,6 +19,7 @@ import { FacturaService } from "src/app/services/factura.service";
 import { VentaService } from "src/app/services/venta.service";
 import { DialogAlertComponent } from "../dialog-alert/dialog-alert.component";
 import { ModalPersonaComponent } from "../modal-persona/modal-persona.component";
+import { runInThisContext } from 'vm';
 
 @Component({
   selector: "app-venta",
@@ -189,6 +190,7 @@ export class VentaComponent implements OnInit {
   async consultarKits() {
     var kits = await this.inventarioService.consultarKits();
     if (kits["codigo"] == "200") {
+      this.kits = [];
       kits["respuesta"].map((item) => {
         if (item.KitUtilizado == "1") {
           this.kits.push(item);
@@ -228,6 +230,9 @@ export class VentaComponent implements OnInit {
     );
     dialogRef.afterClosed().subscribe((result) => {
       if (result != null) {
+        if(result) {
+          this.consultarDetalleFactura();
+        }
         if (result.Kit != "") {
           this.kit = false;
           this.myForm.get("_kit").setValue(result.Kit);
@@ -426,7 +431,6 @@ export class VentaComponent implements OnInit {
           PorcentajeDescuento: porcentajeDescuento,
           Iva: item.IvaAnadido,
         };
-        console.log(producto);
         detalleVenta.push(producto);
       });
       this.detalleVenta.data = detalleVenta;
@@ -441,6 +445,7 @@ export class VentaComponent implements OnInit {
         detalleFactura.IdCabeceraFactura,
         detalleFactura.IdKit
       );
+      console.log(respuesta);
       if (respuesta["codigo"] == "200") {
         this.consultarDetalleFactura();
       } else if (respuesta["codigo"] == "201") {

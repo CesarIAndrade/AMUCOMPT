@@ -171,6 +171,7 @@ export class CompraComponent implements OnInit {
   async consultarKits() {
     var respuesta = await this.inventarioService.consultarKits();
     if (respuesta["codigo"] == "200") {
+      this.kits = [];
       respuesta["respuesta"].map((kit) => {
         if (kit.KitUtilizado == "1") {
           this.kits.push(kit);
@@ -223,6 +224,7 @@ export class CompraComponent implements OnInit {
         this.myForm.get("_lote").reset();
         this.myForm.get("_cantidad").reset();
         this.myForm.get("_precio").reset();
+        this.myForm.get("_precio").enable();
         this.buttonSeleccionarLote = false;
         this.buscarFechaYPrecio();
       }
@@ -444,8 +446,6 @@ export class CompraComponent implements OnInit {
           Precio: item.AsignarProductoLote[0].ValorUnitario,
           Total: total,
         };
-        console.log(producto);
-        
         detalleCompra.push(producto);
       });
       this.detalleCompra.data = detalleCompra;
@@ -482,7 +482,6 @@ export class CompraComponent implements OnInit {
           idDetalleFactura,
           event.target.value
         );
-        console.log(respuesta);
       }
     }
   }
@@ -496,6 +495,11 @@ export class CompraComponent implements OnInit {
       this.openDialog("Compra realizada con éxito");
       this.consultarFacturas();
       this.selectTipoCompra = true;
+      if (!this.seccionKit) {
+        this.buttonSeleccionarProducto = true;
+        this.seccionKit = true;
+        this.selected = "Producto";
+      }
       this.myForm.reset();
       this.myForm.disable();
       this.detalleCompra.data = [];

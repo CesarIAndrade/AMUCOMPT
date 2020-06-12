@@ -3,40 +3,56 @@
     <h5 style="text-align: center;">Lista Lotes</h5>
 
     <div class="row">
-        <div class="col-lg-6">
-          <mat-form-field class="example-full-width">
-            <input matInput (keyup)="keyUp($event)" type="text" placeholder="Lote" [(ngModel)]="lote.nombreLote"/> 
-          </mat-form-field>
-        </div>
-        <div class="col-lg-6"> 
-            <mat-form-field class="example-full-width">
-                <input
-                  readonly
-                  matInput
-                  (dateInput)="change()"
-                  [(ngModel)]="lote.fechaExpiracion"
-                  [matDatepicker]="picker"
-                  placeholder="Fecha Expiración"
-                />
-                <mat-datepicker-toggle matSuffix [for]="picker">
-                </mat-datepicker-toggle>
-                <mat-datepicker #picker></mat-datepicker>
-              </mat-form-field>
-          </div>
+      <div class="col-lg-6">
+        <mat-form-field class="example-full-width">
+          <input
+            matInput
+            (keyup)="keyUp($event)"
+            type="text"
+            placeholder="Lote"
+            [(ngModel)]="lote.nombreLote"
+          />
+        </mat-form-field>
       </div>
-      <div class="row">
-        <div class="col-lg-12" style="padding-top: 1%">
-            <button
-              mat-button
-              type="button"
-              [disabled]="permitirCrearLote"
-              [mat-dialog-close]="lote"
-              class="bg-warning text-white btn-block"
-            >
-            Crear Lote
-            </button>
-          </div>
+      <div class="col-lg-6">
+        <mat-form-field class="example-full-width">
+          <input
+            readonly
+            matInput
+            (dateInput)="change()"
+            [(ngModel)]="lote.fechaExpiracion"
+            [matDatepicker]="picker"
+            placeholder="Fecha Expiración"
+          />
+          <mat-datepicker-toggle matSuffix [for]="picker">
+          </mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
       </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-12" style="padding-top: 1%;">
+        <button
+          mat-button
+          type="button"
+          [disabled]="permitirCrearLote"
+          [mat-dialog-close]="lote"
+          class="bg-warning text-white btn-block"
+        >
+          Crear Lote
+        </button>
+      </div>
+      <div class="col-lg-12">
+        <a 
+          mat-button
+          type="button"
+          class="mt-2 btn-block"
+          (click)="cerrarModal()"
+        >
+          Volver
+        </a>
+      </div>
+    </div>
     <div class="table_all">
       <table mat-table [dataSource]="lotes">
         <ng-container matColumnDef="lote">
@@ -44,12 +60,14 @@
           <td mat-cell *matCellDef="let element">{{ element.Codigo }}</td>
         </ng-container>
         <ng-container matColumnDef="capacidad">
-            <th mat-header-cell *matHeaderCellDef>Capacidad</th>
-            <td mat-cell *matCellDef="let element">{{ element.Capacidad }}</td>
-          </ng-container>
+          <th mat-header-cell *matHeaderCellDef>Capacidad</th>
+          <td mat-cell *matCellDef="let element">{{ element.Capacidad }}</td>
+        </ng-container>
         <ng-container matColumnDef="fechaExpiracion">
           <th mat-header-cell *matHeaderCellDef>FechaExpiracion</th>
-          <td mat-cell *matCellDef="let element">{{ element.FechaExpiracion }}</td>
+          <td mat-cell *matCellDef="let element">
+            {{ element.FechaExpiracion }}
+          </td>
         </ng-container>
         <ng-container matColumnDef="acciones">
           <th mat-header-cell *matHeaderCellDef>Acciones</th>

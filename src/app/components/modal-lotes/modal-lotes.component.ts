@@ -3,6 +3,7 @@ import {
   MAT_DIALOG_DATA,
   MatTableDataSource,
   MatPaginator,
+  MatDialog,
 } from "@angular/material";
 import { InventarioService } from "src/app/services/inventario.service";
 
@@ -14,7 +15,8 @@ import { InventarioService } from "src/app/services/inventario.service";
 export class ModalLotesComponent implements OnInit {
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private inventarioService: InventarioService
+    private inventarioService: InventarioService,
+    private modalLotesComponent: MatDialog
   ) {}
 
   permitirCrearLote = true;
@@ -59,6 +61,16 @@ export class ModalLotesComponent implements OnInit {
     this.lote.nombreLote = lote.Codigo;
     this.lote.fechaExpiracion = lote.FechaExpiracion;
     this.lote.precio = lote.AsignarProductoLote.ValorUnitario;
+  }
+
+  cerrarModal(){
+    this.modalLotesComponent.closeAll();
+    this.lote = {
+      nombreLote: "",
+      fechaExpiracion: "",
+      idLote: "",
+      precio: "",
+    };
   }
 
   ngOnInit() {

@@ -1,6 +1,6 @@
 import { Component, OnInit, Inject, ViewChild } from "@angular/core";
 import { InventarioService } from "src/app/services/inventario.service";
-import { MAT_DIALOG_DATA, MatDialog } from "@angular/material/dialog";
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { Router } from "@angular/router";
 import { VentaService } from "src/app/services/venta.service";
 import { MatPaginator, MatTableDataSource } from "@angular/material";
@@ -15,7 +15,7 @@ export class ModalAsignacionConfiguracionProductoComponent implements OnInit {
     private inventarioService: InventarioService,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private ventaService: VentaService,
-    private modalAsignacionConfiguracionProducto: MatDialog,
+    private modalAsignacionConfiguracionProducto: MatDialogRef<ModalAsignacionConfiguracionProductoComponent>,
     private router: Router
   ) {}
 
@@ -188,8 +188,9 @@ export class ModalAsignacionConfiguracionProductoComponent implements OnInit {
       this.idKit,
       this.cantidad
     );
+    console.log(respuesta);
     if (respuesta["codigo"] == "200") {
-      this.modalAsignacionConfiguracionProducto.closeAll();
+      this.modalAsignacionConfiguracionProducto.close(true);
     }
   }
 
