@@ -103,7 +103,7 @@ export class ProductoComponent implements OnInit {
       var productos: any = [];
       respuesta["respuesta"].map((producto) => {
         console.log(producto.Producto.Descripcion);
-        
+
         productos.push({
           IdConfigurarProducto: producto.IdConfigurarProducto,
           IdProducto: producto.Producto.IdProducto,
@@ -270,6 +270,11 @@ export class ProductoComponent implements OnInit {
       productos.splice(index, 1);
       this.productos.data = productos;
     }
+  }
+  search(term: string) {
+    term = term.trim();
+    term = term.toUpperCase(); 
+    this.productos.filter = term;
   }
 
   ngOnInit() {
