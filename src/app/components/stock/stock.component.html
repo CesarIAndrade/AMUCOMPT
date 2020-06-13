@@ -6,7 +6,7 @@
         <mat-form-field class="example-full-width">
           <input
             matInput
-            [(ngModel)]="filterProducto"
+            (keyup)="search($event.target.value)"
             type="text"
             placeholder="Buscar Producto"
           />
@@ -14,21 +14,8 @@
             <mat-icon>search</mat-icon>
           </button>
         </mat-form-field>
-
         <div class="table_all">
-          <div
-            class="spinner-container"
-            *ngIf="listaProductosEnStock.loading$ | async"
-          >
-            <mat-spinner></mat-spinner>
-          </div>
-          <table
-            mat-table
-            [dataSource]="
-              listaProductosEnStock
-                | filter: filterProducto:'Producto':'Codigo':'TipoProducto'
-            "
-          >
+          <table mat-table [dataSource]="listaProductosEnStock">
             <ng-container matColumnDef="codigo">
               <th mat-header-cell *matHeaderCellDef>Código</th>
               <td mat-cell *matCellDef="let element">{{ element.Codigo }}</td>
@@ -98,6 +85,9 @@
             <tr mat-header-row *matHeaderRowDef="tablaStock; sticky: true"></tr>
             <tr mat-row *matRowDef="let row; columns: tablaStock"></tr>
           </table>
+          <div class="spinner-container" *ngIf="loading">
+            <mat-spinner></mat-spinner>
+          </div>
           <mat-paginator
             #paginator
             [pageSizeOptions]="[7]"

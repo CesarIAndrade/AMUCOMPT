@@ -1,11 +1,4 @@
-import {
-  Component,
-  OnInit,
-  ViewChild,
-  EventEmitter,
-  Input,
-  Output,
-} from "@angular/core";
+import { Component, OnInit, ViewChild, Input } from "@angular/core";
 import {
   FormGroup,
   Validators,
@@ -16,19 +9,19 @@ import {
 import { ErrorStateMatcher } from "@angular/material/core";
 
 // Components
-import { ModalDetallePersonaComponent } from "src/app/components/modal-detalle-persona/modal-detalle-persona.component";
+import { DialogAlertComponent } from "../dialog-alert/dialog-alert.component";
+
+// Functional Components
+import { MatDialog } from "@angular/material/dialog";
 import {
   MatPaginator,
   MatTableDataSource,
   MatSnackBar,
 } from "@angular/material";
-// Functional Components
-import { MatDialog } from "@angular/material/dialog";
 
 // Services
 import { PersonaService } from "../../services/persona.service";
 import { PanelAdministracionService } from "src/app/services/panel-administracion.service";
-import { DialogAlertComponent } from "../dialog-alert/dialog-alert.component";
 
 @Component({
   selector: "app-persona",
@@ -73,7 +66,7 @@ export class PersonaComponent implements OnInit {
     });
   }
 
-  @Input() llamadaModal = "false";
+  @Input() renderizarTablaOriginal = "true";
 
   get _correo() {
     return this.myForm.get("_correo");
@@ -90,6 +83,9 @@ export class PersonaComponent implements OnInit {
   filterPersona = "";
   guardar = "Guardar";
   nuevaPersona = "Nueva Persona";
+  digitosTelefono1 = 0;
+  digitosTelefono2 = 0;
+  mostrarTablaPersonasEnVista = false;
 
   cantones: any[] = [];
   parroquias: any[] = [];
@@ -117,19 +113,6 @@ export class PersonaComponent implements OnInit {
     var provincias = await this.panelAdministracionService.consultarProvincias();
     if (provincias["codigo"] == "200") {
       this.provincias = provincias["respuesta"];
-    }
-  }
-
-  async consultarPersonas() {
-    var respuesta = await this.personaService.consultarPersonas();
-    if (respuesta["codigo"] == "200") {
-      var personas: any = [];
-      respuesta["respuesta"].map((persona) => {
-        persona.Acciones = this.llamadaModal;
-        personas.push(persona);
-      });
-      this.personas.data = personas;
-      this.personas.paginator = this.paginator;
     }
   }
 
@@ -198,10 +181,6 @@ export class PersonaComponent implements OnInit {
     }
   }
 
-  digitosTelefono1 = 0;
-  digitosTelefono2 = 0;
-
-
   seleccionarTipoTelefono1(event) {
     var tipo = this.tipoTelefonos.find(
       (tipo) => tipo.IdTipoTelefono == event.value
@@ -213,21 +192,21 @@ export class PersonaComponent implements OnInit {
         .get("_telefono1")
         .setValidators([
           Validators.required,
-          Validators.pattern(/^-?(0|[1-9]\d*)?$/),
+          Validators.pattern(/^-?(0|[0-9]\d*)?$/),
           Validators.maxLength(10),
           Validators.minLength(10),
         ]);
       this.myForm.get("_telefono1").updateValueAndValidity();
       this.digitosTelefono1 = 10;
     } else {
-      this.digitosTelefono1 = 9;
+      this.digitosTelefono1 = 7;
       this.myForm
         .get("_telefono1")
         .setValidators([
           Validators.required,
-          Validators.pattern(/^-?(0|[1-9]\d*)?$/),
-          Validators.maxLength(9),
-          Validators.minLength(9),
+          Validators.pattern(/^-?(0|[0-9]\d*)?$/),
+          Validators.maxLength(7),
+          Validators.minLength(7),
         ]);
       this.myForm.get("_telefono1").updateValueAndValidity();
       this.myForm.get("_telefono1").reset();
@@ -244,20 +223,20 @@ export class PersonaComponent implements OnInit {
       this.myForm
         .get("_telefono2")
         .setValidators([
-          Validators.pattern(/^-?(0|[1-9]\d*)?$/),
+          Validators.pattern(/^-?(0|[0-9]\d*)?$/),
           Validators.maxLength(10),
           Validators.minLength(10),
         ]);
       this.myForm.get("_telefono2").updateValueAndValidity();
       this.digitosTelefono2 = 10;
     } else {
-      this.digitosTelefono2 = 9;
+      this.digitosTelefono2 = 7;
       this.myForm
         .get("_telefono2")
         .setValidators([
-          Validators.pattern(/^-?(0|[1-9]\d*)?$/),
-          Validators.maxLength(9),
-          Validators.minLength(9),
+          Validators.pattern(/^-?(0|[0-9]\d*)?$/),
+          Validators.maxLength(7),
+          Validators.minLength(7),
         ]);
       this.myForm.get("_telefono2").updateValueAndValidity();
       this.myForm.get("_telefono2").reset();
@@ -296,8 +275,9 @@ export class PersonaComponent implements OnInit {
       console.log(respuesta);
       if (respuesta["codigo"] == "200") {
         this.openSnackBar("Se ingresó correctamente");
+        this.personaService.refresh$.emit();
         var personas: any = this.personas.data;
-        respuesta["respuesta"].Acciones = this.llamadaModal;
+        respuesta["respuesta"].Acciones = this.renderizarTablaOriginal;
         personas.push(respuesta["respuesta"]);
         this.personas.data = personas;
         this.myForm.get("_telefono1").disable();
@@ -313,20 +293,9 @@ export class PersonaComponent implements OnInit {
     }
   }
 
-  abrirModal(persona) {
-    let dialogRef = this.dialog.open(ModalDetallePersonaComponent, {
-      width: "500px",
-      height: "auto",
-      data: {
-        persona: persona,
-      },
-    });
-  }
-
   mostrarPersona(persona) {
     this.myForm.get("_telefono1").enable();
     this.myForm.get("_telefono2").enable();
-    console.log(persona);
     this.nuevaPersona = "Modificar Persona";
     this.contacto = "Modificar Contacto";
     this.direccion = "Modificar Direccion";
@@ -406,6 +375,7 @@ export class PersonaComponent implements OnInit {
       console.log(respuesta);
       if (respuesta["codigo"] == "200") {
         this.openSnackBar("Se actualizó correctamente");
+        this.personaService.refresh$.emit();
         var personas: any = this.personas.data;
         var persona = personas.find(
           (persona) =>
@@ -413,7 +383,7 @@ export class PersonaComponent implements OnInit {
         );
         var index = personas.indexOf(persona);
         personas.splice(index, 1);
-        respuesta["respuesta"].Acciones = this.llamadaModal;
+        respuesta["respuesta"].Acciones = this.renderizarTablaOriginal;
         personas.push(respuesta["respuesta"]);
         this.personas.data = personas;
         this.nuevaPersona = "Nueva Persona";
@@ -434,20 +404,19 @@ export class PersonaComponent implements OnInit {
     }
   }
 
-  @Output() obtenerPersona = new EventEmitter();
-  seleccionarPersona(persona) {
-    this.obtenerPersona.emit(persona);
-  }
-
   cancelar() {
     this.myForm.reset();
   }
 
   ngOnInit() {
-    this.consultarPersonas();
     this.consultarTipoDocumento();
     this.consultarTipoTelefono();
     this.consultarProvincias();
+    if (this.renderizarTablaOriginal == "false") {
+      this.mostrarTablaPersonasEnVista = false;
+    } else {
+      this.mostrarTablaPersonasEnVista = true;
+    }
     this.myForm.get("_telefono1").disable();
     this.myForm.get("_telefono2").disable();
   }

@@ -1,3 +1,22 @@
 <mat-dialog-content>
-    <app-persona llamadaModal="true" (obtenerPersona)="obtenerPersona($event)"></app-persona>
+  <app-tabla-persona
+    llamadaModal="true"
+    (obtenerPersona)="obtenerPersona($event)"
+  >
+  </app-tabla-persona>
+  <div>
+    <button
+      mat-button
+      type="button"
+      (click)="mostrarFormularioPersona()"
+      class="mt-2 bg-warning text-white btn-block"
+    >
+      Crear Persona
+    </button>
+  </div>
+  <ng-container *ngIf="crearPersona">
+    <app-persona
+      [renderizarTablaOriginal]="renderizarTablaOriginal"
+    ></app-persona>
+  </ng-container>
 </mat-dialog-content>

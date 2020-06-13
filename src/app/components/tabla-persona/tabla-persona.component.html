@@ -1,0 +1,88 @@
+<mat-form-field class="example-full-width">
+  <input
+    matInput
+    (keyup)="search($event.target.value)"
+    type="text"
+    placeholder="Buscar Persona"
+  />
+  <button mat-button matPrefix mat-icon-button>
+    <mat-icon>search</mat-icon>
+  </button>
+</mat-form-field>
+<div class="table_all">
+  <table mat-table [dataSource]="personas">
+    <ng-container matColumnDef="nombres">
+      <th mat-header-cell *matHeaderCellDef>Nombres</th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.PrimerNombre }}
+        {{ element.SegundoNombre }}
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="apellidos">
+      <th mat-header-cell *matHeaderCellDef>Apellidos</th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.ApellidoPaterno }} {{ element.ApellidoMaterno }}
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="documento">
+      <th mat-header-cell *matHeaderCellDef>Documento</th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.TipoDocumento }}
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="numeroDocumento">
+      <th mat-header-cell *matHeaderCellDef>No. Documento</th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.NumeroDocumento }}
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="acciones">
+      <th colspan="2" mat-header-cell *matHeaderCellDef>Acciones</th>
+      <ng-container *matCellDef="let element">
+        <ng-container *ngIf="element.Acciones == 'false'">
+          <td mat-cell>
+            <button
+              mat-button
+              type="button"
+              class="btn-outline-info"
+              (click)="abrirModal(element)"
+            >
+              <mat-icon>visibility</mat-icon>
+            </button>
+          </td>
+          <td mat-cell>
+            <button
+              mat-button
+              type="button"
+              class="btn-outline-primary"
+              (click)="mostrarPersona(element)"
+            >
+              <mat-icon>edit</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+        <ng-container *ngIf="element.Acciones == 'true'">
+          <td mat-cell>
+            <button
+              mat-button
+              class="btn-outline-warning"
+              (click)="seleccionarPersona(element)"
+            >
+              <mat-icon>person_add</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+      </ng-container>
+    </ng-container>
+    <tr mat-header-row *matHeaderRowDef="tablaPersonas; sticky: true"></tr>
+    <tr mat-row *matRowDef="let row; columns: tablaPersonas"></tr>
+  </table>
+  <div class="spinner-container" *ngIf="loading">
+    <mat-spinner></mat-spinner>
+  </div>
+  <mat-paginator
+    #paginator
+    [pageSizeOptions]="[5]"
+    showFirstLastButtons
+  ></mat-paginator>
+</div>

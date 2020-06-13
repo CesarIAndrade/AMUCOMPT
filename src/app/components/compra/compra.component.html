@@ -374,6 +374,9 @@
                   *matRowDef="let row; columns: tablaFacturasNoFinalidas"
                 ></tr>
               </table>
+              <div class="spinner-container" *ngIf="loadingFnF">
+                <mat-spinner></mat-spinner>
+              </div>
               <mat-paginator
                 #fnf_paginator
                 [pageSizeOptions]="[8]"
@@ -430,6 +433,9 @@
                   *matRowDef="let row; columns: tablaFacturasFinalidas"
                 ></tr>
               </table>
+              <div class="spinner-container" *ngIf="loadingFF">
+                <mat-spinner></mat-spinner>
+              </div>
               <mat-paginator
                 #ff_paginator
                 [pageSizeOptions]="[8]"

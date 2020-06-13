@@ -1,4 +1,4 @@
-import { Injectable } from "@angular/core";
+import { Injectable, EventEmitter } from "@angular/core";
 import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
 import { apiUrl } from "../../environments/environment";
 @Injectable({
@@ -6,6 +6,8 @@ import { apiUrl } from "../../environments/environment";
 })
 export class PersonaService {
   constructor(private http: HttpClient) {}
+
+  refresh$ = new EventEmitter();
 
   consultarPersonas() {
     const body = new HttpParams().set(

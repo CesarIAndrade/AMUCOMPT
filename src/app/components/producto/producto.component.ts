@@ -271,6 +271,7 @@ export class ProductoComponent implements OnInit {
       this.productos.data = productos;
     }
   }
+  
   search(term: string) {
     term = term.trim();
     term = term.toUpperCase(); 

@@ -46,6 +46,8 @@ import { RegistrarVisitaComponent } from './components/registrar-visita/registra
 import { DialogAlertComponent } from './components/dialog-alert/dialog-alert.component';
 import { ModalPersonaComponent } from './components/modal-persona/modal-persona.component';
 import { ModalReasignarClientesComponent } from './components/modal-reasignar-clientes/modal-reasignar-clientes.component';
+import { FormularioPersonaComponent } from './components/formulario-persona/formulario-persona.component';
+import { TablaPersonaComponent } from './components/tabla-persona/tabla-persona.component';
 
 @NgModule({
   declarations: [
@@ -83,7 +85,9 @@ import { ModalReasignarClientesComponent } from './components/modal-reasignar-cl
     RegistrarVisitaComponent,
     DialogAlertComponent,
     ModalPersonaComponent,
-    ModalReasignarClientesComponent
+    ModalReasignarClientesComponent,
+    FormularioPersonaComponent,
+    TablaPersonaComponent
   ],
   imports: [
     BrowserModule,

@@ -631,6 +631,8 @@ export class VentaComponent implements OnInit {
     }
   }
 
+  loadingFnF = true;
+  loadingFF = true;
   async consultarFacturas() {
     var facturasNoFinalizadas = await this.facturaService.consultarFacturas(
       "Factura/FacturasNoFinalizadasVenta"
@@ -639,10 +641,12 @@ export class VentaComponent implements OnInit {
       "Factura/ListaFacturasFinalizadasVenta"
     );
     if (facturasNoFinalizadas["codigo"] == "200") {
+      this.loadingFnF = false;
       this.facturasNoFinalizadas.data = facturasNoFinalizadas["respuesta"];
       this.facturasNoFinalizadas.paginator = this.fnf_paginator;
     }
     if (facturasFinalizadas["codigo"] == "200") {
+      this.loadingFF = false;
       this.facturasFinalizadas.data = facturasFinalizadas["respuesta"];
       this.facturasFinalizadas.paginator = this.ff_paginator;
     }

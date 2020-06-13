@@ -17,9 +17,12 @@ export class StockComponent implements OnInit {
 
   filterProducto = "";
 
+  loading = true;
+
   async consultarStock() {
     var stock = await this.inventarioService.consultarStock();
     if (stock["codigo"] == "200") {
+      this.loading = false;
       var listaProductosEnStock = [];
       stock["respuesta"].map((item) => {
         var lote = "N/A";
@@ -107,6 +110,12 @@ export class StockComponent implements OnInit {
       this.listaProductosEnStock.data = listaProductosEnStock;
       this.listaProductosEnStock.paginator = this.paginator;
     }
+  }
+
+  search(term: string) {
+    term = term.trim();
+    term = term.toUpperCase(); 
+    this.listaProductosEnStock.filter = term;
   }
 
   ngOnInit() {
