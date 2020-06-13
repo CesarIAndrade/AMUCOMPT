@@ -232,6 +232,7 @@ export class VentaComponent implements OnInit {
         if (result.flag) {
           this.consultarDetalleFactura();
           this.buttonRealizarVenta = false;
+          this.buttonGenerarFactura = false;
           this.kit = true;
           this.seccionKit = true;
           this.selected = "Producto";
@@ -334,6 +335,7 @@ export class VentaComponent implements OnInit {
       );
       if (respuesta["codigo"] == "200") {
         this.buttonRealizarVenta = false;
+        this.buttonGenerarFactura = false;
         this.kit = true;
         this.seccionKit = true;
         this.selected = "Producto";
@@ -416,8 +418,6 @@ export class VentaComponent implements OnInit {
           porcentajeDescuento = "0";
           descuento = "0";
         }
-        console.log(fechaExpiracion); 
-        
         var producto = {
           IdCabeceraFactura: item.IdCabeceraFactura,
           IdDetalleVenta: item.IdDetalleVenta,

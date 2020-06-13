@@ -22,7 +22,6 @@ export class StockComponent implements OnInit {
     if (stock["codigo"] == "200") {
       var listaProductosEnStock = [];
       stock["respuesta"].map((item) => {
-
         var lote = "N/A";
         var kit = "N/A";
         var fechaExpiracion = "";
@@ -88,8 +87,6 @@ export class StockComponent implements OnInit {
           descripcion =
             item.AsignarProductoLote.ConfigurarProductos.Producto.Descripcion;
         }
-        console.log(fechaExpiracion);
-
         var producto = {
           Codigo: codigo,
           Producto: nombreProducto,
