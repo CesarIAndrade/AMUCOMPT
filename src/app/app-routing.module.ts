@@ -22,95 +22,141 @@ import { VisitaComponent } from "./components/visita/visita.component";
 
 // Guards
 import { ValidarUsuarioGuard } from "src/app/guards/validar-usuario.guard";
-import { RegistrarVisitaComponent } from './components/registrar-visita/registrar-visita.component';
+import { RegistrarVisitaComponent } from "./components/registrar-visita/registrar-visita.component";
 
-const routes: Routes = [
-  // { path: '', pathMatch: 'full', redirectTo: 'login' },
-  { path: "login", component: LoginComponent },
-  {
-    path: "",
-    component: NavComponent,
-    // canActivate: [ValidarUsuarioGuard],
-    children: [
-      {
-        path: "usuarios",
-        component: UsuarioComponent,
-        // canActivate: [ValidarUsuarioGuard]
-      },
-      {
-        path: "personas",
-        component: PersonaComponent,
-        // canActivate: [ValidarUsuarioGuard]
-      },
-      {
-        path: "configuracion-productos",
-        component: ConfiguracionProductoComponent,
-        // canActivate: [ValidarUsuarioGuard]
-      },
-      {
-        path: "inventarios",
-        component: InventarioComponent,
-        // canActivate: [ValidarUsuarioGuard]
-      },
-      {
-        path: "stock",
-        component: StockComponent,
-        // canActivate: [ValidarUsuarioGuard]
-      },
-      {
-        path: "asignar-tecnico-cliente",
-        component: AsignarTecnicoClienteComponent,
-        // canActivate: [ValidarUsuarioGuard]
-      },
-      {
-        path: "visitas",
-        component: VisitaComponent,
-        // canActivate: [ValidarUsuarioGuard]
-      },
-      {
-        path: "registrar-visita/:id",
-        component: RegistrarVisitaComponent,
-        // canActivate: [ValidarUsuarioGuard]
-      },
-      {
-        path: "abonos",
-        component: CreditosAbonosComponent,
-        // canActivate: [ValidarUsuarioGuard]
-      },
-      {
-        path: "compras",
-        component: CompraComponent,
-        // canActivate: [ValidarUsuarioGuard]
-      },
-      {
-        path: "compras-rubros",
-        component: CompraRubrosComponent,
-        // canActivate: [ValidarUsuarioGuard]
-      },
-      {
-        path: "ventas",
-        component: VentaComponent,
-        // canActivate: [ValidarUsuarioGuard]
-      },
-      {
-        path: "ventas-rubros",
-        component: VentaRubrosComponent,
-        // canActivate: [ValidarUsuarioGuard]
-      },
-      {
-        path: "localizaciones",
-        component: PanelAdministracionComponent,
-        // canActivate: [ValidarUsuarioGuard]
-      },
-      {
-        path: "cuenta",
-        component: CuentaComponent,
-        // canActivate: [ValidarUsuarioGuard]
-      },
-    ],
-  },
-  { path: "**", component: Page404Component },
-];
+var routesList = [];
+if (localStorage.getItem("miCuenta.tipoUsuario") == "1") {
+  routesList = [
+    // { path: '', pathMatch: 'full', redirectTo: 'login' },
+    { path: "login", component: LoginComponent },
+    {
+      path: "",
+      component: NavComponent,
+      // canActivate: [ValidarUsuarioGuard],
+      children: [
+        {
+          path: "usuarios",
+          component: UsuarioComponent,
+          // canActivate: [ValidarUsuarioGuard]
+        },
+        {
+          path: "personas",
+          component: PersonaComponent,
+          // canActivate: [ValidarUsuarioGuard]
+        },
+        {
+          path: "cuenta",
+          component: CuentaComponent,
+          // canActivate: [ValidarUsuarioGuard]
+        },
+      ],
+    },
+    { path: "**", component: Page404Component },
+  ];
+} else if (localStorage.getItem("miCuenta.tipoUsuario") == "2") {
+  routesList = [
+    // { path: '', pathMatch: 'full', redirectTo: 'login' },
+    { path: "login", component: LoginComponent },
+    {
+      path: "",
+      component: NavComponent,
+      // canActivate: [ValidarUsuarioGuard],
+      children: [
+        {
+          path: "visitas",
+          component: VisitaComponent,
+          // canActivate: [ValidarUsuarioGuard]
+        },
+        {
+          path: "registrar-visita/:id",
+          component: RegistrarVisitaComponent,
+          // canActivate: [ValidarUsuarioGuard]
+        },
+        {
+          path: "compras-rubros",
+          component: CompraRubrosComponent,
+          // canActivate: [ValidarUsuarioGuard]
+        },
+        {
+          path: "ventas-rubros",
+          component: VentaRubrosComponent,
+          // canActivate: [ValidarUsuarioGuard]
+        },
+        {
+          path: "cuenta",
+          component: CuentaComponent,
+          // canActivate: [ValidarUsuarioGuard]
+        },
+      ],
+    },
+    { path: "**", component: Page404Component },
+  ];
+} else if (localStorage.getItem("miCuenta.tipoUsuario") == "3") {
+  routesList = [
+    // { path: '', pathMatch: 'full', redirectTo: 'login' },
+    { path: "login", component: LoginComponent },
+    {
+      path: "",
+      component: NavComponent,
+      // canActivate: [ValidarUsuarioGuard],
+      children: [
+        {
+          path: "personas",
+          component: PersonaComponent,
+          // canActivate: [ValidarUsuarioGuard]
+        },
+        {
+          path: "configuracion-productos",
+          component: ConfiguracionProductoComponent,
+          // canActivate: [ValidarUsuarioGuard]
+        },
+        {
+          path: "inventarios",
+          component: InventarioComponent,
+          // canActivate: [ValidarUsuarioGuard]
+        },
+        {
+          path: "stock",
+          component: StockComponent,
+          // canActivate: [ValidarUsuarioGuard]
+        },
+        {
+          path: "asignar-tecnico-cliente",
+          component: AsignarTecnicoClienteComponent,
+          // canActivate: [ValidarUsuarioGuard]
+        },
+        {
+          path: "abonos",
+          component: CreditosAbonosComponent,
+          // canActivate: [ValidarUsuarioGuard]
+        },
+        {
+          path: "compras",
+          component: CompraComponent,
+          // canActivate: [ValidarUsuarioGuard]
+        },
+        {
+          path: "ventas",
+          component: VentaComponent,
+          // canActivate: [ValidarUsuarioGuard]
+        },
+        {
+          path: "localizaciones",
+          component: PanelAdministracionComponent,
+          // canActivate: [ValidarUsuarioGuard]
+        },
+        {
+          path: "cuenta",
+          component: CuentaComponent,
+          // canActivate: [ValidarUsuarioGuard]
+        },
+      ],
+    },
+    { path: "**", component: Page404Component },
+  ];
+}
+
+const routes: Routes = routesList;
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],

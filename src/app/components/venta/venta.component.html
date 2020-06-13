@@ -80,8 +80,6 @@
                 <div class="col-lg-3 col-md-2">
                   <button
                     [disabled]="buttonSeleccionarProducto"
-                    tooltip="Seleccionar Producto"
-                    placement="top"
                     type="button"
                     mat-button
                     class="mt-2 btn-outline-warning"
@@ -183,7 +181,6 @@
                 <div class="col-lg-3 col-md-2">
                   <button
                     [disabled]="buttonSeleccionarPersona"
-                    tooltip="Seleccionar Persona"
                     mat-button
                     class="mt-2 btn-outline-warning"
                     (click)="seleccionarPersona()"
@@ -315,13 +312,17 @@
                 <td mat-cell *matCellDef="let element">{{ element.Codigo }}</td>
               </ng-container>
               <ng-container matColumnDef="descripcion">
-                <th mat-header-cell class="p-3" *matHeaderCellDef>Descripción</th>
+                <th mat-header-cell class="p-3" *matHeaderCellDef>
+                  Descripción
+                </th>
                 <td mat-cell *matCellDef="let element">
                   {{ element.Producto }} {{ element.Presentacion }}
                 </td>
               </ng-container>
               <ng-container matColumnDef="contenido">
-                <th mat-header-cell class="p-2" *matHeaderCellDef>Presentación</th>
+                <th mat-header-cell class="p-2" *matHeaderCellDef>
+                  Presentación
+                </th>
                 <td mat-cell *matCellDef="let element">
                   {{ element.Contenido }}
                 </td>
@@ -337,7 +338,7 @@
               <ng-container matColumnDef="fechaExpiracion">
                 <th mat-header-cell class="p-2" *matHeaderCellDef>Expira</th>
                 <ng-container *matCellDef="let element">
-                  <td mat-cell *ngIf="element.FechaExpiracion != ''" >
+                  <td mat-cell *ngIf="element.FechaExpiracion != ''">
                     {{ element.FechaExpiracion | date: "yyyy-MM-dd" }}
                   </td>
                   <td mat-cell *ngIf="element.FechaExpiracion == ''">S/F</td>
@@ -434,10 +435,10 @@
           </div>
         </div>
         <div class="row m-4">
-          <div class="col-md-8 detalleResultado">
+          <div class="col-md-7 detalleResultado">
             AMUCOMT
           </div>
-          <div class="col-md-4">
+          <div class="col-md-3">
             <div class="row">
               <div
                 style="
@@ -447,7 +448,7 @@
                 "
                 class="col-sm-12 detalleResultado"
               >
-                Subtotal: {{ subTotalFactura }}$
+                Subtotal:
               </div>
             </div>
             <div class="row">
@@ -459,10 +460,9 @@
                 "
                 class="col-sm-12 detalleResultado"
               >
-                Total IVA: {{ totalIva }}$
+                Total IVA:
               </div>
             </div>
-
             <div class="row">
               <div
                 style="
@@ -472,16 +472,61 @@
                 "
                 class="col-sm-12 detalleResultado"
               >
-                Total Descuento: {{ totalDescontado }}$
+                Total Descuento:
               </div>
             </div>
-
+            <div class="row">
+              <div
+                style="border-inline-start-style: none; justify-content: left;"
+                class="col-sm-12 detalleResultado"
+              >
+                Total:
+              </div>
+            </div>
+          </div>
+          <div class="col-md-2">
+            <div class="row">
+              <div
+                style="
+                  border-inline-start-style: none;
+                  justify-content: left;
+                  border-bottom: thin;
+                "
+                class="col-sm-12 detalleResultado"
+              >
+                {{ subTotalFactura }}$
+              </div>
+            </div>
+            <div class="row">
+              <div
+                style="
+                  border-inline-start-style: none;
+                  justify-content: left;
+                  border-bottom: thin;
+                "
+                class="col-sm-12 detalleResultado"
+              >
+                {{ totalIva }}$
+              </div>
+            </div>
+            <div class="row">
+              <div
+                style="
+                  border-inline-start-style: none;
+                  justify-content: left;
+                  border-bottom: thin;
+                "
+                class="col-sm-12 detalleResultado"
+              >
+                {{ totalDescontado }}$
+              </div>
+            </div>
             <div class="row bottom-right">
               <div
                 style="border-inline-start-style: none; justify-content: left;"
                 class="col-sm-12 detalleResultado"
               >
-                Total: {{ totalFactura }}$
+                {{ totalFactura }}$
               </div>
             </div>
           </div>
@@ -520,8 +565,6 @@
                     <button
                       mat-button
                       class="btn-outline-primary"
-                      tooltip="Modificar"
-                      placement="top"
                       (click)="mostrarDetallesFactura(element)"
                     >
                       <mat-icon>format_line_spacing</mat-icon>

@@ -482,6 +482,9 @@ export class CompraComponent implements OnInit {
           idDetalleFactura,
           event.target.value
         );
+        if(respuesta["codigo"] == "200") {
+          this.consultarDetalleFactura();
+        }
       }
     }
   }

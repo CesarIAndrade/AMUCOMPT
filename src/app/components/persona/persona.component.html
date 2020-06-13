@@ -63,10 +63,15 @@
           <mat-form-field class="example-full-width">
             <input
               matInput
-              type="number"
+              type="text"
               formControlName="_numeroDocumento"
+              #numeroDocumento
+              maxlength="10"
               placeholder="Ingrese Número Documento"
             />
+            <mat-hint align="end"
+              >{{ numeroDocumento.value?.length || 0 }}/10</mat-hint
+            >
             <button disabled mat-button matPrefix mat-icon-button>
               <mat-icon>*</mat-icon>
             </button>
@@ -74,57 +79,83 @@
         </div>
         <div class="col-lg-4">
           <h5 style="text-align: center;">{{ contacto }}</h5>
-          <mat-form-field class="example-full-width">
-            <input
-              matInput
-              type="number"
-              formControlName="_telefono1"
-              placeholder="Número #1"
-              maxlength="10"
-            />
-            <button disabled mat-button matPrefix mat-icon-button>
-              <mat-icon>*</mat-icon>
-            </button>
-          </mat-form-field>
-          <mat-form-field class="example-full-width">
-            <mat-label>Tipo Telefono</mat-label>
-            <mat-select formControlName="_tipoTelefono1">
-              <mat-option
-                *ngFor="let item of tipoTelefonos"
-                [value]="item.IdTipoTelefono"
-              >
-                {{ item.Descripcion }}
-              </mat-option>
-            </mat-select>
-            <button disabled mat-button matPrefix mat-icon-button>
-              <mat-icon>*</mat-icon>
-            </button>
-          </mat-form-field>
-          <mat-form-field class="example-full-width">
-            <input
-              matInput
-              type="number"
-              formControlName="_telefono2"
-              placeholder="Número #2"
-            />
-            <button disabled mat-button matPrefix mat-icon-button>
-              <mat-icon>*</mat-icon>
-            </button>
-          </mat-form-field>
-          <mat-form-field class="example-full-width">
-            <mat-label>Tipo Telefono</mat-label>
-            <mat-select formControlName="_tipoTelefono2">
-              <mat-option
-                *ngFor="let item of tipoTelefonos"
-                [value]="item.IdTipoTelefono"
-              >
-                {{ item.Descripcion }}
-              </mat-option>
-            </mat-select>
-            <button disabled mat-button matPrefix mat-icon-button>
-              <mat-icon>*</mat-icon>
-            </button>
-          </mat-form-field>
+          <div class="row">
+            <div class="col-lg-6 col-md-6">
+              <mat-form-field class="example-full-width">
+                <mat-label>Tipo</mat-label>
+                <mat-select
+                  formControlName="_tipoTelefono1"
+                  (selectionChange)="seleccionarTipoTelefono1($event)"
+                >
+                  <mat-option
+                    *ngFor="let item of tipoTelefonos"
+                    [value]="item.IdTipoTelefono"
+                  >
+                    {{ item.Descripcion }}
+                  </mat-option>
+                </mat-select>
+                <button disabled mat-button matPrefix mat-icon-button>
+                  <mat-icon>*</mat-icon>
+                </button>
+              </mat-form-field>
+            </div>
+            <div class="col-lg-6 col-md-6">
+              <mat-form-field class="example-full-width">
+                <input
+                  matInput
+                  type="text"
+                  formControlName="_telefono1"
+                  #telefono1
+                  placeholder="Número #1"
+                  [maxlength]="digitosTelefono1"
+                />
+                <mat-hint align="end"
+                  >{{ telefono1.value?.length || 0 }}/{{
+                    digitosTelefono1
+                  }}</mat-hint
+                >
+                <button disabled mat-button matPrefix mat-icon-button>
+                  <mat-icon>*</mat-icon>
+                </button>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-6 col-md-6">
+              <mat-form-field class="example-full-width">
+                <mat-label>Tipo</mat-label>
+                <mat-select
+                  formControlName="_tipoTelefono2"
+                  (selectionChange)="seleccionarTipoTelefono2($event)"
+                >
+                  <mat-option
+                    *ngFor="let item of tipoTelefonos"
+                    [value]="item.IdTipoTelefono"
+                  >
+                    {{ item.Descripcion }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div class="col-lg-6 col-md-6">
+              <mat-form-field class="example-full-width">
+                <input
+                  matInput
+                  type="text"
+                  [maxlength]="digitosTelefono2"
+                  #telefono2
+                  formControlName="_telefono2"
+                  placeholder="Número #2"
+                />
+                <mat-hint align="end"
+                  >{{ telefono2.value?.length || 0 }}/{{
+                    digitosTelefono2
+                  }}</mat-hint
+                >
+              </mat-form-field>
+            </div>
+          </div>
+
           <mat-form-field class="example-full-width">
             <input
               matInput
@@ -139,61 +170,81 @@
         </div>
         <div class="col-lg-4">
           <h5 style="text-align: center;">{{ direccion }}</h5>
-          <mat-form-field class="example-full-width">
-            <mat-label>Seleccionar Provincia</mat-label>
-            <mat-select
-              formControlName="_provincia"
-              (selectionChange)="consultarCantonesDeUnaProvincia($event.value, true)"
-            >
-              <mat-option
-                *ngFor="let item of provincias"
-                [value]="item.IdProvincia"
-              >
-                {{ item.Descripcion }}
-              </mat-option>
-            </mat-select>
-            <button disabled mat-button matPrefix mat-icon-button>
-              <mat-icon>*</mat-icon>
-            </button>
-          </mat-form-field>
-          <mat-form-field class="example-full-width">
-            <mat-label>Seleccionar Cantón</mat-label>
-            <mat-select
-              formControlName="_canton"
-              (selectionChange)="consultarParroquiasDeUnCanton($event.value, true)"
-            >
-              <mat-option *ngFor="let item of cantones" [value]="item.IdCanton">
-                {{ item.Descripcion }}
-              </mat-option>
-            </mat-select>
-            <button disabled mat-button matPrefix mat-icon-button>
-              <mat-icon>*</mat-icon>
-            </button>
-          </mat-form-field>
-          <mat-form-field class="example-full-width">
-            <mat-label>Seleccionar Parroquia</mat-label>
-            <mat-select formControlName="_parroquia">
-              <mat-option
-                *ngFor="let item of parroquias"
-                [value]="item.IdParroquia"
-              >
-                {{ item.Descripcion }}
-              </mat-option>
-            </mat-select>
-            <button disabled mat-button matPrefix mat-icon-button>
-              <mat-icon>*</mat-icon>
-            </button>
-          </mat-form-field>
-          <mat-form-field class="example-full-width">
-            <input
-              matInput
-              placeholder="Ingrese Referencia"
-              formControlName="_referencia"
-            />
-            <button disabled mat-button matPrefix mat-icon-button>
-              <mat-icon>*</mat-icon>
-            </button>
-          </mat-form-field>
+          <div class="row">
+            <div class="col-lg-12 col-md-6">
+              <mat-form-field class="example-full-width">
+                <mat-label>Seleccionar Provincia</mat-label>
+                <mat-select
+                  formControlName="_provincia"
+                  (selectionChange)="
+                    consultarCantonesDeUnaProvincia($event.value, true)
+                  "
+                >
+                  <mat-option
+                    *ngFor="let item of provincias"
+                    [value]="item.IdProvincia"
+                  >
+                    {{ item.Descripcion }}
+                  </mat-option>
+                </mat-select>
+                <button disabled mat-button matPrefix mat-icon-button>
+                  <mat-icon>*</mat-icon>
+                </button>
+              </mat-form-field>
+            </div>
+            <div class="col-lg-12 col-md-6">
+              <mat-form-field class="example-full-width">
+                <mat-label>Seleccionar Cantón</mat-label>
+                <mat-select
+                  formControlName="_canton"
+                  (selectionChange)="
+                    consultarParroquiasDeUnCanton($event.value, true)
+                  "
+                >
+                  <mat-option
+                    *ngFor="let item of cantones"
+                    [value]="item.IdCanton"
+                  >
+                    {{ item.Descripcion }}
+                  </mat-option>
+                </mat-select>
+                <button disabled mat-button matPrefix mat-icon-button>
+                  <mat-icon>*</mat-icon>
+                </button>
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-lg-12 col-md-6">
+              <mat-form-field class="example-full-width">
+                <mat-label>Seleccionar Parroquia</mat-label>
+                <mat-select formControlName="_parroquia">
+                  <mat-option
+                    *ngFor="let item of parroquias"
+                    [value]="item.IdParroquia"
+                  >
+                    {{ item.Descripcion }}
+                  </mat-option>
+                </mat-select>
+                <button disabled mat-button matPrefix mat-icon-button>
+                  <mat-icon>*</mat-icon>
+                </button>
+              </mat-form-field>
+            </div>
+            <div class="col-lg-12 col-md-6">
+              <mat-form-field class="example-full-width">
+                <input
+                  matInput
+                  placeholder="Dirección"
+                  formControlName="_referencia"
+                />
+                <button disabled mat-button matPrefix mat-icon-button>
+                  <mat-icon>*</mat-icon>
+                </button>
+              </mat-form-field>
+            </div>
+          </div>
         </div>
       </div>
       <div>

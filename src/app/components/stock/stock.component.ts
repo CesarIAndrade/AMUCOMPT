@@ -19,12 +19,12 @@ export class StockComponent implements OnInit {
 
   async consultarStock() {
     var stock = await this.inventarioService.consultarStock();
-    console.log(stock);
     if (stock["codigo"] == "200") {
       var listaProductosEnStock = [];
       stock["respuesta"].map((item) => {
-        var lote = "";
-        var kit = "";
+
+        var lote = "N/A";
+        var kit = "N/A";
         var fechaExpiracion = "";
         var nombreProducto = "";
         var presentacion = "";
@@ -33,13 +33,20 @@ export class StockComponent implements OnInit {
         var codigo = "";
         var tipoProducto = "";
         var iva = "";
-        var descripcion = "";
+        var descripcion = "N/A";
+        var estado = "";
+        if (item.Cantidad <= 6) {
+          estado = "badge badge-danger";
+        } else {
+          estado = "badge badge-success";
+        }
         if (item.AsignarProductoLote.Lote) {
           lote = item.AsignarProductoLote.Lote.Codigo;
           fechaExpiracion = item.AsignarProductoLote.Lote.FechaExpiracion;
         } else {
           fechaExpiracion = item.AsignarProductoLote.FechaExpiracion;
         }
+        
         if (item.AsignarProductoLote.PerteneceKit != "False") {
           kit = item.AsignarProductoLote.AsignarProductoKit.Kit.Descripcion;
           nombreProducto =
@@ -63,7 +70,7 @@ export class StockComponent implements OnInit {
           descripcion =
             item.AsignarProductoLote.AsignarProductoKit.ListaProductos.Producto
               .Descripcion;
-        } else {
+        } else if (item.AsignarProductoLote.PerteneceKit == "False") {
           nombreProducto =
             item.AsignarProductoLote.ConfigurarProductos.Producto.Nombre;
           contenidoNeto =
@@ -81,6 +88,8 @@ export class StockComponent implements OnInit {
           descripcion =
             item.AsignarProductoLote.ConfigurarProductos.Producto.Descripcion;
         }
+        console.log(fechaExpiracion);
+
         var producto = {
           Codigo: codigo,
           Producto: nombreProducto,
@@ -88,12 +97,13 @@ export class StockComponent implements OnInit {
           Presentacion: presentacion,
           Contenido: contenidoNeto,
           Medida: medida,
-          Descripcion: "",
+          Descripcion: descripcion,
           Iva: iva,
           Kit: kit,
           Lote: lote,
-          FechaExpiracion: fechaExpiracion,
+          FechaExpiracion: fechaExpiracion, 
           Cantidad: item.Cantidad,
+          Estado: estado,
         };
         listaProductosEnStock.push(producto);
       });

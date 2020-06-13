@@ -231,6 +231,7 @@ export class VentaComponent implements OnInit {
         console.log(result); 
         if (result.flag) {
           this.consultarDetalleFactura();
+          this.buttonRealizarVenta = false;
           this.kit = true;
           this.seccionKit = true;
           this.selected = "Producto";
@@ -347,7 +348,7 @@ export class VentaComponent implements OnInit {
   async consultarDetalleFactura() {
     var respuesta = await this.ventaService.consultarDetalleFactura(
       this.myForm.get("_idCabecera").value
-    );
+    ); 
     if (respuesta["codigo"] == "200") {
       var codigo = "";
       var idLote = "";
@@ -415,6 +416,8 @@ export class VentaComponent implements OnInit {
           porcentajeDescuento = "0";
           descuento = "0";
         }
+        console.log(fechaExpiracion); 
+        
         var producto = {
           IdCabeceraFactura: item.IdCabeceraFactura,
           IdDetalleVenta: item.IdDetalleVenta,
@@ -478,10 +481,13 @@ export class VentaComponent implements OnInit {
       if (event.target.value <= 0) {
         event.target.value = cantidad;
       } else {
-        await this.ventaService.modificarCantidadDeProductoEnDetalleVenta(
+        var respuesta = await this.ventaService.modificarCantidadDeProductoEnDetalleVenta(
           idDetalleVenta,
           event.target.value
         );
+        if(respuesta["codigo"] == "200") {
+          this.consultarDetalleFactura();
+        }
       }
     }
   }
@@ -515,6 +521,7 @@ export class VentaComponent implements OnInit {
           this.validarFecha(),
           this.myForm.get("_aplicaSeguro").value ? "1" : "0"
         );
+        console.log(respuesta);
         if (respuesta["codigo"] == "200") {
           this.realizarVenta();
         }
@@ -529,6 +536,7 @@ export class VentaComponent implements OnInit {
       this.myForm.get("_idCabecera").value,
       "Factura/FinalizarCabeceraFacturaVenta"
     );
+    console.log(respuesta);
     if (respuesta["codigo"] == "200") {
       this.openDialog("Venta realizada con éxito");
       this.consultarFacturas();
@@ -540,6 +548,7 @@ export class VentaComponent implements OnInit {
       this.selectTipoPago = true;
       this.buttonSeleccionarComunidad = true;
       this.buttonGenerarFactura = false;
+      this.selectTipoCompra = true;
     }
   }
 

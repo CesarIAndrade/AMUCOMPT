@@ -4,6 +4,7 @@ import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from "@angular/material/dial
 import { Router } from "@angular/router";
 import { VentaService } from "src/app/services/venta.service";
 import { MatPaginator, MatTableDataSource } from "@angular/material";
+import { DialogAlertComponent } from '../dialog-alert/dialog-alert.component';
 
 @Component({
   selector: "app-modal-asignacion-configuracion-producto",
@@ -16,7 +17,8 @@ export class ModalAsignacionConfiguracionProductoComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any,
     private ventaService: VentaService,
     private modalAsignacionConfiguracionProducto: MatDialogRef<ModalAsignacionConfiguracionProductoComponent>,
-    private router: Router
+    private router: Router,
+    private dialog: MatDialog
   ) {}
 
   filterDetalle = "";
@@ -57,6 +59,13 @@ export class ModalAsignacionConfiguracionProductoComponent implements OnInit {
   listaProductosEnStock = new MatTableDataSource<Element[]>();
   configuracionProductos = new MatTableDataSource<Element[]>();
   listaProductosDeUnKit = new MatTableDataSource<Element[]>();
+
+  openDialog(mensaje): void {
+    const dialogRef = this.dialog.open(DialogAlertComponent, {
+      width: "250px",
+      data: { mensaje: mensaje },
+    });
+  }
 
   async consultarConfiguracionProducto() {
     var respuesta = await this.inventarioService.consultarConfiguracionProductoTodos();
@@ -183,7 +192,6 @@ export class ModalAsignacionConfiguracionProductoComponent implements OnInit {
   }
 
   async cerrarModal() {
-    this.buttonComprarKitCompleto = true;
     var respuesta = await this.ventaService.ingresoDetalleVentaPorKit(
       this.idCabeceraFactura,
       this.idKit,
@@ -192,6 +200,9 @@ export class ModalAsignacionConfiguracionProductoComponent implements OnInit {
     console.log(respuesta);
     if (respuesta["codigo"] == "200") {
       this.modalAsignacionConfiguracionProducto.close({flag: true});
+    this.buttonComprarKitCompleto = true;
+    } else if (respuesta["codigo"] == "500") {
+      this.openDialog(respuesta["mensaje"]);
     }
   }
 

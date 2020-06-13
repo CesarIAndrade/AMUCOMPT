@@ -52,6 +52,7 @@ export class ProvinciaComponent implements OnInit {
 
   async consultarProvincias() {
     var provincias = await this.panelAdministracionService.consultarProvincias();
+    console.log(provincias);
     if (provincias["codigo"] == "200") {
       this.provincias.data = provincias["respuesta"];
       this.provincias.paginator = this.paginator;

@@ -49,6 +49,11 @@ export class NavComponent implements OnInit {
           url: "/usuarios",
         },
         {
+          name: "Personas",
+          icon: "supervisor_account",
+          url: "/personas",
+        },
+        {
           name: "Cuenta",
           icon: "face",
           url: "/cuenta",

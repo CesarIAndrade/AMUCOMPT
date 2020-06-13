@@ -102,6 +102,8 @@ export class ProductoComponent implements OnInit {
     if (respuesta["codigo"] == "200") {
       var productos: any = [];
       respuesta["respuesta"].map((producto) => {
+        console.log(producto.Producto.Descripcion);
+        
         productos.push({
           IdConfigurarProducto: producto.IdConfigurarProducto,
           IdProducto: producto.Producto.IdProducto,

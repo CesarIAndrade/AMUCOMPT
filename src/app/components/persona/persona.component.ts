@@ -48,19 +48,19 @@ export class PersonaComponent implements OnInit {
       _numeroDocumento: new FormControl("", [
         Validators.required,
         Validators.maxLength(10),
+        Validators.minLength(10),
+        Validators.pattern(/^-?(0|[1-9]\d*)?$/),
       ]),
-      _telefono1: new FormControl("", [
-        Validators.required,
-        Validators.maxLength(10),
-      ]),
+      _telefono1: new FormControl(""),
       _telefono2: new FormControl("", [
-        Validators.required,
         Validators.maxLength(10),
+        Validators.minLength(10),
+        Validators.pattern(/^-?(0|[1-9]\d*)?$/),
       ]),
       _correo: new FormControl("", [Validators.email]),
       _tipoDocumento: new FormControl("", [Validators.required]),
       _tipoTelefono1: new FormControl("", [Validators.required]),
-      _tipoTelefono2: new FormControl("", [Validators.required]),
+      _tipoTelefono2: new FormControl(""),
       _provincia: new FormControl("", [Validators.required]),
       _canton: new FormControl("", [Validators.required]),
       _parroquia: new FormControl("", [Validators.required]),
@@ -69,7 +69,7 @@ export class PersonaComponent implements OnInit {
       _idPersona: new FormControl(""),
       _idTelefono1: new FormControl(""),
       _idTelefono2: new FormControl(""),
-      _referencia: new FormControl("", [Validators.required])
+      _referencia: new FormControl("", [Validators.required]),
     });
   }
 
@@ -198,6 +198,72 @@ export class PersonaComponent implements OnInit {
     }
   }
 
+  digitosTelefono1 = 0;
+  digitosTelefono2 = 0;
+
+
+  seleccionarTipoTelefono1(event) {
+    var tipo = this.tipoTelefonos.find(
+      (tipo) => tipo.IdTipoTelefono == event.value
+    );
+    this.myForm.get("_telefono1").enable();
+    this.myForm.get("_telefono1").setValidators([]);
+    if (tipo.Descripcion == "CELULAR") {
+      this.myForm
+        .get("_telefono1")
+        .setValidators([
+          Validators.required,
+          Validators.pattern(/^-?(0|[1-9]\d*)?$/),
+          Validators.maxLength(10),
+          Validators.minLength(10),
+        ]);
+      this.myForm.get("_telefono1").updateValueAndValidity();
+      this.digitosTelefono1 = 10;
+    } else {
+      this.digitosTelefono1 = 9;
+      this.myForm
+        .get("_telefono1")
+        .setValidators([
+          Validators.required,
+          Validators.pattern(/^-?(0|[1-9]\d*)?$/),
+          Validators.maxLength(9),
+          Validators.minLength(9),
+        ]);
+      this.myForm.get("_telefono1").updateValueAndValidity();
+      this.myForm.get("_telefono1").reset();
+    }
+  }
+
+  seleccionarTipoTelefono2(event) {
+    var tipo = this.tipoTelefonos.find(
+      (tipo) => tipo.IdTipoTelefono == event.value
+    );
+    this.myForm.get("_telefono2").enable();
+    this.myForm.get("_telefono2").setValidators([]);
+    if (tipo.Descripcion == "CELULAR") {
+      this.myForm
+        .get("_telefono2")
+        .setValidators([
+          Validators.pattern(/^-?(0|[1-9]\d*)?$/),
+          Validators.maxLength(10),
+          Validators.minLength(10),
+        ]);
+      this.myForm.get("_telefono2").updateValueAndValidity();
+      this.digitosTelefono2 = 10;
+    } else {
+      this.digitosTelefono2 = 9;
+      this.myForm
+        .get("_telefono2")
+        .setValidators([
+          Validators.pattern(/^-?(0|[1-9]\d*)?$/),
+          Validators.maxLength(9),
+          Validators.minLength(9),
+        ]);
+      this.myForm.get("_telefono2").updateValueAndValidity();
+      this.myForm.get("_telefono2").reset();
+    }
+  }
+
   validarFormulario() {
     if (this.myForm.valid) {
       if (this.botonInsertar == "insertar") {
@@ -225,7 +291,7 @@ export class PersonaComponent implements OnInit {
         this.myForm.get("_tipoTelefono2").value,
         this.myForm.get("_correo").value,
         this.myForm.get("_parroquia").value,
-        this.myForm.get("_referencia").value,
+        this.myForm.get("_referencia").value
       );
       console.log(respuesta);
       if (respuesta["codigo"] == "200") {
@@ -234,6 +300,8 @@ export class PersonaComponent implements OnInit {
         respuesta["respuesta"].Acciones = this.llamadaModal;
         personas.push(respuesta["respuesta"]);
         this.personas.data = personas;
+        this.myForm.get("_telefono1").disable();
+        this.myForm.get("_telefono2").disable();
         this.myForm.reset();
       } else if (respuesta["codigo"] == "400") {
         this.openDialog("Inténtalo de nuevo");
@@ -256,6 +324,8 @@ export class PersonaComponent implements OnInit {
   }
 
   mostrarPersona(persona) {
+    this.myForm.get("_telefono1").enable();
+    this.myForm.get("_telefono2").enable();
     console.log(persona);
     this.nuevaPersona = "Modificar Persona";
     this.contacto = "Modificar Contacto";
@@ -296,14 +366,16 @@ export class PersonaComponent implements OnInit {
           .IdProvincia
       );
     this.consultarCantonesDeUnaProvincia(this.myForm.get("_provincia").value);
-    this.myForm.get("_canton").setValue(
-      persona.AsignacionPersonaParroquia[0].Parroquia.Canton.IdCanton
-    );
+    this.myForm
+      .get("_canton")
+      .setValue(
+        persona.AsignacionPersonaParroquia[0].Parroquia.Canton.IdCanton
+      );
     this.consultarParroquiasDeUnCanton(this.myForm.get("_canton").value);
     this.myForm
       .get("_parroquia")
       .setValue(persona.AsignacionPersonaParroquia[0].Parroquia.IdParroquia);
-      this.myForm
+    this.myForm
       .get("_referencia")
       .setValue(persona.AsignacionPersonaParroquia[0].Referencia);
     this.botonInsertar = "modificar";
@@ -329,25 +401,28 @@ export class PersonaComponent implements OnInit {
         this.myForm.get("_tipoTelefono2").value,
         this.myForm.get("_correo").value,
         this.myForm.get("_parroquia").value,
-        this.myForm.get("_referencia").value,
+        this.myForm.get("_referencia").value
       );
       console.log(respuesta);
-      if(respuesta["codigo"] == "200") {
+      if (respuesta["codigo"] == "200") {
         this.openSnackBar("Se actualizó correctamente");
         var personas: any = this.personas.data;
         var persona = personas.find(
-          persona => persona["IdPersona"] == this.myForm.get("_idPersona").value
+          (persona) =>
+            persona["IdPersona"] == this.myForm.get("_idPersona").value
         );
         var index = personas.indexOf(persona);
         personas.splice(index, 1);
         respuesta["respuesta"].Acciones = this.llamadaModal;
         personas.push(respuesta["respuesta"]);
         this.personas.data = personas;
-        this.nuevaPersona = "Nueva Persona"
+        this.nuevaPersona = "Nueva Persona";
         this.contacto = "Contacto ";
         this.direccion = "Direccion";
         this.guardar = "Guardar";
         this.botonInsertar = "insertar";
+        this.myForm.get("_telefono1").disable();
+        this.myForm.get("_telefono2").disable();
         this.myForm.reset();
       } else if (respuesta["codigo"] == "400") {
         this.openDialog("Inténtalo de nuevo");
@@ -373,6 +448,8 @@ export class PersonaComponent implements OnInit {
     this.consultarTipoDocumento();
     this.consultarTipoTelefono();
     this.consultarProvincias();
+    this.myForm.get("_telefono1").disable();
+    this.myForm.get("_telefono2").disable();
   }
 
   tablaPersonas = [
