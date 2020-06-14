@@ -381,7 +381,7 @@ export class SeguimientoService {
         .post(
           apiUrl + "Credito/FinalizarAsignarTecnicoPersonaComunidad",
           body.toString(),
-          {
+          { 
             headers: new HttpHeaders().set(
               "Content-Type",
               "application/x-www-form-urlencoded"

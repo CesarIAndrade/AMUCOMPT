@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { Router } from "@angular/router";
+import { Router, Routes } from "@angular/router";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 
 // Services
@@ -14,6 +14,7 @@ import { DialogAlertComponent } from "../dialog-alert/dialog-alert.component";
   styleUrls: ["./login.component.css"],
 })
 export class LoginComponent implements OnInit {
+
   constructor(
     private usuarioService: UsuarioService,
     private router: Router,

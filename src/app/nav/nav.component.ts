@@ -18,6 +18,22 @@ export class NavComponent implements OnInit {
     .observe(Breakpoints.Handset)
     .pipe(map((result) => result.matches));
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   constructor(
     private breakpointObserver: BreakpointObserver,
     private router: Router
@@ -127,8 +143,12 @@ export class NavComponent implements OnInit {
       );
     }
 
+    
+
     if (this.router.url == "/") {
       this.router.navigateByUrl(this.nav_items[0].url);
+      console.log(this.nav_items[0].url);
+      
     }
 
     this.route = this.router.url.split("/")[1].replace("-", " ").toUpperCase();
