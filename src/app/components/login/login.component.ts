@@ -47,15 +47,17 @@ export class LoginComponent implements OnInit {
         this.myForm.get("_contrasena").value
       );
       console.log(login);
+      this.seleccionarTipoUsuario = false;
+      this.ingresarCredenciales = true;      
       if (login["codigo"] == "200") {
         this.tipoUsuarios = login["respuesta"]["ListaTipoUsuario"];
-        this.seleccionarTipoUsuario = false;
-        this.ingresarCredenciales = true;
         localStorage.setItem("miCuenta.usuario", login["respuesta"].IdUsuario);
       } else {
         this.myForm.reset();
         this.myForm.get("_tipoUsuario").setValue("0");
         this.openDialog("Credenciales Incorrectas!");
+        this.seleccionarTipoUsuario = true;
+        this.ingresarCredenciales = false;   
       }
     }
   }

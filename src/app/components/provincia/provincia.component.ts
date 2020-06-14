@@ -70,6 +70,8 @@ export class ProvinciaComponent implements OnInit {
   }
 
   async crearProvincia() {
+    this.myForm.reset();
+    this.myForm.setErrors({ invalid: true });
     var provincia = await this.panelAdministracionService.crearProvincia(
       this.myForm.get("_provincia").value
     );
@@ -82,6 +84,7 @@ export class ProvinciaComponent implements OnInit {
       });
       this.provincias.data = provincias;
       this.myForm.reset();
+      this.myForm.setErrors({ invalid: true });
       this.openSnackBar("Se ingresó correctamente");
     } else if (provincia["codigo"] == "400") {
       this.openDialog("Inténtalo de nuevo");

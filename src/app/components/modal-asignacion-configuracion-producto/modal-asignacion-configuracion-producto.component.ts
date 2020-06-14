@@ -1,10 +1,14 @@
 import { Component, OnInit, Inject, ViewChild } from "@angular/core";
 import { InventarioService } from "src/app/services/inventario.service";
-import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from "@angular/material/dialog";
+import {
+  MAT_DIALOG_DATA,
+  MatDialog,
+  MatDialogRef,
+} from "@angular/material/dialog";
 import { Router } from "@angular/router";
 import { VentaService } from "src/app/services/venta.service";
 import { MatPaginator, MatTableDataSource } from "@angular/material";
-import { DialogAlertComponent } from '../dialog-alert/dialog-alert.component';
+import { DialogAlertComponent } from "../dialog-alert/dialog-alert.component";
 
 @Component({
   selector: "app-modal-asignacion-configuracion-producto",
@@ -16,7 +20,9 @@ export class ModalAsignacionConfiguracionProductoComponent implements OnInit {
     private inventarioService: InventarioService,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private ventaService: VentaService,
-    private modalAsignacionConfiguracionProducto: MatDialogRef<ModalAsignacionConfiguracionProductoComponent>,
+    private modalAsignacionConfiguracionProducto: MatDialogRef<
+      ModalAsignacionConfiguracionProductoComponent
+    >,
     private router: Router,
     private dialog: MatDialog
   ) {}
@@ -26,12 +32,9 @@ export class ModalAsignacionConfiguracionProductoComponent implements OnInit {
   idKit = "";
   cantidad = "";
   idCabeceraFactura = "";
-  areaTablaConfiguracionProducto = true;
-  areaTablaStock = true;
-  areaTablaProductoDeUnKit = true;
   kitCompleto = true;
   buttonComprarKitCompleto = false;
-  permitirAnadir: boolean;
+  permitirAnadir = true;
 
   producto = {
     IdRelacionLogica: "",
@@ -52,13 +55,11 @@ export class ModalAsignacionConfiguracionProductoComponent implements OnInit {
     flag: false,
   };
 
+  loading = true; 
+
   // Para la paginacion
-  @ViewChild("paginator1", { static: false }) paginator1: MatPaginator;
-  @ViewChild("paginator2", { static: false }) paginator2: MatPaginator;
-  @ViewChild("paginator3", { static: false }) paginator3: MatPaginator;
-  listaProductosEnStock = new MatTableDataSource<Element[]>();
-  configuracionProductos = new MatTableDataSource<Element[]>();
-  listaProductosDeUnKit = new MatTableDataSource<Element[]>();
+  @ViewChild("paginator", { static: true }) paginator: MatPaginator;
+  dataSource = new MatTableDataSource<Element[]>();
 
   openDialog(mensaje): void {
     const dialogRef = this.dialog.open(DialogAlertComponent, {
@@ -67,24 +68,11 @@ export class ModalAsignacionConfiguracionProductoComponent implements OnInit {
     });
   }
 
-  async consultarConfiguracionProducto() {
-    var respuesta = await this.inventarioService.consultarConfiguracionProductoTodos();
-    if (respuesta["codigo"] == "200") {
-      var configuracionProductos: any = [];
-      respuesta["respuesta"].map((item) => {
-        configuracionProductos.push({
-          IdRelacionLogica: item.IdConfigurarProducto,
-          PerteneceKit: "False",
-          IdKit: "",
-          Kit: "",
-          Producto: item.Producto.Nombre,
-          Presentacion: item.Presentacion.Descripcion,
-          ContenidoNeto: item.CantidadMedida,
-          Medida: item.Medida.Descripcion,
-        });
-      });
-      this.configuracionProductos.data = configuracionProductos;
-      this.configuracionProductos.paginator = this.paginator1;
+  agregarDetalle(producto) {
+    if (this.router.url == "/compras") {
+      this.agregarDetalleParaCompra(producto);
+    } else if (this.router.url == "/ventas") {
+      this.agregarDetalleParaVenta(producto);
     }
   }
 
@@ -97,6 +85,7 @@ export class ModalAsignacionConfiguracionProductoComponent implements OnInit {
     this.producto.Presentacion = producto.Presentacion;
     this.producto.ContenidoNeto = producto.ContenidoNeto;
     this.producto.Medida = producto.Medida;
+    this.modalAsignacionConfiguracionProducto.close(this.producto);
   }
 
   agregarDetalleParaVenta(producto) {
@@ -108,18 +97,61 @@ export class ModalAsignacionConfiguracionProductoComponent implements OnInit {
     this.producto.Medida = producto.Medida;
     this.producto.Porcentaje = producto.Porcentaje;
     this.producto.Disponible = producto.Disponible;
+    this.modalAsignacionConfiguracionProducto.close(this.producto);
+  }
+
+  async consultarConfiguracionProducto() {
+    this.tabla = [
+      "codigo",
+      "descripcion",
+      "presentacion",
+      "contenidoNeto",
+      "medida",
+      "acciones",
+    ]
+    var respuesta = await this.inventarioService.consultarConfiguracionProductoTodos();
+    if (respuesta["codigo"] == "200") {
+      this.loading = false;
+      var configuracionProductos: any = [];
+      respuesta["respuesta"].map((item) => {
+        configuracionProductos.push({
+          Codigo: item.Codigo,
+          IdRelacionLogica: item.IdConfigurarProducto,
+          PerteneceKit: "False",
+          IdKit: "",
+          Kit: "",
+          Producto: item.Producto.Nombre,
+          Presentacion: item.Presentacion.Descripcion,
+          ContenidoNeto: item.CantidadMedida,
+          Medida: item.Medida.Descripcion
+        });
+      });
+      this.dataSource.data = configuracionProductos;
+      this.dataSource.paginator = this.paginator;
+    }
   }
 
   async consultarStock() {
+    this.tabla = [
+      "codigo",
+      "kit",
+      "descripcion",
+      "presentacion",
+      "lote",
+      "fechaExpiracion",
+      "disponible",
+      "acciones",
+    ];
     var respuesta = await this.inventarioService.consultarStock();
-    var listaProductosEnStock = [];
     if (respuesta["codigo"] == "200") {
+      this.loading = false;
+      var listaProductosEnStock = [];
       respuesta["respuesta"].map((item) => {
-        var lote = "";
+        var lote = "N/A";
         var idLote = "";
-        var kit = "";
+        var kit = "N/A";
         var idKit = "";
-        var fechaExpiracion = "";
+        var fechaExpiracion: any = "";
         var nombreProducto = "";
         var presentacion = "";
         var contenidoNeto = "";
@@ -161,7 +193,6 @@ export class ModalAsignacionConfiguracionProductoComponent implements OnInit {
           medida =
             item.AsignarProductoLote.ConfigurarProductos.Medida.Descripcion;
           codigo = item.AsignarProductoLote.ConfigurarProductos.Codigo;
-          porcentaje = "";
           presentacion =
             item.AsignarProductoLote.ConfigurarProductos.Presentacion
               .Descripcion;
@@ -180,14 +211,14 @@ export class ModalAsignacionConfiguracionProductoComponent implements OnInit {
           ContenidoNeto: contenidoNeto,
           Medida: medida,
           Porcentaje: porcentaje,
-          Precio: item.AsignarProductoLote.ValorUnitario,
+          Precio: item.AsignarProductoLote.ValorUnitario
         };
         if (producto.Disponible != 0) {
           listaProductosEnStock.push(producto);
         }
       });
-      this.listaProductosEnStock.data = listaProductosEnStock;
-      this.listaProductosEnStock.paginator = this.paginator2;
+      this.dataSource.data = listaProductosEnStock;
+      this.dataSource.paginator = this.paginator;
     }
   }
 
@@ -199,17 +230,27 @@ export class ModalAsignacionConfiguracionProductoComponent implements OnInit {
     );
     console.log(respuesta);
     if (respuesta["codigo"] == "200") {
-      this.modalAsignacionConfiguracionProducto.close({flag: true});
-    this.buttonComprarKitCompleto = true;
+      this.modalAsignacionConfiguracionProducto.close({ flag: true });
+      this.buttonComprarKitCompleto = true;
     } else if (respuesta["codigo"] == "500") {
       this.openDialog(respuesta["mensaje"]);
     }
   }
 
   siElKitVieneDeCompra(listaProductos) {
+    this.tabla = [
+      "codigo",
+      "descripcion",
+      "presentacion",
+      "contenidoNeto",
+      "medida",
+      "acciones",
+    ]
+    this.loading = false;
     var configuracionProductos = [];
     listaProductos.map((item) => {
       configuracionProductos.push({
+        Codigo: item.ListaProductos.Codigo,
         IdRelacionLogica: item.IdAsignarProductoKit,
         PerteneceKit: "True",
         IdKit: item.Kit.IdKit,
@@ -217,17 +258,25 @@ export class ModalAsignacionConfiguracionProductoComponent implements OnInit {
         Producto: item.ListaProductos.Producto.Nombre,
         Presentacion: item.ListaProductos.Presentacion.Descripcion,
         ContenidoNeto: item.ListaProductos.CantidadMedida,
-        Medida: item.ListaProductos.Medida.Descripcion,
+        Medida: item.ListaProductos.Medida.Descripcion
       });
     });
-    this.configuracionProductos.data = configuracionProductos;
-    this.configuracionProductos.paginator = this.paginator1;
+    this.dataSource.data = configuracionProductos;
+    this.dataSource.paginator = this.paginator;
   }
 
   siElKitVieneDeVenta(listaProductos) {
+    this.tabla = [
+      "codigo",
+      "descripcion",
+      "presentacion",
+      "contenidoNeto",
+      "medida",
+    ]
+    this.loading = false;
     var listaProductosDeUnKit = [];
     listaProductos.map((item) => {
-      var lote = "";
+      var lote = "N/A";
       var idLote = "";
       var fechaExpiracion = "";
       var cantidad = "0";
@@ -251,12 +300,12 @@ export class ModalAsignacionConfiguracionProductoComponent implements OnInit {
         IdLote: idLote,
         Lote: lote,
         FechaExpiracion: fechaExpiracion,
-        Disponible: cantidad,
+        Disponible: cantidad
       };
       listaProductosDeUnKit.push(producto);
     });
-    this.listaProductosDeUnKit.data = listaProductosDeUnKit;
-    this.listaProductosDeUnKit.paginator = this.paginator3;
+    this.dataSource.data = listaProductosDeUnKit;
+    this.dataSource.paginator = this.paginator;
   }
 
   estructurarProductosDeUnKit(listaProductos, ruta?) {
@@ -267,17 +316,17 @@ export class ModalAsignacionConfiguracionProductoComponent implements OnInit {
     }
   }
 
+  search(term: string) {
+    term = term.trim();
+    term = term.toUpperCase(); 
+    this.dataSource.filter = term;
+  }
+
   ngOnInit() {
     if (this.router.url == "/ventas") {
       if (this.data.listaProductosDeUnKit.length == 0) {
-        this.areaTablaConfiguracionProducto = true;
-        this.areaTablaProductoDeUnKit = true;
-        this.areaTablaStock = false;
         this.consultarStock();
       } else {
-        this.areaTablaConfiguracionProducto = true;
-        this.areaTablaStock = true;
-        this.areaTablaProductoDeUnKit = false;
         this.idCabeceraFactura = this.data.idCabeceraFactura;
         try {
           this.nombreKit = this.data.listaProductosDeUnKit[0].Kit.Descripcion;
@@ -294,9 +343,10 @@ export class ModalAsignacionConfiguracionProductoComponent implements OnInit {
         );
       }
     } else if (this.router.url == "/compras") {
-      this.areaTablaProductoDeUnKit = true;
-      this.areaTablaStock = true;
-      this.areaTablaConfiguracionProducto = false;
+      try {
+        this.nombreKit = this.data.listaProductosDeUnKit[0].Kit.Descripcion;
+        this.idKit = this.data.listaProductosDeUnKit[0].Kit.IdKit;
+      } catch (error) {}
       if (this.data.listaProductosDeUnKit.length != 0) {
         this.estructurarProductosDeUnKit(
           this.data.listaProductosDeUnKit,
@@ -308,29 +358,5 @@ export class ModalAsignacionConfiguracionProductoComponent implements OnInit {
     }
   }
 
-  tablaConfiguracionProducto = [
-    "descripcion",
-    "presentacion",
-    "contenidoNeto",
-    "medida",
-    "acciones",
-  ];
-  tablaStock = [
-    "codigo",
-    "kit",
-    "descripcion",
-    "presentacion",
-    "lote",
-    "fechaExpiracion",
-    "Disponible",
-    "acciones",
-  ];
-  tablaProductosDeUnKit = [
-    "codigo",
-    "descripcion",
-    "presentacion",
-    "lote",
-    "fechaExpiracion",
-    "Disponible",
-  ];
+  tabla = [];
 }

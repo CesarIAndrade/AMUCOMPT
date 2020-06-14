@@ -159,7 +159,6 @@ export class VentaService {
       .set("IdKit", idKit)
       .set("Cantidad", cantidad)
       .set("encriptada", localStorage.getItem("miCuenta.postToken"));
-    console.log(body);
     return new Promise((resolve, reject) => {
       this.http
         .post(apiUrl + "Credito/IngresoDetalleVentaPorKit", body.toString(), {

@@ -54,6 +54,11 @@
               </mat-form-field>
               <mat-form-field [hidden]="seccionKit" class="example-full-width">
                 <mat-label>Kits</mat-label>
+                <mat-spinner
+                  *ngIf="comboKits"
+                  diameter="20"
+                  matSuffix
+                ></mat-spinner>
                 <mat-select
                   formControlName="_kit"
                   (selectionChange)="consultarKitsYSusProductos($event.value)"
@@ -543,7 +548,9 @@
               <table mat-table [dataSource]="facturasNoFinalizadas">
                 <ng-container matColumnDef="codigo">
                   <th mat-header-cell class="p-2" *matHeaderCellDef>Código</th>
-                  <td mat-cell *matCellDef="let element">{{ element.Codigo }}</td>
+                  <td mat-cell *matCellDef="let element">
+                    {{ element.Codigo }}
+                  </td>
                 </ng-container>
                 <ng-container matColumnDef="usuario">
                   <th mat-header-cell class="p-2" *matHeaderCellDef>Usuario</th>
@@ -559,7 +566,9 @@
                   </td>
                 </ng-container>
                 <ng-container matColumnDef="acciones">
-                  <th mat-header-cell class="p-2" *matHeaderCellDef>Acciones</th>
+                  <th mat-header-cell class="p-2" *matHeaderCellDef>
+                    Acciones
+                  </th>
                   <ng-container *matCellDef="let element">
                     <td mat-cell>
                       <button
@@ -604,7 +613,9 @@
               <table mat-table [dataSource]="facturasFinalizadas">
                 <ng-container matColumnDef="codigo">
                   <th mat-header-cell class="p-2" *matHeaderCellDef>Código</th>
-                  <td mat-cell *matCellDef="let element">{{ element.Codigo }}</td>
+                  <td mat-cell *matCellDef="let element">
+                    {{ element.Codigo }}
+                  </td>
                 </ng-container>
                 <ng-container matColumnDef="usuario">
                   <th mat-header-cell class="p-2" *matHeaderCellDef>Usuario</th>
@@ -620,7 +631,9 @@
                   </td>
                 </ng-container>
                 <ng-container matColumnDef="acciones">
-                  <th mat-header-cell class="p-2" *matHeaderCellDef>Acciones</th>
+                  <th mat-header-cell class="p-2" *matHeaderCellDef>
+                    Acciones
+                  </th>
                   <ng-container *matCellDef="let element">
                     <td mat-cell>
                       <button mat-button class="btn-outline-primary">

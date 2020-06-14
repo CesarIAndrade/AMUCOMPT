@@ -116,16 +116,23 @@ export class PersonaComponent implements OnInit {
     }
   }
 
+  comboTipoDocumento = true;
   async consultarTipoDocumento() {
     var tipoDocumentos = await this.personaService.consultarTipoDocumento();
     if (tipoDocumentos["codigo"] == "200") {
+      this.comboTipoDocumento = false;
+      this.myForm.get("_tipoDocumento").enable();
       this.tipoDocumentos = tipoDocumentos["respuesta"];
     }
   }
 
+  comboTipoTelefono = true;
   async consultarTipoTelefono() {
     var tipoTelefonos = await this.personaService.consultarTipoTelefono();
     if (tipoTelefonos["codigo"] == "200") {
+      this.comboTipoTelefono = false;
+      this.myForm.get("_tipoTelefono1").enable();
+      this.myForm.get("_tipoTelefono2").enable();
       this.tipoTelefonos = tipoTelefonos["respuesta"];
     }
   }
@@ -406,6 +413,9 @@ export class PersonaComponent implements OnInit {
 
   cancelar() {
     this.myForm.reset();
+    this.myForm.get("_tipoTelefono1").disable();
+    this.myForm.get("_tipoTelefono2").disable();
+    this.myForm.get("_tipoDocumento").disable();
   }
 
   ngOnInit() {

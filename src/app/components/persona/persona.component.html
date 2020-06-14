@@ -48,6 +48,11 @@
           </mat-form-field>
           <mat-form-field class="example-full-width">
             <mat-label>Seleccione Tipo Documento</mat-label>
+            <mat-spinner
+              *ngIf="comboTipoDocumento"
+              diameter="20"
+              matSuffix
+            ></mat-spinner>
             <mat-select formControlName="_tipoDocumento">
               <mat-option
                 *ngFor="let item of tipoDocumentos"
@@ -83,6 +88,11 @@
             <div class="col-lg-6 col-md-6">
               <mat-form-field class="example-full-width">
                 <mat-label>Tipo</mat-label>
+                <mat-spinner
+                  *ngIf="comboTipoTelefono"
+                  diameter="20"
+                  matSuffix
+                ></mat-spinner>
                 <mat-select
                   formControlName="_tipoTelefono1"
                   (selectionChange)="seleccionarTipoTelefono1($event)"
@@ -124,6 +134,11 @@
             <div class="col-lg-6 col-md-6">
               <mat-form-field class="example-full-width">
                 <mat-label>Tipo</mat-label>
+                <mat-spinner
+                  *ngIf="comboTipoTelefono"
+                  diameter="20"
+                  matSuffix
+                ></mat-spinner>
                 <mat-select
                   formControlName="_tipoTelefono2"
                   (selectionChange)="seleccionarTipoTelefono2($event)"
@@ -264,7 +279,9 @@
         </a>
       </div>
       <ng-container *ngIf="mostrarTablaPersonasEnVista">
-        <app-tabla-persona (enviarPersona)="mostrarPersona($event)"></app-tabla-persona>
+        <app-tabla-persona
+          (enviarPersona)="mostrarPersona($event)"
+        ></app-tabla-persona>
       </ng-container>
     </form>
   </div>

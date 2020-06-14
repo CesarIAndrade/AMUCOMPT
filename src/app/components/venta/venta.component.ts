@@ -81,6 +81,7 @@ export class VentaComponent implements OnInit {
   buttonRealizarVenta = true;
   inputDescuento = true;
   siSePagaACredito = true;
+  comboKits = false;
   meses = [
     "Enero",
     "Febrero",
@@ -176,11 +177,13 @@ export class VentaComponent implements OnInit {
   selecionarTipoCompra(tipoCompra) {
     if (tipoCompra.value == "Kit") {
       this.seccionKit = false;
+      this.comboKits = true;
       this.consultarKits();
       this.limpiarCampos();
     } else {
       this.listaProductosDeUnKit = [];
       this.seccionKit = true;
+      this.buttonSeleccionarProducto = false;
       this.limpiarCampos();
     }
   }
@@ -188,6 +191,7 @@ export class VentaComponent implements OnInit {
   async consultarKits() {
     var kits = await this.inventarioService.consultarKits();
     if (kits["codigo"] == "200") {
+      this.comboKits = false;
       this.kits = [];
       kits["respuesta"].map((item) => {
         if (item.KitUtilizado == "1") {
@@ -217,18 +221,17 @@ export class VentaComponent implements OnInit {
     let dialogRef = this.modalAsignacionConfiguracionProducto.open(
       ModalAsignacionConfiguracionProductoComponent,
       {
-        width: "800px",
+        width: "auto",
         height: "auto",
         data: {
           listaProductosDeUnKit: this.listaProductosDeUnKit,
           idCabeceraFactura: this.myForm.get("_idCabecera").value,
-          permitirAnadir: this.permitirAnadir,
+          permitirAnadir: this.permitirAnadir
         },
       }
     );
-    dialogRef.afterClosed().subscribe((result) => { 
+    dialogRef.afterClosed().subscribe((result) => {
       if (result != null) {
-        console.log(result); 
         if (result.flag) {
           this.consultarDetalleFactura();
           this.buttonRealizarVenta = false;
@@ -350,7 +353,7 @@ export class VentaComponent implements OnInit {
   async consultarDetalleFactura() {
     var respuesta = await this.ventaService.consultarDetalleFactura(
       this.myForm.get("_idCabecera").value
-    ); 
+    );
     if (respuesta["codigo"] == "200") {
       var codigo = "";
       var idLote = "";
@@ -485,7 +488,7 @@ export class VentaComponent implements OnInit {
           idDetalleVenta,
           event.target.value
         );
-        if(respuesta["codigo"] == "200") {
+        if (respuesta["codigo"] == "200") {
           this.consultarDetalleFactura();
         }
       }
@@ -521,7 +524,6 @@ export class VentaComponent implements OnInit {
           this.validarFecha(),
           this.myForm.get("_aplicaSeguro").value ? "1" : "0"
         );
-        console.log(respuesta);
         if (respuesta["codigo"] == "200") {
           this.realizarVenta();
         }
@@ -536,17 +538,18 @@ export class VentaComponent implements OnInit {
       this.myForm.get("_idCabecera").value,
       "Factura/FinalizarCabeceraFacturaVenta"
     );
-    console.log(respuesta);
     if (respuesta["codigo"] == "200") {
       this.openDialog("Venta realizada con éxito");
       this.consultarFacturas();
       this.myForm.reset();
       this.myForm.disable();
       this.detalleVenta.data = [];
+      this.listaProductosDeUnKit = [];
       this.comunidades = [];
       this.pago = "Efectivo";
       this.selectTipoPago = true;
       this.buttonSeleccionarComunidad = true;
+      this.buttonSeleccionarProducto = true;
       this.buttonGenerarFactura = false;
       this.selectTipoCompra = true;
     }

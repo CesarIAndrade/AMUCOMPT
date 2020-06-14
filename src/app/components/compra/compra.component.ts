@@ -367,6 +367,8 @@ export class CompraComponent implements OnInit {
       }
       this.buttonGenerarFactura = false;
       this.buttonSeleccionarLote = true;
+      this.buttonSeleccionarProducto = false;
+      this.listaProductosDeUnKit = [];
       this.clearFieldFecha = true;
       this.clearFieldLote = true;
     }
@@ -482,7 +484,7 @@ export class CompraComponent implements OnInit {
           idDetalleFactura,
           event.target.value
         );
-        if(respuesta["codigo"] == "200") {
+        if (respuesta["codigo"] == "200") {
           this.consultarDetalleFactura();
         }
       }
@@ -498,11 +500,10 @@ export class CompraComponent implements OnInit {
       this.openDialog("Compra realizada con éxito");
       this.consultarFacturas();
       this.selectTipoCompra = true;
-      if (!this.seccionKit) {
-        this.buttonSeleccionarProducto = true;
-        this.seccionKit = true;
-        this.selected = "Producto";
-      }
+      this.seccionKit = true;
+      this.selected = "Producto";
+      this.buttonSeleccionarProducto = true;
+      this.listaProductosDeUnKit = [];
       this.myForm.reset();
       this.myForm.disable();
       this.detalleCompra.data = [];
