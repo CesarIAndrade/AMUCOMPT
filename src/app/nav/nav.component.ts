@@ -18,26 +18,11 @@ export class NavComponent implements OnInit {
     .observe(Breakpoints.Handset)
     .pipe(map((result) => result.matches));
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   constructor(
     private breakpointObserver: BreakpointObserver,
-    private router: Router
-    ) {
+    private router: Router,
+    private activatedRoute: ActivatedRoute
+  ) {
     router.events
       .pipe(
         withLatestFrom(this.isHandset$),
@@ -45,7 +30,10 @@ export class NavComponent implements OnInit {
       )
       .subscribe((_) => {
         this.drawer.close();
-        this.route = this.router.url.split("/")[1].replace("-", " ").toUpperCase();
+        this.route = this.router.url
+          .split("/")[1]
+          .replace("-", " ")
+          .toUpperCase();
       });
   }
 
@@ -55,9 +43,11 @@ export class NavComponent implements OnInit {
 
   route: any = "";
   nav_items = [];
+  rutasPorTipoUsuario: any[] = [];
 
   ngOnInit() {
     if (localStorage.getItem("miCuenta.tipoUsuario") == "1") {
+      this.rutasPorTipoUsuario = ["/usuarios", "/personas", "/cuenta"];
       this.nav_items.push(
         {
           name: "Usuarios",
@@ -76,6 +66,7 @@ export class NavComponent implements OnInit {
         }
       );
     } else if (localStorage.getItem("miCuenta.tipoUsuario") == "2") {
+      this.rutasPorTipoUsuario = ["/visitas", "/cuenta"];
       this.nav_items.push(
         {
           name: "Visitas",
@@ -89,6 +80,18 @@ export class NavComponent implements OnInit {
         }
       );
     } else if (localStorage.getItem("miCuenta.tipoUsuario") == "3") {
+      this.rutasPorTipoUsuario = [
+        "/personas",
+        "/configuracion-productos",
+        "/inventarios",
+        "/stock",
+        "/asignar-tecnico-cliente",
+        "/abonos",
+        "/localizaciones",
+        "/compras",
+        "/ventas",
+        "/cuenta",
+      ];
       this.nav_items.push(
         {
           name: "Personas",
@@ -143,17 +146,20 @@ export class NavComponent implements OnInit {
       );
     }
 
-    
+    if (!this.rutasPorTipoUsuario.includes(this.router.url)) {
+      this.router.navigateByUrl(this.rutasPorTipoUsuario[0])
+    }
 
     if (this.router.url == "/") {
-      this.router.navigateByUrl(this.nav_items[0].url);
-      console.log(this.nav_items[0].url);
-      
-    }
+      this.router.navigateByUrl(this.rutasPorTipoUsuario[0]);
+    } 
 
     this.route = this.router.url.split("/")[1].replace("-", " ").toUpperCase();
     this.router.events.subscribe((_) => {
-      this.route = this.router.url.split("/")[1].replace("-", " ").toUpperCase();
+      this.route = this.router.url
+        .split("/")[1]
+        .replace("-", " ")
+        .toUpperCase();
     });
   }
 }

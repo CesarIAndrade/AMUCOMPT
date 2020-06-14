@@ -26,9 +26,8 @@ import { RegistrarVisitaComponent } from "./components/registrar-visita/registra
 // Guards
 import { ValidarUsuarioGuard } from "src/app/guards/validar-usuario.guard";
 
-const routes: Routes = [{ path: "login", component: LoginComponent }];
-
-var admin = [
+var allRoutes = [
+  { path: "login", component: LoginComponent },
   {
     path: "",
     component: NavComponent,
@@ -39,61 +38,6 @@ var admin = [
         component: UsuarioComponent,
         // canActivate: [ValidarUsuarioGuard]
       },
-      {
-        path: "personas",
-        component: PersonaComponent,
-        // canActivate: [ValidarUsuarioGuard]
-      },
-      {
-        path: "cuenta",
-        component: CuentaComponent,
-        // canActivate: [ValidarUsuarioGuard]
-      },
-    ],
-  },
-  { path: "**", component: Page404Component },
-];
-var tecnico = [
-  {
-    path: "",
-    component: NavComponent,
-    // canActivate: [ValidarUsuarioGuard],
-    children: [
-      {
-        path: "visitas",
-        component: VisitaComponent,
-        // canActivate: [ValidarUsuarioGuard]
-      },
-      {
-        path: "registrar-visita/:id",
-        component: RegistrarVisitaComponent,
-        // canActivate: [ValidarUsuarioGuard]
-      },
-      {
-        path: "compras-rubros",
-        component: CompraRubrosComponent,
-        // canActivate: [ValidarUsuarioGuard]
-      },
-      {
-        path: "ventas-rubros",
-        component: VentaRubrosComponent,
-        // canActivate: [ValidarUsuarioGuard]
-      },
-      {
-        path: "cuenta",
-        component: CuentaComponent,
-        // canActivate: [ValidarUsuarioGuard]
-      },
-    ],
-  },
-  { path: "**", component: Page404Component },
-]; 
-var secretaria = [
-  {
-    path: "",
-    component: NavComponent,
-    // canActivate: [ValidarUsuarioGuard],
-    children: [
       {
         path: "personas",
         component: PersonaComponent,
@@ -140,6 +84,26 @@ var secretaria = [
         // canActivate: [ValidarUsuarioGuard]
       },
       {
+        path: "visitas",
+        component: VisitaComponent,
+        // canActivate: [ValidarUsuarioGuard]
+      },
+      {
+        path: "registrar-visita/:id",
+        component: RegistrarVisitaComponent,
+        // canActivate: [ValidarUsuarioGuard]
+      },
+      {
+        path: "compras-rubros",
+        component: CompraRubrosComponent,
+        // canActivate: [ValidarUsuarioGuard]
+      },
+      {
+        path: "ventas-rubros",
+        component: VentaRubrosComponent,
+        // canActivate: [ValidarUsuarioGuard]
+      },
+      {
         path: "cuenta",
         component: CuentaComponent,
         // canActivate: [ValidarUsuarioGuard]
@@ -149,19 +113,7 @@ var secretaria = [
   { path: "**", component: Page404Component },
 ];
 
-if (localStorage.getItem("miCuenta.tipoUsuario") == "1") {
-  admin.map(route => {
-    routes.push(route);
-  })
-} else if (localStorage.getItem("miCuenta.tipoUsuario") == "2") {
-  tecnico.map(route => {
-    routes.push(route);
-  })
-} else if (localStorage.getItem("miCuenta.tipoUsuario") == "3") {
-  secretaria.map(route => {
-    routes.push(route);
-  })
-}
+const routes: Routes = allRoutes;
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],

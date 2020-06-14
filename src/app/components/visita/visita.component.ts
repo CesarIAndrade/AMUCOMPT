@@ -198,6 +198,13 @@ export class VisitaComponent implements OnInit {
       idComunidad
     );
     console.log(respuesta);
+    if(respuesta["codigo"] == "200") {
+      var clientes = this.clientes.data;
+      var cliente = clientes.find(cliente => cliente["idComunidad"] == idComunidad);
+      var index = this.clientes.data.indexOf(cliente);
+      clientes.splice(index, 1);
+      this.clientes.data = clientes;
+    }
   }
 
   ngOnInit() {
