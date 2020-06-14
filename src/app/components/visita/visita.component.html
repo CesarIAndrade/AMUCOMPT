@@ -9,65 +9,69 @@
           </mat-option>
         </mat-select>
       </mat-form-field>
-
       <div class="row" [hidden]="combos">
-        <div class="col-lg-7">
-          <div class="row">
-            <div class="col-lg-4">
-              <mat-form-field class="example-full-width">
-                <mat-label>Seleccionar Cantón</mat-label>
-                <mat-select
-                  formControlName="_canton"
-                  (selectionChange)="
-                    consultarParroquiasDeUnCanton($event.value)
-                  "
-                >
-                  <mat-option
-                    *ngFor="let item of cantones"
-                    [value]="item.IdCanton"
-                  >
-                    {{ item.Descripcion }}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
-            </div>
-            <div class="col-lg-4">
-              <mat-form-field class="example-full-width">
-                <mat-label>Seleccionar Parroquia</mat-label>
-                <mat-select
-                  formControlName="_parroquia"
-                  (selectionChange)="
-                    consultarComunidadesDeUnaParroquia($event.value)
-                  "
-                >
-                  <mat-option
-                    *ngFor="let item of parroquias"
-                    [value]="item.IdParroquia"
-                  >
-                    {{ item.Descripcion }}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
-            </div>
-            <div class="col-lg-4">
-              <mat-form-field class="example-full-width">
-                <mat-label>Seleccionar Comunidad</mat-label>
-                <mat-select
-                  formControlName="_comunidad"
-                  (selectionChange)="
-                  mostrarClientesPorComunidad($event.value)
-                  "
-                >
-                  <mat-option
-                    *ngFor="let item of comunidades"
-                    [value]="item.IdComunidad"
-                  >
-                    {{ item.Descripcion }}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
-            </div>
-          </div>
+        <div class="col-lg-3">
+          <mat-form-field class="example-full-width">
+            <mat-label>Seleccionar Provincia</mat-label>
+            <mat-select
+              formControlName="_provincia"
+              (selectionChange)="consultarCantonesDeUnaProvincia($event.value)"
+            >
+              <mat-option
+                *ngFor="let item of provincias"
+                [value]="item.IdProvincia"
+              >
+                {{ item.Descripcion }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-lg-3">
+          <mat-form-field class="example-full-width">
+            <mat-label>Seleccionar Cantón</mat-label>
+            <mat-select
+              formControlName="_canton"
+              (selectionChange)="consultarParroquiasDeUnCanton($event.value)"
+            >
+              <mat-option *ngFor="let item of cantones" [value]="item.IdCanton">
+                {{ item.Descripcion }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-lg-3">
+          <mat-form-field class="example-full-width">
+            <mat-label>Seleccionar Parroquia</mat-label>
+            <mat-select
+              formControlName="_parroquia"
+              (selectionChange)="
+                consultarComunidadesDeUnaParroquia($event.value)
+              "
+            >
+              <mat-option
+                *ngFor="let item of parroquias"
+                [value]="item.IdParroquia"
+              >
+                {{ item.Descripcion }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-lg-3">
+          <mat-form-field class="example-full-width">
+            <mat-label>Seleccionar Comunidad</mat-label>
+            <mat-select
+              formControlName="_comunidad"
+              (selectionChange)="mostrarClientesPorComunidad($event.value)"
+            >
+              <mat-option
+                *ngFor="let item of comunidades"
+                [value]="item.IdComunidad"
+              >
+                {{ item.Descripcion }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
         </div>
       </div>
     </form>
@@ -96,12 +100,6 @@
                 {{ element.vivienda }}
               </td>
             </ng-container>
-            <ng-container matColumnDef="comunidad">
-              <th mat-header-cell *matHeaderCellDef>Comunidad</th>
-              <td mat-cell *matCellDef="let element">
-                {{ element.vivienda }}
-              </td>
-            </ng-container>
             <ng-container matColumnDef="telefonos">
               <th mat-header-cell *matHeaderCellDef>Telefonos</th>
               <td mat-cell *matCellDef="let element">
@@ -109,17 +107,33 @@
               </td>
             </ng-container>
             <ng-container matColumnDef="acciones">
-              <th mat-header-cell *matHeaderCellDef>Comunidades</th>
-              <td mat-cell *matCellDef="let element">
-                <button
-                  mat-button
-                  type="button"
-                  class="btn-outline-success"
-                  (click)="openBottomSheet(element.comunidades, element.idComunidad)"
-                >
-                  <mat-icon>open_in_new</mat-icon>
-                </button>
-              </td>
+              <th colspan="2" mat-header-cell *matHeaderCellDef>Comunidades</th>
+              <ng-container *matCellDef="let element">
+                <td mat-cell>
+                  <button
+                    mat-button
+                    type="button"
+                    class="btn-outline-success"
+                    (click)="
+                      openBottomSheet(element.comunidades, element.idComunidad)
+                    "
+                  >
+                    <mat-icon>open_in_new</mat-icon>
+                  </button>
+                </td>
+                <td mat-cell *ngIf="element.terminarAsistencia">
+                  <button
+                    mat-button
+                    type="button"
+                    class="btn-outline-danger"
+                    (click)="
+                    terminarAsistencia(element.idComunidad)
+                    "
+                  >
+                    <mat-icon>not_interested</mat-icon>
+                  </button>
+                </td>
+              </ng-container>
             </ng-container>
             <tr
               mat-header-row
@@ -127,6 +141,9 @@
             ></tr>
             <tr mat-row *matRowDef="let row; columns: tablaClientes"></tr>
           </table>
+          <div class="spinner-container" *ngIf="loading">
+            <mat-spinner></mat-spinner>
+          </div>
           <mat-paginator
             #paginator
             [pageSizeOptions]="[7]"
@@ -134,5 +151,6 @@
           ></mat-paginator>
         </div>
       </div>
+    </div>
   </div>
 </div>

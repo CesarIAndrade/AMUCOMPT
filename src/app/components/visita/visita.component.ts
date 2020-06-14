@@ -7,7 +7,7 @@ import {
 } from "@angular/material";
 import { ComunidadesBottomSheet } from "./comunidades-bottom-sheet.component";
 import { Router } from "@angular/router";
-import { SeguimientoService } from 'src/app/services/seguimiento.service';
+import { SeguimientoService } from "src/app/services/seguimiento.service";
 
 @Component({
   selector: "app-visita",
@@ -21,6 +21,7 @@ export class VisitaComponent implements OnInit {
     private router: Router
   ) {
     this.myForm = new FormGroup({
+      _provincia: new FormControl(""),
       _canton: new FormControl(""),
       _parroquia: new FormControl(""),
       _comunidad: new FormControl(""),
@@ -50,6 +51,8 @@ export class VisitaComponent implements OnInit {
   myForm: FormGroup;
   tabla = true;
   combos = true;
+  loading = true;
+  provincias: any[] = [];
   cantones: any[] = [];
   parroquias: any[] = [];
   comunidades: any[] = [];
@@ -73,38 +76,56 @@ export class VisitaComponent implements OnInit {
     this.clientes.data = [];
     this.tabla = false;
     if (opcion.value === "1") {
+      this.loading = true;
       this.combos = false;
+      this.clientes.data = [];
+      this.myForm.get("_provincia").setValue("0");
+      this.myForm.get("_canton").setValue("0");
+      this.myForm.get("_parroquia").setValue("0");
+      this.myForm.get("_comunidad").setValue("0");
       this.consultarClientesFiltrados();
     } else if (opcion.value === "2") {
+      this.loading = true;
       this.combos = true;
       this.listarClientesTecnico();
     }
   }
 
+  consultarCantonesDeUnaProvincia(idProvincia) {
+    this.clientes.data = [];
+    var provincia = this.provincias.find(
+      (provincia) => provincia.IdProvincia == idProvincia
+    );
+    this.cantones = provincia.CantonPersonas;
+    this.myForm.get("_canton").setValue("0");
+    this.myForm.get("_parroquia").setValue("0");
+    this.myForm.get("_comunidad").setValue("0");
+  }
+
   consultarParroquiasDeUnCanton(idCanton) {
     this.clientes.data = [];
-    var canton = this.cantones.filter((canton) => canton.IdCanton == idCanton);
-    this.parroquias = canton[0].ParroquiaPersonas;
+    var canton = this.cantones.find((canton) => canton.IdCanton == idCanton);
+    this.parroquias = canton.ParroquiaPersonas;
     this.myForm.get("_parroquia").setValue("0");
     this.myForm.get("_comunidad").setValue("0");
   }
 
   consultarComunidadesDeUnaParroquia(idParroquia) {
     this.clientes.data = [];
-    var parroquia = this.parroquias.filter(
+    var parroquia = this.parroquias.find(
       (parroquia) => parroquia.IdParroquia == idParroquia
     );
-    this.comunidades = parroquia[0].ComunidadesPersonas;
+    this.comunidades = parroquia.ComunidadesPersonas;
     this.myForm.get("_comunidad").setValue("0");
   }
 
   mostrarClientesPorComunidad(idComunidad) {
     this.clientes.data = [];
-    var comunidad = this.comunidades.filter(
+    var comunidad = this.comunidades.find(
       (comunidad) => comunidad.IdComunidad == idComunidad
     );
     var data: any = [];
-    comunidad[0].PersonaEntidad.map((cliente) => {
+    comunidad.PersonaEntidad.map((cliente) => {
       data.push({
         _id: cliente.Persona.IdPersona,
         idComunidad: cliente.IdAsignarTecnicoPersonaComunidad,
@@ -121,7 +142,7 @@ export class VisitaComponent implements OnInit {
           cliente.Persona.AsignacionPersonaParroquia[0].Parroquia.Descripcion,
         telefono1: cliente.Persona.ListaTelefono[0].Numero,
         telefono2: cliente.Persona.ListaTelefono[1].Numero,
-        comunidades: cliente.Persona._AsignarTecnicoPersonaComunidad,
+        terminarAsistencia: true,
       });
     });
     this.clientes.data = data;
@@ -133,9 +154,9 @@ export class VisitaComponent implements OnInit {
       this.myForm.get("_idTecnico").value
     );
     if (clientes["codigo"] == "200") {
-      clientes["respuesta"].map((provincia) => {
-        this.cantones = provincia.CantonPersonas;
-      });
+      this.loading = false;
+      this.clientes.data = [];
+      this.provincias = clientes["respuesta"];
     }
   }
 
@@ -146,6 +167,7 @@ export class VisitaComponent implements OnInit {
       this.myForm.get("_idTecnico").value
     );
     if (respuesta["codigo"] == "200") {
+      this.loading = false;
       var clientes = [];
       this.clientes.data = [];
       respuesta["respuesta"].map((cliente) => {
@@ -163,12 +185,19 @@ export class VisitaComponent implements OnInit {
           vivienda: cliente.AsignacionPersonaParroquia[0].Parroquia.Descripcion,
           telefono1: cliente.ListaTelefono[0].Numero,
           telefono2: cliente.ListaTelefono[1].Numero,
-          comunidades: cliente._AsignarTecnicoPersonaComunidad,
+          comunidades: cliente._AsignarTecnicoPersonaComunidad
         });
       });
       this.clientes.data = clientes;
       this.clientes.paginator = this.paginator;
     }
+  }
+
+  async terminarAsistencia(idComunidad) {
+    var respuesta = await this.seguimientoService.terminarAsistencia(
+      idComunidad
+    );
+    console.log(respuesta);
   }
 
   ngOnInit() {
@@ -177,12 +206,5 @@ export class VisitaComponent implements OnInit {
       .setValue(localStorage.getItem("miCuenta.idAsignacionTipoUsuario"));
   }
 
-  tablaClientes = [
-    "cedula",
-    "cliente",
-    "vivienda",
-    "comunidad",
-    "telefonos",
-    "acciones",
-  ];
+  tablaClientes = ["cedula", "cliente", "vivienda", "telefonos", "acciones"];
 }

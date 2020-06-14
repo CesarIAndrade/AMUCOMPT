@@ -62,16 +62,6 @@ export class NavComponent implements OnInit {
     } else if (localStorage.getItem("miCuenta.tipoUsuario") == "2") {
       this.nav_items.push(
         {
-          name: "Compra Rubros",
-          icon: "shopping_cart",
-          url: "/compras-rubros",
-        },
-        {
-          name: "Venta Rubros",
-          icon: "shopping_cart",
-          url: "/ventas-rubros",
-        },
-        {
           name: "Visitas",
           icon: "chrome_reader_mode",
           url: "/visitas",

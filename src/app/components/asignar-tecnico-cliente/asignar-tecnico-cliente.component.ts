@@ -1,8 +1,6 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { FormGroup, FormControl } from "@angular/forms";
-import { PanelAdministracionService } from "src/app/services/panel-administracion.service";
 import { UsuarioService } from "src/app/services/usuario.service";
-import { VentaService } from "src/app/services/venta.service";
 import { MatPaginator, MatTableDataSource, MatDialog } from "@angular/material";
 import { SeguimientoService } from "src/app/services/seguimiento.service";
 import { DialogAlertComponent } from "../dialog-alert/dialog-alert.component";
@@ -39,7 +37,9 @@ export class AsignarTecnicoClienteComponent implements OnInit {
   tecnicos: any[] = [];
 
   // Para la paginacion
-  @ViewChild("paginator", { static: false }) paginator: MatPaginator;
+  @ViewChild("paginatorC", { static: false }) paginatorC: MatPaginator;
+  @ViewChild("paginatorCT", { static: false }) paginatorCT: MatPaginator;
+
   clientes = new MatTableDataSource<Element[]>();
   clientesTecnico = new MatTableDataSource<Element[]>();
 
@@ -141,12 +141,13 @@ export class AsignarTecnicoClienteComponent implements OnInit {
         });
       });
       this.clientes.data = data;
-      this.clientes.paginator = this.paginator;
+      this.clientes.paginator = this.paginatorC;
     }
   }
 
   async consultarTecnicos() {
     var respuesta = await this.usuarioService.consultarTecnicos("2");
+    console.log(respuesta);
     if (respuesta["codigo"] == "200") {
       respuesta["respuesta"].map((tecnico) => {
         this.tecnicos.push({
@@ -171,6 +172,7 @@ export class AsignarTecnicoClienteComponent implements OnInit {
       "IdAsignarTUTecnico",
       idTecnico
     );
+    console.log(respuesta);
     if (respuesta["codigo"] == "200") {
       var clientesTecnico: any = [];
       this.clientesTecnico.data = [];
@@ -186,10 +188,11 @@ export class AsignarTecnicoClienteComponent implements OnInit {
             cliente.ApellidoPaterno +
             " " +
             cliente.ApellidoMaterno,
+          estadoAsignacionTipoUsuario: cliente.EstadoAsignacionTipoUsuario
         });
       });
       this.clientesTecnico.data = clientesTecnico;
-      this.clientesTecnico.paginator = this.paginator;
+      this.clientesTecnico.paginator = this.paginatorCT;
     }
   }
 

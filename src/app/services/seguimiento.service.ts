@@ -124,7 +124,7 @@ export class SeguimientoService {
   ) {
     const body = new HttpParams()
       .set(identificador, idLocalidad)
-      .set("encriptada",  localStorage.getItem("miCuenta.getToken"));
+      .set("encriptada", localStorage.getItem("miCuenta.getToken"));
     return new Promise((resolve, reject) => {
       this.http
         .post(apiUrl + url, body.toString(), {
@@ -144,20 +144,22 @@ export class SeguimientoService {
     });
   }
 
-  filtroClientesEnVisitas(
-    idTecnico: string
-  ) {
+  filtroClientesEnVisitas(idTecnico: string) {
     const body = new HttpParams()
       .set("IdAsignarTUTecnico", idTecnico)
-      .set("encriptada", localStorage.getItem("miCuenta.getToken"))
+      .set("encriptada", localStorage.getItem("miCuenta.getToken"));
     return new Promise((resolve, reject) => {
       this.http
-        .post(apiUrl + "Credito/ConsultarPersonasAsignadasAunTecnicoPorComunidad", body.toString(), {
-          headers: new HttpHeaders().set(
-            "Content-Type",
-            "application/x-www-form-urlencoded"
-          ),
-        })
+        .post(
+          apiUrl + "Credito/ConsultarPersonasAsignadasAunTecnicoPorComunidad",
+          body.toString(),
+          {
+            headers: new HttpHeaders().set(
+              "Content-Type",
+              "application/x-www-form-urlencoded"
+            ),
+          }
+        )
         .subscribe(
           (res) => {
             resolve(res);
@@ -224,11 +226,7 @@ export class SeguimientoService {
     });
   }
 
-  listarClientesTecnico(
-    url: string,
-    identificador: string,
-    idTecnico: string,
-  ) {
+  listarClientesTecnico(url: string, identificador: string, idTecnico: string) {
     const body = new HttpParams()
       .set(identificador, idTecnico)
       .set("encriptada", localStorage.getItem("miCuenta.getToken"));
@@ -274,11 +272,7 @@ export class SeguimientoService {
     });
   }
 
-  registrarVisita(
-    idComunidad: string,
-    idTecnico: string,
-    observacion: string
-  ) {
+  registrarVisita(idComunidad: string, idTecnico: string, observacion: string) {
     const body = new HttpParams()
       .set("IdAsignarTecnicoPersonaComunidad", idComunidad)
       .set("IdAsignarTU", idTecnico)
@@ -303,11 +297,7 @@ export class SeguimientoService {
     });
   }
 
-  actualizarVisita(
-    idVisita: string,
-    idTecnico: string,
-    observacion: string
-  ) {
+  actualizarVisita(idVisita: string, idTecnico: string, observacion: string) {
     const body = new HttpParams()
       .set("IdVisita", idVisita)
       .set("IdAsignarTU", idTecnico)
@@ -331,13 +321,11 @@ export class SeguimientoService {
         );
     });
   }
- 
-  eliminarVisita(
-    idVisita: string
-  ) {
+
+  eliminarVisita(idVisita: string) {
     const body = new HttpParams()
       .set("IdVisita", idVisita)
-      .set("encriptada", localStorage.getItem("miCuenta.deleteToken"))
+      .set("encriptada", localStorage.getItem("miCuenta.deleteToken"));
     return new Promise((resolve, reject) => {
       this.http
         .post(apiUrl + "Credito/EliminarVisita", body.toString(), {
@@ -357,20 +345,22 @@ export class SeguimientoService {
     });
   }
 
-  consultarFacturasCliente(
-    numeroDocumento: string
-  ) {
+  consultarFacturasCliente(numeroDocumento: string) {
     const body = new HttpParams()
       .set("NumeroDocumento", numeroDocumento)
-      .set("encriptada", localStorage.getItem("miCuenta.deleteToken"))
+      .set("encriptada", localStorage.getItem("miCuenta.deleteToken"));
     return new Promise((resolve, reject) => {
       this.http
-        .post(apiUrl + "Credito/ConsultarFacturasPendientesPorPersona", body.toString(), {
-          headers: new HttpHeaders().set(
-            "Content-Type",
-            "application/x-www-form-urlencoded"
-          ),
-        })
+        .post(
+          apiUrl + "Credito/ConsultarFacturasPendientesPorPersona",
+          body.toString(),
+          {
+            headers: new HttpHeaders().set(
+              "Content-Type",
+              "application/x-www-form-urlencoded"
+            ),
+          }
+        )
         .subscribe(
           (res) => {
             resolve(res);
@@ -382,4 +372,30 @@ export class SeguimientoService {
     });
   }
 
+  terminarAsistencia(idTecnico: string) {
+    const body = new HttpParams()
+      .set("IdAsignarTecnicoPersonaComunidad", idTecnico)
+      .set("encriptada", localStorage.getItem("miCuenta.deleteToken"));
+    return new Promise((resolve, reject) => {
+      this.http
+        .post(
+          apiUrl + "Credito/FinalizarAsignarTecnicoPersonaComunidad",
+          body.toString(),
+          {
+            headers: new HttpHeaders().set(
+              "Content-Type",
+              "application/x-www-form-urlencoded"
+            ),
+          }
+        )
+        .subscribe(
+          (res) => {
+            resolve(res);
+          },
+          (err) => {
+            reject(err);
+          }
+        );
+    });
+  }
 }
