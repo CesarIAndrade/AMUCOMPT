@@ -30,6 +30,13 @@ export class ConfiguracionProductoComponent implements OnInit {
       _codigo: new FormControl(""),
       _descuento: new FormControl(""),
       _idDescuento: new FormControl(""),
+      // Solo para intereses
+      _idInteres: new FormControl(""),
+      _interes: new FormControl(""),
+      _tasaInteres: new FormControl(""),
+      _idInteresMora: new FormControl(""),
+      _interesMora: new FormControl(""),
+      _tasaInteresMora: new FormControl(""),
     });
   }
 
@@ -40,6 +47,9 @@ export class ConfiguracionProductoComponent implements OnInit {
   encabezadoTabla: string;
   mostrarForm = true;
   soloParaKits = true;
+  loading = false;
+  ocultarCampoCuandoIntereses = false;
+  mostrarSeccionCuandoIntereses = true;
 
   opciones = [
     {
@@ -57,6 +67,10 @@ export class ConfiguracionProductoComponent implements OnInit {
     {
       _id: "4",
       descripcion: "Kits",
+    },
+    {
+      _id: "5",
+      descripcion: "Intereses",
     },
   ];
   descuentos: any[] = [];
@@ -83,6 +97,7 @@ export class ConfiguracionProductoComponent implements OnInit {
   async consultarTipoProductos() {
     var respuesta = await this.inventarioService.consultarTipoProductos();
     if (respuesta["codigo"] == "200") {
+      this.loading = false;
       var tipoProductos: any = [];
       respuesta["respuesta"].map((item) => {
         tipoProductos.push({
@@ -148,6 +163,7 @@ export class ConfiguracionProductoComponent implements OnInit {
   async consultarPresentaciones() {
     var respuesta = await this.inventarioService.consultarPresentaciones();
     if (respuesta["codigo"] == "200") {
+      this.loading = false;
       var presentaciones: any = [];
       respuesta["respuesta"].map((item) => {
         presentaciones.push({
@@ -213,6 +229,7 @@ export class ConfiguracionProductoComponent implements OnInit {
   async consultarMedidas() {
     var respuesta = await this.inventarioService.consultarMedidas();
     if (respuesta["codigo"] == "200") {
+      this.loading = false;
       var medidas: any = [];
       respuesta["respuesta"].map((item) => {
         medidas.push({
@@ -274,6 +291,7 @@ export class ConfiguracionProductoComponent implements OnInit {
   async consultarKits() {
     var respuesta = await this.inventarioService.consultarKits();
     if (respuesta["codigo"] == "200") {
+      this.loading = false;
       var kits: any = [];
       respuesta["respuesta"].map((item) => {
         kits.push({
@@ -365,6 +383,38 @@ export class ConfiguracionProductoComponent implements OnInit {
     }
   }
 
+  async consultarIntereses() {
+    var respuesta = await this.inventarioService.consultarIntereses();
+    console.log(respuesta);
+    if (respuesta["codigo"] == "200") {
+      this.loading = false;
+      respuesta["respuesta"].map((tipoInteres) => {
+        if (tipoInteres.Descripcion == "MORA") {
+          this.myForm.get("_idInteresMora").setValue(tipoInteres.IdTipoInteres);
+          this.myForm.get("_interesMora").setValue(tipoInteres.Descripcion);
+        } else {
+          this.myForm.get("_idInteres").setValue(tipoInteres.IdTipoInteres);
+          this.myForm.get("_interes").setValue(tipoInteres.Descripcion);
+        }
+      });
+    }
+  }
+
+  async crearInteres() {
+    var respuesta = await this.inventarioService.crearInteres(
+      this.myForm.get("_idInteres").value,
+      this.myForm.get("_tasaInteres").value,
+      this.myForm.get("_idInteresMora").value,
+      this.myForm.get("_tasaInteresMora").value
+    );
+    console.log(respuesta);
+  }
+
+  eliminarInteres(idInteres) {
+    var respuesta = this.inventarioService.eliminarInteres(idInteres);
+    console.log(respuesta);
+  }
+
   actualizarOpcion(titulo, suffix, encabezadoTabla, tabla) {
     this.titulo = titulo;
     this.suffix = suffix;
@@ -372,21 +422,50 @@ export class ConfiguracionProductoComponent implements OnInit {
     this.tabla = tabla;
   }
 
-  setValidators() {
-    this.myForm.get("_codigo").setValidators([Validators.required]);
-    this.myForm.get("_descuento").setValidators([Validators.required]);
-    this.myForm.get("_codigo").updateValueAndValidity();
-    this.myForm.get("_descuento").updateValueAndValidity();
+  setValidators(flag) {
+    if (flag) {
+      this.myForm.get("_codigo").setValidators([Validators.required]);
+      this.myForm.get("_descuento").setValidators([Validators.required]);
+      this.myForm.get("_codigo").updateValueAndValidity();
+      this.myForm.get("_descuento").updateValueAndValidity();
+    } else {
+      this.myForm.get("_campo").clearValidators();
+      this.myForm.get("_campo").updateValueAndValidity();
+      this.myForm
+        .get("_tasaInteres")
+        .setValidators([
+          Validators.required,
+          Validators.pattern(/^-?(0|[1-9]\d*)?$/),
+        ]);
+      this.myForm
+        .get("_tasaInteresMora")
+        .setValidators([
+          Validators.required,
+          Validators.pattern(/^-?(0|[1-9]\d*)?$/),
+        ]);
+      this.myForm.get("_tasaInteres").updateValueAndValidity();
+      this.myForm.get("_tasaInteresMora").updateValueAndValidity();
+    }
   }
 
-  clearValidators() {
-    this.myForm.get("_codigo").clearValidators();
-    this.myForm.get("_descuento").clearValidators();
-    this.myForm.get("_codigo").updateValueAndValidity();
-    this.myForm.get("_descuento").updateValueAndValidity();
+  clearValidators(flag) {
+    if (flag) {
+      this.myForm.get("_codigo").clearValidators();
+      this.myForm.get("_descuento").clearValidators();
+      this.myForm.get("_codigo").updateValueAndValidity();
+      this.myForm.get("_descuento").updateValueAndValidity();
+    } else {
+      this.myForm.get("_campo").setValidators([Validators.required]);
+      this.myForm.get("_campo").updateValueAndValidity();
+      this.myForm.get("_tasaInteres").clearValidators();
+      this.myForm.get("_tasaInteresMora").clearValidators();
+      this.myForm.get("_tasaInteres").updateValueAndValidity();
+      this.myForm.get("_tasaInteresMora").updateValueAndValidity();
+    }
   }
 
   selecionarOpcion(opcion) {
+    this.loading = true;
     this.dataSource.data = [];
     if (opcion.value === "1") {
       this.actualizarOpcion("Tipo Producto", "o", "Tipo Productos", [
@@ -415,13 +494,28 @@ export class ConfiguracionProductoComponent implements OnInit {
       ]);
       this.consultarDescuentos();
       this.consultarKits();
+    } else if (opcion.value === "5") {
+      this.actualizarOpcion("Interés", "o", "Intereses", [
+        "descripcion",
+        "acciones",
+      ]);
+      this.consultarIntereses();
     }
     if (opcion.value === "4") {
       this.soloParaKits = false;
-      this.setValidators();
+      this.setValidators(true);
     } else {
       this.soloParaKits = true;
-      this.clearValidators();
+      this.clearValidators(true);
+    }
+    if (opcion.value === "5") {
+      this.ocultarCampoCuandoIntereses = true;
+      this.mostrarSeccionCuandoIntereses = false;
+      this.setValidators(false);
+    } else {
+      this.ocultarCampoCuandoIntereses = false;
+      this.mostrarSeccionCuandoIntereses = true;
+      this.clearValidators(false);
     }
     this.filter = "";
     this.mostrarForm = false;
@@ -440,6 +534,8 @@ export class ConfiguracionProductoComponent implements OnInit {
         this.crearMedida();
       } else if (this.myForm.get("_idCampo").value === "4") {
         this.crearKit();
+      } else if (this.myForm.get("_idCampo").value === "5") {
+        this.crearInteres();
       }
     }
   }
@@ -453,6 +549,8 @@ export class ConfiguracionProductoComponent implements OnInit {
       this.eliminarMedida(_id);
     } else if (this.myForm.get("_idCampo").value === "4") {
       this.eliminarKit(_id);
+    }else if (this.myForm.get("_idCampo").value === "5") {
+      this.eliminarInteres(_id);
     }
   }
 
@@ -462,7 +560,10 @@ export class ConfiguracionProductoComponent implements OnInit {
     this.myForm.get("_campo").reset();
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.myForm.get("_interes").disable();
+    this.myForm.get("_interesMora").disable();
+  }
 
   tabla = ["descripcion", "acciones"];
 }

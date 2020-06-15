@@ -888,4 +888,83 @@ export class InventarioService {
         );
     });
   }
+
+  consultarIntereses() {
+    const body = new HttpParams().set(
+      "encriptada",
+      localStorage.getItem("miCuenta.postToken")
+    );
+    return new Promise((resolve, reject) => {
+      this.http
+        .post(apiUrl + "Credito/ListaTipoInteres", body.toString(), {
+          headers: new HttpHeaders().set(
+            "Content-Type",
+            "application/x-www-form-urlencoded"
+          ),
+        })
+        .subscribe(
+          (res) => {
+            resolve(res);
+          },
+          (err) => {
+            reject(err);
+          }
+        );
+    });
+  }
+
+  crearInteres(
+    idInteres: string,
+    tasaInteres: string,
+    idInteresMora: string,  
+    tasaInteresMora: string
+  ) {
+    const body = new HttpParams()
+    .set("IdTipoInteres", idInteres)
+    .set("TasaInteres", tasaInteres)
+    .set("IdTipoInteresMora", idInteresMora)
+    .set("TasaInteresMora", tasaInteresMora)
+    .set("encriptada", localStorage.getItem("miCuenta.postToken"));
+    console.log(body);
+    return new Promise((resolve, reject) => {
+      this.http
+        .post(apiUrl + "Credito/IngresoConfiguracionInteres", body.toString(), {
+          headers: new HttpHeaders().set(
+            "Content-Type",
+            "application/x-www-form-urlencoded"
+          ),
+        })
+        .subscribe(
+          (res) => {
+            resolve(res);
+          },
+          (err) => {
+            reject(err);
+          }
+        );
+    });
+  }
+
+  eliminarInteres(idInteres: string) {
+    const body = new HttpParams()
+    .set("", idInteres)
+    .set("encriptada", localStorage.getItem("miCuenta.postToken"));
+    return new Promise((resolve, reject) => {
+      this.http
+        .post(apiUrl + "", body.toString(), {
+          headers: new HttpHeaders().set(
+            "Content-Type",
+            "application/x-www-form-urlencoded"
+          ),
+        })
+        .subscribe(
+          (res) => {
+            resolve(res);
+          },
+          (err) => {
+            reject(err);
+          }
+        );
+    });
+  }
 }

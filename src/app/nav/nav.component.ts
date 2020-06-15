@@ -29,6 +29,12 @@ export class NavComponent implements OnInit {
         filter(([a, b]) => b && a instanceof NavigationEnd)
       )
       .subscribe((_) => {
+        if (this.router.url == "/compras" || this.router.url == "/ventas") {
+          this.compraVenta = true;
+        } else {
+          this.compraVenta = false;
+        }
+
         this.drawer.close();
         this.route = this.router.url
           .split("/")[1]
@@ -41,9 +47,16 @@ export class NavComponent implements OnInit {
     localStorage.clear();
   }
 
+  goBack() {
+    if (this.router.url == "/compras" || this.router.url == "/ventas") {
+      this.router.navigateByUrl("/compra-venta");
+    }
+  }
+
   route: any = "";
   nav_items = [];
   rutasPorTipoUsuario: any[] = [];
+  compraVenta = false;
 
   ngOnInit() {
     if (localStorage.getItem("miCuenta.tipoUsuario") == "1") {
@@ -88,6 +101,11 @@ export class NavComponent implements OnInit {
         "/asignar-tecnico-cliente",
         "/abonos",
         "/localizaciones",
+        "/provincias",
+        "/cantones",
+        "/parroquias",
+        "/comunidades",
+        "/compra-venta",
         "/compras",
         "/ventas",
         "/cuenta",
@@ -129,14 +147,9 @@ export class NavComponent implements OnInit {
           url: "/localizaciones",
         },
         {
-          name: "Compra Inventario",
+          name: "Compra Venta",
           icon: "shop",
-          url: "/compras",
-        },
-        {
-          name: "Venta Inventario",
-          icon: "shop",
-          url: "/ventas",
+          url: "/compra-venta",
         },
         {
           name: "Cuenta",
@@ -147,12 +160,12 @@ export class NavComponent implements OnInit {
     }
 
     if (!this.rutasPorTipoUsuario.includes(this.router.url)) {
-      this.router.navigateByUrl(this.rutasPorTipoUsuario[0])
+      this.router.navigateByUrl(this.rutasPorTipoUsuario[0]);
     }
 
     if (this.router.url == "/") {
       this.router.navigateByUrl(this.rutasPorTipoUsuario[0]);
-    } 
+    }
 
     this.route = this.router.url.split("/")[1].replace("-", " ").toUpperCase();
     this.router.events.subscribe((_) => {

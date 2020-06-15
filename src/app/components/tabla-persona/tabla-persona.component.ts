@@ -58,7 +58,7 @@ export class TablaPersonaComponent implements OnInit {
 
   abrirModal(persona) {
     let dialogRef = this.dialog.open(ModalDetallePersonaComponent, {
-      width: "500px",
+      width: "auto",
       height: "auto",
       data: {
         persona: persona,

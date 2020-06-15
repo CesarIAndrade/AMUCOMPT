@@ -48,6 +48,7 @@ export class ProductoComponent implements OnInit {
   botonIngresar = "ingresar";
   filterProducto = "";
   productosSeleccionado = false;
+  loading = true;
   tipoProductos: any[] = [];
   presentaciones: any[] = [];
   medidas: any[] = [];
@@ -75,6 +76,7 @@ export class ProductoComponent implements OnInit {
   async consultarTipoProductos() {
     var tipoProductos = await this.inventarioService.consultarTipoProductos();
     if (tipoProductos["codigo"] == "200") {
+      this.loading = false;
       this.tipoProductos = tipoProductos["respuesta"];
     }
   }

@@ -81,6 +81,12 @@ export class CreditosAbonosComponent implements OnInit {
     }
   }
 
+  search(term: string) {
+    term = term.trim();
+    term = term.toUpperCase(); 
+    this.facturas.filter = term;
+  }
+
   ngOnInit() {}
 
   tablaFacturasCliente = [

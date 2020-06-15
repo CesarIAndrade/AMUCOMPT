@@ -109,9 +109,13 @@ export class PersonaComponent implements OnInit {
     });
   }
 
+  comboProvincia = true;
+  comboCanton = false;
+  comboParroquia = false;
   async consultarProvincias() {
     var provincias = await this.panelAdministracionService.consultarProvincias();
     if (provincias["codigo"] == "200") {
+      this.comboProvincia = false;
       this.provincias = provincias["respuesta"];
     }
   }
@@ -138,10 +142,12 @@ export class PersonaComponent implements OnInit {
   }
 
   async consultarCantonesDeUnaProvincia(idProvincia: string, flag?) {
+    this.comboCanton = true;
     var respuesta = await this.panelAdministracionService.consultarCantonesDeUnaProvincia(
       idProvincia
     );
     if (respuesta["codigo"] == "200") {
+      this.comboCanton = false;
       this.cantones = respuesta["respuesta"];
       if (flag) {
         this.myForm.get("_canton").setValue("0");
@@ -151,10 +157,12 @@ export class PersonaComponent implements OnInit {
   }
 
   async consultarParroquiasDeUnCanton(idCanton: string, flag?) {
+    this.comboParroquia = true;
     var respuesta = await this.panelAdministracionService.consultarParroquiasDeUnCanton(
       idCanton
     );
     if (respuesta["codigo"] == "200") {
+      this.comboParroquia = false;
       this.parroquias = respuesta["respuesta"];
       if (flag) {
         this.myForm.get("_parroquia").setValue("0");
@@ -188,9 +196,9 @@ export class PersonaComponent implements OnInit {
     }
   }
 
-  seleccionarTipoTelefono1(event) {
+  seleccionarTipoTelefono1(IdTipoTelefono) {
     var tipo = this.tipoTelefonos.find(
-      (tipo) => tipo.IdTipoTelefono == event.value
+      (tipo) => tipo.IdTipoTelefono == IdTipoTelefono
     );
     this.myForm.get("_telefono1").enable();
     this.myForm.get("_telefono1").setValidators([]);
@@ -220,9 +228,9 @@ export class PersonaComponent implements OnInit {
     }
   }
 
-  seleccionarTipoTelefono2(event) {
+  seleccionarTipoTelefono2(IdTipoTelefono) {
     var tipo = this.tipoTelefonos.find(
-      (tipo) => tipo.IdTipoTelefono == event.value
+      (tipo) => tipo.IdTipoTelefono == IdTipoTelefono
     );
     this.myForm.get("_telefono2").enable();
     this.myForm.get("_telefono2").setValidators([]);
@@ -301,6 +309,7 @@ export class PersonaComponent implements OnInit {
   }
 
   mostrarPersona(persona) {
+    console.log(persona);
     this.myForm.get("_telefono1").enable();
     this.myForm.get("_telefono2").enable();
     this.nuevaPersona = "Modificar Persona";
@@ -324,10 +333,12 @@ export class PersonaComponent implements OnInit {
     this.myForm
       .get("_idTelefono1")
       .setValue(persona.ListaTelefono[0].IdTelefono);
+    this.seleccionarTipoTelefono1(persona.ListaTelefono[0].TipoTelefono.IdTipoTelefono);
     this.myForm.get("_telefono1").setValue(persona.ListaTelefono[0].Numero);
     this.myForm
       .get("_tipoTelefono1")
       .setValue(persona.ListaTelefono[0].TipoTelefono.IdTipoTelefono);
+    this.seleccionarTipoTelefono2(persona.ListaTelefono[1].TipoTelefono.IdTipoTelefono);
     this.myForm
       .get("_idTelefono2")
       .setValue(persona.ListaTelefono[1].IdTelefono);

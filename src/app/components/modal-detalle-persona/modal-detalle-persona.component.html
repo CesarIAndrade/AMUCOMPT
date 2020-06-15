@@ -1,72 +1,62 @@
-<mat-dialog-content>
-  <h1 mat-dialog-title style="text-align: center;">Datos de Persona</h1>
-  <mat-form-field class="example-full-width">
-    <input
-      matInput
-      [(ngModel)]="nombresCompletos"
-      type="text"
-      disabled
-      readonly
-    />
-  </mat-form-field>
-  <div class="row">
-    <div class="col-lg-6 col-md-6">
-      <mat-form-field class="example-full-width">
-        <input
-          matInput
-          [(ngModel)]="data.persona.TipoDocumento"
-          type="text"
-          disabled
-          readonly
-        />
-      </mat-form-field>
-    </div>
-    <div class="col-lg-6 col-md-6">
-      <mat-form-field class="example-full-width">
-        <input
-          matInput
-          [(ngModel)]="data.persona.NumeroDocumento"
-          type="text"
-          disabled
-          readonly
-        />
-      </mat-form-field>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-lg-6 col-md-6">
-      <mat-form-field class="example-full-width">
-        <input
-          matInput
-          [(ngModel)]="data.persona.ListaTelefono[0].Numero || sinNumero"
-          type="text"
-          disabled
-          readonly
-        />
-      </mat-form-field>
-    </div>
-    <div class="col-lg-6 col-md-6">
-      <mat-form-field class="example-full-width">
-        <input
-          matInput
-          [(ngModel)]="data.persona.ListaTelefono[1].Numero || sinNumero"
-          type="text"
-          disabled
-          readonly
-        />
-      </mat-form-field>
-    </div>
-  </div>
-  <mat-form-field class="example-full-width">
-    <input matInput [(ngModel)]="correo" type="text" disabled readonly />
-  </mat-form-field>
-  <mat-form-field class="example-full-width">
-    <input
-      matInput
-      [(ngModel)]="direccion || sinDireccion"
-      type="text"
-      disabled
-      readonly
-    />
-  </mat-form-field>
-</mat-dialog-content>
+<mat-card class="example-card">
+  <mat-card-header>
+    <mat-card-title>{{ nombresCompletos }}</mat-card-title>
+    <mat-card-subtitle>{{ data.persona.NumeroDocumento }}</mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+    <mat-list>
+      <mat-list-item role="listitem">
+        <mat-icon mat-list-icon>person</mat-icon>
+        <mat-label>
+          <b>{{ data.persona.TipoDocumento }}: </b>
+          {{ data.persona.NumeroDocumento }}
+        </mat-label>
+      </mat-list-item>
+      <mat-list-item role="listitem">
+        <mat-icon mat-list-icon>alternate_email</mat-icon>
+        <mat-label>
+          <b>CORREO: </b>
+          {{ correo }}
+        </mat-label>
+      </mat-list-item>
+      <mat-list-item
+        role="listitem"
+        *ngFor="let telefono of data.persona.ListaTelefono"
+      >
+        <mat-icon
+          *ngIf="telefono.TipoTelefono.Descripcion == 'CELULAR'"
+          mat-list-icon
+          >stay_current_portrait</mat-icon
+        >
+        <mat-icon
+          *ngIf="telefono.TipoTelefono.Descripcion == 'CONVENCIONAL'"
+          mat-list-icon
+          >phone</mat-icon
+        >
+        <mat-label>
+          <b> {{ telefono.TipoTelefono.Descripcion }}: </b>
+          {{ telefono.Numero }}
+        </mat-label>
+      </mat-list-item>
+      <mat-list-item role="listitem">
+        <mat-icon mat-list-icon>home</mat-icon>
+        <mat-label>
+          <b>UBICACIÓN: </b>
+          {{ direccion }}
+        </mat-label>
+      </mat-list-item>
+      <mat-list-item role="listitem">
+        <mat-icon mat-list-icon>location_on</mat-icon>
+        <mat-label>
+          <b>DIRECCIÓN: </b>
+          {{ referencia }}
+        </mat-label>
+      </mat-list-item>
+    </mat-list>
+  </mat-card-content>
+  <mat-card-actions>
+    <button class="btn-block" color="primary" mat-dialog-close mat-button>
+      Cerrar
+    </button>
+  </mat-card-actions>
+</mat-card>

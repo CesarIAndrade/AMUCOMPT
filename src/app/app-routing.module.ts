@@ -25,6 +25,11 @@ import { RegistrarVisitaComponent } from "./components/registrar-visita/registra
 
 // Guards
 import { ValidarUsuarioGuard } from "src/app/guards/validar-usuario.guard";
+import { ComunidadComponent } from './components/comunidad/comunidad.component';
+import { ParroquiaComponent } from './components/parroquia/parroquia.component';
+import { CantonComponent } from './components/canton/canton.component';
+import { ProvinciaComponent } from './components/provincia/provincia.component';
+import { CompraVentaComponent } from './components/compra-venta/compra-venta.component';
 
 var allRoutes = [
   { path: "login", component: LoginComponent },
@@ -69,6 +74,11 @@ var allRoutes = [
         // canActivate: [ValidarUsuarioGuard]
       },
       {
+        path: "compra-venta",
+        component: CompraVentaComponent,
+        // canActivate: [ValidarUsuarioGuard]
+      },
+      {
         path: "compras",
         component: CompraComponent,
         // canActivate: [ValidarUsuarioGuard]
@@ -81,6 +91,26 @@ var allRoutes = [
       {
         path: "localizaciones",
         component: PanelAdministracionComponent,
+        // canActivate: [ValidarUsuarioGuard]
+      },
+      {
+        path: "provincias",
+        component: ProvinciaComponent,
+        // canActivate: [ValidarUsuarioGuard]
+      },
+      {
+        path: "cantones",
+        component: CantonComponent,
+        // canActivate: [ValidarUsuarioGuard]
+      },
+      {
+        path: "parroquias",
+        component: ParroquiaComponent,
+        // canActivate: [ValidarUsuarioGuard]
+      },
+      {
+        path: "comunidades",
+        component: ComunidadComponent,
         // canActivate: [ValidarUsuarioGuard]
       },
       {

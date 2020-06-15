@@ -39,9 +39,15 @@ export class AsignarTecnicoClienteComponent implements OnInit {
   // Para la paginacion
   @ViewChild("paginatorC", { static: false }) paginatorC: MatPaginator;
   @ViewChild("paginatorCT", { static: false }) paginatorCT: MatPaginator;
-
   clientes = new MatTableDataSource<Element[]>();
   clientesTecnico = new MatTableDataSource<Element[]>();
+
+  comboProvincia = true;
+  comboCanton = false;
+  comboParroquia = false;
+  comboComunidad = false;
+  loadingC = false;
+  loadingCT = false;
 
   openDialog(mensaje): void {
     const dialogRef = this.dialog.open(DialogAlertComponent, {
@@ -53,11 +59,15 @@ export class AsignarTecnicoClienteComponent implements OnInit {
   async provinciasParaSeguimiento() {
     var respuesta = await this.seguimientoService.provinciasParaSeguimiento();
     if (respuesta["codigo"] == "200") {
+      this.comboProvincia = false;
       this.provincias = respuesta["respuesta"];
     }
   }
 
   async cantonesParaSeguimiento(idProvincia) {
+    this.loadingC = true;
+    this.comboCanton = true;
+    this.clientes.data = [];
     var respuesta = await this.seguimientoService.cantonesParaSeguimiento(
       idProvincia
     );
@@ -66,6 +76,7 @@ export class AsignarTecnicoClienteComponent implements OnInit {
     this.myForm.get("_parroquia").setValue("0");
     this.myForm.get("_comunidad").setValue("0");
     if (respuesta["codigo"] == "200") {
+      this.comboCanton = false;
       this.cantones = respuesta["respuesta"];
       this.consultarClientesFiltrados(
         idProvincia,
@@ -76,6 +87,9 @@ export class AsignarTecnicoClienteComponent implements OnInit {
   }
 
   async parroquiasParaSeguimiento(idCanton) {
+    this.loadingC = true;
+    this.comboParroquia = true;
+    this.clientes.data = [];
     var respuesta = await this.seguimientoService.parroquiasParaSeguimiento(
       idCanton
     );
@@ -83,6 +97,7 @@ export class AsignarTecnicoClienteComponent implements OnInit {
     this.myForm.get("_parroquia").setValue("0");
     this.myForm.get("_comunidad").setValue("0");
     if (respuesta["codigo"] == "200") {
+      this.comboParroquia = false;
       this.parroquias = respuesta["respuesta"];
       this.consultarClientesFiltrados(
         idCanton,
@@ -93,12 +108,16 @@ export class AsignarTecnicoClienteComponent implements OnInit {
   }
 
   async comunidadesParaSeguimiento(idParroquia) {
+    this.loadingC = true;
+    this.comboComunidad = true;
+    this.clientes.data = [];
     var respuesta = await this.seguimientoService.comunidadesParaSeguimiento(
       idParroquia
     );
     this.parroquia = true;
     this.myForm.get("_comunidad").setValue("0");
     if (respuesta["codigo"] == "200") {
+      this.comboComunidad = false;
       this.comunidades = respuesta["respuesta"];
       this.consultarClientesFiltrados(
         idParroquia,
@@ -109,6 +128,8 @@ export class AsignarTecnicoClienteComponent implements OnInit {
   }
 
   consultarClientesDeUnaComunidad(idComunidad) {
+    this.loadingC = true;
+    this.clientes.data = [];
     this.consultarClientesFiltrados(
       idComunidad,
       "IdComunidad",
@@ -125,6 +146,7 @@ export class AsignarTecnicoClienteComponent implements OnInit {
     );
     console.log(clientes);
     if (clientes["codigo"] == "200") {
+      this.loadingC = false;
       var data: any = [];
       clientes["respuesta"].map((cliente) => {
         data.push({
@@ -145,10 +167,12 @@ export class AsignarTecnicoClienteComponent implements OnInit {
     }
   }
 
+  comboTecnico = true;
   async consultarTecnicos() {
     var respuesta = await this.usuarioService.consultarTecnicos("2");
     console.log(respuesta);
     if (respuesta["codigo"] == "200") {
+      this.comboTecnico = false;
       respuesta["respuesta"].map((tecnico) => {
         this.tecnicos.push({
           _id: tecnico.AsignacionTipoUsuario.IdAsignacionTUEncriptada,
@@ -166,6 +190,7 @@ export class AsignarTecnicoClienteComponent implements OnInit {
   }
 
   async clientesAsignados(idTecnico) {
+    this.loadingCT = true;
     this.myForm.get("_idTecnico").setValue(idTecnico);
     var respuesta = await this.seguimientoService.listarClientesTecnico(
       "Credito/ConsultarPersonasPorTecnico",
@@ -174,6 +199,7 @@ export class AsignarTecnicoClienteComponent implements OnInit {
     );
     console.log(respuesta);
     if (respuesta["codigo"] == "200") {
+      this.loadingCT = false;
       var clientesTecnico: any = [];
       this.clientesTecnico.data = [];
       respuesta["respuesta"].map((cliente) => {
@@ -188,7 +214,7 @@ export class AsignarTecnicoClienteComponent implements OnInit {
             cliente.ApellidoPaterno +
             " " +
             cliente.ApellidoMaterno,
-          estadoAsignacionTipoUsuario: cliente.EstadoAsignacionTipoUsuario
+          estadoAsignacionTipoUsuario: cliente.EstadoAsignacionTipoUsuario,
         });
       });
       this.clientesTecnico.data = clientesTecnico;

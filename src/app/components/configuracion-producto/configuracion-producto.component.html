@@ -14,7 +14,10 @@
         <div class="col-lg-4">
           <div [hidden]="mostrarForm">
             <h5 style="text-align: center;">Nuev{{ suffix }} {{ titulo }}</h5>
-            <mat-form-field class="example-full-width">
+            <mat-form-field
+              class="example-full-width"
+              [hidden]="ocultarCampoCuandoIntereses"
+            >
               <input
                 matInput
                 formControlName="_campo"
@@ -52,7 +55,9 @@
                 </button>
                 <mat-autocomplete #auto="matAutocomplete">
                   <mat-option
-                    (onSelectionChange)="seleccionarDescuentoSiExiste(option.Porcentaje)"
+                    (onSelectionChange)="
+                      seleccionarDescuentoSiExiste(option.Porcentaje)
+                    "
                     *ngFor="let option of filteredOptions | async"
                     [value]="option.Porcentaje"
                   >
@@ -63,6 +68,36 @@
                   <mat-icon>%&nbsp;</mat-icon>
                 </button>
               </mat-form-field>
+            </div>
+            <div [hidden]="mostrarSeccionCuandoIntereses">
+              <mat-form-field class="example-full-width"
+                ><input
+                  type="text"
+                  matInput
+                  formControlName="_interes"
+                  placeholder="Tipo Interés"
+              /></mat-form-field>
+              <mat-form-field class="example-full-width"
+                ><input
+                  type="text"
+                  matInput
+                  formControlName="_tasaInteres"
+                  placeholder="Tasa Interés"
+              /></mat-form-field>
+              <mat-form-field class="example-full-width"
+                ><input
+                  type="text"
+                  matInput
+                  formControlName="_interesMora"
+                  placeholder="Tipo Interés"
+              /></mat-form-field>
+              <mat-form-field class="example-full-width"
+                ><input
+                  type="text"
+                  matInput
+                  formControlName="_tasaInteresMora"
+                  placeholder="Tasa Interés"
+              /></mat-form-field>
             </div>
             <button
               mat-button
@@ -136,9 +171,12 @@
                 <tr mat-header-row *matHeaderRowDef="tabla; sticky: true"></tr>
                 <tr mat-row *matRowDef="let row; columns: tabla"></tr>
               </table>
+              <div class="spinner-container" *ngIf="loading">
+                <mat-spinner></mat-spinner>
+              </div>
               <mat-paginator
                 #paginator
-                [pageSizeOptions]="[7]"
+                [pageSizeOptions]="[5]"
                 showFirstLastButtons
               ></mat-paginator>
             </div>

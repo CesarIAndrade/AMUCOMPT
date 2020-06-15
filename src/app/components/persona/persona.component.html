@@ -4,83 +4,95 @@
       <div class="row">
         <div class="col-lg-4">
           <h5 style="text-align: center;">{{ nuevaPersona }}</h5>
-          <mat-form-field class="example-full-width">
-            <input
-              matInput
-              type="text"
-              formControlName="_nombres"
-              placeholder="Ingrese Nombres"
-            />
-            <button disabled mat-button matPrefix mat-icon-button>
-              <mat-icon>*</mat-icon>
-            </button>
-            <button
-              tooltip="Necesita dos nombres"
-              placement="top"
-              type="button"
-              readonly
-              matSuffix
-              mat-icon-button
-            >
-              <mat-icon>info</mat-icon>
-            </button>
-          </mat-form-field>
-          <mat-form-field class="example-full-width">
-            <input
-              matInput
-              type="text"
-              formControlName="_apellidos"
-              placeholder="Ingrese Apellidos"
-            />
-            <button disabled mat-button matPrefix mat-icon-button>
-              <mat-icon>*</mat-icon>
-            </button>
-            <button
-              tooltip="Necesita dos apellidos"
-              placement="top"
-              type="button"
-              readonly
-              matSuffix
-              mat-icon-button
-            >
-              <mat-icon>info</mat-icon>
-            </button>
-          </mat-form-field>
-          <mat-form-field class="example-full-width">
-            <mat-label>Seleccione Tipo Documento</mat-label>
-            <mat-spinner
-              *ngIf="comboTipoDocumento"
-              diameter="20"
-              matSuffix
-            ></mat-spinner>
-            <mat-select formControlName="_tipoDocumento">
-              <mat-option
-                *ngFor="let item of tipoDocumentos"
-                [value]="item.IdTipoDocumento"
-              >
-                {{ item.Documento }}
-              </mat-option>
-            </mat-select>
-            <button disabled mat-button matPrefix mat-icon-button>
-              <mat-icon>*</mat-icon>
-            </button>
-          </mat-form-field>
-          <mat-form-field class="example-full-width">
-            <input
-              matInput
-              type="text"
-              formControlName="_numeroDocumento"
-              #numeroDocumento
-              maxlength="10"
-              placeholder="Ingrese Número Documento"
-            />
-            <mat-hint align="end"
-              >{{ numeroDocumento.value?.length || 0 }}/10</mat-hint
-            >
-            <button disabled mat-button matPrefix mat-icon-button>
-              <mat-icon>*</mat-icon>
-            </button>
-          </mat-form-field>
+          <div class="row">
+            <div class="col-lg-12 col-md-6">
+              <mat-form-field class="example-full-width">
+                <input
+                  matInput
+                  type="text"
+                  formControlName="_nombres"
+                  placeholder="Ingrese Nombres"
+                />
+                <button disabled mat-button matPrefix mat-icon-button>
+                  <mat-icon>*</mat-icon>
+                </button>
+                <button
+                  tooltip="Necesita dos nombres"
+                  placement="top"
+                  type="button"
+                  readonly
+                  matSuffix
+                  mat-icon-button
+                >
+                  <mat-icon>info</mat-icon>
+                </button>
+              </mat-form-field>
+            </div>
+            <div class="col-lg-12 col-md-6">
+              <mat-form-field class="example-full-width">
+                <input
+                  matInput
+                  type="text"
+                  formControlName="_apellidos"
+                  placeholder="Ingrese Apellidos"
+                />
+                <button disabled mat-button matPrefix mat-icon-button>
+                  <mat-icon>*</mat-icon>
+                </button>
+                <button
+                  tooltip="Necesita dos apellidos"
+                  placement="top"
+                  type="button"
+                  readonly
+                  matSuffix
+                  mat-icon-button
+                >
+                  <mat-icon>info</mat-icon>
+                </button>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-12 col-md-6">
+              <mat-form-field class="example-full-width">
+                <mat-label>Seleccione Tipo Documento</mat-label>
+                <mat-spinner
+                  *ngIf="comboTipoDocumento"
+                  diameter="20"
+                  matSuffix
+                ></mat-spinner>
+                <mat-select formControlName="_tipoDocumento">
+                  <mat-option
+                    *ngFor="let item of tipoDocumentos"
+                    [value]="item.IdTipoDocumento"
+                  >
+                    {{ item.Documento }}
+                  </mat-option>
+                </mat-select>
+                <button disabled mat-button matPrefix mat-icon-button>
+                  <mat-icon>*</mat-icon>
+                </button>
+              </mat-form-field>
+            </div>
+            <div class="col-lg-12 col-md-6">
+              <mat-form-field class="example-full-width">
+                <input
+                  matInput
+                  type="text"
+                  formControlName="_numeroDocumento"
+                  #numeroDocumento
+                  maxlength="10"
+                  placeholder="Ingrese Número Documento"
+                />
+                <mat-hint align="end"
+                  >{{ numeroDocumento.value?.length || 0 }}/10</mat-hint
+                >
+                <button disabled mat-button matPrefix mat-icon-button>
+                  <mat-icon>*</mat-icon>
+                </button>
+              </mat-form-field>
+            </div>
+          </div>
         </div>
         <div class="col-lg-4">
           <h5 style="text-align: center;">{{ contacto }}</h5>
@@ -95,7 +107,7 @@
                 ></mat-spinner>
                 <mat-select
                   formControlName="_tipoTelefono1"
-                  (selectionChange)="seleccionarTipoTelefono1($event)"
+                  (selectionChange)="seleccionarTipoTelefono1($event.value)"
                 >
                   <mat-option
                     *ngFor="let item of tipoTelefonos"
@@ -141,7 +153,7 @@
                 ></mat-spinner>
                 <mat-select
                   formControlName="_tipoTelefono2"
-                  (selectionChange)="seleccionarTipoTelefono2($event)"
+                  (selectionChange)="seleccionarTipoTelefono2($event.value)"
                 >
                   <mat-option
                     *ngFor="let item of tipoTelefonos"
@@ -189,6 +201,11 @@
             <div class="col-lg-12 col-md-6">
               <mat-form-field class="example-full-width">
                 <mat-label>Seleccionar Provincia</mat-label>
+                <mat-spinner
+                  *ngIf="comboProvincia"
+                  diameter="20"
+                  matSuffix
+                ></mat-spinner>
                 <mat-select
                   formControlName="_provincia"
                   (selectionChange)="
@@ -210,6 +227,11 @@
             <div class="col-lg-12 col-md-6">
               <mat-form-field class="example-full-width">
                 <mat-label>Seleccionar Cantón</mat-label>
+                <mat-spinner
+                  *ngIf="comboCanton"
+                  diameter="20"
+                  matSuffix
+                ></mat-spinner>
                 <mat-select
                   formControlName="_canton"
                   (selectionChange)="
@@ -234,6 +256,11 @@
             <div class="col-lg-12 col-md-6">
               <mat-form-field class="example-full-width">
                 <mat-label>Seleccionar Parroquia</mat-label>
+                <mat-spinner
+                  *ngIf="comboParroquia"
+                  diameter="20"
+                  matSuffix
+                ></mat-spinner>
                 <mat-select formControlName="_parroquia">
                   <mat-option
                     *ngFor="let item of parroquias"

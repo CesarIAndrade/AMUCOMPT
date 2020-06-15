@@ -1,5 +1,6 @@
 import { Component, OnInit, Inject } from "@angular/core";
 import { MAT_DIALOG_DATA } from "@angular/material/dialog";
+import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 
 @Component({
   selector: "app-modal-detalle-persona",
@@ -18,15 +19,17 @@ export class ModalDetallePersonaComponent implements OnInit {
     " " +
     this.data.persona.ApellidoMaterno;
 
-  provincia = this.data.persona.AsignacionPersonaParroquia[0].Parroquia.Canton
-    .Provincia.Descripcion;
-  canton = this.data.persona.AsignacionPersonaParroquia[0].Parroquia.Canton
-    .Descripcion;
-  parroquia = this.data.persona.AsignacionPersonaParroquia[0].Parroquia
-    .Descripcion;
-
   correo = "";
-  direccion = this.provincia + " > " + this.canton + " > " + this.parroquia;
+  referencia = String(this.data.persona.AsignacionPersonaParroquia[0].Referencia).toUpperCase();
+  direccion =
+    this.data.persona.AsignacionPersonaParroquia[0].Parroquia.Canton.Provincia
+      .Descripcion +
+    " - " +
+    this.data.persona.AsignacionPersonaParroquia[0].Parroquia.Canton
+      .Descripcion +
+    " - " +
+    this.data.persona.AsignacionPersonaParroquia[0].Parroquia.Descripcion;
+
 
   sinNumero = "Sin Numero";
   sinCorreo = "Sin Correo";
@@ -39,10 +42,9 @@ export class ModalDetallePersonaComponent implements OnInit {
       this.correo = this.data.persona.ListaCorreo[0].CorreoValor;
     }
     if (
-      this.provincia == null ||
-      this.canton == null ||
-      this.parroquia == null
+      !this.direccion
     ) {
+      this.referencia = "Sin Referencia";
       this.direccion = "Sin Direccion";
     }
   }

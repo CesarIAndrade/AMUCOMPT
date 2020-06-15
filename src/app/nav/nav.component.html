@@ -50,11 +50,10 @@
     <mat-toolbar style="background-color: white;">
       <mat-toolbar-row>
         <button (click)="drawer.toggle()" *ngIf="isHandset$ | async" mat-button>
-          <mat-icon>apps </mat-icon>
-        </button>
-
+          <mat-icon>apps</mat-icon>
+        </button>   
         <span class="example-spacer"></span>
-        <span class="drawer_title">{{ route }}</span>
+        <button mat-button (click)="goBack()" class="drawer_title">{{ route }}</button>
       </mat-toolbar-row>
     </mat-toolbar>
     <router-outlet></router-outlet>

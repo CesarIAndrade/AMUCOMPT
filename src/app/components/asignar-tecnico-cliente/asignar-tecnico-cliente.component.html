@@ -8,6 +8,11 @@
               <div class="col-lg-6">
                 <mat-form-field class="example-full-width">
                   <mat-label>Seleccionar Provincia</mat-label>
+                  <mat-spinner
+                    *ngIf="comboProvincia"
+                    diameter="20"
+                    matSuffix
+                  ></mat-spinner>
                   <mat-select
                     formControlName="_provincia"
                     (selectionChange)="cantonesParaSeguimiento($event.value)"
@@ -24,6 +29,11 @@
               <div class="col-lg-6">
                 <mat-form-field class="example-full-width">
                   <mat-label>Seleccionar Cantón</mat-label>
+                  <mat-spinner
+                    *ngIf="comboCanton"
+                    diameter="20"
+                    matSuffix
+                  ></mat-spinner>
                   <mat-select
                     formControlName="_canton"
                     (selectionChange)="parroquiasParaSeguimiento($event.value)"
@@ -42,6 +52,11 @@
               <div class="col-lg-6">
                 <mat-form-field class="example-full-width">
                   <mat-label>Seleccionar Parroquia</mat-label>
+                  <mat-spinner
+                    *ngIf="comboParroquia"
+                    diameter="20"
+                    matSuffix
+                  ></mat-spinner>
                   <mat-select
                     formControlName="_parroquia"
                     (selectionChange)="comunidadesParaSeguimiento($event.value)"
@@ -58,6 +73,11 @@
               <div class="col-lg-6">
                 <mat-form-field class="example-full-width">
                   <mat-label>Seleccionar Comunidad</mat-label>
+                  <mat-spinner
+                    *ngIf="comboComunidad"
+                    diameter="20"
+                    matSuffix
+                  ></mat-spinner>
                   <mat-select
                     formControlName="_comunidad"
                     (selectionChange)="
@@ -109,6 +129,9 @@
                 ></tr>
                 <tr mat-row *matRowDef="let row; columns: tablaClientes"></tr>
               </table>
+              <div class="spinner-container" *ngIf="loadingC">
+                <mat-spinner></mat-spinner>
+              </div>
               <mat-paginator
                 #paginatorC
                 [pageSizeOptions]="[2]"
@@ -122,6 +145,11 @@
           <div class="col-lg-6">
             <mat-form-field class="example-full-width">
               <mat-label>Seleccionar Técnico</mat-label>
+              <mat-spinner
+              *ngIf="comboTecnico"
+              diameter="20"
+              matSuffix
+            ></mat-spinner>
               <mat-select (selectionChange)="clientesAsignados($event.value)">
                 <mat-option *ngFor="let item of tecnicos" [value]="item._id">
                   {{ item.nombres }}
@@ -171,6 +199,9 @@
                 ></tr>
                 <tr mat-row *matRowDef="let row; columns: tablaClientes"></tr>
               </table>
+              <div class="spinner-container" *ngIf="loadingCT">
+                <mat-spinner></mat-spinner>
+              </div>
               <mat-paginator
                 #paginatorCT
                 [pageSizeOptions]="[2]"
