@@ -70,34 +70,55 @@
               </mat-form-field>
             </div>
             <div [hidden]="mostrarSeccionCuandoIntereses">
-              <mat-form-field class="example-full-width"
-                ><input
-                  type="text"
-                  matInput
-                  formControlName="_interes"
-                  placeholder="Tipo Interés"
-              /></mat-form-field>
-              <mat-form-field class="example-full-width"
-                ><input
-                  type="text"
-                  matInput
-                  formControlName="_tasaInteres"
-                  placeholder="Tasa Interés"
-              /></mat-form-field>
-              <mat-form-field class="example-full-width"
-                ><input
-                  type="text"
-                  matInput
-                  formControlName="_interesMora"
-                  placeholder="Tipo Interés"
-              /></mat-form-field>
-              <mat-form-field class="example-full-width"
-                ><input
-                  type="text"
-                  matInput
-                  formControlName="_tasaInteresMora"
-                  placeholder="Tasa Interés"
-              /></mat-form-field>
+              <div class="row">
+                <div class="col-lg-6 col md-6">
+                  <mat-form-field class="example-full-width"
+                    ><input
+                      type="text"
+                      matInput
+                      formControlName="_interes"
+                      placeholder="Tipo Interés"
+                    />
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-6 col md-6">
+                  <mat-form-field class="example-full-width"
+                    ><input
+                      type="text"
+                      matInput
+                      formControlName="_tasaInteres"
+                      placeholder="Tasa Interés"
+                    />
+                    <button disabled mat-button matSuffix mat-icon-button>
+                      <mat-icon>%</mat-icon>
+                    </button>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-lg-6 col md-6">
+                  <mat-form-field class="example-full-width">
+                    <input
+                      type="text"
+                      matInput
+                      formControlName="_interesMora"
+                      placeholder="Tipo Interés"
+                  /></mat-form-field>
+                </div>
+                <div class="col-lg-6 col md-6">
+                  <mat-form-field class="example-full-width"
+                    ><input
+                      type="text"
+                      matInput
+                      formControlName="_tasaInteresMora"
+                      placeholder="Tasa Interés"
+                    />
+                    <button disabled mat-button matSuffix mat-icon-button>
+                      <mat-icon>%</mat-icon>
+                    </button>
+                  </mat-form-field>
+                </div>
+              </div>
             </div>
             <button
               mat-button
@@ -146,6 +167,30 @@
                   <th mat-header-cell *matHeaderCellDef>Descuento</th>
                   <td mat-cell *matCellDef="let element">
                     {{ element.descuento }} %
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="tasaInteres">
+                  <th mat-header-cell *matHeaderCellDef>Tasa Interés</th>
+                  <td mat-cell *matCellDef="let element">
+                    {{ element.tasaInteres }} %
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="tipoInteres">
+                  <th mat-header-cell *matHeaderCellDef>Tipo Interés</th>
+                  <td mat-cell *matCellDef="let element">
+                    {{ element.tipoInteres }}
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="tasaInteresMora">
+                  <th mat-header-cell *matHeaderCellDef>Tasa Interés</th>
+                  <td mat-cell *matCellDef="let element">
+                    {{ element.tasaInteresMora }} %
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="tipoInteresMora">
+                  <th mat-header-cell *matHeaderCellDef>Tipo Interés</th>
+                  <td mat-cell *matCellDef="let element">
+                    {{ element.tipoInteresMora }}
                   </td>
                 </ng-container>
                 <ng-container matColumnDef="acciones">

@@ -892,7 +892,31 @@ export class InventarioService {
   consultarIntereses() {
     const body = new HttpParams().set(
       "encriptada",
-      localStorage.getItem("miCuenta.postToken")
+      localStorage.getItem("miCuenta.getToken")
+    );
+    return new Promise((resolve, reject) => {
+      this.http
+        .post(apiUrl + "Credito/ListaConfiguracionInteres", body.toString(), {
+          headers: new HttpHeaders().set(
+            "Content-Type",
+            "application/x-www-form-urlencoded"
+          ),
+        })
+        .subscribe(
+          (res) => {
+            resolve(res);
+          },
+          (err) => {
+            reject(err);
+          }
+        );
+    });
+  }
+
+  consultarTiposInteres() {
+    const body = new HttpParams().set(
+      "encriptada",
+      localStorage.getItem("miCuenta.getToken")
     );
     return new Promise((resolve, reject) => {
       this.http
@@ -945,13 +969,36 @@ export class InventarioService {
     });
   }
 
-  eliminarInteres(idInteres: string) {
+  deshabilitarInteres(idInteres: string) {
     const body = new HttpParams()
-    .set("", idInteres)
+    .set("IdConfiguracionInteres", idInteres)
     .set("encriptada", localStorage.getItem("miCuenta.postToken"));
     return new Promise((resolve, reject) => {
       this.http
-        .post(apiUrl + "", body.toString(), {
+        .post(apiUrl + "Credito/DesHabilitarConfiguracionInteres", body.toString(), {
+          headers: new HttpHeaders().set(
+            "Content-Type",
+            "application/x-www-form-urlencoded"
+          ),
+        })
+        .subscribe(
+          (res) => {
+            resolve(res);
+          },
+          (err) => {
+            reject(err);
+          }
+        );
+    });
+  }
+
+  habilitarInteres(idInteres: string) {
+    const body = new HttpParams()
+    .set("IdConfiguracionInteres", idInteres)
+    .set("encriptada", localStorage.getItem("miCuenta.postToken"));
+    return new Promise((resolve, reject) => {
+      this.http
+        .post(apiUrl + "Credito/HabilitarConfiguracionInteres", body.toString(), {
           headers: new HttpHeaders().set(
             "Content-Type",
             "application/x-www-form-urlencoded"

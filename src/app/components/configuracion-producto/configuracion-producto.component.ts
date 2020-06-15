@@ -385,7 +385,27 @@ export class ConfiguracionProductoComponent implements OnInit {
 
   async consultarIntereses() {
     var respuesta = await this.inventarioService.consultarIntereses();
-    console.log(respuesta);
+    if (respuesta["codigo"] == "200") {
+      var intereses: any = [];
+      respuesta["respuesta"].map((interes) => {
+        intereses.push({
+          _id: interes.IdConfiguracionInteres,
+          tasaInteres: interes.TasaInteres,
+          idInteres: interes.IdTipoInteres,
+          tipoInteres: "NORMAL",
+          tasaInteresMora: interes.TasaInteresMora,
+          idInteresMora: interes.IdTipoInteresMora,
+          tipoInteresMora: "MORA",
+          utilizado: interes.utilizado
+        });
+      });
+      this.dataSource.data = intereses;
+      this.dataSource.paginator = this.paginator;
+    }
+  }
+
+  async consultarTiposInteres() {
+    var respuesta = await this.inventarioService.consultarTiposInteres();
     if (respuesta["codigo"] == "200") {
       this.loading = false;
       respuesta["respuesta"].map((tipoInteres) => {
@@ -408,10 +428,38 @@ export class ConfiguracionProductoComponent implements OnInit {
       this.myForm.get("_tasaInteresMora").value
     );
     console.log(respuesta);
+    if(respuesta["codigo"] == "200") {
+      this.openSnackBar("Se ingresó correctamente");
+      var intereses: any = this.dataSource.data;
+      intereses.push({
+        _id: respuesta["respuesta"].IdConfiguracionInteres,
+        tasaInteres: respuesta["respuesta"].TasaInteres,
+        idInteres: respuesta["respuesta"].IdTipoInteres,
+        tipoInteres: "NORMAL",
+        tasaInteresMora: respuesta["respuesta"].TasaInteresMora,
+        idInteresMora: respuesta["respuesta"].IdTipoInteresMora,
+        tipoInteresMora: "MORA",
+        utilizado: respuesta["respuesta"].utilizado
+      });
+      this.dataSource.data = intereses;
+      this.limpiarCampos();
+    } else if (respuesta["codigo"] == "400") {
+      this.openDialog("Inténtalo de nuevo");
+    } else if (respuesta["codigo"] == "418") {
+      this.openDialog(respuesta["mensaje"]);
+    } else if (respuesta["codigo"] == "500") {
+      this.openDialog("Problemas con el servidor");
+    }
   }
 
-  eliminarInteres(idInteres) {
-    var respuesta = this.inventarioService.eliminarInteres(idInteres);
+ async deshabilitarInteres(idInteres) {
+    console.log(idInteres);
+    var respuesta = await this.inventarioService.deshabilitarInteres(idInteres);
+    console.log(respuesta);
+  }
+
+  habilitarInteres(idInteres) {
+    var respuesta = this.inventarioService.habilitarInteres(idInteres);
     console.log(respuesta);
   }
 
@@ -435,13 +483,13 @@ export class ConfiguracionProductoComponent implements OnInit {
         .get("_tasaInteres")
         .setValidators([
           Validators.required,
-          Validators.pattern(/^-?(0|[1-9]\d*)?$/),
+          Validators.pattern(/^-?(1|[1-9]\d*)?$/),
         ]);
       this.myForm
         .get("_tasaInteresMora")
         .setValidators([
           Validators.required,
-          Validators.pattern(/^-?(0|[1-9]\d*)?$/),
+          Validators.pattern(/^-?(1|[1-9]\d*)?$/),
         ]);
       this.myForm.get("_tasaInteres").updateValueAndValidity();
       this.myForm.get("_tasaInteresMora").updateValueAndValidity();
@@ -496,10 +544,14 @@ export class ConfiguracionProductoComponent implements OnInit {
       this.consultarKits();
     } else if (opcion.value === "5") {
       this.actualizarOpcion("Interés", "o", "Intereses", [
-        "descripcion",
+        "tasaInteres",
+        "tipoInteres",
+        "tasaInteresMora",
+        "tipoInteresMora",
         "acciones",
       ]);
       this.consultarIntereses();
+      this.consultarTiposInteres();
     }
     if (opcion.value === "4") {
       this.soloParaKits = false;
@@ -550,7 +602,7 @@ export class ConfiguracionProductoComponent implements OnInit {
     } else if (this.myForm.get("_idCampo").value === "4") {
       this.eliminarKit(_id);
     }else if (this.myForm.get("_idCampo").value === "5") {
-      this.eliminarInteres(_id);
+      this.deshabilitarInteres(_id);
     }
   }
 
@@ -558,6 +610,8 @@ export class ConfiguracionProductoComponent implements OnInit {
     this.myForm.get("_codigo").reset();
     this.myForm.get("_descuento").reset();
     this.myForm.get("_campo").reset();
+    this.myForm.get("_tasaInteres").reset();
+    this.myForm.get("_tasaInteresMora").reset();
   }
 
   ngOnInit() {
