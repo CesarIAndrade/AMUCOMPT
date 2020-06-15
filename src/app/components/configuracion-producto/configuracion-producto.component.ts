@@ -104,8 +104,7 @@ export class ConfiguracionProductoComponent implements OnInit {
           _id: item.IdTipoProducto,
           descripcion: item.Descripcion,
           utilizado: item.TipoProductoUtilizado,
-          codigo: "",
-          descuento: "",
+          estado: item.estado
         });
         this.dataSource.data = tipoProductos;
         this.dataSource.paginator = this.paginator;
@@ -124,8 +123,7 @@ export class ConfiguracionProductoComponent implements OnInit {
         _id: tipoProducto["respuesta"].IdTipoProducto,
         descripcion: tipoProducto["respuesta"].Descripcion,
         utilizado: tipoProducto["respuesta"].TipoProductoUtilizado,
-        codigo: "",
-        descuento: "",
+        estado: tipoProducto["respuesta"].estado,
       });
       this.dataSource.data = tipoProductos;
       this.myForm.get("_campo").reset();
@@ -170,8 +168,7 @@ export class ConfiguracionProductoComponent implements OnInit {
           _id: item.IdPresentacion,
           descripcion: item.Descripcion,
           utilizado: item.PresentacionUtilizado,
-          codigo: "",
-          descuento: "",
+          estado: item.Estado
         });
       });
       this.dataSource.data = presentaciones;
@@ -190,8 +187,7 @@ export class ConfiguracionProductoComponent implements OnInit {
         _id: presentacion["respuesta"].IdPresentacion,
         descripcion: presentacion["respuesta"].Descripcion,
         utilizado: presentacion["respuesta"].PresentacionUtilizado,
-        codigo: "",
-        descuento: "",
+        estado: presentacion["respuesta"].Estado
       });
       this.dataSource.data = presentaciones;
       this.myForm.get("_campo").reset();
@@ -236,8 +232,7 @@ export class ConfiguracionProductoComponent implements OnInit {
           _id: item.IdMedida,
           descripcion: item.Descripcion,
           utilizado: item.MedidaUtilizado,
-          codigo: "",
-          descuento: "",
+          estado: item.Estado
         });
       });
       this.dataSource.data = medidas;
@@ -256,8 +251,7 @@ export class ConfiguracionProductoComponent implements OnInit {
         _id: medida["respuesta"].IdMedida,
         descripcion: medida["respuesta"].Descripcion,
         utilizado: medida["respuesta"].MedidaUtilizado,
-        codigo: "",
-        descuento: "",
+        estado: medida["respuesta"].Estado
       });
       this.dataSource.data = medidas;
       this.myForm.get("_campo").reset();
@@ -300,6 +294,7 @@ export class ConfiguracionProductoComponent implements OnInit {
           utilizado: item.KitUtilizado,
           codigo: item.Codigo,
           descuento: item.AsignarDescuentoKit.Descuento.Porcentaje,
+          estado: item.Estado
         });
       });
       this.dataSource.data = kits;
@@ -323,6 +318,7 @@ export class ConfiguracionProductoComponent implements OnInit {
           utilizado: kit["respuesta"].KitUtilizado,
           codigo: kit["respuesta"].Codigo,
           descuento: kit["respuesta"].AsignarDescuentoKit.Descuento.Porcentaje,
+          estado: kit["respuesta"].Estado
         });
         this.dataSource.data = kits;
         this.limpiarCampos();
@@ -396,7 +392,8 @@ export class ConfiguracionProductoComponent implements OnInit {
           tasaInteresMora: interes.TasaInteresMora,
           idInteresMora: interes.IdTipoInteresMora,
           tipoInteresMora: "MORA",
-          utilizado: interes.utilizado
+          utilizado: interes.utilizado,
+          estado: interes.Estado
         });
       });
       this.dataSource.data = intereses;
@@ -430,18 +427,7 @@ export class ConfiguracionProductoComponent implements OnInit {
     console.log(respuesta);
     if(respuesta["codigo"] == "200") {
       this.openSnackBar("Se ingresó correctamente");
-      var intereses: any = this.dataSource.data;
-      intereses.push({
-        _id: respuesta["respuesta"].IdConfiguracionInteres,
-        tasaInteres: respuesta["respuesta"].TasaInteres,
-        idInteres: respuesta["respuesta"].IdTipoInteres,
-        tipoInteres: "NORMAL",
-        tasaInteresMora: respuesta["respuesta"].TasaInteresMora,
-        idInteresMora: respuesta["respuesta"].IdTipoInteresMora,
-        tipoInteresMora: "MORA",
-        utilizado: respuesta["respuesta"].utilizado
-      });
-      this.dataSource.data = intereses;
+      this.consultarIntereses();
       this.limpiarCampos();
     } else if (respuesta["codigo"] == "400") {
       this.openDialog("Inténtalo de nuevo");
@@ -453,14 +439,19 @@ export class ConfiguracionProductoComponent implements OnInit {
   }
 
  async eliminarDeshabilitarInteres(idInteres) {
-    console.log(idInteres);
     var respuesta = await this.inventarioService.eliminarDeshabilitarInteres(idInteres);
-    console.log(respuesta);
+    if (respuesta["codigo"] == "200") {
+      this.openSnackBar("Se deshabilitó correctamente");
+      this.consultarIntereses();
+    }
   }
 
-  habilitarInteres(idInteres) {
-    var respuesta = this.inventarioService.habilitarInteres(idInteres);
-    console.log(respuesta);
+ async habilitarInteres(idInteres) {
+    var respuesta = await this.inventarioService.habilitarInteres(idInteres);
+    if(respuesta["codigo"] == "200") {
+      this.openSnackBar("Se habilitó correctamente");
+      this.consultarIntereses();
+    }
   }
 
   actualizarOpcion(titulo, suffix, encabezadoTabla, tabla) {

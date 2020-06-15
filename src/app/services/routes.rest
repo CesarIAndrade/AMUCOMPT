@@ -1,5 +1,0 @@
-POST http://25.39.0.74:90/api/Credito/ConsultarPersonasParaSeguimientoPorProvincia
-{
-    IdProvincia: "MQA="
-    encriptada: "asd"
-}

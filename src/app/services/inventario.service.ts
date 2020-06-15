@@ -949,7 +949,6 @@ export class InventarioService {
     .set("IdTipoInteresMora", idInteresMora)
     .set("TasaInteresMora", tasaInteresMora)
     .set("encriptada", localStorage.getItem("miCuenta.postToken"));
-    console.log(body);
     return new Promise((resolve, reject) => {
       this.http
         .post(apiUrl + "Credito/IngresoConfiguracionInteres", body.toString(), {

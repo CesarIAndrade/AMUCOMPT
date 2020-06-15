@@ -200,16 +200,30 @@
                       <td mat-cell></td>
                     </ng-container>
                     <ng-container *ngIf="element.utilizado == '0'">
-                      <td mat-cell>
-                        <button
-                          mat-button
-                          type="button"
-                          class="btn-outline-danger"
-                          (click)="eliminarCampo(element._id)"
-                        >
-                          <mat-icon>remove</mat-icon>
-                        </button>
-                      </td>
+                      <ng-container *ngIf="element.estado">
+                        <td mat-cell>
+                          <button
+                            mat-button
+                            type="button"
+                            class="btn-outline-danger"
+                            (click)="eliminarCampo(element._id)"
+                          >
+                            <mat-icon>remove</mat-icon>
+                          </button>
+                        </td>
+                      </ng-container>
+                      <ng-container *ngIf="!element.estado">
+                        <td mat-cell>
+                          <button
+                            mat-button
+                            type="button"
+                            class="btn-outline-success"
+                            (click)="habilitarInteres(element._id)"
+                          >
+                            <mat-icon>add</mat-icon>
+                          </button>
+                        </td>
+                      </ng-container>
                     </ng-container>
                   </ng-container>
                 </ng-container>
