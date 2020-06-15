@@ -969,13 +969,13 @@ export class InventarioService {
     });
   }
 
-  deshabilitarInteres(idInteres: string) {
+  eliminarDeshabilitarInteres(idInteres: string) {
     const body = new HttpParams()
     .set("IdConfiguracionInteres", idInteres)
     .set("encriptada", localStorage.getItem("miCuenta.postToken"));
     return new Promise((resolve, reject) => {
       this.http
-        .post(apiUrl + "Credito/DesHabilitarConfiguracionInteres", body.toString(), {
+        .post(apiUrl + "Credito/EliminarDeshabilitarConfiguracionInteres", body.toString(), {
           headers: new HttpHeaders().set(
             "Content-Type",
             "application/x-www-form-urlencoded"

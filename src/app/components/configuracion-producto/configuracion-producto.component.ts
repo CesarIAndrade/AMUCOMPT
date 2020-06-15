@@ -452,9 +452,9 @@ export class ConfiguracionProductoComponent implements OnInit {
     }
   }
 
- async deshabilitarInteres(idInteres) {
+ async eliminarDeshabilitarInteres(idInteres) {
     console.log(idInteres);
-    var respuesta = await this.inventarioService.deshabilitarInteres(idInteres);
+    var respuesta = await this.inventarioService.eliminarDeshabilitarInteres(idInteres);
     console.log(respuesta);
   }
 
@@ -602,7 +602,7 @@ export class ConfiguracionProductoComponent implements OnInit {
     } else if (this.myForm.get("_idCampo").value === "4") {
       this.eliminarKit(_id);
     }else if (this.myForm.get("_idCampo").value === "5") {
-      this.deshabilitarInteres(_id);
+      this.eliminarDeshabilitarInteres(_id);
     }
   }
 
