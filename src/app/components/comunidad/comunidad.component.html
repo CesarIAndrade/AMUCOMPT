@@ -150,6 +150,9 @@
                   *matRowDef="let row; columns: tablaComunidades"
                 ></tr>
               </table>
+              <div class="spinner-container" *ngIf="loading">
+                <mat-spinner></mat-spinner>
+              </div>
               <mat-paginator
                 #paginator
                 [pageSizeOptions]="[5]"

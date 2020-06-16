@@ -31,6 +31,7 @@ export class ProvinciaComponent implements OnInit {
   myForm: FormGroup;
   botonIngresar = "ingresar";
   filterProvincia = "";
+  loading = true;
 
   // Para la paginacion
   @ViewChild("paginator", { static: false }) paginator: MatPaginator;
@@ -52,8 +53,8 @@ export class ProvinciaComponent implements OnInit {
 
   async consultarProvincias() {
     var provincias = await this.panelAdministracionService.consultarProvincias();
-    console.log(provincias);
     if (provincias["codigo"] == "200") {
+      this.loading = false;
       this.provincias.data = provincias["respuesta"];
       this.provincias.paginator = this.paginator;
     }
@@ -70,8 +71,6 @@ export class ProvinciaComponent implements OnInit {
   }
 
   async crearProvincia() {
-    this.myForm.reset();
-    this.myForm.setErrors({ invalid: true });
     var provincia = await this.panelAdministracionService.crearProvincia(
       this.myForm.get("_provincia").value
     );
@@ -158,7 +157,7 @@ export class ProvinciaComponent implements OnInit {
     this.consultarProvincias();
     this.panelAdministracionService.refresh$.subscribe(() => {
       this.consultarProvincias();
-    })
+    });
   }
 
   tablaProvincias = ["provincia", "acciones"];

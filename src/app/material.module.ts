@@ -25,6 +25,8 @@ import {
   MatGridListModule, MatSnackBarModule, MatProgressSpinnerModule
 } from "@angular/material";
 import { MatChipsModule } from "@angular/material/chips";
+import {MatTreeModule} from '@angular/material/tree';
+
 
 @NgModule({
   imports: [
@@ -53,6 +55,7 @@ import { MatChipsModule } from "@angular/material/chips";
     MatBottomSheetModule,
     MatSnackBarModule,
     MatProgressSpinnerModule,
+    MatTreeModule
   ],
   exports: [
     MatToolbarModule,
@@ -80,6 +83,7 @@ import { MatChipsModule } from "@angular/material/chips";
     MatBottomSheetModule,
     MatSnackBarModule,
     MatProgressSpinnerModule,
+    MatTreeModule
   ],
 })
 

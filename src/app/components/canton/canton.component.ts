@@ -37,6 +37,7 @@ export class CantonComponent implements OnInit {
   myForm: FormGroup;
   botonIngresar = "ingresar";
   filterCanton = "";
+  loading = true;
 
   // Para la paginacion
   @ViewChild("paginator", { static: false }) paginator: MatPaginator;
@@ -59,6 +60,7 @@ export class CantonComponent implements OnInit {
   async consultarCantones() {
     var respuesta = await this.panelAdministracionService.consultarCantones();
     if (respuesta["codigo"] == "200") {
+      this.loading = false;
       var cantones: any = [];
       respuesta["respuesta"].map((canton) => {
         cantones.push({
@@ -120,8 +122,7 @@ export class CantonComponent implements OnInit {
     if (respuesta["codigo"] == "200") {
       var cantones: any = this.cantones.data;
       var canton = cantones.filter(
-        (canton) =>
-          canton["IdCanton"] == this.myForm.get("_idCanton").value
+        (canton) => canton["IdCanton"] == this.myForm.get("_idCanton").value
       );
       var index = cantones.indexOf(canton[0]);
       cantones.splice(index, 1);
@@ -152,9 +153,7 @@ export class CantonComponent implements OnInit {
     );
     if (respuesta["codigo"] == "200") {
       var cantones = this.cantones.data;
-      var canton = cantones.filter(
-        (canton) => canton["IdCanton"] == idCanton
-      );
+      var canton = cantones.filter((canton) => canton["IdCanton"] == idCanton);
       var index = cantones.indexOf(canton[0]);
       cantones.splice(index, 1);
       this.cantones.data = cantones;

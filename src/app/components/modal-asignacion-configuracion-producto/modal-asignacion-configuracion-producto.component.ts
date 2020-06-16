@@ -272,6 +272,7 @@ export class ModalAsignacionConfiguracionProductoComponent implements OnInit {
       "presentacion",
       "contenidoNeto",
       "medida",
+      "disponible",
     ]
     this.loading = false;
     var listaProductosDeUnKit = [];

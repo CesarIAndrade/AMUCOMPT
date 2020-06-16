@@ -32,6 +32,7 @@ export class ParroquiaComponent implements OnInit {
   myForm: FormGroup;
   botonIngresar = "ingresar";
   filterParroquia = "";
+  loading = true;
 
   // Para la paginacion
   @ViewChild("paginator", { static: false }) paginator: MatPaginator;
@@ -54,6 +55,7 @@ export class ParroquiaComponent implements OnInit {
   async consultarParroquias() {
     var respuesta = await this.panelAdministracionService.consultarParroquias();
     if(respuesta["codigo"] == "200") {
+      this.loading = false;
       var parroquias: any = [];
       respuesta["respuesta"].map((parroquia) => {
         parroquias.push({

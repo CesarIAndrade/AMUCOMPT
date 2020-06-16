@@ -1,13 +1,18 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
-import { MatDialog, MatPaginator, MatTableDataSource, MatSnackBar } from "@angular/material";
+import {
+  MatDialog,
+  MatPaginator,
+  MatTableDataSource,
+  MatSnackBar,
+} from "@angular/material";
 
 // Services
 import { PanelAdministracionService } from "src/app/services/panel-administracion.service";
 
 // Components
 import { ModalLocalidadSuperiorComponent } from "../modal-localidad-superior/modal-localidad-superior.component";
-import { DialogAlertComponent } from '../dialog-alert/dialog-alert.component';
+import { DialogAlertComponent } from "../dialog-alert/dialog-alert.component";
 
 @Component({
   selector: "app-comunidad",
@@ -32,6 +37,7 @@ export class ComunidadComponent implements OnInit {
   myForm: FormGroup;
   botonIngresar = "ingresar";
   filterComunidad = "";
+  loading = true;
 
   // Para la paginacion
   @ViewChild("paginator", { static: false }) paginator: MatPaginator;
@@ -53,7 +59,8 @@ export class ComunidadComponent implements OnInit {
 
   async consultarComunidades() {
     var respuesta = await this.panelAdministracionService.consultarComunidades();
-    if(respuesta["codigo"] == "200") {
+    if (respuesta["codigo"] == "200") {
+      this.loading = false;
       var comunidades: any = [];
       respuesta["respuesta"].map((comunidad) => {
         comunidades.push({
@@ -61,9 +68,9 @@ export class ComunidadComponent implements OnInit {
           Parroquia: comunidad.Parroquia.Descripcion,
           IdComunidad: comunidad.IdComunidad,
           Descripcion: comunidad.Descripcion,
-          PermitirEliminacion: comunidad.PermitirEliminacion
-        })
-      })
+          PermitirEliminacion: comunidad.PermitirEliminacion,
+        });
+      });
       this.comunidades.data = comunidades;
       this.comunidades.paginator = this.paginator;
     }
@@ -91,7 +98,7 @@ export class ComunidadComponent implements OnInit {
         Parroquia: comunidad["respuesta"].Parroquia.Descripcion,
         IdComunidad: comunidad["respuesta"].IdComunidad,
         Descripcion: comunidad["respuesta"].Descripcion,
-        PermitirEliminacion: comunidad["respuesta"].PermitirEliminacion
+        PermitirEliminacion: comunidad["respuesta"].PermitirEliminacion,
       });
       this.comunidades.data = comunidades;
       this.myForm.reset();
@@ -114,8 +121,9 @@ export class ComunidadComponent implements OnInit {
     );
     if (respuesta["codigo"] == "200") {
       var comunidades: any = this.comunidades.data;
-      var comunidad  = comunidades.filter(
-        (comunidad) => comunidad["IdComunidad"] == this.myForm.get("_idComunidad").value
+      var comunidad = comunidades.filter(
+        (comunidad) =>
+          comunidad["IdComunidad"] == this.myForm.get("_idComunidad").value
       );
       var index = comunidades.indexOf(comunidad[0]);
       comunidades.splice(index, 1);
@@ -124,7 +132,7 @@ export class ComunidadComponent implements OnInit {
         Parroquia: respuesta["respuesta"].Parroquia.Descripcion,
         IdComunidad: respuesta["respuesta"].IdComunidad,
         Descripcion: respuesta["respuesta"].Descripcion,
-        PermitirEliminacion: respuesta["respuesta"].PermitirEliminacion
+        PermitirEliminacion: respuesta["respuesta"].PermitirEliminacion,
       });
       this.comunidades.data = comunidades;
       this.myForm.reset();
@@ -146,8 +154,9 @@ export class ComunidadComponent implements OnInit {
     );
     if (respuesta["codigo"] == "200") {
       var comunidades: any = this.comunidades.data;
-      var comunidad  = comunidades.filter(
-        (comunidad) => comunidad["IdComunidad"] == this.myForm.get("_idComunidad").value
+      var comunidad = comunidades.filter(
+        (comunidad) =>
+          comunidad["IdComunidad"] == this.myForm.get("_idComunidad").value
       );
       var index = comunidades.indexOf(comunidad[0]);
       comunidades.splice(index, 1);

@@ -49,6 +49,7 @@ import { ModalReasignarClientesComponent } from './components/modal-reasignar-cl
 import { TablaPersonaComponent } from './components/tabla-persona/tabla-persona.component';
 import { CompraVentaComponent } from './components/compra-venta/compra-venta.component';
 import { InteresComponent } from './components/interes/interes.component';
+import { VisitasFinalizadasComponent } from './components/visitas-finalizadas/visitas-finalizadas.component';
 
 @NgModule({
   declarations: [
@@ -90,6 +91,7 @@ import { InteresComponent } from './components/interes/interes.component';
     TablaPersonaComponent,
     CompraVentaComponent,
     InteresComponent,
+    VisitasFinalizadasComponent,
   ],
   imports: [
     BrowserModule,

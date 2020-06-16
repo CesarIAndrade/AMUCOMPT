@@ -398,4 +398,31 @@ export class SeguimientoService {
         );
     });
   }
+
+  consultarVisitasFinalizadas(idTecnico: string) {
+    const body = new HttpParams()
+      .set("IdAsignarTUTecnico", idTecnico)
+      .set("encriptada", localStorage.getItem("miCuenta.deleteToken"));
+    return new Promise((resolve, reject) => {
+      this.http
+        .post(
+          apiUrl + "Credito/ConsultarVisitasFinalizadasPorTecnico",
+          body.toString(),
+          { 
+            headers: new HttpHeaders().set(
+              "Content-Type",
+              "application/x-www-form-urlencoded"
+            ),
+          }
+        )
+        .subscribe(
+          (res) => {
+            resolve(res);
+          },
+          (err) => {
+            reject(err);
+          }
+        );
+    });
+  }
 }
