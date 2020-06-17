@@ -57,6 +57,12 @@ export class CantonComponent implements OnInit {
     });
   }
 
+  search(term: string) {
+    term = term.trim();
+    term = term.toUpperCase(); 
+    this.cantones.filter = term;
+  }
+
   async consultarCantones() {
     var respuesta = await this.panelAdministracionService.consultarCantones();
     if (respuesta["codigo"] == "200") {

@@ -1,4 +1,4 @@
-import { Injectable } from "@angular/core";
+import { Injectable, EventEmitter } from "@angular/core";
 import { HttpClient, HttpParams, HttpHeaders } from "@angular/common/http";
 import { apiUrl } from "../../environments/environment";
 
@@ -6,6 +6,9 @@ import { apiUrl } from "../../environments/environment";
   providedIn: "root",
 })
 export class SeguimientoService {
+
+  refresh$ = new EventEmitter();
+
   constructor(private http: HttpClient) {}
 
   provinciasParaSeguimiento() {

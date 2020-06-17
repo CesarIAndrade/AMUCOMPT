@@ -21,13 +21,13 @@
               type="submit"
               [value]="botonIngresar"
               [disabled]="myForm.invalid"
-              class="mt-2 bg-success text-white btn-block"
+              class="bg-success text-white btn-block"
             >
               Guardar
             </button>
           </div>
           <div>
-            <a 
+            <a
               mat-button
               routerLink="/localizaciones"
               type="button"
@@ -37,14 +37,12 @@
             </a>
           </div>
         </div>
-
-        <div class="col-lg-8">
+        <div class="col-lg-8 margenTabla">
           <h5 style="text-align: center;">Lista Provincias</h5>
           <mat-form-field class="example-full-width">
             <input
               matInput
-              [(ngModel)]="filterProvincia"
-              [ngModelOptions]="{ standalone: true }"
+              (keyup)="search($event.target.value)"
               type="text"
               placeholder="Buscar Provincia"
             />
@@ -53,10 +51,7 @@
             </button>
           </mat-form-field>
           <div class="table_all">
-            <table
-              mat-table
-              [dataSource]="provincias | filter: filterProvincia:'Descripcion'"
-            >
+            <table mat-table [dataSource]="provincias">
               <ng-container matColumnDef="provincia">
                 <th mat-header-cell *matHeaderCellDef>Provincia</th>
                 <td mat-cell *matCellDef="let element">

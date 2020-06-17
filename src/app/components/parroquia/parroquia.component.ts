@@ -31,7 +31,6 @@ export class ParroquiaComponent implements OnInit {
 
   myForm: FormGroup;
   botonIngresar = "ingresar";
-  filterParroquia = "";
   loading = true;
 
   // Para la paginacion
@@ -50,6 +49,12 @@ export class ParroquiaComponent implements OnInit {
       duration: 2000,
       horizontalPosition: "right",
     });
+  }
+
+  search(term: string) {
+    term = term.trim();
+    term = term.toUpperCase(); 
+    this.parroquias.filter = term;
   }
 
   async consultarParroquias() {

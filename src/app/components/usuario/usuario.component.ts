@@ -74,7 +74,7 @@ export class UsuarioComponent implements OnInit {
     if (respuesta["codigo"] == "200") {
       var usuarios: any = [];
       for (let usuario of respuesta["respuesta"]) {
-        if(usuario.IdUsuario == localStorage.getItem("miCuenta.usuario")) {
+        if(usuario.IdUsuario == localStorage.getItem("miCuenta.idUsuario")) {
           continue;
         } else {
           usuarios.push(usuario);

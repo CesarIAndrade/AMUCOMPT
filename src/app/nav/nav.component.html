@@ -49,11 +49,14 @@
   <mat-sidenav-content>
     <mat-toolbar style="background-color: white;">
       <mat-toolbar-row>
-        <button (click)="drawer.toggle()" *ngIf="isHandset$ | async" mat-button>
+        <button (click)="goBack()" *ngIf="compraVenta" mat-button mat-icon-button>
+          <mat-icon>keyboard_arrow_left</mat-icon>
+        </button>   
+        <button (click)="drawer.toggle()" *ngIf="isHandset$ | async" mat-button mat-icon-button>
           <mat-icon>apps</mat-icon>
         </button>   
         <span class="example-spacer"></span>
-        <button mat-button (click)="goBack()" class="drawer_title">{{ route }}</button>
+        <span class="drawer_title">{{ route }}</span>
       </mat-toolbar-row>
     </mat-toolbar>
     <router-outlet></router-outlet>

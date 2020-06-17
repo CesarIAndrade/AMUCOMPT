@@ -26,8 +26,12 @@ export class VisitaComponent implements OnInit {
       _parroquia: new FormControl(""),
       _comunidad: new FormControl(""),
       _idTecnico: new FormControl(""),
+      _opciones: new FormControl(),
+
     });
   }
+
+  seasons: string[] = ['Winter', 'Spring', 'Summer', 'Autumn'];
 
   openBottomSheet(comunidades, idComunidad): void {
     if (comunidades) {
@@ -49,7 +53,6 @@ export class VisitaComponent implements OnInit {
   }
 
   myForm: FormGroup;
-  tabla = true;
   combos = true;
   loading = true;
   provincias: any[] = [];
@@ -61,10 +64,12 @@ export class VisitaComponent implements OnInit {
     {
       _id: "1",
       descripcion: "Comunidades",
+      checked: false
     },
     {
       _id: "2",
       descripcion: "Personas",
+      checked: true
     },
   ];
 
@@ -73,10 +78,9 @@ export class VisitaComponent implements OnInit {
   clientes = new MatTableDataSource<Element[]>();
 
   selecionarOpcion(opcion) {
+    console.log(opcion);
     this.clientes.data = [];
-    this.tabla = false;
-    if (opcion.value === "1") {
-      this.loading = true;
+    if (opcion._id === "1") {
       this.combos = false;
       this.clientes.data = [];
       this.myForm.get("_provincia").setValue("0");
@@ -84,7 +88,7 @@ export class VisitaComponent implements OnInit {
       this.myForm.get("_parroquia").setValue("0");
       this.myForm.get("_comunidad").setValue("0");
       this.consultarClientesFiltrados();
-    } else if (opcion.value === "2") {
+    } else if (opcion._id === "2") {
       this.loading = true;
       this.combos = true;
       this.listarClientesTecnico();
@@ -152,7 +156,7 @@ export class VisitaComponent implements OnInit {
   async consultarClientesFiltrados() {
     var clientes = await this.seguimientoService.filtroClientesEnVisitas(
       this.myForm.get("_idTecnico").value
-    );
+    );   
     if (clientes["codigo"] == "200") {
       this.loading = false;
       this.clientes.data = [];
@@ -167,7 +171,6 @@ export class VisitaComponent implements OnInit {
       this.myForm.get("_idTecnico").value
     );
     if (respuesta["codigo"] == "200") {
-      this.loading = false;
       var clientes = [];
       this.clientes.data = [];
       respuesta["respuesta"].map((cliente) => {
@@ -188,6 +191,7 @@ export class VisitaComponent implements OnInit {
           comunidades: cliente._AsignarTecnicoPersonaComunidad
         });
       });
+      this.loading = false;
       this.clientes.data = clientes;
       this.clientes.paginator = this.paginator;
     }
@@ -204,13 +208,15 @@ export class VisitaComponent implements OnInit {
       var index = this.clientes.data.indexOf(cliente);
       clientes.splice(index, 1);
       this.clientes.data = clientes;
+      this.seguimientoService.refresh$.emit();
     }
   }
 
   ngOnInit() {
     this.myForm
-      .get("_idTecnico")
+      .get("_idTecnico") 
       .setValue(localStorage.getItem("miCuenta.idAsignacionTipoUsuario"));
+    this.listarClientesTecnico();
   }
 
   tablaClientes = ["cedula", "cliente", "vivienda", "telefonos", "acciones"];

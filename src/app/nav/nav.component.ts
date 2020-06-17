@@ -20,8 +20,7 @@ export class NavComponent implements OnInit {
 
   constructor(
     private breakpointObserver: BreakpointObserver,
-    private router: Router,
-    private activatedRoute: ActivatedRoute
+    private router: Router
   ) {
     router.events
       .pipe(
@@ -29,12 +28,6 @@ export class NavComponent implements OnInit {
         filter(([a, b]) => b && a instanceof NavigationEnd)
       )
       .subscribe((_) => {
-        if (this.router.url == "/compras" || this.router.url == "/ventas") {
-          this.compraVenta = true;
-        } else {
-          this.compraVenta = false;
-        }
-
         this.drawer.close();
         this.route = this.router.url
           .split("/")[1]
@@ -158,17 +151,24 @@ export class NavComponent implements OnInit {
         }
       );
     }
-
     if (!this.rutasPorTipoUsuario.includes(this.router.url)) {
       this.router.navigateByUrl(this.rutasPorTipoUsuario[0]);
     }
-
     if (this.router.url == "/") {
       this.router.navigateByUrl(this.rutasPorTipoUsuario[0]);
     }
-
+    if (this.router.url == "/compras" || this.router.url == "/ventas") {
+      this.compraVenta = true;
+    } else {
+      this.compraVenta = false;
+    }
     this.route = this.router.url.split("/")[1].replace("-", " ").toUpperCase();
     this.router.events.subscribe((_) => {
+      if (this.router.url == "/compras" || this.router.url == "/ventas") {
+        this.compraVenta = true;
+      } else {
+        this.compraVenta = false;
+      }
       this.route = this.router.url
         .split("/")[1]
         .replace("-", " ")

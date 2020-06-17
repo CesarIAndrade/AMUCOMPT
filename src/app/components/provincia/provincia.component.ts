@@ -30,7 +30,6 @@ export class ProvinciaComponent implements OnInit {
 
   myForm: FormGroup;
   botonIngresar = "ingresar";
-  filterProvincia = "";
   loading = true;
 
   // Para la paginacion
@@ -68,6 +67,12 @@ export class ProvinciaComponent implements OnInit {
         this.actualizarProvincia();
       }
     }
+  }
+
+  search(term: string) {
+    term = term.trim();
+    term = term.toUpperCase(); 
+    this.provincias.filter = term;
   }
 
   async crearProvincia() {

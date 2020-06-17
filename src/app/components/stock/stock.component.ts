@@ -14,9 +14,7 @@ export class StockComponent implements OnInit {
   // Para la paginacion
   @ViewChild("paginator", { static: false }) paginator: MatPaginator;
   listaProductosEnStock = new MatTableDataSource<Element[]>();
-
-  filterProducto = "";
-
+  
   loading = true;
 
   async consultarStock() {

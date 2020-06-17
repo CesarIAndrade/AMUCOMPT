@@ -14,7 +14,6 @@ import { DialogAlertComponent } from "../dialog-alert/dialog-alert.component";
   styleUrls: ["./login.component.css"],
 })
 export class LoginComponent implements OnInit {
-
   constructor(
     private usuarioService: UsuarioService,
     private router: Router,
@@ -40,7 +39,7 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  async login() {    
+  async login() {
     if (this.myForm.valid) {
       var login = await this.usuarioService.login(
         this.myForm.get("_usuario").value,
@@ -48,16 +47,17 @@ export class LoginComponent implements OnInit {
       );
       console.log(login);
       this.seleccionarTipoUsuario = false;
-      this.ingresarCredenciales = true;      
+      this.ingresarCredenciales = true;
       if (login["codigo"] == "200") {
+        localStorage.setItem("usuario", JSON.stringify(login["respuesta"]));      
         this.tipoUsuarios = login["respuesta"]["ListaTipoUsuario"];
-        localStorage.setItem("miCuenta.usuario", login["respuesta"].IdUsuario);
+        localStorage.setItem("miCuenta.idUsuario", login["respuesta"].IdUsuario);
       } else {
         this.myForm.reset();
         this.myForm.get("_tipoUsuario").setValue("0");
         this.openDialog("Credenciales Incorrectas!");
         this.seleccionarTipoUsuario = true;
-        this.ingresarCredenciales = false;   
+        this.ingresarCredenciales = false;
       }
     }
   }
@@ -70,13 +70,16 @@ export class LoginComponent implements OnInit {
         "miCuenta.idAsignacionTipoUsuario",
         this.myForm.get("_tipoUsuario").value
       );
-      var tipoUsuario = this.tipoUsuarios.filter(
+      console.log(this.myForm.get("_tipoUsuario").value);
+      
+      var tipoUsuario = this.tipoUsuarios.find(
         (item) => item.IdAsignacionTu == this.myForm.get("_tipoUsuario").value
       );
       localStorage.setItem(
-        "miCuenta.tipoUsuario",
-        tipoUsuario[0].Identificacion
+        "miCuenta.descripcionTipoUsuario",
+        tipoUsuario.Descripcion
       );
+      localStorage.setItem("miCuenta.tipoUsuario", tipoUsuario.Identificacion);
       this.router.navigateByUrl("/");
     }
   }
@@ -106,7 +109,7 @@ export class LoginComponent implements OnInit {
     //   );
     // })
     // .catch((error) => console.log(error));
-  } 
+  }
 
   ngOnInit() {}
 }

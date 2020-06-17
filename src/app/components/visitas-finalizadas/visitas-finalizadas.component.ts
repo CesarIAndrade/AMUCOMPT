@@ -117,6 +117,9 @@ export class VisitasFinalizadasComponent implements OnInit {
 
   ngOnInit() {
     this.consultarVisitasFinalizadas();
+    this.seguimientoService.refresh$.subscribe(() => {
+      this.consultarVisitasFinalizadas();
+    })
   }
 
   nodeMap = new Map<string, LoadmoreFlatNode>();

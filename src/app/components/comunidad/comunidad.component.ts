@@ -57,6 +57,12 @@ export class ComunidadComponent implements OnInit {
     });
   }
 
+  search(term: string) {
+    term = term.trim();
+    term = term.toUpperCase(); 
+    this.comunidades.filter = term;
+  }
+
   async consultarComunidades() {
     var respuesta = await this.panelAdministracionService.consultarComunidades();
     if (respuesta["codigo"] == "200") {

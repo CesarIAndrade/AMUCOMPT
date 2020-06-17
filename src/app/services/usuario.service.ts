@@ -447,4 +447,31 @@ export class UsuarioService {
         );
     });
   }
+
+  actualizarTelefonoCorreo(
+    idPersona: string,
+    correo: string,
+  ) {
+    const body = new HttpParams()
+    .set("IdPersona", idPersona) 
+    .set("Correo", correo)
+      .set("encriptada", localStorage.getItem("miCuenta.getToken"));
+    return new Promise((resolve, reject) => {
+      this.http
+        .post(apiUrl + "TalentoHumano/ActualizarTelefonoCorreo", body.toString(), {
+          headers: new HttpHeaders().set(
+            "Content-Type",
+            "application/x-www-form-urlencoded"
+          ),
+        })
+        .subscribe(
+          (res) => {
+            resolve(res);
+          },
+          (err) => {
+            reject(err);
+          }
+        );
+    });
+  }
 }
