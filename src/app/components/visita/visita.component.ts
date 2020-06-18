@@ -26,8 +26,6 @@ export class VisitaComponent implements OnInit {
       _parroquia: new FormControl(""),
       _comunidad: new FormControl(""),
       _idTecnico: new FormControl(""),
-      _opciones: new FormControl(),
-
     });
   }
 
@@ -78,7 +76,6 @@ export class VisitaComponent implements OnInit {
   clientes = new MatTableDataSource<Element[]>();
 
   selecionarOpcion(opcion) {
-    console.log(opcion);
     this.clientes.data = [];
     if (opcion._id === "1") {
       this.combos = false;

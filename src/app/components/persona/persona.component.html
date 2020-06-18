@@ -9,6 +9,7 @@
               <mat-form-field class="example-full-width">
                 <input
                   matInput
+                  name="nombres"
                   type="text"
                   formControlName="_nombres"
                   placeholder="Ingrese Nombres"
@@ -33,6 +34,7 @@
                 <input
                   matInput
                   type="text"
+                  name="apellidos"
                   formControlName="_apellidos"
                   placeholder="Ingrese Apellidos"
                 />
@@ -79,6 +81,7 @@
                 <input
                   matInput
                   type="text"
+                  name="numeroDocumento"
                   formControlName="_numeroDocumento"
                   #numeroDocumento
                   maxlength="10"
@@ -127,6 +130,7 @@
                   matInput
                   type="text"
                   formControlName="_telefono1"
+                  name="telefono1"
                   #telefono1
                   placeholder="Número #1"
                   [maxlength]="digitosTelefono1"
@@ -169,6 +173,7 @@
                 <input
                   matInput
                   type="text"
+                  name="telefono2"
                   [maxlength]="digitosTelefono2"
                   #telefono2
                   formControlName="_telefono2"
@@ -186,6 +191,7 @@
           <mat-form-field class="example-full-width">
             <input
               matInput
+              name="correo"
               placeholder="Ingrese Correo"
               formControlName="_correo"
               [errorStateMatcher]="matcher"
@@ -278,6 +284,7 @@
               <mat-form-field class="example-full-width">
                 <input
                   matInput
+                  name="direccion"
                   placeholder="Dirección"
                   formControlName="_referencia"
                 />

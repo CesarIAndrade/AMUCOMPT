@@ -59,10 +59,12 @@
                 *matRowDef="let row; columns: tablaProductosDeUnKit"
               ></tr>
             </table>
+            <div class="spinner-container" *ngIf="loadingPK">
+              <mat-spinner></mat-spinner>
+            </div>
             <mat-paginator
               #paginator
               [pageSizeOptions]="[7]"
-              showFirstLastButtons
             ></mat-paginator>
           </div>
         </div>
@@ -73,6 +75,7 @@
             <input
               matInput
               [(ngModel)]="filterProducto"
+              name="buscarProducto"
               [ngModelOptions]="{ standalone: true }"
               type="text"
               placeholder="Buscar Producto"
@@ -118,10 +121,12 @@
               <tr mat-header-row *matHeaderRowDef="tablaProductos; sticky: true"></tr>
               <tr mat-row *matRowDef="let row; columns: tablaProductos"></tr>
             </table>
+            <div class="spinner-container" *ngIf="loadingP">
+              <mat-spinner></mat-spinner>
+            </div>
             <mat-paginator
               #paginatorProductos
               [pageSizeOptions]="[7]"
-              showFirstLastButtons
             ></mat-paginator>
           </div>
         </div>

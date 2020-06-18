@@ -3,6 +3,8 @@ import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { UsuarioService } from "src/app/services/usuario.service";
 import { MatDialog } from "@angular/material";
 import { DialogAlertComponent } from "../dialog-alert/dialog-alert.component";
+import { ComfirmDialogComponent } from "../comfirm-dialog/comfirm-dialog.component";
+import { Router } from '@angular/router';
 
 @Component({
   selector: "app-cuenta",
@@ -13,7 +15,8 @@ export class CuentaComponent implements OnInit {
   myForm: FormGroup;
   constructor(
     private usuarioService: UsuarioService,
-    public dialog: MatDialog
+    private confirmDialog: MatDialog,
+    private router: Router
   ) {
     this.myForm = new FormGroup({
       _correo: new FormControl(""),
@@ -24,33 +27,52 @@ export class CuentaComponent implements OnInit {
 
   nombres: string;
   tipoUsuario: string;
+  inputType = "password";
 
-  openDialog(mensaje): void {
-    const dialogRef = this.dialog.open(DialogAlertComponent, {
+  async modificarDatos() {
+    let dialogRef = this.confirmDialog.open(ComfirmDialogComponent, {
       width: "250px",
-      data: { mensaje: mensaje },
+      height: "auto",
+      data: {
+        mensaje: "Se cerrará su sessión actual"
+      }
+    });
+    dialogRef.afterClosed().subscribe(async (result) => {
+      if (result) {
+        var modificarContacto = await this.usuarioService.actualizarTelefonoCorreo(
+          localStorage.getItem("miCuenta.idPersona"),
+          this.myForm.get("_correo").value
+        );
+        var modificarContrasena = await this.usuarioService.actualizarUsuario(
+          this.usuario.IdUsuario,
+          this.usuario.PersonaEntidad.IdPersona,
+          this.myForm.get("_usuario").value,
+          this.myForm.get("_contrasena").value
+        );
+        console.log(modificarContacto);
+        if (
+          // modificarContacto["codigo"] == "200" &&
+          modificarContrasena["codigo"] == "200"
+        ) {
+          this.salir();
+        }
+      }
     });
   }
 
-  async modificarDatos() {
-    var modificarContacto = await this.usuarioService.actualizarTelefonoCorreo(
-      localStorage.getItem("miCuenta.idPersona"),
-      this.myForm.get("_correo").value
-    );
-    var modificarContrasena = await this.usuarioService.actualizarUsuario(
-      this.usuario.IdUsuario,
-      this.usuario.PersonaEntidad.IdPersona,
-      this.myForm.get("_usuario").value,
-      this.myForm.get("_contrasena").value
-    );
-    console.log(modificarContacto);
-    if (
-      modificarContacto["codigo"] == "200" &&
-      modificarContrasena["codigo"] == "200"
-    ) {
-      this.openDialog("Datos actualizados");
+  salir() {
+    localStorage.clear();
+    this.router.navigateByUrl("/login");
+  }
+
+  mostrarContrasena() {
+    if (this.inputType == "password") {
+      this.inputType = "text";
+    } else {
+      this.inputType = "password";
     }
   }
+
 
   usuario: any = [];
   ngOnInit() {

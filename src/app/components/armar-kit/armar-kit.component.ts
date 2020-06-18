@@ -5,6 +5,7 @@ import {
   MatPaginator,
   MatTableDataSource,
   MatSnackBar,
+  MatDialog,
 } from "@angular/material";
 
 // Services
@@ -13,6 +14,8 @@ import { InventarioService } from "src/app/services/inventario.service";
 // SweetAlert
 import sweetalert from "sweetalert";
 import { FormGroup, FormControl } from "@angular/forms";
+import { ComfirmDialogComponent } from '../comfirm-dialog/comfirm-dialog.component';
+import { toTypeScript } from '@angular/compiler';
 
 export interface DetalleProducto {
   presentacion: string;
@@ -28,7 +31,8 @@ export interface DetalleProducto {
 export class ArmarKitComponent implements OnInit {
   constructor(
     private inventarioService: InventarioService,
-    private _snackBar: MatSnackBar
+    private _snackBar: MatSnackBar,
+    private confirmDialog: MatDialog
   ) {
     this.myForm = new FormGroup({
       _idKit: new FormControl(""),
@@ -46,7 +50,8 @@ export class ArmarKitComponent implements OnInit {
   myForm: FormGroup;
   filterProducto = "";
   kits: any[] = [];
-  Arrayproductos: any[] = [];
+  loadingP = false;
+  loadingPK = false;
 
   openSnackBar(message: string) {
     this._snackBar.open(message, "Cerrar", {
@@ -56,6 +61,10 @@ export class ArmarKitComponent implements OnInit {
   }
 
   onChangeSelectKit(idKit) {
+    this.loadingPK = true;
+    this.loadingP = true;
+    this.productos.data = [];
+    this.listaProductosDeUnKit.data = [];
     var kit = this.kits.filter((kit) => kit.IdKit == idKit);
     this.myForm
       .get("_idAsignarDescuentoKit")
@@ -70,6 +79,7 @@ export class ArmarKitComponent implements OnInit {
       "Inventario/ListaAsignarProductoKit"
     );
     if (kit["codigo"] == "200") {
+      this.loadingPK = false;
       var data: any = [];
       kit["respuesta"][0]["ListaAsignarProductoKit"].map((producto) => {
         data.push({
@@ -104,6 +114,7 @@ export class ArmarKitComponent implements OnInit {
       idKit
     );
     if (productos["codigo"] == "200") {
+      this.loadingP = false;
       var data: any = [];
       productos["respuesta"].map((producto) => {
         data.push({
@@ -125,6 +136,10 @@ export class ArmarKitComponent implements OnInit {
   }
 
   async asignarProductoKit(idProducto) {
+    this.loadingP = true;
+    this.loadingPK = true;
+    this.productos.data = [];
+    this.listaProductosDeUnKit.data = [];
     var producto = await this.inventarioService.asignarProductoKit(
       idProducto,
       this.myForm.get("_idAsignarDescuentoKit").value
@@ -137,14 +152,29 @@ export class ArmarKitComponent implements OnInit {
   }
 
   async eliminarAsignacionProductoKit(idProducto) {
-    var producto = await this.inventarioService.eliminarAsignacionProductoKit(
-      idProducto
-    );
-    if (producto["codigo"] == "200") {
-      this.consultarKitsYSusProductos(this.myForm.get("_idKit").value);
-      this.consultarProductos(this.myForm.get("_idKit").value);
-      this.openSnackBar("Se eliminó correctamente");
-    }
+    let dialogRef = this.confirmDialog.open(ComfirmDialogComponent, {
+      width: "250px",
+      height: "auto",
+      data: {
+        mensaje: ""
+      }
+    });
+    dialogRef.afterClosed().subscribe(async (result) => {
+      if (result) {
+        this.loadingP = true;
+        this.loadingPK = true;
+        this.productos.data = [];
+        this.listaProductosDeUnKit.data = [];
+        var producto = await this.inventarioService.eliminarAsignacionProductoKit(
+          idProducto
+        );
+        if (producto["codigo"] == "200") {
+          this.consultarKitsYSusProductos(this.myForm.get("_idKit").value);
+          this.consultarProductos(this.myForm.get("_idKit").value);
+          this.openSnackBar("Se eliminó correctamente");
+        }
+      }
+    });
   }
 
   ngOnInit() {

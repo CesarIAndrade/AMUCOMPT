@@ -16,6 +16,7 @@ import { InventarioService } from "src/app/services/inventario.service";
 import { Observable } from "rxjs";
 import { startWith, map } from "rxjs/operators";
 import { DialogAlertComponent } from "../dialog-alert/dialog-alert.component";
+import { ComfirmDialogComponent } from "../comfirm-dialog/comfirm-dialog.component";
 
 @Component({
   selector: "app-producto",
@@ -26,7 +27,8 @@ export class ProductoComponent implements OnInit {
   constructor(
     private inventarioService: InventarioService,
     private dialog: MatDialog,
-    private _snackBar: MatSnackBar
+    private _snackBar: MatSnackBar,
+    private confirmDialog: MatDialog
   ) {
     this.myForm = new FormGroup({
       _nombre: new FormControl("", [Validators.required]),
@@ -104,8 +106,6 @@ export class ProductoComponent implements OnInit {
     if (respuesta["codigo"] == "200") {
       var productos: any = [];
       respuesta["respuesta"].map((producto) => {
-        console.log(producto.Producto.Descripcion);
-
         productos.push({
           IdConfigurarProducto: producto.IdConfigurarProducto,
           IdProducto: producto.Producto.IdProducto,
@@ -137,9 +137,9 @@ export class ProductoComponent implements OnInit {
   }
 
   private _filter(value: string): string[] {
-    const filterValue = value.toLowerCase();
+    const filterValue = value;
     return this.productosSeleccionables.filter((option) =>
-      option.Nombre.toLowerCase().includes(filterValue)
+      option.Producto.toLowerCase().includes(filterValue)
     );
   }
 
@@ -258,25 +258,36 @@ export class ProductoComponent implements OnInit {
   }
 
   async eliminarConfiguracionProducto(idConfigurarProducto, idProducto) {
-    var respuesta = await this.inventarioService.eliminarConfiguracionProducto(
-      idConfigurarProducto,
-      idProducto
-    );
-    if (respuesta["codigo"] == "200") {
-      this.openSnackBar("Se eliminó correctamente");
-      var productos = this.productos.data;
-      var producto = productos.filter(
-        (item) => item["IdConfigurarProducto"] == idConfigurarProducto
-      );
-      var index = productos.indexOf(producto[0]);
-      productos.splice(index, 1);
-      this.productos.data = productos;
-    }
+    let dialogRef = this.confirmDialog.open(ComfirmDialogComponent, {
+      width: "250px",
+      height: "auto",
+      data: {
+        mensaje: ""
+      }
+    });
+    dialogRef.afterClosed().subscribe(async (result) => {
+      if (result) {
+        var respuesta = await this.inventarioService.eliminarConfiguracionProducto(
+          idConfigurarProducto,
+          idProducto
+        );
+        if (respuesta["codigo"] == "200") {
+          this.openSnackBar("Se eliminó correctamente");
+          var productos = this.productos.data;
+          var producto = productos.find(
+            (item) => item["IdConfigurarProducto"] == idConfigurarProducto
+          );
+          var index = productos.indexOf(producto);
+          productos.splice(index, 1);
+          this.productos.data = productos;
+        }
+      }
+    });
   }
-  
+
   search(term: string) {
     term = term.trim();
-    term = term.toUpperCase(); 
+    term = term.toUpperCase();
     this.productos.filter = term;
   }
 

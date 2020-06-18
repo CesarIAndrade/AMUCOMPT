@@ -6,6 +6,7 @@
           <mat-form-field class="example-full-width">
             <input
               matInput
+              name="buscarCliente"
               formControlName="_cliente"
               type="text"
               placeholder="Buscar Cliente"
@@ -23,6 +24,7 @@
           matInput
           (keyup)="search($event.target.value)"
           type="text"
+          name="buscarFactura"
           placeholder="Buscar Factura"
         />
         <button mat-button matPrefix mat-icon-button>
@@ -43,7 +45,7 @@
           <ng-container matColumnDef="fecha">
             <th mat-header-cell *matHeaderCellDef>Fecha</th>
             <td mat-cell *matCellDef="let element">
-              {{ element.Fecha | date: "yyyy-MM-dd" }}
+              {{ element.Fecha }}
             </td>
           </ng-container>
 
@@ -60,7 +62,13 @@
               {{ element.TotalFactura }}
             </td>
           </ng-container>
-
+          <ng-container matColumnDef="saldoPendiente">
+            <th mat-header-cell *matHeaderCellDef>Pendiente</th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.Pendiente }}
+            </td>
+          </ng-container>
+          
           <ng-container matColumnDef="fechaFinalCredito">
             <th mat-header-cell *matHeaderCellDef>Final Credito</th>
             <td mat-cell *matCellDef="let element">
@@ -74,7 +82,7 @@
                 mat-button
                 type="button"
                 class="btn-outline-warning"
-                (click)="mostrarCanton(element)"
+                (click)="realizarAbono(element)"
               >
                 <mat-icon>payment</mat-icon>
               </button>

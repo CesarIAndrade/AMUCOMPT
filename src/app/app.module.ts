@@ -48,8 +48,9 @@ import { ModalPersonaComponent } from './components/modal-persona/modal-persona.
 import { ModalReasignarClientesComponent } from './components/modal-reasignar-clientes/modal-reasignar-clientes.component';
 import { TablaPersonaComponent } from './components/tabla-persona/tabla-persona.component';
 import { CompraVentaComponent } from './components/compra-venta/compra-venta.component';
-import { InteresComponent } from './components/interes/interes.component';
 import { VisitasFinalizadasComponent } from './components/visitas-finalizadas/visitas-finalizadas.component';
+import { RealizarAbonoComponent } from './components/realizar-abono/realizar-abono.component';
+import { ComfirmDialogComponent } from './components/comfirm-dialog/comfirm-dialog.component';
 
 @NgModule({
   declarations: [
@@ -90,8 +91,9 @@ import { VisitasFinalizadasComponent } from './components/visitas-finalizadas/vi
     ModalReasignarClientesComponent,
     TablaPersonaComponent,
     CompraVentaComponent,
-    InteresComponent,
     VisitasFinalizadasComponent,
+    RealizarAbonoComponent,
+    ComfirmDialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -116,7 +118,9 @@ import { VisitasFinalizadasComponent } from './components/visitas-finalizadas/vi
     ComunidadesBottomSheet,
     DialogAlertComponent,
     ModalPersonaComponent,
-    ModalReasignarClientesComponent
+    ModalReasignarClientesComponent,
+    RealizarAbonoComponent,
+    ComfirmDialogComponent
   ],
   providers: [],
   bootstrap: [AppComponent],

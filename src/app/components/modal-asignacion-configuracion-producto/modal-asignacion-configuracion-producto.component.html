@@ -2,7 +2,7 @@
   <div>
     <h5 style="text-align: center;">Lista Productos {{ nombreKit }}</h5>
     <mat-form-field class="example-full-width">
-      <input matInput (keyup)='search($event.target.value)' type="text" placeholder="Buscar Producto" />
+      <input matInput (keyup)='search($event.target.value)' type="text" name="buscarProducto" placeholder="Buscar Producto" />
       <button disabled matPrefix mat-icon-button>
         <mat-icon>search</mat-icon>
       </button>

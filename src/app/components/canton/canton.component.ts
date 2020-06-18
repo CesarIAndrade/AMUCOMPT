@@ -13,6 +13,7 @@ import { PanelAdministracionService } from "src/app/services/panel-administracio
 // Components
 import { ModalLocalidadSuperiorComponent } from "../modal-localidad-superior/modal-localidad-superior.component";
 import { DialogAlertComponent } from "../dialog-alert/dialog-alert.component";
+import { ComfirmDialogComponent } from "../comfirm-dialog/comfirm-dialog.component";
 
 @Component({
   selector: "app-canton",
@@ -24,7 +25,9 @@ export class CantonComponent implements OnInit {
     private panelAdministracionService: PanelAdministracionService,
     private modalLocalidadSuperior: MatDialog,
     private dialog: MatDialog,
-    private _snackBar: MatSnackBar
+    private _snackBar: MatSnackBar,
+    private confirmDialog: MatDialog
+
   ) {
     this.myForm = new FormGroup({
       _idCanton: new FormControl(""),
@@ -59,7 +62,7 @@ export class CantonComponent implements OnInit {
 
   search(term: string) {
     term = term.trim();
-    term = term.toUpperCase(); 
+    term = term.toUpperCase();
     this.cantones.filter = term;
   }
 
@@ -154,24 +157,37 @@ export class CantonComponent implements OnInit {
   }
 
   async eliminarCanton(idCanton) {
-    var respuesta = await this.panelAdministracionService.eliminarCanton(
-      idCanton
-    );
-    if (respuesta["codigo"] == "200") {
-      var cantones = this.cantones.data;
-      var canton = cantones.filter((canton) => canton["IdCanton"] == idCanton);
-      var index = cantones.indexOf(canton[0]);
-      cantones.splice(index, 1);
-      this.cantones.data = cantones;
-      this.panelAdministracionService.refresh$.emit();
-      this.openSnackBar("Se eliminó correctamente");
-    } else if (respuesta["codigo"] == "400") {
-      this.openDialog("Inténtalo de nuevo");
-    } else if (respuesta["codigo"] == "418") {
-      this.openDialog(respuesta["mensaje"]);
-    } else if (respuesta["codigo"] == "500") {
-      this.openDialog("Problemas con el servidor");
-    }
+    let dialogRef = this.confirmDialog.open(ComfirmDialogComponent, {
+      width: "250px",
+      height: "auto",
+      data: {
+        mensaje: "",
+      },
+    });
+    dialogRef.afterClosed().subscribe(async (result) => {
+      if (result) {
+        var respuesta = await this.panelAdministracionService.eliminarCanton(
+          idCanton
+        );
+        if (respuesta["codigo"] == "200") {
+          var cantones = this.cantones.data;
+          var canton = cantones.filter(
+            (canton) => canton["IdCanton"] == idCanton
+          );
+          var index = cantones.indexOf(canton[0]);
+          cantones.splice(index, 1);
+          this.cantones.data = cantones;
+          this.panelAdministracionService.refresh$.emit();
+          this.openSnackBar("Se eliminó correctamente");
+        } else if (respuesta["codigo"] == "400") {
+          this.openDialog("Inténtalo de nuevo");
+        } else if (respuesta["codigo"] == "418") {
+          this.openDialog(respuesta["mensaje"]);
+        } else if (respuesta["codigo"] == "500") {
+          this.openDialog("Problemas con el servidor");
+        }
+      }
+    });
   }
 
   abrirModal() {

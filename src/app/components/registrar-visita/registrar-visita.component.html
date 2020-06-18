@@ -5,12 +5,13 @@
         <div class="col-lg-4">
           <h5 style="text-align: center;">Nueva Visita</h5>
           <mat-form-field class="example-full-width">
-            <input
+            <textarea
               matInput
+              rows="5"
               formControlName="_observacion"
               type="text"
               placeholder="Ingrese Observacion"
-            />
+            ></textarea>
             <button disabled mat-button matPrefix mat-icon-button>
               <mat-icon>*</mat-icon>
             </button>
@@ -21,13 +22,13 @@
               type="submit"
               [value]="botonIngresar"
               [disabled]="myForm.invalid"
-              class="mt-2 bg-success text-white btn-block"
+              class="bg-success text-white btn-block"
             >
               Guardar
             </button>
           </div>
           <div>
-            <a 
+            <a
               mat-button
               routerLink="/visitas"
               type="button"

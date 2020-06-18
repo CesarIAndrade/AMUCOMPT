@@ -70,8 +70,6 @@ export class LoginComponent implements OnInit {
         "miCuenta.idAsignacionTipoUsuario",
         this.myForm.get("_tipoUsuario").value
       );
-      console.log(this.myForm.get("_tipoUsuario").value);
-      
       var tipoUsuario = this.tipoUsuarios.find(
         (item) => item.IdAsignacionTu == this.myForm.get("_tipoUsuario").value
       );

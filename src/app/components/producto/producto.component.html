@@ -8,6 +8,7 @@
             <input
               matInput
               formControlName="_nombre"
+              name="nombreProducto"
               type="text"
               placeholder="Producto"
               [matAutocomplete]="auto"
@@ -19,9 +20,9 @@
               <mat-option
                 (onSelectionChange)="seleccionarProductoSiExiste(option)"
                 *ngFor="let option of filteredOptions | async"
-                [value]="option.Nombre"
+                [value]="option.Producto"
               >
-                {{ option.Nombre }}
+                {{ option.Producto }}
               </mat-option>
             </mat-autocomplete>
           </mat-form-field>
@@ -43,6 +44,7 @@
             <input
               matInput
               formControlName="_codigo"
+              name="codigo"
               type="text"
               placeholder="Ingrese Código Producto"
             />
@@ -54,6 +56,7 @@
             <input
               matInput
               formControlName="_descripcion"
+              name="descripcionProducto"
               type="text"
               placeholder="Ingrese Descripción Producto"
             />
@@ -80,6 +83,7 @@
                 <input
                   matInput
                   formControlName="_contenidoNeto"
+                  name="contenidoNeto"
                   type="number"
                   placeholder="Contenido"
                 />
@@ -111,6 +115,7 @@
                 <input
                   matInput
                   formControlName="_precio"
+                  name="precio"
                   type="number"
                   placeholder="Precio"
                 />
@@ -124,6 +129,7 @@
                 <input
                   matInput
                   formControlName="_iva"
+                  name="iva"
                   type="number"
                   placeholder="IVA"
                 />
@@ -149,6 +155,7 @@
           <mat-form-field class="example-full-width">
             <input
               matInput
+              name="buscarProducto"
               (keyup)="search($event.target.value)"
               type="text"
               placeholder="Buscar Producto"

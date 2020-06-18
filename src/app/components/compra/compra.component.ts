@@ -249,7 +249,7 @@ export class CompraComponent implements OnInit {
 
   seleccionarLote() {
     let dialogRef = this.modalLotes.open(ModalLotesComponent, {
-      width: "500px",
+      width: "auto",
       height: "auto",
       data: {
         idCabecera: this.myForm.get("_idCabecera").value,

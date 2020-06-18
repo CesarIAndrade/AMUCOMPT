@@ -64,11 +64,6 @@ export class NavComponent implements OnInit {
           name: "Personas",
           icon: "supervisor_account",
           url: "/personas",
-        },
-        {
-          name: "Cuenta",
-          icon: "face",
-          url: "/cuenta",
         }
       );
     } else if (localStorage.getItem("miCuenta.tipoUsuario") == "2") {
@@ -78,11 +73,6 @@ export class NavComponent implements OnInit {
           name: "Visitas",
           icon: "chrome_reader_mode",
           url: "/visitas",
-        },
-        {
-          name: "Cuenta",
-          icon: "face",
-          url: "/cuenta",
         }
       );
     } else if (localStorage.getItem("miCuenta.tipoUsuario") == "3") {
@@ -143,11 +133,6 @@ export class NavComponent implements OnInit {
           name: "Compra Venta",
           icon: "shop",
           url: "/compra-venta",
-        },
-        {
-          name: "Cuenta",
-          icon: "face",
-          url: "/cuenta",
         }
       );
     }

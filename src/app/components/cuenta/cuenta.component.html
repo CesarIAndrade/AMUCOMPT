@@ -16,6 +16,7 @@
                 <input
                   type="text"
                   formControlName="_correo"
+                  name="correo"
                   matInput
                   placeholder="Correo"
                 />
@@ -29,13 +30,29 @@
                   placeholder="Usuario"
                 />
               </mat-form-field>
+
+
               <mat-form-field class="example-full-width">
                 <input
-                  type="text"
                   matInput
+                  name="contrasena"
                   formControlName="_contrasena"
-                  placeholder="Contraseña"
+                  type="password"
+                  [type]="inputType"
+                  placeholder="Ingrese Contraseña"
                 />
+                <button disabled mat-button matPrefix mat-icon-button>
+                  <mat-icon>*</mat-icon>
+                </button>
+                <button
+                  mat-button
+                  matSuffix
+                  type="button"
+                  mat-icon-button
+                  (click)="mostrarContrasena()"
+                >
+                  <mat-icon>visibility</mat-icon>
+                </button>
               </mat-form-field>
               <button
                 class="btn-block"

@@ -559,7 +559,7 @@ export class VentaComponent implements OnInit {
     let dialogRef = this.modalLocalidadSuperior.open(
       ModalLocalidadSuperiorComponent,
       {
-        width: "400px",
+        width: "auto",
         height: "auto",
         data: {
           ruta: "ventas",

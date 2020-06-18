@@ -6,7 +6,6 @@ import { apiUrl } from "../../environments/environment";
   providedIn: "root",
 })
 export class SeguimientoService {
-
   refresh$ = new EventEmitter();
 
   constructor(private http: HttpClient) {}
@@ -384,7 +383,7 @@ export class SeguimientoService {
         .post(
           apiUrl + "Credito/FinalizarAsignarTecnicoPersonaComunidad",
           body.toString(),
-          { 
+          {
             headers: new HttpHeaders().set(
               "Content-Type",
               "application/x-www-form-urlencoded"
@@ -411,13 +410,61 @@ export class SeguimientoService {
         .post(
           apiUrl + "Credito/ConsultarVisitasFinalizadasPorTecnico",
           body.toString(),
-          { 
+          {
             headers: new HttpHeaders().set(
               "Content-Type",
               "application/x-www-form-urlencoded"
             ),
           }
         )
+        .subscribe(
+          (res) => {
+            resolve(res);
+          },
+          (err) => {
+            reject(err);
+          }
+        );
+    });
+  }
+
+  realizarAbono(idAsignarTU: string, idConfigurarVenta: string, monto: string) {
+    const body = new HttpParams()
+      .set("IdAsignarTU", idAsignarTU)
+      .set("IdConfigurarVenta", idConfigurarVenta)
+      .set("Monto", monto)
+      .set("encriptada", localStorage.getItem("miCuenta.deleteToken"));
+    return new Promise((resolve, reject) => {
+      this.http
+        .post(apiUrl + "Credito/IngresoAbono", body.toString(), {
+          headers: new HttpHeaders().set(
+            "Content-Type",
+            "application/x-www-form-urlencoded"
+          ),
+        })
+        .subscribe(
+          (res) => {
+            resolve(res);
+          },
+          (err) => {
+            reject(err);
+          }
+        );
+    });
+  }
+
+  consultarAbonos(idConfigurarVenta: string) {
+    const body = new HttpParams()
+      .set("IdConfigurarVenta", idConfigurarVenta)
+      .set("encriptada", localStorage.getItem("miCuenta.deleteToken"));
+    return new Promise((resolve, reject) => {
+      this.http
+        .post(apiUrl + "Credito/ConsutlarAbonoPorFactura", body.toString(), {
+          headers: new HttpHeaders().set(
+            "Content-Type",
+            "application/x-www-form-urlencoded"
+          ),
+        })
         .subscribe(
           (res) => {
             resolve(res);

@@ -8,6 +8,7 @@ import { PanelAdministracionService } from "src/app/services/panel-administracio
 // Components
 import { ModalLocalidadSuperiorComponent } from "../modal-localidad-superior/modal-localidad-superior.component";
 import { DialogAlertComponent } from '../dialog-alert/dialog-alert.component';
+import { ComfirmDialogComponent } from '../comfirm-dialog/comfirm-dialog.component';
 
 @Component({
   selector: "app-parroquia",
@@ -19,7 +20,9 @@ export class ParroquiaComponent implements OnInit {
     private panelAdministracionService: PanelAdministracionService,
     private modalLocalidadSuperior: MatDialog,
     private dialog: MatDialog,
-    private _snackBar: MatSnackBar
+    private _snackBar: MatSnackBar,
+    private confirmDialog: MatDialog
+
   ) {
     this.myForm = new FormGroup({
       _idParroquia: new FormControl(""),
@@ -148,26 +151,37 @@ export class ParroquiaComponent implements OnInit {
   }
 
   async eliminarParroquia(idParroquia: string) {
-    var respuesta = await this.panelAdministracionService.eliminarParroquia(
-      idParroquia
-    );
-    if (respuesta["codigo"] == "200") {
-      var parroquias: any = this.parroquias.data;
-      var parroquia = parroquias.filter(
-        (parroquia) => parroquia["IdParroquia"] == idParroquia
-      );
-      var index = parroquias.indexOf(parroquia[0]);
-      parroquias.splice(index, 1);
-      this.parroquias.data = parroquias;
-      this.panelAdministracionService.refresh$.emit();
-      this.openSnackBar("Se eliminó correctamente");
-    } else if (respuesta["codigo"] == "400") {
-      this.openDialog("Inténtalo de nuevo");
-    } else if (respuesta["codigo"] == "418") {
-      this.openDialog(respuesta["mensaje"]);
-    } else if (respuesta["codigo"] == "500") {
-      this.openDialog("Problemas con el servidor");
-    }
+    let dialogRef = this.confirmDialog.open(ComfirmDialogComponent, {
+      width: "250px",
+      height: "auto",
+      data: {
+        mensaje: ""
+      }
+    });
+    dialogRef.afterClosed().subscribe(async (result) => {
+      if (result) {
+        var respuesta = await this.panelAdministracionService.eliminarParroquia(
+          idParroquia
+        );
+        if (respuesta["codigo"] == "200") {
+          var parroquias: any = this.parroquias.data;
+          var parroquia = parroquias.filter(
+            (parroquia) => parroquia["IdParroquia"] == idParroquia
+          );
+          var index = parroquias.indexOf(parroquia[0]);
+          parroquias.splice(index, 1);
+          this.parroquias.data = parroquias;
+          this.panelAdministracionService.refresh$.emit();
+          this.openSnackBar("Se eliminó correctamente");
+        } else if (respuesta["codigo"] == "400") {
+          this.openDialog("Inténtalo de nuevo");
+        } else if (respuesta["codigo"] == "418") {
+          this.openDialog(respuesta["mensaje"]);
+        } else if (respuesta["codigo"] == "500") {
+          this.openDialog("Problemas con el servidor");
+        }
+      }
+    });
   }
 
   abrirModal() {

@@ -10,7 +10,7 @@ import {
 // Services
 import { PanelAdministracionService } from "src/app/services/panel-administracion.service";
 import { DialogAlertComponent } from "../dialog-alert/dialog-alert.component";
-
+import { ComfirmDialogComponent } from "../comfirm-dialog/comfirm-dialog.component";
 @Component({
   selector: "app-provincia",
   templateUrl: "./provincia.component.html",
@@ -20,7 +20,8 @@ export class ProvinciaComponent implements OnInit {
   constructor(
     private panelAdministracionService: PanelAdministracionService,
     private dialog: MatDialog,
-    private _snackBar: MatSnackBar
+    private _snackBar: MatSnackBar,
+    private confirmDialog: MatDialog
   ) {
     this.myForm = new FormGroup({
       _idProvincia: new FormControl(""),
@@ -71,7 +72,7 @@ export class ProvinciaComponent implements OnInit {
 
   search(term: string) {
     term = term.trim();
-    term = term.toUpperCase(); 
+    term = term.toUpperCase();
     this.provincias.filter = term;
   }
 
@@ -130,26 +131,37 @@ export class ProvinciaComponent implements OnInit {
     }
   }
 
-  async eliminarProvincia(idProvincia) {
-    var respuesta = await this.panelAdministracionService.eliminarProvincia(
-      idProvincia
-    );
-    if (respuesta["codigo"] == "200") {
-      var provincias = this.provincias.data;
-      var provincia = provincias.filter(
-        (provincia) => provincia["IdProvincia"] == idProvincia
-      );
-      var index = provincias.indexOf(provincia[0]);
-      provincias.splice(index, 1);
-      this.provincias.data = provincias;
-      this.openSnackBar("Se eliminó correctamente");
-    } else if (respuesta["codigo"] == "400") {
-      this.openDialog("Inténtalo de nuevo");
-    } else if (respuesta["codigo"] == "418") {
-      this.openDialog(provincia["mensaje"]);
-    } else if (respuesta["codigo"] == "500") {
-      this.openDialog("Problemas con el servidor");
-    }
+  eliminarProvincia(idProvincia) {
+    let dialogRef = this.confirmDialog.open(ComfirmDialogComponent, {
+      width: "250px",
+      height: "auto",
+      data: {
+        mensaje: ""
+      }
+    });
+    dialogRef.afterClosed().subscribe(async (result) => {
+      if (result) {
+        var respuesta = await this.panelAdministracionService.eliminarProvincia(
+          idProvincia
+        );
+        if (respuesta["codigo"] == "200") {
+          var provincias = this.provincias.data;
+          var provincia = provincias.filter(
+            (provincia) => provincia["IdProvincia"] == idProvincia
+          );
+          var index = provincias.indexOf(provincia[0]);
+          provincias.splice(index, 1);
+          this.provincias.data = provincias;
+          this.openSnackBar("Se eliminó correctamente");
+        } else if (respuesta["codigo"] == "400") {
+          this.openDialog("Inténtalo de nuevo");
+        } else if (respuesta["codigo"] == "418") {
+          this.openDialog(provincia["mensaje"]);
+        } else if (respuesta["codigo"] == "500") {
+          this.openDialog("Problemas con el servidor");
+        }
+      }
+    });
   }
 
   mostrarProvincia(provincia) {

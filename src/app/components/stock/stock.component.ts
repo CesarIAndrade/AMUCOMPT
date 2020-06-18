@@ -36,7 +36,7 @@ export class StockComponent implements OnInit {
         var descripcion = "N/A";
         var estado = "";
         if (item.Cantidad <= 6) {
-          estado = "badge badge-danger";
+          estado = "badge badge-warning";
         } else {
           estado = "badge badge-success";
         }

@@ -1,77 +1,88 @@
 <div class="container">
   <div class="card-body">
     <form [formGroup]="myForm" (ngSubmit)="validarFormulario()" novalidate>
-      <mat-form-field class="example-full-width">
-        <mat-label>Seleccione una opción</mat-label>
-        <mat-select (selectionChange)="selecionarOpcion($event)">
-          <mat-option *ngFor="let item of opciones" [value]="item._id">
-            {{ item.descripcion }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-      <br />
       <div class="row">
-        <div class="col-lg-4">
-          <div [hidden]="mostrarForm">
-            <h5 style="text-align: center;">Nuev{{ suffix }} {{ titulo }}</h5>
-            <mat-form-field
-              class="example-full-width"
-              [hidden]="ocultarCampoCuandoIntereses"
+        <div class="col-10 offset-1">
+          <h5 style="text-align: center;">Opciones</h5>
+          <mat-radio-group
+            class="example-radio-group"
+            (change)="selecionarOpcion($event.value)"
+          >
+            <mat-radio-button
+              class="example-radio-button"
+              *ngFor="let opcion of opciones"
+              [value]="opcion"
+              [checked]="opcion.checked"
             >
-              <input
-                matInput
-                formControlName="_campo"
-                type="text"
-                placeholder="Ingrese {{ titulo }}"
-              />
-              <button disabled mat-button matPrefix mat-icon-button>
-                <mat-icon>*</mat-icon>
-              </button>
-            </mat-form-field>
-            <div [hidden]="soloParaKits">
-              <mat-form-field class="example-full-width">
-                <input
-                  matInput
-                  formControlName="_codigo"
-                  [readonly]="soloParaKits"
-                  type="text"
-                  placeholder="Ingrese Código kit"
-                />
-                <button disabled mat-button matPrefix mat-icon-button>
-                  <mat-icon>*</mat-icon>
-                </button>
-              </mat-form-field>
-              <mat-form-field class="example-full-width">
-                <input
-                  type="number"
-                  placeholder="Descuento"
-                  [readonly]="soloParaKits"
-                  matInput
-                  formControlName="_descuento"
-                  [matAutocomplete]="auto"
-                />
-                <button disabled mat-button matPrefix mat-icon-button>
-                  <mat-icon>*</mat-icon>
-                </button>
-                <mat-autocomplete #auto="matAutocomplete">
-                  <mat-option
-                    (onSelectionChange)="
-                      seleccionarDescuentoSiExiste(option.Porcentaje)
-                    "
-                    *ngFor="let option of filteredOptions | async"
-                    [value]="option.Porcentaje"
-                  >
-                    {{ option.Porcentaje }}
-                  </mat-option>
-                </mat-autocomplete>
-                <button mat-button matSuffix mat-icon-button>
-                  <mat-icon>%&nbsp;</mat-icon>
-                </button>
-              </mat-form-field>
-            </div>
-            <div [hidden]="mostrarSeccionCuandoIntereses">
-              <div class="row">
-                <div class="col-lg-6 col md-6">
+              {{ opcion.descripcion }}
+            </mat-radio-button>
+          </mat-radio-group>
+          <hr>
+          <div class="row">
+            <div class="col-lg-4">
+              <div [hidden]="mostrarForm">
+                <h5 style="text-align: center;">
+                  Nuev{{ suffix }} {{ titulo }}
+                </h5>
+                <mat-form-field
+                  class="example-full-width"
+                  [hidden]="ocultarCampoCuandoIntereses"
+                >
+                  <input
+                    matInput
+                    name="campo"
+                    formControlName="_campo"
+                    type="text"
+                    placeholder="Ingrese {{ titulo }}"
+                  />
+                  <button disabled mat-button matPrefix mat-icon-button>
+                    <mat-icon>*</mat-icon>
+                  </button>
+                </mat-form-field>
+                <div [hidden]="soloParaKits">
+                  <mat-form-field class="example-full-width">
+                    <input
+                      matInput
+                      name="codigo"
+                      formControlName="_codigo"
+                      [readonly]="soloParaKits"
+                      type="text"
+                      placeholder="Ingrese Código kit"
+                    />
+                    <button disabled mat-button matPrefix mat-icon-button>
+                      <mat-icon>*</mat-icon>
+                    </button>
+                  </mat-form-field>
+                  <mat-form-field class="example-full-width">
+                    <input
+                      type="number"
+                      placeholder="Descuento"
+                      name="descuento"
+                      [readonly]="soloParaKits"
+                      matInput
+                      formControlName="_descuento"
+                      [matAutocomplete]="auto"
+                    />
+                    <button disabled mat-button matPrefix mat-icon-button>
+                      <mat-icon>*</mat-icon>
+                    </button>
+                    <mat-autocomplete #auto="matAutocomplete">
+                      <mat-option
+                        (onSelectionChange)="
+                          seleccionarDescuentoSiExiste(option.Porcentaje)
+                        "
+                        *ngFor="let option of filteredOptions | async"
+                        [value]="option.Porcentaje"
+                      >
+                        {{ option.Porcentaje }}
+                      </mat-option>
+                    </mat-autocomplete>
+                    <button mat-button matSuffix mat-icon-button>
+                      <mat-icon>%&nbsp;</mat-icon>
+                    </button>
+                  </mat-form-field>
+                </div>
+                <div [hidden]="mostrarSeccionCuandoIntereses">
                   <mat-form-field class="example-full-width"
                     ><input
                       type="text"
@@ -80,12 +91,11 @@
                       placeholder="Tipo Interés"
                     />
                   </mat-form-field>
-                </div>
-                <div class="col-lg-6 col md-6">
                   <mat-form-field class="example-full-width"
                     ><input
                       type="text"
                       matInput
+                      name="interes"
                       formControlName="_tasaInteres"
                       placeholder="Tasa Interés"
                     />
@@ -93,10 +103,6 @@
                       <mat-icon>%</mat-icon>
                     </button>
                   </mat-form-field>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-lg-6 col md-6">
                   <mat-form-field class="example-full-width">
                     <input
                       type="text"
@@ -104,12 +110,11 @@
                       formControlName="_interesMora"
                       placeholder="Tipo Interés"
                   /></mat-form-field>
-                </div>
-                <div class="col-lg-6 col md-6">
                   <mat-form-field class="example-full-width"
                     ><input
                       type="text"
                       matInput
+                      name="interesMora"
                       formControlName="_tasaInteresMora"
                       placeholder="Tasa Interés"
                     />
@@ -118,126 +123,131 @@
                     </button>
                   </mat-form-field>
                 </div>
+                <button
+                  mat-button
+                  type="submit"
+                  [value]="botonIngresar"
+                  [disabled]="myForm.invalid"
+                  class="bg-success text-white btn-block"
+                >
+                  Guardar
+                </button>
               </div>
             </div>
-            <button
-              mat-button
-              type="submit"
-              [value]="botonIngresar"
-              [disabled]="myForm.invalid"
-              class="bg-success text-white btn-block mt-2"
-            >
-              Guardar
-            </button>
-          </div>
-        </div>
-        <div class="col-lg-8 margenTabla">
-          <div [hidden]="mostrarForm">
-            <h5 style="text-align: center;">Lista {{ encabezadoTabla }}</h5>
-            <mat-form-field class="example-full-width">
-              <input
-                matInput
-                [(ngModel)]="filter"
-                [ngModelOptions]="{ standalone: true }"
-                type="text"
-                placeholder="Buscar {{ titulo }}"
-              />
-              <button mat-button matPrefix mat-icon-button>
-                <mat-icon>search</mat-icon>
-              </button>
-            </mat-form-field>
-            <div class="table_all">
-              <table
-                mat-table
-                [dataSource]="dataSource | filter: filter:'descripcion'"
-              >
-                <ng-container matColumnDef="descripcion">
-                  <th mat-header-cell *matHeaderCellDef>Descripción</th>
-                  <td mat-cell *matCellDef="let element">
-                    {{ element.descripcion }}
-                  </td>
-                </ng-container>
-                <ng-container matColumnDef="codigo">
-                  <th mat-header-cell *matHeaderCellDef>Código</th>
-                  <td mat-cell *matCellDef="let element">
-                    {{ element.codigo }}
-                  </td>
-                </ng-container>
-                <ng-container matColumnDef="descuento">
-                  <th mat-header-cell *matHeaderCellDef>Descuento</th>
-                  <td mat-cell *matCellDef="let element">
-                    {{ element.descuento }} %
-                  </td>
-                </ng-container>
-                <ng-container matColumnDef="tasaInteres">
-                  <th mat-header-cell *matHeaderCellDef>Tasa Interés</th>
-                  <td mat-cell *matCellDef="let element">
-                    {{ element.tasaInteres }} %
-                  </td>
-                </ng-container>
-                <ng-container matColumnDef="tipoInteres">
-                  <th mat-header-cell *matHeaderCellDef>Tipo Interés</th>
-                  <td mat-cell *matCellDef="let element">
-                    {{ element.tipoInteres }}
-                  </td>
-                </ng-container>
-                <ng-container matColumnDef="tasaInteresMora">
-                  <th mat-header-cell *matHeaderCellDef>Tasa Interés</th>
-                  <td mat-cell *matCellDef="let element">
-                    {{ element.tasaInteresMora }} %
-                  </td>
-                </ng-container>
-                <ng-container matColumnDef="tipoInteresMora">
-                  <th mat-header-cell *matHeaderCellDef>Tipo Interés</th>
-                  <td mat-cell *matCellDef="let element">
-                    {{ element.tipoInteresMora }}
-                  </td>
-                </ng-container>
-                <ng-container matColumnDef="acciones">
-                  <th mat-header-cell *matHeaderCellDef>Acciones</th>
-                  <ng-container *matCellDef="let element">
-                    <ng-container *ngIf="element.utilizado == '1'">
-                      <td mat-cell></td>
+            <div class="col-lg-1"></div>
+            <div class="col-lg-7 margenTabla">
+              <div [hidden]="mostrarForm">
+                <h5 style="text-align: center;">Lista {{ encabezadoTabla }}</h5>
+                <mat-form-field class="example-full-width">
+                  <input
+                    matInput
+                    [(ngModel)]="filter"
+                    name="buscarConfiguracion"
+                    [ngModelOptions]="{ standalone: true }"
+                    type="text"
+                    placeholder="Buscar {{ titulo }}"
+                  />
+                  <button mat-button matPrefix mat-icon-button>
+                    <mat-icon>search</mat-icon>
+                  </button>
+                </mat-form-field>
+                <div class="table_all">
+                  <table
+                    mat-table
+                    [dataSource]="dataSource | filter: filter:'descripcion'"
+                  >
+                    <ng-container matColumnDef="descripcion">
+                      <th mat-header-cell *matHeaderCellDef>Descripción</th>
+                      <td mat-cell *matCellDef="let element">
+                        {{ element.descripcion }}
+                      </td>
                     </ng-container>
-                    <ng-container *ngIf="element.utilizado == '0'">
-                      <ng-container *ngIf="element.estado">
-                        <td mat-cell>
-                          <button
-                            mat-button
-                            type="button"
-                            class="btn-outline-danger"
-                            (click)="eliminarCampo(element._id)"
-                          >
-                            <mat-icon>remove</mat-icon>
-                          </button>
-                        </td>
-                      </ng-container>
-                      <ng-container *ngIf="!element.estado">
-                        <td mat-cell>
-                          <button
-                            mat-button
-                            type="button"
-                            class="btn-outline-success"
-                            (click)="habilitarInteres(element._id)"
-                          >
-                            <mat-icon>add</mat-icon>
-                          </button>
-                        </td>
+                    <ng-container matColumnDef="codigo">
+                      <th mat-header-cell *matHeaderCellDef>Código</th>
+                      <td mat-cell *matCellDef="let element">
+                        {{ element.codigo }}
+                      </td>
+                    </ng-container>
+                    <ng-container matColumnDef="descuento">
+                      <th mat-header-cell *matHeaderCellDef>Descuento</th>
+                      <td mat-cell *matCellDef="let element">
+                        {{ element.descuento }} %
+                      </td>
+                    </ng-container>
+                    <ng-container matColumnDef="tasaInteres">
+                      <th mat-header-cell *matHeaderCellDef>Tasa Interés</th>
+                      <td mat-cell *matCellDef="let element">
+                        {{ element.tasaInteres }} %
+                      </td>
+                    </ng-container>
+                    <ng-container matColumnDef="tipoInteres">
+                      <th mat-header-cell *matHeaderCellDef>Tipo Interés</th>
+                      <td mat-cell *matCellDef="let element">
+                        {{ element.tipoInteres }}
+                      </td>
+                    </ng-container>
+                    <ng-container matColumnDef="tasaInteresMora">
+                      <th mat-header-cell *matHeaderCellDef>Tasa Interés</th>
+                      <td mat-cell *matCellDef="let element">
+                        {{ element.tasaInteresMora }} %
+                      </td>
+                    </ng-container>
+                    <ng-container matColumnDef="tipoInteresMora">
+                      <th mat-header-cell *matHeaderCellDef>Tipo Interés</th>
+                      <td mat-cell *matCellDef="let element">
+                        {{ element.tipoInteresMora }}
+                      </td>
+                    </ng-container>
+                    <ng-container matColumnDef="acciones">
+                      <th mat-header-cell *matHeaderCellDef>Acciones</th>
+                      <ng-container *matCellDef="let element">
+                        <ng-container *ngIf="element.utilizado == '1'">
+                          <td mat-cell></td>
+                        </ng-container>
+                        <ng-container *ngIf="element.utilizado == '0'">
+                          <ng-container *ngIf="element.estado">
+                            <td mat-cell>
+                              <button
+                                mat-button
+                                type="button"
+                                class="btn-outline-danger"
+                                (click)="eliminarCampo(element._id)"
+                              >
+                                <mat-icon>remove</mat-icon>
+                              </button>
+                            </td>
+                          </ng-container>
+                          <ng-container *ngIf="!element.estado">
+                            <td mat-cell>
+                              <button
+                                mat-button
+                                type="button"
+                                class="btn-outline-success"
+                                (click)="habilitarInteres(element._id)"
+                              >
+                                <mat-icon>add</mat-icon>
+                              </button>
+                            </td>
+                          </ng-container>
+                        </ng-container>
                       </ng-container>
                     </ng-container>
-                  </ng-container>
-                </ng-container>
-                <tr mat-header-row *matHeaderRowDef="tabla; sticky: true"></tr>
-                <tr mat-row *matRowDef="let row; columns: tabla"></tr>
-              </table>
-              <div class="spinner-container" *ngIf="loading">
-                <mat-spinner></mat-spinner>
+                    <tr
+                      mat-header-row
+                      *matHeaderRowDef="tabla; sticky: true"
+                    ></tr>
+                    <tr mat-row *matRowDef="let row; columns: tabla"></tr>
+                  </table>
+                  <div class="spinner-container" *ngIf="loading">
+                    <mat-spinner></mat-spinner>
+                  </div>
+                  <mat-paginator
+                    #paginator
+                    [pageSizeOptions]="[5]"
+                    showFirstLastButtons
+                  ></mat-paginator>
+                </div>
               </div>
-              <mat-paginator
-                #paginator
-                [pageSizeOptions]="[5]"
-                showFirstLastButtons
-              ></mat-paginator>
             </div>
           </div>
         </div>

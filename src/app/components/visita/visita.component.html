@@ -5,7 +5,6 @@
         <form [formGroup]="myForm" (ngSubmit)="validarFormulario()" novalidate>
           <mat-radio-group
             class="example-radio-group"
-            formControlName="_opciones"
             (change)="selecionarOpcion($event.value)"
           >
             <mat-radio-button

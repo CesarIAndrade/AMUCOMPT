@@ -13,6 +13,7 @@ import { PanelAdministracionService } from "src/app/services/panel-administracio
 // Components
 import { ModalLocalidadSuperiorComponent } from "../modal-localidad-superior/modal-localidad-superior.component";
 import { DialogAlertComponent } from "../dialog-alert/dialog-alert.component";
+import { ComfirmDialogComponent } from '../comfirm-dialog/comfirm-dialog.component';
 
 @Component({
   selector: "app-comunidad",
@@ -24,7 +25,8 @@ export class ComunidadComponent implements OnInit {
     private panelAdministracionService: PanelAdministracionService,
     private modalLocalidadSuperior: MatDialog,
     private dialog: MatDialog,
-    private _snackBar: MatSnackBar
+    private _snackBar: MatSnackBar,
+    private confirmDialog: MatDialog
   ) {
     this.myForm = new FormGroup({
       _idComunidad: new FormControl(""),
@@ -155,28 +157,39 @@ export class ComunidadComponent implements OnInit {
   }
 
   async eliminarComunidad(idComunidad: string) {
-    var respuesta = await this.panelAdministracionService.eliminarComunidad(
-      idComunidad
-    );
-    if (respuesta["codigo"] == "200") {
-      var comunidades: any = this.comunidades.data;
-      var comunidad = comunidades.filter(
-        (comunidad) =>
-          comunidad["IdComunidad"] == this.myForm.get("_idComunidad").value
-      );
-      var index = comunidades.indexOf(comunidad[0]);
-      comunidades.splice(index, 1);
-      this.comunidades.data = comunidades;
-      this.myForm.reset();
-      this.panelAdministracionService.refresh$.emit();
-      this.openSnackBar("Se eliminó correctamente");
-    } else if (respuesta["codigo"] == "400") {
-      this.openDialog("Inténtalo de nuevo");
-    } else if (respuesta["codigo"] == "418") {
-      this.openDialog(respuesta["mensaje"]);
-    } else if (respuesta["codigo"] == "500") {
-      this.openDialog("Problemas con el servidor");
-    }
+    let dialogRef = this.confirmDialog.open(ComfirmDialogComponent, {
+      width: "250px",
+      height: "auto",
+      data: {
+        mensaje: ""
+      }
+    });
+    dialogRef.afterClosed().subscribe(async (result) => {
+      if (result) {
+        var respuesta = await this.panelAdministracionService.eliminarComunidad(
+          idComunidad
+        );
+        if (respuesta["codigo"] == "200") {
+          var comunidades: any = this.comunidades.data;
+          var comunidad = comunidades.filter(
+            (comunidad) =>
+              comunidad["IdComunidad"] == this.myForm.get("_idComunidad").value
+          );
+          var index = comunidades.indexOf(comunidad[0]);
+          comunidades.splice(index, 1);
+          this.comunidades.data = comunidades;
+          this.myForm.reset();
+          this.panelAdministracionService.refresh$.emit();
+          this.openSnackBar("Se eliminó correctamente");
+        } else if (respuesta["codigo"] == "400") {
+          this.openDialog("Inténtalo de nuevo");
+        } else if (respuesta["codigo"] == "418") {
+          this.openDialog(respuesta["mensaje"]);
+        } else if (respuesta["codigo"] == "500") {
+          this.openDialog("Problemas con el servidor");
+        }
+      }
+    });
   }
 
   abrirModal() {

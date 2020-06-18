@@ -1,0 +1,60 @@
+<mat-dialog-content style="overflow: hidden;">
+  <div class="row">
+    <ng-container *ngIf="data.flag">
+      <div class="col-lg-4 col-md-5">
+        <h5 style="text-align: center;">Realizar Abono</h5>
+        <form [formGroup]="myForm" (ngSubmit)="realizarAbono()" novalidate>
+          <mat-form-field class="example-full-width">
+            <input
+              matInput
+              type="text"
+              name="monto"
+              formControlName="_monto"
+              placeholder="Ingrese Monto"
+            />
+          </mat-form-field>
+          <button
+            mat-button
+            type="submit"
+            [disabled]="myForm.invalid"
+            color="primary"
+            class="btn-block bg-success text-white"
+          >
+            Guardar
+          </button>
+          <a mat-button type="button" class="btn-block" mat-dialog-close>
+            Cancelar
+          </a>
+        </form>
+      </div>
+    </ng-container>
+
+    <div [class]="sinForm">
+      <h5 style="text-align: center;">Lista Abonos</h5>
+      <div class="table_all">
+        <table
+          mat-table
+          [dataSource]="abonos"
+        >
+          <ng-container matColumnDef="fechaRegistro">
+            <th mat-header-cell *matHeaderCellDef>Fecha Registro</th>
+            <td mat-cell *matCellDef="let element">{{ element.FechaRegistro | date: "yyyy-MM-dd" }}</td>
+          </ng-container>
+    
+          <ng-container matColumnDef="monto">
+            <th mat-header-cell *matHeaderCellDef>Monto</th>
+            <td mat-cell *matCellDef="let element"> ${{element.Monto}} </td>
+          </ng-container>
+    
+          <tr mat-header-row *matHeaderRowDef="tablaAbonos; sticky: true"></tr>
+          <tr mat-row *matRowDef="let row; columns: tablaAbonos"></tr>
+        </table>
+        <mat-paginator
+          #paginator
+          [pageSizeOptions]="[4]"
+          showFirstLastButtons
+        ></mat-paginator>
+      </div>
+    </div>
+  </div>
+</mat-dialog-content>

@@ -1,5 +1,15 @@
 @media screen and (max-width: 990px) {
-    .margenTabla {
-      padding-top: 3%;
-    }	
+  .margenTabla {
+    padding-top: 3%;
   }
+}
+
+.example-radio-group {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.example-radio-button {
+  margin: 15px auto;
+}

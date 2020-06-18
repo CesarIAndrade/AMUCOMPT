@@ -58,6 +58,7 @@
           <mat-form-field class="example-full-width">
             <input
               matInput
+              name="nombreUsuario"
               formControlName="_valorUsuario"
               type="text"
               placeholder="Ingrese Usuario"
@@ -69,6 +70,7 @@
           <mat-form-field class="example-full-width">
             <input
               matInput
+              name="contrasena"
               formControlName="_contrasena"
               type="password"
               [type]="inputType"
@@ -115,6 +117,7 @@
             <input
               matInput
               [(ngModel)]="filterUsuario"
+              name="buscarUsuario"
               [ngModelOptions]="{standalone: true}"
               type="text"
               placeholder="Buscar Usuario"

@@ -7,6 +7,7 @@
           <mat-form-field class="example-full-width">
             <input
               matInput
+              name="provincia"
               formControlName="_provincia"
               type="text"
               placeholder="Ingrese Provincia"
@@ -42,6 +43,7 @@
           <mat-form-field class="example-full-width">
             <input
               matInput
+              name="buscarProvincia"
               (keyup)="search($event.target.value)"
               type="text"
               placeholder="Buscar Provincia"
