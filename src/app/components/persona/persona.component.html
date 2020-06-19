@@ -115,7 +115,7 @@
                 ></mat-spinner>
                 <mat-select
                   formControlName="_tipoTelefono1"
-                  (selectionChange)="seleccionarTipoTelefono1($event.value)"
+                  (selectionChange)="seleccionarTipoTelefono($event.value, 1, true)"
                 >
                   <mat-option
                     *ngFor="let item of tipoTelefonos"
@@ -162,7 +162,7 @@
                 ></mat-spinner>
                 <mat-select
                   formControlName="_tipoTelefono2"
-                  (selectionChange)="seleccionarTipoTelefono2($event.value)"
+                  (selectionChange)="seleccionarTipoTelefono($event.value, 2, true)"
                 >
                   <mat-option
                     *ngFor="let item of tipoTelefonos"

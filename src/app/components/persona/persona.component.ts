@@ -194,7 +194,7 @@ export class PersonaComponent implements OnInit {
     );
     this.myForm.get("_numeroDocumento").enable();
     this.myForm.get("_numeroDocumento").setValidators([]);
-    if(tipo.Documento == "CEDULA") {
+    if (tipo.Documento == "CEDULA") {
       this.myForm
         .get("_numeroDocumento")
         .setValidators([
@@ -205,7 +205,7 @@ export class PersonaComponent implements OnInit {
         ]);
       this.myForm.get("_numeroDocumento").updateValueAndValidity();
       this.digitosNumeroDocumento = 10;
-    } else if(tipo.Documento == "RUC") {
+    } else if (tipo.Documento == "RUC") {
       this.myForm
         .get("_numeroDocumento")
         .setValidators([
@@ -219,75 +219,9 @@ export class PersonaComponent implements OnInit {
     } else if (tipo.Documento == "PASAPORTE") {
       this.myForm
         .get("_numeroDocumento")
-        .setValidators([
-          Validators.required,
-          Validators.minLength(4),
-        ]);
+        .setValidators([Validators.required, Validators.minLength(4)]);
       this.myForm.get("_numeroDocumento").updateValueAndValidity();
       this.digitosNumeroDocumento = 15;
-    }
-  }
-
-
-  seleccionarTipoTelefono1(IdTipoTelefono) {
-    var tipo = this.tipoTelefonos.find(
-      (tipo) => tipo.IdTipoTelefono == IdTipoTelefono
-    );
-    this.myForm.get("_telefono1").enable();
-    this.myForm.get("_telefono1").setValidators([]);
-    if (tipo.Descripcion == "CELULAR") {
-      this.myForm
-        .get("_telefono1")
-        .setValidators([
-          Validators.required,
-          Validators.pattern(/^-?(0|[0-9]\d*)?$/),
-          Validators.maxLength(10),
-          Validators.minLength(10),
-        ]);
-      this.myForm.get("_telefono1").updateValueAndValidity();
-      this.digitosTelefono1 = 10;
-    } else {
-      this.digitosTelefono1 = 7;
-      this.myForm
-        .get("_telefono1")
-        .setValidators([
-          Validators.required,
-          Validators.pattern(/^-?(0|[0-9]\d*)?$/),
-          Validators.maxLength(7),
-          Validators.minLength(7),
-        ]);
-      this.myForm.get("_telefono1").updateValueAndValidity();
-      this.myForm.get("_telefono1").reset();
-    }
-  }
-
-  seleccionarTipoTelefono2(IdTipoTelefono) {
-    var tipo = this.tipoTelefonos.find(
-      (tipo) => tipo.IdTipoTelefono == IdTipoTelefono
-    );
-    this.myForm.get("_telefono2").enable();
-    this.myForm.get("_telefono2").setValidators([]);
-    if (tipo.Descripcion == "CELULAR") {
-      this.myForm
-        .get("_telefono2")
-        .setValidators([
-          Validators.pattern(/^-?(0|[0-9]\d*)?$/),
-          Validators.maxLength(10),
-          Validators.minLength(10),
-        ]);
-      this.myForm.get("_telefono2").updateValueAndValidity();
-      this.digitosTelefono2 = 10;
-    } else {
-      this.digitosTelefono2 = 7;
-      this.myForm
-        .get("_telefono2")
-        .setValidators([
-          Validators.pattern(/^-?(0|[0-9]\d*)?$/),
-          Validators.maxLength(7),
-          Validators.minLength(7),
-        ]);
-      this.myForm.get("_telefono2").updateValueAndValidity();
-      this.myForm.get("_telefono2").reset();
     }
   }
 
@@ -345,8 +279,46 @@ export class PersonaComponent implements OnInit {
     }
   }
 
+  seleccionarTipoTelefono(IdTipoTelefono, suffix, flag) {
+    var tipo = this.tipoTelefonos.find(
+      (tipo) => tipo.IdTipoTelefono == IdTipoTelefono
+    );
+    this.myForm.get(`_telefono${suffix}`).enable();
+    this.myForm.get(`_telefono${suffix}`).setValidators([]);
+    if (tipo.Descripcion == "CELULAR") {
+      this.myForm
+        .get(`_telefono${suffix}`)
+        .setValidators([
+          Validators.required,
+          Validators.pattern(/^-?(0|[0-9]\d*)?$/),
+          Validators.maxLength(10),
+          Validators.minLength(10),
+        ]);
+      this.myForm.get(`_telefono${suffix}`).updateValueAndValidity();
+      this.digitosTelefono1 = 10;
+    } else {
+      this.myForm
+        .get(`_telefono${suffix}`)
+        .setValidators([
+          Validators.required,
+          Validators.pattern(/^-?(0|[0-9]\d*)?$/),
+          Validators.maxLength(7),
+          Validators.minLength(7),
+        ]);
+      this.myForm.get(`_telefono${suffix}`).updateValueAndValidity();
+      this.digitosTelefono1 = 7;
+      if(flag) { this.myForm.get(`_telefono${suffix}`).reset(); }
+    }
+  }
+
   mostrarPersona(persona) {
-    console.log(persona);
+    this.myForm.reset();
+    persona.ListaTelefono.map((telefono, index) => {
+      this.myForm.get(`_idTelefono${index + 1}`).setValue(telefono.IdTelefono);
+      this.myForm.get(`_telefono${index + 1}`).setValue(telefono.Numero);      
+      this.myForm.get(`_tipoTelefono${index + 1}`).setValue(telefono.TipoTelefono.IdTipoTelefono);
+      this.seleccionarTipoTelefono(telefono.TipoTelefono.IdTipoTelefono, index + 1, false);
+    });
     this.myForm.get("_telefono1").enable();
     this.myForm.get("_telefono2").enable();
     this.nuevaPersona = "Modificar Persona";
@@ -367,22 +339,6 @@ export class PersonaComponent implements OnInit {
     this.myForm.get("_apellidos").setValue(apellidos);
     this.myForm.get("_tipoDocumento").setValue(persona.IdTipoDocumento);
     this.myForm.get("_numeroDocumento").setValue(persona.NumeroDocumento);
-    this.myForm
-      .get("_idTelefono1")
-      .setValue(persona.ListaTelefono[0].IdTelefono);
-    this.seleccionarTipoTelefono1(persona.ListaTelefono[0].TipoTelefono.IdTipoTelefono);
-    this.myForm.get("_telefono1").setValue(persona.ListaTelefono[0].Numero);
-    this.myForm
-      .get("_tipoTelefono1")
-      .setValue(persona.ListaTelefono[0].TipoTelefono.IdTipoTelefono);
-    this.seleccionarTipoTelefono2(persona.ListaTelefono[1].TipoTelefono.IdTipoTelefono);
-    this.myForm
-      .get("_idTelefono2")
-      .setValue(persona.ListaTelefono[1].IdTelefono);
-    this.myForm.get("_telefono2").setValue(persona.ListaTelefono[1].Numero);
-    this.myForm
-      .get("_tipoTelefono2")
-      .setValue(persona.ListaTelefono[1].TipoTelefono.IdTipoTelefono);
     this.myForm
       .get("_provincia")
       .setValue(
