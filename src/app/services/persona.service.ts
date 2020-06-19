@@ -141,10 +141,10 @@ export class PersonaService {
       .set("SegundoNombre", segundoNombre)
       .set("AsignacionPersonaComunidad.Parroquia.IdParroquia", parroquia)
       .set("AsignacionPersonaComunidad.Referencia", referencia)
-      .set("ListaTelefono[0].Numero", String(numeroTelefono1))
-      .set("ListaTelefono[1].Numero", String(numeroTelefono2))
-      .set("ListaTelefono[0].TipoTelefono.IdTipoTelefono", tipoTelefono1)
-      .set("ListaTelefono[1].TipoTelefono.IdTipoTelefono", tipoTelefono2)
+      .set("Telefono1", String(numeroTelefono1))
+      .set("Telefono2", String(numeroTelefono2))
+      .set("IdTipoTelefono1", tipoTelefono1)
+      .set("IdTipoTelefono2", tipoTelefono2)
       .set("Correo", correo)
       .set("encriptada", localStorage.getItem("miCuenta.postToken"));
     console.log(body);

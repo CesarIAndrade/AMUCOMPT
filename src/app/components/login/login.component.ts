@@ -2,11 +2,15 @@ import { Component, OnInit } from "@angular/core";
 import { Router, Routes } from "@angular/router";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 
+// Components
+import { DialogAlertComponent } from "../dialog-alert/dialog-alert.component";
+
+// Material
+import { MatDialog } from "@angular/material";
+
 // Services
 import { UsuarioService } from "src/app/services/usuario.service";
 import { SeguridadService } from "../../services/seguridad.service";
-import { MatDialog } from "@angular/material";
-import { DialogAlertComponent } from "../dialog-alert/dialog-alert.component";
 
 @Component({
   selector: "app-login",

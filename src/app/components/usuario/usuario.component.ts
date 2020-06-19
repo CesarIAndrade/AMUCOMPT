@@ -4,18 +4,20 @@ import { FormGroup, FormControl, Validators } from "@angular/forms";
 // Components
 import { ModalAsignacionUsuarioPersonaComponent } from "../modal-asignacion-usuario-persona/modal-asignacion-usuario-persona.component";
 import { ModalAsignacionUsuarioTiposUsuarioComponent } from "../modal-asignacion-usuario-tipos-usuario/modal-asignacion-usuario-tipos-usuario.component";
+import { DialogAlertComponent } from "../dialog-alert/dialog-alert.component";
+import { ModalReasignarClientesComponent } from "../modal-reasignar-clientes/modal-reasignar-clientes.component";
+import { ComfirmDialogComponent } from "../comfirm-dialog/comfirm-dialog.component";
+
+// Material
 import {
   MatPaginator,
   MatTableDataSource,
   MatSnackBar,
 } from "@angular/material";
-// Functional Components
 import { MatDialog } from "@angular/material/dialog";
 
 // Services
 import { UsuarioService } from "src/app/services/usuario.service";
-import { DialogAlertComponent } from "../dialog-alert/dialog-alert.component";
-import { ModalReasignarClientesComponent } from "../modal-reasignar-clientes/modal-reasignar-clientes.component";
 
 @Component({
   selector: "app-usuario",
@@ -24,12 +26,9 @@ import { ModalReasignarClientesComponent } from "../modal-reasignar-clientes/mod
 })
 export class UsuarioComponent implements OnInit {
   constructor(
-    private modalAsignacionUsuarioPersona: MatDialog,
-    private modalAsignacionUsuarioTiposUsuario: MatDialog,
     private usuarioService: UsuarioService,
     private dialog: MatDialog,
-    private _snackBar: MatSnackBar,
-    private modalReasignarClientesComponent: MatDialog
+    private _snackBar: MatSnackBar
   ) {
     this.myForm = new FormGroup({
       _idUsuario: new FormControl(""),
@@ -74,7 +73,7 @@ export class UsuarioComponent implements OnInit {
     if (respuesta["codigo"] == "200") {
       var usuarios: any = [];
       for (let usuario of respuesta["respuesta"]) {
-        if(usuario.IdUsuario == localStorage.getItem("miCuenta.idUsuario")) {
+        if (usuario.IdUsuario == localStorage.getItem("miCuenta.idUsuario")) {
           continue;
         } else {
           usuarios.push(usuario);
@@ -109,12 +108,15 @@ export class UsuarioComponent implements OnInit {
       this.myForm.get("_valorUsuario").value,
       this.myForm.get("_contrasena").value
     );
+    console.log(respuesta);
     if (respuesta["codigo"] == "200") {
       this.openSnackBar("Se ingresó correctamente");
       var usuarios: any = this.usuarios.data;
       usuarios.push(respuesta["respuesta"]);
       this.usuarios.data = usuarios;
       this.myForm.reset();
+    } else if (respuesta["codigo"] == "418") {
+      this.openDialog(respuesta["mensaje"]);
     }
   }
 
@@ -151,13 +153,10 @@ export class UsuarioComponent implements OnInit {
   }
 
   abrirModalAsignacionUsuarioPersona() {
-    let dialogRef = this.modalAsignacionUsuarioPersona.open(
-      ModalAsignacionUsuarioPersonaComponent,
-      {
-        width: "700px",
-        height: "auto",
-      }
-    );
+    let dialogRef = this.dialog.open(ModalAsignacionUsuarioPersonaComponent, {
+      width: "700px",
+      height: "auto",
+    });
     dialogRef.afterClosed().subscribe((result) => {
       if (result != null) {
         this.myForm.get("_cedula").setValue(result.cedula);
@@ -169,10 +168,10 @@ export class UsuarioComponent implements OnInit {
   }
 
   abrirModalAsignacionUsuarioTiposUsuario(usuario) {
-    let dialogRef = this.modalAsignacionUsuarioTiposUsuario.open(
+    let dialogRef = this.dialog.open(
       ModalAsignacionUsuarioTiposUsuarioComponent,
       {
-        width: "500px",
+        width: "auto",
         height: "auto",
         data: {
           idUsuario: usuario.IdUsuario,
@@ -188,14 +187,25 @@ export class UsuarioComponent implements OnInit {
   }
 
   async eliminarUsuario(usuario) {
-    var respuesta = await this.usuarioService.eliminarUsuario(
-      usuario.IdUsuario
-    );
-    if (respuesta["codigo"] == "200") {
-      this.consultarUsuarios();
-    } else if (respuesta["codigo"] == "409") {
-      this.reasignarClientes(usuario);
-    }
+    let dialogRef = this.dialog.open(ComfirmDialogComponent, {
+      width: "250px",
+      height: "auto",
+      data: {
+        mensaje: "",
+      },
+    });
+    dialogRef.afterClosed().subscribe(async (result) => {
+      if (result) {
+        var respuesta = await this.usuarioService.eliminarUsuario(
+          usuario.IdUsuario
+        );
+        if (respuesta["codigo"] == "200") {
+          this.consultarUsuarios();
+        } else if (respuesta["codigo"] == "409") {
+          this.reasignarClientes(usuario);
+        }
+      }
+    });
   }
 
   reasignarClientes(usuario) {
@@ -203,12 +213,12 @@ export class UsuarioComponent implements OnInit {
       width: "350px",
       height: "auto",
       data: {
-        usuario: usuario
+        usuario: usuario,
       },
     });
     dialogRef.afterClosed().subscribe((result) => {
       if (result != null) {
-        if(result.flag) {
+        if (result.flag) {
           this.eliminarUsuario(result.usuario);
         }
       }

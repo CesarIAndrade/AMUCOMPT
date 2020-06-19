@@ -1,5 +1,12 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
+
+// Components
+import { ModalLocalidadSuperiorComponent } from "../modal-localidad-superior/modal-localidad-superior.component";
+import { DialogAlertComponent } from "../dialog-alert/dialog-alert.component";
+import { ComfirmDialogComponent } from '../comfirm-dialog/comfirm-dialog.component';
+
+// Material
 import {
   MatDialog,
   MatPaginator,
@@ -10,11 +17,6 @@ import {
 // Services
 import { PanelAdministracionService } from "src/app/services/panel-administracion.service";
 
-// Components
-import { ModalLocalidadSuperiorComponent } from "../modal-localidad-superior/modal-localidad-superior.component";
-import { DialogAlertComponent } from "../dialog-alert/dialog-alert.component";
-import { ComfirmDialogComponent } from '../comfirm-dialog/comfirm-dialog.component';
-
 @Component({
   selector: "app-comunidad",
   templateUrl: "./comunidad.component.html",
@@ -23,10 +25,8 @@ import { ComfirmDialogComponent } from '../comfirm-dialog/comfirm-dialog.compone
 export class ComunidadComponent implements OnInit {
   constructor(
     private panelAdministracionService: PanelAdministracionService,
-    private modalLocalidadSuperior: MatDialog,
     private dialog: MatDialog,
     private _snackBar: MatSnackBar,
-    private confirmDialog: MatDialog
   ) {
     this.myForm = new FormGroup({
       _idComunidad: new FormControl(""),
@@ -157,7 +157,7 @@ export class ComunidadComponent implements OnInit {
   }
 
   async eliminarComunidad(idComunidad: string) {
-    let dialogRef = this.confirmDialog.open(ComfirmDialogComponent, {
+    let dialogRef = this.dialog.open(ComfirmDialogComponent, {
       width: "250px",
       height: "auto",
       data: {
@@ -193,7 +193,7 @@ export class ComunidadComponent implements OnInit {
   }
 
   abrirModal() {
-    let dialogRef = this.modalLocalidadSuperior.open(
+    let dialogRef = this.dialog.open(
       ModalLocalidadSuperiorComponent,
       {
         width: "400px",

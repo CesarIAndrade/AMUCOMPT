@@ -1,22 +1,22 @@
 import { Component, OnInit, ViewChild, ElementRef } from "@angular/core";
 import { FormGroup, Validators, FormControl } from "@angular/forms";
+import { Observable } from "rxjs";
+import { startWith, map } from "rxjs/operators";
 
 // Components
+import { DialogAlertComponent } from "../dialog-alert/dialog-alert.component";
+import { ComfirmDialogComponent } from "../comfirm-dialog/comfirm-dialog.component";
+
+// Material
 import {
   MatPaginator,
   MatTableDataSource,
   MatSnackBar,
 } from "@angular/material";
-// Functional Components
 import { MatDialog } from "@angular/material/dialog";
 
 // Services
 import { InventarioService } from "src/app/services/inventario.service";
-
-import { Observable } from "rxjs";
-import { startWith, map } from "rxjs/operators";
-import { DialogAlertComponent } from "../dialog-alert/dialog-alert.component";
-import { ComfirmDialogComponent } from "../comfirm-dialog/comfirm-dialog.component";
 
 @Component({
   selector: "app-producto",
@@ -27,8 +27,7 @@ export class ProductoComponent implements OnInit {
   constructor(
     private inventarioService: InventarioService,
     private dialog: MatDialog,
-    private _snackBar: MatSnackBar,
-    private confirmDialog: MatDialog
+    private _snackBar: MatSnackBar
   ) {
     this.myForm = new FormGroup({
       _nombre: new FormControl("", [Validators.required]),
@@ -258,7 +257,7 @@ export class ProductoComponent implements OnInit {
   }
 
   async eliminarConfiguracionProducto(idConfigurarProducto, idProducto) {
-    let dialogRef = this.confirmDialog.open(ComfirmDialogComponent, {
+    let dialogRef = this.dialog.open(ComfirmDialogComponent, {
       width: "250px",
       height: "auto",
       data: {

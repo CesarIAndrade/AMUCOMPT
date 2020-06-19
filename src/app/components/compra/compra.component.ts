@@ -1,21 +1,21 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
-import { MatDialog, MatSnackBar } from "@angular/material";
 import { Observable } from "rxjs";
+import { Router } from "@angular/router";
+
+// Material
+import { MatDialog, MatSnackBar } from "@angular/material";
 import { MatPaginator, MatTableDataSource } from "@angular/material";
 
 // Component
 import { ModalAsignacionConfiguracionProductoComponent } from "../modal-asignacion-configuracion-producto/modal-asignacion-configuracion-producto.component";
+import { ModalLotesComponent } from "../modal-lotes/modal-lotes.component";
+import { DialogAlertComponent } from "../dialog-alert/dialog-alert.component";
 
 // Services
 import { InventarioService } from "src/app/services/inventario.service";
 import { CompraService } from "src/app/services/compra.service";
 import { FacturaService } from "src/app/services/factura.service";
-
-// SweetAlert
-import { Router } from "@angular/router";
-import { ModalLotesComponent } from "../modal-lotes/modal-lotes.component";
-import { DialogAlertComponent } from "../dialog-alert/dialog-alert.component";
 
 @Component({
   selector: "app-compra",
@@ -24,12 +24,10 @@ import { DialogAlertComponent } from "../dialog-alert/dialog-alert.component";
 })
 export class CompraComponent implements OnInit {
   constructor(
-    private modalAsignacionConfiguracionProducto: MatDialog,
     private inventarioService: InventarioService,
     private compraService: CompraService,
     private facturaService: FacturaService,
     private router: Router,
-    private modalLotes: MatDialog,
     private dialog: MatDialog,
     private _snackBar: MatSnackBar
   ) {
@@ -196,7 +194,7 @@ export class CompraComponent implements OnInit {
   }
 
   seleccionarProducto() {
-    let dialogRef = this.modalAsignacionConfiguracionProducto.open(
+    let dialogRef = this.dialog.open(
       ModalAsignacionConfiguracionProductoComponent,
       {
         width: "600px",
@@ -248,7 +246,7 @@ export class CompraComponent implements OnInit {
   }
 
   seleccionarLote() {
-    let dialogRef = this.modalLotes.open(ModalLotesComponent, {
+    let dialogRef = this.dialog.open(ModalLotesComponent, {
       width: "auto",
       height: "auto",
       data: {

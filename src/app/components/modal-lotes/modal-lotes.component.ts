@@ -1,10 +1,14 @@
 import { Component, OnInit, Inject, ViewChild } from "@angular/core";
+
+// Material
 import {
   MAT_DIALOG_DATA,
   MatTableDataSource,
   MatPaginator,
   MatDialog,
 } from "@angular/material";
+
+// Services
 import { InventarioService } from "src/app/services/inventario.service";
 
 @Component({

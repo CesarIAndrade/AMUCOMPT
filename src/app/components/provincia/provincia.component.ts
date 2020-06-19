@@ -1,5 +1,11 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
+
+// Components
+import { DialogAlertComponent } from "../dialog-alert/dialog-alert.component";
+import { ComfirmDialogComponent } from "../comfirm-dialog/comfirm-dialog.component";
+
+// Material
 import {
   MatTableDataSource,
   MatPaginator,
@@ -9,8 +15,7 @@ import {
 
 // Services
 import { PanelAdministracionService } from "src/app/services/panel-administracion.service";
-import { DialogAlertComponent } from "../dialog-alert/dialog-alert.component";
-import { ComfirmDialogComponent } from "../comfirm-dialog/comfirm-dialog.component";
+
 @Component({
   selector: "app-provincia",
   templateUrl: "./provincia.component.html",
@@ -20,8 +25,7 @@ export class ProvinciaComponent implements OnInit {
   constructor(
     private panelAdministracionService: PanelAdministracionService,
     private dialog: MatDialog,
-    private _snackBar: MatSnackBar,
-    private confirmDialog: MatDialog
+    private _snackBar: MatSnackBar
   ) {
     this.myForm = new FormGroup({
       _idProvincia: new FormControl(""),
@@ -89,7 +93,6 @@ export class ProvinciaComponent implements OnInit {
       });
       this.provincias.data = provincias;
       this.myForm.reset();
-      this.myForm.setErrors({ invalid: true });
       this.openSnackBar("Se ingresó correctamente");
     } else if (provincia["codigo"] == "400") {
       this.openDialog("Inténtalo de nuevo");
@@ -132,7 +135,7 @@ export class ProvinciaComponent implements OnInit {
   }
 
   eliminarProvincia(idProvincia) {
-    let dialogRef = this.confirmDialog.open(ComfirmDialogComponent, {
+    let dialogRef = this.dialog.open(ComfirmDialogComponent, {
       width: "250px",
       height: "auto",
       data: {

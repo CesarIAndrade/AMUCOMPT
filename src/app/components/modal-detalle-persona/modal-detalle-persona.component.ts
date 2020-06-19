@@ -1,6 +1,7 @@
 import { Component, OnInit, Inject } from "@angular/core";
+
+// Material
 import { MAT_DIALOG_DATA } from "@angular/material/dialog";
-import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 
 @Component({
   selector: "app-modal-detalle-persona",

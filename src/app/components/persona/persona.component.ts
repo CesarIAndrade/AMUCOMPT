@@ -6,18 +6,18 @@ import {
   FormGroupDirective,
   NgForm,
 } from "@angular/forms";
-import { ErrorStateMatcher } from "@angular/material/core";
 
 // Components
 import { DialogAlertComponent } from "../dialog-alert/dialog-alert.component";
 
-// Functional Components
+// Material
 import { MatDialog } from "@angular/material/dialog";
 import {
   MatPaginator,
   MatTableDataSource,
   MatSnackBar,
 } from "@angular/material";
+import { ErrorStateMatcher } from "@angular/material/core";
 
 // Services
 import { PersonaService } from "../../services/persona.service";
@@ -38,18 +38,9 @@ export class PersonaComponent implements OnInit {
     this.myForm = new FormGroup({
       _nombres: new FormControl("", [Validators.required]),
       _apellidos: new FormControl("", [Validators.required]),
-      _numeroDocumento: new FormControl("", [
-        Validators.required,
-        Validators.maxLength(10),
-        Validators.minLength(10),
-        Validators.pattern(/^-?(0|[1-9]\d*)?$/),
-      ]),
+      _numeroDocumento: new FormControl(""),
       _telefono1: new FormControl(""),
-      _telefono2: new FormControl("", [
-        Validators.maxLength(10),
-        Validators.minLength(10),
-        Validators.pattern(/^-?(0|[1-9]\d*)?$/),
-      ]),
+      _telefono2: new FormControl(""),
       _correo: new FormControl("", [Validators.email]),
       _tipoDocumento: new FormControl("", [Validators.required]),
       _tipoTelefono1: new FormControl("", [Validators.required]),
@@ -85,6 +76,7 @@ export class PersonaComponent implements OnInit {
   nuevaPersona = "Nueva Persona";
   digitosTelefono1 = 0;
   digitosTelefono2 = 0;
+  digitosNumeroDocumento = 0;
   mostrarTablaPersonasEnVista = false;
 
   cantones: any[] = [];
@@ -196,6 +188,47 @@ export class PersonaComponent implements OnInit {
     }
   }
 
+  seleccionarTipoDocumento(IdTipoDocumento) {
+    var tipo = this.tipoDocumentos.find(
+      (tipo) => tipo.IdTipoDocumento == IdTipoDocumento
+    );
+    this.myForm.get("_numeroDocumento").enable();
+    this.myForm.get("_numeroDocumento").setValidators([]);
+    if(tipo.Documento == "CEDULA") {
+      this.myForm
+        .get("_numeroDocumento")
+        .setValidators([
+          Validators.required,
+          Validators.pattern(/^-?(0|[0-9]\d*)?$/),
+          Validators.maxLength(10),
+          Validators.minLength(10),
+        ]);
+      this.myForm.get("_numeroDocumento").updateValueAndValidity();
+      this.digitosNumeroDocumento = 10;
+    } else if(tipo.Documento == "RUC") {
+      this.myForm
+        .get("_numeroDocumento")
+        .setValidators([
+          Validators.required,
+          Validators.pattern(/^-?(0|[0-9]\d*)?$/),
+          Validators.maxLength(13),
+          Validators.minLength(13),
+        ]);
+      this.myForm.get("_numeroDocumento").updateValueAndValidity();
+      this.digitosNumeroDocumento = 13;
+    } else if (tipo.Documento == "PASAPORTE") {
+      this.myForm
+        .get("_numeroDocumento")
+        .setValidators([
+          Validators.required,
+          Validators.minLength(4),
+        ]);
+      this.myForm.get("_numeroDocumento").updateValueAndValidity();
+      this.digitosNumeroDocumento = 15;
+    }
+  }
+
+
   seleccionarTipoTelefono1(IdTipoTelefono) {
     var tipo = this.tipoTelefonos.find(
       (tipo) => tipo.IdTipoTelefono == IdTipoTelefono
@@ -297,6 +330,10 @@ export class PersonaComponent implements OnInit {
         this.personas.data = personas;
         this.myForm.get("_telefono1").disable();
         this.myForm.get("_telefono2").disable();
+        this.myForm.get("_numeroDocumento").disable();
+        this.digitosTelefono1 = 0;
+        this.digitosTelefono2 = 0;
+        this.digitosNumeroDocumento = 0;
         this.myForm.reset();
       } else if (respuesta["codigo"] == "400") {
         this.openDialog("Inténtalo de nuevo");
@@ -440,6 +477,7 @@ export class PersonaComponent implements OnInit {
     }
     this.myForm.get("_telefono1").disable();
     this.myForm.get("_telefono2").disable();
+    this.myForm.get("_numeroDocumento").disable();
   }
 
   tablaPersonas = [

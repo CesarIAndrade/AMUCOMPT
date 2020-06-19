@@ -1,12 +1,18 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { FormGroup, FormControl } from "@angular/forms";
+import { Router } from "@angular/router";
+
+// Components
+import { ComunidadesBottomSheet } from "./comunidades-bottom-sheet.component";
+
+// Material
 import {
   MatTableDataSource,
   MatPaginator,
   MatBottomSheet,
 } from "@angular/material";
-import { ComunidadesBottomSheet } from "./comunidades-bottom-sheet.component";
-import { Router } from "@angular/router";
+
+// services
 import { SeguimientoService } from "src/app/services/seguimiento.service";
 
 @Component({

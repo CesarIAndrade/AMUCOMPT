@@ -6,9 +6,15 @@ import {
   Output,
   EventEmitter,
 } from "@angular/core";
-import { MatTableDataSource, MatPaginator, MatDialog } from "@angular/material";
-import { PersonaService } from "src/app/services/persona.service";
+
+// Components
 import { ModalDetallePersonaComponent } from "../modal-detalle-persona/modal-detalle-persona.component";
+
+// Material
+import { MatTableDataSource, MatPaginator, MatDialog } from "@angular/material";
+
+// Services
+import { PersonaService } from "src/app/services/persona.service";
 
 @Component({
   selector: "app-tabla-persona",

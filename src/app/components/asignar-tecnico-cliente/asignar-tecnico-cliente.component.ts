@@ -1,9 +1,15 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { FormGroup, FormControl } from "@angular/forms";
-import { UsuarioService } from "src/app/services/usuario.service";
-import { MatPaginator, MatTableDataSource, MatDialog } from "@angular/material";
-import { SeguimientoService } from "src/app/services/seguimiento.service";
+
+// Components
 import { DialogAlertComponent } from "../dialog-alert/dialog-alert.component";
+
+// Material
+import { MatPaginator, MatTableDataSource, MatDialog } from "@angular/material";
+
+// Services
+import { UsuarioService } from "src/app/services/usuario.service";
+import { SeguimientoService } from "src/app/services/seguimiento.service";
 
 @Component({
   selector: "app-asignar-tecnico-cliente",

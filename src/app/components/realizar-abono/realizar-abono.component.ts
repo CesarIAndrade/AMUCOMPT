@@ -1,13 +1,19 @@
 import { Component, OnInit, Inject, ViewChild } from "@angular/core";
+import { FormGroup, FormControl, Validators } from "@angular/forms";
+
+// Components
+import { ComfirmDialogComponent } from "../comfirm-dialog/comfirm-dialog.component";
+
+// Material
 import {
   MAT_DIALOG_DATA,
   MatDialog,
   MatTableDataSource,
   MatPaginator,
 } from "@angular/material";
-import { FormGroup, FormControl, Validators } from "@angular/forms";
+
+// Services
 import { SeguimientoService } from "src/app/services/seguimiento.service";
-import { ComfirmDialogComponent } from "../comfirm-dialog/comfirm-dialog.component";
 
 @Component({
   selector: "app-realizar-abono",
@@ -19,8 +25,7 @@ export class RealizarAbonoComponent implements OnInit {
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     private seguimientoService: SeguimientoService,
-    private modalRealizarAbono: MatDialog,
-    private confirmDialog: MatDialog
+    private dialog: MatDialog
   ) {
     if (data.flag) {
       this.sinForm = "col-lg-8 col-md-7";
@@ -42,7 +47,7 @@ export class RealizarAbonoComponent implements OnInit {
   abonos = new MatTableDataSource<Element[]>();
 
   async realizarAbono() {
-    let dialogRef = this.confirmDialog.open(ComfirmDialogComponent, {
+    let dialogRef = this.dialog.open(ComfirmDialogComponent, {
       width: "250px",
       height: "auto",
     });
@@ -57,7 +62,7 @@ export class RealizarAbonoComponent implements OnInit {
           console.log(respuesta);
           if (respuesta["codigo"] == "201" || respuesta["codigo"] == "200") {
             this.seguimientoService.refresh$.emit();
-            this.modalRealizarAbono.closeAll();
+            this.dialog.closeAll();
             this.consultarAbonos();
           }
         }

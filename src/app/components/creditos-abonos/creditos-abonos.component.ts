@@ -1,8 +1,14 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
-import { SeguimientoService } from "src/app/services/seguimiento.service";
-import { MatTableDataSource, MatPaginator, MatDialog } from "@angular/material";
+
+// Components
 import { RealizarAbonoComponent } from "../realizar-abono/realizar-abono.component";
+
+// Material
+import { MatTableDataSource, MatPaginator, MatDialog } from "@angular/material";
+
+// Services
+import { SeguimientoService } from "src/app/services/seguimiento.service";
 
 @Component({
   selector: "app-creditos-abonos",
@@ -40,7 +46,7 @@ export class CreditosAbonosComponent implements OnInit {
       var facturas: any = [];
       respuesta["respuesta"].map((factura) => {
         var p = 100;
-        var fechaActual = new Date();
+        var fechaActual = new Date(); 
         var fechaFactura = new Date(factura.FechaGeneracion);
         var fechaFinalCredito = new Date(
           factura.ConfigurarVenta.FechaFinalCredito
@@ -60,7 +66,7 @@ export class CreditosAbonosComponent implements OnInit {
         } else {
           if (mora < 0) {
             estado = "badge badge-danger";
-            filtroEstado = "Urgente";
+            filtroEstado = "Mora";
           } else {
             if (Math.round(intervalo) <= 50) {
               estado = "badge badge-success";

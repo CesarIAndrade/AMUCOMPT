@@ -1,7 +1,12 @@
 import { Component, OnInit, Inject, ViewChild } from "@angular/core";
-import { PersonaService } from "src/app/services/persona.service";
+
+// Material
 import { MatPaginator, MatTableDataSource } from "@angular/material";
 import { MAT_DIALOG_DATA } from "@angular/material/dialog";
+
+// Services
+import { PersonaService } from "src/app/services/persona.service";
+
 @Component({
   selector: "app-modal-asignacion-usuario-persona",
   templateUrl: "./modal-asignacion-usuario-persona.component.html",

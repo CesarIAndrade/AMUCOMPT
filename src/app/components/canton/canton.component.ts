@@ -1,5 +1,12 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
+
+// Components
+import { ModalLocalidadSuperiorComponent } from "../modal-localidad-superior/modal-localidad-superior.component";
+import { DialogAlertComponent } from "../dialog-alert/dialog-alert.component";
+import { ComfirmDialogComponent } from "../comfirm-dialog/comfirm-dialog.component";
+
+// Material
 import {
   MatDialog,
   MatTableDataSource,
@@ -9,11 +16,6 @@ import {
 
 // Services
 import { PanelAdministracionService } from "src/app/services/panel-administracion.service";
-
-// Components
-import { ModalLocalidadSuperiorComponent } from "../modal-localidad-superior/modal-localidad-superior.component";
-import { DialogAlertComponent } from "../dialog-alert/dialog-alert.component";
-import { ComfirmDialogComponent } from "../comfirm-dialog/comfirm-dialog.component";
 
 @Component({
   selector: "app-canton",

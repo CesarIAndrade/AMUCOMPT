@@ -1,11 +1,15 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
+
+// Material
 import {
   MatTableDataSource,
   MatPaginator,
   MatSnackBar,
 } from "@angular/material";
+
+// Services
 import { SeguimientoService } from 'src/app/services/seguimiento.service';
 
 @Component({

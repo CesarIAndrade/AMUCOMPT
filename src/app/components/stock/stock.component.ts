@@ -1,5 +1,8 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
+
+// Material
 import { MatPaginator, MatTableDataSource } from "@angular/material";
+
 // Services
 import { InventarioService } from "src/app/services/inventario.service";
 

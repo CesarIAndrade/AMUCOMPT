@@ -108,6 +108,9 @@
           <tr mat-header-row *matHeaderRowDef="tabla; sticky: true"></tr>
           <tr mat-row *matRowDef="let row; columns: tabla"></tr>
         </table>
+        <div class="spinner-container" *ngIf="loading">
+          <mat-spinner></mat-spinner>
+        </div>
         <mat-paginator
           #paginator
           [pageSizeOptions]="[4]"

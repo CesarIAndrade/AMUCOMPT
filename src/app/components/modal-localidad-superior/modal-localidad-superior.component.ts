@@ -1,4 +1,10 @@
 import { Component, OnInit, Inject, ViewChild } from "@angular/core";
+import { FormGroup, FormControl, Validators } from "@angular/forms";
+
+// Components
+import { DialogAlertComponent } from "../dialog-alert/dialog-alert.component";
+
+// Material
 import {
   MAT_DIALOG_DATA,
   MatPaginator,
@@ -9,8 +15,6 @@ import {
 
 // Services
 import { PanelAdministracionService } from "src/app/services/panel-administracion.service";
-import { FormGroup, FormControl, Validators } from "@angular/forms";
-import { DialogAlertComponent } from "../dialog-alert/dialog-alert.component";
 
 @Component({
   selector: "app-modal-localidad-superior",
@@ -22,7 +26,6 @@ export class ModalLocalidadSuperiorComponent implements OnInit {
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     private panelAdministracionService: PanelAdministracionService,
-    private modalLocalidadSuperior: MatDialog,
     private dialog: MatDialog,
     private _snackBar: MatSnackBar
   ) {
@@ -36,7 +39,7 @@ export class ModalLocalidadSuperiorComponent implements OnInit {
 
   nombre_tabla = "";
   filter_tabla = "";
-
+  loading = true;
   datosLocalidad = {
     idLocalidad: "",
     descripcion: "",
@@ -46,48 +49,44 @@ export class ModalLocalidadSuperiorComponent implements OnInit {
   @ViewChild("paginator", { static: false }) paginator: MatPaginator;
   lista_tabla = new MatTableDataSource<Element[]>();
 
-  consultarProvincias() {
-    this.panelAdministracionService
-      .consultarProvincias()
-      .then((ok) => {
-        this.lista_tabla.data = [];
-        this.lista_tabla.data = ok["respuesta"];
-        this.lista_tabla.paginator = this.paginator;
-      })
-      .catch((error) => console.log(error));
+  async consultarProvincias() {
+    var respuesta = await this.panelAdministracionService.consultarProvincias();
+    if (respuesta["codigo"] == "200") {
+      this.loading = false;
+      this.lista_tabla.data = [];
+      this.lista_tabla.data = respuesta["respuesta"];
+      this.lista_tabla.paginator = this.paginator;
+    }
   }
 
-  consultarCantones() {
-    this.panelAdministracionService
-      .consultarCantones()
-      .then((ok) => {
-        this.lista_tabla.data = [];
-        this.lista_tabla.data = ok["respuesta"];
-        this.lista_tabla.paginator = this.paginator;
-      })
-      .catch((error) => console.log(error));
+  async consultarCantones() {
+    var respuesta = await this.panelAdministracionService.consultarCantones();
+    if (respuesta["codigo"] == "200") {
+      this.loading = false;
+      this.lista_tabla.data = [];
+      this.lista_tabla.data = respuesta["respuesta"];
+      this.lista_tabla.paginator = this.paginator;
+    }
   }
 
-  consultarParroquias() {
-    this.panelAdministracionService
-      .consultarParroquias()
-      .then((ok) => {
-        this.lista_tabla.data = [];
-        this.lista_tabla.data = ok["respuesta"];
-        this.lista_tabla.paginator = this.paginator;
-      })
-      .catch((error) => console.log(error));
+  async consultarParroquias() {
+    var respuesta = await this.panelAdministracionService.consultarParroquias();
+    if (respuesta["codigo"] == "200") {
+      this.loading = false;
+      this.lista_tabla.data = [];
+      this.lista_tabla.data = respuesta["respuesta"];
+      this.lista_tabla.paginator = this.paginator;
+    }
   }
 
-  consultarComunidades() {
-    this.panelAdministracionService
-      .consultarComunidades()
-      .then((ok) => {
-        this.lista_tabla.data = [];
-        this.lista_tabla.data = ok["respuesta"];
-        this.lista_tabla.paginator = this.paginator;
-      })
-      .catch((error) => console.log(error));
+  async consultarComunidades() {
+    var respuesta = await this.panelAdministracionService.consultarComunidades();
+    if (respuesta["codigo"] == "200") {
+      this.loading = false;
+      this.lista_tabla.data = [];
+      this.lista_tabla.data = respuesta["respuesta"];
+      this.lista_tabla.paginator = this.paginator;
+    }
   }
 
   setLocalidad(localidad) {
@@ -104,7 +103,7 @@ export class ModalLocalidadSuperiorComponent implements OnInit {
   }
 
   abrirModal() {
-    let dialogRef = this.modalLocalidadSuperior.open(
+    let dialogRef = this.dialog.open(
       ModalLocalidadSuperiorComponent,
       {
         width: "400px",

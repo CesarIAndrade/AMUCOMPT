@@ -1,16 +1,22 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
-import { InventarioService } from "src/app/services/inventario.service";
+import { Observable, of } from "rxjs";
+import { map, startWith } from "rxjs/operators";
+
+// Components
+import { DialogAlertComponent } from "../dialog-alert/dialog-alert.component";
+import { ComfirmDialogComponent } from "../comfirm-dialog/comfirm-dialog.component";
+
+// Material
 import {
   MatTableDataSource,
   MatPaginator,
   MatDialog,
   MatSnackBar,
 } from "@angular/material";
-import { Observable, of } from "rxjs";
-import { map, startWith } from "rxjs/operators";
-import { DialogAlertComponent } from "../dialog-alert/dialog-alert.component";
-import { ComfirmDialogComponent } from "../comfirm-dialog/comfirm-dialog.component";
+
+// Services
+import { InventarioService } from "src/app/services/inventario.service";
 
 @Component({
   selector: "app-configuracion-producto",
@@ -21,8 +27,7 @@ export class ConfiguracionProductoComponent implements OnInit {
   constructor(
     private inventarioService: InventarioService,
     private dialog: MatDialog,
-    private _snackBar: MatSnackBar,
-    private confirmDialog: MatDialog
+    private _snackBar: MatSnackBar
   ) {
     this.myForm = new FormGroup({
       _campo: new FormControl("", [Validators.required]),
@@ -144,7 +149,7 @@ export class ConfiguracionProductoComponent implements OnInit {
   }
 
   eliminarTipoProducto(idTipoProducto) {
-    let dialogRef = this.confirmDialog.open(ComfirmDialogComponent, {
+    let dialogRef = this.dialog.open(ComfirmDialogComponent, {
       width: "250px",
       height: "auto",
       data: {
@@ -219,7 +224,7 @@ export class ConfiguracionProductoComponent implements OnInit {
   }
 
   async eliminarPresentacion(idPresentacion) {
-    let dialogRef = this.confirmDialog.open(ComfirmDialogComponent, {
+    let dialogRef = this.dialog.open(ComfirmDialogComponent, {
       width: "250px",
       height: "auto",
       data: {
@@ -294,7 +299,7 @@ export class ConfiguracionProductoComponent implements OnInit {
   }
 
   eliminarMedida(idMedida) {
-    let dialogRef = this.confirmDialog.open(ComfirmDialogComponent, {
+    let dialogRef = this.dialog.open(ComfirmDialogComponent, {
       width: "250px",
       height: "auto",
       data: {
@@ -402,7 +407,7 @@ export class ConfiguracionProductoComponent implements OnInit {
   }
 
   eliminarKit(idKit) {
-    let dialogRef = this.confirmDialog.open(ComfirmDialogComponent, {
+    let dialogRef = this.dialog.open(ComfirmDialogComponent, {
       width: "250px",
       height: "auto",
       data: {
@@ -491,7 +496,7 @@ export class ConfiguracionProductoComponent implements OnInit {
   }
 
   eliminarDeshabilitarInteres(idInteres) {
-    let dialogRef = this.confirmDialog.open(ComfirmDialogComponent, {
+    let dialogRef = this.dialog.open(ComfirmDialogComponent, {
       width: "250px",
       height: "auto",
       data: {

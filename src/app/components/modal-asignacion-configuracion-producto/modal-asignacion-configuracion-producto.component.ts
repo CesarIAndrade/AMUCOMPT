@@ -1,14 +1,20 @@
 import { Component, OnInit, Inject, ViewChild } from "@angular/core";
-import { InventarioService } from "src/app/services/inventario.service";
+import { Router } from "@angular/router";
+
+// Components
+import { DialogAlertComponent } from "../dialog-alert/dialog-alert.component";
+
+// Material
 import {
   MAT_DIALOG_DATA,
   MatDialog,
   MatDialogRef,
 } from "@angular/material/dialog";
-import { Router } from "@angular/router";
-import { VentaService } from "src/app/services/venta.service";
 import { MatPaginator, MatTableDataSource } from "@angular/material";
-import { DialogAlertComponent } from "../dialog-alert/dialog-alert.component";
+
+// Services
+import { VentaService } from "src/app/services/venta.service";
+import { InventarioService } from "src/app/services/inventario.service";
 
 @Component({
   selector: "app-modal-asignacion-configuracion-producto",

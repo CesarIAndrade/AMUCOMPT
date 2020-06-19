@@ -1,6 +1,10 @@
 import { Component, OnInit, Inject } from "@angular/core";
+
+// Material
+import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
+
+// Services
 import { UsuarioService } from "src/app/services/usuario.service";
-import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from "@angular/material/dialog";
 
 @Component({
   selector: "app-modal-asignacion-usuario-tipos-usuario",
@@ -11,7 +15,9 @@ export class ModalAsignacionUsuarioTiposUsuarioComponent implements OnInit {
   constructor(
     private usuarioService: UsuarioService,
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private modalAsignacionUsuarioTiposUsuarioComponent: MatDialogRef<ModalAsignacionUsuarioTiposUsuarioComponent>,
+    private modalAsignacionUsuarioTiposUsuarioComponent: MatDialogRef<
+      ModalAsignacionUsuarioTiposUsuarioComponent
+    >
   ) {}
 
   botonEliminar = false;
@@ -20,7 +26,7 @@ export class ModalAsignacionUsuarioTiposUsuarioComponent implements OnInit {
   tipoUsuario: string;
   tipoUsuarioSelecionado = true;
 
-  seleccionarTipoUsuario(event) {    
+  seleccionarTipoUsuario(event) {
     this.tipoUsuario = event.value;
     this.tipoUsuarioSelecionado = false;
   }
@@ -45,7 +51,7 @@ export class ModalAsignacionUsuarioTiposUsuarioComponent implements OnInit {
     );
     if (tipoUsuarios["codigo"] == "200") {
       this.listaTipoUsuario = tipoUsuarios["respuesta"];
-      if(this.listaTipoUsuario.length == 0) {
+      if (this.listaTipoUsuario.length == 0) {
         this.modalAsignacionUsuarioTiposUsuarioComponent.disableClose = true;
       } else {
         this.modalAsignacionUsuarioTiposUsuarioComponent.disableClose = false;
@@ -70,7 +76,9 @@ export class ModalAsignacionUsuarioTiposUsuarioComponent implements OnInit {
       this.consultarTipoUsuariosAsignados();
       this.consultarTipoUsuariosSinAsignar();
     } else if (respuesta["codigo"] == "201") {
-      this.modalAsignacionUsuarioTiposUsuarioComponent.close(respuesta["mensaje"]);
+      this.modalAsignacionUsuarioTiposUsuarioComponent.close(
+        respuesta["mensaje"]
+      );
     }
   }
 

@@ -63,7 +63,10 @@
                   diameter="20"
                   matSuffix
                 ></mat-spinner>
-                <mat-select formControlName="_tipoDocumento">
+                <mat-select
+                  formControlName="_tipoDocumento"
+                  (selectionChange)="seleccionarTipoDocumento($event.value)"
+                >
                   <mat-option
                     *ngFor="let item of tipoDocumentos"
                     [value]="item.IdTipoDocumento"
@@ -84,11 +87,13 @@
                   name="numeroDocumento"
                   formControlName="_numeroDocumento"
                   #numeroDocumento
-                  maxlength="10"
+                  [maxlength]="digitosNumeroDocumento"
                   placeholder="Ingrese Número Documento"
                 />
                 <mat-hint align="end"
-                  >{{ numeroDocumento.value?.length || 0 }}/10</mat-hint
+                  >{{ numeroDocumento.value?.length || 0 }}/{{
+                    digitosNumeroDocumento
+                  }}</mat-hint
                 >
                 <button disabled mat-button matPrefix mat-icon-button>
                   <mat-icon>*</mat-icon>

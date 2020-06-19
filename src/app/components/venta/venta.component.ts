@@ -1,6 +1,14 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { Router } from "@angular/router";
+
+// Components
+import { ModalAsignacionConfiguracionProductoComponent } from "../modal-asignacion-configuracion-producto/modal-asignacion-configuracion-producto.component";
+import { ModalLocalidadSuperiorComponent } from "../modal-localidad-superior/modal-localidad-superior.component";
+import { DialogAlertComponent } from "../dialog-alert/dialog-alert.component";
+import { ModalPersonaComponent } from "../modal-persona/modal-persona.component";
+
+// Material
 import {
   MatTableDataSource,
   MatPaginator,
@@ -8,16 +16,10 @@ import {
 } from "@angular/material";
 import { MatDialog } from "@angular/material/dialog";
 
-// Components
-import { ModalAsignacionConfiguracionProductoComponent } from "../modal-asignacion-configuracion-producto/modal-asignacion-configuracion-producto.component";
-import { ModalLocalidadSuperiorComponent } from "../modal-localidad-superior/modal-localidad-superior.component";
-
 // Services
 import { InventarioService } from "src/app/services/inventario.service";
 import { FacturaService } from "src/app/services/factura.service";
 import { VentaService } from "src/app/services/venta.service";
-import { DialogAlertComponent } from "../dialog-alert/dialog-alert.component";
-import { ModalPersonaComponent } from "../modal-persona/modal-persona.component";
 
 @Component({
   selector: "app-venta",
@@ -26,12 +28,9 @@ import { ModalPersonaComponent } from "../modal-persona/modal-persona.component"
 })
 export class VentaComponent implements OnInit {
   constructor(
-    private modalAsignacionUsuarioPersona: MatDialog,
-    private modalAsignacionConfiguracionProducto: MatDialog,
     private inventarioService: InventarioService,
     private ventaService: VentaService,
     private facturaService: FacturaService,
-    private modalLocalidadSuperior: MatDialog,
     private router: Router,
     private dialog: MatDialog,
     private _snackBar: MatSnackBar
@@ -82,6 +81,7 @@ export class VentaComponent implements OnInit {
   inputDescuento = true;
   siSePagaACredito = true;
   comboKits = false;
+  todayDate: Date = new Date();
   meses = [
     "Enero",
     "Febrero",
@@ -218,7 +218,7 @@ export class VentaComponent implements OnInit {
   }
 
   seleccionarProducto() {
-    let dialogRef = this.modalAsignacionConfiguracionProducto.open(
+    let dialogRef = this.dialog.open(
       ModalAsignacionConfiguracionProductoComponent,
       {
         width: "auto",
@@ -288,7 +288,7 @@ export class VentaComponent implements OnInit {
   }
 
   seleccionarPersona() {
-    let dialogRef = this.modalAsignacionUsuarioPersona.open(
+    let dialogRef = this.dialog.open(
       ModalPersonaComponent,
       {
         width: "auto",
@@ -556,7 +556,7 @@ export class VentaComponent implements OnInit {
   }
 
   seleccionarComunidad() {
-    let dialogRef = this.modalLocalidadSuperior.open(
+    let dialogRef = this.dialog.open(
       ModalLocalidadSuperiorComponent,
       {
         width: "auto",

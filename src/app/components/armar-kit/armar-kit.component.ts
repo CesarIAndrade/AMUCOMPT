@@ -1,6 +1,10 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
+import { FormGroup, FormControl } from "@angular/forms";
 
 // Components
+import { ComfirmDialogComponent } from '../comfirm-dialog/comfirm-dialog.component';
+
+// Material
 import {
   MatPaginator,
   MatTableDataSource,
@@ -11,11 +15,6 @@ import {
 // Services
 import { InventarioService } from "src/app/services/inventario.service";
 
-// SweetAlert
-import sweetalert from "sweetalert";
-import { FormGroup, FormControl } from "@angular/forms";
-import { ComfirmDialogComponent } from '../comfirm-dialog/comfirm-dialog.component';
-import { toTypeScript } from '@angular/compiler';
 
 export interface DetalleProducto {
   presentacion: string;

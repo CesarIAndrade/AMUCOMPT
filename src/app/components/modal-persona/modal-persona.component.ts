@@ -1,6 +1,8 @@
 import { Component, OnInit } from "@angular/core";
-import { MatDialogRef } from "@angular/material";
 import { Router } from "@angular/router";
+
+// Material
+import { MatDialogRef } from "@angular/material";
 
 @Component({
   selector: "app-modal-persona",

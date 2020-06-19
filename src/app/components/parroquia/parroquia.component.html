@@ -2,156 +2,163 @@
   <div class="card-body">
     <form [formGroup]="myForm" (ngSubmit)="validarFormulario()" novalidate>
       <div class="row">
-        <div class="col-lg-4">
-          <h5 style="text-align: center;">Nueva Parroquia</h5>
+        <div class="col-lg-10 offset-lg-1">
           <div class="row">
-            <div class="col-9">
+            <div class="col-lg-5 col-md-5">
+              <h5 style="text-align: center;">Nueva Parroquia</h5>
+              <div class="row">
+                <div class="col-9">
+                  <mat-form-field class="example-full-width">
+                    <input
+                      matInput
+                      formControlName="_canton"
+                      placeholder="Cantón"
+                      type="text"
+                      readonly
+                      aria-disabled="true"
+                    />
+                    <button disabled mat-button matPrefix mat-icon-button>
+                      <mat-icon>*</mat-icon>
+                    </button>
+                  </mat-form-field>
+                </div>
+                <div class="col-2">
+                  <button
+                    mat-button
+                    mat-icon-button
+                    type="button"
+                    (click)="abrirModal()"
+                    class="mt-2 bg-warning text-white btn-block"
+                  >
+                    <mat-icon>
+                      location_on
+                    </mat-icon>
+                  </button>
+                </div>
+              </div>
               <mat-form-field class="example-full-width">
                 <input
                   matInput
-                  formControlName="_canton"
-                  placeholder="Cantón"
+                  name="arroquia"
+                  formControlName="_parroquia"
                   type="text"
-                  readonly
-                  aria-disabled="true"
+                  placeholder="Ingrese Parroquia"
                 />
                 <button disabled mat-button matPrefix mat-icon-button>
                   <mat-icon>*</mat-icon>
                 </button>
               </mat-form-field>
+              <div>
+                <button
+                  mat-button
+                  type="submit"
+                  [value]="botonIngresar"
+                  [disabled]="myForm.invalid"
+                  class="bg-success text-white btn-block"
+                >
+                  Guardar
+                </button>
+              </div>
+              <div>
+                <a
+                  mat-button
+                  routerLink="/localizaciones"
+                  type="button"
+                  class="mt-2 btn-block"
+                >
+                  Volver
+                </a>
+              </div>
             </div>
-            <div class="col-2">
-              <button
-                mat-button
-                mat-icon-button
-                type="button"
-                (click)="abrirModal()"
-                class="mt-2 bg-warning text-white btn-block"
-              >
-                <mat-icon>
-                  location_on
-                </mat-icon>
-              </button>
-            </div>
-          </div>
-          <mat-form-field class="example-full-width">
-            <input
-              matInput
-              name="arroquia"
-              formControlName="_parroquia"
-              type="text"
-              placeholder="Ingrese Parroquia"
-            />
-            <button disabled mat-button matPrefix mat-icon-button>
-              <mat-icon>*</mat-icon>
-            </button>
-          </mat-form-field>
-          <div>
-            <button
-              mat-button
-              type="submit"
-              [value]="botonIngresar"
-              [disabled]="myForm.invalid"
-              class="bg-success text-white btn-block"
-            >
-              Guardar
-            </button>
-          </div>
-          <div>
-            <a
-              mat-button
-              routerLink="/localizaciones"
-              type="button"
-              class="mt-2 btn-block"
-            >
-              Volver
-            </a>
-          </div>
-        </div>
-        <div class="col-lg-8 margenTabla">
-          <h5 style="text-align: center;">Lista Parroquias</h5>
-          <mat-form-field class="example-full-width">
-            <input
-              matInput
-              name="buscarParroquia"
-              (keyup)="search($event.target.value)"
-              type="text"
-              placeholder="Buscar Parroquia"
-            />
-            <button mat-button matPrefix mat-icon-button>
-              <mat-icon>search</mat-icon>
-            </button>
-          </mat-form-field>
-          <div class="table_all">
-            <table mat-table [dataSource]="parroquias">
-              <ng-container matColumnDef="parroquia">
-                <th mat-header-cell *matHeaderCellDef>Parroquia</th>
-                <td mat-cell *matCellDef="let element">
-                  {{ element.Descripcion }}
-                </td>
-              </ng-container>
-              <ng-container matColumnDef="canton">
-                <th mat-header-cell *matHeaderCellDef>Cantón</th>
-                <td mat-cell *matCellDef="let element">
-                  {{ element.Canton }}
-                </td>
-              </ng-container>
-              <ng-container matColumnDef="acciones">
-                <th colspan="2" mat-header-cell *matHeaderCellDef>
-                  Acciones
-                </th>
-                <ng-container *matCellDef="let element">
-                  <ng-container *ngIf="element.PermitirEliminacion">
-                    <td mat-cell>
-                      <button
-                        mat-button
-                        type="button"
-                        (click)="mostrarParroquia(element)"
-                        class="btn-outline-primary"
-                      >
-                        <mat-icon>edit</mat-icon>
-                      </button>
-                    </td>
-                    <td mat-cell>
-                      <button
-                        mat-button
-                        type="button"
-                        class="btn-outline-danger"
-                        (click)="eliminarParroquia(element.IdParroquia)"
-                      >
-                        <mat-icon>remove</mat-icon>
-                      </button>
+            <div class="col-lg-7 col-md-7">
+              <h5 style="text-align: center;">Lista Parroquias</h5>
+              <mat-form-field class="example-full-width">
+                <input
+                  matInput
+                  name="buscarParroquia"
+                  (keyup)="search($event.target.value)"
+                  type="text"
+                  placeholder="Buscar Parroquia"
+                />
+                <button mat-button matPrefix mat-icon-button>
+                  <mat-icon>search</mat-icon>
+                </button>
+              </mat-form-field>
+              <div class="table_all">
+                <table mat-table [dataSource]="parroquias">
+                  <ng-container matColumnDef="parroquia">
+                    <th mat-header-cell *matHeaderCellDef>Parroquia</th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element.Descripcion }}
                     </td>
                   </ng-container>
-                  <ng-container *ngIf="!element.PermitirEliminacion">
-                    <td mat-cell>
-                      <button
-                        mat-button
-                        type="button"
-                        (click)="mostrarParroquia(element)"
-                        class="btn-outline-primary btn-block"
-                      >
-                        <mat-icon>edit</mat-icon>
-                      </button>
+                  <ng-container matColumnDef="canton">
+                    <th mat-header-cell *matHeaderCellDef>Cantón</th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element.Canton }}
                     </td>
-                    <td mat-cell></td>
                   </ng-container>
-                </ng-container>
-              </ng-container>
-              <tr
-                mat-header-row
-                *matHeaderRowDef="tablaParroquias; sticky: true"
-              ></tr>
-              <tr mat-row *matRowDef="let row; columns: tablaParroquias"></tr>
-            </table>
-            <div class="spinner-container" *ngIf="loading">
-              <mat-spinner></mat-spinner>
+                  <ng-container matColumnDef="acciones">
+                    <th colspan="2" mat-header-cell *matHeaderCellDef>
+                      Acciones
+                    </th>
+                    <ng-container *matCellDef="let element">
+                      <ng-container *ngIf="element.PermitirEliminacion">
+                        <td mat-cell>
+                          <button
+                            mat-button
+                            type="button"
+                            (click)="mostrarParroquia(element)"
+                            class="btn-outline-primary"
+                          >
+                            <mat-icon>edit</mat-icon>
+                          </button>
+                        </td>
+                        <td mat-cell>
+                          <button
+                            mat-button
+                            type="button"
+                            class="btn-outline-danger"
+                            (click)="eliminarParroquia(element.IdParroquia)"
+                          >
+                            <mat-icon>remove</mat-icon>
+                          </button>
+                        </td>
+                      </ng-container>
+                      <ng-container *ngIf="!element.PermitirEliminacion">
+                        <td mat-cell>
+                          <button
+                            mat-button
+                            type="button"
+                            (click)="mostrarParroquia(element)"
+                            class="btn-outline-primary btn-block"
+                          >
+                            <mat-icon>edit</mat-icon>
+                          </button>
+                        </td>
+                        <td mat-cell></td>
+                      </ng-container>
+                    </ng-container>
+                  </ng-container>
+                  <tr
+                    mat-header-row
+                    *matHeaderRowDef="tablaParroquias; sticky: true"
+                  ></tr>
+                  <tr
+                    mat-row
+                    *matRowDef="let row; columns: tablaParroquias"
+                  ></tr>
+                </table>
+                <div class="spinner-container" *ngIf="loading">
+                  <mat-spinner></mat-spinner>
+                </div>
+                <mat-paginator
+                  #paginator
+                  [pageSizeOptions]="[5]"
+                  showFirstLastButtons
+                ></mat-paginator>
+              </div>
             </div>
-            <mat-paginator
-              #paginator
-              [pageSizeOptions]="[5]"
-              showFirstLastButtons
-            ></mat-paginator>
           </div>
         </div>
       </div>

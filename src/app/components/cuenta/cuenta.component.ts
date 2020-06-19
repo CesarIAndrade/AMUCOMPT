@@ -1,10 +1,15 @@
 import { Component, OnInit } from "@angular/core";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
-import { UsuarioService } from "src/app/services/usuario.service";
-import { MatDialog } from "@angular/material";
-import { DialogAlertComponent } from "../dialog-alert/dialog-alert.component";
-import { ComfirmDialogComponent } from "../comfirm-dialog/comfirm-dialog.component";
 import { Router } from '@angular/router';
+
+// Components
+import { ComfirmDialogComponent } from "../comfirm-dialog/comfirm-dialog.component";
+
+// Material
+import { MatDialog } from "@angular/material";
+
+// Services
+import { UsuarioService } from "src/app/services/usuario.service";
 
 @Component({
   selector: "app-cuenta",
@@ -15,7 +20,7 @@ export class CuentaComponent implements OnInit {
   myForm: FormGroup;
   constructor(
     private usuarioService: UsuarioService,
-    private confirmDialog: MatDialog,
+    private dialog: MatDialog,
     private router: Router
   ) {
     this.myForm = new FormGroup({
@@ -30,7 +35,7 @@ export class CuentaComponent implements OnInit {
   inputType = "password";
 
   async modificarDatos() {
-    let dialogRef = this.confirmDialog.open(ComfirmDialogComponent, {
+    let dialogRef = this.dialog.open(ComfirmDialogComponent, {
       width: "250px",
       height: "auto",
       data: {
