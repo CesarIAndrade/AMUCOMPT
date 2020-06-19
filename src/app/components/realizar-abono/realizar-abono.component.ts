@@ -50,6 +50,9 @@ export class RealizarAbonoComponent implements OnInit {
     let dialogRef = this.dialog.open(ComfirmDialogComponent, {
       width: "250px",
       height: "auto",
+      data: {
+        mensaje: ""
+      }
     });
     dialogRef.afterClosed().subscribe(async (result) => {
       if (result) {

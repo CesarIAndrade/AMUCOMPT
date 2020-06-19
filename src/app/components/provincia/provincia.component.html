@@ -63,50 +63,41 @@
                     </td>
                   </ng-container>
                   <ng-container matColumnDef="acciones">
-                    <th colspan="2" mat-header-cell *matHeaderCellDef>Acciones</th>
+                    <th colspan="2" mat-header-cell *matHeaderCellDef>
+                      Acciones
+                    </th>
                     <ng-container *matCellDef="let element">
-                      <ng-container *ngIf="element.PermitirEliminacion">
-                        <td mat-cell>
-                          <button
-                            mat-button
-                            type="button"
-                            class="btn-outline-primary"
-                            (click)="mostrarProvincia(element)"
-                          >
-                            <mat-icon>edit</mat-icon>
-                          </button>
-                        </td>
-                        <td mat-cell>
-                          <button
-                            mat-button
-                            type="button"
-                            class="btn-outline-danger"
-                            (click)="eliminarProvincia(element.IdProvincia)"
-                          >
-                            <mat-icon>remove</mat-icon>
-                          </button>
-                        </td>
-                      </ng-container>
-                      <ng-container *ngIf="!element.PermitirEliminacion">
-                        <td mat-cell>
-                          <button
-                            mat-button
-                            type="button"
-                            class="btn-outline-primary"
-                            (click)="setProvincia(element)"
-                          >
-                            <mat-icon>edit</mat-icon>
-                          </button>
-                        </td>
-                        <td mat-cell></td>
-                      </ng-container>
+                      <td mat-cell>
+                        <button
+                          mat-button
+                          type="button"
+                          class="btn-outline-primary"
+                          (click)="mostrarProvincia(element)"
+                        >
+                          <mat-icon>edit</mat-icon>
+                        </button>
+                      </td>
+                      <td mat-cell *ngIf="!element.PermitirEliminacion"></td>
+                      <td mat-cell *ngIf="element.PermitirEliminacion">
+                        <button
+                          mat-button
+                          type="button"
+                          class="btn-outline-danger"
+                          (click)="eliminarProvincia(element.IdProvincia)"
+                        >
+                          <mat-icon>remove</mat-icon>
+                        </button>
+                      </td>
                     </ng-container>
                   </ng-container>
                   <tr
                     mat-header-row
                     *matHeaderRowDef="tablaProvincias; sticky: true"
                   ></tr>
-                  <tr mat-row *matRowDef="let row; columns: tablaProvincias"></tr>
+                  <tr
+                    mat-row
+                    *matRowDef="let row; columns: tablaProvincias"
+                  ></tr>
                 </table>
                 <div class="spinner-container" *ngIf="loading">
                   <mat-spinner></mat-spinner>

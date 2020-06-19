@@ -336,6 +336,7 @@ export class VentaComponent implements OnInit {
           ? ""
           : this.myForm.get("_descuento").value
       );
+      console.log(respuesta);
       if (respuesta["codigo"] == "200") {
         this.buttonRealizarVenta = false;
         this.buttonGenerarFactura = false;
@@ -346,6 +347,8 @@ export class VentaComponent implements OnInit {
         this.myForm.get("_checkedDescuento").disable();
         this.limpiarCampos();
         this.consultarDetalleFactura();
+      } else if (respuesta["codigo"] == "500") {
+        this.openDialog(respuesta["mensaje"]);
       }
     }
   }
