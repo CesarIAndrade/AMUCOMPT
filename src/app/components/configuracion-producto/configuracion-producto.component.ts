@@ -92,10 +92,10 @@ export class ConfiguracionProductoComponent implements OnInit {
   @ViewChild("paginator", { static: false }) paginator: MatPaginator;
   dataSource = new MatTableDataSource<Element[]>();
 
-  openDialog(mensaje): void {
+  openDialog(mensaje, icono): void {
     const dialogRef = this.dialog.open(DialogAlertComponent, {
       width: "250px",
-      data: { mensaje: mensaje },
+      data: { mensaje: mensaje, icono: icono },
     });
   }
 
@@ -117,6 +117,7 @@ export class ConfiguracionProductoComponent implements OnInit {
           descripcion: item.Descripcion,
           utilizado: item.TipoProductoUtilizado,
           estado: item.estado,
+          mostrar: false,
         });
         this.dataSource.data = tipoProductos;
         this.dataSource.paginator = this.paginator;
@@ -140,11 +141,11 @@ export class ConfiguracionProductoComponent implements OnInit {
       this.dataSource.data = tipoProductos;
       this.myForm.get("_campo").reset();
     } else if (tipoProducto["codigo"] == "400") {
-      this.openDialog("Inténtalo de nuevo");
+      this.openDialog("Inténtalo de nuevo", "advertencia");
     } else if (tipoProducto["codigo"] == "418") {
-      this.openDialog(tipoProducto["mensaje"]);
+      this.openDialog(tipoProducto["mensaje"], "advertencia");
     } else if (tipoProducto["codigo"] == "500") {
-      this.openDialog("Problemas con el servidor");
+      this.openDialog("Problemas con el servidor", "advertencia");
     }
   }
 
@@ -153,8 +154,8 @@ export class ConfiguracionProductoComponent implements OnInit {
       width: "250px",
       height: "auto",
       data: {
-        mensaje: ""
-      }
+        mensaje: "",
+      },
     });
     dialogRef.afterClosed().subscribe(async (result) => {
       if (result) {
@@ -171,11 +172,11 @@ export class ConfiguracionProductoComponent implements OnInit {
           tipoProductos.splice(index, 1);
           this.dataSource.data = tipoProductos;
         } else if (respuesta["codigo"] == "400") {
-          this.openDialog("Inténtalo de nuevo");
+          this.openDialog("Inténtalo de nuevo", "advertencia");
         } else if (respuesta["codigo"] == "418") {
-          this.openDialog(respuesta["mensaje"]);
+          this.openDialog(respuesta["mensaje"], "advertencia");
         } else if (respuesta["codigo"] == "500") {
-          this.openDialog("Problemas con el servidor");
+          this.openDialog("Problemas con el servidor", "advertencia");
         }
       }
     });
@@ -215,11 +216,11 @@ export class ConfiguracionProductoComponent implements OnInit {
       this.dataSource.data = presentaciones;
       this.myForm.get("_campo").reset();
     } else if (presentacion["codigo"] == "400") {
-      this.openDialog("Inténtalo de nuevo");
+      this.openDialog("Inténtalo de nuevo", "advertencia");
     } else if (presentacion["codigo"] == "418") {
-      this.openDialog(presentacion["mensaje"]);
+      this.openDialog(presentacion["mensaje"], "advertencia");
     } else if (presentacion["codigo"] == "500") {
-      this.openDialog("Problemas con el servidor");
+      this.openDialog("Problemas con el servidor", "advertencia");
     }
   }
 
@@ -228,8 +229,8 @@ export class ConfiguracionProductoComponent implements OnInit {
       width: "250px",
       height: "auto",
       data: {
-        mensaje: ""
-      }
+        mensaje: "",
+      },
     });
     dialogRef.afterClosed().subscribe(async (result) => {
       if (result) {
@@ -246,11 +247,11 @@ export class ConfiguracionProductoComponent implements OnInit {
           presentaciones.splice(index, 1);
           this.dataSource.data = presentaciones;
         } else if (respuesta["codigo"] == "400") {
-          this.openDialog("Inténtalo de nuevo");
+          this.openDialog("Inténtalo de nuevo", "advertencia");
         } else if (respuesta["codigo"] == "418") {
-          this.openDialog(respuesta["mensaje"]);
+          this.openDialog(respuesta["mensaje"], "advertencia");
         } else if (respuesta["codigo"] == "500") {
-          this.openDialog("Problemas con el servidor");
+          this.openDialog("Problemas con el servidor", "advertencia");
         }
       }
     });
@@ -290,11 +291,11 @@ export class ConfiguracionProductoComponent implements OnInit {
       this.dataSource.data = medidas;
       this.myForm.get("_campo").reset();
     } else if (medida["codigo"] == "400") {
-      this.openDialog("Inténtalo de nuevo");
+      this.openDialog("Inténtalo de nuevo", "advertencia");
     } else if (medida["codigo"] == "418") {
-      this.openDialog(medida["mensaje"]);
+      this.openDialog(medida["mensaje"], "advertencia");
     } else if (medida["codigo"] == "500") {
-      this.openDialog("Problemas con el servidor");
+      this.openDialog("Problemas con el servidor", "advertencia");
     }
   }
 
@@ -303,8 +304,8 @@ export class ConfiguracionProductoComponent implements OnInit {
       width: "250px",
       height: "auto",
       data: {
-        mensaje: ""
-      }
+        mensaje: "",
+      },
     });
     dialogRef.afterClosed().subscribe(async (result) => {
       if (result) {
@@ -317,11 +318,11 @@ export class ConfiguracionProductoComponent implements OnInit {
           medidas.splice(index, 1);
           this.dataSource.data = medidas;
         } else if (respuesta["codigo"] == "400") {
-          this.openDialog("Inténtalo de nuevo");
+          this.openDialog("Inténtalo de nuevo", "advertencia");
         } else if (respuesta["codigo"] == "418") {
-          this.openDialog(respuesta["mensaje"]);
+          this.openDialog(respuesta["mensaje"], "advertencia");
         } else if (respuesta["codigo"] == "500") {
-          this.openDialog("Problemas con el servidor");
+          this.openDialog("Problemas con el servidor", "advertencia");
         }
       }
     });
@@ -368,14 +369,14 @@ export class ConfiguracionProductoComponent implements OnInit {
         this.dataSource.data = kits;
         this.limpiarCampos();
       } else if (kit["codigo"] == "400") {
-        this.openDialog("Inténtalo de nuevo");
+        this.openDialog("Inténtalo de nuevo", "advertencia");
       } else if (kit["codigo"] == "418") {
-        this.openDialog(kit["mensaje"]);
+        this.openDialog(kit["mensaje"], "advertencia");
       } else if (kit["codigo"] == "500") {
-        this.openDialog("Problemas con el servidor");
+        this.openDialog("Problemas con el servidor", "advertencia");
       }
     } else {
-      this.openDialog("El descuento debe ser entero");
+      this.openDialog("El descuento debe ser entero", "advertencia");
     }
   }
 
@@ -411,8 +412,8 @@ export class ConfiguracionProductoComponent implements OnInit {
       width: "250px",
       height: "auto",
       data: {
-        mensaje: ""
-      }
+        mensaje: "",
+      },
     });
     dialogRef.afterClosed().subscribe(async (result) => {
       if (result) {
@@ -425,11 +426,11 @@ export class ConfiguracionProductoComponent implements OnInit {
           kits.splice(index, 1);
           this.dataSource.data = kits;
         } else if (respuesta["codigo"] == "400") {
-          this.openDialog("Inténtalo de nuevo");
+          this.openDialog("Inténtalo de nuevo", "advertencia");
         } else if (respuesta["codigo"] == "418") {
-          this.openDialog(respuesta["mensaje"]);
+          this.openDialog(respuesta["mensaje"], "advertencia");
         } else if (respuesta["codigo"] == "500") {
-          this.openDialog("Problemas con el servidor");
+          this.openDialog("Problemas con el servidor", "advertencia");
         }
       }
     });
@@ -450,6 +451,7 @@ export class ConfiguracionProductoComponent implements OnInit {
           tipoInteresMora: "MORA",
           utilizado: interes.utilizado,
           estado: interes.Estado,
+          mostrar: true,
         });
       });
       console.log(intereses);
@@ -487,11 +489,11 @@ export class ConfiguracionProductoComponent implements OnInit {
       this.consultarIntereses();
       this.limpiarCampos();
     } else if (respuesta["codigo"] == "400") {
-      this.openDialog("Inténtalo de nuevo");
+      this.openDialog("Inténtalo de nuevo", "advertencia");
     } else if (respuesta["codigo"] == "418") {
-      this.openDialog(respuesta["mensaje"]);
+      this.openDialog(respuesta["mensaje"], "advertencia");
     } else if (respuesta["codigo"] == "500") {
-      this.openDialog("Problemas con el servidor");
+      this.openDialog("Problemas con el servidor", "advertencia");
     }
   }
 
@@ -500,8 +502,8 @@ export class ConfiguracionProductoComponent implements OnInit {
       width: "250px",
       height: "auto",
       data: {
-        mensaje: ""
-      }
+        mensaje: "",
+      },
     });
     dialogRef.afterClosed().subscribe(async (result) => {
       if (result) {
@@ -673,7 +675,7 @@ export class ConfiguracionProductoComponent implements OnInit {
     this.myForm.get("_tasaInteres").reset();
     this.myForm.get("_tasaInteresMora").reset();
   }
- 
+
   ngOnInit() {
     this.myForm.get("_idCampo").setValue(this.opciones[0]._id);
     this.myForm.get("_interes").disable();

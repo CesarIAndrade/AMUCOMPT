@@ -36,7 +36,6 @@ export class TablaPersonaComponent implements OnInit {
   loading = true;
   async consultarPersonas() {
     var respuesta = await this.personaService.consultarPersonas();
-    console.log(respuesta);
     if (respuesta["codigo"] == "200") {
       this.loading = false;
       var personas: any = [];
@@ -63,7 +62,7 @@ export class TablaPersonaComponent implements OnInit {
   }
 
   abrirModal(persona) {
-    let dialogRef = this.dialog.open(ModalDetallePersonaComponent, {
+    this.dialog.open(ModalDetallePersonaComponent, {
       width: "auto",
       height: "auto",
       data: {

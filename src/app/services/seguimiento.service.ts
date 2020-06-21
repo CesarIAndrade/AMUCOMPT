@@ -13,7 +13,7 @@ export class SeguimientoService {
   provinciasParaSeguimiento() {
     const body = new HttpParams().set(
       "encriptada",
-      localStorage.getItem("miCuenta.getToken")
+      localStorage.getItem("token")
     );
     return new Promise((resolve, reject) => {
       this.http
@@ -41,7 +41,7 @@ export class SeguimientoService {
   cantonesParaSeguimiento(idProvincia: string) {
     const body = new HttpParams()
       .set("IdProvincia", idProvincia)
-      .set("encriptada", localStorage.getItem("miCuenta.getToken"));
+      .set("encriptada", localStorage.getItem("token"));
     return new Promise((resolve, reject) => {
       this.http
         .post(
@@ -68,7 +68,7 @@ export class SeguimientoService {
   parroquiasParaSeguimiento(idCanton: string) {
     const body = new HttpParams()
       .set("IdCanton", idCanton)
-      .set("encriptada", localStorage.getItem("miCuenta.getToken"));
+      .set("encriptada", localStorage.getItem("token"));
     return new Promise((resolve, reject) => {
       this.http
         .post(
@@ -95,7 +95,7 @@ export class SeguimientoService {
   comunidadesParaSeguimiento(idParroquia: string) {
     const body = new HttpParams()
       .set("IdParroquia", idParroquia)
-      .set("encriptada", localStorage.getItem("miCuenta.getToken"));
+      .set("encriptada", localStorage.getItem("token"));
     return new Promise((resolve, reject) => {
       this.http
         .post(
@@ -126,7 +126,7 @@ export class SeguimientoService {
   ) {
     const body = new HttpParams()
       .set(identificador, idLocalidad)
-      .set("encriptada", localStorage.getItem("miCuenta.getToken"));
+      .set("encriptada", localStorage.getItem("token"));
     return new Promise((resolve, reject) => {
       this.http
         .post(apiUrl + url, body.toString(), {
@@ -149,7 +149,7 @@ export class SeguimientoService {
   filtroClientesEnVisitas(idTecnico: string) {
     const body = new HttpParams()
       .set("IdAsignarTUTecnico", idTecnico)
-      .set("encriptada", localStorage.getItem("miCuenta.getToken"));
+      .set("encriptada", localStorage.getItem("token"));
     return new Promise((resolve, reject) => {
       this.http
         .post(
@@ -177,7 +177,7 @@ export class SeguimientoService {
     const body = new HttpParams()
       .set("IdAsignarTUTecnico", idTecnico)
       .set("IdPersona", idPersona)
-      .set("encriptada", localStorage.getItem("miCuenta.postToken"));
+      .set("encriptada", localStorage.getItem("token"));
     return new Promise((resolve, reject) => {
       this.http
         .post(
@@ -204,7 +204,7 @@ export class SeguimientoService {
   desaignarClienteTecnico(idPersona: string) {
     const body = new HttpParams()
       .set("IdPersona", idPersona)
-      .set("encriptada", localStorage.getItem("miCuenta.deleteToken"));
+      .set("encriptada", localStorage.getItem("token"));
     return new Promise((resolve, reject) => {
       this.http
         .post(
@@ -231,7 +231,7 @@ export class SeguimientoService {
   listarClientesTecnico(url: string, identificador: string, idTecnico: string) {
     const body = new HttpParams()
       .set(identificador, idTecnico)
-      .set("encriptada", localStorage.getItem("miCuenta.getToken"));
+      .set("encriptada", localStorage.getItem("token"));
     return new Promise((resolve, reject) => {
       this.http
         .post(apiUrl + url, body.toString(), {
@@ -254,7 +254,7 @@ export class SeguimientoService {
   visitasClienteComunidad(idComunidad: string) {
     const body = new HttpParams()
       .set("IdAsignarTecnicoPersonaComunidad", idComunidad)
-      .set("encriptada", localStorage.getItem("miCuenta.getToken"));
+      .set("encriptada", localStorage.getItem("token"));
     return new Promise((resolve, reject) => {
       this.http
         .post(apiUrl + "Credito/ConsutlarVisita", body.toString(), {
@@ -279,7 +279,7 @@ export class SeguimientoService {
       .set("IdAsignarTecnicoPersonaComunidad", idComunidad)
       .set("IdAsignarTU", idTecnico)
       .set("Observacion", observacion)
-      .set("encriptada", localStorage.getItem("miCuenta.postToken"));
+      .set("encriptada", localStorage.getItem("token"));
     return new Promise((resolve, reject) => {
       this.http
         .post(apiUrl + "Credito/IngresoVisita", body.toString(), {
@@ -304,7 +304,7 @@ export class SeguimientoService {
       .set("IdVisita", idVisita)
       .set("IdAsignarTU", idTecnico)
       .set("Observacion", observacion)
-      .set("encriptada", localStorage.getItem("miCuenta.putToken"));
+      .set("encriptada", localStorage.getItem("token"));
     return new Promise((resolve, reject) => {
       this.http
         .post(apiUrl + "Credito/ModificarVisita", body.toString(), {
@@ -327,7 +327,7 @@ export class SeguimientoService {
   eliminarVisita(idVisita: string) {
     const body = new HttpParams()
       .set("IdVisita", idVisita)
-      .set("encriptada", localStorage.getItem("miCuenta.deleteToken"));
+      .set("encriptada", localStorage.getItem("token"));
     return new Promise((resolve, reject) => {
       this.http
         .post(apiUrl + "Credito/EliminarVisita", body.toString(), {
@@ -350,7 +350,7 @@ export class SeguimientoService {
   consultarFacturasCliente(numeroDocumento: string) {
     const body = new HttpParams()
       .set("NumeroDocumento", numeroDocumento)
-      .set("encriptada", localStorage.getItem("miCuenta.deleteToken"));
+      .set("encriptada", localStorage.getItem("token"));
     return new Promise((resolve, reject) => {
       this.http
         .post(
@@ -377,7 +377,7 @@ export class SeguimientoService {
   terminarAsistencia(idTecnico: string) {
     const body = new HttpParams()
       .set("IdAsignarTecnicoPersonaComunidad", idTecnico)
-      .set("encriptada", localStorage.getItem("miCuenta.deleteToken"));
+      .set("encriptada", localStorage.getItem("token"));
     return new Promise((resolve, reject) => {
       this.http
         .post(
@@ -404,7 +404,7 @@ export class SeguimientoService {
   consultarVisitasFinalizadas(idTecnico: string) {
     const body = new HttpParams()
       .set("IdAsignarTUTecnico", idTecnico)
-      .set("encriptada", localStorage.getItem("miCuenta.deleteToken"));
+      .set("encriptada", localStorage.getItem("token"));
     return new Promise((resolve, reject) => {
       this.http
         .post(
@@ -433,7 +433,7 @@ export class SeguimientoService {
       .set("IdAsignarTU", idAsignarTU)
       .set("IdConfigurarVenta", idConfigurarVenta)
       .set("Monto", monto)
-      .set("encriptada", localStorage.getItem("miCuenta.deleteToken"));
+      .set("encriptada", localStorage.getItem("token"));
     return new Promise((resolve, reject) => {
       this.http
         .post(apiUrl + "Credito/IngresoAbono", body.toString(), {
@@ -456,7 +456,7 @@ export class SeguimientoService {
   consultarAbonos(idConfigurarVenta: string) {
     const body = new HttpParams()
       .set("IdConfigurarVenta", idConfigurarVenta)
-      .set("encriptada", localStorage.getItem("miCuenta.deleteToken"));
+      .set("encriptada", localStorage.getItem("token"));
     return new Promise((resolve, reject) => {
       this.http
         .post(apiUrl + "Credito/ConsutlarAbonoPorFactura", body.toString(), {

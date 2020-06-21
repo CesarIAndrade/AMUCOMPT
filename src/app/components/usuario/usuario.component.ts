@@ -37,7 +37,7 @@ export class UsuarioComponent implements OnInit {
       _nombres: new FormControl(""),
       _apellidos: new FormControl(""),
       _valorUsuario: new FormControl("", [Validators.required]),
-      _contrasena: new FormControl("", [Validators.required]),
+      _contrasena: new FormControl("", [Validators.required, Validators.minLength(8)]),
     });
   }
 
@@ -51,13 +51,12 @@ export class UsuarioComponent implements OnInit {
   inputType = "password";
   nuevoUsuario = "Nuevo Usuario";
   filterUsuario = "";
-
   personas: any[] = [];
 
-  openDialog(mensaje): void {
+  openDialog(mensaje, icono): void {
     const dialogRef = this.dialog.open(DialogAlertComponent, {
       width: "250px",
-      data: { mensaje: mensaje },
+      data: { mensaje: mensaje, icono: icono },
     });
   }
 
@@ -73,7 +72,7 @@ export class UsuarioComponent implements OnInit {
     if (respuesta["codigo"] == "200") {
       var usuarios: any = [];
       for (let usuario of respuesta["respuesta"]) {
-        if (usuario.IdUsuario == localStorage.getItem("miCuenta.idUsuario")) {
+        if (usuario.IdUsuario == this.usuario.IdUsuario) {
           continue;
         } else {
           usuarios.push(usuario);
@@ -108,7 +107,6 @@ export class UsuarioComponent implements OnInit {
       this.myForm.get("_valorUsuario").value,
       this.myForm.get("_contrasena").value
     );
-    console.log(respuesta);
     if (respuesta["codigo"] == "200") {
       this.openSnackBar("Se ingresó correctamente");
       var usuarios: any = this.usuarios.data;
@@ -116,7 +114,7 @@ export class UsuarioComponent implements OnInit {
       this.usuarios.data = usuarios;
       this.myForm.reset();
     } else if (respuesta["codigo"] == "418") {
-      this.openDialog(respuesta["mensaje"]);
+      this.openDialog(respuesta["mensaje"], "advertencia");
     }
   }
 
@@ -174,38 +172,47 @@ export class UsuarioComponent implements OnInit {
         width: "auto",
         height: "auto",
         data: {
-          idUsuario: usuario.IdUsuario,
+          usuario: usuario,
         },
       }
     );
     dialogRef.afterClosed().subscribe((result) => {
       if (result != null) {
-        this.openDialog(result);
+        this.openDialog(result, "success");
         this.consultarUsuarios();
       }
     });
   }
-
-  async eliminarUsuario(usuario) {
-    let dialogRef = this.dialog.open(ComfirmDialogComponent, {
-      width: "250px",
-      height: "auto",
-      data: {
-        mensaje: "",
-      },
-    });
-    dialogRef.afterClosed().subscribe(async (result) => {
-      if (result) {
-        var respuesta = await this.usuarioService.eliminarUsuario(
-          usuario.IdUsuario
-        );
-        if (respuesta["codigo"] == "200") {
-          this.consultarUsuarios();
-        } else if (respuesta["codigo"] == "409") {
-          this.reasignarClientes(usuario);
-        }
+ 
+  async eliminarUsuario(usuario, flag?) {
+    if (flag) {
+      var respuesta = await this.usuarioService.eliminarUsuario(
+        usuario.IdUsuario
+      );
+      if (respuesta["codigo"] == "200") {
+        this.consultarUsuarios();
       }
-    });
+    } else {
+      let dialogRef = this.dialog.open(ComfirmDialogComponent, {
+        width: "250px",
+        height: "auto",
+        data: {
+          mensaje: "",
+        },
+      });
+      dialogRef.afterClosed().subscribe(async (result) => {
+        if (result) {
+          var respuesta = await this.usuarioService.eliminarUsuario(
+            usuario.IdUsuario
+          );
+          if (respuesta["codigo"] == "200") {
+            this.consultarUsuarios();
+          } else if (respuesta["codigo"] == "409") {
+            this.reasignarClientes(usuario);
+          }
+        }
+      });
+    }
   }
 
   reasignarClientes(usuario) {
@@ -219,7 +226,7 @@ export class UsuarioComponent implements OnInit {
     dialogRef.afterClosed().subscribe((result) => {
       if (result != null) {
         if (result.flag) {
-          this.eliminarUsuario(result.usuario);
+          this.eliminarUsuario(result.usuario, result.flag);
         }
       }
     });
@@ -245,7 +252,9 @@ export class UsuarioComponent implements OnInit {
     this.myForm.reset();
   }
 
+  usuario: any;
   ngOnInit() {
+    this.usuario = JSON.parse(localStorage.getItem("usuario"));
     this.consultarUsuarios();
   }
 

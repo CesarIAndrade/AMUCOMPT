@@ -13,9 +13,15 @@ export class DialogAlertComponent implements OnInit {
     public dialogRef: MatDialogRef<DialogAlertComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
-    console.log(data);
+    if(data.icono == "advertencia") {
+      this.rutaIcono = "../../../assets/img/panel/advertencia.png";
+    } else {
+      this.rutaIcono = "../../../assets/img/panel/success.png";
+    }
   }
 
+  rutaIcono: string;
+  
   onNoClick(): void {
     this.dialogRef.close();
   }

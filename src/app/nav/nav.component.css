@@ -58,3 +58,6 @@ a.active {
   flex: 1 1 auto;
 }
 
+.shadow {
+  text-shadow: 1px 1px #343a40;
+}

@@ -204,7 +204,6 @@ export class VisitaComponent implements OnInit {
     var respuesta = await this.seguimientoService.terminarAsistencia(
       idComunidad
     );
-    console.log(respuesta);
     if(respuesta["codigo"] == "200") {
       var clientes = this.clientes.data;
       var cliente = clientes.find(cliente => cliente["idComunidad"] == idComunidad);

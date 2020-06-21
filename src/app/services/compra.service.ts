@@ -18,7 +18,7 @@ export class CompraService {
       .set("IdRelacionLogica", idRelacionLogica)
       .set("PerteneceKit", perteneceKit)
       .set("FechaExpiracion", fechaExpiracion)
-      .set("encriptada", localStorage.getItem("miCuenta.getToken"));
+      .set("encriptada", localStorage.getItem("token"));
     return new Promise((resolve, reject) => {
       this.http
         .post(
@@ -49,7 +49,7 @@ export class CompraService {
     const body = new HttpParams()
       .set("IdDetalleFactura", idDetalleFactura)
       .set("Cantidad", cantidad)
-      .set("encriptada", localStorage.getItem("miCuenta.putToken"));
+      .set("encriptada", localStorage.getItem("token"));
     return new Promise((resolve, reject) => {
       this.http
         .post(apiUrl + "Factura/AumentarDetalleFactura", body.toString(), {
@@ -72,7 +72,7 @@ export class CompraService {
   consultarDetalleFactura(idCabecera: string) {
     const body = new HttpParams()
       .set("IdCabeceraFactura", idCabecera)
-      .set("encriptada", localStorage.getItem("miCuenta.getToken"));
+      .set("encriptada", localStorage.getItem("token"));
     return new Promise((resolve, reject) => {
       this.http
         .post(apiUrl + "Factura/ListaFacturaDetalle", body.toString(), {
@@ -103,7 +103,7 @@ export class CompraService {
       .set("IdAsignarProductoLote", idAsignarProductoLote)
       .set("Cantidad", cantidad)
       .set("Faltante", faltante)
-      .set("encriptada", localStorage.getItem("miCuenta.postToken"));
+      .set("encriptada", localStorage.getItem("token"));
     return new Promise((resolve, reject) => {
       this.http
         .post(apiUrl + "Factura/IngresoDetalleFactura", body.toString(), {
@@ -127,7 +127,7 @@ export class CompraService {
     const body = new HttpParams()
       .set("IdDetalleFactura", idDetalleFactura)
       .set("IdCabeceraFactura", idCabeceraFactura)
-      .set("encriptada", localStorage.getItem("miCuenta.deleteToken"));
+      .set("encriptada", localStorage.getItem("token"));
     return new Promise((resolve, reject) => {
       this.http
         .post(apiUrl + "Factura/EliminarDetalleFactura", body.toString(), {

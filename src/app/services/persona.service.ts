@@ -12,7 +12,7 @@ export class PersonaService {
   consultarPersonas() {
     const body = new HttpParams().set(
       "encriptada",
-      localStorage.getItem("miCuenta.getToken")
+      localStorage.getItem("token")
     );
     return new Promise((resolve, reject) => {
       this.http
@@ -40,7 +40,7 @@ export class PersonaService {
   consultarPersonasSinUsuario() {
     const body = new HttpParams().set(
       "encriptada",
-      localStorage.getItem("miCuenta.getToken")
+      localStorage.getItem("token")
     );
     return new Promise((resolve, reject) => {
       this.http
@@ -68,7 +68,7 @@ export class PersonaService {
   consultarTipoDocumento() {
     const body = new HttpParams().set(
       "encriptada",
-      localStorage.getItem("miCuenta.getToken")
+      localStorage.getItem("token")
     );
     return new Promise((resolve, reject) => {
       this.http
@@ -96,7 +96,7 @@ export class PersonaService {
   consultarTipoTelefono() {
     const body = new HttpParams().set(
       "encriptada",
-      localStorage.getItem("miCuenta.getToken")
+      localStorage.getItem("token")
     );
     return new Promise((resolve, reject) => {
       this.http
@@ -146,9 +146,7 @@ export class PersonaService {
       .set("IdTipoTelefono1", tipoTelefono1)
       .set("IdTipoTelefono2", tipoTelefono2)
       .set("Correo", correo)
-      .set("encriptada", localStorage.getItem("miCuenta.postToken"));
-    console.log(body);
-    
+      .set("encriptada", localStorage.getItem("token"));
     return new Promise((resolve, reject) => {
       this.http
         .post(apiUrl + "TalentoHumano/IngresoPersona", body.toString(), {
@@ -171,7 +169,7 @@ export class PersonaService {
   consultarPersonaPorId(idPersona: string) {
     const body = new HttpParams()
       .set("IdPersona", idPersona)
-      .set("encriptada", localStorage.getItem("miCuenta.getToken"));
+      .set("encriptada", localStorage.getItem("token"));
     return new Promise((resolve, reject) => {
       this.http
         .post(apiUrl + "TalentoHumano/BuscarPersona", body.toString(), {
@@ -226,9 +224,7 @@ export class PersonaService {
       .set("IdTipoTelefono1", tipoTelefono1)
       .set("IdTipoTelefono2", tipoTelefono2)
       .set("Correo", correo)
-      .set("encriptada", localStorage.getItem("miCuenta.putToken"));
-      console.log(body);
-      
+      .set("encriptada", localStorage.getItem("token"));
     return new Promise((resolve, reject) => {
       this.http
         .post(apiUrl + "TalentoHumano/ActualizarPersona", body.toString(), {

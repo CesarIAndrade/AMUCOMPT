@@ -31,94 +31,105 @@
               </button>
             </div>
           </div>
-          <mat-form-field class="example-full-width">
-            <input
-              matInput
-              formControlName="_nombres"
-              placeholder="Nombres"
-              type="text"
-              readonly
-            />
-            <button disabled mat-button matPrefix mat-icon-button>
-              <mat-icon>*</mat-icon>
-            </button>
-          </mat-form-field>
-          <mat-form-field class="example-full-width">
-            <input
-              matInput
-              formControlName="_apellidos"
-              placeholder="Apellidos"
-              type="text"
-              readonly
-            />
-            <button disabled mat-button matPrefix mat-icon-button>
-              <mat-icon>*</mat-icon>
-            </button>
-          </mat-form-field>
-          <mat-form-field class="example-full-width">
-            <input
-              matInput
-              name="nombreUsuario"
-              formControlName="_valorUsuario"
-              type="text"
-              placeholder="Ingrese Usuario"
-            />
-            <button disabled mat-button matPrefix mat-icon-button>
-              <mat-icon>*</mat-icon>
-            </button>
-          </mat-form-field>
-          <mat-form-field class="example-full-width">
-            <input
-              matInput
-              name="contrasena"
-              formControlName="_contrasena"
-              type="password"
-              [type]="inputType"
-              placeholder="Ingrese Contraseña"
-            />
-            <button disabled mat-button matPrefix mat-icon-button>
-              <mat-icon>*</mat-icon>
-            </button>
-            <button
-              mat-button
-              matSuffix
-              type="button"
-              mat-icon-button
-              (click)="mostrarContrasena()"
-            >
-              <mat-icon>visibility</mat-icon>
-            </button>
-          </mat-form-field>
-          <div>
-            <button
-              mat-button
-              class="bg-success text-white btn-block mt-2"
-              type="submit"
-              [disabled]="myForm.invalid"
-              [value]="botonInsertar"
-            >
-              Guardar
-            </button>
+          <div class="row">
+            <div class="col-lg-12 col-md-6">
+              <mat-form-field class="example-full-width">
+                <input
+                  matInput
+                  formControlName="_nombres"
+                  placeholder="Nombres"
+                  type="text"
+                  readonly
+                />
+                <button disabled mat-button matPrefix mat-icon-button>
+                  <mat-icon>*</mat-icon>
+                </button>
+              </mat-form-field>
+            </div>
+            <div class="col-lg-12 col-md-6">
+              <mat-form-field class="example-full-width">
+                <input
+                  matInput
+                  formControlName="_apellidos"
+                  placeholder="Apellidos"
+                  type="text"
+                  readonly
+                />
+                <button disabled mat-button matPrefix mat-icon-button>
+                  <mat-icon>*</mat-icon>
+                </button>
+              </mat-form-field>
+            </div>
           </div>
-          <div>
-            <a 
-              mat-button
-              (click)="cancelar()"
-              type="button"
-              class="mt-2 btn-block"
-            >
-              Cancelar
-            </a>
+          <div class="row">
+            <div class="col-lg-12 col-md-6">
+              <mat-form-field class="example-full-width">
+                <input
+                  matInput
+                  name="nombreUsuario"
+                  formControlName="_valorUsuario"
+                  type="text"
+                  placeholder="Ingrese Usuario"
+                />
+                <button disabled mat-button matPrefix mat-icon-button>
+                  <mat-icon>*</mat-icon>
+                </button>
+              </mat-form-field>
+            </div>
+            <div class="col-lg-12 col-md-6">
+              <mat-form-field class="example-full-width">
+                <input
+                  matInput
+                  name="contrasena"
+                  formControlName="_contrasena"
+                  #contrasena
+                  [type]="inputType"
+                  placeholder="Ingrese Contraseña"
+                />
+                <mat-hint align="end">{{
+                  contrasena.value?.length || 0
+                }}</mat-hint>
+                <button disabled mat-button matPrefix mat-icon-button>
+                  <mat-icon>*</mat-icon>
+                </button>
+                <button
+                  mat-button
+                  matSuffix
+                  type="button"
+                  mat-icon-button
+                  (click)="mostrarContrasena()"
+                >
+                  <mat-icon>visibility</mat-icon>
+                </button>
+              </mat-form-field>
+            </div>
           </div>
+          <button
+            mat-button
+            class="btn-outline-success btn-block mt-2"
+            type="submit"
+            [disabled]="myForm.invalid"
+            [value]="botonInsertar"
+          >
+            Guardar
+          </button>
+          <a
+            mat-button
+            (click)="cancelar()"
+            type="button"
+            class="mt-2 btn-block"
+          >
+            Cancelar
+          </a>
         </div>
-        <div class="col-lg-8">
+        <div class="col-lg-8 margenTabla">
           <h5 style="text-align: center;">Lista Usuarios</h5>
           <mat-form-field class="example-full-width">
             <input
               matInput
               [(ngModel)]="filterUsuario"
               name="buscarUsuario"
-              [ngModelOptions]="{standalone: true}"
+              [ngModelOptions]="{ standalone: true }"
               type="text"
               placeholder="Buscar Usuario"
             />
@@ -139,7 +150,7 @@
                     : 'ApellidoMaterno'
                     : 'UsuarioLogin'
               "
-            > 
+            >
               <ng-container matColumnDef="usuario">
                 <th mat-header-cell *matHeaderCellDef>Usuario</th>
                 <td mat-cell *matCellDef="let element">

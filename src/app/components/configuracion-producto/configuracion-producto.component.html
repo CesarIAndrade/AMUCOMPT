@@ -17,7 +17,7 @@
               {{ opcion.descripcion }}
             </mat-radio-button>
           </mat-radio-group>
-          <hr>
+          <hr />
           <div class="row">
             <div class="col-lg-4">
               <div [hidden]="mostrarForm">
@@ -128,7 +128,7 @@
                   type="submit"
                   [value]="botonIngresar"
                   [disabled]="myForm.invalid"
-                  class="bg-success text-white btn-block"
+                  class="mt.2 btn-outline-success btn-block"
                 >
                   Guardar
                 </button>
@@ -201,10 +201,19 @@
                     <ng-container matColumnDef="acciones">
                       <th mat-header-cell *matHeaderCellDef>Acciones</th>
                       <ng-container *matCellDef="let element">
-                        <ng-container *ngIf="element.utilizado == '1'">
-                          <td mat-cell></td>
-                        </ng-container> 
-                        <ng-container *ngIf="element.utilizado == '0'">
+                        <ng-container *ngIf="element.mostrar">
+                          <ng-container *ngIf="!element.estado">
+                            <td mat-cell>
+                              <button
+                                mat-button
+                                type="button"
+                                class="btn-outline-success"
+                                (click)="habilitarInteres(element._id)"
+                              >
+                                <mat-icon>add</mat-icon>
+                              </button>
+                            </td>
+                          </ng-container>
                           <ng-container *ngIf="element.estado">
                             <td mat-cell>
                               <button
@@ -217,15 +226,20 @@
                               </button>
                             </td>
                           </ng-container>
-                          <ng-container *ngIf="!element.estado">
+                        </ng-container>
+                        <ng-container *ngIf="!element.mostrar">
+                          <ng-container *ngIf="element.utilizado == '1'">
+                            <td mat-cell></td>
+                          </ng-container>
+                          <ng-container *ngIf="element.utilizado == '0'">
                             <td mat-cell>
                               <button
                                 mat-button
                                 type="button"
-                                class="btn-outline-success"
-                                (click)="habilitarInteres(element._id)"
+                                class="btn-outline-danger"
+                                (click)="eliminarCampo(element._id)"
                               >
-                                <mat-icon>add</mat-icon>
+                                <mat-icon>remove</mat-icon>
                               </button>
                             </td>
                           </ng-container>

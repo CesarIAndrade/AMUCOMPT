@@ -60,10 +60,10 @@ export class ProductoComponent implements OnInit {
   @ViewChild("paginator", { static: false }) paginator: MatPaginator;
   productos = new MatTableDataSource<Element[]>();
 
-  openDialog(mensaje): void {
+  openDialog(mensaje, icono): void {
     const dialogRef = this.dialog.open(DialogAlertComponent, {
       width: "250px",
-      data: { mensaje: mensaje },
+      data: { mensaje: mensaje, icono: icono },
     });
   }
 

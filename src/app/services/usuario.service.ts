@@ -34,7 +34,7 @@ export class UsuarioService {
   consultarUsuarios() {
     const body = new HttpParams().set(
       "encriptada",
-      localStorage.getItem("miCuenta.getToken")
+      localStorage.getItem("token")
     );
     return new Promise((resolve, reject) => {
       this.http
@@ -58,7 +58,7 @@ export class UsuarioService {
   moduloDeUnTipoDeUsuario(idTipoUsuario: string) {
     const body = new HttpParams()
       .set("IdTipoUsuario", idTipoUsuario)
-      .set("encriptada", localStorage.getItem("miCuenta.getToken"));
+      .set("encriptada", localStorage.getItem("token"));
     return new Promise((resolve, reject) => {
       this.http
         .post(
@@ -85,7 +85,7 @@ export class UsuarioService {
   privilegiosDeUnModuloTipo(idModuloTipo: string) {
     const body = new HttpParams()
       .set("IdModuloTipo", idModuloTipo)
-      .set("encriptada", localStorage.getItem("miCuenta.getToken"));
+      .set("encriptada", localStorage.getItem("token"));
     return new Promise((resolve, reject) => {
       this.http
         .post(
@@ -112,7 +112,7 @@ export class UsuarioService {
   consultarTipoUsuariosAsignados(idUsuario: string) {
     const body = new HttpParams()
       .set("IdUsuario", idUsuario)
-      .set("encriptada", localStorage.getItem("miCuenta.getToken"));
+      .set("encriptada", localStorage.getItem("token"));
     return new Promise((resolve, reject) => {
       this.http
         .post(
@@ -139,7 +139,7 @@ export class UsuarioService {
   consultarTipoUsuariosSinAsignar(idUsuario: string) {
     const body = new HttpParams()
       .set("IdUsuario", idUsuario)
-      .set("encriptada", localStorage.getItem("miCuenta.getToken"));
+      .set("encriptada", localStorage.getItem("token"));
     return new Promise((resolve, reject) => {
       this.http
         .post(
@@ -166,7 +166,7 @@ export class UsuarioService {
   consultarPrivilegios() {
     const body = new HttpParams().set(
       "encriptada",
-      localStorage.getItem("miCuenta.getToken")
+      localStorage.getItem("token")
     );
     return new Promise((resolve, reject) => {
       this.http
@@ -190,7 +190,7 @@ export class UsuarioService {
   consultarModulos() {
     const body = new HttpParams().set(
       "encriptada",
-      localStorage.getItem("miCuenta.getToken")
+      localStorage.getItem("token")
     );
     return new Promise((resolve, reject) => {
       this.http
@@ -216,7 +216,7 @@ export class UsuarioService {
       .set("IdPersona", idPersona)
       .set("UsuarioLogin", usuario)
       .set("Contrasena", contrasena)
-      .set("encriptada", localStorage.getItem("miCuenta.postToken"));
+      .set("encriptada", localStorage.getItem("token"));
     return new Promise((resolve, reject) => {
       this.http
         .post(apiUrl + "TalentoHumano/IngresoCredencial", body.toString(), {
@@ -239,7 +239,7 @@ export class UsuarioService {
   habilitarUsuario(idUsuario: string) {
     const body = new HttpParams()
       .set("IdUsuario", idUsuario)
-      .set("encriptada", localStorage.getItem("miCuenta.postToken"));
+      .set("encriptada", localStorage.getItem("token"));
     return new Promise((resolve, reject) => {
       this.http
         .post(apiUrl + "Usuario/HabilitarUsuario", body.toString(), {
@@ -263,7 +263,7 @@ export class UsuarioService {
     const body = new HttpParams()
       .set("IdUsuario", idUsuario)
       .set("IdTipoUsuario", tipoUsuario)
-      .set("encriptada", localStorage.getItem("miCuenta.postToken"));
+      .set("encriptada", localStorage.getItem("token"));
     return new Promise((resolve, reject) => {
       this.http
         .post(apiUrl + "TalentoHumano/IngresoTipoUsuario", body.toString(), {
@@ -292,7 +292,7 @@ export class UsuarioService {
       .set("IdAsignacionTU", idAsignacionTU)
       .set("IdUsuario", idUsuario)
       .set("IdTipoUsuario", idTipoUsuario)
-      .set("encriptada", localStorage.getItem("miCuenta.putToken"));
+      .set("encriptada", localStorage.getItem("token"));
     return new Promise((resolve, reject) => {
       this.http
         .post(
@@ -319,7 +319,7 @@ export class UsuarioService {
   eliminarTipoUsuario(idAsignacionTipoUsuario: string) {
     const body = new HttpParams()
       .set("IdAsignacionTU", idAsignacionTipoUsuario)
-      .set("encriptada", localStorage.getItem("miCuenta.deleteToken"));
+      .set("encriptada", localStorage.getItem("token"));
     return new Promise((resolve, reject) => {
       this.http
         .post(
@@ -346,7 +346,7 @@ export class UsuarioService {
   eliminarUsuario(idUsuario: string) {
     const body = new HttpParams()
       .set("IdUsuario", idUsuario)
-      .set("encriptada", localStorage.getItem("miCuenta.deleteToken"));
+      .set("encriptada", localStorage.getItem("token"));
     return new Promise((resolve, reject) => {
       this.http
         .post(apiUrl + "TalentoHumano/EliminarCredencial", body.toString(), {
@@ -367,17 +367,17 @@ export class UsuarioService {
   }
 
   actualizarUsuario(
-    IdUsuario: string,
-    IdPersona: string,
-    UsuarioLogin: string,
-    Contrasena: string
+    idUsuario: string,
+    idPersona: string,
+    usuarioLogin: string,
+    contrasena: string
   ) {
     const body = new HttpParams()
-      .set("IdUsuario", IdUsuario)
-      .set("IdPersona", IdPersona)
-      .set("UsuarioLogin", UsuarioLogin)
-      .set("Contrasena", Contrasena)
-      .set("encriptada", localStorage.getItem("miCuenta.putToken"));
+      .set("IdUsuario", idUsuario)
+      .set("IdPersona", idPersona)
+      .set("UsuarioLogin", usuarioLogin)
+      .set("Contrasena", contrasena)
+      .set("encriptada", localStorage.getItem("token"));
     return new Promise((resolve, reject) => {
       this.http
         .post(apiUrl + "TalentoHumano/ActualizarCredencial", body.toString(), {
@@ -400,7 +400,7 @@ export class UsuarioService {
   consultarTecnicos(idTipoUsuario: string) {
     const body = new HttpParams()
       .set("Identificacion", idTipoUsuario)
-      .set("encriptada", localStorage.getItem("miCuenta.getToken"));
+      .set("encriptada", localStorage.getItem("token"));
     return new Promise((resolve, reject) => {
       this.http
         .post(
@@ -428,7 +428,7 @@ export class UsuarioService {
     const body = new HttpParams()
       .set("IdAsignarTUAntiguo", idTecnicoViejo)
       .set("IdAsignarTUNuevo", idTecnicoNuevo)
-      .set("encriptada", localStorage.getItem("miCuenta.getToken"));
+      .set("encriptada", localStorage.getItem("token"));
     return new Promise((resolve, reject) => {
       this.http
         .post(apiUrl + "Credito/TransferirTecnico", body.toString(), {
@@ -448,22 +448,23 @@ export class UsuarioService {
     });
   }
 
-  actualizarTelefonoCorreo(
-    idPersona: string,
-    correo: string,
-  ) {
+  actualizarCorreo(idPersona: string, correo: string) {
     const body = new HttpParams()
-    .set("IdPersona", idPersona) 
-    .set("Correo", correo)
-      .set("encriptada", localStorage.getItem("miCuenta.getToken"));
+      .set("IdPersona", idPersona)
+      .set("Correo", correo)
+      .set("encriptada", localStorage.getItem("token"));
     return new Promise((resolve, reject) => {
       this.http
-        .post(apiUrl + "TalentoHumano/ActualizarTelefonoCorreo", body.toString(), {
-          headers: new HttpHeaders().set(
-            "Content-Type",
-            "application/x-www-form-urlencoded"
-          ),
-        })
+        .post(
+          apiUrl + "TalentoHumano/ActualizarCorreo",
+          body.toString(),
+          {
+            headers: new HttpHeaders().set(
+              "Content-Type",
+              "application/x-www-form-urlencoded"
+            ),
+          }
+        )
         .subscribe(
           (res) => {
             resolve(res);

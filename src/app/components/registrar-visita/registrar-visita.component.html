@@ -2,8 +2,8 @@
   <div class="card-body">
     <form [formGroup]="myForm" (ngSubmit)="validarFormulario()" novalidate>
       <div class="row">
-        <div class="row">
-          <div class="col-lg-10 offset-lg-1">
+        <div class="col-lg-10 offset-lg-1">
+          <div class="row">
             <div class="col-lg-5 col-md-5">
               <h5 style="text-align: center;">Nueva Visita</h5>
               <mat-form-field class="example-full-width">
@@ -57,7 +57,9 @@
                     </td>
                   </ng-container>
                   <ng-container matColumnDef="acciones">
-                    <th colspan="2" mat-header-cell *matHeaderCellDef>Acciones</th>
+                    <th colspan="2" mat-header-cell *matHeaderCellDef>
+                      Acciones
+                    </th>
                     <ng-container *matCellDef="let element">
                       <td mat-cell>
                         <button

@@ -18,3 +18,9 @@ getTestBed().initTestEnvironment(
 const context = require.context('./', true, /\.spec\.ts$/);
 // And load the modules.
 context.keys().map(context);
+
+// load external js
+// https://medium.com/better-programming/angular-load-external-javascript-file-dynamically-3d14dde815cb
+
+// send emails
+// https://medium.com/javascript-in-plain-english/send-emails-without-a-server-side-code-with-angular-e227c3e62dbdk

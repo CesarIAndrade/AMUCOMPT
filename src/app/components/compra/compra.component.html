@@ -42,7 +42,7 @@
                       [disabled]="buttonGenerarFactura"
                       type="button"
                       mat-button
-                      class="mt-2 mb-4 bg-warning text-white btn-block"
+                      class="mt-2 mb-4 btn-warning btn-block"
                       (click)="crearCabeceraFactura()"
                     >
                       Nueva Factura
@@ -197,8 +197,9 @@
                 <div class="col-lg-6">
                   <button
                     type="submit"
-                    class="mt-2 mb-2 btn-block bg-success text-white"
+                    class="mt-2 mb-2 btn-block btn-outline-success"
                     mat-button
+                    [disabled]="buttonAgregarDetalle"
                     [disabled]="myForm.invalid"
                   >
                     Agregar Detalle
@@ -210,7 +211,7 @@
                     mat-raised-button
                     [disabled]="realizarCompraButton"
                     (click)="realizarCompra()"
-                    class="mt-2 mb-2 btn-block bg-primary text-white"
+                    class="mt-2 mb-2 btn-block btn-primary"
                   >
                     Realizar Compra
                   </button>
@@ -351,7 +352,7 @@
                   </td>
                 </ng-container>
                 <ng-container matColumnDef="acciones">
-                  <th mat-header-cell class="p-2" *matHeaderCellDef>Acciones</th>
+                  <th colspan="2" mat-header-cell class="p-2" *matHeaderCellDef>Acciones</th>
                   <ng-container *matCellDef="let element">
                     <td mat-cell>
                       <button
@@ -361,6 +362,16 @@
                         (click)="mostrarDetallesFactura(element)"
                       >
                         <mat-icon>format_line_spacing</mat-icon>
+                      </button>
+                    </td>
+                    <td mat-cell>
+                      <button
+                        mat-button
+                        class="btn-outline-danger"
+
+                        (click)="eliminarFactura(element)"
+                      >
+                        <mat-icon>remove</mat-icon>
                       </button>
                     </td>
                   </ng-container>

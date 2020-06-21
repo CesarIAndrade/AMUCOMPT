@@ -67,10 +67,10 @@ export class ModalAsignacionConfiguracionProductoComponent implements OnInit {
   @ViewChild("paginator", { static: true }) paginator: MatPaginator;
   dataSource = new MatTableDataSource<Element[]>();
 
-  openDialog(mensaje): void {
+  openDialog(mensaje, icono): void {
     const dialogRef = this.dialog.open(DialogAlertComponent, {
       width: "250px",
-      data: { mensaje: mensaje },
+      data: { mensaje: mensaje, icono: icono },
     });
   }
 
@@ -239,7 +239,7 @@ export class ModalAsignacionConfiguracionProductoComponent implements OnInit {
       this.modalAsignacionConfiguracionProducto.close({ flag: true });
       this.buttonComprarKitCompleto = true;
     } else if (respuesta["codigo"] == "500") {
-      this.openDialog(respuesta["mensaje"]);
+      this.openDialog(respuesta["mensaje"], "advertencia");
     }
   }
 

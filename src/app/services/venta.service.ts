@@ -22,8 +22,7 @@ export class VentaService {
       .set("Faltante", faltante)
       .set("Cantidad", cantidad)
       .set("PorcentajeDescuento", descuento)
-      .set("encriptada", localStorage.getItem("miCuenta.postToken"));
-    console.log(body);
+      .set("encriptada", localStorage.getItem("token"));
     return new Promise((resolve, reject) => {
       this.http
         .post(apiUrl + "Credito/IngresoDetalleVenta", body.toString(), {
@@ -46,7 +45,7 @@ export class VentaService {
   consultarDetalleFactura(IdCabeceraFactura: string) {
     const body = new HttpParams()
       .set("IdCabeceraFactura", IdCabeceraFactura)
-      .set("encriptada", localStorage.getItem("miCuenta.getToken"));
+      .set("encriptada", localStorage.getItem("token"));
     return new Promise((resolve, reject) => {
       this.http
         .post(apiUrl + "Factura/ListaFacturaVenta", body.toString(), {
@@ -79,7 +78,7 @@ export class VentaService {
       .set("Efectivo", efectivo)
       .set("FechaFinalCredito", fechaFinalCredito)
       .set("AplicaSeguro", aplicaSeguro)
-      .set("encriptada", localStorage.getItem("miCuenta.postToken"));
+      .set("encriptada", localStorage.getItem("token"));
     return new Promise((resolve, reject) => {
       this.http
         .post(apiUrl + "Factura/IngresoConfigurarVenta", body.toString(), {
@@ -106,7 +105,7 @@ export class VentaService {
     const body = new HttpParams()
       .set("IdDetalleVenta", IdDetalleVenta)
       .set("Cantidad", Cantidad)
-      .set("encriptada", localStorage.getItem("miCuenta.putToken"));
+      .set("encriptada", localStorage.getItem("token"));
     return new Promise((resolve, reject) => {
       this.http
         .post(apiUrl + "Credito/AumentarDetalleVenta", body.toString(), {
@@ -129,7 +128,7 @@ export class VentaService {
   quitarDetalleFactura(idDetalleVenta: string) {
     const body = new HttpParams()
       .set("IdDetalleVenta", idDetalleVenta)
-      .set("encriptada", localStorage.getItem("miCuenta.deleteToken"));
+      .set("encriptada", localStorage.getItem("token"));
     return new Promise((resolve, reject) => {
       this.http
         .post(apiUrl + "Credito/EliminarDetalleVenta", body.toString(), {
@@ -158,7 +157,7 @@ export class VentaService {
       .set("IdCabeceraFactura", idCabeceraFactura)
       .set("IdKit", idKit)
       .set("Cantidad", cantidad)
-      .set("encriptada", localStorage.getItem("miCuenta.postToken"));
+      .set("encriptada", localStorage.getItem("token"));
     return new Promise((resolve, reject) => {
       this.http
         .post(apiUrl + "Credito/IngresoDetalleVentaPorKit", body.toString(), {
@@ -178,14 +177,11 @@ export class VentaService {
     });
   }
 
-  quitarDetalleVentaPorKit(
-    idCabeceraFactura: string,
-    idKit: string
-  ) {
+  quitarDetalleVentaPorKit(idCabeceraFactura: string, idKit: string) {
     const body = new HttpParams()
       .set("IdCabeceraFactura", idCabeceraFactura)
       .set("IdKit", idKit)
-      .set("encriptada", localStorage.getItem("miCuenta.deleteToken"));
+      .set("encriptada", localStorage.getItem("token"));
     return new Promise((resolve, reject) => {
       this.http
         .post(
@@ -209,14 +205,11 @@ export class VentaService {
     });
   }
 
-  asignarComunidadFactura(
-    idCabeceraFactura: string,
-    idComunidad: string
-  ) {
+  asignarComunidadFactura(idCabeceraFactura: string, idComunidad: string) {
     const body = new HttpParams()
       .set("IdCabeceraFactura", idCabeceraFactura)
       .set("IdComunidad", idComunidad)
-      .set("encriptada", localStorage.getItem("miCuenta.postToken"));
+      .set("encriptada", localStorage.getItem("token"));
     return new Promise((resolve, reject) => {
       this.http
         .post(
@@ -240,12 +233,10 @@ export class VentaService {
     });
   }
 
-  quitarAsignacionComunidadFactura(
-    idAsignarComunidadFactura: string
-  ) {
+  quitarAsignacionComunidadFactura(idAsignarComunidadFactura: string) {
     const body = new HttpParams()
       .set("IdAsignarComunidadFactura", idAsignarComunidadFactura)
-      .set("encriptada", localStorage.getItem("miCuenta.deleteToken"));
+      .set("encriptada", localStorage.getItem("token"));
     return new Promise((resolve, reject) => {
       this.http
         .post(
@@ -272,7 +263,7 @@ export class VentaService {
   listarComunidadesPorFactura(idCabeceraFactura: string) {
     const body = new HttpParams()
       .set("IdCabeceraFactura", idCabeceraFactura)
-      .set("encriptada", localStorage.getItem("miCuenta.getToken"));
+      .set("encriptada", localStorage.getItem("token"));
     return new Promise((resolve, reject) => {
       this.http
         .post(

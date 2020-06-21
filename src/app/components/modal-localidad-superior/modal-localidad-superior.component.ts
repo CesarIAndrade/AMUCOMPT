@@ -50,6 +50,7 @@ export class ModalLocalidadSuperiorComponent implements OnInit {
   lista_tabla = new MatTableDataSource<Element[]>();
 
   async consultarProvincias() {
+    this.loading = true;
     var respuesta = await this.panelAdministracionService.consultarProvincias();
     if (respuesta["codigo"] == "200") {
       this.loading = false;
@@ -60,6 +61,7 @@ export class ModalLocalidadSuperiorComponent implements OnInit {
   }
 
   async consultarCantones() {
+    this.loading = true;
     var respuesta = await this.panelAdministracionService.consultarCantones();
     if (respuesta["codigo"] == "200") {
       this.loading = false;
@@ -70,6 +72,7 @@ export class ModalLocalidadSuperiorComponent implements OnInit {
   }
 
   async consultarParroquias() {
+    this.loading = true;
     var respuesta = await this.panelAdministracionService.consultarParroquias();
     if (respuesta["codigo"] == "200") {
       this.loading = false;
@@ -80,6 +83,7 @@ export class ModalLocalidadSuperiorComponent implements OnInit {
   }
 
   async consultarComunidades() {
+    this.loading = true;
     var respuesta = await this.panelAdministracionService.consultarComunidades();
     if (respuesta["codigo"] == "200") {
       this.loading = false;
@@ -126,7 +130,6 @@ export class ModalLocalidadSuperiorComponent implements OnInit {
       this.myForm.get("_idParroquia").value,
       this.myForm.get("_comunidad").value
     );
-    console.log(comunidad);
     if (comunidad["codigo"] == "200") {
       var comunidades: any = this.lista_tabla.data;
       comunidades.push({
@@ -140,18 +143,18 @@ export class ModalLocalidadSuperiorComponent implements OnInit {
       this.myForm.reset();
       this.panelAdministracionService.refresh$.emit();
     } else if (comunidad["codigo"] == "400") {
-      this.openDialog("Inténtalo de nuevo");
+      this.openDialog("Inténtalo de nuevo", "advertencia");
     } else if (comunidad["codigo"] == "418") {
-      this.openDialog(comunidad["mensaje"]);
+      this.openDialog(comunidad["mensaje"], "advertencia");
     } else if (comunidad["codigo"] == "500") {
-      this.openDialog("Problemas con el servidor");
+      this.openDialog("Problemas con el servidor", "advertencia");
     }
   }
 
-  openDialog(mensaje): void {
+  openDialog(mensaje, icono): void {
     const dialogRef = this.dialog.open(DialogAlertComponent, {
       width: "250px",
-      data: { mensaje: mensaje },
+      data: { mensaje: mensaje, icono: icono },
     });
   }
 

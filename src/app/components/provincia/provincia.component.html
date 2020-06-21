@@ -18,27 +18,23 @@
                   <mat-icon>*</mat-icon>
                 </button>
               </mat-form-field>
-              <div>
-                <button
-                  mat-button
-                  type="submit"
-                  [value]="botonIngresar"
-                  [disabled]="myForm.invalid"
-                  class="bg-success text-white btn-block"
-                >
-                  Guardar
-                </button>
-              </div>
-              <div>
-                <a
-                  mat-button
-                  routerLink="/localizaciones"
-                  type="button"
-                  class="mt-2 btn-block"
-                >
-                  Volver
-                </a>
-              </div>
+              <button
+                mat-button
+                type="submit"
+                [value]="botonIngresar"
+                [disabled]="myForm.invalid"
+                class="btn-outline-success btn-block"
+              >
+                Guardar
+              </button>
+              <a
+                mat-button
+                routerLink="/localizaciones"
+                type="button"
+                class="mt-2 btn-block"
+              >
+                Volver
+              </a>
             </div>
             <div class="col-lg-7 col-md-7">
               <h5 style="text-align: center;">Lista Provincias</h5>

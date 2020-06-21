@@ -4,6 +4,7 @@ import { Observable } from "rxjs";
 import { map, filter, withLatestFrom } from "rxjs/operators";
 import { Router, NavigationEnd, ActivatedRoute } from "@angular/router";
 import { MatSidenav } from "@angular/material";
+import { LoginComponent } from '../components/login/login.component';
 
 @Component({
   selector: "app-nav",
@@ -50,105 +51,119 @@ export class NavComponent implements OnInit {
   nav_items = [];
   rutasPorTipoUsuario: any[] = [];
   compraVenta = false;
-
+  usuario: any;
+  nombres: string;
   ngOnInit() {
-    if (localStorage.getItem("miCuenta.tipoUsuario") == "1") {
-      this.rutasPorTipoUsuario = ["/usuarios", "/personas", "/cuenta"];
-      this.nav_items.push(
-        {
-          name: "Usuarios",
-          icon: "person",
-          url: "/usuarios",
-        },
-        {
-          name: "Personas",
-          icon: "supervisor_account",
-          url: "/personas",
-        }
-      );
-    } else if (localStorage.getItem("miCuenta.tipoUsuario") == "2") {
-      this.rutasPorTipoUsuario = ["/visitas", "/cuenta"];
-      this.nav_items.push(
-        {
+    this.usuario = JSON.parse(localStorage.getItem("usuario"));
+    if (this.usuario) {
+      this.nombres =
+        this.usuario.PersonaEntidad.PrimerNombre +
+        " " +
+        this.usuario.PersonaEntidad.ApellidoPaterno;
+      if (localStorage.getItem("miCuenta.tipoUsuario") == "1") {
+        this.rutasPorTipoUsuario = ["/usuarios", "/personas", "/cuenta"];
+        this.nav_items.push(
+          {
+            name: "Usuarios",
+            icon: "person",
+            url: "/usuarios",
+          },
+          {
+            name: "Personas",
+            icon: "supervisor_account",
+            url: "/personas",
+          }
+        );
+      } else if (localStorage.getItem("miCuenta.tipoUsuario") == "2") {
+        this.rutasPorTipoUsuario = ["/visitas", "/cuenta"];
+        this.nav_items.push({
           name: "Visitas",
           icon: "chrome_reader_mode",
           url: "/visitas",
-        }
-      );
-    } else if (localStorage.getItem("miCuenta.tipoUsuario") == "3") {
-      this.rutasPorTipoUsuario = [
-        "/personas",
-        "/configuracion-productos",
-        "/inventarios",
-        "/stock",
-        "/asignar-tecnico-cliente",
-        "/abonos",
-        "/localizaciones",
-        "/provincias",
-        "/cantones",
-        "/parroquias",
-        "/comunidades",
-        "/compra-venta",
-        "/compras",
-        "/ventas",
-        "/cuenta",
-      ];
-      this.nav_items.push(
-        {
-          name: "Personas",
-          icon: "supervisor_account",
-          url: "/personas",
-        },
-        {
-          name: "Conf. Productos",
-          icon: "settings",
-          url: "/configuracion-productos",
-        },
-        {
-          name: "Inventario",
-          icon: "storage",
-          url: "/inventarios",
-        },
-        {
-          name: "Stock",
-          icon: "list_alt",
-          url: "/stock",
-        },
-        {
-          name: "Asignar Técnico Clientes",
-          icon: "assignment_ind",
-          url: "/asignar-tecnico-cliente",
-        },
-        {
-          name: "Abonos",
-          icon: "attach_money",
-          url: "/abonos",
-        },
-        {
-          name: "Localidades",
-          icon: "where_to_vote",
-          url: "/localizaciones",
-        },
-        {
-          name: "Compra Venta",
-          icon: "shop",
-          url: "/compra-venta",
-        }
-      );
-    }
-    if (!this.rutasPorTipoUsuario.includes(this.router.url)) {
-      this.router.navigateByUrl(this.rutasPorTipoUsuario[0]);
-    }
-    if (this.router.url == "/") {
-      this.router.navigateByUrl(this.rutasPorTipoUsuario[0]);
-    }
-    if (this.router.url == "/compras" || this.router.url == "/ventas") {
-      this.compraVenta = true;
-    } else {
-      this.compraVenta = false;
-    }
-    this.route = this.router.url.split("/")[1].replace("-", " ").toUpperCase();
-    this.router.events.subscribe((_) => {
+        });
+      } else if (localStorage.getItem("miCuenta.tipoUsuario") == "3") {
+        this.rutasPorTipoUsuario = [
+          "/personas",
+          "/configuracion-productos",
+          "/inventarios",
+          "/stock",
+          "/asignar-tecnico-cliente",
+          "/abonos",
+          "/localizaciones",
+          "/provincias",
+          "/cantones",
+          "/parroquias",
+          "/comunidades",
+          "/compra-venta",
+          "/compras",
+          "/ventas",
+          "/cuenta",
+        ];
+        this.nav_items.push(
+          {
+            name: "Personas",
+            icon: "supervisor_account",
+            url: "/personas",
+          },
+          {
+            name: "Conf. Productos",
+            icon: "settings",
+            url: "/configuracion-productos",
+          },
+          {
+            name: "Inventario",
+            icon: "storage",
+            url: "/inventarios",
+          },
+          {
+            name: "Stock",
+            icon: "list_alt",
+            url: "/stock",
+          },
+          {
+            name: "Asignar Técnico Clientes",
+            icon: "assignment_ind",
+            url: "/asignar-tecnico-cliente",
+          },
+          {
+            name: "Abonos",
+            icon: "attach_money",
+            url: "/abonos",
+          },
+          {
+            name: "Localidades",
+            icon: "where_to_vote",
+            url: "/localizaciones",
+          },
+          {
+            name: "Compra Venta",
+            icon: "shop",
+            url: "/compra-venta",
+          }
+        );
+      } else if (localStorage.getItem("miCuenta.tipoUsuario") == "4") {
+        this.rutasPorTipoUsuario = ["/cuenta"];
+      } else if (localStorage.getItem("miCuenta.tipoUsuario") == "5") {
+        this.rutasPorTipoUsuario = ["/compras-rubros", "/ventas-rubros", "/cuenta"];
+        this.nav_items.push(
+          {
+            name: "Compra Rubros",
+            icon: "supervisor_account",
+            url: "/compras-rubros",
+          },
+          {
+            name: "Venta Rubros",
+            icon: "supervisor_account",
+            url: "/ventas-rubros",
+          }
+        );
+      }
+      if (!this.rutasPorTipoUsuario.includes(this.router.url)) {
+        this.router.navigateByUrl(this.rutasPorTipoUsuario[0]);
+      }
+      if (this.router.url == "/") {
+        this.router.navigateByUrl(this.rutasPorTipoUsuario[0]);
+      }
       if (this.router.url == "/compras" || this.router.url == "/ventas") {
         this.compraVenta = true;
       } else {
@@ -158,6 +173,17 @@ export class NavComponent implements OnInit {
         .split("/")[1]
         .replace("-", " ")
         .toUpperCase();
-    });
+      this.router.events.subscribe((_) => {
+        if (this.router.url == "/compras" || this.router.url == "/ventas") {
+          this.compraVenta = true;
+        } else {
+          this.compraVenta = false;
+        }
+        this.route = this.router.url
+          .split("/")[1]
+          .replace("-", " ")
+          .toUpperCase();
+      });
+    }
   }
 }

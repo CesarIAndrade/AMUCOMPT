@@ -20,6 +20,7 @@ import { MatDialog } from "@angular/material/dialog";
 import { InventarioService } from "src/app/services/inventario.service";
 import { FacturaService } from "src/app/services/factura.service";
 import { VentaService } from "src/app/services/venta.service";
+import { element } from "protractor";
 
 @Component({
   selector: "app-venta",
@@ -37,13 +38,13 @@ export class VentaComponent implements OnInit {
   ) {
     this.myForm = new FormGroup({
       _idCabecera: new FormControl(""),
-      _cabecera: new FormControl(""),
-      _fechaFactura: new FormControl(""),
-      _producto: new FormControl(""),
-      _cantidad: new FormControl(""),
+      _cabecera: new FormControl("", [Validators.required]),
+      _fechaFactura: new FormControl("", [Validators.required]),
+      _producto: new FormControl("", [Validators.required]),
+      _cantidad: new FormControl("", [Validators.required]),
       _precio: new FormControl(""),
       _persona: new FormControl(""),
-      _cedula: new FormControl(""),
+      _cedula: new FormControl("", [Validators.required]),
       _idPersona: new FormControl(""),
       _nombres: new FormControl(""),
       _idAsignarProductoLote: new FormControl(""),
@@ -74,13 +75,16 @@ export class VentaComponent implements OnInit {
   buttonSeleccionarProducto = true;
   selectTipoCompra = true;
   selectTipoPago = true;
+  buttonGenerarFactura = false;
   buttonSeleccionarPersona = true;
   buttonSeleccionarComunidad = true;
-  buttonGenerarFactura = false;
+  buttonAgregarDetalle = true;
   buttonRealizarVenta = true;
   inputDescuento = true;
-  siSePagaACredito = true;
+  siSePagaACredito = false;
   comboKits = false;
+  loadingFnF = true;
+  loadingFF = true;
   todayDate: Date = new Date();
   meses = [
     "Enero",
@@ -119,10 +123,10 @@ export class VentaComponent implements OnInit {
   facturasNoFinalizadas = new MatTableDataSource<Element[]>();
   facturasFinalizadas = new MatTableDataSource<Element[]>();
 
-  openDialog(mensaje): void {
+  openDialog(mensaje, icono): void {
     const dialogRef = this.dialog.open(DialogAlertComponent, {
       width: "250px",
-      data: { mensaje: mensaje },
+      data: { mensaje: mensaje, icono: icono },
     });
   }
 
@@ -152,7 +156,7 @@ export class VentaComponent implements OnInit {
       localStorage.getItem("miCuenta.ventas")
     );
     if (respuesta["codigo"] == "200") {
-      this.consultarFacturas();
+      this.consultarFacturas(true);
       this.limpiarCampos();
       this.detalleVenta.data = [];
       this.myForm
@@ -166,9 +170,12 @@ export class VentaComponent implements OnInit {
       this.buttonGenerarFactura = true;
       this.buttonSeleccionarPersona = false;
       this.buttonSeleccionarProducto = false;
-      this.buttonSeleccionarComunidad = false;
+      this.buttonSeleccionarComunidad = true;
+      this.buttonAgregarDetalle = false;
       this.selectTipoCompra = false;
       this.selectTipoPago = false;
+      this.siSePagaACredito = false;
+      this.pago = "Efectivo";
       this.myForm.enable();
       this.myForm.get("_checkedDescuento").disable();
     }
@@ -226,7 +233,7 @@ export class VentaComponent implements OnInit {
         data: {
           listaProductosDeUnKit: this.listaProductosDeUnKit,
           idCabeceraFactura: this.myForm.get("_idCabecera").value,
-          permitirAnadir: this.permitirAnadir
+          permitirAnadir: this.permitirAnadir,
         },
       }
     );
@@ -288,13 +295,10 @@ export class VentaComponent implements OnInit {
   }
 
   seleccionarPersona() {
-    let dialogRef = this.dialog.open(
-      ModalPersonaComponent,
-      {
-        width: "auto",
-        height: "auto",
-      }
-    );
+    let dialogRef = this.dialog.open(ModalPersonaComponent, {
+      width: "auto",
+      height: "auto",
+    });
     dialogRef.afterClosed().subscribe((result) => {
       if (result != null) {
         this.myForm.get("_cedula").setValue(result.cedula);
@@ -307,13 +311,15 @@ export class VentaComponent implements OnInit {
 
   selecionarTipoPago(tipoPago) {
     if (tipoPago.value == "Efectivo") {
-      this.siSePagaACredito = true;
+      this.siSePagaACredito = false;
+      this.buttonSeleccionarComunidad = true;
       this.myForm.get("_aplicaSeguro").setValue(false);
       this.myForm.get("_aplicaSeguro").enable();
       this.myForm.get("_fechaFinalCredito").clearValidators();
       this.myForm.get("_fechaFinalCredito").updateValueAndValidity();
     } else {
-      this.siSePagaACredito = false;
+      this.siSePagaACredito = true;
+      this.buttonSeleccionarComunidad = false;
       this.myForm.get("_aplicaSeguro").setValue(true);
       this.myForm.get("_aplicaSeguro").disable();
       this.myForm
@@ -348,7 +354,7 @@ export class VentaComponent implements OnInit {
         this.limpiarCampos();
         this.consultarDetalleFactura();
       } else if (respuesta["codigo"] == "500") {
-        this.openDialog(respuesta["mensaje"]);
+        this.openDialog(respuesta["mensaje"], "advertencia");
       }
     }
   }
@@ -463,7 +469,7 @@ export class VentaComponent implements OnInit {
         this.consultarDetalleFactura();
       } else if (respuesta["codigo"] == "201") {
         this.openSnackBar("Factura eliminada");
-        this.consultarFacturas();
+        this.consultarFacturas(true);
         this.myForm.reset();
         this.detalleVenta.data = [];
       }
@@ -475,7 +481,7 @@ export class VentaComponent implements OnInit {
         this.consultarDetalleFactura();
       } else if (respuesta["codigo"] == "201") {
         this.openSnackBar("Factura eliminada");
-        this.consultarFacturas();
+        this.consultarFacturas(true);
         this.myForm.reset();
         this.detalleVenta.data = [];
       }
@@ -518,7 +524,7 @@ export class VentaComponent implements OnInit {
   async crearConfiguracionVenta() {
     if (this.myForm.get("_nombres").value) {
       if (this.pago == "Crédito" && this.comunidades.length == 0) {
-        this.openDialog("Necesitas lugar(es) de sembrío");
+        this.openDialog("Necesitas lugar(es) de sembrío", "advertencia");
       } else {
         var respuesta = await this.ventaService.crearConfiguracionVenta(
           this.myForm.get("_idCabecera").value,
@@ -532,7 +538,7 @@ export class VentaComponent implements OnInit {
         }
       }
     } else {
-      this.openDialog("Necesitas un cliente");
+      this.openDialog("Necesitas un cliente", "advertencia");
     }
   }
 
@@ -542,8 +548,8 @@ export class VentaComponent implements OnInit {
       "Factura/FinalizarCabeceraFacturaVenta"
     );
     if (respuesta["codigo"] == "200") {
-      this.openDialog("Venta realizada con éxito");
-      this.consultarFacturas();
+      this.openDialog("Venta realizada con éxito", "success");
+      this.consultarFacturas(true);
       this.myForm.reset();
       this.myForm.disable();
       this.detalleVenta.data = [];
@@ -553,22 +559,20 @@ export class VentaComponent implements OnInit {
       this.selectTipoPago = true;
       this.buttonSeleccionarComunidad = true;
       this.buttonSeleccionarProducto = true;
+      this.buttonAgregarDetalle = true;
       this.buttonGenerarFactura = false;
       this.selectTipoCompra = true;
     }
   }
 
   seleccionarComunidad() {
-    let dialogRef = this.dialog.open(
-      ModalLocalidadSuperiorComponent,
-      {
-        width: "auto",
-        height: "auto",
-        data: {
-          ruta: "ventas",
-        },
-      }
-    );
+    let dialogRef = this.dialog.open(ModalLocalidadSuperiorComponent, {
+      width: "auto",
+      height: "auto",
+      data: {
+        ruta: "ventas",
+      },
+    });
     dialogRef.afterClosed().subscribe(async (result) => {
       if (result != null) {
         var respuesta = await this.ventaService.asignarComunidadFactura(
@@ -613,8 +617,9 @@ export class VentaComponent implements OnInit {
       .setValue(new Date(factura.FechaGeneracion).toJSON().split("T")[0]);
     this.buttonRealizarVenta = false;
     this.buttonSeleccionarProducto = false;
-    this.buttonSeleccionarComunidad = false;
+    // this.buttonSeleccionarComunidad = false;
     this.buttonSeleccionarPersona = false;
+    this.buttonAgregarDetalle = false;
     this.selectTipoCompra = false;
     this.buttonGenerarFactura = false;
     this.selectTipoPago = false;
@@ -637,24 +642,24 @@ export class VentaComponent implements OnInit {
     }
   }
 
-  loadingFnF = true;
-  loadingFF = true;
-  async consultarFacturas() {
+  async consultarFacturas(flag) {
+    if(flag) {
+      var facturasFinalizadas = await this.facturaService.consultarFacturas(
+        "Factura/ListaFacturasFinalizadasVenta"
+      );
+      if (facturasFinalizadas["codigo"] == "200") {
+        this.loadingFF = false;
+        this.facturasFinalizadas.data = facturasFinalizadas["respuesta"];
+        this.facturasFinalizadas.paginator = this.ff_paginator;
+      }
+    }
     var facturasNoFinalizadas = await this.facturaService.consultarFacturas(
       "Factura/FacturasNoFinalizadasVenta"
-    );
-    var facturasFinalizadas = await this.facturaService.consultarFacturas(
-      "Factura/ListaFacturasFinalizadasVenta"
     );
     if (facturasNoFinalizadas["codigo"] == "200") {
       this.loadingFnF = false;
       this.facturasNoFinalizadas.data = facturasNoFinalizadas["respuesta"];
       this.facturasNoFinalizadas.paginator = this.fnf_paginator;
-    }
-    if (facturasFinalizadas["codigo"] == "200") {
-      this.loadingFF = false;
-      this.facturasFinalizadas.data = facturasFinalizadas["respuesta"];
-      this.facturasFinalizadas.paginator = this.ff_paginator;
     }
   }
 
@@ -669,9 +674,18 @@ export class VentaComponent implements OnInit {
     this.myForm.get("_descuento").reset();
   }
 
+  async eliminarFactura(factura) {
+    this.facturasNoFinalizadas.data = [];
+    this.loadingFnF = true;
+    var respuesta = await this.facturaService.eliminarFactura(factura.IdCabeceraFactura);
+    if (respuesta["codigo"] == "200") {
+      this.consultarFacturas(false);
+    }
+  }
+
   ngOnInit() {
     this.consultarTipoTransaccion();
-    this.consultarFacturas();
+    this.consultarFacturas(true);
     this.myForm.disable();
     this.myForm.reset();
   }

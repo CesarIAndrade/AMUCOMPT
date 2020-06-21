@@ -74,9 +74,9 @@ export class PersonaComponent implements OnInit {
   filterPersona = "";
   guardar = "Guardar";
   nuevaPersona = "Nueva Persona";
-  digitosTelefono1 = 0;
-  digitosTelefono2 = 0;
-  digitosNumeroDocumento = 0;
+  digitosTelefono1 = "0";
+  digitosTelefono2 = "0";
+  digitosNumeroDocumento = "0";
   mostrarTablaPersonasEnVista = false;
 
   cantones: any[] = [];
@@ -87,10 +87,10 @@ export class PersonaComponent implements OnInit {
   tipoDocumentos: any[] = [];
   tipoTelefonos: any[] = [];
 
-  openDialog(mensaje): void {
+  openDialog(mensaje, icono): void {
     const dialogRef = this.dialog.open(DialogAlertComponent, {
       width: "250px",
-      data: { mensaje: mensaje },
+      data: { mensaje: mensaje, icono: icono },
     });
   }
 
@@ -173,7 +173,7 @@ export class PersonaComponent implements OnInit {
       tipo = "apellidos";
     }
     if (campos.length == 1) {
-      this.openDialog(`Necesita dos ${tipo}`);
+      this.openDialog(`Necesita dos ${tipo}`, "advertencia");
     } else if (campos.length >= 2) {
       if (campos[0].length > 0 && campos[1].length > 0) {
         var nombresYApellidos = {
@@ -183,7 +183,7 @@ export class PersonaComponent implements OnInit {
         };
         return nombresYApellidos;
       } else {
-        this.openDialog(`Necesita dos ${tipo}`);
+        this.openDialog(`Necesita dos ${tipo}`, "advertencia");
       }
     }
   }
@@ -204,7 +204,7 @@ export class PersonaComponent implements OnInit {
           Validators.minLength(10),
         ]);
       this.myForm.get("_numeroDocumento").updateValueAndValidity();
-      this.digitosNumeroDocumento = 10;
+      this.digitosNumeroDocumento = "10";
     } else if (tipo.Documento == "RUC") {
       this.myForm
         .get("_numeroDocumento")
@@ -215,13 +215,13 @@ export class PersonaComponent implements OnInit {
           Validators.minLength(13),
         ]);
       this.myForm.get("_numeroDocumento").updateValueAndValidity();
-      this.digitosNumeroDocumento = 13;
+      this.digitosNumeroDocumento = "13";
     } else if (tipo.Documento == "PASAPORTE") {
       this.myForm
         .get("_numeroDocumento")
         .setValidators([Validators.required, Validators.minLength(4)]);
       this.myForm.get("_numeroDocumento").updateValueAndValidity();
-      this.digitosNumeroDocumento = 15;
+      this.digitosNumeroDocumento = "";
     }
   }
 
@@ -265,20 +265,22 @@ export class PersonaComponent implements OnInit {
         this.myForm.get("_telefono1").disable();
         this.myForm.get("_telefono2").disable();
         this.myForm.get("_numeroDocumento").disable();
-        this.digitosTelefono1 = 0;
-        this.digitosTelefono2 = 0;
-        this.digitosNumeroDocumento = 0;
+        this.digitosTelefono1 = "0";
+        this.digitosTelefono2 = "0";
+        this.digitosNumeroDocumento = "0";
         this.myForm.reset();
       } else if (respuesta["codigo"] == "400") {
-        this.openDialog("Inténtalo de nuevo");
+        this.openDialog("Inténtalo de nuevo", "advertencia");
       } else if (respuesta["codigo"] == "418") {
-        this.openDialog(respuesta["mensaje"]);
+        this.openDialog(respuesta["mensaje"], "advertencia");
       } else if (respuesta["codigo"] == "500") {
-        this.openDialog("Problemas con el servidor");
+        this.openDialog("Problemas con el servidor", "advertencia");
       }
     }
   }
 
+  minTelefono1 = 0;
+  minTelefono2 = 0;
   seleccionarTipoTelefono(IdTipoTelefono, suffix, flag) {
     var tipo = this.tipoTelefonos.find(
       (tipo) => tipo.IdTipoTelefono == IdTipoTelefono
@@ -295,18 +297,23 @@ export class PersonaComponent implements OnInit {
           Validators.minLength(10),
         ]);
       this.myForm.get(`_telefono${suffix}`).updateValueAndValidity();
-      this.digitosTelefono1 = 10;
+      suffix == 1? this.digitosTelefono1 = "10" : this.digitosTelefono2 = "10";
     } else {
       this.myForm
         .get(`_telefono${suffix}`)
         .setValidators([
           Validators.required,
           Validators.pattern(/^-?(0|[0-9]\d*)?$/),
-          Validators.maxLength(7),
           Validators.minLength(7),
         ]);
       this.myForm.get(`_telefono${suffix}`).updateValueAndValidity();
-      this.digitosTelefono1 = 7;
+      if(suffix === 1) {
+        this.digitosTelefono1 = "";
+        this.minTelefono1 = 7;
+      } else {
+        this.digitosTelefono2 = "";
+        this.minTelefono2 = 7;
+      }
       if(flag) { this.myForm.get(`_telefono${suffix}`).reset(); }
     }
   }
@@ -406,11 +413,11 @@ export class PersonaComponent implements OnInit {
         this.myForm.get("_telefono2").disable();
         this.myForm.reset();
       } else if (respuesta["codigo"] == "400") {
-        this.openDialog("Inténtalo de nuevo");
+        this.openDialog("Inténtalo de nuevo", "advertencia");
       } else if (respuesta["codigo"] == "418") {
-        this.openDialog(respuesta["mensaje"]);
+        this.openDialog(respuesta["mensaje"], "advertencia");
       } else if (respuesta["codigo"] == "500") {
-        this.openDialog("Problemas con el servidor");
+        this.openDialog("Problemas con el servidor", "advertencia");
       }
     }
   }

@@ -1,5 +1,13 @@
 <div mat-dialog-content>
   <h5 style="text-align: center">{{ data.mensaje }}</h5>
+  <div class="flex-container">
+    <img
+      [src]="rutaIcono"
+      width="100px"
+      height="100px"
+      class="justify-content: center;"
+    />
+  </div>
   <a mat-button type="button" class="mt-2 btn-block" (click)="onNoClick()"
     >Ok</a
   >

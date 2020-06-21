@@ -36,10 +36,10 @@ export class LoginComponent implements OnInit {
   ingresarCredenciales = false;
   tipoUsuarios: any[] = [];
 
-  openDialog(mensaje): void {
+  openDialog(mensaje, icono): void {
     const dialogRef = this.dialog.open(DialogAlertComponent, {
       width: "250px",
-      data: { mensaje: mensaje },
+      data: { mensaje: mensaje, icono: icono },
     });
   }
 
@@ -50,25 +50,23 @@ export class LoginComponent implements OnInit {
         this.myForm.get("_contrasena").value
       );
       console.log(login);
-      this.seleccionarTipoUsuario = false;
-      this.ingresarCredenciales = true;
       if (login["codigo"] == "200") {
-        localStorage.setItem("usuario", JSON.stringify(login["respuesta"]));      
+        this.seleccionarTipoUsuario = false;
+        this.ingresarCredenciales = true;
+        localStorage.setItem("usuario", JSON.stringify(login["respuesta"]));
+        localStorage.setItem("token", login["Token"]);
         this.tipoUsuarios = login["respuesta"]["ListaTipoUsuario"];
-        localStorage.setItem("miCuenta.idUsuario", login["respuesta"].IdUsuario);
       } else {
         this.myForm.reset();
         this.myForm.get("_tipoUsuario").setValue("0");
-        this.openDialog("Credenciales Incorrectas!");
-        this.seleccionarTipoUsuario = true;
-        this.ingresarCredenciales = false;
+        this.openDialog("Credenciales Incorrectas!", "advertencia");
       }
     }
   }
 
   iniciarSesionSegunTipoUsuario() {
     if (this.myForm.get("_tipoUsuario").value == "0") {
-      this.openDialog("Seleccione Tipo Usuario!");
+      this.openDialog("Seleccione Tipo Usuario!", "advertencia");
     } else {
       localStorage.setItem(
         "miCuenta.idAsignacionTipoUsuario",

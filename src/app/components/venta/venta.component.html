@@ -28,8 +28,8 @@
               <button
                 [disabled]="buttonGenerarFactura"
                 type="button"
-                class="mt-2 mb-4 btn-block bg-warning text-white"
-                mat-raised-button
+                class="mt-2 mb-4 btn-block btn-warning"
+                mat-button
                 (click)="crearCabeceraFactura()"
               >
                 Nueva Factura
@@ -217,13 +217,12 @@
                   </mat-option>
                 </mat-select>
               </mat-form-field>
-              <div class="row">
+              <div class="row" *ngIf="siSePagaACredito">
                 <div class="col-lg-6 col-md-6">
                   <mat-form-field class="example-full-width">
                     <input
                       matInput
                       readonly
-                      [min]="todayDate"
                       formControlName="_fechaFinalCredito"
                       [matDatepicker]="picker"
                       placeholder="Final Crédito"
@@ -256,8 +255,7 @@
                   [disabled]="buttonSeleccionarComunidad"
                   type="button"
                   (click)="seleccionarComunidad()"
-                  class="mt-2 mb-4 text-white btn-block"
-                  style="background-color: #868e96;"
+                  class="mt-2 mb-4 btn-secondary btn-block"
                 >
                   Seleccionar lugar(es) de Sembrío
                 </button>
@@ -290,20 +288,21 @@
             <div class="col-lg-6">
               <button
                 type="submit"
-                class="mt-2 mb-2 btn-block bg-success text-white"
-                mat-raised-button
+                class="mt-2 mb-2 btn-block btn-outline-success"
+                mat-button
+                [disabled]="buttonAgregarDetalle"
                 [disabled]="myForm.invalid"
-              >
+              > 
                 Agregar Detalle
               </button>
             </div>
             <div class="col-lg-6">
               <button
                 type="button"
-                mat-raised-button
+                mat-button
                 [disabled]="buttonRealizarVenta"
                 (click)="crearConfiguracionVenta()"
-                class="mt-2 mb-2 btn-block bg-primary text-white"
+                class="mt-2 mb-2 btn-block btn-primary"
               >
                 Realizar Venta
               </button>
@@ -567,7 +566,7 @@
                   </td>
                 </ng-container>
                 <ng-container matColumnDef="acciones">
-                  <th mat-header-cell class="p-2" *matHeaderCellDef>
+                  <th colspan="2" mat-header-cell class="p-2" *matHeaderCellDef>
                     Acciones
                   </th>
                   <ng-container *matCellDef="let element">
@@ -578,6 +577,16 @@
                         (click)="mostrarDetallesFactura(element)"
                       >
                         <mat-icon>format_line_spacing</mat-icon>
+                      </button>
+                    </td>
+                    <td mat-cell>
+                      <button
+                        mat-button
+                        class="btn-outline-danger"
+
+                        (click)="eliminarFactura(element)"
+                      >
+                        <mat-icon>remove</mat-icon>
                       </button>
                     </td>
                   </ng-container>

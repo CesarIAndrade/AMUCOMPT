@@ -39,10 +39,10 @@ export class ParroquiaComponent implements OnInit {
   @ViewChild("paginator", { static: false }) paginator: MatPaginator;
   parroquias = new MatTableDataSource<Element[]>();
 
-  openDialog(mensaje): void {
+  openDialog(mensaje, icono): void {
     const dialogRef = this.dialog.open(DialogAlertComponent, {
       width: "250px",
-      data: { mensaje: mensaje },
+      data: { mensaje: mensaje, icono: icono },
     });
   }
 
@@ -107,11 +107,11 @@ export class ParroquiaComponent implements OnInit {
       this.panelAdministracionService.refresh$.emit();
       this.openSnackBar("Se ingresó correctamente");
     } else if (parroquia["codigo"] == "400") {
-      this.openDialog("Inténtalo de nuevo");
+      this.openDialog("Inténtalo de nuevo", "advertencia");
     } else if (parroquia["codigo"] == "418") {
-      this.openDialog(parroquia["mensaje"]);
+      this.openDialog(parroquia["mensaje"], "advertencia");
     } else if (parroquia["codigo"] == "500") {
-      this.openDialog("Problemas con el servidor");
+      this.openDialog("Problemas con el servidor", "advertencia");
     }
   }
 
@@ -141,11 +141,11 @@ export class ParroquiaComponent implements OnInit {
       this.panelAdministracionService.refresh$.emit();
       this.openSnackBar("Se actualizó correctamente");
     } else if (respuesta["codigo"] == "400") {
-      this.openDialog("Inténtalo de nuevo");
+      this.openDialog("Inténtalo de nuevo", "advertencia");
     } else if (respuesta["codigo"] == "418") {
-      this.openDialog(respuesta["mensaje"]);
+      this.openDialog(respuesta["mensaje"], "advertencia");
     } else if (respuesta["codigo"] == "500") {
-      this.openDialog("Problemas con el servidor");
+      this.openDialog("Problemas con el servidor", "advertencia");
     }
   }
 
@@ -173,11 +173,11 @@ export class ParroquiaComponent implements OnInit {
           this.panelAdministracionService.refresh$.emit();
           this.openSnackBar("Se eliminó correctamente");
         } else if (respuesta["codigo"] == "400") {
-          this.openDialog("Inténtalo de nuevo");
+          this.openDialog("Inténtalo de nuevo", "advertencia");
         } else if (respuesta["codigo"] == "418") {
-          this.openDialog(respuesta["mensaje"]);
+          this.openDialog(respuesta["mensaje"], "advertencia");
         } else if (respuesta["codigo"] == "500") {
-          this.openDialog("Problemas con el servidor");
+          this.openDialog("Problemas con el servidor", "advertencia");
         }
       }
     });

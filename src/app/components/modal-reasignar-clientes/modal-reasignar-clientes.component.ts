@@ -15,7 +15,7 @@ export class ModalReasignarClientesComponent implements OnInit {
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     private usuarioService: UsuarioService,
-    private modalReasignarClientesComponent: MatDialogRef<ModalReasignarClientesComponent>
+    private dialog: MatDialogRef<ModalReasignarClientesComponent>
   ) {}
 
   idAsignacionTu: string;
@@ -51,7 +51,7 @@ export class ModalReasignarClientesComponent implements OnInit {
     );
     if (tipoUsuarios["codigo"] == "200") {
       tipoUsuarios["respuesta"].map((tipoUsuario) => {
-        if(tipoUsuario.TipoUsuario.Descripcion == "TECNICO"){
+        if(tipoUsuario.TipoUsuario.Descripcion == "TÉCNICO DE CAMPO"){
           this.idAsignacionTu = tipoUsuario.IdAsignacionTUEncriptada;
         }
       })
@@ -68,7 +68,7 @@ export class ModalReasignarClientesComponent implements OnInit {
       this.idTecnico
     );
     if(respuesta["codigo"] == "200") {
-      this.modalReasignarClientesComponent.close({
+      this.dialog.close({
         flag: true,
         usuario: this.data.usuario
       });

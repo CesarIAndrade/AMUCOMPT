@@ -36,17 +36,19 @@ export class CreditosAbonosComponent implements OnInit {
     }
   }
 
-  filterFacturas = "";
+  cliente: string;
+  mostrarDatosCliente = false;
   async consultarFacturasCliente() {
+    this.mostrarDatosCliente = false;
     var respuesta = await this.seguimientoService.consultarFacturasCliente(
       this.myForm.get("_cliente").value
     );
-    console.log(respuesta);
     if (respuesta["codigo"] == "200") {
       var facturas: any = [];
       respuesta["respuesta"].map((factura) => {
         var p = 100;
-        var fechaActual = new Date(); 
+        var fechaActual = new Date();
+        // 2020-06-T09:08:30.79
         var fechaFactura = new Date(factura.FechaGeneracion);
         var fechaFinalCredito = new Date(
           factura.ConfigurarVenta.FechaFinalCredito
@@ -59,7 +61,6 @@ export class CreditosAbonosComponent implements OnInit {
         var intervalo = (Difference_In_Days2 * p) / Difference_In_Days1;
         var estado: string;
         var filtroEstado: string;
-
         if (factura.ConfigurarVenta.EstadoConfVenta == 1) {
           estado = "badge badge-secondary";
           filtroEstado = "Finalizado";
@@ -73,31 +74,32 @@ export class CreditosAbonosComponent implements OnInit {
               filtroEstado = "Normal";
             } else if (Math.round(intervalo) > 50) {
               estado = "badge badge-warning";
-              filtroEstado = "Observación";
+              filtroEstado = "Urgente";
             }
           }
         }
-
+        this.cliente =
+          factura.ConfigurarVenta._PersonaEntidad.PrimerNombre +
+          " " +
+          factura.ConfigurarVenta._PersonaEntidad.SegundoNombre +
+          " " +
+          factura.ConfigurarVenta._PersonaEntidad.ApellidoPaterno +
+          " " +
+          factura.ConfigurarVenta._PersonaEntidad.ApellidoMaterno;
         facturas.push({
           Codigo: factura.Codigo,
           Fecha: factura.FechaGeneracion,
-          Cliente:
-            factura.ConfigurarVenta._PersonaEntidad.PrimerNombre +
-            " " +
-            factura.ConfigurarVenta._PersonaEntidad.SegundoNombre +
-            " " +
-            factura.ConfigurarVenta._PersonaEntidad.ApellidoPaterno +
-            " " +
-            factura.ConfigurarVenta._PersonaEntidad.ApellidoMaterno,
           TotalFactura: factura.ConfigurarVenta._SaldoPendiente.TotalFactura,
           Pendiente: factura.ConfigurarVenta._SaldoPendiente.Pendiente,
+          Mora: factura.ConfigurarVenta._SaldoPendiente.TotalInteres,
           FechaFinalCredito: factura.ConfigurarVenta.FechaFinalCredito,
           Estado: estado,
           FiltroEstado: filtroEstado,
           idConfigurarVenta: factura.ConfigurarVenta.IdConfigurarVenta,
-          estadoConfVenta: factura.ConfigurarVenta.EstadoConfVenta
+          estadoConfVenta: factura.ConfigurarVenta.EstadoConfVenta,
         });
       });
+      this.mostrarDatosCliente = true;
       this.facturas.data = facturas;
       this.facturas.paginator = this.paginator;
     }
@@ -115,7 +117,7 @@ export class CreditosAbonosComponent implements OnInit {
       height: "auto",
       data: {
         idConfigurarVenta: factura.idConfigurarVenta,
-        flag: factura.estadoConfVenta == "1"? false : true,
+        flag: factura.estadoConfVenta == "1" ? false : true,
       },
     });
   }
@@ -129,9 +131,9 @@ export class CreditosAbonosComponent implements OnInit {
   tablaFacturasCliente = [
     "factura",
     "fecha",
-    "cliente",
     "totalFactura",
     "saldoPendiente",
+    "saldoMora",
     "fechaFinalCredito",
     "acciones",
     "estado",

@@ -12,7 +12,7 @@ export class InventarioService {
   consultarTipoProductos() {
     const body = new HttpParams().set(
       "encriptada",
-      localStorage.getItem("miCuenta.getToken")
+      localStorage.getItem("token")
     );
     return new Promise((resolve, reject) => {
       this.http
@@ -36,7 +36,7 @@ export class InventarioService {
   crearTipoProducto(tipoProducto: string) {
     const body = new HttpParams()
       .set("Descripcion", tipoProducto)
-      .set("encriptada", localStorage.getItem("miCuenta.postToken"));
+      .set("encriptada", localStorage.getItem("token"));
     return new Promise((resolve, reject) => {
       this.http
         .post(apiUrl + "Inventario/IngresoTipoProducto", body.toString(), {
@@ -59,7 +59,7 @@ export class InventarioService {
   eliminarTipoProducto(idTipoProducto: string) {
     const body = new HttpParams()
       .set("IdTipoProducto", idTipoProducto)
-      .set("encriptada", localStorage.getItem("miCuenta.deleteToken"));
+      .set("encriptada", localStorage.getItem("token"));
     return new Promise((resolve, reject) => {
       this.http
         .post(apiUrl + "Inventario/EliminarTipoProducto", body.toString(), {
@@ -82,7 +82,7 @@ export class InventarioService {
   consultarProductos() {
     const body = new HttpParams().set(
       "encriptada",
-      localStorage.getItem("miCuenta.getToken")
+      localStorage.getItem("token")
     );
     return new Promise((resolve, reject) => {
       this.http
@@ -108,7 +108,7 @@ export class InventarioService {
       .set("Nombre", nombre)
       .set("Descripcion", descripcion)
       .set("IdTipoProducto", idTipoProducto)
-      .set("encriptada", localStorage.getItem("miCuenta.postToken"));
+      .set("encriptada", localStorage.getItem("token"));
     return new Promise((resolve, reject) => {
       this.http
         .post(apiUrl + "Inventario/IngresoProducto", body.toString(), {
@@ -139,7 +139,7 @@ export class InventarioService {
       .set("Nombre", nombre)
       .set("Descripcion", descripcion)
       .set("IdTipoProducto", idTipoProducto)
-      .set("encriptada", localStorage.getItem("miCuenta.putToken"));
+      .set("encriptada", localStorage.getItem("token"));
     return new Promise((resolve, reject) => {
       this.http
         .post(apiUrl + "Inventario/ActualizarProducto", body.toString(), {
@@ -162,7 +162,7 @@ export class InventarioService {
   eliminarProducto(idProducto: string) {
     const body = new HttpParams()
       .set("IdProducto", idProducto)
-      .set("encriptada", localStorage.getItem("miCuenta.deleteToken"));
+      .set("encriptada", localStorage.getItem("token"));
     return new Promise((resolve, reject) => {
       this.http
         .post(apiUrl + "Inventario/EliminarProducto", body.toString(), {
@@ -185,7 +185,7 @@ export class InventarioService {
   consultarPresentaciones() {
     const body = new HttpParams().set(
       "encriptada",
-      localStorage.getItem("miCuenta.getToken")
+      localStorage.getItem("token")
     );
     return new Promise((resolve, reject) => {
       this.http
@@ -209,7 +209,7 @@ export class InventarioService {
   crearPresentacion(presentacion: string) {
     const body = new HttpParams()
       .set("Descripcion", presentacion)
-      .set("encriptada", localStorage.getItem("miCuenta.postToken"));
+      .set("encriptada", localStorage.getItem("token"));
     return new Promise((resolve, reject) => {
       this.http
         .post(apiUrl + "Inventario/IngresoPresentacion", body.toString(), {
@@ -232,7 +232,7 @@ export class InventarioService {
   eliminarPresentacion(idPresentacion: string) {
     const body = new HttpParams()
       .set("IdPresentacion", idPresentacion)
-      .set("encriptada", localStorage.getItem("miCuenta.deleteToken"));
+      .set("encriptada", localStorage.getItem("token"));
     return new Promise((resolve, reject) => {
       this.http
         .post(apiUrl + "Inventario/EliminarPresentacion", body.toString(), {
@@ -255,7 +255,7 @@ export class InventarioService {
   consultarMedidas() {
     const body = new HttpParams().set(
       "encriptada",
-      localStorage.getItem("miCuenta.getToken")
+      localStorage.getItem("token")
     );
     return new Promise((resolve, reject) => {
       this.http
@@ -279,7 +279,7 @@ export class InventarioService {
   crearMedida(medida: string) {
     const body = new HttpParams()
       .set("Descripcion", medida)
-      .set("encriptada", localStorage.getItem("miCuenta.postToken"));
+      .set("encriptada", localStorage.getItem("token"));
     return new Promise((resolve, reject) => {
       this.http
         .post(apiUrl + "Inventario/IngresoMedida", body.toString(), {
@@ -302,7 +302,7 @@ export class InventarioService {
   eliminarMedida(idMedida: string) {
     const body = new HttpParams()
       .set("IdMedida", idMedida)
-      .set("encriptada", localStorage.getItem("miCuenta.deleteToken"));
+      .set("encriptada", localStorage.getItem("token"));
     return new Promise((resolve, reject) => {
       this.http
         .post(apiUrl + "Inventario/EliminarMedida", body.toString(), {
@@ -325,7 +325,7 @@ export class InventarioService {
   consultarConfiguracionProductoTodos() {
     const body = new HttpParams().set(
       "encriptada",
-      localStorage.getItem("miCuenta.getToken")
+      localStorage.getItem("token")
     );
     return new Promise((resolve, reject) => {
       this.http
@@ -353,7 +353,7 @@ export class InventarioService {
   consultarConfiguracionProducto() {
     const body = new HttpParams().set(
       "encriptada",
-      localStorage.getItem("miCuenta.getToken")
+      localStorage.getItem("token")
     );
     return new Promise((resolve, reject) => {
       this.http
@@ -391,7 +391,7 @@ export class InventarioService {
       .set("Codigo", codigo)
       .set("CantidadMedida", cantidadMedida)
       .set("Iva", iva)
-      .set("encriptada", localStorage.getItem("miCuenta.postToken"));
+      .set("encriptada", localStorage.getItem("token"));
     return new Promise((resolve, reject) => {
       this.http
         .post(
@@ -434,7 +434,7 @@ export class InventarioService {
       .set("Codigo", codigo)
       .set("CantidadMedida", cantidadMedida)
       .set("Iva", iva)
-      .set("encriptada", localStorage.getItem("miCuenta.putToken"));
+      .set("encriptada", localStorage.getItem("token"));
     return new Promise((resolve, reject) => {
       this.http
         .post(
@@ -465,7 +465,7 @@ export class InventarioService {
     const body = new HttpParams()
       .set("IdConfigurarProducto", idConfigurarProducto)
       .set("IdProducto", idProducto)
-      .set("encriptada", localStorage.getItem("miCuenta.deleteToken"));
+      .set("encriptada", localStorage.getItem("token"));
     return new Promise((resolve, reject) => {
       this.http
         .post(
@@ -492,7 +492,7 @@ export class InventarioService {
   consultarKits() {
     const body = new HttpParams().set(
       "encriptada",
-      localStorage.getItem("miCuenta.getToken")
+      localStorage.getItem("token")
     );
     return new Promise((resolve, reject) => {
       this.http
@@ -518,7 +518,7 @@ export class InventarioService {
       .set("Descripcion", kit)
       .set("Codigo", codigo)
       .set("AsignarDescuentoKit.Descuento.Porcentaje", descuento)
-      .set("encriptada", localStorage.getItem("miCuenta.postToken"));
+      .set("encriptada", localStorage.getItem("token"));
     return new Promise((resolve, reject) => {
       this.http
         .post(apiUrl + "Inventario/IngresoKit", body.toString(), {
@@ -541,7 +541,7 @@ export class InventarioService {
   eliminarKit(idKit: string) {
     const body = new HttpParams()
       .set("IdKit", idKit)
-      .set("encriptada", localStorage.getItem("miCuenta.deleteToken"));
+      .set("encriptada", localStorage.getItem("token"));
     return new Promise((resolve, reject) => {
       this.http
         .post(apiUrl + "Inventario/EliminarKit", body.toString(), {
@@ -564,7 +564,7 @@ export class InventarioService {
   consultarDescuentos() {
     const body = new HttpParams().set(
       "encriptada",
-      localStorage.getItem("miCuenta.getToken")
+      localStorage.getItem("token")
     );
     return new Promise((resolve, reject) => {
       this.http
@@ -588,7 +588,7 @@ export class InventarioService {
   consultarKitsYSusProductos(idKit: string, url: string) {
     const body = new HttpParams()
       .set("IdKit", idKit)
-      .set("encriptada", localStorage.getItem("miCuenta.getToken"));
+      .set("encriptada", localStorage.getItem("token"));
     return new Promise((resolve, reject) => {
       this.http
         .post(apiUrl + url, body.toString(), {
@@ -611,7 +611,7 @@ export class InventarioService {
   consultarProductosQueNoTieneUnKit(idKit: string) {
     const body = new HttpParams()
       .set("IdKit", idKit)
-      .set("encriptada", localStorage.getItem("miCuenta.getToken"));
+      .set("encriptada", localStorage.getItem("token"));
     return new Promise((resolve, reject) => {
       this.http
         .post(
@@ -642,7 +642,7 @@ export class InventarioService {
     const body = new HttpParams()
       .set("IdConfigurarProducto", idConfigurarProducto)
       .set("IdAsignarDescuentoKit", idAsignarDescuentoKit)
-      .set("encriptada", localStorage.getItem("miCuenta.postToken"));
+      .set("encriptada", localStorage.getItem("token"));
     console.log(body);
     return new Promise((resolve, reject) => {
       this.http
@@ -670,7 +670,7 @@ export class InventarioService {
   eliminarAsignacionProductoKit(idAsignarProductoKit: string) {
     const body = new HttpParams()
       .set("IdAsignarProductoKit", idAsignarProductoKit)
-      .set("encriptada", localStorage.getItem("miCuenta.deleteToken"));
+      .set("encriptada", localStorage.getItem("token"));
     return new Promise((resolve, reject) => {
       this.http
         .post(
@@ -697,7 +697,7 @@ export class InventarioService {
   consultarStock() {
     const body = new HttpParams().set(
       "encriptada",
-      localStorage.getItem("miCuenta.getToken")
+      localStorage.getItem("token")
     );
     return new Promise((resolve, reject) => {
       this.http
@@ -727,7 +727,7 @@ export class InventarioService {
       .set("IdCabeceraFactura", idCabeceraFactura)
       .set("IdRelacionLogica", idRelacionLogica)
       .set("PerteneceKit", perteneceKit)
-      .set("encriptada", localStorage.getItem("miCuenta.getToken"));
+      .set("encriptada", localStorage.getItem("token"));
     return new Promise((resolve, reject) => {
       this.http
         .post(apiUrl + "Factura/ListaLote", body.toString(), {
@@ -752,7 +752,7 @@ export class InventarioService {
       .set("Codigo", codigo)
       .set("Capacidad", capacidad)
       .set("FechaExpiracion", fechaExpiracion)
-      .set("encriptada", localStorage.getItem("miCuenta.postToken"));
+      .set("encriptada", localStorage.getItem("token"));
     return new Promise((resolve, reject) => {
       this.http
         .post(apiUrl + "Factura/IngresoLote", body.toString(), {
@@ -787,7 +787,7 @@ export class InventarioService {
       .set("IdRelacionLogica", idRelacionLogica)
       .set("PerteneceKit", perteneceKit)
       .set("ValorUnitario", precio)
-      .set("encriptada", localStorage.getItem("miCuenta.postToken"))
+      .set("encriptada", localStorage.getItem("token"))
       .set("IdLote", idLote)
       .set("FechaExpiracion", fechaExpiracion);
     return new Promise((resolve, reject) => {
@@ -812,7 +812,7 @@ export class InventarioService {
   buscarPrecioDeUnProducto(IdAsignarProductoLote: string) {
     const body = new HttpParams()
       .set("IdAsignarProductoLote", IdAsignarProductoLote)
-      .set("encriptada", localStorage.getItem("miCuenta.getToken"));
+      .set("encriptada", localStorage.getItem("token"));
     return new Promise((resolve, reject) => {
       this.http
         .post(
@@ -841,7 +841,7 @@ export class InventarioService {
       .set("Codigo", lote)
       .set("AsignarProductoLote.IdRelacionLogica", idRelacionLogica)
       .set("AsignarProductoLote.PerteneceKit", perteneceKit)
-      .set("encriptada", localStorage.getItem("miCuenta.getToken"));
+      .set("encriptada", localStorage.getItem("token"));
     return new Promise((resolve, reject) => {
       this.http
         .post(apiUrl + "Factura/BuscarLote", body.toString(), {
@@ -865,7 +865,7 @@ export class InventarioService {
     const body = new HttpParams()
       .set("IdConfigurarProducto", idConfigurarProducto)
       .set("Precio", precio)
-      .set("encriptada", localStorage.getItem("miCuenta.postToken"));
+      .set("encriptada", localStorage.getItem("token"));
     return new Promise((resolve, reject) => {
       this.http
         .post(
@@ -892,7 +892,7 @@ export class InventarioService {
   consultarIntereses() {
     const body = new HttpParams().set(
       "encriptada",
-      localStorage.getItem("miCuenta.getToken")
+      localStorage.getItem("token")
     );
     return new Promise((resolve, reject) => {
       this.http
@@ -916,7 +916,7 @@ export class InventarioService {
   consultarTiposInteres() {
     const body = new HttpParams().set(
       "encriptada",
-      localStorage.getItem("miCuenta.getToken")
+      localStorage.getItem("token")
     );
     return new Promise((resolve, reject) => {
       this.http
@@ -940,15 +940,15 @@ export class InventarioService {
   crearInteres(
     idInteres: string,
     tasaInteres: string,
-    idInteresMora: string,  
+    idInteresMora: string,
     tasaInteresMora: string
   ) {
     const body = new HttpParams()
-    .set("IdTipoInteres", idInteres)
-    .set("TasaInteres", tasaInteres)
-    .set("IdTipoInteresMora", idInteresMora)
-    .set("TasaInteresMora", tasaInteresMora)
-    .set("encriptada", localStorage.getItem("miCuenta.postToken"));
+      .set("IdTipoInteres", idInteres)
+      .set("TasaInteres", tasaInteres)
+      .set("IdTipoInteresMora", idInteresMora)
+      .set("TasaInteresMora", tasaInteresMora)
+      .set("encriptada", localStorage.getItem("token"));
     return new Promise((resolve, reject) => {
       this.http
         .post(apiUrl + "Credito/IngresoConfiguracionInteres", body.toString(), {
@@ -970,16 +970,20 @@ export class InventarioService {
 
   eliminarDeshabilitarInteres(idInteres: string) {
     const body = new HttpParams()
-    .set("IdConfiguracionInteres", idInteres)
-    .set("encriptada", localStorage.getItem("miCuenta.postToken"));
+      .set("IdConfiguracionInteres", idInteres)
+      .set("encriptada", localStorage.getItem("token"));
     return new Promise((resolve, reject) => {
       this.http
-        .post(apiUrl + "Credito/EliminarDeshabilitarConfiguracionInteres", body.toString(), {
-          headers: new HttpHeaders().set(
-            "Content-Type",
-            "application/x-www-form-urlencoded"
-          ),
-        })
+        .post(
+          apiUrl + "Credito/EliminarDeshabilitarConfiguracionInteres",
+          body.toString(),
+          {
+            headers: new HttpHeaders().set(
+              "Content-Type",
+              "application/x-www-form-urlencoded"
+            ),
+          }
+        )
         .subscribe(
           (res) => {
             resolve(res);
@@ -993,16 +997,20 @@ export class InventarioService {
 
   habilitarInteres(idInteres: string) {
     const body = new HttpParams()
-    .set("IdConfiguracionInteres", idInteres)
-    .set("encriptada", localStorage.getItem("miCuenta.postToken"));
+      .set("IdConfiguracionInteres", idInteres)
+      .set("encriptada", localStorage.getItem("token"));
     return new Promise((resolve, reject) => {
       this.http
-        .post(apiUrl + "Credito/HabilitarConfiguracionInteres", body.toString(), {
-          headers: new HttpHeaders().set(
-            "Content-Type",
-            "application/x-www-form-urlencoded"
-          ),
-        })
+        .post(
+          apiUrl + "Credito/HabilitarConfiguracionInteres",
+          body.toString(),
+          {
+            headers: new HttpHeaders().set(
+              "Content-Type",
+              "application/x-www-form-urlencoded"
+            ),
+          }
+        )
         .subscribe(
           (res) => {
             resolve(res);

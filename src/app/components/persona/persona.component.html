@@ -141,7 +141,7 @@
                   [maxlength]="digitosTelefono1"
                 />
                 <mat-hint align="end"
-                  >{{ telefono1.value?.length || 0 }}/{{
+                  >{{ telefono1.value?.length || minTelefono1 }}/{{
                     digitosTelefono1
                   }}</mat-hint
                 >
@@ -185,7 +185,7 @@
                   placeholder="Número #2"
                 />
                 <mat-hint align="end"
-                  >{{ telefono2.value?.length || 0 }}/{{
+                  >{{ telefono2.value?.length || minTelefono2 }}/{{
                     digitosTelefono2
                   }}</mat-hint
                 >
@@ -306,7 +306,7 @@
           mat-button
           type="submit"
           [disabled]="myForm.invalid"
-          class="mt-2 bg-success btn-block text-white"
+          class="mt.2 btn-outline-success btn-block"
           [value]="botonInsertar"
         >
           {{ guardar }}

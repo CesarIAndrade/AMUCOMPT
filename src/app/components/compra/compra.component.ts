@@ -59,6 +59,7 @@ export class CompraComponent implements OnInit {
   buttonSeleccionarProducto = true;
   loteEnDetalle = true;
   buttonSeleccionarLote = true;
+  buttonAgregarDetalle = true;
   clearFieldLote = true;
   clearFieldFecha = true;
 
@@ -99,10 +100,10 @@ export class CompraComponent implements OnInit {
   facturasNoFinalizadas = new MatTableDataSource<Element[]>();
   facturasFinalizadas = new MatTableDataSource<Element[]>();
 
-  openDialog(mensaje): void {
+  openDialog(mensaje, icono): void {
     const dialogRef = this.dialog.open(DialogAlertComponent, {
       width: "250px",
-      data: { mensaje: mensaje },
+      data: { mensaje: mensaje, icono: icono },
     });
   }
 
@@ -132,7 +133,7 @@ export class CompraComponent implements OnInit {
       localStorage.getItem("miCuenta.compras")
     );
     if (respuesta["codigo"] == "200") {
-      this.consultarFacturas();
+      this.consultarFacturas(true);
       this.limpiarCampos();
       this.detalleCompra.data = [];
       this.myForm
@@ -149,8 +150,9 @@ export class CompraComponent implements OnInit {
       this.selectTipoCompra = false;
       this.buttonSeleccionarProducto = false;
       this.buttonGenerarFactura = true;
+      this.buttonAgregarDetalle = false;
     } else {
-      this.openDialog("Problemas con el servidor");
+      this.openDialog("Problemas con el servidor", "advertencia");
     }
   }
 
@@ -323,7 +325,7 @@ export class CompraComponent implements OnInit {
     if (lote["codigo"] == "200") {
       this.asignarProductoLote(lote["respuesta"].IdLote, fechaExpiracion);
     } else if (lote["codigo"] == "500") {
-      this.openDialog(lote["mensaje"]);
+      this.openDialog(lote["mensaje"], "advertencia");
     }
   }
 
@@ -463,7 +465,7 @@ export class CompraComponent implements OnInit {
       this.consultarDetalleFactura();
     } else if (respuesta["codigo"] == "201") {
       this.openSnackBar("Factura eliminada");
-      this.consultarFacturas();
+      this.consultarFacturas(true);
       this.myForm.reset();
       this.detalleCompra.data = [];
     }
@@ -495,12 +497,13 @@ export class CompraComponent implements OnInit {
       "Factura/FinalizarCabeceraFactura"
     );
     if (respuesta["codigo"] == "200") {
-      this.openDialog("Compra realizada con éxito");
-      this.consultarFacturas();
+      this.openDialog("Compra realizada con éxito", "success");
+      this.consultarFacturas(true);
       this.selectTipoCompra = true;
       this.seccionKit = true;
       this.selected = "Producto";
       this.buttonSeleccionarProducto = true;
+      this.buttonAgregarDetalle = true;
       this.listaProductosDeUnKit = [];
       this.myForm.reset();
       this.myForm.disable();
@@ -522,6 +525,7 @@ export class CompraComponent implements OnInit {
     this.buttonSeleccionarProducto = false;
     this.selectTipoCompra = false;
     this.buttonGenerarFactura = false;
+    this.buttonAgregarDetalle = false;
     this.consultarDetalleFactura();
   }
 
@@ -534,22 +538,25 @@ export class CompraComponent implements OnInit {
 
   loadingFnF = true;
   loadingFF = true;
-  async consultarFacturas() {
+  async consultarFacturas(flag) {
+    console.log(flag);
+    if(flag) {
+      var facturasFinalizadas = await this.facturaService.consultarFacturas(
+        "Factura/ListaFacturasFinalizadas"
+      );
+      if (facturasFinalizadas["codigo"] == "200") {
+        this.loadingFF = false;
+        this.facturasFinalizadas.data = facturasFinalizadas["respuesta"];
+        this.facturasFinalizadas.paginator = this.ff_paginator;
+      }
+    }
     var facturasNoFinalizadas = await this.facturaService.consultarFacturas(
       "Factura/ListaFacturasNoFinalizadas"
-    );
-    var facturasFinalizadas = await this.facturaService.consultarFacturas(
-      "Factura/ListaFacturasFinalizadas"
-    );
+    );    
     if (facturasNoFinalizadas["codigo"] == "200") {
       this.loadingFnF = false;
       this.facturasNoFinalizadas.data = facturasNoFinalizadas["respuesta"];
       this.facturasNoFinalizadas.paginator = this.fnf_paginator;
-    }
-    if (facturasFinalizadas["codigo"] == "200") {
-      this.loadingFF = false;
-      this.facturasFinalizadas.data = facturasFinalizadas["respuesta"];
-      this.facturasFinalizadas.paginator = this.ff_paginator;
     }
   }
 
@@ -565,9 +572,22 @@ export class CompraComponent implements OnInit {
     this.myForm.get("_lote").reset();
   }
 
+  async eliminarFactura(factura) {
+    console.log(factura);
+    
+    this.facturasNoFinalizadas.data = [];
+    this.loadingFnF = true;
+    var respuesta = await this.facturaService.eliminarFactura(factura.IdCabeceraFactura);
+    console.log(respuesta);
+    
+    if (respuesta["codigo"] == "200") {
+      this.consultarFacturas(false);
+    }
+  }
+
   ngOnInit() {
     this.consultarTipoTransaccion();
-    this.consultarFacturas();
+    this.consultarFacturas(true);
     this.myForm.reset();
     this.myForm.disable();
   }

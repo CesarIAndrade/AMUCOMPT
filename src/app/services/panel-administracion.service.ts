@@ -12,7 +12,7 @@ export class PanelAdministracionService {
   crearProvincia(provincia: string) {
     const body = new HttpParams()
       .set("Descripcion", provincia)
-      .set("encriptada", localStorage.getItem("miCuenta.postToken"));
+      .set("encriptada", localStorage.getItem("token"));
     return new Promise((resolve, reject) => {
       this.http
         .post(apiUrl + "TalentoHumano/IngresoProvincia", body.toString(), {
@@ -36,7 +36,7 @@ export class PanelAdministracionService {
     const body = new HttpParams()
       .set("IdProvincia", idProvincia)
       .set("Descripcion", provincia)
-      .set("encriptada", localStorage.getItem("miCuenta.putToken"));
+      .set("encriptada", localStorage.getItem("token"));
     return new Promise((resolve, reject) => {
       this.http
         .post(apiUrl + "TalentoHumano/ActualizarProvincia", body.toString(), {
@@ -59,7 +59,7 @@ export class PanelAdministracionService {
   eliminarProvincia(idProvincia: string) {
     const body = new HttpParams()
       .set("IdProvincia", idProvincia)
-      .set("encriptada", localStorage.getItem("miCuenta.deleteToken"));
+      .set("encriptada", localStorage.getItem("token"));
     return new Promise((resolve, reject) => {
       this.http
         .post(apiUrl + "TalentoHumano/EliminarProvincia", body.toString(), {
@@ -83,7 +83,7 @@ export class PanelAdministracionService {
     const body = new HttpParams()
       .set("IdProvincia", idProvincia)
       .set("Descripcion", canton)
-      .set("encriptada", localStorage.getItem("miCuenta.postToken"));
+      .set("encriptada", localStorage.getItem("token"));
     return new Promise((resolve, reject) => {
       this.http
         .post(apiUrl + "TalentoHumano/IngresoCanton", body.toString(), {
@@ -108,7 +108,7 @@ export class PanelAdministracionService {
       .set("IdProvincia", idProvincia)
       .set("IdCanton", idCanton)
       .set("Descripcion", canton)
-      .set("encriptada", localStorage.getItem("miCuenta.putToken"));
+      .set("encriptada", localStorage.getItem("token"));
     return new Promise((resolve, reject) => {
       this.http
         .post(apiUrl + "TalentoHumano/ActualizarCanton", body.toString(), {
@@ -131,7 +131,7 @@ export class PanelAdministracionService {
   eliminarCanton(idCanton: string) {
     const body = new HttpParams()
       .set("IdCanton", idCanton)
-      .set("encriptada", localStorage.getItem("miCuenta.deleteToken"));
+      .set("encriptada", localStorage.getItem("token"));
     return new Promise((resolve, reject) => {
       this.http
         .post(apiUrl + "TalentoHumano/EliminarCanton", body.toString(), {
@@ -155,7 +155,7 @@ export class PanelAdministracionService {
     const body = new HttpParams()
       .set("IdCanton", idCanton)
       .set("Descripcion", parroquia)
-      .set("encriptada", localStorage.getItem("miCuenta.postToken"));
+      .set("encriptada", localStorage.getItem("token"));
     return new Promise((resolve, reject) => {
       this.http
         .post(apiUrl + "TalentoHumano/IngresoParroquia", body.toString(), {
@@ -184,7 +184,7 @@ export class PanelAdministracionService {
       .set("IdCanton", idCanton)
       .set("IdParroquia", idParroquia)
       .set("Descripcion", parroquia)
-      .set("encriptada", localStorage.getItem("miCuenta.putToken"));
+      .set("encriptada", localStorage.getItem("token"));
     return new Promise((resolve, reject) => {
       this.http
         .post(apiUrl + "TalentoHumano/ActualizarParroquia", body.toString(), {
@@ -207,7 +207,7 @@ export class PanelAdministracionService {
   eliminarParroquia(idParroquia: string) {
     const body = new HttpParams()
       .set("IdParroquia", idParroquia)
-      .set("encriptada", localStorage.getItem("miCuenta.deleteToken"));
+      .set("encriptada", localStorage.getItem("token"));
     return new Promise((resolve, reject) => {
       this.http
         .post(apiUrl + "TalentoHumano/EliminarParroquia", body.toString(), {
@@ -231,7 +231,7 @@ export class PanelAdministracionService {
     const body = new HttpParams()
       .set("IdParroquia", idParroquia)
       .set("Descripcion", comunidad)
-      .set("encriptada", localStorage.getItem("miCuenta.postToken"));
+      .set("encriptada", localStorage.getItem("token"));
     return new Promise((resolve, reject) => {
       this.http
         .post(apiUrl + "TalentoHumano/IngresoComunidad", body.toString(), {
@@ -260,7 +260,7 @@ export class PanelAdministracionService {
       .set("IdParroquia", idParroquia)
       .set("IdComunidad", idComunidad)
       .set("Descripcion", comunidad)
-      .set("encriptada", localStorage.getItem("miCuenta.putToken"));
+      .set("encriptada", localStorage.getItem("token"));
     return new Promise((resolve, reject) => {
       this.http
         .post(apiUrl + "TalentoHumano/ActualizarComunidad", body.toString(), {
@@ -283,7 +283,7 @@ export class PanelAdministracionService {
   eliminarComunidad(idComunidad: string) {
     const body = new HttpParams()
       .set("IdComunidad", idComunidad)
-      .set("encriptada", localStorage.getItem("miCuenta.deleteToken"));
+      .set("encriptada", localStorage.getItem("token"));
     return new Promise((resolve, reject) => {
       this.http
         .post(apiUrl + "TalentoHumano/EliminarComunidad", body.toString(), {
@@ -306,7 +306,7 @@ export class PanelAdministracionService {
   consultarProvincias() {
     const body = new HttpParams().set(
       "encriptada",
-      localStorage.getItem("miCuenta.getToken")
+      localStorage.getItem("token")
     );
     return new Promise((resolve, reject) => {
       this.http
@@ -330,7 +330,7 @@ export class PanelAdministracionService {
   consultarCantones() {
     const body = new HttpParams().set(
       "encriptada",
-      localStorage.getItem("miCuenta.getToken")
+      localStorage.getItem("token")
     );
     return new Promise((resolve, reject) => {
       this.http
@@ -354,7 +354,7 @@ export class PanelAdministracionService {
   consultarParroquias() {
     const body = new HttpParams().set(
       "encriptada",
-      localStorage.getItem("miCuenta.getToken")
+      localStorage.getItem("token")
     );
     return new Promise((resolve, reject) => {
       this.http
@@ -378,7 +378,7 @@ export class PanelAdministracionService {
   consultarComunidades() {
     const body = new HttpParams().set(
       "encriptada",
-      localStorage.getItem("miCuenta.getToken")
+      localStorage.getItem("token")
     );
     return new Promise((resolve, reject) => {
       this.http
@@ -402,7 +402,7 @@ export class PanelAdministracionService {
   consultarCantonesDeUnaProvincia(idProvincia: string) {
     const body = new HttpParams()
       .set("IdProvincia", idProvincia)
-      .set("encriptada", localStorage.getItem("miCuenta.getToken"));
+      .set("encriptada", localStorage.getItem("token"));
     return new Promise((resolve, reject) => {
       this.http
         .post(
@@ -429,7 +429,7 @@ export class PanelAdministracionService {
   consultarParroquiasDeUnCanton(idCanton: string) {
     const body = new HttpParams()
       .set("IdCanton", idCanton)
-      .set("encriptada", localStorage.getItem("miCuenta.getToken"));
+      .set("encriptada", localStorage.getItem("token"));
     return new Promise((resolve, reject) => {
       this.http
         .post(apiUrl + "TalentoHumano/ListaParroquiaCanton", body.toString(), {
@@ -452,7 +452,7 @@ export class PanelAdministracionService {
   consultarComunidadesDeUnaParroquia(idParroquia: string) {
     const body = new HttpParams()
       .set("IdParroquia", idParroquia)
-      .set("encriptada", localStorage.getItem("miCuenta.getToken"));
+      .set("encriptada", localStorage.getItem("token"));
     return new Promise((resolve, reject) => {
       this.http
         .post(

@@ -1,6 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
-import { Router } from '@angular/router';
+import { Router } from "@angular/router";
 
 // Components
 import { ComfirmDialogComponent } from "../comfirm-dialog/comfirm-dialog.component";
@@ -26,7 +26,7 @@ export class CuentaComponent implements OnInit {
     this.myForm = new FormGroup({
       _correo: new FormControl(""),
       _usuario: new FormControl(""),
-      _contrasena: new FormControl(""),
+      _contrasena: new FormControl("", [Validators.minLength(8)]),
     });
   }
 
@@ -39,13 +39,13 @@ export class CuentaComponent implements OnInit {
       width: "250px",
       height: "auto",
       data: {
-        mensaje: "Se cerrará su sessión actual"
-      }
+        mensaje: "Se cerrará su sessión actual",
+      },
     });
     dialogRef.afterClosed().subscribe(async (result) => {
       if (result) {
-        var modificarContacto = await this.usuarioService.actualizarTelefonoCorreo(
-          localStorage.getItem("miCuenta.idPersona"),
+        var modificarCorreo = await this.usuarioService.actualizarCorreo(
+          this.usuario.PersonaEntidad.IdPersona,
           this.myForm.get("_correo").value
         );
         var modificarContrasena = await this.usuarioService.actualizarUsuario(
@@ -54,9 +54,8 @@ export class CuentaComponent implements OnInit {
           this.myForm.get("_usuario").value,
           this.myForm.get("_contrasena").value
         );
-        console.log(modificarContacto);
         if (
-          // modificarContacto["codigo"] == "200" &&
+          modificarCorreo["codigo"] == "200" &&
           modificarContrasena["codigo"] == "200"
         ) {
           this.salir();
@@ -78,7 +77,6 @@ export class CuentaComponent implements OnInit {
     }
   }
 
-
   usuario: any = [];
   ngOnInit() {
     this.usuario = JSON.parse(localStorage.getItem("usuario"));
@@ -87,9 +85,13 @@ export class CuentaComponent implements OnInit {
       " " +
       this.usuario.PersonaEntidad.ApellidoPaterno;
     this.tipoUsuario = localStorage.getItem("miCuenta.descripcionTipoUsuario");
-    this.myForm
-      .get("_correo")
-      .setValue(this.usuario.PersonaEntidad.ListaCorreo[0].CorreoValor);
+    try {
+      this.myForm
+        .get("_correo")
+        .setValue(this.usuario.PersonaEntidad.ListaCorreo[0].CorreoValor);
+    } catch (error) {
+      this.myForm.get("_correo").setValue("Sin correo");
+    }
     this.myForm.get("_usuario").setValue(this.usuario.UsuarioLogin);
     this.myForm.get("_usuario").disable();
   }

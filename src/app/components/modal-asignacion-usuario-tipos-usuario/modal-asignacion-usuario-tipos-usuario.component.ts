@@ -1,10 +1,15 @@
 import { Component, OnInit, Inject } from "@angular/core";
 
 // Material
-import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
+import {
+  MAT_DIALOG_DATA,
+  MatDialogRef,
+  MatDialog,
+} from "@angular/material/dialog";
 
 // Services
 import { UsuarioService } from "src/app/services/usuario.service";
+import { ModalReasignarClientesComponent } from "../modal-reasignar-clientes/modal-reasignar-clientes.component";
 
 @Component({
   selector: "app-modal-asignacion-usuario-tipos-usuario",
@@ -17,7 +22,8 @@ export class ModalAsignacionUsuarioTiposUsuarioComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any,
     private modalAsignacionUsuarioTiposUsuarioComponent: MatDialogRef<
       ModalAsignacionUsuarioTiposUsuarioComponent
-    >
+    >,
+    private dialog: MatDialog
   ) {}
 
   botonEliminar = false;
@@ -33,7 +39,7 @@ export class ModalAsignacionUsuarioTiposUsuarioComponent implements OnInit {
 
   async asignarTipoUsuario() {
     var respuesta = await this.usuarioService.asignacionTipoUsuario(
-      this.data.idUsuario,
+      this.data.usuario.IdUsuario,
       this.tipoUsuario
     );
     if (respuesta["codigo"] == "200") {
@@ -47,7 +53,7 @@ export class ModalAsignacionUsuarioTiposUsuarioComponent implements OnInit {
 
   async consultarTipoUsuariosAsignados() {
     var tipoUsuarios = await this.usuarioService.consultarTipoUsuariosAsignados(
-      this.data.idUsuario
+      this.data.usuario.IdUsuario
     );
     if (tipoUsuarios["codigo"] == "200") {
       this.listaTipoUsuario = tipoUsuarios["respuesta"];
@@ -61,24 +67,48 @@ export class ModalAsignacionUsuarioTiposUsuarioComponent implements OnInit {
 
   async consultarTipoUsuariosSinAsignar() {
     var tipoUsuarios = await this.usuarioService.consultarTipoUsuariosSinAsignar(
-      this.data.idUsuario
+      this.data.usuario.IdUsuario
     );
     if (tipoUsuarios["codigo"] == "200") {
       this.tipoUsuarios = tipoUsuarios["respuesta"];
     }
   }
+ 
+  reasignarClientes() {
+    const dialogRef = this.dialog.open(ModalReasignarClientesComponent, {
+      width: "350px",
+      height: "auto",
+      data: {
+        usuario: this.data.usuario, 
+      }, 
+    });
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result != null) {
+        if (result.flag) {
+          this.consultarTipoUsuariosAsignados();
+        }
+      }
+    });
+  }
 
-  async eliminarTipoUsuario(idTipoUsuario) {
+  async eliminarTipoUsuario(idTipoUsuario, flag?) {
     var respuesta = await this.usuarioService.eliminarTipoUsuario(
       idTipoUsuario
     );
     if (respuesta["codigo"] == "200") {
       this.consultarTipoUsuariosAsignados();
       this.consultarTipoUsuariosSinAsignar();
+      if(flag) {
+        this.modalAsignacionUsuarioTiposUsuarioComponent.close(
+          respuesta["mensaje"]
+        );
+      }
     } else if (respuesta["codigo"] == "201") {
       this.modalAsignacionUsuarioTiposUsuarioComponent.close(
         respuesta["mensaje"]
       );
+    } else if (respuesta["codigo"] == "409") {
+      this.reasignarClientes();
     }
   }
 

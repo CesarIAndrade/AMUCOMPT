@@ -19,6 +19,11 @@
           </button>
         </div>
       </div>
+      <mat-list *ngIf="mostrarDatosCliente">
+        <mat-list-item>
+          <mat-label class="mb-3"> {{ cliente }} </mat-label>
+        </mat-list-item>
+      </mat-list>
       <mat-form-field class="example-full-width">
         <input
           matInput
@@ -34,7 +39,7 @@
       <div class="table_all">
         <table
           mat-table
-          [dataSource]="facturas | filter: filterFacturas:'FiltroEstado'"
+          [dataSource]="facturas"
         >
           <ng-container matColumnDef="factura">
             <th mat-header-cell *matHeaderCellDef>Factura</th>
@@ -46,13 +51,6 @@
             <th mat-header-cell *matHeaderCellDef>Fecha</th>
             <td mat-cell *matCellDef="let element">
               {{ element.Fecha | date: "yyyy-MM-dd" }}
-            </td>
-          </ng-container>
-
-          <ng-container matColumnDef="cliente">
-            <th mat-header-cell *matHeaderCellDef>Cliente</th>
-            <td mat-cell *matCellDef="let element">
-              {{ element.Cliente }}
             </td>
           </ng-container>
 
@@ -68,7 +66,14 @@
               {{ element.Pendiente }}
             </td>
           </ng-container>
-          
+
+          <ng-container matColumnDef="saldoMora">
+            <th mat-header-cell *matHeaderCellDef>Mora</th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.Mora }}
+            </td>
+          </ng-container>
+
           <ng-container matColumnDef="fechaFinalCredito">
             <th mat-header-cell *matHeaderCellDef>Final Credito</th>
             <td mat-cell *matCellDef="let element">

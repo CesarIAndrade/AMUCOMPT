@@ -55,10 +55,10 @@ export class AsignarTecnicoClienteComponent implements OnInit {
   loadingC = false;
   loadingCT = false;
 
-  openDialog(mensaje): void {
+  openDialog(mensaje, icono): void {
     const dialogRef = this.dialog.open(DialogAlertComponent, {
       width: "250px",
-      data: { mensaje: mensaje },
+      data: { mensaje: mensaje, icono: icono },
     });
   }
 
@@ -150,7 +150,6 @@ export class AsignarTecnicoClienteComponent implements OnInit {
       idLocalidad,
       localidad
     );
-    console.log(clientes);
     if (clientes["codigo"] == "200") {
       this.loadingC = false;
       var data: any = [];
@@ -176,7 +175,6 @@ export class AsignarTecnicoClienteComponent implements OnInit {
   comboTecnico = true;
   async consultarTecnicos() {
     var respuesta = await this.usuarioService.consultarTecnicos("2");
-    console.log(respuesta);
     if (respuesta["codigo"] == "200") {
       this.comboTecnico = false;
       respuesta["respuesta"].map((tecnico) => {
@@ -203,7 +201,6 @@ export class AsignarTecnicoClienteComponent implements OnInit {
       "IdAsignarTUTecnico",
       idTecnico
     );
-    console.log(respuesta);
     if (respuesta["codigo"] == "200") {
       this.loadingCT = false;
       var clientesTecnico: any = [];
@@ -245,7 +242,7 @@ export class AsignarTecnicoClienteComponent implements OnInit {
         this.clientesAsignados(this.myForm.get("_idTecnico").value);
       }
     } else {
-      this.openDialog("Necesitas un técnnico");
+      this.openDialog("Necesitas un técnnico", "advertencia");
     }
   }
 

@@ -48,10 +48,10 @@ export class CantonComponent implements OnInit {
   @ViewChild("paginator", { static: false }) paginator: MatPaginator;
   cantones = new MatTableDataSource<Element[]>();
 
-  openDialog(mensaje): void {
+  openDialog(mensaje, icono): void {
     const dialogRef = this.dialog.open(DialogAlertComponent, {
       width: "250px",
-      data: { mensaje: mensaje },
+      data: { mensaje: mensaje, icono: icono },
     });
   }
 
@@ -116,11 +116,11 @@ export class CantonComponent implements OnInit {
       this.panelAdministracionService.refresh$.emit();
       this.openSnackBar("Se ingresó correctamente");
     } else if (canton["codigo"] == "400") {
-      this.openDialog("Inténtalo de nuevo");
+      this.openDialog("Inténtalo de nuevo", "advertencia");
     } else if (canton["codigo"] == "418") {
-      this.openDialog(canton["mensaje"]);
+      this.openDialog(canton["mensaje"], "advertencia");
     } else if (canton["codigo"] == "500") {
-      this.openDialog("Problemas con el servidor");
+      this.openDialog("Problemas con el servidor", "advertencia");
     }
   }
 
@@ -150,11 +150,11 @@ export class CantonComponent implements OnInit {
       this.panelAdministracionService.refresh$.emit();
       this.openSnackBar("Se actualizó correctamente");
     } else if (respuesta["codigo"] == "400") {
-      this.openDialog("Inténtalo de nuevo");
+      this.openDialog("Inténtalo de nuevo", "advertencia");
     } else if (respuesta["codigo"] == "418") {
-      this.openDialog(respuesta["mensaje"]);
+      this.openDialog(respuesta["mensaje"], "advertencia");
     } else if (respuesta["codigo"] == "500") {
-      this.openDialog("Problemas con el servidor");
+      this.openDialog("Problemas con el servidor", "advertencia");
     }
   }
 
@@ -182,11 +182,11 @@ export class CantonComponent implements OnInit {
           this.panelAdministracionService.refresh$.emit();
           this.openSnackBar("Se eliminó correctamente");
         } else if (respuesta["codigo"] == "400") {
-          this.openDialog("Inténtalo de nuevo");
+          this.openDialog("Inténtalo de nuevo", "advertencia");
         } else if (respuesta["codigo"] == "418") {
-          this.openDialog(respuesta["mensaje"]);
+          this.openDialog(respuesta["mensaje"], "advertencia");
         } else if (respuesta["codigo"] == "500") {
-          this.openDialog("Problemas con el servidor");
+          this.openDialog("Problemas con el servidor", "advertencia");
         }
       }
     });
