@@ -1,10 +1,14 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
+import { Router } from "@angular/router";
 
 // Material
-import { MatPaginator, MatTableDataSource } from "@angular/material";
+import { MatPaginator, MatTableDataSource, MatDialog } from "@angular/material";
 
 // Services
 import { InventarioService } from "src/app/services/inventario.service";
+
+import { salir } from '../../../environments/environment';
+import { DialogAlertComponent } from '../dialog-alert/dialog-alert.component';
 
 @Component({
   selector: "app-stock",
@@ -12,12 +16,16 @@ import { InventarioService } from "src/app/services/inventario.service";
   styleUrls: ["./stock.component.css"],
 })
 export class StockComponent implements OnInit {
-  constructor(private inventarioService: InventarioService) {}
+  constructor(
+    private inventarioService: InventarioService,
+    private router: Router,
+    private dialog: MatDialog
+  ) {}
 
   // Para la paginacion
   @ViewChild("paginator", { static: false }) paginator: MatPaginator;
   listaProductosEnStock = new MatTableDataSource<Element[]>();
-  
+
   loading = true;
 
   async consultarStock() {
@@ -49,7 +57,7 @@ export class StockComponent implements OnInit {
         } else {
           fechaExpiracion = item.AsignarProductoLote.FechaExpiracion;
         }
-        
+
         if (item.AsignarProductoLote.PerteneceKit != "False") {
           kit = item.AsignarProductoLote.AsignarProductoKit.Kit.Descripcion;
           nombreProducto =
@@ -102,7 +110,7 @@ export class StockComponent implements OnInit {
           Iva: iva,
           Kit: kit,
           Lote: lote,
-          FechaExpiracion: fechaExpiracion, 
+          FechaExpiracion: fechaExpiracion,
           Cantidad: item.Cantidad,
           Estado: estado,
         };
@@ -110,12 +118,22 @@ export class StockComponent implements OnInit {
       });
       this.listaProductosEnStock.data = listaProductosEnStock;
       this.listaProductosEnStock.paginator = this.paginator;
+    } else if (stock["codigo"] == "403") {
+      this.openDialog("Sesión Caducada", "advertencia");
+      this.router.navigateByUrl(salir())
     }
+  }
+
+  openDialog(mensaje, icono): void {
+    const dialogRef = this.dialog.open(DialogAlertComponent, {
+      width: "250px",
+      data: { mensaje: mensaje, icono: icono },
+    });
   }
 
   search(term: string) {
     term = term.trim();
-    term = term.toUpperCase(); 
+    term = term.toUpperCase();
     this.listaProductosEnStock.filter = term;
   }
 

@@ -2,6 +2,8 @@ import { Component, OnInit, ViewChild, ElementRef } from "@angular/core";
 import { FormGroup, Validators, FormControl } from "@angular/forms";
 import { Observable } from "rxjs";
 import { startWith, map } from "rxjs/operators";
+import { salir } from '../../../environments/environment';
+import { Router } from '@angular/router';
 
 // Components
 import { DialogAlertComponent } from "../dialog-alert/dialog-alert.component";
@@ -27,7 +29,8 @@ export class ProductoComponent implements OnInit {
   constructor(
     private inventarioService: InventarioService,
     private dialog: MatDialog,
-    private _snackBar: MatSnackBar
+    private _snackBar: MatSnackBar,
+    private router: Router
   ) {
     this.myForm = new FormGroup({
       _nombre: new FormControl("", [Validators.required]),
@@ -132,6 +135,9 @@ export class ProductoComponent implements OnInit {
         startWith(""),
         map((value) => this._filter(value))
       );
+    } else if (respuesta["codigo"] == "403") {
+      this.openDialog("Sesión Caducada", "advertencia");
+      this.router.navigateByUrl(salir())
     }
   }
 

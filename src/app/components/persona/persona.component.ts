@@ -6,6 +6,8 @@ import {
   FormGroupDirective,
   NgForm,
 } from "@angular/forms";
+import { Router } from '@angular/router';
+import { salir } from '../../../environments/environment';
 
 // Components
 import { DialogAlertComponent } from "../dialog-alert/dialog-alert.component";
@@ -22,6 +24,7 @@ import { ErrorStateMatcher } from "@angular/material/core";
 // Services
 import { PersonaService } from "../../services/persona.service";
 import { PanelAdministracionService } from "src/app/services/panel-administracion.service";
+import { SeguridadService } from 'src/app/services/seguridad.service';
 
 @Component({
   selector: "app-persona",
@@ -33,7 +36,9 @@ export class PersonaComponent implements OnInit {
     private personaService: PersonaService,
     private panelAdministracionService: PanelAdministracionService,
     private dialog: MatDialog,
-    private _snackBar: MatSnackBar
+    private _snackBar: MatSnackBar,
+    private seguridadService: SeguridadService,
+    private router: Router
   ) {
     this.myForm = new FormGroup({
       _nombres: new FormControl("", [Validators.required]),
@@ -119,6 +124,9 @@ export class PersonaComponent implements OnInit {
       this.comboTipoDocumento = false;
       this.myForm.get("_tipoDocumento").enable();
       this.tipoDocumentos = tipoDocumentos["respuesta"];
+    } else if (tipoDocumentos["codigo"] == "403") {
+      this.openDialog("Sesión Caducada", "advertencia");
+      this.router.navigateByUrl(salir())
     }
   }
 
@@ -328,6 +336,7 @@ export class PersonaComponent implements OnInit {
     });
     this.myForm.get("_telefono1").enable();
     this.myForm.get("_telefono2").enable();
+    this.myForm.get("_numeroDocumento").enable();
     this.nuevaPersona = "Modificar Persona";
     this.contacto = "Modificar Contacto";
     this.direccion = "Modificar Direccion";
@@ -345,6 +354,7 @@ export class PersonaComponent implements OnInit {
     this.myForm.get("_nombres").setValue(nombres);
     this.myForm.get("_apellidos").setValue(apellidos);
     this.myForm.get("_tipoDocumento").setValue(persona.IdTipoDocumento);
+    this.seleccionarTipoDocumento(persona.IdTipoDocumento)
     this.myForm.get("_numeroDocumento").setValue(persona.NumeroDocumento);
     this.myForm
       .get("_provincia")

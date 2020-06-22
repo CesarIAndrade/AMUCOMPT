@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
+import { salir } from '../../../environments/environment';
 
 // Components
 import { ModalLocalidadSuperiorComponent } from "../modal-localidad-superior/modal-localidad-superior.component";
@@ -16,6 +17,7 @@ import {
 
 // Services
 import { PanelAdministracionService } from "src/app/services/panel-administracion.service";
+import { Router } from '@angular/router';
 
 @Component({
   selector: "app-canton",
@@ -28,8 +30,7 @@ export class CantonComponent implements OnInit {
     private modalLocalidadSuperior: MatDialog,
     private dialog: MatDialog,
     private _snackBar: MatSnackBar,
-    private confirmDialog: MatDialog
-
+    private router: Router
   ) {
     this.myForm = new FormGroup({
       _idCanton: new FormControl(""),
@@ -84,6 +85,9 @@ export class CantonComponent implements OnInit {
       });
       this.cantones.data = cantones;
       this.cantones.paginator = this.paginator;
+    } else if (respuesta["codigo"] == "403") {
+      this.openDialog("Sesión Caducada", "advertencia");
+      this.router.navigateByUrl(salir())
     }
   }
 
@@ -159,7 +163,7 @@ export class CantonComponent implements OnInit {
   }
 
   async eliminarCanton(idCanton) {
-    let dialogRef = this.confirmDialog.open(ComfirmDialogComponent, {
+    let dialogRef = this.dialog.open(ComfirmDialogComponent, {
       width: "250px",
       height: "auto",
       data: {

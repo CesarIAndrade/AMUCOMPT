@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, EventEmitter } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { apiUrl } from "../../environments/environment";
 @Injectable({
@@ -7,6 +7,8 @@ import { apiUrl } from "../../environments/environment";
 export class SeguridadService {
 
   constructor(private http: HttpClient) { }
+
+  refresh$ = new EventEmitter();
 
   consultarTokens(){
     return new Promise((resolve, reject) => {

@@ -1,5 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef } from "@angular/core";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
+import { salir } from '../../../environments/environment';
+import { Router } from '@angular/router';
 
 // Components
 import { ModalAsignacionUsuarioPersonaComponent } from "../modal-asignacion-usuario-persona/modal-asignacion-usuario-persona.component";
@@ -28,7 +30,8 @@ export class UsuarioComponent implements OnInit {
   constructor(
     private usuarioService: UsuarioService,
     private dialog: MatDialog,
-    private _snackBar: MatSnackBar
+    private _snackBar: MatSnackBar,
+    private router: Router
   ) {
     this.myForm = new FormGroup({
       _idUsuario: new FormControl(""),
@@ -80,6 +83,9 @@ export class UsuarioComponent implements OnInit {
       }
       this.usuarios.data = usuarios;
       this.usuarios.paginator = this.paginator;
+    } else if (respuesta["codigo"] == "403") {
+      this.openDialog("Sesión Caducada", "advertencia");
+      this.router.navigateByUrl(salir())
     }
   }
 
@@ -123,7 +129,8 @@ export class UsuarioComponent implements OnInit {
       this.myForm.get("_idUsuario").value,
       this.myForm.get("_idPersona").value,
       this.myForm.get("_valorUsuario").value,
-      this.myForm.get("_contrasena").value
+      this.myForm.get("_contrasena").value,
+      "0"
     );
     if (respuesta["codigo"] == "200") {
       this.openSnackBar("Se actualizó correctamente");

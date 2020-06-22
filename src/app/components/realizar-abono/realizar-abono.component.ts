@@ -14,6 +14,7 @@ import {
 
 // Services
 import { SeguimientoService } from "src/app/services/seguimiento.service";
+import { DialogAlertComponent } from '../dialog-alert/dialog-alert.component';
 
 @Component({
   selector: "app-realizar-abono",
@@ -46,6 +47,13 @@ export class RealizarAbonoComponent implements OnInit {
   @ViewChild("paginator", { static: false }) paginator: MatPaginator;
   abonos = new MatTableDataSource<Element[]>();
 
+  openDialog(mensaje, icono): void {
+    const dialogRef = this.dialog.open(DialogAlertComponent, {
+      width: "250px",
+      data: { mensaje: mensaje, icono: icono },
+    });
+  }
+
   async realizarAbono() {
     let dialogRef = this.dialog.open(ComfirmDialogComponent, {
       width: "250px",
@@ -62,10 +70,18 @@ export class RealizarAbonoComponent implements OnInit {
             this.data.idConfigurarVenta,
             this.myForm.get("_monto").value
           );
-          if (respuesta["codigo"] == "201" || respuesta["codigo"] == "200") {
+          console.log(respuesta);
+          if(respuesta["codigo"] == "200") {
             this.seguimientoService.refresh$.emit();
-            // this.dialog.closeAll();
+            this.myForm.reset();
+            this.dialog.closeAll();
+          }
+          if (respuesta["codigo"] == "201") {
+            this.seguimientoService.refresh$.emit();
+            this.myForm.reset();
             this.consultarAbonos();
+          } else if (respuesta["codigo"] == "418") {
+            this.openDialog(respuesta["mensaje"], "advertencia");
           }
         }
       }

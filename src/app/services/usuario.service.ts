@@ -370,13 +370,15 @@ export class UsuarioService {
     idUsuario: string,
     idPersona: string,
     usuarioLogin: string,
-    contrasena: string
+    contrasena: string,
+    cerrarSesiones: string
   ) {
     const body = new HttpParams()
       .set("IdUsuario", idUsuario)
       .set("IdPersona", idPersona)
       .set("UsuarioLogin", usuarioLogin)
       .set("Contrasena", contrasena)
+      .set("Cerrar", cerrarSesiones)
       .set("encriptada", localStorage.getItem("token"));
     return new Promise((resolve, reject) => {
       this.http

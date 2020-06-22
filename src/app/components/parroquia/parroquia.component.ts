@@ -1,5 +1,7 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
+import { salir } from '../../../environments/environment';
+import { Router } from '@angular/router';
 
 // Components
 import { ModalLocalidadSuperiorComponent } from "../modal-localidad-superior/modal-localidad-superior.component";
@@ -21,7 +23,8 @@ export class ParroquiaComponent implements OnInit {
   constructor(
     private panelAdministracionService: PanelAdministracionService,
     private dialog: MatDialog,
-    private _snackBar: MatSnackBar
+    private _snackBar: MatSnackBar,
+    private router: Router
   ) {
     this.myForm = new FormGroup({
       _idParroquia: new FormControl(""),
@@ -75,6 +78,9 @@ export class ParroquiaComponent implements OnInit {
       })
       this.parroquias.data = parroquias;
       this.parroquias.paginator = this.paginator;
+    } else if (respuesta["codigo"] == "403") {
+      this.openDialog("Sesión Caducada", "advertencia");
+      this.router.navigateByUrl(salir())
     }
   }
 

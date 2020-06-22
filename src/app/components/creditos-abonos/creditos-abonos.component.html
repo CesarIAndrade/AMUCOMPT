@@ -1,29 +1,54 @@
 <div class="container">
   <div class="card-body">
-    <form [formGroup]="myForm" (ngSubmit)="validarFormulario()" novalidate>
-      <div class="row">
-        <div class="col-lg-10 col-md-10">
-          <mat-form-field class="example-full-width">
-            <input
-              matInput
-              name="buscarCliente"
-              formControlName="_cliente"
-              type="text"
-              placeholder="Buscar Cliente"
-            />
-          </mat-form-field>
-        </div>
-        <div class="col-lg-2 col-md-2">
-          <button mat-button class="ml-4 mt-2 bg-success text-white">
-            <mat-icon>search</mat-icon>
-          </button>
-        </div>
-      </div>
-      <mat-list *ngIf="mostrarDatosCliente">
+    <form [formGroup]="myForm">
+      <mat-form-field class="example-full-width">
+        <input
+          matInput
+          name="buscarCliente"
+          formControlName="_cliente"
+          type="text"
+          placeholder="Buscar Cliente"
+          [matAutocomplete]="auto"
+        />
+
+        <button
+          type="button"
+          [hidden]="clearFieldFecha"
+          mat-button
+          matSuffix
+          mat-icon-button
+        >
+          <mat-icon (click)="limpiarCampo()">clear</mat-icon>
+        </button>
+        <mat-autocomplete #auto="matAutocomplete">
+          <mat-option
+            (onSelectionChange)="seleccionarCliente(option.NumeroDocumento)"
+            tooltip="{{ option.NumeroDocumento }}"
+            placement="right"
+            hide-delay="1"
+            *ngFor="let option of filteredOptions | async | slice: 0:5"
+            [value]="
+              option.PrimerNombre +
+              ' ' +
+              option.SegundoNombre +
+              ' ' +
+              option.ApellidoPaterno +
+              ' ' +
+              option.ApellidoMaterno
+            "
+          >
+            {{ option.PrimerNombre }}
+            {{ option.SegundoNombre }}
+            {{ option.ApellidoPaterno }}
+            {{ option.ApellidoMaterno }}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+      <!-- <mat-list *ngIf="mostrarDatosCliente">
         <mat-list-item>
           <mat-label class="mb-3"> {{ cliente }} </mat-label>
         </mat-list-item>
-      </mat-list>
+      </mat-list> -->
       <mat-form-field class="example-full-width">
         <input
           matInput
@@ -37,10 +62,7 @@
         </button>
       </mat-form-field>
       <div class="table_all">
-        <table
-          mat-table
-          [dataSource]="facturas"
-        >
+        <table mat-table [dataSource]="facturas">
           <ng-container matColumnDef="factura">
             <th mat-header-cell *matHeaderCellDef>Factura</th>
             <td mat-cell *matCellDef="let element">
@@ -61,16 +83,16 @@
             </td>
           </ng-container>
           <ng-container matColumnDef="saldoPendiente">
-            <th mat-header-cell *matHeaderCellDef>Pendiente</th>
+            <th mat-header-cell *matHeaderCellDef>Total+Interés</th>
             <td mat-cell *matCellDef="let element">
-              {{ element.Pendiente }}
+              {{ element.Mora }}
             </td>
           </ng-container>
 
           <ng-container matColumnDef="saldoMora">
-            <th mat-header-cell *matHeaderCellDef>Mora</th>
+            <th mat-header-cell *matHeaderCellDef>Pendiente</th>
             <td mat-cell *matCellDef="let element">
-              {{ element.Mora }}
+              {{ element.Pendiente }}
             </td>
           </ng-container>
 
@@ -109,6 +131,9 @@
           ></tr>
           <tr mat-row *matRowDef="let row; columns: tablaFacturasCliente"></tr>
         </table>
+        <div class="spinner-container" *ngIf="loading">
+          <mat-spinner></mat-spinner>
+        </div>
         <mat-paginator
           #paginator
           [pageSizeOptions]="[5]"

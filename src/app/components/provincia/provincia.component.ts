@@ -1,5 +1,7 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
+import { salir } from '../../../environments/environment';
+import { Router } from '@angular/router';
 
 // Components
 import { DialogAlertComponent } from "../dialog-alert/dialog-alert.component";
@@ -25,7 +27,8 @@ export class ProvinciaComponent implements OnInit {
   constructor(
     private panelAdministracionService: PanelAdministracionService,
     private dialog: MatDialog,
-    private _snackBar: MatSnackBar
+    private _snackBar: MatSnackBar,
+    private router: Router
   ) {
     this.myForm = new FormGroup({
       _idProvincia: new FormControl(""),
@@ -41,10 +44,10 @@ export class ProvinciaComponent implements OnInit {
   @ViewChild("paginator", { static: false }) paginator: MatPaginator;
   provincias = new MatTableDataSource<Element[]>();
 
-  openDialog(mensaje): void {
+  openDialog(mensaje, icono): void {
     const dialogRef = this.dialog.open(DialogAlertComponent, {
       width: "250px",
-      data: { mensaje: mensaje },
+      data: { mensaje: mensaje, icono: icono },
     });
   }
 
@@ -58,11 +61,13 @@ export class ProvinciaComponent implements OnInit {
   async consultarProvincias() {
     var provincias = await this.panelAdministracionService.consultarProvincias();
     console.log(provincias);
-    
     if (provincias["codigo"] == "200") {
       this.loading = false;
       this.provincias.data = provincias["respuesta"];
       this.provincias.paginator = this.paginator;
+    } else if (provincias["codigo"] == "403") {
+      this.openDialog("Sesión Caducada", "advertencia");
+      this.router.navigateByUrl(salir())
     }
   }
 
@@ -97,11 +102,11 @@ export class ProvinciaComponent implements OnInit {
       this.myForm.reset();
       this.openSnackBar("Se ingresó correctamente");
     } else if (provincia["codigo"] == "400") {
-      this.openDialog("Inténtalo de nuevo");
+      this.openDialog("Inténtalo de nuevo", "advertencia");
     } else if (provincia["codigo"] == "418") {
-      this.openDialog(provincia["mensaje"]);
+      this.openDialog(provincia["mensaje"], "advertencia");
     } else if (provincia["codigo"] == "500") {
-      this.openDialog("Problemas con el servidor");
+      this.openDialog("Problemas con el servidor", "advertencia");
     }
   }
 
@@ -128,11 +133,11 @@ export class ProvinciaComponent implements OnInit {
       this.botonIngresar = "ingresar";
       this.openSnackBar("Se actualizó correctamente");
     } else if (respuesta["codigo"] == "400") {
-      this.openDialog("Inténtalo de nuevo");
+      this.openDialog("Inténtalo de nuevo", "advertencia");
     } else if (respuesta["codigo"] == "418") {
-      this.openDialog(respuesta["mensaje"]);
+      this.openDialog(respuesta["mensaje"], "advertencia");
     } else if (respuesta["codigo"] == "500") {
-      this.openDialog("Problemas con el servidor");
+      this.openDialog("Problemas con el servidor", "advertencia");
     }
   }
 
@@ -159,11 +164,11 @@ export class ProvinciaComponent implements OnInit {
           this.provincias.data = provincias;
           this.openSnackBar("Se eliminó correctamente");
         } else if (respuesta["codigo"] == "400") {
-          this.openDialog("Inténtalo de nuevo");
+          this.openDialog("Inténtalo de nuevo", "advertencia");
         } else if (respuesta["codigo"] == "418") {
-          this.openDialog(provincia["mensaje"]);
+          this.openDialog(provincia["mensaje"], "advertencia");
         } else if (respuesta["codigo"] == "500") {
-          this.openDialog("Problemas con el servidor");
+          this.openDialog("Problemas con el servidor", "advertencia");
         }
       }
     });

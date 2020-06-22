@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { FormGroup, FormControl } from "@angular/forms";
+import { salir } from '../../../environments/environment';
 
 // Components
 import { DialogAlertComponent } from "../dialog-alert/dialog-alert.component";
@@ -10,6 +11,7 @@ import { MatPaginator, MatTableDataSource, MatDialog } from "@angular/material";
 // Services
 import { UsuarioService } from "src/app/services/usuario.service";
 import { SeguimientoService } from "src/app/services/seguimiento.service";
+import { Router } from '@angular/router';
 
 @Component({
   selector: "app-asignar-tecnico-cliente",
@@ -20,7 +22,8 @@ export class AsignarTecnicoClienteComponent implements OnInit {
   constructor(
     private usuarioService: UsuarioService,
     private seguimientoService: SeguimientoService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private router: Router
   ) {
     this.myForm = new FormGroup({
       _provincia: new FormControl(""),
@@ -67,6 +70,9 @@ export class AsignarTecnicoClienteComponent implements OnInit {
     if (respuesta["codigo"] == "200") {
       this.comboProvincia = false;
       this.provincias = respuesta["respuesta"];
+    } else if (respuesta["codigo"] == "403") {
+      this.openDialog("Sesión Caducada", "advertencia");
+      this.router.navigateByUrl(salir())
     }
   }
 

@@ -1,14 +1,20 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
+import { Observable } from "rxjs";
+import { startWith, map } from "rxjs/operators";
+import { Router } from '@angular/router';
+import { salir } from '../../../environments/environment';
 
 // Components
 import { RealizarAbonoComponent } from "../realizar-abono/realizar-abono.component";
+import { DialogAlertComponent } from '../dialog-alert/dialog-alert.component';
 
 // Material
 import { MatTableDataSource, MatPaginator, MatDialog } from "@angular/material";
 
 // Services
 import { SeguimientoService } from "src/app/services/seguimiento.service";
+import { PersonaService } from "src/app/services/persona.service";
 
 @Component({
   selector: "app-creditos-abonos",
@@ -19,35 +25,86 @@ export class CreditosAbonosComponent implements OnInit {
   myForm: FormGroup;
   constructor(
     private seguimientoService: SeguimientoService,
-    private modalRealizarAbono: MatDialog
+    private modalRealizarAbono: MatDialog,
+    private personaService: PersonaService,
+    private dialog: MatDialog,
+    private router: Router
   ) {
     this.myForm = new FormGroup({
-      _cliente: new FormControl("", [Validators.required]),
+      _cliente: new FormControl(""),
+      _numeroDocumento: new FormControl(""),
     });
   }
 
   // Para la paginacion
   @ViewChild("paginator", { static: false }) paginator: MatPaginator;
   facturas = new MatTableDataSource<Element[]>();
+  personas = new MatTableDataSource<Element[]>();
 
-  validarFormulario() {
-    if (this.myForm.valid) {
-      this.consultarFacturasCliente();
+  filteredOptions: Observable<string[]>;
+  _personas: any[] = [];
+  loading = false;
+
+  openDialog(mensaje, icono): void {
+    const dialogRef = this.dialog.open(DialogAlertComponent, {
+      width: "250px",
+      data: { mensaje: mensaje, icono: icono },
+    });
+  }
+
+  async consultarPersonas() {
+    var respuesta = await this.personaService.consultarPersonas();
+    if (respuesta["codigo"] == "200") {
+      this.personas.data = respuesta["respuesta"];
+      this._personas = respuesta["respuesta"];
+      this.filteredOptions = this.myForm.get("_cliente").valueChanges.pipe(
+        startWith(""),
+        map((value) => this._filter(value))
+      );
+    } else if (respuesta["codigo"] == "403") {
+      this.openDialog("Sesión Caducada", "advertencia");
+      this.router.navigateByUrl(salir())
     }
   }
 
-  cliente: string;
-  mostrarDatosCliente = false;
-  async consultarFacturasCliente() {
-    this.mostrarDatosCliente = false;
+  private _filter(value: string): string[] {
+    if (value) {
+      const filterValue = value.toLowerCase().trim();
+      return this._personas.filter((option) =>
+        (
+          option.PrimerNombre +
+          option.SegundoNombre +
+          option.ApellidoPaterno +
+          option.ApellidoMaterno +
+          option.NumeroDocumento
+        )
+          .trim()
+          .toLowerCase()
+          .includes(filterValue)
+      );
+    } else {
+      return this._personas;
+    }
+  }
+
+  limpiarCampo() {
+    this.myForm.get("_cliente").reset();
+    this.facturas.data = [];
+  }
+
+  async seleccionarCliente(numeroDocumento) {
+    this.myForm.get("_numeroDocumento").setValue(numeroDocumento);
+    this.loading = true;
+    this.facturas.data = [];
     var respuesta = await this.seguimientoService.consultarFacturasCliente(
-      this.myForm.get("_cliente").value
+      numeroDocumento
     );
     if (respuesta["codigo"] == "200") {
+      this.loading = false;
       var facturas: any = [];
       respuesta["respuesta"].map((factura) => {
         var p = 100;
-        var fechaActual = new Date();
+        var fechaActual = new Date("2020-06-25T00:00:00");
         // 2020-06-T09:08:30.79
         var fechaFactura = new Date(factura.FechaGeneracion);
         var fechaFinalCredito = new Date(
@@ -78,14 +135,6 @@ export class CreditosAbonosComponent implements OnInit {
             }
           }
         }
-        this.cliente =
-          factura.ConfigurarVenta._PersonaEntidad.PrimerNombre +
-          " " +
-          factura.ConfigurarVenta._PersonaEntidad.SegundoNombre +
-          " " +
-          factura.ConfigurarVenta._PersonaEntidad.ApellidoPaterno +
-          " " +
-          factura.ConfigurarVenta._PersonaEntidad.ApellidoMaterno;
         facturas.push({
           Codigo: factura.Codigo,
           Fecha: factura.FechaGeneracion,
@@ -99,10 +148,16 @@ export class CreditosAbonosComponent implements OnInit {
           estadoConfVenta: factura.ConfigurarVenta.EstadoConfVenta,
         });
       });
-      this.mostrarDatosCliente = true;
       this.facturas.data = facturas;
       this.facturas.paginator = this.paginator;
     }
+  }
+
+  searchCliente(term: string) {
+    term = term.trim();
+    term = term.toUpperCase();
+    this.personas.filter = term;
+    console.log(this.personas.filter);
   }
 
   search(term: string) {
@@ -123,8 +178,9 @@ export class CreditosAbonosComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.consultarPersonas();
     this.seguimientoService.refresh$.subscribe(() => {
-      this.consultarFacturasCliente();
+      this.seleccionarCliente(this.myForm.get("_numeroDocumento").value);
     });
   }
 

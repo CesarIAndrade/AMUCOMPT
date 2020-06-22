@@ -1,5 +1,7 @@
 import { FlatTreeControl } from "@angular/cdk/tree";
 import { Component, Injectable, OnInit } from "@angular/core";
+import { salir } from '../../../environments/environment';
+import { Router } from '@angular/router';
 
 // Material
 import {
@@ -10,6 +12,8 @@ import { BehaviorSubject, Observable } from "rxjs";
 
 // Services
 import { SeguimientoService } from "src/app/services/seguimiento.service";
+import { MatDialog } from '@angular/material';
+import { DialogAlertComponent } from '../dialog-alert/dialog-alert.component';
 
 const LOAD_MORE = "LOAD_MORE";
 
@@ -110,12 +114,23 @@ export class LoadmoreDatabase {
   providers: [LoadmoreDatabase],
 })
 export class VisitasFinalizadasComponent implements OnInit {
+
+  openDialog(mensaje, icono): void {
+    const dialogRef = this.dialog.open(DialogAlertComponent, {
+      width: "250px",
+      data: { mensaje: mensaje, icono: icono },
+    });
+  }
+
   async consultarVisitasFinalizadas() {
     var respuesta = await this.seguimientoService.consultarVisitasFinalizadas(
       localStorage.getItem("miCuenta.idAsignacionTipoUsuario")
     );
     if (respuesta["codigo"] == "200") {
       this._database.recibirData(respuesta["respuesta"]);
+    } else if (respuesta["codigo"] == "403") {
+      this.openDialog("Sesión Caducada", "advertencia");
+      this.router.navigateByUrl(salir())
     }
   }
 
@@ -133,7 +148,9 @@ export class VisitasFinalizadasComponent implements OnInit {
 
   constructor(
     private _database: LoadmoreDatabase,
-    private seguimientoService: SeguimientoService
+    private seguimientoService: SeguimientoService,
+    private dialog: MatDialog,
+    private router: Router
   ) {
     this.treeFlattener = new MatTreeFlattener(
       this.transformer,

@@ -1,15 +1,18 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { FormGroup, FormControl } from "@angular/forms";
 import { Router } from "@angular/router";
+import { salir } from '../../../environments/environment';
 
 // Components
 import { ComunidadesBottomSheet } from "./comunidades-bottom-sheet.component";
+import { DialogAlertComponent } from '../dialog-alert/dialog-alert.component';
 
 // Material
 import {
   MatTableDataSource,
   MatPaginator,
   MatBottomSheet,
+  MatDialog,
 } from "@angular/material";
 
 // services
@@ -24,7 +27,8 @@ export class VisitaComponent implements OnInit {
   constructor(
     private seguimientoService: SeguimientoService,
     private bottomSheet: MatBottomSheet,
-    private router: Router
+    private router: Router,
+    private dialog: MatDialog
   ) {
     this.myForm = new FormGroup({
       _provincia: new FormControl(""),
@@ -80,6 +84,13 @@ export class VisitaComponent implements OnInit {
   // Para la paginacion
   @ViewChild("paginator", { static: false }) paginator: MatPaginator;
   clientes = new MatTableDataSource<Element[]>();
+
+  openDialog(mensaje, icono): void {
+    const dialogRef = this.dialog.open(DialogAlertComponent, {
+      width: "250px",
+      data: { mensaje: mensaje, icono: icono },
+    });
+  }
 
   selecionarOpcion(opcion) {
     this.clientes.data = [];
@@ -197,6 +208,9 @@ export class VisitaComponent implements OnInit {
       this.loading = false;
       this.clientes.data = clientes;
       this.clientes.paginator = this.paginator;
+    } else if (respuesta["codigo"] == "403") {
+      this.openDialog("Sesión Caducada", "advertencia");
+      this.router.navigateByUrl(salir())
     }
   }
 

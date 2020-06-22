@@ -1,8 +1,11 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { FormGroup, FormControl } from "@angular/forms";
+import { Router } from '@angular/router';
+import { salir } from '../../../environments/environment';
 
 // Components
 import { ComfirmDialogComponent } from '../comfirm-dialog/comfirm-dialog.component';
+import { DialogAlertComponent } from '../dialog-alert/dialog-alert.component';
 
 // Material
 import {
@@ -14,7 +17,6 @@ import {
 
 // Services
 import { InventarioService } from "src/app/services/inventario.service";
-
 
 export interface DetalleProducto {
   presentacion: string;
@@ -31,7 +33,8 @@ export class ArmarKitComponent implements OnInit {
   constructor(
     private inventarioService: InventarioService,
     private _snackBar: MatSnackBar,
-    private confirmDialog: MatDialog
+    private dialog: MatDialog,
+    private router: Router
   ) {
     this.myForm = new FormGroup({
       _idKit: new FormControl(""),
@@ -51,6 +54,13 @@ export class ArmarKitComponent implements OnInit {
   kits: any[] = [];
   loadingP = false;
   loadingPK = false;
+
+  openDialog(mensaje, icono): void {
+    const dialogRef = this.dialog.open(DialogAlertComponent, {
+      width: "250px",
+      data: { mensaje: mensaje, icono: icono },
+    });
+  }
 
   openSnackBar(message: string) {
     this._snackBar.open(message, "Cerrar", {
@@ -105,6 +115,9 @@ export class ArmarKitComponent implements OnInit {
     var kits = await this.inventarioService.consultarKits();
     if (kits["codigo"] == "200") {
       this.kits = kits["respuesta"];
+    } else if (kits["codigo"] == "403") {
+      this.openDialog("Sesión Caducada", "advertencia");
+      this.router.navigateByUrl(salir())
     }
   }
 
@@ -151,7 +164,7 @@ export class ArmarKitComponent implements OnInit {
   }
 
   async eliminarAsignacionProductoKit(idProducto) {
-    let dialogRef = this.confirmDialog.open(ComfirmDialogComponent, {
+    let dialogRef = this.dialog.open(ComfirmDialogComponent, {
       width: "250px",
       height: "auto",
       data: {

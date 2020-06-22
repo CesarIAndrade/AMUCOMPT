@@ -1,5 +1,7 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
+import { salir } from '../../../environments/environment';
+import { Router } from '@angular/router';
 
 // Components
 import { ModalLocalidadSuperiorComponent } from "../modal-localidad-superior/modal-localidad-superior.component";
@@ -27,6 +29,7 @@ export class ComunidadComponent implements OnInit {
     private panelAdministracionService: PanelAdministracionService,
     private dialog: MatDialog,
     private _snackBar: MatSnackBar,
+    private router: Router
   ) {
     this.myForm = new FormGroup({
       _idComunidad: new FormControl(""),
@@ -81,6 +84,9 @@ export class ComunidadComponent implements OnInit {
       });
       this.comunidades.data = comunidades;
       this.comunidades.paginator = this.paginator;
+    } else if (respuesta["codigo"] == "403") {
+      this.openDialog("Sesión Caducada", "advertencia");
+      this.router.navigateByUrl(salir())
     }
   }
 

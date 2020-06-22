@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from "@angular/core";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { Observable } from "rxjs";
 import { Router } from "@angular/router";
+import { salir } from '../../../environments/environment';
 
 // Material
 import { MatDialog, MatSnackBar } from "@angular/material";
@@ -124,6 +125,9 @@ export class CompraComponent implements OnInit {
           }
         });
       }
+    } else if (respuesta["codigo"] == "403") {
+      this.openDialog("Sesión Caducada", "advertencia");
+      this.router.navigateByUrl(salir())
     }
   }
 
@@ -539,7 +543,6 @@ export class CompraComponent implements OnInit {
   loadingFnF = true;
   loadingFF = true;
   async consultarFacturas(flag) {
-    console.log(flag);
     if(flag) {
       var facturasFinalizadas = await this.facturaService.consultarFacturas(
         "Factura/ListaFacturasFinalizadas"
@@ -573,13 +576,9 @@ export class CompraComponent implements OnInit {
   }
 
   async eliminarFactura(factura) {
-    console.log(factura);
-    
     this.facturasNoFinalizadas.data = [];
     this.loadingFnF = true;
     var respuesta = await this.facturaService.eliminarFactura(factura.IdCabeceraFactura);
-    console.log(respuesta);
-    
     if (respuesta["codigo"] == "200") {
       this.consultarFacturas(false);
     }
