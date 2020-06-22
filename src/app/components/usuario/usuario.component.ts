@@ -1,20 +1,18 @@
 import { Component, OnInit, ViewChild, ElementRef } from "@angular/core";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
-import { salir } from '../../../environments/environment';
+import { salir, openDialog, openSnackBar } from '../../functions/global';
 import { Router } from '@angular/router';
 
 // Components
 import { ModalAsignacionUsuarioPersonaComponent } from "../modal-asignacion-usuario-persona/modal-asignacion-usuario-persona.component";
 import { ModalAsignacionUsuarioTiposUsuarioComponent } from "../modal-asignacion-usuario-tipos-usuario/modal-asignacion-usuario-tipos-usuario.component";
-import { DialogAlertComponent } from "../dialog-alert/dialog-alert.component";
 import { ModalReasignarClientesComponent } from "../modal-reasignar-clientes/modal-reasignar-clientes.component";
-import { ComfirmDialogComponent } from "../comfirm-dialog/comfirm-dialog.component";
+import { ConfirmDialogComponent } from "../confirm-dialog/confirm-dialog.component";
 
 // Material
 import {
   MatPaginator,
   MatTableDataSource,
-  MatSnackBar,
 } from "@angular/material";
 import { MatDialog } from "@angular/material/dialog";
 
@@ -30,7 +28,6 @@ export class UsuarioComponent implements OnInit {
   constructor(
     private usuarioService: UsuarioService,
     private dialog: MatDialog,
-    private _snackBar: MatSnackBar,
     private router: Router
   ) {
     this.myForm = new FormGroup({
@@ -56,20 +53,6 @@ export class UsuarioComponent implements OnInit {
   filterUsuario = "";
   personas: any[] = [];
 
-  openDialog(mensaje, icono): void {
-    const dialogRef = this.dialog.open(DialogAlertComponent, {
-      width: "250px",
-      data: { mensaje: mensaje, icono: icono },
-    });
-  }
-
-  openSnackBar(message: string) {
-    this._snackBar.open(message, "Cerrar", {
-      duration: 2000,
-      horizontalPosition: "right",
-    });
-  }
-
   async consultarUsuarios() {
     var respuesta = await this.usuarioService.consultarUsuarios();
     if (respuesta["codigo"] == "200") {
@@ -84,7 +67,7 @@ export class UsuarioComponent implements OnInit {
       this.usuarios.data = usuarios;
       this.usuarios.paginator = this.paginator;
     } else if (respuesta["codigo"] == "403") {
-      this.openDialog("Sesión Caducada", "advertencia");
+      openDialog("Sesión Caducada", "advertencia", this.dialog);
       this.router.navigateByUrl(salir())
     }
   }
@@ -114,13 +97,13 @@ export class UsuarioComponent implements OnInit {
       this.myForm.get("_contrasena").value
     );
     if (respuesta["codigo"] == "200") {
-      this.openSnackBar("Se ingresó correctamente");
+      openSnackBar("Se ingresó correctamente");
       var usuarios: any = this.usuarios.data;
       usuarios.push(respuesta["respuesta"]);
       this.usuarios.data = usuarios;
       this.myForm.reset();
     } else if (respuesta["codigo"] == "418") {
-      this.openDialog(respuesta["mensaje"], "advertencia");
+      openDialog(respuesta["mensaje"], "advertencia", this.dialog);
     }
   }
 
@@ -133,7 +116,7 @@ export class UsuarioComponent implements OnInit {
       "0"
     );
     if (respuesta["codigo"] == "200") {
-      this.openSnackBar("Se actualizó correctamente");
+      openSnackBar("Se actualizó correctamente");
       var usuarios: any = this.usuarios.data;
       var usuario = usuarios.find(
         (usuario) => usuario["IdUsuario"] == this.myForm.get("_idUsuario").value
@@ -185,7 +168,7 @@ export class UsuarioComponent implements OnInit {
     );
     dialogRef.afterClosed().subscribe((result) => {
       if (result != null) {
-        this.openDialog(result, "success");
+        openDialog(result, "success", this.dialog);
         this.consultarUsuarios();
       }
     });
@@ -200,7 +183,7 @@ export class UsuarioComponent implements OnInit {
         this.consultarUsuarios();
       }
     } else {
-      let dialogRef = this.dialog.open(ComfirmDialogComponent, {
+      let dialogRef = this.dialog.open(ConfirmDialogComponent, {
         width: "250px",
         height: "auto",
         data: {

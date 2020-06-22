@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from "@angular/core";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { Observable } from "rxjs";
 import { Router } from "@angular/router";
-import { salir } from '../../../environments/environment';
+import { salir, openDialog, openSnackBar} from '../../functions/global';
 
 // Material
 import { MatDialog, MatSnackBar } from "@angular/material";
@@ -11,7 +11,6 @@ import { MatPaginator, MatTableDataSource } from "@angular/material";
 // Component
 import { ModalAsignacionConfiguracionProductoComponent } from "../modal-asignacion-configuracion-producto/modal-asignacion-configuracion-producto.component";
 import { ModalLotesComponent } from "../modal-lotes/modal-lotes.component";
-import { DialogAlertComponent } from "../dialog-alert/dialog-alert.component";
 
 // Services
 import { InventarioService } from "src/app/services/inventario.service";
@@ -29,8 +28,7 @@ export class CompraComponent implements OnInit {
     private compraService: CompraService,
     private facturaService: FacturaService,
     private router: Router,
-    private dialog: MatDialog,
-    private _snackBar: MatSnackBar
+    private dialog: MatDialog
   ) {
     this.myForm = new FormGroup({
       _idCabecera: new FormControl(""),
@@ -101,20 +99,6 @@ export class CompraComponent implements OnInit {
   facturasNoFinalizadas = new MatTableDataSource<Element[]>();
   facturasFinalizadas = new MatTableDataSource<Element[]>();
 
-  openDialog(mensaje, icono): void {
-    const dialogRef = this.dialog.open(DialogAlertComponent, {
-      width: "250px",
-      data: { mensaje: mensaje, icono: icono },
-    });
-  }
-
-  openSnackBar(message: string) {
-    this._snackBar.open(message, "Cerrar", {
-      duration: 2000,
-      horizontalPosition: "right",
-    });
-  }
-
   async consultarTipoTransaccion() {
     var respuesta = await this.facturaService.consultarTipoTransaccion();
     if (respuesta["codigo"] == "200") {
@@ -126,7 +110,7 @@ export class CompraComponent implements OnInit {
         });
       }
     } else if (respuesta["codigo"] == "403") {
-      this.openDialog("Sesión Caducada", "advertencia");
+      openDialog("Sesión Caducada", "advertencia", this.dialog);
       this.router.navigateByUrl(salir())
     }
   }
@@ -156,7 +140,7 @@ export class CompraComponent implements OnInit {
       this.buttonGenerarFactura = true;
       this.buttonAgregarDetalle = false;
     } else {
-      this.openDialog("Problemas con el servidor", "advertencia");
+      openDialog("Problemas con el servidor", "advertencia", this.dialog);
     }
   }
 
@@ -329,7 +313,7 @@ export class CompraComponent implements OnInit {
     if (lote["codigo"] == "200") {
       this.asignarProductoLote(lote["respuesta"].IdLote, fechaExpiracion);
     } else if (lote["codigo"] == "500") {
-      this.openDialog(lote["mensaje"], "advertencia");
+      openDialog(lote["mensaje"], "advertencia", this.dialog);
     }
   }
 
@@ -358,7 +342,7 @@ export class CompraComponent implements OnInit {
       "0"
     );
     if (respuesta["codigo"] == "200") {
-      this.openSnackBar("Se ingresó correctamente");
+      openSnackBar("Se ingresó correctamente");
       this.limpiarCampos();
       this.consultarDetalleFactura();
       this.realizarCompraButton = false;
@@ -465,10 +449,10 @@ export class CompraComponent implements OnInit {
       this.myForm.get("_idCabecera").value
     );
     if (respuesta["codigo"] == "200") {
-      this.openSnackBar("Se eliminó correctamente");
+      openSnackBar("Se eliminó correctamente");
       this.consultarDetalleFactura();
     } else if (respuesta["codigo"] == "201") {
-      this.openSnackBar("Factura eliminada");
+      openSnackBar("Factura eliminada");
       this.consultarFacturas(true);
       this.myForm.reset();
       this.detalleCompra.data = [];
@@ -501,7 +485,7 @@ export class CompraComponent implements OnInit {
       "Factura/FinalizarCabeceraFactura"
     );
     if (respuesta["codigo"] == "200") {
-      this.openDialog("Compra realizada con éxito", "success");
+      openDialog("Compra realizada con éxito", "success", this.dialog);
       this.consultarFacturas(true);
       this.selectTipoCompra = true;
       this.seccionKit = true;

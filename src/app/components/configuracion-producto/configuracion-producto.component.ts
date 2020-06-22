@@ -1,21 +1,15 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
-import { Observable, of } from "rxjs";
+import { Observable } from "rxjs";
 import { map, startWith } from "rxjs/operators";
-import { salir } from '../../../environments/environment';
-import { Router } from '@angular/router';
+import { salir, openDialog, openSnackBar } from "../../functions/global";
+import { Router } from "@angular/router";
 
 // Components
-import { DialogAlertComponent } from "../dialog-alert/dialog-alert.component";
-import { ComfirmDialogComponent } from "../comfirm-dialog/comfirm-dialog.component";
+import { ConfirmDialogComponent } from "../confirm-dialog/confirm-dialog.component";
 
 // Material
-import {
-  MatTableDataSource,
-  MatPaginator,
-  MatDialog,
-  MatSnackBar,
-} from "@angular/material";
+import { MatTableDataSource, MatPaginator, MatDialog } from "@angular/material";
 
 // Services
 import { InventarioService } from "src/app/services/inventario.service";
@@ -29,7 +23,6 @@ export class ConfiguracionProductoComponent implements OnInit {
   constructor(
     private inventarioService: InventarioService,
     private dialog: MatDialog,
-    private _snackBar: MatSnackBar,
     private router: Router
   ) {
     this.myForm = new FormGroup({
@@ -95,20 +88,6 @@ export class ConfiguracionProductoComponent implements OnInit {
   @ViewChild("paginator", { static: false }) paginator: MatPaginator;
   dataSource = new MatTableDataSource<Element[]>();
 
-  openDialog(mensaje, icono): void {
-    const dialogRef = this.dialog.open(DialogAlertComponent, {
-      width: "250px",
-      data: { mensaje: mensaje, icono: icono },
-    });
-  }
-
-  openSnackBar(message: string) {
-    this._snackBar.open(message, "Cerrar", {
-      duration: 2000,
-      horizontalPosition: "right",
-    });
-  }
-
   async consultarTipoProductos() {
     var respuesta = await this.inventarioService.consultarTipoProductos();
     if (respuesta["codigo"] == "200") {
@@ -126,8 +105,8 @@ export class ConfiguracionProductoComponent implements OnInit {
         this.dataSource.paginator = this.paginator;
       });
     } else if (respuesta["codigo"] == "403") {
-      this.openDialog("Sesión Caducada", "advertencia");
-      this.router.navigateByUrl(salir())
+      openDialog("Sesión Caducada", "advertencia", this.dialog);
+      this.router.navigateByUrl(salir());
     }
   }
 
@@ -136,7 +115,7 @@ export class ConfiguracionProductoComponent implements OnInit {
       this.myForm.get("_campo").value
     );
     if (tipoProducto["codigo"] == "200") {
-      this.openSnackBar("Se ingresó correctamente");
+      openSnackBar("Se ingresó correctamente");
       var tipoProductos: any = this.dataSource.data;
       tipoProductos.push({
         _id: tipoProducto["respuesta"].IdTipoProducto,
@@ -147,16 +126,16 @@ export class ConfiguracionProductoComponent implements OnInit {
       this.dataSource.data = tipoProductos;
       this.myForm.get("_campo").reset();
     } else if (tipoProducto["codigo"] == "400") {
-      this.openDialog("Inténtalo de nuevo", "advertencia");
+      openDialog("Inténtalo de nuevo", "advertencia", this.dialog);
     } else if (tipoProducto["codigo"] == "418") {
-      this.openDialog(tipoProducto["mensaje"], "advertencia");
+      openDialog(tipoProducto["mensaje"], "advertencia", this.dialog);
     } else if (tipoProducto["codigo"] == "500") {
-      this.openDialog("Problemas con el servidor", "advertencia");
+      openDialog("Problemas con el servidor", "advertencia", this.dialog);
     }
   }
 
   eliminarTipoProducto(idTipoProducto) {
-    let dialogRef = this.dialog.open(ComfirmDialogComponent, {
+    let dialogRef = this.dialog.open(ConfirmDialogComponent, {
       width: "250px",
       height: "auto",
       data: {
@@ -169,7 +148,7 @@ export class ConfiguracionProductoComponent implements OnInit {
           idTipoProducto
         );
         if (respuesta["codigo"] == "200") {
-          this.openSnackBar("Se eliminó correctamente");
+          openSnackBar("Se eliminó correctamente");
           var tipoProductos: any = this.dataSource.data;
           var tipoProducto = tipoProductos.find(
             (tipoProducto) => tipoProducto["_id"] == idTipoProducto
@@ -178,11 +157,11 @@ export class ConfiguracionProductoComponent implements OnInit {
           tipoProductos.splice(index, 1);
           this.dataSource.data = tipoProductos;
         } else if (respuesta["codigo"] == "400") {
-          this.openDialog("Inténtalo de nuevo", "advertencia");
+          openDialog("Inténtalo de nuevo", "advertencia", this.dialog);
         } else if (respuesta["codigo"] == "418") {
-          this.openDialog(respuesta["mensaje"], "advertencia");
+          openDialog(respuesta["mensaje"], "advertencia", this.dialog);
         } else if (respuesta["codigo"] == "500") {
-          this.openDialog("Problemas con el servidor", "advertencia");
+          openDialog("Problemas con el servidor", "advertencia", this.dialog);
         }
       }
     });
@@ -211,7 +190,7 @@ export class ConfiguracionProductoComponent implements OnInit {
       this.myForm.get("_campo").value
     );
     if (presentacion["codigo"] == "200") {
-      this.openSnackBar("Se ingresó correctamente");
+      openSnackBar("Se ingresó correctamente");
       var presentaciones: any = this.dataSource.data;
       presentaciones.push({
         _id: presentacion["respuesta"].IdPresentacion,
@@ -222,16 +201,16 @@ export class ConfiguracionProductoComponent implements OnInit {
       this.dataSource.data = presentaciones;
       this.myForm.get("_campo").reset();
     } else if (presentacion["codigo"] == "400") {
-      this.openDialog("Inténtalo de nuevo", "advertencia");
+      openDialog("Inténtalo de nuevo", "advertencia", this.dialog);
     } else if (presentacion["codigo"] == "418") {
-      this.openDialog(presentacion["mensaje"], "advertencia");
+      openDialog(presentacion["mensaje"], "advertencia", this.dialog);
     } else if (presentacion["codigo"] == "500") {
-      this.openDialog("Problemas con el servidor", "advertencia");
+      openDialog("Problemas con el servidor", "advertencia", this.dialog);
     }
   }
 
   async eliminarPresentacion(idPresentacion) {
-    let dialogRef = this.dialog.open(ComfirmDialogComponent, {
+    let dialogRef = this.dialog.open(ConfirmDialogComponent, {
       width: "250px",
       height: "auto",
       data: {
@@ -244,7 +223,7 @@ export class ConfiguracionProductoComponent implements OnInit {
           idPresentacion
         );
         if (respuesta["codigo"] == "200") {
-          this.openSnackBar("Se eliminó correctamente");
+          openSnackBar("Se eliminó correctamente");
           var presentaciones: any = this.dataSource.data;
           var presentacion = presentaciones.find(
             (presentacion) => presentacion["_id"] == idPresentacion
@@ -253,11 +232,11 @@ export class ConfiguracionProductoComponent implements OnInit {
           presentaciones.splice(index, 1);
           this.dataSource.data = presentaciones;
         } else if (respuesta["codigo"] == "400") {
-          this.openDialog("Inténtalo de nuevo", "advertencia");
+          openDialog("Inténtalo de nuevo", "advertencia", this.dialog);
         } else if (respuesta["codigo"] == "418") {
-          this.openDialog(respuesta["mensaje"], "advertencia");
+          openDialog(respuesta["mensaje"], "advertencia", this.dialog);
         } else if (respuesta["codigo"] == "500") {
-          this.openDialog("Problemas con el servidor", "advertencia");
+          openDialog("Problemas con el servidor", "advertencia", this.dialog);
         }
       }
     });
@@ -286,7 +265,7 @@ export class ConfiguracionProductoComponent implements OnInit {
       this.myForm.get("_campo").value
     );
     if (medida["codigo"] == "200") {
-      this.openSnackBar("Se ingresó correctamente");
+      openSnackBar("Se ingresó correctamente");
       var medidas: any = this.dataSource.data;
       medidas.push({
         _id: medida["respuesta"].IdMedida,
@@ -297,16 +276,16 @@ export class ConfiguracionProductoComponent implements OnInit {
       this.dataSource.data = medidas;
       this.myForm.get("_campo").reset();
     } else if (medida["codigo"] == "400") {
-      this.openDialog("Inténtalo de nuevo", "advertencia");
+      openDialog("Inténtalo de nuevo", "advertencia", this.dialog);
     } else if (medida["codigo"] == "418") {
-      this.openDialog(medida["mensaje"], "advertencia");
+      openDialog(medida["mensaje"], "advertencia", this.dialog);
     } else if (medida["codigo"] == "500") {
-      this.openDialog("Problemas con el servidor", "advertencia");
+      openDialog("Problemas con el servidor", "advertencia", this.dialog);
     }
   }
 
   eliminarMedida(idMedida) {
-    let dialogRef = this.dialog.open(ComfirmDialogComponent, {
+    let dialogRef = this.dialog.open(ConfirmDialogComponent, {
       width: "250px",
       height: "auto",
       data: {
@@ -317,18 +296,18 @@ export class ConfiguracionProductoComponent implements OnInit {
       if (result) {
         var respuesta = await this.inventarioService.eliminarMedida(idMedida);
         if (respuesta["codigo"] == "200") {
-          this.openSnackBar("Se eliminó correctamente");
+          openSnackBar("Se eliminó correctamente");
           var medidas: any = this.dataSource.data;
           var medida = medidas.find((medida) => medida["_id"] == idMedida);
           var index = medidas.indexOf(medida);
           medidas.splice(index, 1);
           this.dataSource.data = medidas;
         } else if (respuesta["codigo"] == "400") {
-          this.openDialog("Inténtalo de nuevo", "advertencia");
+          openDialog("Inténtalo de nuevo", "advertencia", this.dialog);
         } else if (respuesta["codigo"] == "418") {
-          this.openDialog(respuesta["mensaje"], "advertencia");
+          openDialog(respuesta["mensaje"], "advertencia", this.dialog);
         } else if (respuesta["codigo"] == "500") {
-          this.openDialog("Problemas con el servidor", "advertencia");
+          openDialog("Problemas con el servidor", "advertencia", this.dialog);
         }
       }
     });
@@ -362,7 +341,7 @@ export class ConfiguracionProductoComponent implements OnInit {
         this.myForm.get("_descuento").value
       );
       if (kit["codigo"] == "200") {
-        this.openSnackBar("Se ingresó correctamente");
+        openSnackBar("Se ingresó correctamente");
         var kits: any = this.dataSource.data;
         kits.push({
           _id: kit["respuesta"].IdKit,
@@ -375,14 +354,14 @@ export class ConfiguracionProductoComponent implements OnInit {
         this.dataSource.data = kits;
         this.limpiarCampos();
       } else if (kit["codigo"] == "400") {
-        this.openDialog("Inténtalo de nuevo", "advertencia");
+        openDialog("Inténtalo de nuevo", "advertencia", this.dialog);
       } else if (kit["codigo"] == "418") {
-        this.openDialog(kit["mensaje"], "advertencia");
+        openDialog(kit["mensaje"], "advertencia", this.dialog);
       } else if (kit["codigo"] == "500") {
-        this.openDialog("Problemas con el servidor", "advertencia");
+        openDialog("Problemas con el servidor", "advertencia", this.dialog);
       }
     } else {
-      this.openDialog("El descuento debe ser entero", "advertencia");
+      openDialog("El descuento debe ser entero", "advertencia", this.dialog);
     }
   }
 
@@ -414,7 +393,7 @@ export class ConfiguracionProductoComponent implements OnInit {
   }
 
   eliminarKit(idKit) {
-    let dialogRef = this.dialog.open(ComfirmDialogComponent, {
+    let dialogRef = this.dialog.open(ConfirmDialogComponent, {
       width: "250px",
       height: "auto",
       data: {
@@ -425,18 +404,18 @@ export class ConfiguracionProductoComponent implements OnInit {
       if (result) {
         var respuesta = await this.inventarioService.eliminarKit(idKit);
         if (respuesta["codigo"] == "200") {
-          this.openSnackBar("Se eliminó correctamente");
+          openSnackBar("Se eliminó correctamente");
           var kits: any = this.dataSource.data;
           var kit = kits.find((kit) => kit["_id"] == idKit);
           var index = kits.indexOf(kit);
           kits.splice(index, 1);
           this.dataSource.data = kits;
         } else if (respuesta["codigo"] == "400") {
-          this.openDialog("Inténtalo de nuevo", "advertencia");
+          openDialog("Inténtalo de nuevo", "advertencia", this.dialog);
         } else if (respuesta["codigo"] == "418") {
-          this.openDialog(respuesta["mensaje"], "advertencia");
+          openDialog(respuesta["mensaje"], "advertencia", this.dialog);
         } else if (respuesta["codigo"] == "500") {
-          this.openDialog("Problemas con el servidor", "advertencia");
+          openDialog("Problemas con el servidor", "advertencia", this.dialog);
         }
       }
     });
@@ -491,20 +470,20 @@ export class ConfiguracionProductoComponent implements OnInit {
     );
     console.log(respuesta);
     if (respuesta["codigo"] == "200") {
-      this.openSnackBar("Se ingresó correctamente");
+      openSnackBar("Se ingresó correctamente");
       this.consultarIntereses();
       this.limpiarCampos();
     } else if (respuesta["codigo"] == "400") {
-      this.openDialog("Inténtalo de nuevo", "advertencia");
+      openDialog("Inténtalo de nuevo", "advertencia", this.dialog);
     } else if (respuesta["codigo"] == "418") {
-      this.openDialog(respuesta["mensaje"], "advertencia");
+      openDialog(respuesta["mensaje"], "advertencia", this.dialog);
     } else if (respuesta["codigo"] == "500") {
-      this.openDialog("Problemas con el servidor", "advertencia");
+      openDialog("Problemas con el servidor", "advertencia", this.dialog);
     }
   }
 
   eliminarDeshabilitarInteres(idInteres) {
-    let dialogRef = this.dialog.open(ComfirmDialogComponent, {
+    let dialogRef = this.dialog.open(ConfirmDialogComponent, {
       width: "250px",
       height: "auto",
       data: {
@@ -517,7 +496,7 @@ export class ConfiguracionProductoComponent implements OnInit {
           idInteres
         );
         if (respuesta["codigo"] == "200") {
-          this.openSnackBar("Se deshabilitó correctamente");
+          openSnackBar("Se deshabilitó correctamente");
           this.consultarIntereses();
         }
       }
@@ -527,7 +506,7 @@ export class ConfiguracionProductoComponent implements OnInit {
   async habilitarInteres(idInteres) {
     var respuesta = await this.inventarioService.habilitarInteres(idInteres);
     if (respuesta["codigo"] == "200") {
-      this.openSnackBar("Se habilitó correctamente");
+      openSnackBar("Se habilitó correctamente");
       this.consultarIntereses();
     }
   }

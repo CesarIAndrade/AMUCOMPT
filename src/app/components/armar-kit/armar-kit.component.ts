@@ -1,17 +1,15 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { FormGroup, FormControl } from "@angular/forms";
 import { Router } from '@angular/router';
-import { salir } from '../../../environments/environment';
+import { salir, openDialog, openSnackBar } from '../../functions/global';
 
 // Components
-import { ComfirmDialogComponent } from '../comfirm-dialog/comfirm-dialog.component';
-import { DialogAlertComponent } from '../dialog-alert/dialog-alert.component';
+import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
 
 // Material
 import {
   MatPaginator,
   MatTableDataSource,
-  MatSnackBar,
   MatDialog,
 } from "@angular/material";
 
@@ -32,7 +30,6 @@ export interface DetalleProducto {
 export class ArmarKitComponent implements OnInit {
   constructor(
     private inventarioService: InventarioService,
-    private _snackBar: MatSnackBar,
     private dialog: MatDialog,
     private router: Router
   ) {
@@ -54,20 +51,6 @@ export class ArmarKitComponent implements OnInit {
   kits: any[] = [];
   loadingP = false;
   loadingPK = false;
-
-  openDialog(mensaje, icono): void {
-    const dialogRef = this.dialog.open(DialogAlertComponent, {
-      width: "250px",
-      data: { mensaje: mensaje, icono: icono },
-    });
-  }
-
-  openSnackBar(message: string) {
-    this._snackBar.open(message, "Cerrar", {
-      duration: 2000,
-      horizontalPosition: "right",
-    });
-  }
 
   onChangeSelectKit(idKit) {
     this.loadingPK = true;
@@ -116,7 +99,7 @@ export class ArmarKitComponent implements OnInit {
     if (kits["codigo"] == "200") {
       this.kits = kits["respuesta"];
     } else if (kits["codigo"] == "403") {
-      this.openDialog("Sesión Caducada", "advertencia");
+      openDialog("Sesión Caducada", "advertencia", this.dialog);
       this.router.navigateByUrl(salir())
     }
   }
@@ -159,12 +142,12 @@ export class ArmarKitComponent implements OnInit {
     if (producto["codigo"] == "200") {
       this.consultarKitsYSusProductos(this.myForm.get("_idKit").value);
       this.consultarProductos(this.myForm.get("_idKit").value);
-      this.openSnackBar("Se asignó correctamente");
+      openSnackBar("Se asignó correctamente");
     }
   }
 
   async eliminarAsignacionProductoKit(idProducto) {
-    let dialogRef = this.dialog.open(ComfirmDialogComponent, {
+    let dialogRef = this.dialog.open(ConfirmDialogComponent, {
       width: "250px",
       height: "auto",
       data: {
@@ -183,7 +166,7 @@ export class ArmarKitComponent implements OnInit {
         if (producto["codigo"] == "200") {
           this.consultarKitsYSusProductos(this.myForm.get("_idKit").value);
           this.consultarProductos(this.myForm.get("_idKit").value);
-          this.openSnackBar("Se eliminó correctamente");
+          openSnackBar("Se eliminó correctamente");
         }
       }
     });

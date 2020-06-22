@@ -1,7 +1,7 @@
 import { Component, OnInit, Inject } from "@angular/core";
 
 // Material
-import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from "@angular/material";
+import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material";
 
 // Services
 import { UsuarioService } from "src/app/services/usuario.service";
@@ -43,7 +43,7 @@ export class ModalReasignarClientesComponent implements OnInit {
         }
       }
     }
-  } 
+  }
 
   async consultarTipoUsuariosAsignados() {
     var tipoUsuarios = await this.usuarioService.consultarTipoUsuariosAsignados(
@@ -51,10 +51,10 @@ export class ModalReasignarClientesComponent implements OnInit {
     );
     if (tipoUsuarios["codigo"] == "200") {
       tipoUsuarios["respuesta"].map((tipoUsuario) => {
-        if(tipoUsuario.TipoUsuario.Descripcion == "TÉCNICO DE CAMPO"){
+        if (tipoUsuario.TipoUsuario.Descripcion == "TÉCNICO DE CAMPO") {
           this.idAsignacionTu = tipoUsuario.IdAsignacionTUEncriptada;
         }
-      })
+      });
     }
   }
 
@@ -62,15 +62,15 @@ export class ModalReasignarClientesComponent implements OnInit {
     this.idTecnico = idTecnico;
   }
 
- async reasignarClientes() {
+  async reasignarClientes() {
     var respuesta = await this.usuarioService.reasignarClientes(
       this.idAsignacionTu,
       this.idTecnico
     );
-    if(respuesta["codigo"] == "200") {
+    if (respuesta["codigo"] == "200") {
       this.dialog.close({
         flag: true,
-        usuario: this.data.usuario
+        usuario: this.data.usuario,
       });
     }
   }

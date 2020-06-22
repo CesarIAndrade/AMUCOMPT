@@ -1,18 +1,16 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
-import { salir } from '../../../environments/environment';
+import { salir, openDialog, openSnackBar } from '../../functions/global';
 
 // Components
 import { ModalLocalidadSuperiorComponent } from "../modal-localidad-superior/modal-localidad-superior.component";
-import { DialogAlertComponent } from "../dialog-alert/dialog-alert.component";
-import { ComfirmDialogComponent } from "../comfirm-dialog/comfirm-dialog.component";
+import { ConfirmDialogComponent } from "../confirm-dialog/confirm-dialog.component";
 
 // Material
 import {
   MatDialog,
   MatTableDataSource,
-  MatPaginator,
-  MatSnackBar,
+  MatPaginator
 } from "@angular/material";
 
 // Services
@@ -29,7 +27,6 @@ export class CantonComponent implements OnInit {
     private panelAdministracionService: PanelAdministracionService,
     private modalLocalidadSuperior: MatDialog,
     private dialog: MatDialog,
-    private _snackBar: MatSnackBar,
     private router: Router
   ) {
     this.myForm = new FormGroup({
@@ -48,20 +45,6 @@ export class CantonComponent implements OnInit {
   // Para la paginacion
   @ViewChild("paginator", { static: false }) paginator: MatPaginator;
   cantones = new MatTableDataSource<Element[]>();
-
-  openDialog(mensaje, icono): void {
-    const dialogRef = this.dialog.open(DialogAlertComponent, {
-      width: "250px",
-      data: { mensaje: mensaje, icono: icono },
-    });
-  }
-
-  openSnackBar(message: string) {
-    this._snackBar.open(message, "Cerrar", {
-      duration: 2000,
-      horizontalPosition: "right",
-    });
-  }
 
   search(term: string) {
     term = term.trim();
@@ -86,7 +69,7 @@ export class CantonComponent implements OnInit {
       this.cantones.data = cantones;
       this.cantones.paginator = this.paginator;
     } else if (respuesta["codigo"] == "403") {
-      this.openDialog("Sesión Caducada", "advertencia");
+      openDialog("Sesión Caducada", "advertencia", this.dialog);
       this.router.navigateByUrl(salir())
     }
   }
@@ -118,13 +101,13 @@ export class CantonComponent implements OnInit {
       this.cantones.data = cantones;
       this.myForm.reset();
       this.panelAdministracionService.refresh$.emit();
-      this.openSnackBar("Se ingresó correctamente");
+      openSnackBar("Se ingresó correctamente");
     } else if (canton["codigo"] == "400") {
-      this.openDialog("Inténtalo de nuevo", "advertencia");
+      openDialog("Inténtalo de nuevo", "advertencia", this.dialog);
     } else if (canton["codigo"] == "418") {
-      this.openDialog(canton["mensaje"], "advertencia");
+      openDialog(canton["mensaje"], "advertencia", this.dialog);
     } else if (canton["codigo"] == "500") {
-      this.openDialog("Problemas con el servidor", "advertencia");
+      openDialog("Problemas con el servidor", "advertencia", this.dialog);
     }
   }
 
@@ -152,18 +135,18 @@ export class CantonComponent implements OnInit {
       this.myForm.reset();
       this.botonIngresar = "ingresar";
       this.panelAdministracionService.refresh$.emit();
-      this.openSnackBar("Se actualizó correctamente");
+      openSnackBar("Se actualizó correctamente");
     } else if (respuesta["codigo"] == "400") {
-      this.openDialog("Inténtalo de nuevo", "advertencia");
+      openDialog("Inténtalo de nuevo", "advertencia", this.dialog);
     } else if (respuesta["codigo"] == "418") {
-      this.openDialog(respuesta["mensaje"], "advertencia");
+      openDialog(respuesta["mensaje"], "advertencia", this.dialog);
     } else if (respuesta["codigo"] == "500") {
-      this.openDialog("Problemas con el servidor", "advertencia");
+      openDialog("Problemas con el servidor", "advertencia", this.dialog);
     }
   }
 
   async eliminarCanton(idCanton) {
-    let dialogRef = this.dialog.open(ComfirmDialogComponent, {
+    let dialogRef = this.dialog.open(ConfirmDialogComponent, {
       width: "250px",
       height: "auto",
       data: {
@@ -184,13 +167,13 @@ export class CantonComponent implements OnInit {
           cantones.splice(index, 1);
           this.cantones.data = cantones;
           this.panelAdministracionService.refresh$.emit();
-          this.openSnackBar("Se eliminó correctamente");
+          openSnackBar("Se eliminó correctamente");
         } else if (respuesta["codigo"] == "400") {
-          this.openDialog("Inténtalo de nuevo", "advertencia");
+          openDialog("Inténtalo de nuevo", "advertencia", this.dialog);
         } else if (respuesta["codigo"] == "418") {
-          this.openDialog(respuesta["mensaje"], "advertencia");
+          openDialog(respuesta["mensaje"], "advertencia", this.dialog);
         } else if (respuesta["codigo"] == "500") {
-          this.openDialog("Problemas con el servidor", "advertencia");
+          openDialog("Problemas con el servidor", "advertencia", this.dialog);
         }
       }
     });

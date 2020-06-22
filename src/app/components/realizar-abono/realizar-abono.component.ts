@@ -1,8 +1,9 @@
 import { Component, OnInit, Inject, ViewChild } from "@angular/core";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
+import { openDialog } from "../../functions/global";
 
 // Components
-import { ComfirmDialogComponent } from "../comfirm-dialog/comfirm-dialog.component";
+import { ConfirmDialogComponent } from "../confirm-dialog/confirm-dialog.component";
 
 // Material
 import {
@@ -14,7 +15,6 @@ import {
 
 // Services
 import { SeguimientoService } from "src/app/services/seguimiento.service";
-import { DialogAlertComponent } from '../dialog-alert/dialog-alert.component';
 
 @Component({
   selector: "app-realizar-abono",
@@ -47,20 +47,13 @@ export class RealizarAbonoComponent implements OnInit {
   @ViewChild("paginator", { static: false }) paginator: MatPaginator;
   abonos = new MatTableDataSource<Element[]>();
 
-  openDialog(mensaje, icono): void {
-    const dialogRef = this.dialog.open(DialogAlertComponent, {
-      width: "250px",
-      data: { mensaje: mensaje, icono: icono },
-    });
-  }
-
   async realizarAbono() {
-    let dialogRef = this.dialog.open(ComfirmDialogComponent, {
+    let dialogRef = this.dialog.open(ConfirmDialogComponent, {
       width: "250px",
       height: "auto",
       data: {
-        mensaje: ""
-      }
+        mensaje: "",
+      },
     });
     dialogRef.afterClosed().subscribe(async (result) => {
       if (result) {
@@ -71,7 +64,7 @@ export class RealizarAbonoComponent implements OnInit {
             this.myForm.get("_monto").value
           );
           console.log(respuesta);
-          if(respuesta["codigo"] == "200") {
+          if (respuesta["codigo"] == "200") {
             this.seguimientoService.refresh$.emit();
             this.myForm.reset();
             this.dialog.closeAll();
@@ -81,7 +74,7 @@ export class RealizarAbonoComponent implements OnInit {
             this.myForm.reset();
             this.consultarAbonos();
           } else if (respuesta["codigo"] == "418") {
-            this.openDialog(respuesta["mensaje"], "advertencia");
+            openDialog(respuesta["mensaje"], "advertencia", this.dialog);
           }
         }
       }

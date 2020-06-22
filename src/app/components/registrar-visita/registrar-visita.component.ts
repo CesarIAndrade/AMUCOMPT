@@ -1,12 +1,16 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
+import { openSnackBar } from "../../functions/global";
+
+// Components
+import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
 
 // Material
 import {
   MatTableDataSource,
   MatPaginator,
-  MatSnackBar,
+  MatDialog
 } from "@angular/material";
 
 // Services
@@ -21,7 +25,7 @@ export class RegistrarVisitaComponent implements OnInit {
   constructor(
     private activatedRoute: ActivatedRoute,
     private seguimientoService: SeguimientoService,
-    private _snackBar: MatSnackBar
+    private dialog: MatDialog
   ) {
     this.myForm = new FormGroup({
       _idVisita: new FormControl(""),
@@ -58,13 +62,6 @@ export class RegistrarVisitaComponent implements OnInit {
   @ViewChild("paginator", { static: false }) paginator: MatPaginator;
   visitas = new MatTableDataSource<Element[]>();
 
-  openSnackBar(message: string) {
-    this._snackBar.open(message, "Cerrar", {
-      duration: 2000,
-      horizontalPosition: "right",
-    });
-  }
-
   validarFormulario() {
     if (this.myForm.valid) {
       if (this.botonIngresar == "ingresar") {
@@ -93,7 +90,7 @@ export class RegistrarVisitaComponent implements OnInit {
       this.visitas.data = visitas;
       this.visitas.paginator = this.paginator;
       this.myForm.reset();
-      this.openSnackBar("Se guardó correctamente!");
+      openSnackBar("Se guardó correctamente!");
     }
   }
 
@@ -128,20 +125,32 @@ export class RegistrarVisitaComponent implements OnInit {
       this.visitas.data = visitas;
       this.botonIngresar = "ingresar";
       this.myForm.reset();
-      this.openSnackBar("Se actualizó correctamente");
+      openSnackBar("Se actualizó correctamente");
     }
   }
 
   async eliminarVisita(idVisita) {
-    var respuesta = await this.seguimientoService.eliminarVisita(idVisita);
-    if (respuesta["codigo"] == "200") {
-      var visitas = this.visitas.data;
-      var visita: any = visitas.filter((visita) => visita["_id"] == idVisita);
-      var index = visitas.indexOf(visita[0]);
-      visitas.splice(index, 1);
-      this.visitas.data = visitas;
-      this.openSnackBar("Se eliminó correctamente");
-    }
+    let dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: "250px",
+      height: "auto",
+      data: {
+        mensaje: ""
+      }
+    });
+    dialogRef.afterClosed().subscribe(async (result) => {
+      if (result) {
+        var respuesta = await this.seguimientoService.eliminarVisita(idVisita);
+        if (respuesta["codigo"] == "200") {
+          var visitas = this.visitas.data;
+          var visita: any = visitas.filter((visita) => visita["_id"] == idVisita);
+          var index = visitas.indexOf(visita[0]);
+          visitas.splice(index, 1);
+          this.visitas.data = visitas;
+          openSnackBar("Se eliminó correctamente");
+        }
+      }
+    });
+
   }
 
   ngOnInit() {

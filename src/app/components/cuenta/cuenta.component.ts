@@ -1,10 +1,10 @@
 import { Component, OnInit } from "@angular/core";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { Router } from "@angular/router";
-import { salir } from '../../../environments/environment';
+import { salir, openDialog} from '../../functions/global';
 
 // Components
-import { ComfirmDialogComponent } from "../comfirm-dialog/comfirm-dialog.component";
+import { ConfirmDialogComponent } from "../confirm-dialog/confirm-dialog.component";
 
 // Material
 import { MatDialog } from "@angular/material";
@@ -12,7 +12,6 @@ import { MatDialog } from "@angular/material";
 // Services
 import { UsuarioService } from "src/app/services/usuario.service";
 import { SeguridadService } from "src/app/services/seguridad.service";
-import { DialogAlertComponent } from '../dialog-alert/dialog-alert.component';
 
 @Component({
   selector: "app-cuenta",
@@ -39,7 +38,7 @@ export class CuentaComponent implements OnInit {
   inputType = "password";
 
   async modificarDatos() {
-    let dialogRef = this.dialog.open(ComfirmDialogComponent, {
+    let dialogRef = this.dialog.open(ConfirmDialogComponent, {
       width: "250px",
       height: "auto",
       data: {
@@ -83,13 +82,6 @@ export class CuentaComponent implements OnInit {
     }
   }
 
-  openDialog(mensaje, icono): void {
-    const dialogRef = this.dialog.open(DialogAlertComponent, {
-      width: "250px",
-      data: { mensaje: mensaje, icono: icono },
-    });
-  }
-
   usuario: any = [];
   ngOnInit() {
     if (localStorage.getItem("token")) {
@@ -111,7 +103,7 @@ export class CuentaComponent implements OnInit {
       this.myForm.get("_usuario").setValue(this.usuario.UsuarioLogin);
       this.myForm.get("_usuario").disable();
     } else {
-      this.openDialog("Sesión Caducada", "advertencia");
+      openDialog("Sesión Caducada", "advertencia", this.dialog);
       this.router.navigateByUrl(salir())
     }
   } 

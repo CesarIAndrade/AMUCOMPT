@@ -1,9 +1,7 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { FormGroup, FormControl } from "@angular/forms";
-import { salir } from '../../../environments/environment';
-
-// Components
-import { DialogAlertComponent } from "../dialog-alert/dialog-alert.component";
+import { salir, openDialog } from '../../functions/global';
+import { Router } from '@angular/router';
 
 // Material
 import { MatPaginator, MatTableDataSource, MatDialog } from "@angular/material";
@@ -11,7 +9,6 @@ import { MatPaginator, MatTableDataSource, MatDialog } from "@angular/material";
 // Services
 import { UsuarioService } from "src/app/services/usuario.service";
 import { SeguimientoService } from "src/app/services/seguimiento.service";
-import { Router } from '@angular/router';
 
 @Component({
   selector: "app-asignar-tecnico-cliente",
@@ -22,8 +19,8 @@ export class AsignarTecnicoClienteComponent implements OnInit {
   constructor(
     private usuarioService: UsuarioService,
     private seguimientoService: SeguimientoService,
-    private dialog: MatDialog,
-    private router: Router
+    private router: Router,
+    private dialog: MatDialog
   ) {
     this.myForm = new FormGroup({
       _provincia: new FormControl(""),
@@ -58,20 +55,13 @@ export class AsignarTecnicoClienteComponent implements OnInit {
   loadingC = false;
   loadingCT = false;
 
-  openDialog(mensaje, icono): void {
-    const dialogRef = this.dialog.open(DialogAlertComponent, {
-      width: "250px",
-      data: { mensaje: mensaje, icono: icono },
-    });
-  }
-
   async provinciasParaSeguimiento() {
     var respuesta = await this.seguimientoService.provinciasParaSeguimiento();
     if (respuesta["codigo"] == "200") {
       this.comboProvincia = false;
       this.provincias = respuesta["respuesta"];
     } else if (respuesta["codigo"] == "403") {
-      this.openDialog("Sesión Caducada", "advertencia");
+      openDialog("Sesión Caducada", "advertencia", this.dialog);
       this.router.navigateByUrl(salir())
     }
   }
@@ -248,12 +238,11 @@ export class AsignarTecnicoClienteComponent implements OnInit {
         this.clientesAsignados(this.myForm.get("_idTecnico").value);
       }
     } else {
-      this.openDialog("Necesitas un técnnico", "advertencia");
+      openDialog("Necesitas un técnnico", "advertencia", this.dialog);
     }
   }
 
   queConsulto() {
-    console.log(this.myForm.get("_provincia").value);
     if (this.provincia && this.canton && this.parroquia && this.comunidad) {
       this.consultarClientesFiltrados(
         this.myForm.get("_comunidad").value,

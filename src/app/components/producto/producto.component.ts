@@ -2,19 +2,14 @@ import { Component, OnInit, ViewChild, ElementRef } from "@angular/core";
 import { FormGroup, Validators, FormControl } from "@angular/forms";
 import { Observable } from "rxjs";
 import { startWith, map } from "rxjs/operators";
-import { salir } from '../../../environments/environment';
-import { Router } from '@angular/router';
+import { salir, openDialog, openSnackBar } from "../../functions/global";
+import { Router } from "@angular/router";
 
 // Components
-import { DialogAlertComponent } from "../dialog-alert/dialog-alert.component";
-import { ComfirmDialogComponent } from "../comfirm-dialog/comfirm-dialog.component";
+import { ConfirmDialogComponent } from "../confirm-dialog/confirm-dialog.component";
 
 // Material
-import {
-  MatPaginator,
-  MatTableDataSource,
-  MatSnackBar,
-} from "@angular/material";
+import { MatPaginator, MatTableDataSource } from "@angular/material";
 import { MatDialog } from "@angular/material/dialog";
 
 // Services
@@ -29,7 +24,6 @@ export class ProductoComponent implements OnInit {
   constructor(
     private inventarioService: InventarioService,
     private dialog: MatDialog,
-    private _snackBar: MatSnackBar,
     private router: Router
   ) {
     this.myForm = new FormGroup({
@@ -62,20 +56,6 @@ export class ProductoComponent implements OnInit {
   // Para la paginacion
   @ViewChild("paginator", { static: false }) paginator: MatPaginator;
   productos = new MatTableDataSource<Element[]>();
-
-  openDialog(mensaje, icono): void {
-    const dialogRef = this.dialog.open(DialogAlertComponent, {
-      width: "250px",
-      data: { mensaje: mensaje, icono: icono },
-    });
-  }
-
-  openSnackBar(message: string) {
-    this._snackBar.open(message, "Cerrar", {
-      duration: 2000,
-      horizontalPosition: "right",
-    });
-  }
 
   async consultarTipoProductos() {
     var tipoProductos = await this.inventarioService.consultarTipoProductos();
@@ -136,8 +116,8 @@ export class ProductoComponent implements OnInit {
         map((value) => this._filter(value))
       );
     } else if (respuesta["codigo"] == "403") {
-      this.openDialog("Sesión Caducada", "advertencia");
-      this.router.navigateByUrl(salir())
+      openDialog("Sesión Caducada", "advertencia", this.dialog);
+      this.router.navigateByUrl(salir());
     }
   }
 
@@ -208,9 +188,9 @@ export class ProductoComponent implements OnInit {
     );
     if (precio["codigo"] == "200") {
       if (flag) {
-        this.openSnackBar("Se ingresó correctamente");
+        openSnackBar("Se ingresó correctamente");
       } else {
-        this.openSnackBar("Se actualizó correctamente");
+        openSnackBar("Se actualizó correctamente");
         this.botonIngresar = "ingresar";
       }
       this.myForm.reset();
@@ -263,12 +243,12 @@ export class ProductoComponent implements OnInit {
   }
 
   async eliminarConfiguracionProducto(idConfigurarProducto, idProducto) {
-    let dialogRef = this.dialog.open(ComfirmDialogComponent, {
+    let dialogRef = this.dialog.open(ConfirmDialogComponent, {
       width: "250px",
       height: "auto",
       data: {
-        mensaje: ""
-      }
+        mensaje: "",
+      },
     });
     dialogRef.afterClosed().subscribe(async (result) => {
       if (result) {
@@ -277,7 +257,7 @@ export class ProductoComponent implements OnInit {
           idProducto
         );
         if (respuesta["codigo"] == "200") {
-          this.openSnackBar("Se eliminó correctamente");
+          openSnackBar("Se eliminó correctamente");
           var productos = this.productos.data;
           var producto = productos.find(
             (item) => item["IdConfigurarProducto"] == idConfigurarProducto

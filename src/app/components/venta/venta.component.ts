@@ -1,19 +1,17 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { Router } from "@angular/router";
-import { salir } from '../../../environments/environment';
+import { salir, openDialog, openSnackBar } from '../../functions/global';
 
 // Components
 import { ModalAsignacionConfiguracionProductoComponent } from "../modal-asignacion-configuracion-producto/modal-asignacion-configuracion-producto.component";
 import { ModalLocalidadSuperiorComponent } from "../modal-localidad-superior/modal-localidad-superior.component";
-import { DialogAlertComponent } from "../dialog-alert/dialog-alert.component";
 import { ModalPersonaComponent } from "../modal-persona/modal-persona.component";
 
 // Material
 import {
   MatTableDataSource,
-  MatPaginator,
-  MatSnackBar,
+  MatPaginator
 } from "@angular/material";
 import { MatDialog } from "@angular/material/dialog";
 
@@ -21,7 +19,6 @@ import { MatDialog } from "@angular/material/dialog";
 import { InventarioService } from "src/app/services/inventario.service";
 import { FacturaService } from "src/app/services/factura.service";
 import { VentaService } from "src/app/services/venta.service";
-import { element } from "protractor";
 
 @Component({
   selector: "app-venta",
@@ -34,8 +31,7 @@ export class VentaComponent implements OnInit {
     private ventaService: VentaService,
     private facturaService: FacturaService,
     private router: Router,
-    private dialog: MatDialog,
-    private _snackBar: MatSnackBar
+    private dialog: MatDialog
   ) {
     this.myForm = new FormGroup({
       _idCabecera: new FormControl(""),
@@ -124,20 +120,6 @@ export class VentaComponent implements OnInit {
   facturasNoFinalizadas = new MatTableDataSource<Element[]>();
   facturasFinalizadas = new MatTableDataSource<Element[]>();
 
-  openDialog(mensaje, icono): void {
-    const dialogRef = this.dialog.open(DialogAlertComponent, {
-      width: "250px",
-      data: { mensaje: mensaje, icono: icono },
-    });
-  }
-
-  openSnackBar(message: string) {
-    this._snackBar.open(message, "Cerrar", {
-      duration: 2000,
-      horizontalPosition: "right",
-    });
-  }
-
   async consultarTipoTransaccion() {
     var respuesta = await this.facturaService.consultarTipoTransaccion();
     if (respuesta["codigo"] == "200") {
@@ -149,7 +131,7 @@ export class VentaComponent implements OnInit {
         });
       }
     } else if (respuesta["codigo"] == "403") {
-      this.openDialog("Sesión Caducada", "advertencia");
+      openDialog("Sesión Caducada", "advertencia", this.dialog);
       this.router.navigateByUrl(salir())
     }
   }
@@ -358,7 +340,7 @@ export class VentaComponent implements OnInit {
         this.limpiarCampos();
         this.consultarDetalleFactura();
       } else if (respuesta["codigo"] == "500") {
-        this.openDialog(respuesta["mensaje"], "advertencia");
+        openDialog(respuesta["mensaje"], "advertencia", this.dialog);
       }
     }
   }
@@ -472,7 +454,7 @@ export class VentaComponent implements OnInit {
       if (respuesta["codigo"] == "200") {
         this.consultarDetalleFactura();
       } else if (respuesta["codigo"] == "201") {
-        this.openSnackBar("Factura eliminada");
+        openSnackBar("Factura eliminada");
         this.consultarFacturas(true);
         this.myForm.reset();
         this.detalleVenta.data = [];
@@ -484,7 +466,7 @@ export class VentaComponent implements OnInit {
       if (respuesta["codigo"] == "200") {
         this.consultarDetalleFactura();
       } else if (respuesta["codigo"] == "201") {
-        this.openSnackBar("Factura eliminada");
+        openSnackBar("Factura eliminada");
         this.consultarFacturas(true);
         this.myForm.reset();
         this.detalleVenta.data = [];
@@ -528,7 +510,7 @@ export class VentaComponent implements OnInit {
   async crearConfiguracionVenta() {
     if (this.myForm.get("_nombres").value) {
       if (this.pago == "Crédito" && this.comunidades.length == 0) {
-        this.openDialog("Necesitas lugar(es) de sembrío", "advertencia");
+        openDialog("Necesitas lugar(es) de sembrío", "advertencia", this.dialog);
       } else {
         var respuesta = await this.ventaService.crearConfiguracionVenta(
           this.myForm.get("_idCabecera").value,
@@ -542,7 +524,7 @@ export class VentaComponent implements OnInit {
         }
       }
     } else {
-      this.openDialog("Necesitas un cliente", "advertencia");
+      openDialog("Necesitas un cliente", "advertencia", this.dialog);
     }
   }
 
@@ -552,7 +534,7 @@ export class VentaComponent implements OnInit {
       "Factura/FinalizarCabeceraFacturaVenta"
     );
     if (respuesta["codigo"] == "200") {
-      this.openDialog("Venta realizada con éxito", "success");
+      openDialog("Venta realizada con éxito", "success", this.dialog);
       this.consultarFacturas(true);
       this.myForm.reset();
       this.myForm.disable();

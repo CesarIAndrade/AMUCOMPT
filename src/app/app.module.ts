@@ -50,7 +50,7 @@ import { TablaPersonaComponent } from './components/tabla-persona/tabla-persona.
 import { CompraVentaComponent } from './components/compra-venta/compra-venta.component';
 import { VisitasFinalizadasComponent } from './components/visitas-finalizadas/visitas-finalizadas.component';
 import { RealizarAbonoComponent } from './components/realizar-abono/realizar-abono.component';
-import { ComfirmDialogComponent } from './components/comfirm-dialog/comfirm-dialog.component';
+import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
 
 @NgModule({
   declarations: [
@@ -93,7 +93,7 @@ import { ComfirmDialogComponent } from './components/comfirm-dialog/comfirm-dial
     CompraVentaComponent,
     VisitasFinalizadasComponent,
     RealizarAbonoComponent,
-    ComfirmDialogComponent,
+    ConfirmDialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -120,7 +120,7 @@ import { ComfirmDialogComponent } from './components/comfirm-dialog/comfirm-dial
     ModalPersonaComponent,
     ModalReasignarClientesComponent,
     RealizarAbonoComponent,
-    ComfirmDialogComponent
+    ConfirmDialogComponent
   ],
   providers: [],
   bootstrap: [AppComponent],

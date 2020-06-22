@@ -1,12 +1,10 @@
 import { Component, OnInit } from "@angular/core";
-import { Router, Routes } from "@angular/router";
+import { Router } from "@angular/router";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
-
-// Components
-import { DialogAlertComponent } from "../dialog-alert/dialog-alert.component";
+import { openDialog } from "../../functions/global";
 
 // Material
-import { MatDialog } from "@angular/material";
+import { MatDialog } from '@angular/material';
 
 // Services
 import { UsuarioService } from "src/app/services/usuario.service";
@@ -22,7 +20,7 @@ export class LoginComponent implements OnInit {
     private usuarioService: UsuarioService,
     private router: Router,
     private seguridadService: SeguridadService,
-    public dialog: MatDialog
+    private dialog: MatDialog,
   ) {
     this.myForm = new FormGroup({
       _usuario: new FormControl("", [Validators.required]),
@@ -35,13 +33,6 @@ export class LoginComponent implements OnInit {
   seleccionarTipoUsuario = true;
   ingresarCredenciales = false;
   tipoUsuarios: any[] = [];
-
-  openDialog(mensaje, icono): void {
-    const dialogRef = this.dialog.open(DialogAlertComponent, {
-      width: "250px",
-      data: { mensaje: mensaje, icono: icono },
-    });
-  }
 
   async login() {
     if (this.myForm.valid) {
@@ -59,14 +50,14 @@ export class LoginComponent implements OnInit {
       } else {
         this.myForm.reset();
         this.myForm.get("_tipoUsuario").setValue("0");
-        this.openDialog("Credenciales Incorrectas!", "advertencia");
+        openDialog("Credenciales Incorrectas!", "advertencia", this.dialog);
       }
     }
   }
 
   iniciarSesionSegunTipoUsuario() {
     if (this.myForm.get("_tipoUsuario").value == "0") {
-      this.openDialog("Seleccione Tipo Usuario!", "advertencia");
+      openDialog("Seleccione Tipo Usuario!", "advertencia", this.dialog);
     } else {
       localStorage.setItem(
         "miCuenta.idAsignacionTipoUsuario",

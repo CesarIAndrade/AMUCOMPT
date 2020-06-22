@@ -1,11 +1,10 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { FormGroup, FormControl } from "@angular/forms";
 import { Router } from "@angular/router";
-import { salir } from '../../../environments/environment';
+import { salir, openDialog } from "../../functions/global";
 
 // Components
 import { ComunidadesBottomSheet } from "./comunidades-bottom-sheet.component";
-import { DialogAlertComponent } from '../dialog-alert/dialog-alert.component';
 
 // Material
 import {
@@ -27,8 +26,8 @@ export class VisitaComponent implements OnInit {
   constructor(
     private seguimientoService: SeguimientoService,
     private bottomSheet: MatBottomSheet,
-    private router: Router,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private router: Router
   ) {
     this.myForm = new FormGroup({
       _provincia: new FormControl(""),
@@ -39,7 +38,7 @@ export class VisitaComponent implements OnInit {
     });
   }
 
-  seasons: string[] = ['Winter', 'Spring', 'Summer', 'Autumn'];
+  seasons: string[] = ["Winter", "Spring", "Summer", "Autumn"];
 
   openBottomSheet(comunidades, idComunidad): void {
     if (comunidades) {
@@ -72,25 +71,18 @@ export class VisitaComponent implements OnInit {
     {
       _id: "1",
       descripcion: "Comunidades",
-      checked: false
+      checked: false,
     },
     {
       _id: "2",
       descripcion: "Personas",
-      checked: true
+      checked: true,
     },
   ];
 
   // Para la paginacion
   @ViewChild("paginator", { static: false }) paginator: MatPaginator;
   clientes = new MatTableDataSource<Element[]>();
-
-  openDialog(mensaje, icono): void {
-    const dialogRef = this.dialog.open(DialogAlertComponent, {
-      width: "250px",
-      data: { mensaje: mensaje, icono: icono },
-    });
-  }
 
   selecionarOpcion(opcion) {
     this.clientes.data = [];
@@ -170,7 +162,7 @@ export class VisitaComponent implements OnInit {
   async consultarClientesFiltrados() {
     var clientes = await this.seguimientoService.filtroClientesEnVisitas(
       this.myForm.get("_idTecnico").value
-    );   
+    );
     if (clientes["codigo"] == "200") {
       this.loading = false;
       this.clientes.data = [];
@@ -202,15 +194,15 @@ export class VisitaComponent implements OnInit {
           vivienda: cliente.AsignacionPersonaParroquia[0].Parroquia.Descripcion,
           telefono1: cliente.ListaTelefono[0].Numero,
           telefono2: cliente.ListaTelefono[1].Numero,
-          comunidades: cliente._AsignarTecnicoPersonaComunidad
+          comunidades: cliente._AsignarTecnicoPersonaComunidad,
         });
       });
       this.loading = false;
       this.clientes.data = clientes;
       this.clientes.paginator = this.paginator;
     } else if (respuesta["codigo"] == "403") {
-      this.openDialog("Sesión Caducada", "advertencia");
-      this.router.navigateByUrl(salir())
+      openDialog("Sesión Caducada", "advertencia", this.dialog);
+      this.router.navigateByUrl(salir());
     }
   }
 
@@ -218,9 +210,11 @@ export class VisitaComponent implements OnInit {
     var respuesta = await this.seguimientoService.terminarAsistencia(
       idComunidad
     );
-    if(respuesta["codigo"] == "200") {
+    if (respuesta["codigo"] == "200") {
       var clientes = this.clientes.data;
-      var cliente = clientes.find(cliente => cliente["idComunidad"] == idComunidad);
+      var cliente = clientes.find(
+        (cliente) => cliente["idComunidad"] == idComunidad
+      );
       var index = this.clientes.data.indexOf(cliente);
       clientes.splice(index, 1);
       this.clientes.data = clientes;
@@ -230,7 +224,7 @@ export class VisitaComponent implements OnInit {
 
   ngOnInit() {
     this.myForm
-      .get("_idTecnico") 
+      .get("_idTecnico")
       .setValue(localStorage.getItem("miCuenta.idAsignacionTipoUsuario"));
     this.listarClientesTecnico();
   }

@@ -1,9 +1,6 @@
 import { Component, OnInit, Inject, ViewChild } from "@angular/core";
 import { Router } from "@angular/router";
-
-// Components
-import { DialogAlertComponent } from "../dialog-alert/dialog-alert.component";
-
+import { openDialog } from "../../functions/global";
 // Material
 import {
   MAT_DIALOG_DATA,
@@ -66,13 +63,6 @@ export class ModalAsignacionConfiguracionProductoComponent implements OnInit {
   // Para la paginacion
   @ViewChild("paginator", { static: true }) paginator: MatPaginator;
   dataSource = new MatTableDataSource<Element[]>();
-
-  openDialog(mensaje, icono): void {
-    const dialogRef = this.dialog.open(DialogAlertComponent, {
-      width: "250px",
-      data: { mensaje: mensaje, icono: icono },
-    });
-  }
 
   agregarDetalle(producto) {
     if (this.router.url == "/compras") {
@@ -239,7 +229,7 @@ export class ModalAsignacionConfiguracionProductoComponent implements OnInit {
       this.modalAsignacionConfiguracionProducto.close({ flag: true });
       this.buttonComprarKitCompleto = true;
     } else if (respuesta["codigo"] == "500") {
-      this.openDialog(respuesta["mensaje"], "advertencia");
+      openDialog(respuesta["mensaje"], "advertencia", this.dialog);
     }
   }
 

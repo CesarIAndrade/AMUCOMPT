@@ -1,15 +1,14 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
-import { salir } from '../../../environments/environment';
-import { Router } from '@angular/router';
+import { salir, openDialog, openSnackBar } from "../../functions/global";
+import { Router } from "@angular/router";
 
 // Components
 import { ModalLocalidadSuperiorComponent } from "../modal-localidad-superior/modal-localidad-superior.component";
-import { DialogAlertComponent } from '../dialog-alert/dialog-alert.component';
-import { ComfirmDialogComponent } from '../comfirm-dialog/comfirm-dialog.component';
+import { ConfirmDialogComponent } from "../confirm-dialog/confirm-dialog.component";
 
 // Material
-import { MatDialog, MatPaginator, MatTableDataSource, MatSnackBar } from "@angular/material";
+import { MatDialog, MatPaginator, MatTableDataSource } from "@angular/material";
 
 // Services
 import { PanelAdministracionService } from "src/app/services/panel-administracion.service";
@@ -23,7 +22,6 @@ export class ParroquiaComponent implements OnInit {
   constructor(
     private panelAdministracionService: PanelAdministracionService,
     private dialog: MatDialog,
-    private _snackBar: MatSnackBar,
     private router: Router
   ) {
     this.myForm = new FormGroup({
@@ -42,29 +40,15 @@ export class ParroquiaComponent implements OnInit {
   @ViewChild("paginator", { static: false }) paginator: MatPaginator;
   parroquias = new MatTableDataSource<Element[]>();
 
-  openDialog(mensaje, icono): void {
-    const dialogRef = this.dialog.open(DialogAlertComponent, {
-      width: "250px",
-      data: { mensaje: mensaje, icono: icono },
-    });
-  }
-
-  openSnackBar(message: string) {
-    this._snackBar.open(message, "Cerrar", {
-      duration: 2000,
-      horizontalPosition: "right",
-    });
-  }
-
   search(term: string) {
     term = term.trim();
-    term = term.toUpperCase(); 
+    term = term.toUpperCase();
     this.parroquias.filter = term;
   }
 
   async consultarParroquias() {
     var respuesta = await this.panelAdministracionService.consultarParroquias();
-    if(respuesta["codigo"] == "200") {
+    if (respuesta["codigo"] == "200") {
       this.loading = false;
       var parroquias: any = [];
       respuesta["respuesta"].map((parroquia) => {
@@ -73,14 +57,14 @@ export class ParroquiaComponent implements OnInit {
           Canton: parroquia.Canton.Descripcion,
           IdParroquia: parroquia.IdParroquia,
           Descripcion: parroquia.Descripcion,
-          PermitirEliminacion: parroquia.PermitirEliminacion
-        })
-      })
+          PermitirEliminacion: parroquia.PermitirEliminacion,
+        });
+      });
       this.parroquias.data = parroquias;
       this.parroquias.paginator = this.paginator;
     } else if (respuesta["codigo"] == "403") {
-      this.openDialog("Sesión Caducada", "advertencia");
-      this.router.navigateByUrl(salir())
+      openDialog("Sesión Caducada", "advertencia", this.dialog);
+      this.router.navigateByUrl(salir());
     }
   }
 
@@ -106,18 +90,18 @@ export class ParroquiaComponent implements OnInit {
         Canton: parroquia["respuesta"].Canton.Descripcion,
         IdParroquia: parroquia["respuesta"].IdParroquia,
         Descripcion: parroquia["respuesta"].Descripcion,
-        PermitirEliminacion: parroquia["respuesta"].PermitirEliminacion
+        PermitirEliminacion: parroquia["respuesta"].PermitirEliminacion,
       });
       this.parroquias.data = parroquias;
       this.myForm.reset();
       this.panelAdministracionService.refresh$.emit();
-      this.openSnackBar("Se ingresó correctamente");
+      openSnackBar("Se ingresó correctamente");
     } else if (parroquia["codigo"] == "400") {
-      this.openDialog("Inténtalo de nuevo", "advertencia");
+      openDialog("Inténtalo de nuevo", "advertencia", this.dialog);
     } else if (parroquia["codigo"] == "418") {
-      this.openDialog(parroquia["mensaje"], "advertencia");
+      openDialog(parroquia["mensaje"], "advertencia", this.dialog);
     } else if (parroquia["codigo"] == "500") {
-      this.openDialog("Problemas con el servidor", "advertencia");
+      openDialog("Problemas con el servidor", "advertencia", this.dialog);
     }
   }
 
@@ -130,7 +114,8 @@ export class ParroquiaComponent implements OnInit {
     if (respuesta["codigo"] == "200") {
       var parroquias: any = this.parroquias.data;
       var parroquia = parroquias.filter(
-        (parroquia) => parroquia["IdParroquia"] == this.myForm.get("_idParroquia").value
+        (parroquia) =>
+          parroquia["IdParroquia"] == this.myForm.get("_idParroquia").value
       );
       var index = parroquias.indexOf(parroquia[0]);
       parroquias.splice(index, 1);
@@ -139,29 +124,29 @@ export class ParroquiaComponent implements OnInit {
         Canton: respuesta["respuesta"].Canton.Descripcion,
         IdParroquia: respuesta["respuesta"].IdParroquia,
         Descripcion: respuesta["respuesta"].Descripcion,
-        PermitirEliminacion: respuesta["respuesta"].PermitirEliminacion
+        PermitirEliminacion: respuesta["respuesta"].PermitirEliminacion,
       });
       this.parroquias.data = parroquias;
       this.myForm.reset();
       this.botonIngresar = "ingresar";
       this.panelAdministracionService.refresh$.emit();
-      this.openSnackBar("Se actualizó correctamente");
+      openSnackBar("Se actualizó correctamente");
     } else if (respuesta["codigo"] == "400") {
-      this.openDialog("Inténtalo de nuevo", "advertencia");
+      openDialog("Inténtalo de nuevo", "advertencia", this.dialog);
     } else if (respuesta["codigo"] == "418") {
-      this.openDialog(respuesta["mensaje"], "advertencia");
+      openDialog(respuesta["mensaje"], "advertencia", this.dialog);
     } else if (respuesta["codigo"] == "500") {
-      this.openDialog("Problemas con el servidor", "advertencia");
+      openDialog("Problemas con el servidor", "advertencia", this.dialog);
     }
   }
 
   async eliminarParroquia(idParroquia: string) {
-    let dialogRef = this.dialog.open(ComfirmDialogComponent, {
+    let dialogRef = this.dialog.open(ConfirmDialogComponent, {
       width: "250px",
       height: "auto",
       data: {
-        mensaje: ""
-      }
+        mensaje: "",
+      },
     });
     dialogRef.afterClosed().subscribe(async (result) => {
       if (result) {
@@ -177,29 +162,26 @@ export class ParroquiaComponent implements OnInit {
           parroquias.splice(index, 1);
           this.parroquias.data = parroquias;
           this.panelAdministracionService.refresh$.emit();
-          this.openSnackBar("Se eliminó correctamente");
+          openSnackBar("Se eliminó correctamente");
         } else if (respuesta["codigo"] == "400") {
-          this.openDialog("Inténtalo de nuevo", "advertencia");
+          openDialog("Inténtalo de nuevo", "advertencia", this.dialog);
         } else if (respuesta["codigo"] == "418") {
-          this.openDialog(respuesta["mensaje"], "advertencia");
+          openDialog(respuesta["mensaje"], "advertencia", this.dialog);
         } else if (respuesta["codigo"] == "500") {
-          this.openDialog("Problemas con el servidor", "advertencia");
+          openDialog("Problemas con el servidor", "advertencia", this.dialog);
         }
       }
     });
   }
 
   abrirModal() {
-    let dialogRef = this.dialog.open(
-      ModalLocalidadSuperiorComponent,
-      {
-        width: "400px",
-        height: "auto",
-        data: {
-          ruta: "parroquias",
-        },
-      }
-    );
+    let dialogRef = this.dialog.open(ModalLocalidadSuperiorComponent, {
+      width: "400px",
+      height: "auto",
+      data: {
+        ruta: "parroquias",
+      },
+    });
     dialogRef.afterClosed().subscribe((result) => {
       if (result != null) {
         this.myForm.get("_idCanton").setValue(result.idLocalidad);
@@ -220,7 +202,7 @@ export class ParroquiaComponent implements OnInit {
     this.myForm.get("_canton").setValue(parroquia.Canton);
     this.botonIngresar = "modificar";
   }
- 
+
   ngOnInit() {
     this.consultarParroquias();
     this.panelAdministracionService.refresh$.subscribe(() => {

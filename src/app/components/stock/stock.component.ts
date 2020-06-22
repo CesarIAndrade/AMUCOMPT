@@ -1,14 +1,12 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { Router } from "@angular/router";
+import { salir, openDialog } from "../../functions/global";
 
 // Material
 import { MatPaginator, MatTableDataSource, MatDialog } from "@angular/material";
 
 // Services
 import { InventarioService } from "src/app/services/inventario.service";
-
-import { salir } from '../../../environments/environment';
-import { DialogAlertComponent } from '../dialog-alert/dialog-alert.component';
 
 @Component({
   selector: "app-stock",
@@ -18,8 +16,8 @@ import { DialogAlertComponent } from '../dialog-alert/dialog-alert.component';
 export class StockComponent implements OnInit {
   constructor(
     private inventarioService: InventarioService,
-    private router: Router,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private router: Router
   ) {}
 
   // Para la paginacion
@@ -119,16 +117,9 @@ export class StockComponent implements OnInit {
       this.listaProductosEnStock.data = listaProductosEnStock;
       this.listaProductosEnStock.paginator = this.paginator;
     } else if (stock["codigo"] == "403") {
-      this.openDialog("Sesión Caducada", "advertencia");
-      this.router.navigateByUrl(salir())
+      openDialog("Sesión Caducada", "advertencia", this.dialog);
+      this.router.navigateByUrl(salir());
     }
-  }
-
-  openDialog(mensaje, icono): void {
-    const dialogRef = this.dialog.open(DialogAlertComponent, {
-      width: "250px",
-      data: { mensaje: mensaje, icono: icono },
-    });
   }
 
   search(term: string) {

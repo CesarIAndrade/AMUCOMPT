@@ -1,16 +1,13 @@
 import { Component, OnInit, Inject, ViewChild } from "@angular/core";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
-
-// Components
-import { DialogAlertComponent } from "../dialog-alert/dialog-alert.component";
+import { openDialog } from '../../functions/global';
 
 // Material
 import {
   MAT_DIALOG_DATA,
   MatPaginator,
   MatTableDataSource,
-  MatDialog,
-  MatSnackBar,
+  MatDialog
 } from "@angular/material";
 
 // Services
@@ -26,8 +23,7 @@ export class ModalLocalidadSuperiorComponent implements OnInit {
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     private panelAdministracionService: PanelAdministracionService,
-    private dialog: MatDialog,
-    private _snackBar: MatSnackBar
+    private dialog: MatDialog
   ) {
     this.myForm = new FormGroup({
       _idComunidad: new FormControl(""),
@@ -143,26 +139,12 @@ export class ModalLocalidadSuperiorComponent implements OnInit {
       this.myForm.reset();
       this.panelAdministracionService.refresh$.emit();
     } else if (comunidad["codigo"] == "400") {
-      this.openDialog("Inténtalo de nuevo", "advertencia");
+      openDialog("Inténtalo de nuevo", "advertencia", this.dialog);
     } else if (comunidad["codigo"] == "418") {
-      this.openDialog(comunidad["mensaje"], "advertencia");
+      openDialog(comunidad["mensaje"], "advertencia", this.dialog);
     } else if (comunidad["codigo"] == "500") {
-      this.openDialog("Problemas con el servidor", "advertencia");
+      openDialog("Problemas con el servidor", "advertencia", this.dialog);
     }
-  }
-
-  openDialog(mensaje, icono): void {
-    const dialogRef = this.dialog.open(DialogAlertComponent, {
-      width: "250px",
-      data: { mensaje: mensaje, icono: icono },
-    });
-  }
-
-  openSnackBar(message: string) {
-    this._snackBar.open(message, "Cerrar", {
-      duration: 2000,
-      horizontalPosition: "right",
-    });
   }
 
   siSonComunidades = "col-12";

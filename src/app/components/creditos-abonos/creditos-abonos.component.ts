@@ -1,13 +1,12 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
-import { FormGroup, FormControl, Validators } from "@angular/forms";
+import { FormGroup, FormControl } from "@angular/forms";
 import { Observable } from "rxjs";
 import { startWith, map } from "rxjs/operators";
 import { Router } from '@angular/router';
-import { salir } from '../../../environments/environment';
+import { salir, openDialog } from '../../functions/global';
 
 // Components
 import { RealizarAbonoComponent } from "../realizar-abono/realizar-abono.component";
-import { DialogAlertComponent } from '../dialog-alert/dialog-alert.component';
 
 // Material
 import { MatTableDataSource, MatPaginator, MatDialog } from "@angular/material";
@@ -27,8 +26,8 @@ export class CreditosAbonosComponent implements OnInit {
     private seguimientoService: SeguimientoService,
     private modalRealizarAbono: MatDialog,
     private personaService: PersonaService,
-    private dialog: MatDialog,
-    private router: Router
+    private router: Router,
+    private dialog: MatDialog
   ) {
     this.myForm = new FormGroup({
       _cliente: new FormControl(""),
@@ -45,13 +44,6 @@ export class CreditosAbonosComponent implements OnInit {
   _personas: any[] = [];
   loading = false;
 
-  openDialog(mensaje, icono): void {
-    const dialogRef = this.dialog.open(DialogAlertComponent, {
-      width: "250px",
-      data: { mensaje: mensaje, icono: icono },
-    });
-  }
-
   async consultarPersonas() {
     var respuesta = await this.personaService.consultarPersonas();
     if (respuesta["codigo"] == "200") {
@@ -62,7 +54,7 @@ export class CreditosAbonosComponent implements OnInit {
         map((value) => this._filter(value))
       );
     } else if (respuesta["codigo"] == "403") {
-      this.openDialog("Sesión Caducada", "advertencia");
+      openDialog("Sesión Caducada", "advertencia", this.dialog);
       this.router.navigateByUrl(salir())
     }
   }

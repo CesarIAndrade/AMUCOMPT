@@ -7,17 +7,13 @@ import {
   NgForm,
 } from "@angular/forms";
 import { Router } from '@angular/router';
-import { salir } from '../../../environments/environment';
-
-// Components
-import { DialogAlertComponent } from "../dialog-alert/dialog-alert.component";
+import { salir, openDialog, openSnackBar} from '../../functions/global';
 
 // Material
 import { MatDialog } from "@angular/material/dialog";
 import {
   MatPaginator,
-  MatTableDataSource,
-  MatSnackBar,
+  MatTableDataSource
 } from "@angular/material";
 import { ErrorStateMatcher } from "@angular/material/core";
 
@@ -36,8 +32,6 @@ export class PersonaComponent implements OnInit {
     private personaService: PersonaService,
     private panelAdministracionService: PanelAdministracionService,
     private dialog: MatDialog,
-    private _snackBar: MatSnackBar,
-    private seguridadService: SeguridadService,
     private router: Router
   ) {
     this.myForm = new FormGroup({
@@ -83,7 +77,10 @@ export class PersonaComponent implements OnInit {
   digitosTelefono2 = "0";
   digitosNumeroDocumento = "0";
   mostrarTablaPersonasEnVista = false;
-
+  comboProvincia = true;
+  comboCanton = false;
+  comboParroquia = false;
+  
   cantones: any[] = [];
   parroquias: any[] = [];
   personaModal: any = {};
@@ -91,24 +88,7 @@ export class PersonaComponent implements OnInit {
   telefonos: any[] = [];
   tipoDocumentos: any[] = [];
   tipoTelefonos: any[] = [];
-
-  openDialog(mensaje, icono): void {
-    const dialogRef = this.dialog.open(DialogAlertComponent, {
-      width: "250px",
-      data: { mensaje: mensaje, icono: icono },
-    });
-  }
-
-  openSnackBar(message: string) {
-    this._snackBar.open(message, "Cerrar", {
-      duration: 2000,
-      horizontalPosition: "right",
-    });
-  }
-
-  comboProvincia = true;
-  comboCanton = false;
-  comboParroquia = false;
+  
   async consultarProvincias() {
     var provincias = await this.panelAdministracionService.consultarProvincias();
     if (provincias["codigo"] == "200") {
@@ -125,7 +105,7 @@ export class PersonaComponent implements OnInit {
       this.myForm.get("_tipoDocumento").enable();
       this.tipoDocumentos = tipoDocumentos["respuesta"];
     } else if (tipoDocumentos["codigo"] == "403") {
-      this.openDialog("Sesión Caducada", "advertencia");
+      openDialog("Sesión Caducada", "advertencia", this.dialog);
       this.router.navigateByUrl(salir())
     }
   }
@@ -181,7 +161,7 @@ export class PersonaComponent implements OnInit {
       tipo = "apellidos";
     }
     if (campos.length == 1) {
-      this.openDialog(`Necesita dos ${tipo}`, "advertencia");
+      openDialog(`Necesita dos ${tipo}`, "advertencia", this.dialog);
     } else if (campos.length >= 2) {
       if (campos[0].length > 0 && campos[1].length > 0) {
         var nombresYApellidos = {
@@ -191,7 +171,7 @@ export class PersonaComponent implements OnInit {
         };
         return nombresYApellidos;
       } else {
-        this.openDialog(`Necesita dos ${tipo}`, "advertencia");
+        openDialog(`Necesita dos ${tipo}`, "advertencia", this.dialog);
       }
     }
   }
@@ -264,7 +244,7 @@ export class PersonaComponent implements OnInit {
       );
       console.log(respuesta);
       if (respuesta["codigo"] == "200") {
-        this.openSnackBar("Se ingresó correctamente");
+        openSnackBar("Se ingresó correctamente");
         this.personaService.refresh$.emit();
         var personas: any = this.personas.data;
         respuesta["respuesta"].Acciones = this.renderizarTablaOriginal;
@@ -278,11 +258,11 @@ export class PersonaComponent implements OnInit {
         this.digitosNumeroDocumento = "0";
         this.myForm.reset();
       } else if (respuesta["codigo"] == "400") {
-        this.openDialog("Inténtalo de nuevo", "advertencia");
+        openDialog("Inténtalo de nuevo", "advertencia", this.dialog);
       } else if (respuesta["codigo"] == "418") {
-        this.openDialog(respuesta["mensaje"], "advertencia");
+        openDialog(respuesta["mensaje"], "advertencia", this.dialog);
       } else if (respuesta["codigo"] == "500") {
-        this.openDialog("Problemas con el servidor", "advertencia");
+        openDialog("Problemas con el servidor", "advertencia", this.dialog);
       }
     }
   }
@@ -402,7 +382,7 @@ export class PersonaComponent implements OnInit {
       );
       console.log(respuesta);
       if (respuesta["codigo"] == "200") {
-        this.openSnackBar("Se actualizó correctamente");
+        openSnackBar("Se actualizó correctamente");
         this.personaService.refresh$.emit();
         var personas: any = this.personas.data;
         var persona = personas.find(
@@ -423,11 +403,11 @@ export class PersonaComponent implements OnInit {
         this.myForm.get("_telefono2").disable();
         this.myForm.reset();
       } else if (respuesta["codigo"] == "400") {
-        this.openDialog("Inténtalo de nuevo", "advertencia");
+        openDialog("Inténtalo de nuevo", "advertencia", this.dialog);
       } else if (respuesta["codigo"] == "418") {
-        this.openDialog(respuesta["mensaje"], "advertencia");
+        openDialog(respuesta["mensaje"], "advertencia", this.dialog);
       } else if (respuesta["codigo"] == "500") {
-        this.openDialog("Problemas con el servidor", "advertencia");
+        openDialog("Problemas con el servidor", "advertencia", this.dialog);
       }
     }
   }
