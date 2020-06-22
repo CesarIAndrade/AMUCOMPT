@@ -12,8 +12,8 @@ export const openDialog = (mensaje, icono, dialog) => {
   });
 }
 
-export const openSnackBar = (message: string) => {
-  this._snackBar.open(message, "Cerrar", {
+export const openSnackBar = (message, snackBar) => {
+  snackBar.open(message, "Cerrar", {
     duration: 2000,
     horizontalPosition: "right",
   });

@@ -10,7 +10,8 @@ import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.compone
 import {
   MatTableDataSource,
   MatPaginator,
-  MatDialog
+  MatDialog,
+  MatSnackBar
 } from "@angular/material";
 
 // Services
@@ -25,7 +26,8 @@ export class RegistrarVisitaComponent implements OnInit {
   constructor(
     private activatedRoute: ActivatedRoute,
     private seguimientoService: SeguimientoService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private snackBar: MatSnackBar
   ) {
     this.myForm = new FormGroup({
       _idVisita: new FormControl(""),
@@ -90,7 +92,7 @@ export class RegistrarVisitaComponent implements OnInit {
       this.visitas.data = visitas;
       this.visitas.paginator = this.paginator;
       this.myForm.reset();
-      openSnackBar("Se guardó correctamente!");
+      openSnackBar("Se guardó correctamente", this.snackBar);
     }
   }
 
@@ -125,7 +127,7 @@ export class RegistrarVisitaComponent implements OnInit {
       this.visitas.data = visitas;
       this.botonIngresar = "ingresar";
       this.myForm.reset();
-      openSnackBar("Se actualizó correctamente");
+      openSnackBar("Se actualizó correctamente", this.snackBar);
     }
   }
 
@@ -146,7 +148,7 @@ export class RegistrarVisitaComponent implements OnInit {
           var index = visitas.indexOf(visita[0]);
           visitas.splice(index, 1);
           this.visitas.data = visitas;
-          openSnackBar("Se eliminó correctamente");
+          openSnackBar("Se eliminó correctamente", this.snackBar);
         }
       }
     });

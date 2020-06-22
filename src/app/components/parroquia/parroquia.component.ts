@@ -8,7 +8,7 @@ import { ModalLocalidadSuperiorComponent } from "../modal-localidad-superior/mod
 import { ConfirmDialogComponent } from "../confirm-dialog/confirm-dialog.component";
 
 // Material
-import { MatDialog, MatPaginator, MatTableDataSource } from "@angular/material";
+import { MatDialog, MatPaginator, MatTableDataSource, MatSnackBar } from "@angular/material";
 
 // Services
 import { PanelAdministracionService } from "src/app/services/panel-administracion.service";
@@ -22,7 +22,8 @@ export class ParroquiaComponent implements OnInit {
   constructor(
     private panelAdministracionService: PanelAdministracionService,
     private dialog: MatDialog,
-    private router: Router
+    private router: Router,
+    private snackBar: MatSnackBar
   ) {
     this.myForm = new FormGroup({
       _idParroquia: new FormControl(""),
@@ -95,7 +96,7 @@ export class ParroquiaComponent implements OnInit {
       this.parroquias.data = parroquias;
       this.myForm.reset();
       this.panelAdministracionService.refresh$.emit();
-      openSnackBar("Se ingresó correctamente");
+      openSnackBar("Se ingresó correctamente", this.snackBar);
     } else if (parroquia["codigo"] == "400") {
       openDialog("Inténtalo de nuevo", "advertencia", this.dialog);
     } else if (parroquia["codigo"] == "418") {
@@ -130,7 +131,7 @@ export class ParroquiaComponent implements OnInit {
       this.myForm.reset();
       this.botonIngresar = "ingresar";
       this.panelAdministracionService.refresh$.emit();
-      openSnackBar("Se actualizó correctamente");
+      openSnackBar("Se actualizó correctamente", this.snackBar);
     } else if (respuesta["codigo"] == "400") {
       openDialog("Inténtalo de nuevo", "advertencia", this.dialog);
     } else if (respuesta["codigo"] == "418") {
@@ -162,7 +163,7 @@ export class ParroquiaComponent implements OnInit {
           parroquias.splice(index, 1);
           this.parroquias.data = parroquias;
           this.panelAdministracionService.refresh$.emit();
-          openSnackBar("Se eliminó correctamente");
+          openSnackBar("Se eliminó correctamente", this.snackBar);
         } else if (respuesta["codigo"] == "400") {
           openDialog("Inténtalo de nuevo", "advertencia", this.dialog);
         } else if (respuesta["codigo"] == "418") {

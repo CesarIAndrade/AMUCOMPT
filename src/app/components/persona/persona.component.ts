@@ -13,7 +13,8 @@ import { salir, openDialog, openSnackBar} from '../../functions/global';
 import { MatDialog } from "@angular/material/dialog";
 import {
   MatPaginator,
-  MatTableDataSource
+  MatTableDataSource,
+  MatSnackBar
 } from "@angular/material";
 import { ErrorStateMatcher } from "@angular/material/core";
 
@@ -32,7 +33,8 @@ export class PersonaComponent implements OnInit {
     private personaService: PersonaService,
     private panelAdministracionService: PanelAdministracionService,
     private dialog: MatDialog,
-    private router: Router
+    private router: Router,
+    private snackBar: MatSnackBar
   ) {
     this.myForm = new FormGroup({
       _nombres: new FormControl("", [Validators.required]),
@@ -244,7 +246,7 @@ export class PersonaComponent implements OnInit {
       );
       console.log(respuesta);
       if (respuesta["codigo"] == "200") {
-        openSnackBar("Se ingresó correctamente");
+        openSnackBar("Se ingresó correctamente", this.snackBar);
         this.personaService.refresh$.emit();
         var personas: any = this.personas.data;
         respuesta["respuesta"].Acciones = this.renderizarTablaOriginal;
@@ -382,7 +384,7 @@ export class PersonaComponent implements OnInit {
       );
       console.log(respuesta);
       if (respuesta["codigo"] == "200") {
-        openSnackBar("Se actualizó correctamente");
+        openSnackBar("Se actualizó correctamente", this.snackBar);
         this.personaService.refresh$.emit();
         var personas: any = this.personas.data;
         var persona = personas.find(

@@ -11,6 +11,7 @@ import {
   MatPaginator,
   MatTableDataSource,
   MatDialog,
+  MatSnackBar,
 } from "@angular/material";
 
 // Services
@@ -31,7 +32,8 @@ export class ArmarKitComponent implements OnInit {
   constructor(
     private inventarioService: InventarioService,
     private dialog: MatDialog,
-    private router: Router
+    private router: Router,
+    private snackBar: MatSnackBar
   ) {
     this.myForm = new FormGroup({
       _idKit: new FormControl(""),
@@ -142,7 +144,7 @@ export class ArmarKitComponent implements OnInit {
     if (producto["codigo"] == "200") {
       this.consultarKitsYSusProductos(this.myForm.get("_idKit").value);
       this.consultarProductos(this.myForm.get("_idKit").value);
-      openSnackBar("Se asignó correctamente");
+      openSnackBar("Se asignó correctamente", this.snackBar);
     }
   }
 
@@ -166,7 +168,7 @@ export class ArmarKitComponent implements OnInit {
         if (producto["codigo"] == "200") {
           this.consultarKitsYSusProductos(this.myForm.get("_idKit").value);
           this.consultarProductos(this.myForm.get("_idKit").value);
-          openSnackBar("Se eliminó correctamente");
+          openSnackBar("Se eliminó correctamente", this.snackBar);
         }
       }
     });

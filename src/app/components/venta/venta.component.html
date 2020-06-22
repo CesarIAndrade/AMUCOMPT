@@ -4,308 +4,299 @@
       <div class="card-body">
         <form [formGroup]="myForm" (ngSubmit)="crearDetalleVenta()" novalidate>
           <div class="row">
-            <div class="col-lg-5">
-              <mat-form-field class="example-full-width">
-                <input
-                  readonly
-                  matInput
-                  formControlName="_cabecera"
-                  placeholder="Factura"
-                />
-              </mat-form-field>
-            </div>
-            <div class="col-lg-4">
-              <mat-form-field class="example-full-width">
-                <input
-                  readonly
-                  matInput
-                  formControlName="_fechaFactura"
-                  placeholder="Fecha"
-                />
-              </mat-form-field>
-            </div>
-            <div class="col-lg-3">
-              <button
-                [disabled]="buttonGenerarFactura"
-                type="button"
-                class="mt-2 mb-4 btn-block btn-warning"
-                mat-button
-                (click)="crearCabeceraFactura()"
-              >
-                Nueva Factura
-              </button>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-lg-4">
-              <mat-form-field class="example-full-width">
-                <mat-select
-                  [disabled]="selectTipoCompra"
-                  [(value)]="selected"
-                  (selectionChange)="selecionarTipoCompra($event)"
-                >
-                  <mat-option
-                    *ngFor="let item of tipoCompra"
-                    [value]="item.tipo"
-                  >
-                    {{ item.tipo }}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
-              <mat-form-field [hidden]="seccionKit" class="example-full-width">
-                <mat-label>Kits</mat-label>
-                <mat-spinner
-                  *ngIf="comboKits"
-                  diameter="20"
-                  matSuffix
-                ></mat-spinner>
-                <mat-select
-                  formControlName="_kit"
-                  (selectionChange)="consultarKitsYSusProductos($event.value)"
-                >
-                  <mat-option *ngFor="let item of kits" [value]="item.IdKit">
-                    {{ item.Descripcion }}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
+            <div class="col-lg-10 offset-lg-1">
               <div class="row">
-                <div class="col-lg-9 col-md-10">
+                <div class="col-lg-4">
                   <mat-form-field class="example-full-width">
                     <input
                       readonly
                       matInput
-                      placeholder="Producto"
-                      formControlName="_producto"
+                      formControlName="_cabecera"
+                      placeholder="Factura"
                     />
-                    <button disabled mat-button matPrefix mat-icon-button>
-                      <mat-icon>*</mat-icon>
-                    </button>
                   </mat-form-field>
                 </div>
-                <div class="col-lg-3 col-md-2">
+                <div class="col-lg-4">
+                  <mat-form-field class="example-full-width">
+                    <input
+                      readonly
+                      matInput
+                      formControlName="_fechaFactura"
+                      placeholder="Fecha"
+                    />
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-4">
                   <button
-                    [disabled]="buttonSeleccionarProducto"
+                    [disabled]="buttonGenerarFactura"
                     type="button"
+                    class="mt-2 mb-4 btn-block btn-warning"
                     mat-button
-                    class="mt-2 btn-outline-warning"
-                    (click)="seleccionarProducto()"
+                    (click)="crearCabeceraFactura()"
                   >
-                    <mat-icon>add</mat-icon>
+                    Nueva Factura
                   </button>
                 </div>
               </div>
-              <div [hidden]="kit">
-                <mat-form-field class="example-full-width">
-                  <input
-                    readonly
-                    matInput
-                    placeholder="Kit"
-                    formControlName="_kit"
-                  />
-                </mat-form-field>
-              </div>
-              <div class="row">
-                <div class="col-lg-6 col-md-6 descuento">
-                  <mat-checkbox
-                    formControlName="_checkedDescuento"
-                    (change)="aplicarDescuento($event)"
-                    >Aplicar Descuento</mat-checkbox
-                  >
-                </div>
-                <div class="col-lg-6 col-md-6">
-                  <mat-form-field
-                    class="example-full-width"
-                    [hidden]="inputDescuento"
-                  >
-                    <input
-                      matInput
-                      placeholder="Descuento"
-                      formControlName="_descuento"
-                      type="number"
-                    />
-                    <button disabled mat-button matSuffix mat-icon-button>
-                      <mat-icon>%</mat-icon>
-                    </button>
-                  </mat-form-field>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-lg-6 col-md-6">
-                  <mat-form-field class="example-full-width">
-                    <input
-                      matInput
-                      readonly
-                      type="number"
-                      formControlName="_disponible"
-                      placeholder="Disponible"
-                    />
-                  </mat-form-field>
-                </div>
-                <div class="col-lg-6 col-md-6">
-                  <mat-form-field class="example-full-width">
-                    <input
-                      matInput
-                      type="number"
-                      formControlName="_cantidad"
-                      placeholder="Cantidad"
-                    />
-                    <button disabled mat-button matPrefix mat-icon-button>
-                      <mat-icon>*</mat-icon>
-                    </button>
-                  </mat-form-field>
-                </div>
-              </div>
-              <mat-form-field
-                class="example-full-width"
-                style="margin-top: 1px;"
-              >
-                <input
-                  matInput
-                  readonly
-                  type="number"
-                  formControlName="_precio"
-                  placeholder="Precio"
-                />
-              </mat-form-field>
-            </div>
-            <div class="col-lg-4">
-              <div class="row">
-                <div class="col-lg-9 col-md-10">
-                  <mat-form-field class="example-full-width">
-                    <input
-                      readonly
-                      matInput
-                      placeholder="Cédula"
-                      formControlName="_cedula"
-                    />
-                    <button disabled mat-button matPrefix mat-icon-button>
-                      <mat-icon>*</mat-icon>
-                    </button>
-                  </mat-form-field>
-                </div>
-                <div class="col-lg-3 col-md-2">
+              <div class="row card flex-container p-2">
+                <div class="col-lg-4 col-md-4">
                   <button
+                    class="btn-outline-warning btn-block"
+                    (click)="seleccionarPersona()"
                     [disabled]="buttonSeleccionarPersona"
                     mat-button
-                    class="mt-2 btn-outline-warning"
-                    (click)="seleccionarPersona()"
                   >
                     <mat-icon>person_add</mat-icon>
+                    Seleccionar Cliente
                   </button>
                 </div>
+                <div class="col-lg-2 col-md-2 mt-1">
+                    <mat-label>{{ cedula || "Cédula" }}</mat-label>
+                </div>
+                <div class="col-lg-6 col-md-6 mt-1">
+                    <mat-label>{{ nombres || "Cliente" }}</mat-label>
+                </div>
               </div>
-              <mat-form-field class="example-full-width">
-                <input
-                  matInput
-                  formControlName="_nombres"
-                  placeholder="Persona"
-                  type="text"
-                  readonly
-                />
-                <button disabled mat-button matPrefix mat-icon-button>
-                  <mat-icon>*</mat-icon>
-                </button>
-              </mat-form-field>
-              <mat-form-field class="example-full-width">
-                <mat-select
-                  [disabled]="selectTipoPago"
-                  [(value)]="pago"
-                  (selectionChange)="selecionarTipoPago($event)"
-                >
-                  <mat-option *ngFor="let item of tipoPago" [value]="item.tipo">
-                    {{ item.tipo }}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
-              <div class="row" *ngIf="siSePagaACredito">
-                <div class="col-lg-6 col-md-6">
+              <div class="row mt-3">
+                <div class="col-lg-6">
+                  <mat-label>
+                    CONFIGURAR VENTA
+                  </mat-label>
                   <mat-form-field class="example-full-width">
+                    <mat-select
+                      [disabled]="selectTipoCompra"
+                      [(value)]="selected"
+                      (selectionChange)="selecionarTipoCompra($event)"
+                    >
+                      <mat-option
+                        *ngFor="let item of tipoCompra"
+                        [value]="item.tipo"
+                      >
+                        {{ item.tipo }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                  <mat-form-field [hidden]="seccionKit" class="example-full-width">
+                    <mat-label>Kits</mat-label>
+                    <mat-spinner
+                      *ngIf="comboKits"
+                      diameter="20"
+                      matSuffix
+                    ></mat-spinner>
+                    <mat-select
+                      formControlName="_kit"
+                      (selectionChange)="consultarKitsYSusProductos($event.value)"
+                    >
+                      <mat-option *ngFor="let item of kits" [value]="item.IdKit">
+                        {{ item.Descripcion }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                  <div class="row">
+                    <div class="col-lg-9 col-md-10">
+                      <mat-form-field class="example-full-width">
+                        <input
+                          readonly
+                          matInput
+                          placeholder="Producto"
+                          formControlName="_producto"
+                        />
+                        <button disabled mat-button matPrefix mat-icon-button>
+                          <mat-icon>*</mat-icon>
+                        </button>
+                      </mat-form-field>
+                    </div>
+                    <div class="col-lg-3 col-md-2">
+                      <button
+                        [disabled]="buttonSeleccionarProducto"
+                        type="button"
+                        mat-button
+                        class="mt-2 btn-outline-warning"
+                        (click)="seleccionarProducto()"
+                      >
+                        <mat-icon>add</mat-icon>
+                      </button>
+                    </div>
+                  </div>
+                  <div [hidden]="kit">
+                    <mat-form-field class="example-full-width">
+                      <input
+                        readonly
+                        matInput
+                        placeholder="Kit"
+                        formControlName="_kit"
+                      />
+                    </mat-form-field>
+                  </div>
+                  <div class="row">
+                    <div class="col-lg-6 col-md-6 descuento">
+                      <mat-checkbox
+                        formControlName="_checkedDescuento"
+                        (change)="aplicarDescuento($event)"
+                        >Aplicar Descuento</mat-checkbox
+                      >
+                    </div>
+                    <div class="col-lg-6 col-md-6">
+                      <mat-form-field
+                        class="example-full-width"
+                        [hidden]="inputDescuento"
+                      >
+                        <input
+                          matInput
+                          placeholder="Descuento"
+                          formControlName="_descuento"
+                          type="number"
+                        />
+                        <button disabled mat-button matSuffix mat-icon-button>
+                          <mat-icon>%</mat-icon>
+                        </button>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-lg-6 col-md-6">
+                      <mat-form-field class="example-full-width">
+                        <input
+                          matInput
+                          readonly
+                          type="number"
+                          formControlName="_disponible"
+                          placeholder="Disponible"
+                        />
+                      </mat-form-field>
+                    </div>
+                    <div class="col-lg-6 col-md-6">
+                      <mat-form-field class="example-full-width">
+                        <input
+                          matInput
+                          type="number"
+                          formControlName="_cantidad"
+                          placeholder="Cantidad"
+                        />
+                        <button disabled mat-button matPrefix mat-icon-button>
+                          <mat-icon>*</mat-icon>
+                        </button>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                  <mat-form-field
+                    class="example-full-width"
+                    style="margin-top: 1px;"
+                  >
                     <input
                       matInput
                       readonly
-                      formControlName="_fechaFinalCredito"
-                      [matDatepicker]="picker"
-                      placeholder="Final Crédito"
+                      type="number"
+                      formControlName="_precio"
+                      placeholder="Precio"
                     />
-                    <button
-                      disabled
-                      [hidden]="siSePagaACredito"
-                      mat-button
-                      matPrefix
-                      mat-icon-button
-                    >
-                      <mat-icon>*</mat-icon>
-                    </button>
-                    <mat-datepicker #picker></mat-datepicker>
-                    <mat-datepicker-toggle matSuffix [for]="picker">
-                    </mat-datepicker-toggle>
                   </mat-form-field>
                 </div>
-                <div class="col-lg-6 col-md-6 descuento">
-                  <mat-checkbox formControlName="_aplicaSeguro"
-                    >Asistencia Técnica</mat-checkbox
-                  >
-                </div>
-              </div>
-            </div>
-            <div class="col-lg-4">
-              <div>
-                <button
-                  mat-button
-                  [disabled]="buttonSeleccionarComunidad"
-                  type="button"
-                  (click)="seleccionarComunidad()"
-                  class="mt-2 mb-4 btn-secondary btn-block"
-                >
-                  Seleccionar lugar(es) de Sembrío
-                </button>
-                <mat-label>
-                  Lugar(es) de Sembrío:
-                </mat-label>
-                <div class="p-4">
-                  <mat-chip-list>
-                    <mat-chip
-                      *ngFor="let item of comunidades"
-                      [selectable]="selectable"
-                      [removable]="removable"
-                      (removed)="
-                        quitarAsignacionComunidadFactura(
-                          item.idAsignarComunidadFactura
-                        )
-                      "
+                <div class="col-lg-6">
+                  <mat-label>
+                    SELECCIONAR MÉTODO DE PAGO
+                  </mat-label>
+                  <mat-form-field class="example-full-width">
+                    <mat-select
+                      [disabled]="selectTipoPago"
+                      [(value)]="pago"
+                      (selectionChange)="selecionarTipoPago($event)"
                     >
-                      {{ item.name }}
-                      <mat-icon matChipRemove *ngIf="removable"
-                        >cancel</mat-icon
-                      >
-                    </mat-chip>
-                  </mat-chip-list>
+                      <mat-option *ngFor="let item of tipoPago" [value]="item.tipo">
+                        {{ item.tipo }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                  <div *ngIf="siSePagaACredito">
+                    <div class="row">
+                      <div class="col-lg-6 col-md-6">
+                        <mat-form-field class="example-full-width">
+                          <input
+                            matInput
+                            readonly
+                            formControlName="_fechaFinalCredito"
+                            [matDatepicker]="picker"
+                            placeholder="Final Crédito"
+                          />
+                          <button
+                            disabled
+                            [hidden]="siSePagaACredito"
+                            mat-button
+                            matPrefix
+                            mat-icon-button
+                          >
+                            <mat-icon>*</mat-icon>
+                          </button>
+                          <mat-datepicker #picker></mat-datepicker>
+                          <mat-datepicker-toggle matSuffix [for]="picker">
+                          </mat-datepicker-toggle>
+                        </mat-form-field>
+                      </div>
+                      <div class="col-lg-6 col-md-6 descuento">
+                        <mat-checkbox formControlName="_aplicaSeguro"
+                          >Asistencia Técnica</mat-checkbox
+                        >
+                      </div>
+                    </div>
+                    <button
+                      mat-button
+                      [disabled]="buttonSeleccionarComunidad"
+                      type="button"
+                      (click)="seleccionarComunidad()"
+                      class="mt-2 mb-4 btn-secondary btn-block"
+                    >
+                      Seleccionar lugar(es) de Sembrío
+                    </button>
+                    <mat-label>
+                      Lugar(es) de Sembrío:
+                    </mat-label>
+                    <mat-list>
+                      <mat-list-item *ngFor="let item of comunidades" class="">
+                        <mat-label> {{ item.name }} </mat-label>
+                        <span class="example-spacer"></span>
+                        <button
+                          mat-button
+                          mat-icon-button
+                          class="btn-outline-danger"
+                          (click)="
+                            quitarAsignacionComunidadFactura(
+                              item.idAsignarComunidadFactura
+                            )
+                          "
+                        >
+                          <mat-icon>
+                            remove
+                          </mat-icon>
+                        </button>
+                      </mat-list-item>
+                    </mat-list>
+                  </div>
                 </div>
               </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-lg-6">
-              <button
-                type="submit"
-                class="mt-2 mb-2 btn-block btn-outline-success"
-                mat-button
-                [disabled]="buttonAgregarDetalle"
-                [disabled]="myForm.invalid"
-              > 
-                Agregar Detalle
-              </button>
-            </div>
-            <div class="col-lg-6">
-              <button
-                type="button"
-                mat-button
-                [disabled]="buttonRealizarVenta"
-                (click)="crearConfiguracionVenta()"
-                class="mt-2 mb-2 btn-block btn-primary"
-              >
-                Realizar Venta
-              </button>
+              <div class="row">
+                <div class="col-lg-6">
+                  <button
+                    type="submit"
+                    class="mt-2 mb-2 btn-block btn-outline-success"
+                    mat-button
+                    [disabled]="buttonAgregarDetalle"
+                    [disabled]="myForm.invalid"
+                  >
+                    Agregar Detalle
+                  </button>
+                </div>
+                <div class="col-lg-6">
+                  <button
+                    type="button"
+                    mat-button
+                    [disabled]="buttonRealizarVenta"
+                    (click)="crearConfiguracionVenta()"
+                    class="mt-2 mb-2 btn-block btn-primary"
+                  >
+                    Realizar Venta
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         </form>
@@ -583,7 +574,6 @@
                       <button
                         mat-button
                         class="btn-outline-danger"
-
                         (click)="eliminarFactura(element)"
                       >
                         <mat-icon>remove</mat-icon>

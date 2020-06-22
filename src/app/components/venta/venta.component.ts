@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { Router } from "@angular/router";
-import { salir, openDialog, openSnackBar } from '../../functions/global';
+import { salir, openDialog, openSnackBar } from "../../functions/global";
 
 // Components
 import { ModalAsignacionConfiguracionProductoComponent } from "../modal-asignacion-configuracion-producto/modal-asignacion-configuracion-producto.component";
@@ -9,10 +9,7 @@ import { ModalLocalidadSuperiorComponent } from "../modal-localidad-superior/mod
 import { ModalPersonaComponent } from "../modal-persona/modal-persona.component";
 
 // Material
-import {
-  MatTableDataSource,
-  MatPaginator
-} from "@angular/material";
+import { MatTableDataSource, MatPaginator, MatSnackBar } from "@angular/material";
 import { MatDialog } from "@angular/material/dialog";
 
 // Services
@@ -31,7 +28,8 @@ export class VentaComponent implements OnInit {
     private ventaService: VentaService,
     private facturaService: FacturaService,
     private router: Router,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private snackBar: MatSnackBar
   ) {
     this.myForm = new FormGroup({
       _idCabecera: new FormControl(""),
@@ -53,6 +51,8 @@ export class VentaComponent implements OnInit {
       _aplicaSeguro: new FormControl(false),
     });
   }
+
+  nombres: string;
 
   myForm: FormGroup;
   selected = "Producto";
@@ -132,7 +132,7 @@ export class VentaComponent implements OnInit {
       }
     } else if (respuesta["codigo"] == "403") {
       openDialog("Sesión Caducada", "advertencia", this.dialog);
-      this.router.navigateByUrl(salir())
+      this.router.navigateByUrl(salir());
     }
   }
 
@@ -280,6 +280,7 @@ export class VentaComponent implements OnInit {
     }
   }
 
+  cedula: string;
   seleccionarPersona() {
     let dialogRef = this.dialog.open(ModalPersonaComponent, {
       width: "auto",
@@ -291,6 +292,8 @@ export class VentaComponent implements OnInit {
         this.myForm.get("_idPersona").setValue(result.idPersona);
         var nombres = result.nombres + " " + result.apellidos;
         this.myForm.get("_nombres").setValue(nombres);
+        this.nombres = nombres;
+        this.cedula = result.cedula;
       }
     });
   }
@@ -454,7 +457,7 @@ export class VentaComponent implements OnInit {
       if (respuesta["codigo"] == "200") {
         this.consultarDetalleFactura();
       } else if (respuesta["codigo"] == "201") {
-        openSnackBar("Factura eliminada");
+        openSnackBar("Factura eliminada", this.snackBar);
         this.consultarFacturas(true);
         this.myForm.reset();
         this.detalleVenta.data = [];
@@ -466,7 +469,7 @@ export class VentaComponent implements OnInit {
       if (respuesta["codigo"] == "200") {
         this.consultarDetalleFactura();
       } else if (respuesta["codigo"] == "201") {
-        openSnackBar("Factura eliminada");
+        openSnackBar("Factura eliminada", this.snackBar);
         this.consultarFacturas(true);
         this.myForm.reset();
         this.detalleVenta.data = [];
@@ -510,7 +513,11 @@ export class VentaComponent implements OnInit {
   async crearConfiguracionVenta() {
     if (this.myForm.get("_nombres").value) {
       if (this.pago == "Crédito" && this.comunidades.length == 0) {
-        openDialog("Necesitas lugar(es) de sembrío", "advertencia", this.dialog);
+        openDialog(
+          "Necesitas lugar(es) de sembrío",
+          "advertencia",
+          this.dialog
+        );
       } else {
         var respuesta = await this.ventaService.crearConfiguracionVenta(
           this.myForm.get("_idCabecera").value,
@@ -565,6 +572,7 @@ export class VentaComponent implements OnInit {
           this.myForm.get("_idCabecera").value,
           result.idLocalidad
         );
+        console.log(respuesta);
         if (respuesta["codigo"] == "200") {
           this.comunidades.push({
             _id: result.idLocalidad,
@@ -572,8 +580,10 @@ export class VentaComponent implements OnInit {
               respuesta["respuesta"].IdAsignarComunidadFactura,
             name: result.descripcion,
           });
+        } else if(respuesta["codigo"] == "418") {
+          openDialog(respuesta["mensaje"], "advertencia", this.dialog)
         }
-      }
+       }
     });
   }
 
@@ -629,7 +639,7 @@ export class VentaComponent implements OnInit {
   }
 
   async consultarFacturas(flag) {
-    if(flag) {
+    if (flag) {
       var facturasFinalizadas = await this.facturaService.consultarFacturas(
         "Factura/ListaFacturasFinalizadasVenta"
       );
@@ -663,7 +673,9 @@ export class VentaComponent implements OnInit {
   async eliminarFactura(factura) {
     this.facturasNoFinalizadas.data = [];
     this.loadingFnF = true;
-    var respuesta = await this.facturaService.eliminarFactura(factura.IdCabeceraFactura);
+    var respuesta = await this.facturaService.eliminarFactura(
+      factura.IdCabeceraFactura
+    );
     if (respuesta["codigo"] == "200") {
       this.consultarFacturas(false);
     }

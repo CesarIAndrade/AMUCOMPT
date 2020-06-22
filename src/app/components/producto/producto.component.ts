@@ -9,7 +9,7 @@ import { Router } from "@angular/router";
 import { ConfirmDialogComponent } from "../confirm-dialog/confirm-dialog.component";
 
 // Material
-import { MatPaginator, MatTableDataSource } from "@angular/material";
+import { MatPaginator, MatTableDataSource, MatSnackBar } from "@angular/material";
 import { MatDialog } from "@angular/material/dialog";
 
 // Services
@@ -24,7 +24,8 @@ export class ProductoComponent implements OnInit {
   constructor(
     private inventarioService: InventarioService,
     private dialog: MatDialog,
-    private router: Router
+    private router: Router,
+    private snackBar: MatSnackBar
   ) {
     this.myForm = new FormGroup({
       _nombre: new FormControl("", [Validators.required]),
@@ -188,9 +189,9 @@ export class ProductoComponent implements OnInit {
     );
     if (precio["codigo"] == "200") {
       if (flag) {
-        openSnackBar("Se ingresó correctamente");
+        openSnackBar("Se ingresó correctamente", this.snackBar);
       } else {
-        openSnackBar("Se actualizó correctamente");
+        openSnackBar("Se actualizó correctamente", this.snackBar);
         this.botonIngresar = "ingresar";
       }
       this.myForm.reset();
@@ -257,7 +258,7 @@ export class ProductoComponent implements OnInit {
           idProducto
         );
         if (respuesta["codigo"] == "200") {
-          openSnackBar("Se eliminó correctamente");
+          openSnackBar("Se eliminó correctamente", this.snackBar);
           var productos = this.productos.data;
           var producto = productos.find(
             (item) => item["IdConfigurarProducto"] == idConfigurarProducto

@@ -10,7 +10,8 @@ import { ConfirmDialogComponent } from "../confirm-dialog/confirm-dialog.compone
 import {
   MatTableDataSource,
   MatPaginator,
-  MatDialog
+  MatDialog,
+  MatSnackBar
 } from "@angular/material";
 
 // Services
@@ -25,7 +26,8 @@ export class ProvinciaComponent implements OnInit {
   constructor(
     private panelAdministracionService: PanelAdministracionService,
     private dialog: MatDialog,
-    private router: Router
+    private router: Router,
+    private snackBar: MatSnackBar
   ) {
     this.myForm = new FormGroup({
       _idProvincia: new FormControl(""),
@@ -83,7 +85,7 @@ export class ProvinciaComponent implements OnInit {
       });
       this.provincias.data = provincias;
       this.myForm.reset();
-      openSnackBar("Se ingresó correctamente");
+      openSnackBar("Se ingresó correctamente", this.snackBar);
     } else if (provincia["codigo"] == "400") {
       openDialog("Inténtalo de nuevo", "advertencia", this.dialog);
     } else if (provincia["codigo"] == "418") {
@@ -114,7 +116,7 @@ export class ProvinciaComponent implements OnInit {
       this.provincias.data = provincias;
       this.myForm.reset();
       this.botonIngresar = "ingresar";
-      openSnackBar("Se actualizó correctamente");
+      openSnackBar("Se actualizó correctamente", this.snackBar);
     } else if (respuesta["codigo"] == "400") {
       openDialog("Inténtalo de nuevo", "advertencia", this.dialog);
     } else if (respuesta["codigo"] == "418") {
@@ -145,7 +147,7 @@ export class ProvinciaComponent implements OnInit {
           var index = provincias.indexOf(provincia[0]);
           provincias.splice(index, 1);
           this.provincias.data = provincias;
-          openSnackBar("Se eliminó correctamente");
+          openSnackBar("Se eliminó correctamente", this.snackBar);
         } else if (respuesta["codigo"] == "400") {
           openDialog("Inténtalo de nuevo", "advertencia", this.dialog);
         } else if (respuesta["codigo"] == "418") {

@@ -13,6 +13,7 @@ import { ConfirmDialogComponent } from "../confirm-dialog/confirm-dialog.compone
 import {
   MatPaginator,
   MatTableDataSource,
+  MatSnackBar,
 } from "@angular/material";
 import { MatDialog } from "@angular/material/dialog";
 
@@ -28,7 +29,8 @@ export class UsuarioComponent implements OnInit {
   constructor(
     private usuarioService: UsuarioService,
     private dialog: MatDialog,
-    private router: Router
+    private router: Router,
+    private snackBar: MatSnackBar
   ) {
     this.myForm = new FormGroup({
       _idUsuario: new FormControl(""),
@@ -97,7 +99,7 @@ export class UsuarioComponent implements OnInit {
       this.myForm.get("_contrasena").value
     );
     if (respuesta["codigo"] == "200") {
-      openSnackBar("Se ingresó correctamente");
+      openSnackBar("Se ingresó correctamente", this.snackBar);
       var usuarios: any = this.usuarios.data;
       usuarios.push(respuesta["respuesta"]);
       this.usuarios.data = usuarios;
@@ -116,7 +118,7 @@ export class UsuarioComponent implements OnInit {
       "0"
     );
     if (respuesta["codigo"] == "200") {
-      openSnackBar("Se actualizó correctamente");
+      openSnackBar("Se actualizó correctamente", this.snackBar);
       var usuarios: any = this.usuarios.data;
       var usuario = usuarios.find(
         (usuario) => usuario["IdUsuario"] == this.myForm.get("_idUsuario").value

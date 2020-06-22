@@ -9,7 +9,7 @@ import { Router } from "@angular/router";
 import { ConfirmDialogComponent } from "../confirm-dialog/confirm-dialog.component";
 
 // Material
-import { MatTableDataSource, MatPaginator, MatDialog } from "@angular/material";
+import { MatTableDataSource, MatPaginator, MatDialog, MatSnackBar } from "@angular/material";
 
 // Services
 import { InventarioService } from "src/app/services/inventario.service";
@@ -23,7 +23,8 @@ export class ConfiguracionProductoComponent implements OnInit {
   constructor(
     private inventarioService: InventarioService,
     private dialog: MatDialog,
-    private router: Router
+    private router: Router,
+    private snackBar: MatSnackBar
   ) {
     this.myForm = new FormGroup({
       _campo: new FormControl("", [Validators.required]),
@@ -115,7 +116,7 @@ export class ConfiguracionProductoComponent implements OnInit {
       this.myForm.get("_campo").value
     );
     if (tipoProducto["codigo"] == "200") {
-      openSnackBar("Se ingresó correctamente");
+      openSnackBar("Se ingresó correctamente", this.snackBar);
       var tipoProductos: any = this.dataSource.data;
       tipoProductos.push({
         _id: tipoProducto["respuesta"].IdTipoProducto,
@@ -148,7 +149,7 @@ export class ConfiguracionProductoComponent implements OnInit {
           idTipoProducto
         );
         if (respuesta["codigo"] == "200") {
-          openSnackBar("Se eliminó correctamente");
+          openSnackBar("Se eliminó correctamente", this.snackBar);
           var tipoProductos: any = this.dataSource.data;
           var tipoProducto = tipoProductos.find(
             (tipoProducto) => tipoProducto["_id"] == idTipoProducto
@@ -190,7 +191,7 @@ export class ConfiguracionProductoComponent implements OnInit {
       this.myForm.get("_campo").value
     );
     if (presentacion["codigo"] == "200") {
-      openSnackBar("Se ingresó correctamente");
+      openSnackBar("Se ingresó correctamente", this.snackBar);
       var presentaciones: any = this.dataSource.data;
       presentaciones.push({
         _id: presentacion["respuesta"].IdPresentacion,
@@ -223,7 +224,7 @@ export class ConfiguracionProductoComponent implements OnInit {
           idPresentacion
         );
         if (respuesta["codigo"] == "200") {
-          openSnackBar("Se eliminó correctamente");
+          openSnackBar("Se eliminó correctamente", this.snackBar);
           var presentaciones: any = this.dataSource.data;
           var presentacion = presentaciones.find(
             (presentacion) => presentacion["_id"] == idPresentacion
@@ -265,7 +266,7 @@ export class ConfiguracionProductoComponent implements OnInit {
       this.myForm.get("_campo").value
     );
     if (medida["codigo"] == "200") {
-      openSnackBar("Se ingresó correctamente");
+      openSnackBar("Se ingresó correctamente", this.snackBar);
       var medidas: any = this.dataSource.data;
       medidas.push({
         _id: medida["respuesta"].IdMedida,
@@ -296,7 +297,7 @@ export class ConfiguracionProductoComponent implements OnInit {
       if (result) {
         var respuesta = await this.inventarioService.eliminarMedida(idMedida);
         if (respuesta["codigo"] == "200") {
-          openSnackBar("Se eliminó correctamente");
+          openSnackBar("Se eliminó correctamente", this.snackBar);
           var medidas: any = this.dataSource.data;
           var medida = medidas.find((medida) => medida["_id"] == idMedida);
           var index = medidas.indexOf(medida);
@@ -341,7 +342,7 @@ export class ConfiguracionProductoComponent implements OnInit {
         this.myForm.get("_descuento").value
       );
       if (kit["codigo"] == "200") {
-        openSnackBar("Se ingresó correctamente");
+        openSnackBar("Se ingresó correctamente", this.snackBar);
         var kits: any = this.dataSource.data;
         kits.push({
           _id: kit["respuesta"].IdKit,
@@ -404,7 +405,7 @@ export class ConfiguracionProductoComponent implements OnInit {
       if (result) {
         var respuesta = await this.inventarioService.eliminarKit(idKit);
         if (respuesta["codigo"] == "200") {
-          openSnackBar("Se eliminó correctamente");
+          openSnackBar("Se eliminó correctamente", this.snackBar);
           var kits: any = this.dataSource.data;
           var kit = kits.find((kit) => kit["_id"] == idKit);
           var index = kits.indexOf(kit);
@@ -470,7 +471,7 @@ export class ConfiguracionProductoComponent implements OnInit {
     );
     console.log(respuesta);
     if (respuesta["codigo"] == "200") {
-      openSnackBar("Se ingresó correctamente");
+      openSnackBar("Se ingresó correctamente", this.snackBar);
       this.consultarIntereses();
       this.limpiarCampos();
     } else if (respuesta["codigo"] == "400") {
@@ -496,7 +497,7 @@ export class ConfiguracionProductoComponent implements OnInit {
           idInteres
         );
         if (respuesta["codigo"] == "200") {
-          openSnackBar("Se deshabilitó correctamente");
+          openSnackBar("Se deshabilitó correctamente", this.snackBar);
           this.consultarIntereses();
         }
       }
@@ -506,7 +507,7 @@ export class ConfiguracionProductoComponent implements OnInit {
   async habilitarInteres(idInteres) {
     var respuesta = await this.inventarioService.habilitarInteres(idInteres);
     if (respuesta["codigo"] == "200") {
-      openSnackBar("Se habilitó correctamente");
+      openSnackBar("Se habilitó correctamente", this.snackBar);
       this.consultarIntereses();
     }
   }

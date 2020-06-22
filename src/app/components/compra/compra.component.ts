@@ -28,7 +28,8 @@ export class CompraComponent implements OnInit {
     private compraService: CompraService,
     private facturaService: FacturaService,
     private router: Router,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private snackBar: MatSnackBar
   ) {
     this.myForm = new FormGroup({
       _idCabecera: new FormControl(""),
@@ -341,8 +342,9 @@ export class CompraComponent implements OnInit {
       this.myForm.get("_cantidad").value,
       "0"
     );
+    console.log(respuesta);
     if (respuesta["codigo"] == "200") {
-      openSnackBar("Se ingresó correctamente");
+      openSnackBar("Se ingresó correctamente", this.snackBar);
       this.limpiarCampos();
       this.consultarDetalleFactura();
       this.realizarCompraButton = false;
@@ -449,10 +451,10 @@ export class CompraComponent implements OnInit {
       this.myForm.get("_idCabecera").value
     );
     if (respuesta["codigo"] == "200") {
-      openSnackBar("Se eliminó correctamente");
+      openSnackBar("Se eliminó correctamente", this.snackBar);
       this.consultarDetalleFactura();
     } else if (respuesta["codigo"] == "201") {
-      openSnackBar("Factura eliminada");
+      openSnackBar("Factura eliminada", this.snackBar);
       this.consultarFacturas(true);
       this.myForm.reset();
       this.detalleCompra.data = [];

@@ -11,7 +11,8 @@ import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.compone
 import {
   MatDialog,
   MatPaginator,
-  MatTableDataSource
+  MatTableDataSource,
+  MatSnackBar
 } from "@angular/material";
 
 // Services
@@ -26,7 +27,8 @@ export class ComunidadComponent implements OnInit {
   constructor(
     private panelAdministracionService: PanelAdministracionService,
     private dialog: MatDialog,
-    private router: Router
+    private router: Router,
+    private snackBar: MatSnackBar
   ) {
     this.myForm = new FormGroup({
       _idComunidad: new FormControl(""),
@@ -100,7 +102,7 @@ export class ComunidadComponent implements OnInit {
       this.comunidades.data = comunidades;
       this.myForm.reset();
       this.panelAdministracionService.refresh$.emit();
-      openSnackBar("Se ingresó correctamente");
+      openSnackBar("Se ingresó correctamente", this.snackBar);
     } else if (comunidad["codigo"] == "400") {
       openDialog("Inténtalo de nuevo", "advertencia", this.dialog);
     } else if (comunidad["codigo"] == "418") {
@@ -135,7 +137,7 @@ export class ComunidadComponent implements OnInit {
       this.myForm.reset();
       this.botonIngresar = "ingresar";
       this.panelAdministracionService.refresh$.emit();
-      openSnackBar("Se actualizó correctamente");
+      openSnackBar("Se actualizó correctamente", this.snackBar);
     } else if (respuesta["codigo"] == "400") {
       openDialog("Inténtalo de nuevo", "advertencia", this.dialog);
     } else if (respuesta["codigo"] == "418") {
@@ -169,7 +171,7 @@ export class ComunidadComponent implements OnInit {
           this.comunidades.data = comunidades;
           this.myForm.reset();
           this.panelAdministracionService.refresh$.emit();
-          openSnackBar("Se eliminó correctamente");
+          openSnackBar("Se eliminó correctamente", this.snackBar);
         } else if (respuesta["codigo"] == "400") {
           openDialog("Inténtalo de nuevo", "advertencia", this.dialog);
         } else if (respuesta["codigo"] == "418") {

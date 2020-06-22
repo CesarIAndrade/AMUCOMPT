@@ -10,7 +10,8 @@ import { ConfirmDialogComponent } from "../confirm-dialog/confirm-dialog.compone
 import {
   MatDialog,
   MatTableDataSource,
-  MatPaginator
+  MatPaginator,
+  MatSnackBar
 } from "@angular/material";
 
 // Services
@@ -27,7 +28,8 @@ export class CantonComponent implements OnInit {
     private panelAdministracionService: PanelAdministracionService,
     private modalLocalidadSuperior: MatDialog,
     private dialog: MatDialog,
-    private router: Router
+    private router: Router,
+    private snackBar: MatSnackBar
   ) {
     this.myForm = new FormGroup({
       _idCanton: new FormControl(""),
@@ -101,7 +103,7 @@ export class CantonComponent implements OnInit {
       this.cantones.data = cantones;
       this.myForm.reset();
       this.panelAdministracionService.refresh$.emit();
-      openSnackBar("Se ingresó correctamente");
+      openSnackBar("Se ingresó correctamente", this.snackBar);
     } else if (canton["codigo"] == "400") {
       openDialog("Inténtalo de nuevo", "advertencia", this.dialog);
     } else if (canton["codigo"] == "418") {
@@ -135,7 +137,7 @@ export class CantonComponent implements OnInit {
       this.myForm.reset();
       this.botonIngresar = "ingresar";
       this.panelAdministracionService.refresh$.emit();
-      openSnackBar("Se actualizó correctamente");
+      openSnackBar("Se actualizó correctamente", this.snackBar);
     } else if (respuesta["codigo"] == "400") {
       openDialog("Inténtalo de nuevo", "advertencia", this.dialog);
     } else if (respuesta["codigo"] == "418") {
@@ -167,7 +169,7 @@ export class CantonComponent implements OnInit {
           cantones.splice(index, 1);
           this.cantones.data = cantones;
           this.panelAdministracionService.refresh$.emit();
-          openSnackBar("Se eliminó correctamente");
+          openSnackBar("Se eliminó correctamente", this.snackBar);
         } else if (respuesta["codigo"] == "400") {
           openDialog("Inténtalo de nuevo", "advertencia", this.dialog);
         } else if (respuesta["codigo"] == "418") {
