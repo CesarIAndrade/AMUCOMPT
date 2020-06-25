@@ -100,7 +100,6 @@ export class ModalAsignacionConfiguracionProductoComponent implements OnInit {
     this.tabla = [
       "codigo",
       "descripcion",
-      "presentacion",
       "contenidoNeto",
       "medida",
       "acciones",
@@ -132,7 +131,8 @@ export class ModalAsignacionConfiguracionProductoComponent implements OnInit {
       "codigo",
       "kit",
       "descripcion",
-      "presentacion",
+      "contenidoNeto",
+      "medida",
       "lote",
       "fechaExpiracion",
       "disponible",
@@ -237,7 +237,6 @@ export class ModalAsignacionConfiguracionProductoComponent implements OnInit {
     this.tabla = [
       "codigo",
       "descripcion",
-      "presentacion",
       "contenidoNeto",
       "medida",
       "acciones",
@@ -265,7 +264,6 @@ export class ModalAsignacionConfiguracionProductoComponent implements OnInit {
     this.tabla = [
       "codigo",
       "descripcion",
-      "presentacion",
       "contenidoNeto",
       "medida",
       "disponible",

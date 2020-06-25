@@ -5,6 +5,7 @@ import { Observable } from "rxjs";
 import { startWith, map } from "rxjs/operators";
 import { ModalPersonaComponent } from "../modal-persona/modal-persona.component";
 import { MatDialog, MatTableDataSource, MatPaginator } from "@angular/material";
+import { openDialog } from "src/app/functions/global";
 
 @Component({
   selector: "app-compra-rubros",
@@ -33,6 +34,7 @@ export class CompraRubrosComponent implements OnInit {
   filteredOptions: Observable<string[]>;
   placasSeleccionables: any[] = [];
   carro = false;
+  medida: string;
   loading = true;
 
   // Para la paginacion
@@ -125,12 +127,13 @@ export class CompraRubrosComponent implements OnInit {
     var respuesta = this.presentacionRubros.find(
       (item) => item.IdTipoPresentacionRubro == presentacionRubro.value
     );
-    console.log(respuesta);
-
-    respuesta.Descripcion == "CARRO"
-      ? (this.carro = true)
-      : (this.carro = false);
-
+    if (respuesta.Descripcion == "CARRO") {
+      this.medida = "Bruto";
+      this.carro = true;
+    } else if (respuesta.Descripcion == "SACO") {
+      this.medida = "Neto";
+      this.carro = false;
+    }
     this.myForm
       .get("_identificadorPresentacion")
       .setValue(respuesta.Identificador);
@@ -151,11 +154,12 @@ export class CompraRubrosComponent implements OnInit {
       this.consultarPlacas();
       this.consultarTickets();
       this.myForm.reset();
+    } else if (respuesta["codigo"] == "418") {
+      openDialog(respuesta["mensaje"], "advertencia", this.dialog);
     }
   }
 
   async eliminarTicket(idTicket) {
-    console.log(idTicket);
     var respuesta = await this.rubrosService.eliminarTicket(idTicket);
     console.log(respuesta);
     if (respuesta["codigo"] == "200") {
