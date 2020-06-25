@@ -222,50 +222,39 @@
               <ng-container matColumnDef="acciones">
                 <th colspan="2" mat-header-cell *matHeaderCellDef>Acciones</th>
                 <ng-container *matCellDef="let element">
-                  <ng-container
+                  <td mat-cell>
+                    <button
+                      mat-icon-button
+                      color="primary"
+                      type="button"
+                      (click)="mostrarProducto(element)"
+                    >
+                      <mat-icon>edit</mat-icon>
+                    </button>
+                  </td>
+                  <td
+                    mat-cell
+                    *ngIf="element.ConfigurarProductosUtilizado == '1'"
+                  ></td>
+                  <td
+                    mat-cell
                     *ngIf="element.ConfigurarProductosUtilizado == '0'"
                   >
-                    <td mat-cell>
-                      <button
-                        mat-button
-                        type="button"
-                        class="btn-outline-primary"
-                        (click)="mostrarProducto(element)"
+                    <button
+                      mat-icon-button
+                      type="button"
+                      (click)="
+                        eliminarConfiguracionProducto(
+                          element.IdConfigurarProducto,
+                          element.IdProducto
+                        )
+                      "
+                    >
+                      <mat-icon style="color: #d9534f;"
+                        >delete_outline</mat-icon
                       >
-                        <mat-icon>edit</mat-icon>
-                      </button>
-                    </td>
-                    <td mat-cell>
-                      <button
-                        mat-button
-                        type="button"
-                        class="btn-outline-danger"
-                        (click)="
-                          eliminarConfiguracionProducto(
-                            element.IdConfigurarProducto,
-                            element.IdProducto
-                          )
-                        "
-                      >
-                        <mat-icon>remove</mat-icon>
-                      </button>
-                    </td>
-                  </ng-container>
-                  <ng-container
-                    *ngIf="element.ConfigurarProductosUtilizado == '1'"
-                  >
-                    <td mat-cell>
-                      <button
-                        mat-button
-                        type="button"
-                        class="btn-outline-primary"
-                        (click)="mostrarProducto(element)"
-                      >
-                        <mat-icon>edit</mat-icon>
-                      </button>
-                    </td>
-                    <td mat-cell></td>
-                  </ng-container>
+                    </button>
+                  </td>
                 </ng-container>
               </ng-container>
               <tr

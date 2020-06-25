@@ -65,9 +65,9 @@
                     <ng-container *matCellDef="let element">
                       <td mat-cell>
                         <button
-                          mat-button
+                          mat-icon-button
+                          color="primary"
                           type="button"
-                          class="btn-outline-primary"
                           (click)="mostrarProvincia(element)"
                         >
                           <mat-icon>edit</mat-icon>
@@ -76,12 +76,11 @@
                       <td mat-cell *ngIf="!element.PermitirEliminacion"></td>
                       <td mat-cell *ngIf="element.PermitirEliminacion">
                         <button
-                          mat-button
+                          mat-icon-button
                           type="button"
-                          class="btn-outline-danger"
                           (click)="eliminarProvincia(element.IdProvincia)"
                         >
-                          <mat-icon>remove</mat-icon>
+                        <mat-icon style="color: #d9534f">delete_outline</mat-icon>
                         </button>
                       </td>
                     </ng-container>

@@ -11,42 +11,65 @@ import { MAT_DIALOG_DATA } from "@angular/material/dialog";
 export class ModalDetallePersonaComponent implements OnInit {
   constructor(@Inject(MAT_DIALOG_DATA) public data: any) {}
 
-  nombresCompletos =
-    this.data.persona.PrimerNombre +
-    " " +
-    this.data.persona.SegundoNombre +
-    " " +
-    this.data.persona.ApellidoPaterno +
-    " " +
-    this.data.persona.ApellidoMaterno;
-
-  correo = "";
-  referencia = String(this.data.persona.AsignacionPersonaParroquia[0].Referencia).toUpperCase();
-  direccion =
-    this.data.persona.AsignacionPersonaParroquia[0].Parroquia.Canton.Provincia
-      .Descripcion +
-    " - " +
-    this.data.persona.AsignacionPersonaParroquia[0].Parroquia.Canton
-      .Descripcion +
-    " - " +
-    this.data.persona.AsignacionPersonaParroquia[0].Parroquia.Descripcion;
-
-
-  sinNumero = "Sin Numero";
-  sinCorreo = "Sin Correo";
-  sinDireccion: string;
+  persona = {
+    nombres: "",
+    documento: "",
+    tipoDocumento: "",
+    telefonos: [],
+    correo: "",
+    direccion: "",
+    referencia: "",
+  };
 
   ngOnInit() {
-    if (this.data.persona.ListaCorreo.length == 0) {
-      this.correo = "Sin Correo";
-    } else {
-      this.correo = this.data.persona.ListaCorreo[0].CorreoValor;
+    var nombres =
+      this.data.persona.PrimerNombre +
+      " " +
+      this.data.persona.SegundoNombre +
+      " " +
+      this.data.persona.ApellidoPaterno +
+      " " +
+      this.data.persona.ApellidoMaterno;
+    var documento = this.data.persona.NumeroDocumento;
+    var tipoDocumento = this.data.persona.TipoDocumento;
+
+    var telefonos = [];
+    var referencia = "Sin Referencia";
+    var direccion = "Sin Dirección";
+    var correo = "Sin Correo";
+
+    try {
+      this.data.persona.ListaTelefono.map((telefono) => {
+        telefonos.push(telefono);
+      });
+      if (this.data.persona.AsignacionPersonaParroquia.length != 0) {
+        referencia = String(
+          this.data.persona.AsignacionPersonaParroquia[0].Referencia
+        ).toUpperCase();
+        direccion =
+          this.data.persona.AsignacionPersonaParroquia[0].Parroquia.Canton
+            .Provincia.Descripcion +
+          " - " +
+          this.data.persona.AsignacionPersonaParroquia[0].Parroquia.Canton
+            .Descripcion +
+          " - " +
+          this.data.persona.AsignacionPersonaParroquia[0].Parroquia.Descripcion;
+      }
+      if (this.data.persona.ListaCorreo.length != 0) {
+        correo = this.data.persona.ListaCorreo[0].CorreoValor;
+      }
+    } catch (error) {
+      console.log(error);
     }
-    if (
-      !this.direccion
-    ) {
-      this.referencia = "Sin Referencia";
-      this.direccion = "Sin Direccion";
-    }
+
+    this.persona = {
+      nombres: nombres,
+      documento: documento,
+      tipoDocumento: tipoDocumento,
+      telefonos: telefonos,
+      correo: correo,
+      direccion: direccion,
+      referencia: referencia,
+    };
   }
 }

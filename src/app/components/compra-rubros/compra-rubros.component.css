@@ -1,0 +1,9 @@
+.flex-buttons {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.flex-content {
+  display: flex;
+  flex-direction: column;
+}

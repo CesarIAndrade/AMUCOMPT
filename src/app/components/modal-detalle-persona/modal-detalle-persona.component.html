@@ -1,26 +1,26 @@
 <mat-card class="example-card">
   <mat-card-header>
-    <mat-card-title style="text-align: center">{{ nombresCompletos }}</mat-card-title>
+    <mat-card-title style="text-align: center">{{ persona.nombres }}</mat-card-title>
   </mat-card-header>
   <mat-card-content>
     <mat-list>
       <mat-list-item role="listitem">
         <mat-icon mat-list-icon>person</mat-icon>
         <mat-label>
-          <b>{{ data.persona.TipoDocumento }}: </b>
-          {{ data.persona.NumeroDocumento }}
+          <b>{{ persona.tipoDocumento }}: </b>
+          {{ persona.documento }}
         </mat-label>
       </mat-list-item>
       <mat-list-item role="listitem">
         <mat-icon mat-list-icon>alternate_email</mat-icon>
         <mat-label>
           <b>CORREO: </b>
-          {{ correo }}
+          {{ persona.correo }}
         </mat-label>
       </mat-list-item>
       <mat-list-item
         role="listitem"
-        *ngFor="let telefono of data.persona.ListaTelefono"
+        *ngFor="let telefono of persona.telefonos"
       >
         <mat-icon
           *ngIf="telefono.TipoTelefono.Descripcion == 'CELULAR'"
@@ -41,14 +41,14 @@
         <mat-icon mat-list-icon>home</mat-icon>
         <mat-label>
           <b>UBICACIÓN: </b>
-          {{ direccion }}
+          {{ persona.direccion }}
         </mat-label>
       </mat-list-item>
       <mat-list-item role="listitem">
         <mat-icon mat-list-icon>location_on</mat-icon>
         <mat-label>
           <b>DIRECCIÓN: </b>
-          {{ referencia }}
+          {{ persona.referencia }}
         </mat-label>
       </mat-list-item>
     </mat-list>

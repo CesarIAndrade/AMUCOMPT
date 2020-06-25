@@ -35,7 +35,7 @@
                     type="text"
                     placeholder="Ingrese {{ titulo }}"
                   />
-                  <button disabled mat-button matPrefix mat-icon-button>
+                  <button disabled matPrefix mat-icon-button>
                     <mat-icon>*</mat-icon>
                   </button>
                 </mat-form-field>
@@ -49,7 +49,7 @@
                       type="text"
                       placeholder="Ingrese Código kit"
                     />
-                    <button disabled mat-button matPrefix mat-icon-button>
+                    <button disabled matPrefix mat-icon-button>
                       <mat-icon>*</mat-icon>
                     </button>
                   </mat-form-field>
@@ -63,7 +63,7 @@
                       formControlName="_descuento"
                       [matAutocomplete]="auto"
                     />
-                    <button disabled mat-button matPrefix mat-icon-button>
+                    <button disabled matPrefix mat-icon-button>
                       <mat-icon>*</mat-icon>
                     </button>
                     <mat-autocomplete #auto="matAutocomplete">
@@ -77,7 +77,7 @@
                         {{ option.Porcentaje }}
                       </mat-option>
                     </mat-autocomplete>
-                    <button disabled mat-button matSuffix mat-icon-button>
+                    <button disabled matSuffix mat-icon-button>
                       <mat-icon>%&nbsp;</mat-icon>
                     </button>
                   </mat-form-field>
@@ -99,7 +99,7 @@
                       formControlName="_tasaInteres"
                       placeholder="Tasa Interés"
                     />
-                    <button disabled mat-button matSuffix mat-icon-button>
+                    <button disabled matSuffix mat-icon-button>
                       <mat-icon>%</mat-icon>
                     </button>
                   </mat-form-field>
@@ -118,7 +118,7 @@
                       formControlName="_tasaInteresMora"
                       placeholder="Tasa Interés"
                     />
-                    <button disabled mat-button matSuffix mat-icon-button>
+                    <button disabled matSuffix mat-icon-button>
                       <mat-icon>%</mat-icon>
                     </button>
                   </mat-form-field>
@@ -205,24 +205,22 @@
                           <ng-container *ngIf="!element.estado">
                             <td mat-cell>
                               <button
-                                mat-button
+                                mat-icon-button
                                 type="button"
-                                class="btn-outline-success"
                                 (click)="habilitarInteres(element._id)"
                               >
-                                <mat-icon>add</mat-icon>
+                                <mat-icon style="color: #02B875">power_settings_new</mat-icon>
                               </button>
                             </td>
                           </ng-container>
                           <ng-container *ngIf="element.estado">
                             <td mat-cell>
                               <button
-                                mat-button
+                                mat-icon-button
                                 type="button"
-                                class="btn-outline-danger"
                                 (click)="eliminarCampo(element._id)"
                               >
-                                <mat-icon>remove</mat-icon>
+                                <mat-icon style="color: #d9534f">delete_outline</mat-icon>
                               </button>
                             </td>
                           </ng-container>
@@ -234,12 +232,11 @@
                           <ng-container *ngIf="element.utilizado == '0'">
                             <td mat-cell>
                               <button
-                                mat-button
+                                mat-icon-button
                                 type="button"
-                                class="btn-outline-danger"
                                 (click)="eliminarCampo(element._id)"
                               >
-                                <mat-icon>remove</mat-icon>
+                              <mat-icon style="color: #d9534f">delete_outline</mat-icon>
                               </button>
                             </td>
                           </ng-container>

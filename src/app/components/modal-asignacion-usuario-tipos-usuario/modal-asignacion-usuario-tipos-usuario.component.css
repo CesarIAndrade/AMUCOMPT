@@ -5,11 +5,3 @@
 th {
   background-color: #f8f9fa;
 }
-
-.example-spacer {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  flex: 1 1 auto;
-}
-

@@ -28,7 +28,7 @@
                   (click)="abrirModal()"
                 >
                   <mat-icon>
-                    location_on
+                    add_location
                   </mat-icon>
                 </button>
               </mat-form-field>
@@ -101,41 +101,27 @@
                       Acciones
                     </th>
                     <ng-container *matCellDef="let element">
-                      <ng-container *ngIf="element.PermitirEliminacion">
-                        <td mat-cell>
-                          <button
-                            mat-button
-                            type="button"
-                            class="btn-outline-primary"
-                            (click)="mostrarCanton(element)"
-                          >
-                            <mat-icon>edit</mat-icon>
-                          </button>
-                        </td>
-                        <td mat-cell>
-                          <button
-                            mat-button
-                            type="button"
-                            class="btn-outline-danger"
-                            (click)="eliminarCanton(element.IdCanton)"
-                          >
-                            <mat-icon>remove</mat-icon>
-                          </button>
-                        </td>
-                      </ng-container>
-                      <ng-container *ngIf="!element.PermitirEliminacion">
-                        <td mat-cell>
-                          <button
-                            mat-button
-                            type="button"
-                            class="btn-outline-primary btn-block"
-                            (click)="mostrarCanton(element)"
-                          >
-                            <mat-icon>edit</mat-icon>
-                          </button>
-                        </td>
-                        <td mat-cell></td>
-                      </ng-container>
+                      <td mat-cell>
+                        <button
+                          mat-icon-button
+                          color="primary"
+                          type="button"
+                          (click)="mostrarCanton(element)"
+                        >
+                          <mat-icon>edit</mat-icon>
+                        </button>
+                      </td>
+                      <td mat-cell *ngIf="!element.PermitirEliminacion"></td>
+                      <td mat-cell *ngIf="element.PermitirEliminacion">
+                        <button
+                          mat-icon-button
+                      
+                          type="button"
+                          (click)="eliminarCanton(element.IdCanton)"
+                        >
+                        <mat-icon style="color: #d9534f">delete_outline</mat-icon>
+                        </button>
+                      </td>
                     </ng-container>
                   </ng-container>
                   <tr

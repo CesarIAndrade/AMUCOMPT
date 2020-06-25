@@ -1,43 +1,39 @@
 <mat-dialog-content>
   <h5 style="text-align: center;">Asignar Role(s)</h5>
-  <div class="example-spacer">
-    <mat-form-field>
-      <mat-label>Tipos Usuario</mat-label>
-      <mat-select
-        (selectionChange)="seleccionarTipoUsuario($event)"
-        [(ngModel)]="tipoUsuario"
-      >
-        <mat-option
-          *ngFor="let item of tipoUsuarios"
-          [value]="item.IdTipoUsuario"
-        >
-          {{ item.Descripcion }}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-    <button
-      [disabled]="tipoUsuarioSelecionado"
-      mat-button
-      mat-icon-button
-      type="button"
-      class="btn-outline-warning mt-2 ml-3"
-      (click)="asignarTipoUsuario()"
+  <mat-form-field class="example-full-width">
+    <mat-label>Tipos Usuario</mat-label>
+    <mat-select
+      (selectionChange)="seleccionarTipoUsuario($event)"
+      [(ngModel)]="tipoUsuario"
     >
-      <mat-icon>add</mat-icon>
-    </button>
-  </div>
-
+      <mat-option
+        *ngFor="let item of tipoUsuarios"
+        [value]="item.IdTipoUsuario"
+      >
+        {{ item.Descripcion }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <button
+    [disabled]="tipoUsuarioSelecionado"
+    mat-button
+    type="button"
+    (click)="asignarTipoUsuario()"
+    class="btn-outline-success btn-block"
+  >
+    <mat-icon>playlist_add</mat-icon>
+    Agregar
+  </button>
   <mat-nav-list *ngFor="let tipo of listaTipoUsuario">
     <mat-list-item>
       <span mat-line> {{ tipo.TipoUsuario.Descripcion }}</span>
       <span class="example-spacer"></span>
       <button
-        mat-button
-        class="btn-outline-danger"
+        mat-icon-button
         (click)="eliminarTipoUsuario(tipo.IdAsignacionTUEncriptada)"
       >
-        <mat-icon>
-          remove
+        <mat-icon style="color: #d9534f;">
+          delete_outline
         </mat-icon>
       </button>
     </mat-list-item>

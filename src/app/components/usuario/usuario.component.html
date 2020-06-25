@@ -4,33 +4,30 @@
       <div class="row">
         <div class="col-lg-4">
           <h5 style="text-align: center;">{{ nuevoUsuario }}</h5>
-          <div class="row">
-            <div class="col-lg-9 col-md-10">
-              <mat-form-field class="example-full-width">
-                <input
-                  matInput
-                  formControlName="_cedula"
-                  type="text"
-                  placeholder="Cédula"
-                  readonly
-                  aria-disabled="true"
-                />
-                <button disabled mat-button matPrefix mat-icon-button>
-                  <mat-icon>*</mat-icon>
-                </button>
-              </mat-form-field>
-            </div>
-            <div class="col-lg-3 col-md-2">
-              <button
-                mat-button
-                class="mt-2 btn-outline-warning"
-                type="button"
-                (click)="abrirModalAsignacionUsuarioPersona()"
-              >
-                <mat-icon>person_add</mat-icon>
-              </button>
-            </div>
-          </div>
+          <mat-form-field class="example-full-width">
+            <input
+              matInput
+              formControlName="_cedula"
+              type="text"
+              placeholder="Cédula"
+              readonly
+              aria-disabled="true"
+            />
+            <button disabled matPrefix mat-icon-button>
+              <mat-icon>*</mat-icon>
+            </button>
+            <button
+              mat-icon-button
+              matSuffix
+              tooltip="Seleccionar Persona"
+              placement="top"
+              hide-delay="1"
+              type="button"
+              (click)="abrirModalAsignacionUsuarioPersona()"
+            >
+              <mat-icon style="color: #f0ad4e;">person_add</mat-icon>
+            </button>
+          </mat-form-field>
           <div class="row">
             <div class="col-lg-12 col-md-6">
               <mat-form-field class="example-full-width">
@@ -41,7 +38,7 @@
                   type="text"
                   readonly
                 />
-                <button disabled mat-button matPrefix mat-icon-button>
+                <button disabled matPrefix mat-icon-button>
                   <mat-icon>*</mat-icon>
                 </button>
               </mat-form-field>
@@ -55,7 +52,7 @@
                   type="text"
                   readonly
                 />
-                <button disabled mat-button matPrefix mat-icon-button>
+                <button disabled matPrefix mat-icon-button>
                   <mat-icon>*</mat-icon>
                 </button>
               </mat-form-field>
@@ -71,7 +68,7 @@
                   type="text"
                   placeholder="Ingrese Usuario"
                 />
-                <button disabled mat-button matPrefix mat-icon-button>
+                <button disabled matPrefix mat-icon-button>
                   <mat-icon>*</mat-icon>
                 </button>
               </mat-form-field>
@@ -89,11 +86,10 @@
                 <mat-hint align="end">{{
                   contrasena.value?.length || 0
                 }}</mat-hint>
-                <button disabled mat-button matPrefix mat-icon-button>
+                <button disabled matPrefix mat-icon-button>
                   <mat-icon>*</mat-icon>
                 </button>
                 <button
-                  mat-button
                   matSuffix
                   type="button"
                   mat-icon-button
@@ -133,7 +129,7 @@
               type="text"
               placeholder="Buscar Usuario"
             />
-            <button mat-button matPrefix mat-icon-button>
+            <button matPrefix mat-icon-button>
               <mat-icon>search</mat-icon>
             </button>
           </mat-form-field>
@@ -170,20 +166,19 @@
                   <ng-container *ngIf="element.EstadoUsuario">
                     <td mat-cell>
                       <button
-                        mat-button
-                        class="btn-outline-warning"
+                        mat-icon-button
                         type="button"
                         (click)="
                           abrirModalAsignacionUsuarioTiposUsuario(element)
                         "
                       >
-                        <mat-icon>person</mat-icon>
+                        <mat-icon style="color: #f0ad4e;">person</mat-icon>
                       </button>
                     </td>
                     <td mat-cell>
                       <button
-                        mat-button
-                        class="btn-outline-primary"
+                        mat-icon-button
+                        color="primary"
                         type="button"
                         (click)="mostrarUsuario(element)"
                       >
@@ -192,23 +187,23 @@
                     </td>
                     <td mat-cell>
                       <button
-                        mat-button
-                        class="btn-outline-danger"
+                        mat-icon-button
                         type="button"
                         (click)="eliminarUsuario(element)"
                       >
-                        <mat-icon>remove</mat-icon>
+                        <mat-icon style="color: #d9534f;"
+                          >delete_outline</mat-icon
+                        >
                       </button>
                     </td>
                   </ng-container>
                   <ng-container *ngIf="!element.EstadoUsuario">
                     <td mat-cell colspan="3">
                       <button
-                        mat-button
+                        mat-icon-button
                         type="button"
                         (click)="habilitarUsuario(element)"
-                        style="justify-content: center;"
-                        class="btn-outline-success btn-block"
+                        style="justify-content: center; color: #02b875;"
                       >
                         <mat-icon>how_to_reg</mat-icon>
                       </button>

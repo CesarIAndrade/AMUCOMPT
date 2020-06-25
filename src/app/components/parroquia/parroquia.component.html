@@ -28,7 +28,7 @@
                   (click)="abrirModal()"
                 >
                   <mat-icon>
-                    location_on
+                    add_location
                   </mat-icon>
                 </button>
               </mat-form-field>
@@ -99,41 +99,27 @@
                       Acciones
                     </th>
                     <ng-container *matCellDef="let element">
-                      <ng-container *ngIf="element.PermitirEliminacion">
-                        <td mat-cell>
-                          <button
-                            mat-button
-                            type="button"
-                            (click)="mostrarParroquia(element)"
-                            class="btn-outline-primary"
-                          >
-                            <mat-icon>edit</mat-icon>
-                          </button>
-                        </td>
-                        <td mat-cell>
-                          <button
-                            mat-button
-                            type="button"
-                            class="btn-outline-danger"
-                            (click)="eliminarParroquia(element.IdParroquia)"
-                          >
-                            <mat-icon>remove</mat-icon>
-                          </button>
-                        </td>
-                      </ng-container>
-                      <ng-container *ngIf="!element.PermitirEliminacion">
-                        <td mat-cell>
-                          <button
-                            mat-button
-                            type="button"
-                            (click)="mostrarParroquia(element)"
-                            class="btn-outline-primary btn-block"
-                          >
-                            <mat-icon>edit</mat-icon>
-                          </button>
-                        </td>
-                        <td mat-cell></td>
-                      </ng-container>
+                      <td mat-cell>
+                        <button
+                          mat-button
+                          type="button"
+                          (click)="mostrarParroquia(element)"
+                          class="btn-outline-primary"
+                        >
+                          <mat-icon>edit</mat-icon>
+                        </button>
+                      </td>
+                      <td mat-cell *ngIf="!element.PermitirEliminacion"></td>
+                      <td mat-cell *ngIf="element.PermitirEliminacion">
+                        <button
+                          mat-icon-button
+                          color="warn"
+                          type="button"
+                          (click)="eliminarParroquia(element.IdParroquia)"
+                        >
+                          <mat-icon>delete_outline</mat-icon>
+                        </button>
+                      </td>
                     </ng-container>
                   </ng-container>
                   <tr

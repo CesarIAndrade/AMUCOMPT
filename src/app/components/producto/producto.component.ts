@@ -86,6 +86,7 @@ export class ProductoComponent implements OnInit {
 
   async consultarProductos() {
     var respuesta = await this.inventarioService.consultarConfiguracionProducto();
+    console.log(respuesta);
     if (respuesta["codigo"] == "200") {
       var productos: any = [];
       respuesta["respuesta"].map((producto) => {
@@ -166,7 +167,7 @@ export class ProductoComponent implements OnInit {
 
   async crearConfiguracionProducto(idProducto) {
     var configuracionProducto = await this.inventarioService.crearConfiguracionProducto(
-      localStorage.getItem("miCuenta.idAsignacionTipoUsuario"),
+      localStorage.getItem("miCuenta.idAsignacionTipoUsuario"), 
       idProducto,
       this.myForm.get("_medida").value,
       this.myForm.get("_presentacion").value,
@@ -174,6 +175,7 @@ export class ProductoComponent implements OnInit {
       this.myForm.get("_contenidoNeto").value,
       this.myForm.get("_iva").value
     );
+    console.log(configuracionProducto);
     if (configuracionProducto["codigo"] == "200") {
       this.crearPrecio(
         configuracionProducto["respuesta"].IdConfigurarProducto,
@@ -187,6 +189,7 @@ export class ProductoComponent implements OnInit {
       idConfigurarProducto,
       this.myForm.get("_precio").value
     );
+    console.log(precio);
     if (precio["codigo"] == "200") {
       if (flag) {
         openSnackBar("Se ingresó correctamente", this.snackBar);

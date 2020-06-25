@@ -43,9 +43,9 @@
         <ng-container *ngIf="element.Acciones == 'false'">
           <td mat-cell>
             <button
-              mat-button
+              mat-icon-button
+              color="accent"
               type="button"
-              class="btn-outline-info"
               (click)="abrirModal(element)"
             >
               <mat-icon>visibility</mat-icon>
@@ -53,9 +53,9 @@
           </td>
           <td mat-cell>
             <button
-              mat-button
+              mat-icon-button
+              color="primary"
               type="button"
-              class="btn-outline-primary"
               (click)="mostrarPersona(element)"
             >
               <mat-icon>edit</mat-icon>
@@ -65,8 +65,9 @@
         <ng-container *ngIf="element.Acciones == 'true'">
           <td mat-cell>
             <button
-              mat-button
-              class="btn-outline-warning"
+              mat-icon-button
+              color="accent"
+              type="button"
               (click)="seleccionarPersona(element)"
             >
               <mat-icon>person_add</mat-icon>

@@ -79,66 +79,58 @@
                   </mat-option>
                 </mat-select>
               </mat-form-field>
-              <div class="row">
-                <div class="col-lg-9 col-md-10">
-                  <mat-form-field class="example-full-width">
-                    <input
-                      readonly
-                      matInput
-                      placeholder="Producto"
-                      formControlName="_producto"
-                    />
-                    <button disabled mat-button matPrefix mat-icon-button>
-                      <mat-icon>*</mat-icon>
-                    </button>
-                  </mat-form-field>
-                </div>
-                <div class="col-lg-3 col-md-2">
-                  <button
-                    [disabled]="buttonSeleccionarProducto"
-                    type="button"
-                    mat-button
-                    class="mt-2 btn-outline-warning"
-                    (click)="seleccionarProducto()"
-                  >
-                    <mat-icon>add</mat-icon>
-                  </button>
-                </div>
-              </div>
+              <mat-form-field class="example-full-width">
+                <input
+                  readonly
+                  matInput
+                  placeholder="Producto"
+                  formControlName="_producto"
+                />
+                <button disabled matPrefix mat-icon-button>
+                  <mat-icon>*</mat-icon>
+                </button>
+                <button
+                  tooltip="Seleccionar Producto"
+                  placement="top"
+                  hide-delay="1"
+                  [disabled]="buttonSeleccionarProducto"
+                  (click)="seleccionarProducto()"
+                  matSuffix
+                  mat-icon-button
+                >
+                  <mat-icon style="color: #f0ad4e;">add_box</mat-icon>
+                </button>
+              </mat-form-field>
             </div>
             <div class="col-lg-5">
-              <div class="row">
-                <div class="col-lg-9 col-md-10">
-                  <mat-form-field class="example-full-width">
-                    <input
-                      type="text"
-                      placeholder="Lote"
-                      matInput
-                      formControlName="_lote"
-                    />
-                    <button
-                      type="button"
-                      [hidden]="clearFieldLote"
-                      mat-button
-                      matPrefix
-                      mat-icon-button
-                    >
-                      <mat-icon (click)="limpiarFechaYLote()">clear</mat-icon>
-                    </button>
-                  </mat-form-field>
-                </div>
-                <div class="col-lg-3 col-md-2">
-                  <button
-                    mat-button
-                    type="button"
-                    [disabled]="buttonSeleccionarLote"
-                    (click)="seleccionarLote()"
-                    class="mt-2 btn-outline-danger"
-                  >
-                    <mat-icon>add</mat-icon>
-                  </button>
-                </div>
-              </div>
+              <mat-form-field class="example-full-width">
+                <input
+                  type="text"
+                  placeholder="Lote"
+                  matInput
+                  formControlName="_lote"
+                />
+                <button
+                  type="button"
+                  [hidden]="clearFieldLote"
+                  matPrefix
+                  mat-icon-button
+                >
+                  <mat-icon (click)="limpiarFechaYLote()">clear</mat-icon>
+                </button>
+                <button
+                  tooltip="Seleccionar Lote"
+                  placement="top"
+                  hide-delay="1"
+                  mat-icon-button
+                  matSuffix
+                  type="button"
+                  [disabled]="buttonSeleccionarLote"
+                  (click)="seleccionarLote()"
+                >
+                  <mat-icon style="color: #f0ad4e;">library_add</mat-icon>
+                </button>
+              </mat-form-field>
               <mat-form-field class="example-full-width">
                 <input
                   matInput
@@ -170,7 +162,7 @@
                       formControlName="_cantidad"
                       placeholder="Cantidad"
                     />
-                    <button disabled mat-button matPrefix mat-icon-button>
+                    <button disabled matPrefix mat-icon-button>
                       <mat-icon>*</mat-icon>
                     </button>
                   </mat-form-field>
@@ -183,7 +175,7 @@
                       formControlName="_precio"
                       placeholder="Precio"
                     />
-                    <button disabled mat-button matPrefix mat-icon-button>
+                    <button disabled matPrefix mat-icon-button>
                       <mat-icon>*</mat-icon>
                     </button>
                   </mat-form-field>
@@ -229,13 +221,17 @@
                   </td>
                 </ng-container>
                 <ng-container matColumnDef="descripcion">
-                  <th mat-header-cell class="p-3" *matHeaderCellDef>Descripción</th>
+                  <th mat-header-cell class="p-3" *matHeaderCellDef>
+                    Descripción
+                  </th>
                   <td mat-cell *matCellDef="let element">
                     {{ element.Producto }} {{ element.Presentacion }}
                   </td>
                 </ng-container>
                 <ng-container matColumnDef="contenido">
-                  <th mat-header-cell class="p-2" *matHeaderCellDef>Presentación</th>
+                  <th mat-header-cell class="p-2" *matHeaderCellDef>
+                    Presentación
+                  </th>
                   <td mat-cell *matCellDef="let element">
                     {{ element.ContenidoNeto }}
                     {{ element.Medida }}
@@ -266,7 +262,7 @@
                     {{ element.Precio }}
                   </td>
                 </ng-container>
-                <ng-container matColumnDef="cantidad"> 
+                <ng-container matColumnDef="cantidad">
                   <th mat-header-cell class="p-2" *matHeaderCellDef>Cant</th>
                   <td mat-cell *matCellDef="let element">
                     <input
@@ -282,7 +278,7 @@
                       type="number"
                       value="{{ element.Cantidad }}"
                     />
-                  </td> 
+                  </td>
                 </ng-container>
                 <ng-container matColumnDef="total">
                   <th mat-header-cell class="p-2" *matHeaderCellDef>Total</th>
@@ -291,17 +287,20 @@
                   </td>
                 </ng-container>
                 <ng-container matColumnDef="acciones">
-                  <th mat-header-cell class="p-2"  *matHeaderCellDef>
-                    <mat-icon class="mt-1">delete_outline</mat-icon>
+                  <th mat-header-cell *matHeaderCellDef>
+                    <mat-icon class="mt-1" style="color: #d9534f;"
+                      >delete_outline</mat-icon
+                    >
                   </th>
                   <td mat-cell *matCellDef="let element">
                     <button
-                      mat-button
+                      mat-icon-button
                       type="button"
-                      class="btn-outline-danger"
                       (click)="quitarDetalleFactura(element.IdDetalleFactura)"
                     >
-                      <mat-icon>remove</mat-icon>
+                      <mat-icon style="color: #d9534f;"
+                        >delete_outline</mat-icon
+                      >
                     </button>
                   </td>
                 </ng-container>
@@ -352,13 +351,14 @@
                   </td>
                 </ng-container>
                 <ng-container matColumnDef="acciones">
-                  <th colspan="2" mat-header-cell class="p-2" *matHeaderCellDef>Acciones</th>
+                  <th colspan="2" mat-header-cell class="p-2" *matHeaderCellDef>
+                    Acciones
+                  </th>
                   <ng-container *matCellDef="let element">
                     <td mat-cell>
                       <button
-                        mat-button
-                        class="btn-outline-primary"
-
+                        mat-icon-button
+                        color="primary"
                         (click)="mostrarDetallesFactura(element)"
                       >
                         <mat-icon>format_line_spacing</mat-icon>
@@ -366,12 +366,12 @@
                     </td>
                     <td mat-cell>
                       <button
-                        mat-button
-                        class="btn-outline-danger"
-
+                        mat-icon-button
                         (click)="eliminarFactura(element)"
                       >
-                        <mat-icon>remove</mat-icon>
+                        <mat-icon style="color: #d9534f;"
+                          >delete_outline</mat-icon
+                        >
                       </button>
                     </td>
                   </ng-container>
@@ -426,10 +426,12 @@
                   </td>
                 </ng-container>
                 <ng-container matColumnDef="acciones">
-                  <th mat-header-cell class="p-2" *matHeaderCellDef>Acciones</th>
+                  <th mat-header-cell class="p-2" *matHeaderCellDef>
+                    Acciones
+                  </th>
                   <ng-container *matCellDef="let element">
                     <td mat-cell>
-                      <button mat-button class="btn-outline-primary">
+                      <button mat-icon-button color="accent">
                         <mat-icon>visibility</mat-icon>
                       </button>
                     </td>

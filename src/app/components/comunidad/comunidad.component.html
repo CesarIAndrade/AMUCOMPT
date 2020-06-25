@@ -29,7 +29,7 @@
                   (click)="abrirModal()"
                 >
                   <mat-icon>
-                    location_on
+                    add_location
                   </mat-icon>
                 </button>
               </mat-form-field>
@@ -101,41 +101,27 @@
                         Acciones
                       </th>
                       <ng-container *matCellDef="let element">
-                        <ng-container *ngIf="element.PermitirEliminacion">
-                          <td mat-cell>
-                            <button
-                              mat-button
-                              type="button"
-                              (click)="mostrarComunidad(element)"
-                              class="btn-outline-primary"
-                            >
-                              <mat-icon>edit</mat-icon>
-                            </button>
-                          </td>
-                          <td mat-cell>
-                            <button
-                              mat-button
-                              type="button"
-                              class="btn-outline-danger"
-                              (click)="eliminarComunidad(element.IdComunidad)"
-                            >
-                              <mat-icon>remove</mat-icon>
-                            </button>
-                          </td>
-                        </ng-container>
-                        <ng-container *ngIf="!element.PermitirEliminacion">
-                          <td mat-cell>
-                            <button
-                              mat-button
-                              type="button"
-                              (click)="mostrarComunidad(element)"
-                              class="btn-outline-primary btn-block"
-                            >
-                              <mat-icon>edit</mat-icon>
-                            </button>
-                          </td>
-                          <td mat-cell></td>
-                        </ng-container>
+                        <td mat-cell>
+                          <button
+                            mat-icon-button
+                            color="primary"
+                            type="button"
+                            (click)="mostrarComunidad(element)"
+                          >
+                            <mat-icon>edit</mat-icon>
+                          </button>
+                        </td>
+                        <td mat-cell *ngIf="!element.PermitirEliminacion"></td>
+                        <td mat-cell *ngIf="element.PermitirEliminacion">
+                          <button
+                            mat-icon-button
+                        
+                            type="button"
+                            (click)="eliminarComunidad(element.IdComunidad)"
+                          >
+                            <mat-icon>delete_outline</mat-icon>
+                          </button>
+                        </td>
                       </ng-container>
                     </ng-container>
                   </ng-container>

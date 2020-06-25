@@ -1,10 +1,10 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ViewChild } from "@angular/core";
 import { RubrosService } from "src/app/services/rubros.service";
 import { FormGroup, FormControl } from "@angular/forms";
 import { Observable } from "rxjs";
 import { startWith, map } from "rxjs/operators";
 import { ModalPersonaComponent } from "../modal-persona/modal-persona.component";
-import { MatDialog } from "@angular/material";
+import { MatDialog, MatTableDataSource, MatPaginator } from "@angular/material";
 
 @Component({
   selector: "app-compra-rubros",
@@ -32,6 +32,12 @@ export class CompraRubrosComponent implements OnInit {
   placas: any[] = [];
   filteredOptions: Observable<string[]>;
   placasSeleccionables: any[] = [];
+  carro = false;
+  loading = true;
+
+  // Para la paginacion
+  @ViewChild("paginator", { static: false }) paginator: MatPaginator;
+  tickets = new MatTableDataSource<Element[]>();
 
   async consultarRubros() {
     var respuesta = await this.rubrosService.consultarRubros();
@@ -47,10 +53,35 @@ export class CompraRubrosComponent implements OnInit {
     }
   }
 
+  async consultarTickets() {
+    var respuesta = await this.rubrosService.consultarTickets();
+    console.log(respuesta);
+    if (respuesta["codigo"] == "200") {
+      this.loading = false;
+      this.tickets.data = respuesta["respuesta"];
+      this.tickets.paginator = this.paginator;
+    }
+  }
+
+  // Codigo: "AMUCOMT 0001"
+  // Estado: true
+  // FechaIngreso: "2020-06-23T21:33:00"
+  // PesoBruto: 10
+
+  // _TipoPresentacionRubro:
+  // Descripcion: "CARRO"
+
+  // _TipoRubro:
+  // Descripcion: "MAIZ"
+
+  // _Vehiculo:
+  // Placa: "geh944"
+
   async consultarPlacas() {
     var respuesta = await this.rubrosService.consultarPlacas();
     if (respuesta["codigo"] == "200") {
       this.placas = respuesta["respuesta"];
+      this.placasSeleccionables = this.placas;
       this.filteredOptions = this.myForm
         .get("_placaVehiculo")
         .valueChanges.pipe(
@@ -63,7 +94,7 @@ export class CompraRubrosComponent implements OnInit {
   private _filter(value: string): string[] {
     const filterValue = value;
     return this.placasSeleccionables.filter((option) =>
-      option.Descripcion.toLowerCase().includes(filterValue)
+      option.Placa.toLowerCase().includes(filterValue)
     );
   }
 
@@ -94,6 +125,12 @@ export class CompraRubrosComponent implements OnInit {
     var respuesta = this.presentacionRubros.find(
       (item) => item.IdTipoPresentacionRubro == presentacionRubro.value
     );
+    console.log(respuesta);
+
+    respuesta.Descripcion == "CARRO"
+      ? (this.carro = true)
+      : (this.carro = false);
+
     this.myForm
       .get("_identificadorPresentacion")
       .setValue(respuesta.Identificador);
@@ -110,12 +147,36 @@ export class CompraRubrosComponent implements OnInit {
       this.myForm.get("_idCliente").value
     );
     console.log(respuesta);
+    if (respuesta["codigo"] == "200") {
+      this.consultarPlacas();
+      this.consultarTickets();
+      this.myForm.reset();
+    }
+  }
+
+  async eliminarTicket(idTicket) {
+    console.log(idTicket);
+    var respuesta = await this.rubrosService.eliminarTicket(idTicket);
+    console.log(respuesta);
+    if (respuesta["codigo"] == "200") {
+      this.consultarPlacas();
+      this.consultarTickets();
+    }
   }
 
   ngOnInit() {
     this.consultarRubros();
     this.consultarPresentacionRubros();
     this.consultarPlacas();
+    this.consultarTickets();
   }
+
+  tablaTickets = [
+    "codigo",
+    "rubro",
+    "presentacion",
+    "placa",
+    "pesoBruto",
+    "acciones",
+  ];
 }
- 

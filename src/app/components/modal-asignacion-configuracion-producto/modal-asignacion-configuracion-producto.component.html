@@ -2,7 +2,13 @@
   <div>
     <h5 style="text-align: center;">Lista Productos {{ nombreKit }}</h5>
     <mat-form-field class="example-full-width">
-      <input matInput (keyup)='search($event.target.value)' type="text" name="buscarProducto" placeholder="Buscar Producto" />
+      <input
+        matInput
+        (keyup)="search($event.target.value)"
+        type="text"
+        name="buscarProducto"
+        placeholder="Buscar Producto"
+      />
       <button disabled matPrefix mat-icon-button>
         <mat-icon>search</mat-icon>
       </button>
@@ -58,12 +64,8 @@
         <ng-container matColumnDef="acciones">
           <th mat-header-cell *matHeaderCellDef>Acciones</th>
           <td mat-cell *matCellDef="let element">
-            <button
-              mat-button
-              color="warn"
-              (click)="agregarDetalle(element)"
-            >
-              <mat-icon>add</mat-icon>
+            <button mat-icon-button (click)="agregarDetalle(element)">
+              <mat-icon style="color: #02b875;">add_shopping_cart</mat-icon>
             </button>
           </td>
         </ng-container>
@@ -73,14 +75,16 @@
       <div class="spinner-container" *ngIf="loading">
         <mat-spinner></mat-spinner>
       </div>
-      <mat-paginator
-        #paginator
-        [pageSize]="4"
-      ></mat-paginator>
+      <mat-paginator #paginator [pageSize]="4"></mat-paginator>
       <div class="row" [hidden]="permitirAnadir">
         <div class="col-lg-6 col-md-6 col-sm-6">
           <mat-form-field class="example-full-width">
-            <input matInput type="number" placeholder="Cantidad" [(ngModel)]="cantidad"/>
+            <input
+              matInput
+              type="number"
+              placeholder="Cantidad"
+              [(ngModel)]="cantidad"
+            />
           </mat-form-field>
         </div>
         <div class="mt-2 col-lg-6 col-md-6 col-sm-6">
@@ -91,7 +95,7 @@
             (click)="cerrarModal()"
             class="bg-warning text-white btn-block"
           >
-          Enviar
+            Enviar
           </button>
         </div>
       </div>
