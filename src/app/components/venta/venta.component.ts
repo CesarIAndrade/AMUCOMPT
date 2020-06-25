@@ -164,6 +164,10 @@ export class VentaComponent implements OnInit {
       this.pago = "Efectivo";
       this.myForm.enable();
       this.myForm.get("_checkedDescuento").disable();
+      this.subTotalFactura = "0";
+      this.totalDescontado = "0'";
+      this.totalIva = "0";
+      this.totalFactura = "0";
     }
   }
 
@@ -555,6 +559,10 @@ export class VentaComponent implements OnInit {
       this.buttonAgregarDetalle = true;
       this.buttonGenerarFactura = false;
       this.selectTipoCompra = true;
+      this.subTotalFactura = "0";
+      this.totalDescontado = "0'";
+      this.totalIva = "0";
+      this.totalFactura = "0";
     }
   }
 

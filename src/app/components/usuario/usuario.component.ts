@@ -209,7 +209,7 @@ export class UsuarioComponent implements OnInit {
 
   reasignarClientes(usuario) {
     const dialogRef = this.dialog.open(ModalReasignarClientesComponent, {
-      width: "350px",
+      width: "auto",
       height: "auto",
       data: {
         usuario: usuario,

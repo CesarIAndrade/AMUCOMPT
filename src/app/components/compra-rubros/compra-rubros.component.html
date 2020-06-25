@@ -1,1 +1,116 @@
-<p>compra-rubros works!</p>
+<div class="container">
+  <div class="card-body">
+    <form [formGroup]="myForm" (ngSubmit)="crearTicket()" novalidate>
+      <div class="row">
+        <div class="col-lg-10 offset-lg-1">
+          <div class="row">
+            <div class="col-lg-6 col-md-6">
+              <mat-form-field class="example-full-width">
+                <mat-label>Rubro</mat-label>
+                <mat-select
+                  formControlName="_rubro"
+                  (selectionChange)="selecionarRubro($event)"
+                >
+                  <mat-option
+                    *ngFor="let item of rubros"
+                    [value]="item.IdTipoRubro"
+                  >
+                    {{ item.Descripcion }}
+                  </mat-option>
+                </mat-select>
+                <button disabled mat-button matPrefix mat-icon-button>
+                  <mat-icon>*</mat-icon>
+                </button>
+              </mat-form-field>
+            </div>
+            <div class="col-lg-6 col-md-6">
+              <mat-form-field class="example-full-width">
+                <mat-label>Presentación</mat-label>
+                <mat-select
+                  formControlName="_presentacionRubro"
+                  (selectionChange)="seleccionarPresentacionRubros($event)"
+                >
+                  <mat-option
+                    *ngFor="let item of presentacionRubros"
+                    [value]="item.IdTipoPresentacionRubro"
+                  >
+                    {{ item.Descripcion }}
+                  </mat-option>
+                </mat-select>
+                <button disabled mat-button matPrefix mat-icon-button>
+                  <mat-icon>*</mat-icon>
+                </button>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-6 col-md-6">
+              <mat-form-field class="example-full-width">
+                <input
+                  matInput
+                  formControlName="_placaVehiculo"
+                  name="placaVehiculo"
+                  type="text"
+                  placeholder="Placa Vehiculo"
+                  [matAutocomplete]="auto"
+                />
+                <button disabled mat-button matPrefix mat-icon-button>
+                  <mat-icon>*</mat-icon>
+                </button>
+                <mat-autocomplete #auto="matAutocomplete">
+                  <mat-option
+                    (onSelectionChange)="seleccionarPlacaVehiculo(option)"
+                    *ngFor="let option of filteredOptions | async"
+                    [value]="option.Placa"
+                  >
+                    {{ option.Placa }}
+                  </mat-option>
+                </mat-autocomplete>
+              </mat-form-field>
+            </div>
+            <div class="col-lg-6 col-md-6">
+              <mat-form-field class="example-full-width">
+                <input
+                  matInput
+                  type="text"
+                  placeholder="Peso Bruto"
+                  formControlName="_pesoBruto"
+                />
+                <button disabled mat-button matPrefix mat-icon-button>
+                  <mat-icon>*</mat-icon>
+                </button>
+              </mat-form-field>
+            </div>
+          </div>
+          <mat-form-field class="example-full-width">
+            <input
+              readonly
+              matInput
+              type="text"
+              placeholder="Cliente"
+              formControlName="_cliente"
+            />
+            <button
+              tooltip="Seleccionar Cliente"
+              mat-button
+              matSuffix
+              mat-icon-button
+              type="button"
+              (click)="seleccionarPersona()"
+            >
+              <mat-icon>person_add</mat-icon>
+            </button>
+          </mat-form-field>
+          <button
+            mat-button
+            type="submit"
+            [disabled]="myForm.invalid"
+            class="btn-outline-success btn-block"
+          >
+            Guardar
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

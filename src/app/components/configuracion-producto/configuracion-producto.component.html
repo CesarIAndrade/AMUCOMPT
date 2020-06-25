@@ -55,7 +55,7 @@
                   </mat-form-field>
                   <mat-form-field class="example-full-width">
                     <input
-                      type="number"
+                      type="text"
                       placeholder="Descuento"
                       name="descuento"
                       [readonly]="soloParaKits"
@@ -77,7 +77,7 @@
                         {{ option.Porcentaje }}
                       </mat-option>
                     </mat-autocomplete>
-                    <button mat-button matSuffix mat-icon-button>
+                    <button disabled mat-button matSuffix mat-icon-button>
                       <mat-icon>%&nbsp;</mat-icon>
                     </button>
                   </mat-form-field>

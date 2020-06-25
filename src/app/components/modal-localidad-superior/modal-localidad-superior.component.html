@@ -1,39 +1,36 @@
 <mat-dialog-content>
   <div class="row">
     <ng-container *ngIf="data.ruta == 'ventas'">
-      <div class="col-lg-5 col-md-5">
+      <div class="col-lg-4 col-md-4">
         <form [formGroup]="myForm" (ngSubmit)="crearComunidad()" novalidate>
           <h5 style="text-align: center;">Nueva Comunidad</h5>
-          <div class="row">
-            <div class="col-9">
-              <mat-form-field class="example-full-width">
-                <input
-                  matInput
-                  formControlName="_parroquia"
-                  placeholder="Parroquia"
-                  type="text"
-                  readonly
-                  aria-disabled="true"
-                />
-                <button disabled mat-button matPrefix mat-icon-button>
-                  <mat-icon>*</mat-icon>
-                </button>
-              </mat-form-field>
-            </div>
-            <div class="col-2">
-              <button
-                mat-button
-                mat-icon-button
-                type="button"
-                (click)="abrirModal()"
-                class="mt-2 bg-warning text-white btn-block"
-              >
-                <mat-icon>
-                  location_on
-                </mat-icon>
-              </button>
-            </div>
-          </div>
+          <mat-form-field class="example-full-width">
+            <input
+              matInput
+              formControlName="_parroquia"
+              placeholder="Parroquia"
+              type="text"
+              readonly
+              aria-disabled="true"
+            />
+            <button disabled mat-button matPrefix mat-icon-button>
+              <mat-icon>*</mat-icon>
+            </button>
+            <button
+              tooltip="Seleccionar Parroquia"
+              placement="top"
+              mat-button
+              mat-icon-button
+              matSuffix
+              type="button"
+              (click)="abrirModal()"
+            >
+              <mat-icon>
+                location_on
+              </mat-icon>
+            </button>
+          </mat-form-field>
+
           <mat-form-field class="example-full-width">
             <input
               matInput
@@ -55,18 +52,12 @@
           >
             Guardar
           </button>
-          <a
-            mat-button
-            mat-dialog-close
-            type="button"
-            class="mt-2 btn-block"
-          >
+          <a mat-button mat-dialog-close type="button" class="mt-2 btn-block">
             Volver
           </a>
         </form>
       </div>
     </ng-container>
-
     <div [class]="siSonComunidades">
       <h5 style="text-align: center;">Lista {{ nombre_tabla }}</h5>
       <mat-form-field class="example-full-width">
@@ -97,7 +88,7 @@
             <td mat-cell *matCellDef="let element">
               <button
                 mat-button
-                class="btn-outline-warning"
+                mat-icon-button
                 [mat-dialog-close]="datosLocalidad"
                 (click)="setLocalidad(element)"
               >

@@ -9,7 +9,12 @@ import { Router } from "@angular/router";
 import { ConfirmDialogComponent } from "../confirm-dialog/confirm-dialog.component";
 
 // Material
-import { MatTableDataSource, MatPaginator, MatDialog, MatSnackBar } from "@angular/material";
+import {
+  MatTableDataSource,
+  MatPaginator,
+  MatDialog,
+  MatSnackBar,
+} from "@angular/material";
 
 // Services
 import { InventarioService } from "src/app/services/inventario.service";
@@ -522,7 +527,12 @@ export class ConfiguracionProductoComponent implements OnInit {
   setValidators(flag) {
     if (flag) {
       this.myForm.get("_codigo").setValidators([Validators.required]);
-      this.myForm.get("_descuento").setValidators([Validators.required]);
+      this.myForm
+        .get("_descuento")
+        .setValidators([
+          Validators.required,
+          Validators.pattern(/^-?(0|[0-9]\d*)?$/),
+        ]);
       this.myForm.get("_codigo").updateValueAndValidity();
       this.myForm.get("_descuento").updateValueAndValidity();
     } else {

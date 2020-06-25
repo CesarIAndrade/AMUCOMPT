@@ -2,7 +2,7 @@
   <div class="card-body">
     <form [formGroup]="myForm" (ngSubmit)="validarFormulario()" novalidate>
       <div class="row">
-        <div class="col-lg-4">
+        <div [class]="claseParaModuloPersona">
           <h5 style="text-align: center;">{{ nuevaPersona }}</h5>
           <div class="row">
             <div class="col-lg-12 col-md-6">
@@ -102,208 +102,210 @@
             </div>
           </div>
         </div>
-        <div class="col-lg-4">
-          <h5 style="text-align: center;">{{ contacto }}</h5>
-          <div class="row">
-            <div class="col-lg-6 col-md-6">
-              <mat-form-field class="example-full-width">
-                <mat-label>Tipo</mat-label>
-                <mat-spinner
-                  *ngIf="comboTipoTelefono"
-                  diameter="20"
-                  matSuffix
-                ></mat-spinner>
-                <mat-select
-                  formControlName="_tipoTelefono1"
-                  (selectionChange)="
-                    seleccionarTipoTelefono($event.value, 1, true)
-                  "
-                >
-                  <mat-option
-                    *ngFor="let item of tipoTelefonos"
-                    [value]="item.IdTipoTelefono"
+        <ng-container *ngIf="mostrarEnModuloPersona">
+          <div class="col-lg-4">
+            <h5 style="text-align: center;">{{ contacto }}</h5>
+            <div class="row">
+              <div class="col-lg-6 col-md-6">
+                <mat-form-field class="example-full-width">
+                  <mat-label>Tipo</mat-label>
+                  <mat-spinner
+                    *ngIf="comboTipoTelefono"
+                    diameter="20"
+                    matSuffix
+                  ></mat-spinner>
+                  <mat-select
+                    formControlName="_tipoTelefono1"
+                    (selectionChange)="
+                      seleccionarTipoTelefono($event.value, 1, true)
+                    "
                   >
-                    {{ item.Descripcion }}
-                  </mat-option>
-                </mat-select>
-                <button disabled mat-button matPrefix mat-icon-button>
-                  <mat-icon>*</mat-icon>
-                </button>
-              </mat-form-field>
+                    <mat-option
+                      *ngFor="let item of tipoTelefonos"
+                      [value]="item.IdTipoTelefono"
+                    >
+                      {{ item.Descripcion }}
+                    </mat-option>
+                  </mat-select>
+                  <button disabled mat-button matPrefix mat-icon-button>
+                    <mat-icon>*</mat-icon>
+                  </button>
+                </mat-form-field>
+              </div>
+              <div class="col-lg-6 col-md-6">
+                <mat-form-field class="example-full-width">
+                  <input
+                    matInput
+                    type="text"
+                    formControlName="_telefono1"
+                    name="telefono1"
+                    #telefono1
+                    placeholder="Número #1"
+                    [maxlength]="digitosTelefono1"
+                  />
+                  <mat-hint align="end"
+                    >{{ telefono1.value?.length || minTelefono1 }}/{{
+                      digitosTelefono1
+                    }}</mat-hint
+                  >
+                  <button disabled mat-button matPrefix mat-icon-button>
+                    <mat-icon>*</mat-icon>
+                  </button>
+                </mat-form-field>
+              </div>
             </div>
-            <div class="col-lg-6 col-md-6">
-              <mat-form-field class="example-full-width">
-                <input
-                  matInput
-                  type="text"
-                  formControlName="_telefono1"
-                  name="telefono1"
-                  #telefono1
-                  placeholder="Número #1"
-                  [maxlength]="digitosTelefono1"
-                />
-                <mat-hint align="end"
-                  >{{ telefono1.value?.length || minTelefono1 }}/{{
-                    digitosTelefono1
-                  }}</mat-hint
-                >
-                <button disabled mat-button matPrefix mat-icon-button>
-                  <mat-icon>*</mat-icon>
-                </button>
-              </mat-form-field>
+            <div class="row">
+              <div class="col-lg-6 col-md-6">
+                <mat-form-field class="example-full-width">
+                  <mat-label>Tipo</mat-label>
+                  <mat-spinner
+                    *ngIf="comboTipoTelefono"
+                    diameter="20"
+                    matSuffix
+                  ></mat-spinner>
+                  <mat-select
+                    formControlName="_tipoTelefono2"
+                    (selectionChange)="
+                      seleccionarTipoTelefono($event.value, 2, true)
+                    "
+                  >
+                    <mat-option
+                      *ngFor="let item of tipoTelefonos"
+                      [value]="item.IdTipoTelefono"
+                    >
+                      {{ item.Descripcion }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+              <div class="col-lg-6 col-md-6">
+                <mat-form-field class="example-full-width">
+                  <input
+                    matInput
+                    type="text"
+                    name="telefono2"
+                    [maxlength]="digitosTelefono2"
+                    #telefono2
+                    formControlName="_telefono2"
+                    placeholder="Número #2"
+                  />
+                  <mat-hint align="end"
+                    >{{ telefono2.value?.length || minTelefono2 }}/{{
+                      digitosTelefono2
+                    }}</mat-hint
+                  >
+                </mat-form-field>
+              </div>
+            </div>
+  
+            <mat-form-field class="example-full-width">
+              <input
+                matInput
+                name="correo"
+                placeholder="Ingrese Correo"
+                formControlName="_correo"
+                [errorStateMatcher]="matcher"
+              />
+              <mat-error *ngIf="_correo.hasError('email')">
+                Ingrese Dirección de Correo Válida
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col-lg-4">
+            <h5 style="text-align: center;">{{ direccion }}</h5>
+            <div class="row">
+              <div class="col-lg-12 col-md-6">
+                <mat-form-field class="example-full-width">
+                  <mat-label>Seleccionar Provincia</mat-label>
+                  <mat-spinner
+                    *ngIf="comboProvincia"
+                    diameter="20"
+                    matSuffix
+                  ></mat-spinner>
+                  <mat-select
+                    formControlName="_provincia"
+                    (selectionChange)="
+                      consultarCantonesDeUnaProvincia($event.value, true)
+                    "
+                  >
+                    <mat-option
+                      *ngFor="let item of provincias"
+                      [value]="item.IdProvincia"
+                    >
+                      {{ item.Descripcion }}
+                    </mat-option>
+                  </mat-select>
+                  <button disabled mat-button matPrefix mat-icon-button>
+                    <mat-icon>*</mat-icon>
+                  </button>
+                </mat-form-field>
+              </div>
+              <div class="col-lg-12 col-md-6">
+                <mat-form-field class="example-full-width">
+                  <mat-label>Seleccionar Cantón</mat-label>
+                  <mat-spinner
+                    *ngIf="comboCanton"
+                    diameter="20"
+                    matSuffix
+                  ></mat-spinner>
+                  <mat-select
+                    formControlName="_canton"
+                    (selectionChange)="
+                      consultarParroquiasDeUnCanton($event.value, true)
+                    "
+                  >
+                    <mat-option
+                      *ngFor="let item of cantones"
+                      [value]="item.IdCanton"
+                    >
+                      {{ item.Descripcion }}
+                    </mat-option>
+                  </mat-select>
+                  <button disabled mat-button matPrefix mat-icon-button>
+                    <mat-icon>*</mat-icon>
+                  </button>
+                </mat-form-field>
+              </div>
+            </div>
+  
+            <div class="row">
+              <div class="col-lg-12 col-md-6">
+                <mat-form-field class="example-full-width">
+                  <mat-label>Seleccionar Parroquia</mat-label>
+                  <mat-spinner
+                    *ngIf="comboParroquia"
+                    diameter="20"
+                    matSuffix
+                  ></mat-spinner>
+                  <mat-select formControlName="_parroquia">
+                    <mat-option
+                      *ngFor="let item of parroquias"
+                      [value]="item.IdParroquia"
+                    >
+                      {{ item.Descripcion }}
+                    </mat-option>
+                  </mat-select>
+                  <button disabled mat-button matPrefix mat-icon-button>
+                    <mat-icon>*</mat-icon>
+                  </button>
+                </mat-form-field>
+              </div>
+              <div class="col-lg-12 col-md-6">
+                <mat-form-field class="example-full-width">
+                  <input
+                    matInput
+                    name="direccion"
+                    placeholder="Dirección"
+                    formControlName="_referencia"
+                  />
+                  <button disabled mat-button matPrefix mat-icon-button>
+                    <mat-icon>*</mat-icon>
+                  </button>
+                </mat-form-field>
+              </div>
             </div>
           </div>
-          <div class="row">
-            <div class="col-lg-6 col-md-6">
-              <mat-form-field class="example-full-width">
-                <mat-label>Tipo</mat-label>
-                <mat-spinner
-                  *ngIf="comboTipoTelefono"
-                  diameter="20"
-                  matSuffix
-                ></mat-spinner>
-                <mat-select
-                  formControlName="_tipoTelefono2"
-                  (selectionChange)="
-                    seleccionarTipoTelefono($event.value, 2, true)
-                  "
-                >
-                  <mat-option
-                    *ngFor="let item of tipoTelefonos"
-                    [value]="item.IdTipoTelefono"
-                  >
-                    {{ item.Descripcion }}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
-            </div>
-            <div class="col-lg-6 col-md-6">
-              <mat-form-field class="example-full-width">
-                <input
-                  matInput
-                  type="text"
-                  name="telefono2"
-                  [maxlength]="digitosTelefono2"
-                  #telefono2
-                  formControlName="_telefono2"
-                  placeholder="Número #2"
-                />
-                <mat-hint align="end"
-                  >{{ telefono2.value?.length || minTelefono2 }}/{{
-                    digitosTelefono2
-                  }}</mat-hint
-                >
-              </mat-form-field>
-            </div>
-          </div>
-
-          <mat-form-field class="example-full-width">
-            <input
-              matInput
-              name="correo"
-              placeholder="Ingrese Correo"
-              formControlName="_correo"
-              [errorStateMatcher]="matcher"
-            />
-            <mat-error *ngIf="_correo.hasError('email')">
-              Ingrese Dirección de Correo Válida
-            </mat-error>
-          </mat-form-field>
-        </div>
-        <div class="col-lg-4">
-          <h5 style="text-align: center;">{{ direccion }}</h5>
-          <div class="row">
-            <div class="col-lg-12 col-md-6">
-              <mat-form-field class="example-full-width">
-                <mat-label>Seleccionar Provincia</mat-label>
-                <mat-spinner
-                  *ngIf="comboProvincia"
-                  diameter="20"
-                  matSuffix
-                ></mat-spinner>
-                <mat-select
-                  formControlName="_provincia"
-                  (selectionChange)="
-                    consultarCantonesDeUnaProvincia($event.value, true)
-                  "
-                >
-                  <mat-option
-                    *ngFor="let item of provincias"
-                    [value]="item.IdProvincia"
-                  >
-                    {{ item.Descripcion }}
-                  </mat-option>
-                </mat-select>
-                <button disabled mat-button matPrefix mat-icon-button>
-                  <mat-icon>*</mat-icon>
-                </button>
-              </mat-form-field>
-            </div>
-            <div class="col-lg-12 col-md-6">
-              <mat-form-field class="example-full-width">
-                <mat-label>Seleccionar Cantón</mat-label>
-                <mat-spinner
-                  *ngIf="comboCanton"
-                  diameter="20"
-                  matSuffix
-                ></mat-spinner>
-                <mat-select
-                  formControlName="_canton"
-                  (selectionChange)="
-                    consultarParroquiasDeUnCanton($event.value, true)
-                  "
-                >
-                  <mat-option
-                    *ngFor="let item of cantones"
-                    [value]="item.IdCanton"
-                  >
-                    {{ item.Descripcion }}
-                  </mat-option>
-                </mat-select>
-                <button disabled mat-button matPrefix mat-icon-button>
-                  <mat-icon>*</mat-icon>
-                </button>
-              </mat-form-field>
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="col-lg-12 col-md-6">
-              <mat-form-field class="example-full-width">
-                <mat-label>Seleccionar Parroquia</mat-label>
-                <mat-spinner
-                  *ngIf="comboParroquia"
-                  diameter="20"
-                  matSuffix
-                ></mat-spinner>
-                <mat-select formControlName="_parroquia">
-                  <mat-option
-                    *ngFor="let item of parroquias"
-                    [value]="item.IdParroquia"
-                  >
-                    {{ item.Descripcion }}
-                  </mat-option>
-                </mat-select>
-                <button disabled mat-button matPrefix mat-icon-button>
-                  <mat-icon>*</mat-icon>
-                </button>
-              </mat-form-field>
-            </div>
-            <div class="col-lg-12 col-md-6">
-              <mat-form-field class="example-full-width">
-                <input
-                  matInput
-                  name="direccion"
-                  placeholder="Dirección"
-                  formControlName="_referencia"
-                />
-                <button disabled mat-button matPrefix mat-icon-button>
-                  <mat-icon>*</mat-icon>
-                </button>
-              </mat-form-field>
-            </div>
-          </div>
-        </div>
+        </ng-container>
       </div>
       <div>
         <button

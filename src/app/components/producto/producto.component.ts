@@ -32,14 +32,14 @@ export class ProductoComponent implements OnInit {
       _tipoProducto: new FormControl("", [Validators.required]),
       _codigo: new FormControl("", [Validators.required]),
       _presentacion: new FormControl("", [Validators.required]),
-      _contenidoNeto: new FormControl("", [Validators.required]),
+      _contenidoNeto: new FormControl("", [Validators.required, Validators.pattern(/^-?(0|[0-9]\d*)?$/)]),
       _medida: new FormControl("", [Validators.required]),
       _descripcion: new FormControl(""),
       _idProducto: new FormControl(""),
       _idConfiguracionProducto: new FormControl(""),
-      _precio: new FormControl("", [Validators.required]),
+      _precio: new FormControl("", [Validators.required, Validators.pattern(/^-?(0|[0-9]\d*)?$/)]),
       _idPrecio: new FormControl(""),
-      _iva: new FormControl(""),
+      _iva: new FormControl("", Validators.pattern(/^-?(0|[0-9]\d*)?$/)),
     });
   }
 

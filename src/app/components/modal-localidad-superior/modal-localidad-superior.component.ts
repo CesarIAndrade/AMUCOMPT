@@ -161,7 +161,7 @@ export class ModalLocalidadSuperiorComponent implements OnInit {
     } else if (this.data.ruta == "ventas") {
       this.nombre_tabla = "Comunidades";
       this.consultarComunidades();
-      this.siSonComunidades = "col-lg-7 col-md-7";
+      this.siSonComunidades = "col-lg-8 col-md-8";
     }
   }
 
