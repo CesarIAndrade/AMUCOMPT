@@ -51,6 +51,8 @@ import { CompraVentaComponent } from './components/compra-venta/compra-venta.com
 import { VisitasFinalizadasComponent } from './components/visitas-finalizadas/visitas-finalizadas.component';
 import { RealizarAbonoComponent } from './components/realizar-abono/realizar-abono.component';
 import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
+import { CompraRubrosEntradaComponent } from './components/compra-rubros-entrada/compra-rubros-entrada.component';
+import { CompraRubrosSalidaComponent } from './components/compra-rubros-salida/compra-rubros-salida.component';
 
 @NgModule({
   declarations: [
@@ -94,6 +96,8 @@ import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dial
     VisitasFinalizadasComponent,
     RealizarAbonoComponent,
     ConfirmDialogComponent,
+    CompraRubrosEntradaComponent,
+    CompraRubrosSalidaComponent,
   ],
   imports: [
     BrowserModule,

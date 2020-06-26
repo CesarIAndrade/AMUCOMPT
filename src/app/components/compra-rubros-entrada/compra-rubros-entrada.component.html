@@ -1,0 +1,208 @@
+<div class="container">
+    <div class="card-body">
+      <form [formGroup]="myForm" (ngSubmit)="crearTicket()" novalidate>
+        <div class="row">
+          <div class="col-lg-4 col-md-5">
+            <mat-form-field class="example-full-width">
+              <mat-label>Rubro</mat-label>
+              <mat-select
+                formControlName="_rubro"
+                (selectionChange)="selecionarRubro($event)"
+              >
+                <mat-option
+                  *ngFor="let item of rubros"
+                  [value]="item.IdTipoRubro"
+                >
+                  {{ item.Descripcion }}
+                </mat-option>
+              </mat-select>
+              <button disabled matPrefix mat-icon-button>
+                <mat-icon>*</mat-icon>
+              </button>
+            </mat-form-field>
+            <mat-form-field class="example-full-width">
+              <mat-label>Presentación</mat-label>
+              <mat-select
+                formControlName="_presentacionRubro"
+                (selectionChange)="seleccionarPresentacionRubros($event)"
+              >
+                <mat-option
+                  *ngFor="let item of presentacionRubros"
+                  [value]="item.IdTipoPresentacionRubro"
+                >
+                  {{ item.Descripcion }}
+                </mat-option>
+              </mat-select>
+              <button disabled matPrefix mat-icon-button>
+                <mat-icon>*</mat-icon>
+              </button>
+            </mat-form-field>
+            <mat-form-field *ngIf="carro" class="example-full-width">
+              <input
+                matInput
+                formControlName="_placaVehiculo"
+                name="placaVehiculo"
+                type="text"
+                placeholder="Placa Vehiculo"
+                [matAutocomplete]="auto"
+              />
+              <button disabled matPrefix mat-icon-button>
+                <mat-icon>*</mat-icon>
+              </button>
+              <mat-autocomplete #auto="matAutocomplete">
+                <mat-option
+                  (onSelectionChange)="seleccionarPlacaVehiculo(option)"
+                  *ngFor="let option of filteredOptions | async"
+                  [value]="option.Placa"
+                >
+                  {{ option.Placa }}
+                </mat-option>
+              </mat-autocomplete>
+            </mat-form-field>
+            <mat-form-field class="example-full-width">
+              <input
+                matInput
+                type="text"
+                name="peso{{medida}}"
+                placeholder="Peso {{medida}}"
+                formControlName="_pesoBruto"
+              />
+              <button disabled matPrefix mat-icon-button>
+                <mat-icon>*</mat-icon>
+              </button>
+            </mat-form-field>
+            <mat-form-field class="example-full-width">
+              <input
+                readonly
+                matInput
+                type="text"
+                name="cliente"
+                placeholder="Cliente"
+                formControlName="_cliente"
+              />
+              <button
+                tooltip="Seleccionar Cliente"
+                mat-button
+                matSuffix
+                mat-icon-button
+                type="button"
+                (click)="seleccionarPersona()"
+              >
+                <mat-icon style="color: #f0ad4e;">person_add</mat-icon>
+              </button>
+            </mat-form-field> 
+            <button
+              mat-button
+              type="submit"
+              [disabled]="myForm.invalid"
+              class="btn-outline-success btn-block"
+            >
+              Guardar
+            </button>
+          </div>
+          <div class="col-lg-8 col-md-7">
+            <div class="table_all">
+              <table mat-table [dataSource]="tickets">
+                <ng-container matColumnDef="codigo">
+                  <th mat-header-cell *matHeaderCellDef>codigo</th>
+                  <td mat-cell *matCellDef="let element">
+                    {{ element.Codigo }}
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="rubro">
+                  <th mat-header-cell *matHeaderCellDef>rubro</th>
+                  <td mat-cell *matCellDef="let element">
+                    {{ element._TipoRubro.Descripcion }}
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="presentacion">
+                  <th mat-header-cell *matHeaderCellDef>presentacion</th>
+                  <td mat-cell *matCellDef="let element">
+                    {{ element._TipoPresentacionRubro.Descripcion }}
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="placa">
+                  <th mat-header-cell *matHeaderCellDef>placa</th>
+                  <td mat-cell *matCellDef="let element">
+                    {{ element._Vehiculo.Placa }}
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="pesoBruto">
+                  <th mat-header-cell *matHeaderCellDef>pesoBruto</th>
+                  <td mat-cell *matCellDef="let element">
+                    {{ element.PesoBruto }}
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="acciones">
+                  <th colspan="2"mat-header-cell *matHeaderCellDef>
+                    Acciones
+                  </th>
+                  <ng-container *matCellDef="let element">
+                    <td mat-cell>
+                      <button
+                        type="button"
+                        mat-icon-button
+                        (click)="eliminarTicket(element.IdTicket)"
+                      >
+                        <mat-icon style="color: #d9534f">
+                          delete_outline
+                        </mat-icon>
+                      </button>
+                    </td>
+                    <td mat-cell>
+                      <button
+                        type="button"
+                        mat-icon-button
+                        color="primary"
+                        (click)="finalizarTicket(element.IdTicket)"
+                      >
+                        <mat-icon>
+                          done_all
+                        </mat-icon>
+                      </button>
+                    </td>
+                  </ng-container>
+
+                </ng-container>
+                <tr
+                  mat-header-row
+                  *matHeaderRowDef="tablaTickets;"
+                ></tr>
+                <tr mat-row *matRowDef="let row; columns: tablaTickets"></tr>
+              </table>
+              <div class="spinner-container" *ngIf="loading">
+                <mat-spinner></mat-spinner>
+              </div>
+              <mat-paginator
+                #paginator
+                [pageSizeOptions]="[5]"
+                showFirstLastButtons
+              ></mat-paginator>
+            </div>
+  
+            <!-- sticky: true -->
+            <!-- <mat-card *ngFor="let item of tickets">
+              <mat-card-header>
+                <mat-card-title>{{ item.Codigo }}</mat-card-title>
+                <mat-card-subtitle
+                  >Vehículo: {{ item._Vehiculo.Placa }}</mat-card-subtitle
+                >
+              </mat-card-header>
+              <mat-card-content class="flex-content">
+                <span
+                  >Contenedor: {{ item._TipoPresentacionRubro.Descripcion }}
+                </span>
+                <span>Rubro: {{ item._TipoRubro.Descripcion }}</span>
+                <span>Peso Bruto: {{ item.PesoBruto }}</span>
+              </mat-card-content>
+              <mat-card-actions class="flex-buttons">
+                <button type="button" mat-button class="btn-outline-danger">
+                  Eliminar
+                </button>
+              </mat-card-actions>
+            </mat-card> -->
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>

@@ -1,0 +1,67 @@
+<div class="container">
+  <div class="card-body">
+    <form [formGroup]="myForm" (ngSubmit)="finalizarTicket()" novalidate>
+      <div class="row">
+        <div class="col-lg-4 col-md-5">
+          <mat-form-field class="example-full-width">
+            <input
+              matInput
+              type="text"
+              name="pesoTara"
+              formControlName="_pesoTara"
+              placeholder="Peso Tara"
+            />
+            <button disabled matPrefix mat-icon-button>
+              <mat-icon>*</mat-icon>
+            </button>
+          </mat-form-field>
+          <mat-form-field class="example-full-width">
+            <input
+              matInput
+              type="text"
+              name="porcentajeHumedad"
+              formControlName="_porcentajeHumedad"
+              placeholder="% Humedad"
+            />
+            <button disabled matPrefix mat-icon-button>
+              <mat-icon>*</mat-icon>
+            </button>
+          </mat-form-field>
+          <mat-form-field class="example-full-width">
+            <input
+              matInput
+              type="text"
+              name="precioPorQuintal"
+              formControlName="_precioPorQuintal"
+              placeholder="Precio Quintal"
+            />
+            <button disabled matPrefix mat-icon-button>
+              <mat-icon>*</mat-icon>
+            </button>
+          </mat-form-field>
+          <mat-form-field class="example-full-width">
+            <input
+              matInput 
+              name="porcentajeImpureza"
+              type="text"
+              formControlName="_porcentajeImpureza"
+              placeholder="% Impureza"
+            />
+            <button disabled matPrefix mat-icon-button>
+              <mat-icon>*</mat-icon>
+            </button>
+          </mat-form-field>
+          <button
+            mat-button
+            type="submit"
+            [disabled]="myForm.invalid"
+            class="btn-outline-success btn-block"
+          >
+            Finalizar
+          </button>
+        </div>
+        <div class="col-lg-8 col-md-7"></div>
+      </div>
+    </form>
+  </div>
+</div>
