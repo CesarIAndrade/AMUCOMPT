@@ -53,6 +53,7 @@ import { RealizarAbonoComponent } from './components/realizar-abono/realizar-abo
 import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
 import { CompraRubrosEntradaComponent } from './components/compra-rubros-entrada/compra-rubros-entrada.component';
 import { CompraRubrosSalidaComponent } from './components/compra-rubros-salida/compra-rubros-salida.component';
+import { ModalTicketFinalizadoComponent } from './components/modal-ticket-finalizado/modal-ticket-finalizado.component';
 
 @NgModule({
   declarations: [
@@ -98,6 +99,7 @@ import { CompraRubrosSalidaComponent } from './components/compra-rubros-salida/c
     ConfirmDialogComponent,
     CompraRubrosEntradaComponent,
     CompraRubrosSalidaComponent,
+    ModalTicketFinalizadoComponent,
   ],
   imports: [
     BrowserModule,
@@ -124,7 +126,8 @@ import { CompraRubrosSalidaComponent } from './components/compra-rubros-salida/c
     ModalPersonaComponent,
     ModalReasignarClientesComponent,
     RealizarAbonoComponent,
-    ConfirmDialogComponent
+    ConfirmDialogComponent,
+    ModalTicketFinalizadoComponent
   ],
   providers: [],
   bootstrap: [AppComponent],

@@ -1,8 +1,14 @@
-import { Component, OnInit, ViewChild, Output, EventEmitter } from "@angular/core";
+import {
+  Component,
+  OnInit,
+  ViewChild,
+  Output,
+  EventEmitter,
+} from "@angular/core";
 import { RubrosService } from "src/app/services/rubros.service";
 import { FormGroup, FormControl } from "@angular/forms";
 import { Observable } from "rxjs";
-import { startWith, map } from "rxjs/operators";
+import { startWith, map, throwIfEmpty } from "rxjs/operators";
 import { ModalPersonaComponent } from "../modal-persona/modal-persona.component";
 import { MatDialog, MatTableDataSource, MatPaginator } from "@angular/material";
 import { openDialog } from "src/app/functions/global";
@@ -24,7 +30,11 @@ export class CompraRubrosEntradaComponent implements OnInit {
       _placaVehiculo: new FormControl(""),
       _cliente: new FormControl(""),
       _idCliente: new FormControl(""),
-      _pesoBruto: new FormControl(""),
+      _peso: new FormControl(""),
+      // Solo para saco
+      _porcentajeHumedad: new FormControl(""),
+      _precioPorQuintal: new FormControl(""),
+      _porcentajeImpureza: new FormControl(""),
     });
   }
 
@@ -36,6 +46,7 @@ export class CompraRubrosEntradaComponent implements OnInit {
   carro = false;
   medida: string;
   loading = true;
+  compraPorSaco = false;
 
   // Para la paginacion
   @ViewChild("paginator", { static: false }) paginator: MatPaginator;
@@ -108,7 +119,18 @@ export class CompraRubrosEntradaComponent implements OnInit {
     this.myForm.get("_idRubro").setValue(rubro.value);
   }
 
+  limpiarCampos() {
+    this.myForm.get("_placaVehiculo").reset();
+    this.myForm.get("_cliente").reset();
+    this.myForm.get("_idCliente").reset();
+    this.myForm.get("_peso").reset();
+    this.myForm.get("_porcentajeHumedad").reset();
+    this.myForm.get("_precioPorQuintal").reset();
+    this.myForm.get("_porcentajeImpureza").reset();
+  }
+
   seleccionarPresentacionRubros(presentacionRubro) {
+    this.limpiarCampos();
     this.myForm.get("_idPresentacionRubro").setValue(presentacionRubro.value);
     var respuesta = this.presentacionRubros.find(
       (item) => item.IdTipoPresentacionRubro == presentacionRubro.value
@@ -116,30 +138,39 @@ export class CompraRubrosEntradaComponent implements OnInit {
     if (respuesta.Descripcion == "CARRO") {
       this.medida = "Bruto";
       this.carro = true;
+      this.compraPorSaco = false;
     } else if (respuesta.Descripcion == "SACO") {
       this.medida = "Neto";
       this.carro = false;
-    }
+      this.compraPorSaco = true;
+    };
     this.myForm
       .get("_identificadorPresentacion")
       .setValue(respuesta.Identificador);
   }
 
   async crearTicket() {
+    this.loading = true;
+    this.tickets.data = [];
     var respuesta = await this.rubrosService.crearTicket(
       this.myForm.get("_idPresentacionRubro").value,
       this.myForm.get("_identificadorPresentacion").value,
       this.myForm.get("_idRubro").value,
       this.myForm.get("_placaVehiculo").value,
       localStorage.getItem("miCuenta.idAsignacionTipoUsuario"),
-      this.myForm.get("_pesoBruto").value,
-      this.myForm.get("_idCliente").value
+      this.myForm.get("_idCliente").value,
+      this.myForm.get("_placaVehiculo").value ? "PesoBruto" : "PesoNeto",
+      this.myForm.get("_peso").value,
+      this.myForm.get("_porcentajeHumedad").value,
+      this.myForm.get("_precioPorQuintal").value,
+      this.myForm.get("_porcentajeImpureza").value
     );
     console.log(respuesta);
     if (respuesta["codigo"] == "200") {
       this.consultarPlacas();
       this.consultarTickets();
       this.myForm.reset();
+      this.compraPorSaco = false;
     } else if (respuesta["codigo"] == "418") {
       openDialog(respuesta["mensaje"], "advertencia", this.dialog);
     }
@@ -147,7 +178,6 @@ export class CompraRubrosEntradaComponent implements OnInit {
 
   async eliminarTicket(idTicket) {
     var respuesta = await this.rubrosService.eliminarTicket(idTicket);
-    console.log(respuesta);
     if (respuesta["codigo"] == "200") {
       this.consultarPlacas();
       this.consultarTickets();
@@ -166,6 +196,10 @@ export class CompraRubrosEntradaComponent implements OnInit {
     this.consultarPresentacionRubros();
     this.consultarPlacas();
     this.consultarTickets();
+    this.rubrosService.refresh$.subscribe(() => {
+      this.consultarPlacas();
+      this.consultarTickets();
+    });
   }
 
   tablaTickets = [

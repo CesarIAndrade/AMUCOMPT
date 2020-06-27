@@ -116,8 +116,12 @@ export class RubrosService {
     rubro: string,
     placa: string,
     idAdministrador: string,
-    pesoBruto: string,
-    idPersona: string
+    idPersona: string,
+    identificador: string,
+    peso?: string,
+    porcentajeHumedad?: string,
+    precioPorQuintal?: string,
+    porcentajeImpureza?: string,
   ) {
     const body = new HttpParams()
       .set("_TipoPresentacionRubro.IdTipoPresentacionRubro", presentacionRubro)
@@ -125,8 +129,11 @@ export class RubrosService {
       .set("_TipoRubro.IdTipoRubro", rubro)
       .set("_Vehiculo.Placa", placa)
       .set("IdAsignarTU", idAdministrador)
-      .set("PesoBruto", pesoBruto)
       .set("IdPersona", idPersona)
+      .set(identificador, peso)
+      .set("PorcentajeHumedad", porcentajeHumedad)
+      .set("PrecioPorQuintal", precioPorQuintal)
+      .set("PorcentajeImpureza", porcentajeImpureza)
       .set("encriptada", localStorage.getItem("token"));
     console.log(body);
     return new Promise((resolve, reject) => {

@@ -1,6 +1,9 @@
-import { Component, OnInit, Input } from "@angular/core";
+import { Component, OnInit, Input, Output } from "@angular/core";
 import { FormGroup, FormControl } from "@angular/forms";
 import { RubrosService } from "src/app/services/rubros.service";
+import { MatDialog } from "@angular/material";
+import { ModalTicketFinalizadoComponent } from '../modal-ticket-finalizado/modal-ticket-finalizado.component';
+import { openDialog } from 'src/app/functions/global';
 
 @Component({
   selector: "app-compra-rubros-salida",
@@ -9,7 +12,7 @@ import { RubrosService } from "src/app/services/rubros.service";
 })
 export class CompraRubrosSalidaComponent implements OnInit {
   myForm: FormGroup;
-  constructor(private rubrosService: RubrosService) {
+  constructor(private rubrosService: RubrosService, private dialog: MatDialog) {
     this.myForm = new FormGroup({
       _idTicket: new FormControl(""),
       _pesoTara: new FormControl(""),
@@ -18,7 +21,7 @@ export class CompraRubrosSalidaComponent implements OnInit {
       _porcentajeImpureza: new FormControl(""),
     });
   }
- 
+
   async finalizarTicket() {
     var respuesta = await this.rubrosService.finalizarTicket(
       this.myForm.get("_idTicket").value,
@@ -28,11 +31,32 @@ export class CompraRubrosSalidaComponent implements OnInit {
       this.myForm.get("_porcentajeImpureza").value
     );
     console.log(respuesta);
+    if (respuesta["codigo"] == "200") {
+      this.detallesTicketFinalizado(respuesta["respuesta"]); 
+      this.rubrosService.refresh$.emit();
+    } else if (respuesta["codigo"] == "418") {
+      openDialog(respuesta["mensaje"], "advertencia", this.dialog);
+    }
+  }
+
+  detallesTicketFinalizado(ticket) {
+    let dialogRef = this.dialog.open(ModalTicketFinalizadoComponent, {
+      width: "auto",
+      height: "auto",
+      data: {
+        ticket,
+      },
+    });
+    // dialogRef.afterClosed().subscribe((result) => {
+    //   if(result) {
+
+    //   }
+    // });
   }
 
   ngOnInit() {
     this.rubrosService.refresh$.subscribe(() => {
       this.myForm.get("_idTicket").setValue(this.rubrosService.idTicket);
-    })
+    });
   }
 }
