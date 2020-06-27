@@ -4,7 +4,6 @@ import { Observable } from "rxjs";
 import { map, filter, withLatestFrom } from "rxjs/operators";
 import { Router, NavigationEnd, ActivatedRoute } from "@angular/router";
 import { MatSidenav } from "@angular/material";
-import { LoginComponent } from '../components/login/login.component';
 
 @Component({
   selector: "app-nav",
@@ -144,7 +143,7 @@ export class NavComponent implements OnInit {
       } else if (localStorage.getItem("miCuenta.tipoUsuario") == "4") {
         this.rutasPorTipoUsuario = ["/cuenta"];
       } else if (localStorage.getItem("miCuenta.tipoUsuario") == "5") {
-        this.rutasPorTipoUsuario = ["/compras-rubros", "/ventas-rubros", "/cuenta"];
+        this.rutasPorTipoUsuario = ["/compras-rubros", "/ventas-rubros", "/stock", "/cuenta"];
         this.nav_items.push(
           {
             name: "Compra Rubros",
@@ -155,7 +154,12 @@ export class NavComponent implements OnInit {
             name: "Venta Rubros",
             icon: "supervisor_account",
             url: "/ventas-rubros",
-          }
+          },
+          {
+            name: "Stock",
+            icon: "list_alt",
+            url: "/stock",
+          },
         );
       }
       if (!this.rutasPorTipoUsuario.includes(this.router.url)) {

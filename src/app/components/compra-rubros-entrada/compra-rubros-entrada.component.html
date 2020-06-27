@@ -140,36 +140,61 @@
           </button>
         </div>
         <div class="col-lg-8 col-md-7">
+          <mat-radio-group
+            class="example-radio-group"
+            (change)="selecionarOpcion($event.value)"
+          >
+            <mat-radio-button
+              class="example-radio-button"
+              *ngFor="let opcion of opciones"
+              [value]="opcion"
+              [checked]="opcion.checked"
+            >
+              {{ opcion.descripcion }}
+            </mat-radio-button>
+          </mat-radio-group>
           <div class="table_all">
             <table mat-table [dataSource]="tickets">
               <ng-container matColumnDef="codigo">
-                <th mat-header-cell *matHeaderCellDef>codigo</th>
+                <th mat-header-cell *matHeaderCellDef>Código</th>
                 <td mat-cell *matCellDef="let element">
                   {{ element.Codigo }}
                 </td>
               </ng-container>
               <ng-container matColumnDef="rubro">
-                <th mat-header-cell *matHeaderCellDef>rubro</th>
+                <th mat-header-cell *matHeaderCellDef>Rubro</th>
                 <td mat-cell *matCellDef="let element">
                   {{ element._TipoRubro.Descripcion }}
                 </td>
               </ng-container>
               <ng-container matColumnDef="presentacion">
-                <th mat-header-cell *matHeaderCellDef>presentacion</th>
+                <th mat-header-cell *matHeaderCellDef>Presentación</th>
                 <td mat-cell *matCellDef="let element">
                   {{ element._TipoPresentacionRubro.Descripcion }}
                 </td>
               </ng-container>
               <ng-container matColumnDef="placa">
-                <th mat-header-cell *matHeaderCellDef>placa</th>
+                <th mat-header-cell *matHeaderCellDef>Placa</th>
                 <td mat-cell *matCellDef="let element">
                   {{ element._Vehiculo.Placa }}
                 </td>
               </ng-container>
               <ng-container matColumnDef="pesoBruto">
-                <th mat-header-cell *matHeaderCellDef>pesoBruto</th>
+                <th mat-header-cell *matHeaderCellDef>Peso Bruto</th>
                 <td mat-cell *matCellDef="let element">
                   {{ element.PesoBruto }}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="pesoNeto">
+                <th mat-header-cell *matHeaderCellDef>Peso Neto</th>
+                <td mat-cell *matCellDef="let element">
+                  {{ element.PesoNeto }}q
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="total">
+                <th mat-header-cell *matHeaderCellDef>Total</th>
+                <td mat-cell *matCellDef="let element">
+                  ${{ element.TotalAPagar }}
                 </td>
               </ng-container>
               <ng-container matColumnDef="acciones">
@@ -177,29 +202,44 @@
                   Acciones
                 </th>
                 <ng-container *matCellDef="let element">
-                  <td mat-cell>
-                    <button
-                      type="button"
-                      mat-icon-button
-                      (click)="eliminarTicket(element.IdTicket)"
-                    >
-                      <mat-icon style="color: #d9534f;">
-                        delete_outline
-                      </mat-icon>
-                    </button>
-                  </td>
-                  <td mat-cell>
-                    <button
-                      type="button"
-                      mat-icon-button
-                      color="primary"
-                      (click)="finalizarTicket(element.IdTicket)"
-                    >
-                      <mat-icon>
-                        done_all
-                      </mat-icon>
-                    </button>
-                  </td>
+                  <ng-container *ngIf="!element.Finalizado">
+                    <td mat-cell>
+                      <button
+                        type="button"
+                        mat-icon-button
+                        (click)="eliminarTicket(element.IdTicket)"
+                      >
+                        <mat-icon style="color: #d9534f;">
+                          delete_outline
+                        </mat-icon>
+                      </button>
+                    </td>
+                    <td mat-cell>
+                      <button
+                        type="button"
+                        mat-icon-button
+                        color="primary"
+                        (click)="finalizarTicket(element.IdTicket)"
+                      >
+                        <mat-icon>
+                          done_all
+                        </mat-icon>
+                      </button>
+                    </td>
+                  </ng-container>
+                  <ng-container  *ngIf="element.Finalizado">
+                    <td mat-cell>
+                      <button
+                        type="button"
+                        mat-icon-button
+                        (click)="anularCompra(element.IdTicket)"
+                      >
+                        <mat-icon style="color: #d9534f;">
+                          delete_outline
+                        </mat-icon>
+                      </button>
+                    </td>
+                  </ng-container>
                 </ng-container>
               </ng-container>
               <tr mat-header-row *matHeaderRowDef="tablaTickets"></tr>

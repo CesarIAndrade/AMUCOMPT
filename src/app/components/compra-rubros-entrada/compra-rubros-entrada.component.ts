@@ -52,6 +52,40 @@ export class CompraRubrosEntradaComponent implements OnInit {
   @ViewChild("paginator", { static: false }) paginator: MatPaginator;
   tickets = new MatTableDataSource<Element[]>();
 
+  opciones = [
+    {
+      _id: "1",
+      descripcion: "Tickets Carro",
+      checked: true,
+    },
+    {
+      _id: "2",
+      descripcion: "Compras finalizadas",
+      checked: false,
+    },
+  ];
+
+  selecionarOpcion(opcion) {
+    this.tickets.data = [];
+    if (opcion._id === "1") {
+      this.loading = true;
+      this.tablaTickets = ["codigo", "rubro", "placa", "pesoBruto", "acciones"];
+      this.consultarTickets();
+      this.consultarPlacas();
+    } else if (opcion._id === "2") {
+      this.loading = true;
+      this.tablaTickets = [
+        "codigo",
+        "rubro",
+        "presentacion",
+        "pesoNeto",
+        "total",
+        "acciones",
+      ];
+      this.consultarComprasRubros();
+    }
+  }
+
   async consultarRubros() {
     var respuesta = await this.rubrosService.consultarRubros();
     if (respuesta["codigo"] == "200") {
@@ -68,11 +102,14 @@ export class CompraRubrosEntradaComponent implements OnInit {
 
   async consultarTickets() {
     var respuesta = await this.rubrosService.consultarTickets();
-    console.log(respuesta);
     if (respuesta["codigo"] == "200") {
       this.loading = false;
-      this.tickets.data = respuesta["respuesta"];
-      this.tickets.paginator = this.paginator;
+      var temp_respuesta: any = [];
+      respuesta["respuesta"].map((item) => {
+        item.Finalizado = false;
+        temp_respuesta.push(item);
+      });
+      this.tickets.data = temp_respuesta;
     }
   }
 
@@ -97,8 +134,19 @@ export class CompraRubrosEntradaComponent implements OnInit {
     );
   }
 
-  seleccionarPlacaVehiculo(placaVehiculo) {
-    console.log(placaVehiculo);
+  async consultarComprasRubros() {
+    var respuesta = await this.rubrosService.consultarComprasRubros();
+    console.log(respuesta);
+
+    if (respuesta["codigo"] == "200") {
+      this.loading = false;
+      var temp_respuesta: any = [];
+      respuesta["respuesta"].map((item) => {
+        item.Finalizado = true;
+        temp_respuesta.push(item);
+      });
+      this.tickets.data = temp_respuesta;
+    }
   }
 
   seleccionarPersona() {
@@ -143,7 +191,7 @@ export class CompraRubrosEntradaComponent implements OnInit {
       this.medida = "Neto";
       this.carro = false;
       this.compraPorSaco = true;
-    };
+    }
     this.myForm
       .get("_identificadorPresentacion")
       .setValue(respuesta.Identificador);
@@ -165,7 +213,6 @@ export class CompraRubrosEntradaComponent implements OnInit {
       this.myForm.get("_precioPorQuintal").value,
       this.myForm.get("_porcentajeImpureza").value
     );
-    console.log(respuesta);
     if (respuesta["codigo"] == "200") {
       this.consultarPlacas();
       this.consultarTickets();
@@ -191,6 +238,18 @@ export class CompraRubrosEntradaComponent implements OnInit {
     this.finalizarTicketEvent.emit();
   }
 
+  async anularCompra(idTicket) {
+    var respuesta = await this.rubrosService.anularCompra(
+      idTicket,
+      localStorage.getItem("miCuenta.idAsignacionTipoUsuario")
+    );
+    console.log(respuesta);
+    
+    if (respuesta["codigo"] == "200") {
+      this.consultarComprasRubros();
+    }
+  }
+
   ngOnInit() {
     this.consultarRubros();
     this.consultarPresentacionRubros();
@@ -202,12 +261,5 @@ export class CompraRubrosEntradaComponent implements OnInit {
     });
   }
 
-  tablaTickets = [
-    "codigo",
-    "rubro",
-    "presentacion",
-    "placa",
-    "pesoBruto",
-    "acciones",
-  ];
+  tablaTickets = ["codigo", "rubro", "placa", "pesoBruto", "acciones"];
 }

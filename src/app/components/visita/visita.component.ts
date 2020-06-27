@@ -38,8 +38,6 @@ export class VisitaComponent implements OnInit {
     });
   }
 
-  seasons: string[] = ["Winter", "Spring", "Summer", "Autumn"];
-
   openBottomSheet(comunidades, idComunidad): void {
     if (comunidades) {
       var comunidadesDeUnaPersona: any = [];

@@ -83,6 +83,24 @@
                 <span class="{{ element.Estado }}">{{ element.Cantidad }}</span>
               </td>
             </ng-container>
+            <ng-container matColumnDef="rubro">
+              <th mat-header-cell *matHeaderCellDef>Rubro</th>
+              <td mat-cell *matCellDef="let element">
+                <span>{{ element._TipoRubro.Descripcion }}</span>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="fechaCreacion">
+              <th mat-header-cell *matHeaderCellDef>Fecha Creacion</th>
+              <td mat-cell *matCellDef="let element">
+                <span>{{ element._TipoRubro.FechaCreacion | date: "yyyy-MM-dd" }}</span>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="cantidadRubro">
+              <th mat-header-cell *matHeaderCellDef>Cantidad Rubro</th>
+              <td mat-cell *matCellDef="let element">
+                <span>{{ element.Stock }}q</span>
+              </td>
+            </ng-container>
             <tr mat-header-row *matHeaderRowDef="tablaStock; sticky: true"></tr>
             <tr mat-row *matRowDef="let row; columns: tablaStock"></tr>
           </table>

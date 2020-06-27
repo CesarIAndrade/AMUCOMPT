@@ -7,6 +7,7 @@ import { MatPaginator, MatTableDataSource, MatDialog } from "@angular/material";
 
 // Services
 import { InventarioService } from "src/app/services/inventario.service";
+import { RubrosService } from 'src/app/services/rubros.service';
 
 @Component({
   selector: "app-stock",
@@ -16,6 +17,7 @@ import { InventarioService } from "src/app/services/inventario.service";
 export class StockComponent implements OnInit {
   constructor(
     private inventarioService: InventarioService,
+    private rubrosService: RubrosService,
     private dialog: MatDialog,
     private router: Router
   ) {}
@@ -55,7 +57,6 @@ export class StockComponent implements OnInit {
         } else {
           fechaExpiracion = item.AsignarProductoLote.FechaExpiracion;
         }
-
         if (item.AsignarProductoLote.PerteneceKit != "False") {
           kit = item.AsignarProductoLote.AsignarProductoKit.Kit.Descripcion;
           nombreProducto =
@@ -128,8 +129,25 @@ export class StockComponent implements OnInit {
     this.listaProductosEnStock.filter = term;
   }
 
+  async consultarStockRubros(){
+    var respuesta = await this.rubrosService.consultarStockRubros();
+    if(respuesta["codigo"] == "200") {
+      this.loading = false;
+      this.listaProductosEnStock = respuesta["respuesta"];
+    }
+  }
+
   ngOnInit() {
-    this.consultarStock();
+    if(localStorage.getItem("miCuenta.descripcionTipoUsuario") === "ADMINISTRADOR") {
+      this.consultarStockRubros();
+      this.tablaStock = [
+        "rubro",
+        "fechaCreacion",
+        "cantidadRubro"
+      ]
+    } else {
+      this.consultarStock();
+    }
   }
 
   tablaStock = [
