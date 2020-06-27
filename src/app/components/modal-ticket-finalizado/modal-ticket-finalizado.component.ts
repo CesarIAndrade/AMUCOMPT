@@ -1,5 +1,6 @@
 import { Component, OnInit, Inject } from "@angular/core";
 import { MAT_DIALOG_DATA } from "@angular/material";
+import { runInThisContext } from 'vm';
 
 @Component({
   selector: "app-modal-ticket-finalizado",
@@ -27,12 +28,14 @@ export class ModalTicketFinalizadoComponent implements OnInit {
     vehiculo: "",
   }
 
+  compraPorSaco = true;
+  medidaPesoNeto: string;
   ngOnInit() {
     console.log(this.data);
     this.detalleTicket = {
       codigo: this.data.ticket.Codigo,
       entrada: this.data.ticket.FechaIngreso,
-      salida: this.data.ticket.FechaSalida,
+      salida: this.data.ticket.FechaSalida ? this.data.ticket.FechaSalida : this.data.ticket.FechaIngreso,
       pesoAPagar: this.data.ticket.PesoAPagar,
       precioPorQuintal: this.data.ticket.PrecioPorQuintal,
       TotalAPagar: this.data.ticket.TotalAPagar,
@@ -45,21 +48,10 @@ export class ModalTicketFinalizadoComponent implements OnInit {
       vehiculo: this.data.ticket._Vehiculo.Placa,
       porcentajeHumedad: this.data.ticket.PorcentajeHumedad,
       porcentajeImpureza: this.data.ticket.PorcentajeImpureza,
-    }
-    // Codigo: "AMUCOMT 0001"
-    // FechaIngreso: "2020-06-26T00:02:00"
-    // FechaSalida: "2020-06-26T00:02:00"
-    // PesoAPagar: -0.12
-    // PesoBruto: 12
-    // PesoNeto: -9
-    // PesoSinImpurezas: -7.02
-    // PesoTara: 21
-    // PorcentajeHumedad: 12
-    // PorcentajeImpureza: 22
-    // PrecioPorQuintal: 12
-    // TotalAPagar: -1.8
-    //  _TipoRubro: Descripcion: "MAIZ"
-    // _TipoPresentacionRubro: Descripcion: "CARRO"
-    // _Vehiculo: Placa: "geh944";
+    }    
+    if(this.detalleTicket.vehiculo == "null") {
+      this.compraPorSaco = false;
+      this.medidaPesoNeto = "q"
+    } else { this.medidaPesoNeto = "kg" }
   }
 }

@@ -40,18 +40,13 @@ export class CompraRubrosSalidaComponent implements OnInit {
   }
 
   detallesTicketFinalizado(ticket) {
-    let dialogRef = this.dialog.open(ModalTicketFinalizadoComponent, {
+    this.dialog.open(ModalTicketFinalizadoComponent, {
       width: "auto",
       height: "auto",
       data: {
         ticket,
       },
     });
-    // dialogRef.afterClosed().subscribe((result) => {
-    //   if(result) {
-
-    //   }
-    // });
   }
 
   ngOnInit() {

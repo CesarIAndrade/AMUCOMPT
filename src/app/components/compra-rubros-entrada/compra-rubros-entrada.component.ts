@@ -12,6 +12,7 @@ import { startWith, map, throwIfEmpty } from "rxjs/operators";
 import { ModalPersonaComponent } from "../modal-persona/modal-persona.component";
 import { MatDialog, MatTableDataSource, MatPaginator } from "@angular/material";
 import { openDialog } from "src/app/functions/global";
+import { ModalTicketFinalizadoComponent } from '../modal-ticket-finalizado/modal-ticket-finalizado.component';
 
 @Component({
   selector: "app-compra-rubros-entrada",
@@ -110,6 +111,7 @@ export class CompraRubrosEntradaComponent implements OnInit {
         temp_respuesta.push(item);
       });
       this.tickets.data = temp_respuesta;
+      this.tickets.paginator = this.paginator;
     }
   }
 
@@ -216,8 +218,17 @@ export class CompraRubrosEntradaComponent implements OnInit {
     if (respuesta["codigo"] == "200") {
       this.consultarPlacas();
       this.consultarTickets();
-      this.myForm.reset();
       this.compraPorSaco = false;
+      if(!this.myForm.get("_placaVehiculo").value) {
+        this.dialog.open(ModalTicketFinalizadoComponent, {
+          width: "auto",
+          height: "auto",
+          data: {
+            ticket: respuesta["respuesta"],
+          },
+        });
+      }
+      this.myForm.reset();
     } else if (respuesta["codigo"] == "418") {
       openDialog(respuesta["mensaje"], "advertencia", this.dialog);
     }
@@ -243,8 +254,6 @@ export class CompraRubrosEntradaComponent implements OnInit {
       idTicket,
       localStorage.getItem("miCuenta.idAsignacionTipoUsuario")
     );
-    console.log(respuesta);
-    
     if (respuesta["codigo"] == "200") {
       this.consultarComprasRubros();
     }
