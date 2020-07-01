@@ -1,6 +1,5 @@
 import { Component, OnInit, Inject } from "@angular/core";
 import { MAT_DIALOG_DATA } from "@angular/material";
-import { runInThisContext } from 'vm';
 
 @Component({
   selector: "app-modal-ticket-finalizado",
@@ -31,7 +30,6 @@ export class ModalTicketFinalizadoComponent implements OnInit {
   compraPorSaco = true;
   medidaPesoNeto: string;
   ngOnInit() {
-    console.log(this.data);
     this.detalleTicket = {
       codigo: this.data.ticket.Codigo,
       entrada: this.data.ticket.FechaIngreso,
@@ -55,3 +53,4 @@ export class ModalTicketFinalizadoComponent implements OnInit {
     } else { this.medidaPesoNeto = "kg" }
   }
 }
+ 

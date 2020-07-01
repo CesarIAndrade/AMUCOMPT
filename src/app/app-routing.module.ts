@@ -30,6 +30,7 @@ import { ParroquiaComponent } from './components/parroquia/parroquia.component';
 import { CantonComponent } from './components/canton/canton.component';
 import { ProvinciaComponent } from './components/provincia/provincia.component';
 import { CompraVentaComponent } from './components/compra-venta/compra-venta.component';
+import { ComprasRubrosAnuladasComponent } from './components/compras-rubros-anuladas/compras-rubros-anuladas.component';
 
 var allRoutes = [
   { path: "login", component: LoginComponent },
@@ -131,6 +132,11 @@ var allRoutes = [
       {
         path: "ventas-rubros",
         component: VentaRubrosComponent,
+        // canActivate: [ValidarUsuarioGuard]
+      },
+      {
+        path: "compras-rubros-anuladas",
+        component: ComprasRubrosAnuladasComponent,
         // canActivate: [ValidarUsuarioGuard]
       },
       {

@@ -143,7 +143,13 @@ export class NavComponent implements OnInit {
       } else if (localStorage.getItem("miCuenta.tipoUsuario") == "4") {
         this.rutasPorTipoUsuario = ["/cuenta"];
       } else if (localStorage.getItem("miCuenta.tipoUsuario") == "5") {
-        this.rutasPorTipoUsuario = ["/compras-rubros", "/ventas-rubros", "/stock", "/cuenta"];
+        this.rutasPorTipoUsuario = [
+          "/compras-rubros",
+          "/ventas-rubros",
+          "compras-rubros-anuladas",
+          "/stock",
+          "/cuenta",
+        ];
         this.nav_items.push(
           {
             name: "Compra Rubros",
@@ -156,10 +162,15 @@ export class NavComponent implements OnInit {
             url: "/ventas-rubros",
           },
           {
+            name: "Compras Rubros Anuladas",
+            icon: "cancel_presentation",
+            url: "/compras-rubros-anuladas",
+          },
+          {
             name: "Stock",
             icon: "list_alt",
             url: "/stock",
-          },
+          }
         );
       }
       if (!this.rutasPorTipoUsuario.includes(this.router.url)) {

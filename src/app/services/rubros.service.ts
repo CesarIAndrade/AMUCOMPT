@@ -183,7 +183,6 @@ export class RubrosService {
       .set("PrecioPorQuintal", precioPorQuintal)
       .set("PorcentajeImpureza", porcentajeImpureza)
       .set("encriptada", localStorage.getItem("token"));
-    console.log(body);
     return new Promise((resolve, reject) => {
       this.http
         .post(apiUrl + "Rubros/IngresarTicket", body.toString(), {
@@ -207,7 +206,6 @@ export class RubrosService {
     const body = new HttpParams()
       .set("IdTicket", idTicket)
       .set("encriptada", localStorage.getItem("token"));
-    console.log(body);
     return new Promise((resolve, reject) => {
       this.http
         .post(apiUrl + "Rubros/EliminarTicket", body.toString(), {
@@ -241,7 +239,6 @@ export class RubrosService {
       .set("PrecioPorQuintal", precioPorQuintal)
       .set("PorcentajeImpureza", porcentajeImpureza)
       .set("encriptada", localStorage.getItem("token"));
-    console.log(body);
     return new Promise((resolve, reject) => {
       this.http
         .post(apiUrl + "Rubros/FinalizarTicket", body.toString(), {
@@ -266,10 +263,35 @@ export class RubrosService {
       .set("IdTicket", idTicket)
       .set("IdAsignarTU", idAdministrador)
       .set("encriptada", localStorage.getItem("token"));
-    console.log(body);
     return new Promise((resolve, reject) => {
       this.http
         .post(apiUrl + "Rubros/AnularTicket", body.toString(), {
+          headers: new HttpHeaders().set(
+            "Content-Type",
+            "application/x-www-form-urlencoded"
+          ),
+        })
+        .subscribe(
+          (res) => {
+            resolve(res);
+          },
+          (err) => {
+            reject(err);
+          }
+        );
+    });
+  }
+
+  
+
+  consultarComprasRubrosAnuladas() {
+    const body = new HttpParams().set(
+      "encriptada",
+      localStorage.getItem("token")
+    );
+    return new Promise((resolve, reject) => {
+      this.http
+        .post(apiUrl + "Rubros/ConsultarTicketAnulados", body.toString(), {
           headers: new HttpHeaders().set(
             "Content-Type",
             "application/x-www-form-urlencoded"

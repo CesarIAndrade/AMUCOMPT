@@ -12,7 +12,8 @@ import { startWith, map, throwIfEmpty } from "rxjs/operators";
 import { ModalPersonaComponent } from "../modal-persona/modal-persona.component";
 import { MatDialog, MatTableDataSource, MatPaginator } from "@angular/material";
 import { openDialog } from "src/app/functions/global";
-import { ModalTicketFinalizadoComponent } from '../modal-ticket-finalizado/modal-ticket-finalizado.component';
+import { ModalTicketFinalizadoComponent } from "../modal-ticket-finalizado/modal-ticket-finalizado.component";
+import { ConfirmDialogComponent } from "../confirm-dialog/confirm-dialog.component";
 
 @Component({
   selector: "app-compra-rubros-entrada",
@@ -46,8 +47,11 @@ export class CompraRubrosEntradaComponent implements OnInit {
   placasSeleccionables: any[] = [];
   carro = false;
   medida: string;
+  tipoPeso: string;
+
   loading = true;
   compraPorSaco = false;
+  filterTicket = "";
 
   // Para la paginacion
   @ViewChild("paginator", { static: false }) paginator: MatPaginator;
@@ -56,7 +60,7 @@ export class CompraRubrosEntradaComponent implements OnInit {
   opciones = [
     {
       _id: "1",
-      descripcion: "Tickets Carro",
+      descripcion: "Compras Pendientes",
       checked: true,
     },
     {
@@ -108,6 +112,7 @@ export class CompraRubrosEntradaComponent implements OnInit {
       var temp_respuesta: any = [];
       respuesta["respuesta"].map((item) => {
         item.Finalizado = false;
+        item.Placa = item._Vehiculo.Placa
         temp_respuesta.push(item);
       });
       this.tickets.data = temp_respuesta;
@@ -138,8 +143,6 @@ export class CompraRubrosEntradaComponent implements OnInit {
 
   async consultarComprasRubros() {
     var respuesta = await this.rubrosService.consultarComprasRubros();
-    console.log(respuesta);
-
     if (respuesta["codigo"] == "200") {
       this.loading = false;
       var temp_respuesta: any = [];
@@ -186,11 +189,13 @@ export class CompraRubrosEntradaComponent implements OnInit {
       (item) => item.IdTipoPresentacionRubro == presentacionRubro.value
     );
     if (respuesta.Descripcion == "CARRO") {
-      this.medida = "Bruto";
+      this.tipoPeso = "Bruto";
+      this.medida = "kg";
       this.carro = true;
       this.compraPorSaco = false;
     } else if (respuesta.Descripcion == "SACO") {
-      this.medida = "Neto";
+      this.tipoPeso = "Neto";
+      this.medida = "q";
       this.carro = false;
       this.compraPorSaco = true;
     }
@@ -219,7 +224,7 @@ export class CompraRubrosEntradaComponent implements OnInit {
       this.consultarPlacas();
       this.consultarTickets();
       this.compraPorSaco = false;
-      if(!this.myForm.get("_placaVehiculo").value) {
+      if (!this.myForm.get("_placaVehiculo").value) {
         this.dialog.open(ModalTicketFinalizadoComponent, {
           width: "auto",
           height: "auto",
@@ -235,11 +240,22 @@ export class CompraRubrosEntradaComponent implements OnInit {
   }
 
   async eliminarTicket(idTicket) {
-    var respuesta = await this.rubrosService.eliminarTicket(idTicket);
-    if (respuesta["codigo"] == "200") {
-      this.consultarPlacas();
-      this.consultarTickets();
-    }
+    let dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: "250px",
+      height: "auto",
+      data: {
+        mensaje: "",
+      },
+    });
+    dialogRef.afterClosed().subscribe(async (result) => {
+      if (result) {
+        var respuesta = await this.rubrosService.eliminarTicket(idTicket);
+        if (respuesta["codigo"] == "200") {
+          this.consultarPlacas();
+          this.consultarTickets();
+        }
+      }
+    });
   }
 
   @Output() finalizarTicketEvent = new EventEmitter();
@@ -250,13 +266,26 @@ export class CompraRubrosEntradaComponent implements OnInit {
   }
 
   async anularCompra(idTicket) {
-    var respuesta = await this.rubrosService.anularCompra(
-      idTicket,
-      localStorage.getItem("miCuenta.idAsignacionTipoUsuario")
-    );
-    if (respuesta["codigo"] == "200") {
-      this.consultarComprasRubros();
-    }
+    let dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: "250px",
+      height: "auto",
+      data: {
+        mensaje: "",
+      },
+    });
+    dialogRef.afterClosed().subscribe(async (result) => {
+      if (result) {
+        this.loading = true;
+        var respuesta = await this.rubrosService.anularCompra(
+          idTicket,
+          localStorage.getItem("miCuenta.idAsignacionTipoUsuario")
+        );
+        if (respuesta["codigo"] == "200") {
+          this.loading = false;
+          this.consultarComprasRubros();
+        }
+      }
+    });
   }
 
   ngOnInit() {

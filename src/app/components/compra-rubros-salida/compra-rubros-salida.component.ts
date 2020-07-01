@@ -2,8 +2,9 @@ import { Component, OnInit, Input, Output } from "@angular/core";
 import { FormGroup, FormControl } from "@angular/forms";
 import { RubrosService } from "src/app/services/rubros.service";
 import { MatDialog } from "@angular/material";
-import { ModalTicketFinalizadoComponent } from '../modal-ticket-finalizado/modal-ticket-finalizado.component';
-import { openDialog } from 'src/app/functions/global';
+import { ModalTicketFinalizadoComponent } from "../modal-ticket-finalizado/modal-ticket-finalizado.component";
+import { openDialog } from "src/app/functions/global";
+import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: "app-compra-rubros-salida",
@@ -23,20 +24,30 @@ export class CompraRubrosSalidaComponent implements OnInit {
   }
 
   async finalizarTicket() {
-    var respuesta = await this.rubrosService.finalizarTicket(
-      this.myForm.get("_idTicket").value,
-      this.myForm.get("_pesoTara").value,
-      this.myForm.get("_porcentajeHumedad").value,
-      this.myForm.get("_precioPorQuintal").value,
-      this.myForm.get("_porcentajeImpureza").value
-    );
-    console.log(respuesta);
-    if (respuesta["codigo"] == "200") {
-      this.detallesTicketFinalizado(respuesta["respuesta"]); 
-      this.rubrosService.refresh$.emit();
-    } else if (respuesta["codigo"] == "418") {
-      openDialog(respuesta["mensaje"], "advertencia", this.dialog);
-    }
+    let dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: "250px",
+      height: "auto",
+      data: {
+        mensaje: "",
+      },
+    });
+    dialogRef.afterClosed().subscribe(async (result) => {
+      if (result) {
+        var respuesta = await this.rubrosService.finalizarTicket(
+          this.myForm.get("_idTicket").value,
+          this.myForm.get("_pesoTara").value,
+          this.myForm.get("_porcentajeHumedad").value,
+          this.myForm.get("_precioPorQuintal").value,
+          this.myForm.get("_porcentajeImpureza").value
+        );
+        if (respuesta["codigo"] == "200") {
+          this.detallesTicketFinalizado(respuesta["respuesta"]);
+          this.rubrosService.refresh$.emit();
+        } else if (respuesta["codigo"] == "418") {
+          openDialog(respuesta["mensaje"], "advertencia", this.dialog);
+        }
+      }
+    });
   }
 
   detallesTicketFinalizado(ticket) {
@@ -47,6 +58,10 @@ export class CompraRubrosSalidaComponent implements OnInit {
         ticket,
       },
     });
+  }
+
+  volver() {
+    this.rubrosService.refresh$.emit();
   }
 
   ngOnInit() {

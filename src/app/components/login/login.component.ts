@@ -4,7 +4,7 @@ import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { openDialog } from "../../functions/global";
 
 // Material
-import { MatDialog } from '@angular/material';
+import { MatDialog } from "@angular/material";
 
 // Services
 import { UsuarioService } from "src/app/services/usuario.service";
@@ -20,7 +20,7 @@ export class LoginComponent implements OnInit {
     private usuarioService: UsuarioService,
     private router: Router,
     private seguridadService: SeguridadService,
-    private dialog: MatDialog,
+    private dialog: MatDialog
   ) {
     this.myForm = new FormGroup({
       _usuario: new FormControl("", [Validators.required]),
@@ -30,11 +30,14 @@ export class LoginComponent implements OnInit {
   }
 
   myForm: FormGroup;
-  seleccionarTipoUsuario = true;
-  ingresarCredenciales = false;
+  seleccionarTipoUsuario = false;
   tipoUsuarios: any[] = [];
+  loading = false;
+  loginForm = true;
 
   async login() {
+    this.loading = true;
+    this.loginForm = false;
     if (this.myForm.valid) {
       var login = await this.usuarioService.login(
         this.myForm.get("_usuario").value,
@@ -42,12 +45,16 @@ export class LoginComponent implements OnInit {
       );
       console.log(login);
       if (login["codigo"] == "200") {
-        this.seleccionarTipoUsuario = false;
-        this.ingresarCredenciales = true;
+        this.seleccionarTipoUsuario = true;
+        this.loading = false; 
+        this.loginForm = false;
         localStorage.setItem("usuario", JSON.stringify(login["respuesta"]));
         localStorage.setItem("token", login["Token"]);
         this.tipoUsuarios = login["respuesta"]["ListaTipoUsuario"];
       } else {
+        this.loading = false;
+        this.loginForm = true;
+        this.seleccionarTipoUsuario = false;
         this.myForm.reset();
         this.myForm.get("_tipoUsuario").setValue("0");
         openDialog("Credenciales Incorrectas!", "advertencia", this.dialog);

@@ -54,6 +54,7 @@ import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dial
 import { CompraRubrosEntradaComponent } from './components/compra-rubros-entrada/compra-rubros-entrada.component';
 import { CompraRubrosSalidaComponent } from './components/compra-rubros-salida/compra-rubros-salida.component';
 import { ModalTicketFinalizadoComponent } from './components/modal-ticket-finalizado/modal-ticket-finalizado.component';
+import { ComprasRubrosAnuladasComponent } from './components/compras-rubros-anuladas/compras-rubros-anuladas.component';
 
 @NgModule({
   declarations: [
@@ -100,6 +101,7 @@ import { ModalTicketFinalizadoComponent } from './components/modal-ticket-finali
     CompraRubrosEntradaComponent,
     CompraRubrosSalidaComponent,
     ModalTicketFinalizadoComponent,
+    ComprasRubrosAnuladasComponent,
   ],
   imports: [
     BrowserModule,
