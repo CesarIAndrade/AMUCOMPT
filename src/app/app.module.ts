@@ -35,7 +35,6 @@ import { ModalAsignacionConfiguracionProductoComponent } from "./components/moda
 import { StockComponent } from "./components/stock/stock.component";
 import { CreditosAbonosComponent } from "./components/creditos-abonos/creditos-abonos.component";
 import { CompraRubrosComponent } from "./components/compra-rubros/compra-rubros.component";
-import { VentaRubrosComponent } from "./components/venta-rubros/venta-rubros.component";
 import { ModalLocalidadSuperiorComponent } from "./components/modal-localidad-superior/modal-localidad-superior.component";
 import { ModalLotesComponent } from "./components/modal-lotes/modal-lotes.component";
 import { MaterialModule } from './material.module';
@@ -55,6 +54,9 @@ import { CompraRubrosEntradaComponent } from './components/compra-rubros-entrada
 import { CompraRubrosSalidaComponent } from './components/compra-rubros-salida/compra-rubros-salida.component';
 import { ModalTicketFinalizadoComponent } from './components/modal-ticket-finalizado/modal-ticket-finalizado.component';
 import { ComprasRubrosAnuladasComponent } from './components/compras-rubros-anuladas/compras-rubros-anuladas.component';
+import { VentaRubrosEntradaComponent } from './components/venta-rubros-entrada/venta-rubros-entrada.component';
+import { VentaRubrosSalidaComponent } from './components/venta-rubros-salida/venta-rubros-salida.component';
+import { VentaRubrosComponent } from './components/venta-rubros/venta-rubros.component';
 
 @NgModule({
   declarations: [
@@ -83,7 +85,6 @@ import { ComprasRubrosAnuladasComponent } from './components/compras-rubros-anul
     StockComponent,
     CreditosAbonosComponent,
     CompraRubrosComponent,
-    VentaRubrosComponent,
     ModalLocalidadSuperiorComponent,
     ModalLotesComponent,
     AsignarTecnicoClienteComponent,
@@ -102,6 +103,9 @@ import { ComprasRubrosAnuladasComponent } from './components/compras-rubros-anul
     CompraRubrosSalidaComponent,
     ModalTicketFinalizadoComponent,
     ComprasRubrosAnuladasComponent,
+    VentaRubrosEntradaComponent,
+    VentaRubrosSalidaComponent,
+    VentaRubrosComponent,
   ],
   imports: [
     BrowserModule,

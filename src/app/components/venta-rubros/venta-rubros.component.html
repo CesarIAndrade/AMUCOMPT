@@ -1,1 +1,10 @@
-<p>venta-rubros works!</p>
+<mat-tab-group [(selectedIndex)]="selectedTab">
+  <mat-tab label="Entrada">
+    <app-venta-rubros-entrada
+      (finalizarTicketEvent)="finalizarTicket()"
+    ></app-venta-rubros-entrada>
+  </mat-tab>
+  <mat-tab label="Salida" disabled>
+    <app-venta-rubros-salida></app-venta-rubros-salida>
+  </mat-tab>
+</mat-tab-group>

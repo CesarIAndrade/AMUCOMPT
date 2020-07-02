@@ -8,7 +8,7 @@ import { RubrosService } from 'src/app/services/rubros.service';
 })
 export class CompraRubrosComponent implements OnInit {
   constructor(
-    private rubrosService: RubrosService,
+    private rubrosService: RubrosService
   ) {}
   selectedTab = 0;
   finalizarTicket() {

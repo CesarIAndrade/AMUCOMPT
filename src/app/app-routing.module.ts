@@ -17,7 +17,6 @@ import { ConfiguracionProductoComponent } from "./components/configuracion-produ
 import { CuentaComponent } from "./components/cuenta/cuenta.component";
 import { StockComponent } from "./components/stock/stock.component";
 import { CompraRubrosComponent } from "./components/compra-rubros/compra-rubros.component";
-import { VentaRubrosComponent } from "./components/venta-rubros/venta-rubros.component";
 import { CreditosAbonosComponent } from "./components/creditos-abonos/creditos-abonos.component";
 import { AsignarTecnicoClienteComponent } from "./components/asignar-tecnico-cliente/asignar-tecnico-cliente.component";
 import { VisitaComponent } from "./components/visita/visita.component";
@@ -31,6 +30,7 @@ import { CantonComponent } from './components/canton/canton.component';
 import { ProvinciaComponent } from './components/provincia/provincia.component';
 import { CompraVentaComponent } from './components/compra-venta/compra-venta.component';
 import { ComprasRubrosAnuladasComponent } from './components/compras-rubros-anuladas/compras-rubros-anuladas.component';
+import { VentaRubrosComponent } from './components/venta-rubros/venta-rubros.component';
 
 var allRoutes = [
   { path: "login", component: LoginComponent },

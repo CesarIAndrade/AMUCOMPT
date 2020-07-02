@@ -282,8 +282,6 @@ export class RubrosService {
     });
   }
 
-  
-
   consultarComprasRubrosAnuladas() {
     const body = new HttpParams().set(
       "encriptada",
@@ -292,6 +290,54 @@ export class RubrosService {
     return new Promise((resolve, reject) => {
       this.http
         .post(apiUrl + "Rubros/ConsultarTicketAnulados", body.toString(), {
+          headers: new HttpHeaders().set(
+            "Content-Type",
+            "application/x-www-form-urlencoded"
+          ),
+        })
+        .subscribe(
+          (res) => {
+            resolve(res);
+          },
+          (err) => {
+            reject(err);
+          }
+        );
+    });
+  }
+
+  crearTicketVenta(
+    presentacionRubro: string,
+    rubro: string,
+    idPersona: string,
+    idAdministrador: string,
+    identificador: string,
+    peso: string,
+    // Carro
+    placa: string,
+    idChofer: string,
+    // Saco
+    porcentajeImpureza?: string,
+    porcentajeHumedad?: string,
+    precioPorQuintal?: string
+  ) {
+    const body = new HttpParams()
+      .set("_TipoPresentacionRubro.IdTipoPresentacionRubro", presentacionRubro)
+      .set("_TipoRubro.IdTipoRubro", rubro)
+      .set("IdPersonaCliente", idPersona)
+      .set("IdAsignarTU", idAdministrador)
+      .set(identificador, peso)
+      .set("_Vehiculo.Placa", placa)
+      .set("IdPersonaChofer", idChofer)
+      .set("PorcentajeImpureza", porcentajeImpureza)
+      .set("PorcentajeHumedad", porcentajeHumedad)
+      .set("PrecioPorQuintal", precioPorQuintal)
+      .set("encriptada", localStorage.getItem("token"));
+    console.log(body);
+    
+    return new Promise((resolve, reject) => {
+      this.http
+        .post(apiUrl + "Rubros/IngresarVentaRubro", body.toString(), {
           headers: new HttpHeaders().set(
             "Content-Type",
             "application/x-www-form-urlencoded"
