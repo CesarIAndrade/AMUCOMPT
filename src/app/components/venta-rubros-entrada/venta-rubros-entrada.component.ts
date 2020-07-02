@@ -1,21 +1,26 @@
-import { Component, OnInit, ViewChild, Output, EventEmitter } from '@angular/core';
-import { FormGroup, FormControl } from '@angular/forms';
-import { RubrosService } from 'src/app/services/rubros.service';
-import { MatDialog, MatTableDataSource, MatPaginator } from '@angular/material';
-import { Observable } from 'rxjs';
-import { startWith, map } from 'rxjs/operators';
-import { ModalPersonaComponent } from '../modal-persona/modal-persona.component';
-import { ModalTicketFinalizadoComponent } from '../modal-ticket-finalizado/modal-ticket-finalizado.component';
-import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
+import {
+  Component,
+  OnInit,
+  ViewChild,
+  Output,
+  EventEmitter,
+} from "@angular/core";
+import { FormGroup, FormControl } from "@angular/forms";
+import { RubrosService } from "src/app/services/rubros.service";
+import { MatDialog, MatTableDataSource, MatPaginator } from "@angular/material";
+import { Observable } from "rxjs";
+import { startWith, map } from "rxjs/operators";
+import { ModalPersonaComponent } from "../modal-persona/modal-persona.component";
+import { ModalTicketFinalizadoComponent } from "../modal-ticket-finalizado/modal-ticket-finalizado.component";
+import { ConfirmDialogComponent } from "../confirm-dialog/confirm-dialog.component";
 import { openDialog } from "../../functions/global";
 
 @Component({
-  selector: 'app-venta-rubros-entrada',
-  templateUrl: './venta-rubros-entrada.component.html',
-  styleUrls: ['./venta-rubros-entrada.component.css']
+  selector: "app-venta-rubros-entrada",
+  templateUrl: "./venta-rubros-entrada.component.html",
+  styleUrls: ["./venta-rubros-entrada.component.css"],
 })
 export class VentaRubrosEntradaComponent implements OnInit {
- 
   myForm: FormGroup;
   constructor(private rubrosService: RubrosService, private dialog: MatDialog) {
     this.myForm = new FormGroup({
@@ -85,7 +90,7 @@ export class VentaRubrosEntradaComponent implements OnInit {
         "total",
         "acciones",
       ];
-      this.consultarComprasRubros();
+      this.consultarVentasRubros();
     }
   }
 
@@ -104,13 +109,15 @@ export class VentaRubrosEntradaComponent implements OnInit {
   }
 
   async consultarTickets() {
-    var respuesta = await this.rubrosService.consultarTickets();
+    var respuesta = await this.rubrosService.consultarTickets(
+      "ConsultarTicketVentaSinFinalizar"
+    );
     if (respuesta["codigo"] == "200") {
       this.loading = false;
       var temp_respuesta: any = [];
       respuesta["respuesta"].map((item) => {
         item.Finalizado = false;
-        item.Placa = item._Vehiculo.Placa
+        item.Placa = item._Vehiculo.Placa;
         temp_respuesta.push(item);
       });
       this.tickets.data = temp_respuesta;
@@ -139,8 +146,10 @@ export class VentaRubrosEntradaComponent implements OnInit {
     );
   }
 
-  async consultarComprasRubros() {
-    var respuesta = await this.rubrosService.consultarComprasRubros();
+  async consultarVentasRubros() {
+    var respuesta = await this.rubrosService.consultarComprasOVentasRubros(
+      "ConsultarTicketFinalizados"
+    );
     if (respuesta["codigo"] == "200") {
       this.loading = false;
       var temp_respuesta: any = [];
@@ -237,24 +246,26 @@ export class VentaRubrosEntradaComponent implements OnInit {
       this.myForm.get("_porcentajeImpureza").value
     );
     console.log(respuesta);
-    
-    // if (respuesta["codigo"] == "200") {
-    //   this.consultarPlacas();
-    //   this.consultarTickets();
-    //   this.compraPorSaco = false;
-    //   if (!this.myForm.get("_placaVehiculo").value) {
-    //     this.dialog.open(ModalTicketFinalizadoComponent, {
-    //       width: "auto",
-    //       height: "auto",
-    //       data: {
-    //         ticket: respuesta["respuesta"],
-    //       },
-    //     });
-    //   }
-    //   this.myForm.reset();
-    // } else if (respuesta["codigo"] == "418") {
-    //   openDialog(respuesta["mensaje"], "advertencia", this.dialog);
-    // }
+    if (respuesta["codigo"] == "200") {
+      this.consultarPlacas();
+      this.consultarTickets();
+      this.compraPorSaco = false;
+      this.despuesDeSeleccionarPresentacion = false;
+      this.carro = false;
+      if (!this.myForm.get("_placaVehiculo").value) {
+        this.dialog.open(ModalTicketFinalizadoComponent, {
+          width: "auto",
+          height: "auto",
+          data: {
+            ticket: respuesta["respuesta"],
+            ruta: "venta"
+          },
+        });
+      }
+      this.myForm.reset();
+    } else if (respuesta["codigo"] == "418") {
+      openDialog(respuesta["mensaje"], "advertencia", this.dialog);
+    }
   }
 
   async eliminarTicket(idTicket) {
@@ -300,7 +311,7 @@ export class VentaRubrosEntradaComponent implements OnInit {
         );
         if (respuesta["codigo"] == "200") {
           this.loading = false;
-          this.consultarComprasRubros();
+          this.consultarVentasRubros();
         }
       }
     });
@@ -310,10 +321,12 @@ export class VentaRubrosEntradaComponent implements OnInit {
     this.consultarRubros();
     this.consultarPresentacionRubros();
     this.consultarPlacas();
-    // this.consultarTickets();
+    this.consultarTickets();
+    this.consultarVentasRubros();
     this.rubrosService.refresh$.subscribe(() => {
       this.consultarPlacas();
-      // this.consultarTickets();
+      this.consultarTickets();
+      this.consultarVentasRubros();
     });
   }
 

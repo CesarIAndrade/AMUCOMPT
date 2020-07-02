@@ -1,6 +1,7 @@
 import { Injectable, EventEmitter } from "@angular/core";
 import { apiUrl } from "../../environments/environment";
 import { HttpClient, HttpParams, HttpHeaders } from "@angular/common/http";
+import { url } from "inspector";
 @Injectable({
   providedIn: "root",
 })
@@ -86,14 +87,14 @@ export class RubrosService {
     });
   }
 
-  consultarTickets() {
+  consultarTickets(url) {
     const body = new HttpParams().set(
       "encriptada",
       localStorage.getItem("token")
     );
     return new Promise((resolve, reject) => {
       this.http
-        .post(apiUrl + "Rubros/ConsultarTicket", body.toString(), {
+        .post(apiUrl + `Rubros/${url}`, body.toString(), {
           headers: new HttpHeaders().set(
             "Content-Type",
             "application/x-www-form-urlencoded"
@@ -134,14 +135,14 @@ export class RubrosService {
     });
   }
 
-  consultarComprasRubros() {
+  consultarComprasOVentasRubros(url) {
     const body = new HttpParams().set(
       "encriptada",
       localStorage.getItem("token")
     );
     return new Promise((resolve, reject) => {
       this.http
-        .post(apiUrl + "Rubros/ConsultarTicketFinalizados", body.toString(), {
+        .post(apiUrl + `Rubros/${url}`, body.toString(), {
           headers: new HttpHeaders().set(
             "Content-Type",
             "application/x-www-form-urlencoded"
@@ -333,8 +334,6 @@ export class RubrosService {
       .set("PorcentajeHumedad", porcentajeHumedad)
       .set("PrecioPorQuintal", precioPorQuintal)
       .set("encriptada", localStorage.getItem("token"));
-    console.log(body);
-    
     return new Promise((resolve, reject) => {
       this.http
         .post(apiUrl + "Rubros/IngresarVentaRubro", body.toString(), {

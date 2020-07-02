@@ -52,6 +52,7 @@ export class CompraRubrosEntradaComponent implements OnInit {
   loading = true;
   compraPorSaco = false;
   filterTicket = "";
+  despuesDeSeleccionarPresentacion = false;
 
   // Para la paginacion
   @ViewChild("paginator", { static: false }) paginator: MatPaginator;
@@ -106,7 +107,7 @@ export class CompraRubrosEntradaComponent implements OnInit {
   }
 
   async consultarTickets() {
-    var respuesta = await this.rubrosService.consultarTickets();
+    var respuesta = await this.rubrosService.consultarTickets("ConsultarTicket");
     if (respuesta["codigo"] == "200") {
       this.loading = false;
       var temp_respuesta: any = [];
@@ -142,7 +143,7 @@ export class CompraRubrosEntradaComponent implements OnInit {
   }
 
   async consultarComprasRubros() {
-    var respuesta = await this.rubrosService.consultarComprasRubros();
+    var respuesta = await this.rubrosService.consultarComprasOVentasRubros("ConsultarTicketVentaFinalizados");
     if (respuesta["codigo"] == "200") {
       this.loading = false;
       var temp_respuesta: any = [];
@@ -184,6 +185,7 @@ export class CompraRubrosEntradaComponent implements OnInit {
 
   seleccionarPresentacionRubros(presentacionRubro) {
     this.limpiarCampos();
+    this.despuesDeSeleccionarPresentacion = true;
     this.myForm.get("_idPresentacionRubro").setValue(presentacionRubro.value);
     var respuesta = this.presentacionRubros.find(
       (item) => item.IdTipoPresentacionRubro == presentacionRubro.value
@@ -224,6 +226,8 @@ export class CompraRubrosEntradaComponent implements OnInit {
       this.consultarPlacas();
       this.consultarTickets();
       this.compraPorSaco = false;
+      this.despuesDeSeleccionarPresentacion = false;
+      this.carro = false;
       if (!this.myForm.get("_placaVehiculo").value) {
         this.dialog.open(ModalTicketFinalizadoComponent, {
           width: "auto",
@@ -293,9 +297,11 @@ export class CompraRubrosEntradaComponent implements OnInit {
     this.consultarPresentacionRubros();
     this.consultarPlacas();
     this.consultarTickets();
+    this.consultarComprasRubros();
     this.rubrosService.refresh$.subscribe(() => {
       this.consultarPlacas();
       this.consultarTickets();
+      this.consultarComprasRubros();
     });
   }
 
