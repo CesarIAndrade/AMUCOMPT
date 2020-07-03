@@ -27,9 +27,16 @@ export class ModalPersonaComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.router.url == "/ventas" || this.router.url == "/compras-rubros"
-      ? (this.renderizarTablaOriginal = "false")
-      : (this.renderizarTablaOriginal = "true");
+
+    if (
+      this.router.url == "/ventas" ||
+      this.router.url == "/compras-rubros" ||
+      this.router.url == "/ventas-rubros"
+    ) {
+      this.renderizarTablaOriginal = "false";
+    } else {
+      this.renderizarTablaOriginal = "true";
+    }
   }
 
   datosPersona = {

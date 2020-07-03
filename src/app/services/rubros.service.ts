@@ -10,6 +10,8 @@ export class RubrosService {
 
   idTicket: string;
   refresh$ = new EventEmitter();
+  encabezadoTabsEvent$ = new EventEmitter();
+  encabezadoTabs: string;
 
   consultarRubros() {
     const body = new HttpParams().set(

@@ -9,6 +9,7 @@ import { RubrosService } from "src/app/services/rubros.service";
 export class VentaRubrosComponent implements OnInit {
   constructor(private rubrosService: RubrosService) {}
   selectedTab = 0;
+  encabezadoTabs: string;
   finalizarTicket() {
     this.selectedTab = 1;
   }
@@ -16,5 +17,8 @@ export class VentaRubrosComponent implements OnInit {
     this.rubrosService.refresh$.subscribe(() => {
       this.selectedTab = 0;
     });
+    this.rubrosService.encabezadoTabsEvent$.subscribe(() => {
+      this.encabezadoTabs = this.rubrosService.encabezadoTabs;
+    })
   }
 }

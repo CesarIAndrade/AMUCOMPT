@@ -538,6 +538,33 @@ export class InventarioService {
     });
   }
 
+  actualizarKit(idKit: string, kit: string, codigo: string, descuento: string) {
+    const body = new HttpParams()
+      .set("IdKit", idKit)
+      .set("Descripcion", kit)
+      .set("Codigo", codigo)
+      .set("AsignarDescuentoKit.Descuento.Porcentaje", descuento)
+      .set("encriptada", localStorage.getItem("token"));
+    console.log(body);
+    return new Promise((resolve, reject) => {
+      this.http
+        .post(apiUrl + "Inventario/ActualizarKit", body.toString(), {
+          headers: new HttpHeaders().set(
+            "Content-Type",
+            "application/x-www-form-urlencoded"
+          ),
+        })
+        .subscribe(
+          (res) => {
+            resolve(res);
+          },
+          (err) => {
+            reject(err);
+          }
+        );
+    });
+  }
+
   eliminarKit(idKit: string) {
     const body = new HttpParams()
       .set("IdKit", idKit)

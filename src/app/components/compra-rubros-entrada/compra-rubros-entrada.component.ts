@@ -199,11 +199,15 @@ export class CompraRubrosEntradaComponent implements OnInit {
       this.medida = "kg";
       this.carro = true;
       this.compraPorSaco = false;
+      this.rubrosService.encabezadoTabs = "Carro";
+      this.rubrosService.encabezadoTabsEvent$.emit();
     } else if (respuesta.Descripcion == "SACO") {
       this.tipoPeso = "Neto";
       this.medida = "q";
       this.carro = false;
       this.compraPorSaco = true;
+      this.rubrosService.encabezadoTabs = "";
+      this.rubrosService.encabezadoTabsEvent$.emit();
     }
     this.myForm
       .get("_identificadorPresentacion")

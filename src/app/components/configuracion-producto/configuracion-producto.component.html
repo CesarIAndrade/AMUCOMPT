@@ -39,13 +39,12 @@
                     <mat-icon>*</mat-icon>
                   </button>
                 </mat-form-field>
-                <div [hidden]="soloParaKits">
+                <ng-container *ngIf="soloParaKits">
                   <mat-form-field class="example-full-width">
                     <input
                       matInput
                       name="codigo"
                       formControlName="_codigo"
-                      [readonly]="soloParaKits"
                       type="text"
                       placeholder="Ingrese Código kit"
                     />
@@ -58,7 +57,6 @@
                       type="text"
                       placeholder="Descuento"
                       name="descuento"
-                      [readonly]="soloParaKits"
                       matInput
                       formControlName="_descuento"
                       [matAutocomplete]="auto"
@@ -81,7 +79,7 @@
                       <mat-icon>%&nbsp;</mat-icon>
                     </button>
                   </mat-form-field>
-                </div>
+                </ng-container>
                 <div [hidden]="mostrarSeccionCuandoIntereses">
                   <mat-form-field class="example-full-width"
                     ><input
@@ -132,6 +130,9 @@
                 >
                   Guardar
                 </button>
+                <a mat-button (click)="limpiarCampos()" type="button" class="mt-2 btn-block">
+                  Cancelar
+                </a>
               </div>
             </div>
             <div class="col-lg-1"></div>
@@ -199,7 +200,9 @@
                       </td>
                     </ng-container>
                     <ng-container matColumnDef="acciones">
-                      <th mat-header-cell *matHeaderCellDef>Acciones</th>
+                      <th colspan="2" mat-header-cell *matHeaderCellDef>
+                        Acciones
+                      </th>
                       <ng-container *matCellDef="let element">
                         <ng-container *ngIf="element.mostrar">
                           <ng-container *ngIf="!element.estado">
@@ -209,7 +212,9 @@
                                 type="button"
                                 (click)="habilitarInteres(element._id)"
                               >
-                                <mat-icon style="color: #02B875">power_settings_new</mat-icon>
+                                <mat-icon style="color: #02b875;"
+                                  >power_settings_new</mat-icon
+                                >
                               </button>
                             </td>
                           </ng-container>
@@ -220,7 +225,9 @@
                                 type="button"
                                 (click)="eliminarCampo(element._id)"
                               >
-                                <mat-icon style="color: #d9534f">delete_outline</mat-icon>
+                                <mat-icon style="color: #d9534f;"
+                                  >delete_outline</mat-icon
+                                >
                               </button>
                             </td>
                           </ng-container>
@@ -228,6 +235,16 @@
                         <ng-container *ngIf="!element.mostrar">
                           <ng-container *ngIf="element.utilizado == '1'">
                             <td mat-cell></td>
+                            <td mat-cell *ngIf="soloParaKits">
+                              <button
+                                mat-icon-button
+                                color="primary"
+                                type="button"
+                                (click)="mostrarKit(element)"
+                              >
+                                <mat-icon>edit</mat-icon>
+                              </button>
+                            </td>
                           </ng-container>
                           <ng-container *ngIf="element.utilizado == '0'">
                             <td mat-cell>
@@ -236,7 +253,19 @@
                                 type="button"
                                 (click)="eliminarCampo(element._id)"
                               >
-                              <mat-icon style="color: #d9534f">delete_outline</mat-icon>
+                                <mat-icon style="color: #d9534f;"
+                                  >delete_outline</mat-icon
+                                >
+                              </button>
+                            </td>
+                            <td mat-cell>
+                              <button
+                                mat-icon-button
+                                color="primary"
+                                type="button"
+                                (click)="mostrarKit(element)"
+                              >
+                                <mat-icon>edit</mat-icon>
                               </button>
                             </td>
                           </ng-container>

@@ -55,10 +55,11 @@ export class ConfiguracionProductoComponent implements OnInit {
   suffix: string;
   encabezadoTabla: string;
   mostrarForm = true;
-  soloParaKits = true;
+  soloParaKits = false;
   loading = false;
   ocultarCampoCuandoIntereses = false;
   mostrarSeccionCuandoIntereses = true;
+  botonIngresar = "ingresar";
 
   opciones = [
     {
@@ -398,6 +399,31 @@ export class ConfiguracionProductoComponent implements OnInit {
     this.myForm.get("_descuento").setValue(descuento);
   }
 
+  mostrarKit(kit) {    
+    this.botonIngresar = "modificar";
+    this.myForm.get("_idKit").setValue(kit._id);
+    this.myForm.get("_campo").setValue(kit.descripcion);
+    this.myForm.get("_codigo").setValue(kit.codigo);
+    this.myForm.get("_descuento").setValue(kit.descuento);
+    if (kit.utilizado == "1") {
+      this.myForm.get("_campo").disable();
+      this.myForm.get("_codigo").disable();
+    } else {
+      this.myForm.get("_campo").enable();
+      this.myForm.get("_codigo").enable();
+    }
+  }
+
+  async actualizarKit() {
+    var respuesta = await this.inventarioService.actualizarKit(
+      this.myForm.get("_idKit").value,
+      this.myForm.get("_campo").value,
+      this.myForm.get("_codigo").value,
+      this.myForm.get("_descuento").value
+    );
+    console.log(respuesta);
+  }
+
   eliminarKit(idKit) {
     let dialogRef = this.dialog.open(ConfirmDialogComponent, {
       width: "250px",
@@ -613,10 +639,10 @@ export class ConfiguracionProductoComponent implements OnInit {
       this.consultarTiposInteres();
     }
     if (opcion._id === "4") {
-      this.soloParaKits = false;
+      this.soloParaKits = true;
       this.setValidators(true);
     } else {
-      this.soloParaKits = true;
+      this.soloParaKits = false;
       this.clearValidators(true);
     }
     if (opcion._id === "5") {
@@ -643,7 +669,11 @@ export class ConfiguracionProductoComponent implements OnInit {
       } else if (this.myForm.get("_idCampo").value === "3") {
         this.crearMedida();
       } else if (this.myForm.get("_idCampo").value === "4") {
-        this.crearKit();
+        if (this.botonIngresar == "ingresar") {
+          this.crearKit();
+        } else if (this.botonIngresar == "modificar") {
+          this.actualizarKit();
+        }
       } else if (this.myForm.get("_idCampo").value === "5") {
         this.crearInteres();
       }

@@ -457,7 +457,7 @@ export class PersonaComponent implements OnInit {
     this.consultarTipoDocumento();
     this.consultarTipoTelefono();
     this.consultarProvincias();
-    if (this.router.url === "/compras-rubros") {
+    if (this.router.url === "/compras-rubros" || this.router.url === "/ventas-rubros") {
       this.mostrarEnModuloPersona = false;
       this.claseParaModuloPersona = "col-lg-12";
     }

@@ -14,6 +14,9 @@
             <button disabled matPrefix mat-icon-button>
               <mat-icon>*</mat-icon>
             </button>
+            <button disabled matSuffix mat-icon-button>
+              <span>kg</span>
+            </button>
           </mat-form-field>
           <mat-form-field class="example-full-width">
             <input
@@ -59,12 +62,7 @@
           >
             Finalizar
           </button>
-          <a
-            mat-button
-            (click)="volver()"
-            type="button"
-            class="mt-2 btn-block"
-          >
+          <a mat-button (click)="volver()" type="button" class="mt-2 btn-block">
             Volver
           </a>
         </div>

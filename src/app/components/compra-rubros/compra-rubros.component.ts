@@ -11,12 +11,16 @@ export class CompraRubrosComponent implements OnInit {
     private rubrosService: RubrosService
   ) {}
   selectedTab = 0;
+  encabezadoTabs: string;
   finalizarTicket() {
     this.selectedTab = 1;
   }
   ngOnInit() {
     this.rubrosService.refresh$.subscribe(() => {
       this.selectedTab = 0;
+    })
+    this.rubrosService.encabezadoTabsEvent$.subscribe(() => {
+      this.encabezadoTabs = this.rubrosService.encabezadoTabs;
     })
   }
 }

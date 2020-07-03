@@ -11,6 +11,7 @@ export class ComprasRubrosAnuladasComponent implements OnInit {
   constructor(private rubrosService: RubrosService) {}
 
   loading = true;
+  transaccion = "Compra";
 
   // Para la paginacion
   @ViewChild("paginator", { static: false }) paginator: MatPaginator;
@@ -32,8 +33,10 @@ export class ComprasRubrosAnuladasComponent implements OnInit {
   selecionarOpcion(opcion) {
     this.rubrosAnuladas.data = [];
     if (opcion._id === "1") {
+      this.transaccion = "Compra";
       this.consultarRubrosAnulados("ConsultarTicketAnulados", opcion._id);
     } else if (opcion._id === "2") {
+      this.transaccion = "Venta";
       this.consultarRubrosAnulados("ConsultarTicketVentaAnulados", opcion._id)
     }
   }
