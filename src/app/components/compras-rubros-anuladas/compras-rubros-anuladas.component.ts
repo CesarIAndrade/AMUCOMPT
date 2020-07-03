@@ -14,10 +14,33 @@ export class ComprasRubrosAnuladasComponent implements OnInit {
 
   // Para la paginacion
   @ViewChild("paginator", { static: false }) paginator: MatPaginator;
-  comprasRubrosAnuladas = new MatTableDataSource<Element[]>();
+  rubrosAnuladas = new MatTableDataSource<Element[]>();
 
-  async consultarComprasRubrosAnuladas() {
-    var respuesta = await this.rubrosService.consultarComprasRubrosAnuladas();
+  opciones = [
+    {
+      _id: "1",
+      descripcion: "Compras Anuladas",
+      checked: true,
+    },
+    {
+      _id: "2",
+      descripcion: "Ventas Anuladas",
+      checked: false,
+    },
+  ];
+
+  selecionarOpcion(opcion) {
+    this.rubrosAnuladas.data = [];
+    if (opcion._id === "1") {
+      this.consultarRubrosAnulados("ConsultarTicketAnulados", opcion._id);
+    } else if (opcion._id === "2") {
+      this.consultarRubrosAnulados("ConsultarTicketVentaAnulados", opcion._id)
+    }
+  }
+
+  async consultarRubrosAnulados(url, opcion) {
+    this.loading = true;
+    var respuesta = await this.rubrosService.consultarRubrosAnulados(url);
     if (respuesta["codigo"] == "200") {
       this.loading = false;
       var temp_respuesta: any = [];
@@ -32,22 +55,22 @@ export class ComprasRubrosAnuladasComponent implements OnInit {
           Presentacion: item._TipoPresentacionRubro.Descripcion,
           Rubro: item._TipoRubro.Descripcion,
           PesoNeto: item.PesoNeto,
-          TotalAPagar: item.TotalAPagar,
+          Total: opcion == "1" ? item.TotalAPagar : item.TotalACobrar
         });
       });
-      this.comprasRubrosAnuladas.data = temp_respuesta;
-      this.comprasRubrosAnuladas.paginator = this.paginator;
+      this.rubrosAnuladas.data = temp_respuesta;
+      this.rubrosAnuladas.paginator = this.paginator;
     }
   }
 
   search(term: string) {
     term = term.trim();
     term = term.toUpperCase();
-    this.comprasRubrosAnuladas.filter = term;
+    this.rubrosAnuladas.filter = term;
   }
 
   ngOnInit() {
-    this.consultarComprasRubrosAnuladas();
+    this.consultarRubrosAnulados("ConsultarTicketAnulados", "1");
   }
 
   tablaComprasRubrosAnuladas = [

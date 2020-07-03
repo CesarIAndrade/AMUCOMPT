@@ -43,7 +43,7 @@ export class VentaRubrosSalidaComponent implements OnInit {
           this.myForm.get("_precioPorQuintal").value,
           this.myForm.get("_porcentajeImpureza").value,
           "FinalizarVentaRubro"
-        );
+        ); 
         if (respuesta["codigo"] == "200") {
           this.detallesTicketFinalizado(respuesta["respuesta"]);
           this.rubrosService.refresh$.emit();
