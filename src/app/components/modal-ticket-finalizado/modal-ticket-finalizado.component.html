@@ -1,39 +1,47 @@
-<h4 style="text-align: center;">{{ detalleTicket.codigo }}</h4>
-<div class="flex-container">
-  <mat-label>Entrada: {{ detalleTicket.entrada }}</mat-label>
-  <mat-label>Salida: {{ detalleTicket.salida }}</mat-label>
-  <mat-label *ngIf="porSaco"
-    >Peso Bruto: {{ detalleTicket.pesoBruto }}kg</mat-label
-  >
-  <mat-label *ngIf="porSaco"
-    >Peso Tara: {{ detalleTicket.pesoTara }}kg</mat-label
-  >
-  <mat-label
-    >Peso Neto: {{ detalleTicket.pesoNeto }}{{ medidaPesoNeto }}</mat-label
-  >
-  <mat-label>Rubro: {{ detalleTicket.rubros }}</mat-label>
-  <mat-label>Presentación: {{ detalleTicket.presentacion }}</mat-label>
-  <mat-label *ngIf="porSaco">Vehículo: {{ detalleTicket.vehiculo }}</mat-label>
+<div id="comprobante">
+  <h4 style="text-align: center;">{{ detalleTicket.codigo }}</h4>
+  <div class="flex-container">
+    <mat-label>Entrada: {{ detalleTicket.entrada }}</mat-label>
+    <mat-label>Salida: {{ detalleTicket.salida }}</mat-label>
+    <mat-label *ngIf="porSaco"
+      >Peso Bruto: {{ detalleTicket.pesoBruto }}kg</mat-label
+    >
+    <mat-label *ngIf="porSaco"
+      >Peso Tara: {{ detalleTicket.pesoTara }}kg</mat-label
+    >
+    <mat-label
+      >Peso Neto: {{ detalleTicket.pesoNeto }}{{ medidaPesoNeto }}</mat-label
+    >
+    <mat-label>Rubro: {{ detalleTicket.rubros }}</mat-label>
+    <mat-label>Presentación: {{ detalleTicket.presentacion }}</mat-label>
+    <mat-label *ngIf="porSaco"
+      >Vehículo: {{ detalleTicket.vehiculo }}</mat-label
+    >
 
-  <div class="flex-row">
-    <mat-label
-      >Porcentaje Humedad: {{ detalleTicket.porcentajeHumedad }}%</mat-label
+    <div class="flex-row">
+      <mat-label
+        >Porcentaje Humedad: {{ detalleTicket.porcentajeHumedad }}%</mat-label
+      >
+      <mat-label
+        >Porcentaje Impureza: {{ detalleTicket.porcentajeImpureza }}%</mat-label
+      >
+    </div>
+
+    <mat-label *ngIf="detalleTicket.pesoSinImpurezas"
+      >Peso a Pagar: {{ detalleTicket.pesoSinImpurezas
+      }}{{ medidaPesoNeto }}</mat-label
+    >
+
+    <mat-label *ngIf="detalleTicket.peso"
+      >Peso Equivalente: {{ detalleTicket.peso }}q</mat-label
     >
     <mat-label
-      >Porcentaje Impureza: {{ detalleTicket.porcentajeImpureza }}%</mat-label
+      >Precio por Quintal: {{ detalleTicket.precioPorQuintal }}$</mat-label
     >
+    <h5 class="mt-2">Total: {{ detalleTicket.Total }}$</h5>
   </div>
-
-  <mat-label *ngIf="detalleTicket.pesoSinImpurezas"
-    >Peso a Pagar: {{ detalleTicket.pesoSinImpurezas
-    }}{{ medidaPesoNeto }}</mat-label
-  >
-
-  <mat-label *ngIf="detalleTicket.peso"
-    >Peso Equivalente: {{ detalleTicket.peso }}q</mat-label
-  >
-  <mat-label
-    >Precio por Quintal: {{ detalleTicket.precioPorQuintal }}$</mat-label
-  >
-  <h5 class="mt-2">Total: {{ detalleTicket.Total }}$</h5>
 </div>
+
+<mat-dialog-actions>
+  <button mat-button (click)="imprimirComprobante(detalleTicket.codigo)" color="primary">Imprimir</button>
+</mat-dialog-actions>

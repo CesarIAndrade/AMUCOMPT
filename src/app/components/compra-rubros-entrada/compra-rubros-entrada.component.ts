@@ -107,13 +107,15 @@ export class CompraRubrosEntradaComponent implements OnInit {
   }
 
   async consultarTickets() {
-    var respuesta = await this.rubrosService.consultarTickets("ConsultarTicket");
+    var respuesta = await this.rubrosService.consultarTickets(
+      "ConsultarTicket"
+    );
     if (respuesta["codigo"] == "200") {
       this.loading = false;
       var temp_respuesta: any = [];
       respuesta["respuesta"].map((item) => {
         item.Finalizado = false;
-        item.Placa = item._Vehiculo.Placa
+        item.Placa = item._Vehiculo.Placa;
         temp_respuesta.push(item);
       });
       this.tickets.data = temp_respuesta;
@@ -143,7 +145,9 @@ export class CompraRubrosEntradaComponent implements OnInit {
   }
 
   async consultarComprasRubros() {
-    var respuesta = await this.rubrosService.consultarComprasOVentasRubros("ConsultarTicketVentaFinalizados");
+    var respuesta = await this.rubrosService.consultarComprasOVentasRubros(
+      "ConsultarTicketFinalizados"
+    );
     if (respuesta["codigo"] == "200") {
       this.loading = false;
       var temp_respuesta: any = [];
@@ -253,7 +257,13 @@ export class CompraRubrosEntradaComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe(async (result) => {
       if (result) {
-        var respuesta = await this.rubrosService.eliminarTicket(idTicket);
+        this.loading = true;
+        this.tickets.data = [];
+        var respuesta = await this.rubrosService.eliminarTicket(
+          idTicket,
+          "IdTicket",
+          "EliminarTicket"
+        );
         if (respuesta["codigo"] == "200") {
           this.consultarPlacas();
           this.consultarTickets();
@@ -280,9 +290,12 @@ export class CompraRubrosEntradaComponent implements OnInit {
     dialogRef.afterClosed().subscribe(async (result) => {
       if (result) {
         this.loading = true;
+        this.tickets.data = [];
         var respuesta = await this.rubrosService.anularCompra(
           idTicket,
-          localStorage.getItem("miCuenta.idAsignacionTipoUsuario")
+          "IdTicket",
+          localStorage.getItem("miCuenta.idAsignacionTipoUsuario"),
+          "AnularTicket"
         );
         if (respuesta["codigo"] == "200") {
           this.loading = false;
@@ -297,7 +310,7 @@ export class CompraRubrosEntradaComponent implements OnInit {
     this.consultarPresentacionRubros();
     this.consultarPlacas();
     this.consultarTickets();
-    this.consultarComprasRubros();
+    // this.consultarComprasRubros();
     this.rubrosService.refresh$.subscribe(() => {
       this.consultarPlacas();
       this.consultarTickets();

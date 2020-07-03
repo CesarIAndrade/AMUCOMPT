@@ -1,7 +1,7 @@
 import { Injectable, EventEmitter } from "@angular/core";
 import { apiUrl } from "../../environments/environment";
 import { HttpClient, HttpParams, HttpHeaders } from "@angular/common/http";
-import { url } from "inspector";
+
 @Injectable({
   providedIn: "root",
 })
@@ -203,13 +203,13 @@ export class RubrosService {
     });
   }
 
-  eliminarTicket(idTicket: string) {
+  eliminarTicket(idTicket: string, identificador: string, url: string) {
     const body = new HttpParams()
-      .set("IdTicket", idTicket)
+      .set(identificador, idTicket)
       .set("encriptada", localStorage.getItem("token"));
     return new Promise((resolve, reject) => {
       this.http
-        .post(apiUrl + "Rubros/EliminarTicket", body.toString(), {
+        .post(apiUrl + `Rubros/${url}`, body.toString(), {
           headers: new HttpHeaders().set(
             "Content-Type",
             "application/x-www-form-urlencoded"
@@ -228,21 +228,24 @@ export class RubrosService {
 
   finalizarTicket(
     idTicket: string,
-    pesoTara: string,
+    identificador: string,
+    peso: string,
+    identificadorPeso: string,
     porcentajeHumedad: string,
     precioPorQuintal: string,
-    porcentajeImpureza: string
+    porcentajeImpureza: string,
+    url: string
   ) {
     const body = new HttpParams()
-      .set("IdTicket", idTicket)
-      .set("PesoTara", pesoTara)
+      .set(identificador, idTicket)
+      .set(identificadorPeso, peso)
       .set("PorcentajeHumedad", porcentajeHumedad)
       .set("PrecioPorQuintal", precioPorQuintal)
       .set("PorcentajeImpureza", porcentajeImpureza)
       .set("encriptada", localStorage.getItem("token"));
     return new Promise((resolve, reject) => {
       this.http
-        .post(apiUrl + "Rubros/FinalizarTicket", body.toString(), {
+        .post(apiUrl + `Rubros/${url}`, body.toString(), {
           headers: new HttpHeaders().set(
             "Content-Type",
             "application/x-www-form-urlencoded"
@@ -259,14 +262,21 @@ export class RubrosService {
     });
   }
 
-  anularCompra(idTicket: string, idAdministrador: string) {
+  anularCompra(
+    idTicket: string,
+    identificador: string,
+    idAdministrador: string,
+    url: string
+  ) {
     const body = new HttpParams()
-      .set("IdTicket", idTicket)
+      .set(identificador, idTicket)
       .set("IdAsignarTU", idAdministrador)
       .set("encriptada", localStorage.getItem("token"));
+    console.log(body);
+          
     return new Promise((resolve, reject) => {
       this.http
-        .post(apiUrl + "Rubros/AnularTicket", body.toString(), {
+        .post(apiUrl + `Rubros/${url}`, body.toString(), {
           headers: new HttpHeaders().set(
             "Content-Type",
             "application/x-www-form-urlencoded"

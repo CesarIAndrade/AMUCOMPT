@@ -35,14 +35,18 @@ export class CompraRubrosSalidaComponent implements OnInit {
       if (result) {
         var respuesta = await this.rubrosService.finalizarTicket(
           this.myForm.get("_idTicket").value,
+          "IdTicket",
           this.myForm.get("_pesoTara").value,
+          "PesoTara",
           this.myForm.get("_porcentajeHumedad").value,
           this.myForm.get("_precioPorQuintal").value,
-          this.myForm.get("_porcentajeImpureza").value
+          this.myForm.get("_porcentajeImpureza").value,
+          "FinalizarTicket"
         );
         if (respuesta["codigo"] == "200") {
           this.detallesTicketFinalizado(respuesta["respuesta"]);
           this.rubrosService.refresh$.emit();
+          this.myForm.reset();
         } else if (respuesta["codigo"] == "418") {
           openDialog(respuesta["mensaje"], "advertencia", this.dialog);
         }
@@ -62,6 +66,7 @@ export class CompraRubrosSalidaComponent implements OnInit {
 
   volver() {
     this.rubrosService.refresh$.emit();
+    this.myForm.reset();
   }
 
   ngOnInit() {

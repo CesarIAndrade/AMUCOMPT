@@ -1,6 +1,6 @@
 import { Component, OnInit, Inject } from "@angular/core";
 import { MAT_DIALOG_DATA } from "@angular/material";
-
+import * as jsPdf from "jspdf"
 @Component({
   selector: "app-modal-ticket-finalizado",
   templateUrl: "./modal-ticket-finalizado.component.html",
@@ -13,6 +13,13 @@ export class ModalTicketFinalizadoComponent implements OnInit {
 
   porSaco = true;
   medidaPesoNeto: string;
+
+  imprimirComprobante(encabezado) {    
+    const doc = new jsPdf();
+    doc.fromHTML(document.getElementById("comprobante"),10,10);
+    doc.save(encabezado);
+  }
+
   ngOnInit() {
     if(this.data.ruta == "venta") {
       this.detalleTicket = {

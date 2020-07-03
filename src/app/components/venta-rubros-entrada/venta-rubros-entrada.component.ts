@@ -52,7 +52,7 @@ export class VentaRubrosEntradaComponent implements OnInit {
   tipoPeso: string;
 
   loading = true;
-  compraPorSaco = false;
+  ventaPorSaco = false;
   filterTicket = "";
   despuesDeSeleccionarPresentacion = false;
 
@@ -148,16 +148,16 @@ export class VentaRubrosEntradaComponent implements OnInit {
 
   async consultarVentasRubros() {
     var respuesta = await this.rubrosService.consultarComprasOVentasRubros(
-      "ConsultarTicketFinalizados"
+      "ConsultarTicketVentaFinalizados"
     );
     if (respuesta["codigo"] == "200") {
       this.loading = false;
       var temp_respuesta: any = [];
-      respuesta["respuesta"].map((item) => {
+      respuesta["respuesta"].map((item) => {        
         item.Finalizado = true;
         temp_respuesta.push(item);
       });
-      this.tickets.data = temp_respuesta;
+      this.tickets.data = temp_respuesta;      
     }
   }
 
@@ -218,12 +218,12 @@ export class VentaRubrosEntradaComponent implements OnInit {
       this.tipoPeso = "Tara";
       this.medida = "kg";
       this.carro = true;
-      this.compraPorSaco = false;
+      this.ventaPorSaco = false;
     } else if (respuesta.Descripcion == "SACO") {
       this.tipoPeso = "Neto";
       this.medida = "q";
       this.carro = false;
-      this.compraPorSaco = true;
+      this.ventaPorSaco = true;
     }
   }
 
@@ -245,11 +245,10 @@ export class VentaRubrosEntradaComponent implements OnInit {
       this.myForm.get("_precioPorQuintal").value,
       this.myForm.get("_porcentajeImpureza").value
     );
-    console.log(respuesta);
     if (respuesta["codigo"] == "200") {
       this.consultarPlacas();
       this.consultarTickets();
-      this.compraPorSaco = false;
+      this.ventaPorSaco = false;
       this.despuesDeSeleccionarPresentacion = false;
       this.carro = false;
       if (!this.myForm.get("_placaVehiculo").value) {
@@ -258,7 +257,7 @@ export class VentaRubrosEntradaComponent implements OnInit {
           height: "auto",
           data: {
             ticket: respuesta["respuesta"],
-            ruta: "venta"
+            ruta: "venta",
           },
         });
       }
@@ -274,11 +273,17 @@ export class VentaRubrosEntradaComponent implements OnInit {
       height: "auto",
       data: {
         mensaje: "",
-      },
+      }, 
     });
     dialogRef.afterClosed().subscribe(async (result) => {
       if (result) {
-        var respuesta = await this.rubrosService.eliminarTicket(idTicket);
+        this.loading = true;
+        this.tickets.data = [];
+        var respuesta = await this.rubrosService.eliminarTicket(
+          idTicket,
+          "IdTicketVenta",
+          "EliminarVentaRubro"
+        );
         if (respuesta["codigo"] == "200") {
           this.consultarPlacas();
           this.consultarTickets();
@@ -294,7 +299,7 @@ export class VentaRubrosEntradaComponent implements OnInit {
     this.finalizarTicketEvent.emit();
   }
 
-  async anularCompra(idTicket) {
+  async anularVenta(idTicket) {
     let dialogRef = this.dialog.open(ConfirmDialogComponent, {
       width: "250px",
       height: "auto",
@@ -305,10 +310,14 @@ export class VentaRubrosEntradaComponent implements OnInit {
     dialogRef.afterClosed().subscribe(async (result) => {
       if (result) {
         this.loading = true;
+        this.tickets.data = [];
         var respuesta = await this.rubrosService.anularCompra(
           idTicket,
-          localStorage.getItem("miCuenta.idAsignacionTipoUsuario")
+          "IdTicketVenta",
+          localStorage.getItem("miCuenta.idAsignacionTipoUsuario"),
+          "AnularVentaRubro"
         );
+        console.log(respuesta);
         if (respuesta["codigo"] == "200") {
           this.loading = false;
           this.consultarVentasRubros();
@@ -322,7 +331,7 @@ export class VentaRubrosEntradaComponent implements OnInit {
     this.consultarPresentacionRubros();
     this.consultarPlacas();
     this.consultarTickets();
-    this.consultarVentasRubros();
+    // this.consultarVentasRubros();
     this.rubrosService.refresh$.subscribe(() => {
       this.consultarPlacas();
       this.consultarTickets();

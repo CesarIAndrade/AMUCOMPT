@@ -119,7 +119,7 @@
             </mat-form-field>
           </ng-container>
 
-          <ng-container *ngIf="compraPorSaco">
+          <ng-container *ngIf="ventaPorSaco">
             <mat-form-field class="example-full-width">
               <input
                 matInput
@@ -237,7 +237,7 @@
               <ng-container matColumnDef="total">
                 <th mat-header-cell *matHeaderCellDef>Total</th>
                 <td mat-cell *matCellDef="let element">
-                  ${{ element.TotalAPagar }}
+                  ${{ element.TotalACobrar }}
                 </td>
               </ng-container>
               <ng-container matColumnDef="acciones">
@@ -250,7 +250,7 @@
                       <button
                         type="button"
                         mat-icon-button
-                        (click)="eliminarTicket(element.IdTicket)"
+                        (click)="eliminarTicket(element.IdTicketVenta)"
                       >
                         <mat-icon style="color: #d9534f;">
                           delete_outline
@@ -262,7 +262,7 @@
                         type="button"
                         mat-icon-button
                         color="primary"
-                        (click)="finalizarTicket(element.IdTicket)"
+                        (click)="finalizarTicket(element.IdTicketVenta)"
                       >
                         <mat-icon>
                           done_all
@@ -275,7 +275,7 @@
                       <button
                         type="button"
                         mat-icon-button
-                        (click)="anularCompra(element.IdTicket)"
+                        (click)="anularVenta(element.IdTicketVenta)"
                       >
                         <mat-icon style="color: #d9534f;">
                           delete_outline
