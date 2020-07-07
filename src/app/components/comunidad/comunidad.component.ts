@@ -120,11 +120,11 @@ export class ComunidadComponent implements OnInit {
     );
     if (respuesta["codigo"] == "200") {
       var comunidades: any = this.comunidades.data;
-      var comunidad = comunidades.filter(
+      var comunidad = comunidades.find(
         (comunidad) =>
           comunidad["IdComunidad"] == this.myForm.get("_idComunidad").value
       );
-      var index = comunidades.indexOf(comunidad[0]);
+      var index = comunidades.indexOf(comunidad);
       comunidades.splice(index, 1);
       comunidades.push({
         IdParroquia: respuesta["respuesta"].Parroquia.IdParroquia,
@@ -162,11 +162,11 @@ export class ComunidadComponent implements OnInit {
         );
         if (respuesta["codigo"] == "200") {
           var comunidades: any = this.comunidades.data;
-          var comunidad = comunidades.filter(
+          var comunidad = comunidades.find(
             (comunidad) =>
               comunidad["IdComunidad"] == this.myForm.get("_idComunidad").value
           );
-          var index = comunidades.indexOf(comunidad[0]);
+          var index = comunidades.indexOf(comunidad);
           comunidades.splice(index, 1);
           this.comunidades.data = comunidades;
           this.myForm.reset();

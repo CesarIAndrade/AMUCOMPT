@@ -399,7 +399,7 @@ export class ConfiguracionProductoComponent implements OnInit {
     this.myForm.get("_descuento").setValue(descuento);
   }
 
-  mostrarKit(kit) {    
+  mostrarKit(kit) {
     this.botonIngresar = "modificar";
     this.myForm.get("_idKit").setValue(kit._id);
     this.myForm.get("_campo").setValue(kit.descripcion);
@@ -415,13 +415,41 @@ export class ConfiguracionProductoComponent implements OnInit {
   }
 
   async actualizarKit() {
+    this.loading = true;
     var respuesta = await this.inventarioService.actualizarKit(
       this.myForm.get("_idKit").value,
       this.myForm.get("_campo").value,
       this.myForm.get("_codigo").value,
       this.myForm.get("_descuento").value
     );
-    console.log(respuesta);
+    if (this.myForm.get("_descuento").value % 1 === 0) {
+      if (respuesta["codigo"] == "200") {
+        this.loading = false;
+        openSnackBar("Se actualizó correctamente", this.snackBar);
+        var kits: any = this.dataSource.data;
+        var kit = kits.find(kit => kit["_id"] == this.myForm.get("_idKit").value);
+        var index = kits.indexOf(kit);
+        kits.splice(index, 1);
+        kits.push({
+          _id: respuesta["respuesta"].IdKit,
+          descripcion: respuesta["respuesta"].Descripcion,
+          utilizado: respuesta["respuesta"].KitUtilizado,
+          codigo: respuesta["respuesta"].Codigo,
+          descuento: respuesta["respuesta"].AsignarDescuentoKit.Descuento.Porcentaje,
+          estado: respuesta["respuesta"].Estado,
+        });
+        this.dataSource.data = kits;
+        this.limpiarCampos();
+      } else if (respuesta["codigo"] == "400") {
+        openDialog("Inténtalo de nuevo", "advertencia", this.dialog);
+      } else if (respuesta["codigo"] == "418") {
+        openDialog(respuesta["mensaje"], "advertencia", this.dialog);
+      } else if (respuesta["codigo"] == "500") {
+        openDialog("Problemas con el servidor", "advertencia", this.dialog);
+      }
+    } else {
+      openDialog("El descuento debe ser entero", "advertencia", this.dialog);
+    }
   }
 
   eliminarKit(idKit) {

@@ -545,7 +545,6 @@ export class InventarioService {
       .set("Codigo", codigo)
       .set("AsignarDescuentoKit.Descuento.Porcentaje", descuento)
       .set("encriptada", localStorage.getItem("token"));
-    console.log(body);
     return new Promise((resolve, reject) => {
       this.http
         .post(apiUrl + "Inventario/ActualizarKit", body.toString(), {

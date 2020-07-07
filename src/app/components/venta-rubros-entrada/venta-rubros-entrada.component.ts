@@ -245,9 +245,9 @@ export class VentaRubrosEntradaComponent implements OnInit {
       this.myForm.get("_placaVehiculo").value,
       this.myForm.get("_idChofer").value,
       // Saco
+      this.myForm.get("_porcentajeImpureza").value,
       this.myForm.get("_porcentajeHumedad").value,
       this.myForm.get("_precioPorQuintal").value,
-      this.myForm.get("_porcentajeImpureza").value
     );
     if (respuesta["codigo"] == "200") {
       this.consultarPlacas();
@@ -339,7 +339,7 @@ export class VentaRubrosEntradaComponent implements OnInit {
     this.rubrosService.refresh$.subscribe(() => {
       this.consultarPlacas();
       this.consultarTickets();
-      this.consultarVentasRubros();
+      // this.consultarVentasRubros();
     });
   }
 

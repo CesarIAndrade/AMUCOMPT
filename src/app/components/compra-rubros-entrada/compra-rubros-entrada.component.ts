@@ -214,7 +214,16 @@ export class CompraRubrosEntradaComponent implements OnInit {
       .setValue(respuesta.Identificador);
   }
 
-  async crearTicket() {
+  async crearTicket() { 
+
+    // this.dialog.open(ModalTicketFinalizadoComponent, {
+    //   width: "auto",
+    //   height: "auto",
+    //   data: {
+    //     ticket: "",
+    //   },
+    // });
+
     this.loading = true;
     this.tickets.data = [];
     var respuesta = await this.rubrosService.crearTicket(
@@ -318,7 +327,7 @@ export class CompraRubrosEntradaComponent implements OnInit {
     this.rubrosService.refresh$.subscribe(() => {
       this.consultarPlacas();
       this.consultarTickets();
-      this.consultarComprasRubros();
+      // this.consultarComprasRubros();
     });
   }
 

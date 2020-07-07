@@ -162,7 +162,7 @@ export class NavComponent implements OnInit {
             url: "/ventas-rubros",
           },
           {
-            name: "Compras Rubros Anuladas",
+            name: "Transacciones Anuladas",
             icon: "cancel_presentation",
             url: "/compras-rubros-anuladas",
           },
