@@ -69,7 +69,8 @@ export class ModalTicketFinalizadoComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log(this.data);
+    console.log(this.data.ticket);
+    
     if (this.data.ruta == "venta") {
       this.medidaPesoSinImpureza = "";
       this.tipoCliente = "Cliente";
@@ -152,8 +153,9 @@ export class ModalTicketFinalizadoComponent implements OnInit {
       this.porCarro = false;
       this.medidaPesoNeto = "q";
     } else {
-      this.data.ruta == "compra" ? this.porCarro = false : this.porCarro = true;
-      // this.porCarro = true;
+      this.data.ruta == "compra"
+        ? (this.porCarro = false)
+        : (this.porCarro = true);
       this.medidaPesoNeto = "kg";
     }
   }
