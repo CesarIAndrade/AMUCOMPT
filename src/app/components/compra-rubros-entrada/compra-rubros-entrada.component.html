@@ -218,7 +218,7 @@
                 </td>
               </ng-container>
               <ng-container matColumnDef="acciones">
-                <th colspan="2" mat-header-cell *matHeaderCellDef>
+                <th colspan="2"mat-header-cell *matHeaderCellDef>
                   Acciones
                 </th>
                 <ng-container *matCellDef="let element">
@@ -256,6 +256,18 @@
                       >
                         <mat-icon style="color: #d9534f;">
                           delete_outline
+                        </mat-icon>
+                      </button>
+                    </td>
+                    <td mat-cell>
+                      <button
+                        type="button"
+                        mat-icon-button
+                        (click)="reimprimirComprobante(element)"
+                        color="primary"
+                      >
+                        <mat-icon>
+                          print
                         </mat-icon>
                       </button>
                     </td>

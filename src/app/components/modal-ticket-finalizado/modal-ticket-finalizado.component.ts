@@ -16,10 +16,12 @@ export class ModalTicketFinalizadoComponent implements OnInit {
   detalleTicket: any = {};
 
   medidaPesoNeto = "kg";
-  porCarro = false;
+  porCarro: boolean;
+  porSaco: boolean;
   comprobanteVenta = "";
   medidaPesoSinImpureza = "q";
   tipoCliente = "";
+  tipoComprobante = "";
 
   imprimirComprobante(encabezado) {
     // html2canvas(document.getElementById("comprobante"))
@@ -74,6 +76,7 @@ export class ModalTicketFinalizadoComponent implements OnInit {
     if (this.data.ruta == "venta") {
       this.medidaPesoSinImpureza = "";
       this.tipoCliente = "Cliente";
+      this.tipoComprobante = "Venta";
       this.detalleTicket = {
         codigo: this.data.ticket.Codigo,
         entrada: this.data.ticket.FechaIngreso,
@@ -108,7 +111,7 @@ export class ModalTicketFinalizadoComponent implements OnInit {
         cedulaChofer: this.data.ticket._PersonaChofer
           ? this.data.ticket._PersonaChofer.NumeroDocumento
           : null,
-        vehiculo: this.data.ticket._Vehiculo.Placa,
+        vehiculo: this.data.ticket._Vehiculo ? this.data.ticket._Vehiculo.Placa : null,
         rubros: this.data.ticket._TipoRubro.Descripcion,
         presentacion: this.data.ticket._TipoPresentacionRubro.Descripcion,
         porcentajeHumedad: this.data.ticket.PorcentajeHumedad,
@@ -117,6 +120,7 @@ export class ModalTicketFinalizadoComponent implements OnInit {
     } else {
       this.comprobanteVenta = "Peso Pagar:";
       this.tipoCliente = "Proveedor";
+      this.tipoComprobante = "Compra";
       this.detalleTicket = {
         codigo: this.data.ticket.Codigo,
         entrada: this.data.ticket.FechaIngreso,
@@ -141,7 +145,6 @@ export class ModalTicketFinalizadoComponent implements OnInit {
           " " +
           this.data.ticket._PersonaEntidad.ApellidoMaterno,
         cedulaCliente: this.data.ticket._PersonaEntidad.NumeroDocumento,
-        vehiculo: this.data.ticket._Vehiculo.Placa,
         rubros: this.data.ticket._TipoRubro.Descripcion,
         presentacion: this.data.ticket._TipoPresentacionRubro.Descripcion,
         porcentajeHumedad: this.data.ticket.PorcentajeHumedad,
@@ -149,13 +152,15 @@ export class ModalTicketFinalizadoComponent implements OnInit {
       };
     }
 
-    if (this.data.ticket._Vehiculo.Placa == "null") {
+    if (!this.data.ticket._Vehiculo || this.data.ticket._Vehiculo.Placa == "null") {
       this.porCarro = false;
+      this.porSaco = false;
       this.medidaPesoNeto = "q";
     } else {
       this.data.ruta == "compra"
         ? (this.porCarro = false)
         : (this.porCarro = true);
+      this.porSaco = true;
       this.medidaPesoNeto = "kg";
     }
   }

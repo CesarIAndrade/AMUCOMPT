@@ -319,6 +319,17 @@ export class CompraRubrosEntradaComponent implements OnInit {
     });
   }
 
+  reimprimirComprobante(ticket){
+    this.dialog.open(ModalTicketFinalizadoComponent, {
+      width: "auto",
+      height: "auto",
+      data: {
+        ticket,
+        ruta: "compra",
+      },
+    });
+  }
+
   ngOnInit() {
     this.consultarRubros();
     this.consultarPresentacionRubros();
