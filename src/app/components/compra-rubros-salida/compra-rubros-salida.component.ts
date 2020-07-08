@@ -60,6 +60,7 @@ export class CompraRubrosSalidaComponent implements OnInit {
       height: "auto",
       data: {
         ticket,
+        ruta: "compra",
       },
     });
   }

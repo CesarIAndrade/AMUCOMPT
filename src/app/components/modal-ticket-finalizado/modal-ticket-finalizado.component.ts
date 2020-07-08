@@ -15,8 +15,11 @@ export class ModalTicketFinalizadoComponent implements OnInit {
 
   detalleTicket: any = {};
 
-  // porSaco = true;
   medidaPesoNeto = "kg";
+  porCarro = false;
+  comprobanteVenta = "";
+  medidaPesoSinImpureza = "q";
+  tipoCliente = "";
 
   imprimirComprobante(encabezado) {
     // html2canvas(document.getElementById("comprobante"))
@@ -27,19 +30,14 @@ export class ModalTicketFinalizadoComponent implements OnInit {
     //   doc.save(`${encabezado}.pdf`)
     // })
 
-    console.log("clicked...");
-    
-
-    const fileName = `${encabezado}.pdf`;
     const element: HTMLElement = document.getElementById("comprobante");
-    const regionCanvas = element.getBoundingClientRect();
     html2canvas(element, { scale: 3 }).then(async (canvas) => {
       const pdf = new jsPdf("l", "mm", "a5");
-      // let imgData = canvas.toDataURL("image/png");
-      pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 3, 0, 205, 140);
-
-      // pdf.addImage(imgData, 0, 0, 10, 10);
-      window.open(pdf.output("bloburl", { filename: fileName }), "_blank");
+      pdf.addImage(canvas.toDataURL("image/png"), "PNG", 3, 0, 205, 140);
+      window.open(
+        pdf.output("bloburl", { filename: `${encabezado}.pdf` }),
+        "_blank"
+      );
     });
 
     // const options = {
@@ -73,6 +71,8 @@ export class ModalTicketFinalizadoComponent implements OnInit {
   ngOnInit() {
     console.log(this.data);
     if (this.data.ruta == "venta") {
+      this.medidaPesoSinImpureza = "";
+      this.tipoCliente = "Cliente";
       this.detalleTicket = {
         codigo: this.data.ticket.Codigo,
         entrada: this.data.ticket.FechaIngreso,
@@ -81,18 +81,41 @@ export class ModalTicketFinalizadoComponent implements OnInit {
           : this.data.ticket.FechaIngreso,
         peso: this.data.ticket.PesoACobrar,
         precioPorQuintal: this.data.ticket.PrecioPorQuintal,
-        Total: this.data.ticket.TotalACobrar,
-        pesoBruto: this.data.ticket.PesoBruto,
+        total: this.data.ticket.TotalACobrar,
+        pesoBruto: this.data.ticket.PesoBruto
+          ? this.data.ticket.PesoBruto
+          : this.data.ticket.PesoNeto,
         pesoSinImpurezas: null,
         pesoNeto: this.data.ticket.PesoNeto,
-        pesoTara: this.data.ticket.PesoTara,
+        pesoTara: this.data.ticket.PesoTara
+          ? this.data.ticket.PesoTara
+          : this.data.ticket.PesoNeto,
+        cliente:
+          this.data.ticket._PersonaCliente.PrimerNombre +
+          " " +
+          this.data.ticket._PersonaCliente.ApellidoPaterno +
+          " " +
+          this.data.ticket._PersonaCliente.ApellidoMaterno,
+        cedulaCliente: this.data.ticket._PersonaCliente.NumeroDocumento,
+        chofer: this.data.ticket._PersonaChofer
+          ? this.data.ticket._PersonaChofer.PrimerNombre +
+            " " +
+            this.data.ticket._PersonaChofer.ApellidoPaterno +
+            " " +
+            this.data.ticket._PersonaChofer.ApellidoMaterno
+          : null,
+        cedulaChofer: this.data.ticket._PersonaChofer
+          ? this.data.ticket._PersonaChofer.NumeroDocumento
+          : null,
+        vehiculo: this.data.ticket._Vehiculo.Placa,
         rubros: this.data.ticket._TipoRubro.Descripcion,
         presentacion: this.data.ticket._TipoPresentacionRubro.Descripcion,
-        vehiculo: this.data.ticket._Vehiculo.Placa,
         porcentajeHumedad: this.data.ticket.PorcentajeHumedad,
         porcentajeImpureza: this.data.ticket.PorcentajeImpureza,
       };
     } else {
+      this.comprobanteVenta = "Peso Pagar:";
+      this.tipoCliente = "Proveedor";
       this.detalleTicket = {
         codigo: this.data.ticket.Codigo,
         entrada: this.data.ticket.FechaIngreso,
@@ -101,7 +124,7 @@ export class ModalTicketFinalizadoComponent implements OnInit {
           : this.data.ticket.FechaIngreso,
         peso: this.data.ticket.PesoAPagar,
         precioPorQuintal: this.data.ticket.PrecioPorQuintal,
-        Total: this.data.ticket.TotalAPagar,
+        total: this.data.ticket.TotalAPagar,
         pesoBruto: this.data.ticket.PesoBruto
           ? this.data.ticket.PesoBruto
           : this.data.ticket.PesoNeto,
@@ -110,26 +133,27 @@ export class ModalTicketFinalizadoComponent implements OnInit {
         pesoTara: this.data.ticket.PesoTara
           ? this.data.ticket.PesoTara
           : this.data.ticket.PesoNeto,
+        cliente:
+          this.data.ticket._PersonaEntidad.PrimerNombre +
+          " " +
+          this.data.ticket._PersonaEntidad.ApellidoPaterno +
+          " " +
+          this.data.ticket._PersonaEntidad.ApellidoMaterno,
+        cedulaCliente: this.data.ticket._PersonaEntidad.NumeroDocumento,
+        vehiculo: this.data.ticket._Vehiculo.Placa,
         rubros: this.data.ticket._TipoRubro.Descripcion,
         presentacion: this.data.ticket._TipoPresentacionRubro.Descripcion,
-        cliente: "Cliente",
-        vehiculo:
-          this.data.ticket._Vehiculo.Placa != "null"
-            ? this.data.ticket._Vehiculo.Placa
-            : "Compra por saco",
-        chofer:
-          this.data.ticket._Vehiculo.Placa != "null"
-            ? this.data.ticket._Vehiculo.Placa
-            : "Compra por saco",
         porcentajeHumedad: this.data.ticket.PorcentajeHumedad,
         porcentajeImpureza: this.data.ticket.PorcentajeImpureza,
       };
     }
 
-    if (this.detalleTicket.vehiculo == "null") {
-      // this.porSaco = false;
+    if (this.data.ticket._Vehiculo.Placa == "null") {
+      this.porCarro = false;
       this.medidaPesoNeto = "q";
     } else {
+      this.data.ruta == "compra" ? this.porCarro = false : this.porCarro = true;
+      // this.porCarro = true;
       this.medidaPesoNeto = "kg";
     }
   }

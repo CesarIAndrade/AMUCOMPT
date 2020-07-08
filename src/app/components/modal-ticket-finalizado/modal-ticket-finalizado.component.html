@@ -8,36 +8,34 @@
     />
   </span>
 
-
-
-
   <div class="f-row mt-2">
     <div class="f-column">
       <mat-label>Compra de Producto</mat-label>
-      <mat-label>Producto:</mat-label>
-      <mat-label>Proveedor/Cliente:</mat-label>
-      <mat-label>Chofer:</mat-label>
-      <mat-label>Camión Placa Nro:</mat-label>
+      <mat-label>Producto: {{ detalleTicket.rubros }}</mat-label>
+      <mat-label>Nro. Doc: {{ detalleTicket.cedulaCliente }}</mat-label>
+      <mat-label *ngIf="porCarro">Nro. Doc: {{ detalleTicket.cedulaChofer }}</mat-label>
+      <mat-label *ngIf="porCarro"
+        >Camión Placa Nro: {{ detalleTicket.vehiculo }}</mat-label
+      >
     </div>
     <div class="f-column">
       <mat-label>{{ detalleTicket.codigo }}</mat-label>
-      <mat-label>{{ detalleTicket.rubros }}</mat-label>
-      <mat-label>{{ detalleTicket.cliente }}</mat-label>
-      <mat-label>{{ detalleTicket.chofer }}</mat-label>
-      <mat-label>{{ detalleTicket.vehiculo }}</mat-label>
+      <mat-label>-</mat-label>
+      <mat-label>{{ tipoCliente }}: {{ detalleTicket.cliente }}</mat-label>
+      <mat-label *ngIf="porCarro">Chofer: {{ detalleTicket.chofer }}</mat-label>
     </div>
   </div>
-  <table class="table table-borderless">
+  <table class="table table-borderless mt-2">
     <tbody>
       <tr>
         <td>Peso Bruto:</td>
-        <td>{{ detalleTicket.pesoBruto }}kg</td>
+        <td>{{ detalleTicket.pesoBruto }}{{ medidaPesoNeto }}</td>
         <td></td>
         <td>Humedad: {{ detalleTicket.porcentajeHumedad }}%</td>
       </tr>
       <tr>
         <td>Peso Tara:</td>
-        <td>{{ detalleTicket.pesoTara }}kg</td>
+        <td>{{ detalleTicket.pesoTara }}{{ medidaPesoNeto }}</td>
         <td></td>
         <td>Impureza: {{ detalleTicket.porcentajeImpureza }}%</td>
       </tr>
@@ -48,8 +46,8 @@
         <td></td>
       </tr>
       <tr>
-        <td>Peso a pagar:</td>
-        <td>{{ detalleTicket.pesoSinImpurezas }}{{ medidaPesoNeto }}</td>
+        <td>{{ comprobanteVenta }}</td>
+        <td>{{ detalleTicket.pesoSinImpurezas }}{{ medidaPesoSinImpureza }}</td>
         <td>Equivalente a:</td>
         <td>{{ detalleTicket.peso }}q</td>
       </tr>
@@ -57,16 +55,22 @@
   </table>
   <div class="f-row">
     <div class="f-column">
-      <mat-label class="text-center">Entrada</mat-label>
+      <mat-label class="text-center"
+        >Precio qq: ${{ detalleTicket.precioPorQuintal }}</mat-label
+      >
+      <mat-label class="text-center mt-2">Entrada</mat-label>
       <mat-label class="text-center">{{ detalleTicket.entrada }}</mat-label>
       <mat-label class="text-center mt-2">Venta Balanza</mat-label>
-      <input readonly type="text"/>
+      <input readonly type="text" />
     </div>
     <div class="f-column">
-      <mat-label class="text-center">Salida</mat-label>
+      <mat-label class="text-center"
+        >Total: ${{ detalleTicket.total }}</mat-label
+      >
+      <mat-label class="text-center mt-2">Salida</mat-label>
       <mat-label class="text-center">{{ detalleTicket.salida }}</mat-label>
       <mat-label class="text-center mt-2">Proveedor/Chofer</mat-label>
-      <input readonly type="text"/>
+      <input readonly type="text" />
     </div>
   </div>
 </div>
@@ -83,8 +87,7 @@
   </button>
 </mat-dialog-actions>
 
-
-  <!-- <div class="row">
+<!-- <div class="row">
     <div class="col-lg-3">
       <mat-label>Peso Bruto:</mat-label>
       <br />
@@ -116,8 +119,7 @@
     </div>
   </div> -->
 
-
-    <!-- <div class="f-row">
+<!-- <div class="f-row">
     <div class="f-column">
       <mat-label>Peso Bruto:</mat-label>
       <mat-label>Peso Tara:</mat-label>

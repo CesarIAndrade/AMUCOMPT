@@ -251,6 +251,7 @@ export class CompraRubrosEntradaComponent implements OnInit {
           height: "auto",
           data: {
             ticket: respuesta["respuesta"],
+            ruta: "compra",
           },
         });
       }

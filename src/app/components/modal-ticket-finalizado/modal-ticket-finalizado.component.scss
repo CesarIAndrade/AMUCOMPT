@@ -1,6 +1,6 @@
 #comprobante {
-
-  mat-label, td{
+  mat-label,
+  td {
     font-size: 14px;
   }
 
@@ -33,7 +33,6 @@
   .f-column {
     display: flex;
     flex-direction: column;
-    flex-basis: 100%;
     flex: 1;
   }
 
@@ -42,5 +41,18 @@
     border-width: 0 0 2px;
     border-color: blue;
     margin: 0 2rem;
+  }
+
+  tr td {
+    margin: 0;
+    padding: 0;
+  }
+
+  tr td:first-child {
+    padding-left: 3rem;
+  }
+
+  table {
+    border: 1px solid black;
   }
 }
