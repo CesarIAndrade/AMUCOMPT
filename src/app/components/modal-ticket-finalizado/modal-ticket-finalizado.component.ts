@@ -1,14 +1,16 @@
 import { Component, OnInit, Inject } from "@angular/core";
 import { MAT_DIALOG_DATA } from "@angular/material";
+import { imgUrl } from "../../functions/variables";
 
 import * as jsPdf from "jspdf";
 import html2canvas from "html2canvas";
 
 import * as html2pdf from "html2pdf.js";
+
 @Component({
   selector: "app-modal-ticket-finalizado",
   templateUrl: "./modal-ticket-finalizado.component.html",
-  styleUrls: ["./modal-ticket-finalizado.component.scss"],
+  styleUrls: ["./modal-ticket-finalizado.component.css"],
 })
 export class ModalTicketFinalizadoComponent implements OnInit {
   constructor(@Inject(MAT_DIALOG_DATA) public data: any) {}
@@ -24,22 +26,12 @@ export class ModalTicketFinalizadoComponent implements OnInit {
   tipoComprobante = "";
 
   imprimirComprobante(encabezado) {
-    // html2canvas(document.getElementById("comprobante"))
-    // .then(canvas => {
-    //   let imgData = canvas.toDataURL("image/png");
-    //   let doc = new jsPdf();
-    //   doc.addImage(imgData, 0,0,10,10);
-    //   doc.save(`${encabezado}.pdf`)
-    // })
-
     const element: HTMLElement = document.getElementById("comprobante");
-    html2canvas(element, { scale: 3 }).then(async (canvas) => {
-      const pdf = new jsPdf("l", "mm", "a5");
-      pdf.addImage(canvas.toDataURL("image/png"), "PNG", 3, 0, 205, 140);
-      window.open(
-        pdf.output("bloburl", { filename: `${encabezado}.pdf` }),
-        "_blank"
-      );
+    html2canvas(element, { scale: 4 }).then(function (canvas) {
+      var img = canvas.toDataURL("image/png");
+      var doc = new jsPdf("l", "mm", "a5");
+      doc.addImage(img, "PNG", 30, 5, 150, 130);
+      window.open(doc.output("bloburl"));
     });
 
     // const options = {
@@ -60,19 +52,25 @@ export class ModalTicketFinalizadoComponent implements OnInit {
     //   await window.open(pdf.output('bloburl'), '_blank');
     // });
 
+    // var specialElementHandler = {
+    //   "#editor": function(element, renderer) {
+    //     return true;
+    //   }
+    // }
     // const doc = new jsPdf("l", "mm", "a5");
     // doc.setProperties({
     //   title: `${encabezado}.pdf`,
     // });
-    // doc.fromHTML(document.getElementById("comprobante"), 10, 10, {
-    //   width: 190,
-    // });
+    // // doc.fromHTML(document.getElementById("tabla"), 10, 45);
+    // doc.addImage(imgUrl, "JPEG", 25, 5, 160, 35);
+    // // doc.text(element, 10, 10)
     // doc.output("dataurlnewwindow");
+    // // doc.save();
   }
 
   ngOnInit() {
     console.log(this.data.ticket);
-    
+
     if (this.data.ruta == "venta") {
       this.medidaPesoSinImpureza = "";
       this.tipoCliente = "Cliente";
@@ -111,7 +109,9 @@ export class ModalTicketFinalizadoComponent implements OnInit {
         cedulaChofer: this.data.ticket._PersonaChofer
           ? this.data.ticket._PersonaChofer.NumeroDocumento
           : null,
-        vehiculo: this.data.ticket._Vehiculo ? this.data.ticket._Vehiculo.Placa : null,
+        vehiculo: this.data.ticket._Vehiculo
+          ? this.data.ticket._Vehiculo.Placa
+          : null,
         rubros: this.data.ticket._TipoRubro.Descripcion,
         presentacion: this.data.ticket._TipoPresentacionRubro.Descripcion,
         porcentajeHumedad: this.data.ticket.PorcentajeHumedad,
@@ -152,7 +152,10 @@ export class ModalTicketFinalizadoComponent implements OnInit {
       };
     }
 
-    if (!this.data.ticket._Vehiculo || this.data.ticket._Vehiculo.Placa == "null") {
+    if (
+      !this.data.ticket._Vehiculo ||
+      this.data.ticket._Vehiculo.Placa == "null"
+    ) {
       this.porCarro = false;
       this.porSaco = false;
       this.medidaPesoNeto = "q";

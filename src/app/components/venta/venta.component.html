@@ -285,7 +285,6 @@
                     type="submit"
                     class="mt-2 mb-2 btn-block btn-outline-success"
                     mat-button
-                    [disabled]="buttonAgregarDetalle"
                     [disabled]="myForm.invalid"
                   >
                     Agregar Detalle
@@ -295,7 +294,6 @@
                   <button
                     type="button"
                     mat-button
-                    [disabled]="buttonRealizarVenta"
                     (click)="crearConfiguracionVenta()"
                     class="mt-2 mb-2 btn-block btn-primary"
                   >

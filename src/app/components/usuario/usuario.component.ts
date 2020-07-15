@@ -58,7 +58,7 @@ export class UsuarioComponent implements OnInit {
   async consultarUsuarios() {
     var respuesta = await this.usuarioService.consultarUsuarios();
     if (respuesta["codigo"] == "200") {
-      var usuarios: any = [];
+      var usuarios = [];
       for (let usuario of respuesta["respuesta"]) {
         if (usuario.IdUsuario == this.usuario.IdUsuario) {
           continue;

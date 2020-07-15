@@ -44,7 +44,6 @@
           <button
             mat-button
             type="submit"
-            [value]="botonIngresar"
             [disabled]="myForm.invalid"
             class="btn-outline-success btn-block"
           >
@@ -73,7 +72,7 @@
       <div class="table_all">
         <table
           mat-table
-          [dataSource]="lista_tabla | filter: filter_tabla:'Descripcion'"
+          [dataSource]="lista_tabla"
         >
           <ng-container matColumnDef="localidad">
             <th mat-header-cell *matHeaderCellDef>{{ nombre_tabla }}</th>

@@ -322,7 +322,7 @@ export class VentaComponent implements OnInit {
     }
     this.myForm.get("_fechaFinalCredito").setValue("");
   }
-
+ 
   async crearDetalleVenta() {
     if (this.myForm.valid) {
       var respuesta = await this.ventaService.crearDetalleFactura(
@@ -530,6 +530,8 @@ export class VentaComponent implements OnInit {
           this.validarFecha(),
           this.myForm.get("_aplicaSeguro").value ? "1" : "0"
         );
+        console.log(respuesta);
+        
         if (respuesta["codigo"] == "200") {
           this.realizarVenta();
         }
@@ -543,7 +545,8 @@ export class VentaComponent implements OnInit {
     var respuesta = await this.facturaService.finalizarFactura(
       this.myForm.get("_idCabecera").value,
       "Factura/FinalizarCabeceraFacturaVenta"
-    );
+    )
+    console.log(respuesta);
     if (respuesta["codigo"] == "200") {
       openDialog("Venta realizada con éxito", "success", this.dialog);
       this.consultarFacturas(true);

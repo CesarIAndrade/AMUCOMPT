@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
-import { salir, openDialog, openSnackBar} from '../../functions/global';
-import { Router } from '@angular/router';
+import { salir, openDialog, openSnackBar } from "../../functions/global";
+import { Router } from "@angular/router";
 
 // Components
 import { ConfirmDialogComponent } from "../confirm-dialog/confirm-dialog.component";
@@ -11,7 +11,7 @@ import {
   MatTableDataSource,
   MatPaginator,
   MatDialog,
-  MatSnackBar
+  MatSnackBar,
 } from "@angular/material";
 
 // Services
@@ -131,8 +131,8 @@ export class ProvinciaComponent implements OnInit {
       width: "250px",
       height: "auto",
       data: {
-        mensaje: ""
-      }
+        mensaje: "",
+      },
     });
     dialogRef.afterClosed().subscribe(async (result) => {
       if (result) {
@@ -160,8 +160,8 @@ export class ProvinciaComponent implements OnInit {
   }
 
   mostrarProvincia(provincia) {
-    console.log(provincia); 
-    
+    console.log(provincia);
+
     this.myForm.get("_idProvincia").setValue(provincia.IdProvincia);
     this.myForm.get("_provincia").setValue(provincia.Descripcion);
     this.botonIngresar = "modificar";

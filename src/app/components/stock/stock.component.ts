@@ -2,12 +2,15 @@ import { Component, OnInit, ViewChild } from "@angular/core";
 import { Router } from "@angular/router";
 import { salir, openDialog } from "../../functions/global";
 
+import * as jsPdf from "jspdf";
+
 // Material
 import { MatPaginator, MatTableDataSource, MatDialog } from "@angular/material";
 
 // Services
 import { InventarioService } from "src/app/services/inventario.service";
 import { RubrosService } from 'src/app/services/rubros.service';
+declare var xepOnline: any;
 
 @Component({
   selector: "app-stock",
@@ -27,6 +30,10 @@ export class StockComponent implements OnInit {
   listaProductosEnStock = new MatTableDataSource<Element[]>();
 
   loading = true;
+
+  imprimirComprobante() {
+    return xepOnline.Formatter.Format('stock', {render: 'download'})
+  }
 
   async consultarStock() {
     var stock = await this.inventarioService.consultarStock();

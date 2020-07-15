@@ -87,7 +87,7 @@
           <div class="tablaProductos table_all">
             <table
               mat-table
-              [dataSource]="productos | filter: filterProducto:'nombre'"
+              [dataSource]="productos"
             >
               <ng-container matColumnDef="codigo">
                 <th mat-header-cell *matHeaderCellDef>Código</th>

@@ -99,7 +99,7 @@ export class ConfiguracionProductoComponent implements OnInit {
     var respuesta = await this.inventarioService.consultarTipoProductos();
     if (respuesta["codigo"] == "200") {
       this.loading = false;
-      var tipoProductos: any = [];
+      var tipoProductos = [];
       respuesta["respuesta"].map((item) => {
         tipoProductos.push({
           _id: item.IdTipoProducto,
