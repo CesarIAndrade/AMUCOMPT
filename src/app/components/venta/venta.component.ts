@@ -78,7 +78,7 @@ export class VentaComponent implements OnInit {
   buttonAgregarDetalle = true;
   buttonRealizarVenta = true;
   inputDescuento = true;
-  siSePagaACredito = false;
+  siSePagaACredito: boolean;
   comboKits = false;
   loadingFnF = true;
   loadingFF = true;
@@ -523,12 +523,14 @@ export class VentaComponent implements OnInit {
           this.dialog
         );
       } else {
+        console.log(this.siSePagaACredito);
+        
         var respuesta = await this.ventaService.crearConfiguracionVenta(
           this.myForm.get("_idCabecera").value,
           this.myForm.get("_idPersona").value,
-          this.siSePagaACredito ? "1" : "0",
+          this.siSePagaACredito ? "0" : "1",
           this.validarFecha(),
-          this.myForm.get("_aplicaSeguro").value ? "1" : "0"
+          this.myForm.get("_aplicaSeguro").value ? "0" : "1"
         );
         console.log(respuesta);
         
