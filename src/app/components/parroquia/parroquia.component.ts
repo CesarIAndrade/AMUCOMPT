@@ -155,14 +155,8 @@ export class ParroquiaComponent implements OnInit {
           idParroquia
         );
         if (respuesta["codigo"] == "200") {
-          var parroquias: any = this.parroquias.data;
-          var parroquia = parroquias.filter(
-            (parroquia) => parroquia["IdParroquia"] == idParroquia
-          );
-          var index = parroquias.indexOf(parroquia[0]);
-          parroquias.splice(index, 1);
-          this.parroquias.data = parroquias;
-          this.panelAdministracionService.refresh$.emit();
+          this.consultarParroquias();
+          // this.panelAdministracionService.refresh$.emit();
           openSnackBar("Se eliminó correctamente", this.snackBar);
         } else if (respuesta["codigo"] == "400") {
           openDialog("Inténtalo de nuevo", "advertencia", this.dialog);

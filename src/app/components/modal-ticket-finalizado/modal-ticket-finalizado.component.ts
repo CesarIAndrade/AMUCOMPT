@@ -20,10 +20,12 @@ export class ModalTicketFinalizadoComponent implements OnInit {
   medidaPesoNeto = "kg";
   porCarro: boolean;
   porSaco: boolean;
+  placaCarro: boolean;
   comprobanteVenta = "";
   medidaPesoSinImpureza = "q";
   tipoCliente = "";
   tipoComprobante = "";
+  balanza: string;
 
   imprimirComprobante(encabezado) {
     const element: HTMLElement = document.getElementById("comprobante");
@@ -70,11 +72,11 @@ export class ModalTicketFinalizadoComponent implements OnInit {
 
   ngOnInit() {
     console.log(this.data.ticket);
-
     if (this.data.ruta == "venta") {
       this.medidaPesoSinImpureza = "";
-      this.tipoCliente = "Cliente";
-      this.tipoComprobante = "Venta";
+      this.tipoCliente = "CLIENTE";
+      this.tipoComprobante = "VENTA";
+      this.balanza = "";
       this.detalleTicket = {
         codigo: this.data.ticket.Codigo,
         entrada: this.data.ticket.FechaIngreso,
@@ -110,7 +112,7 @@ export class ModalTicketFinalizadoComponent implements OnInit {
           ? this.data.ticket._PersonaChofer.NumeroDocumento
           : null,
         vehiculo: this.data.ticket._Vehiculo
-          ? this.data.ticket._Vehiculo.Placa
+          ? this.data.ticket._Vehiculo.Placa.toUpperCase()
           : null,
         rubros: this.data.ticket._TipoRubro.Descripcion,
         presentacion: this.data.ticket._TipoPresentacionRubro.Descripcion,
@@ -118,9 +120,10 @@ export class ModalTicketFinalizadoComponent implements OnInit {
         porcentajeImpureza: this.data.ticket.PorcentajeImpureza,
       };
     } else {
-      this.comprobanteVenta = "Peso Pagar:";
-      this.tipoCliente = "Proveedor";
-      this.tipoComprobante = "Compra";
+      this.comprobanteVenta = "PESO PAGAR:";
+      this.tipoCliente = "PROVEEDOR/CLIENTE";
+      this.tipoComprobante = "COMPRA";
+      this.balanza = "COMPRADOR/"
       this.detalleTicket = {
         codigo: this.data.ticket.Codigo,
         entrada: this.data.ticket.FechaIngreso,
@@ -149,6 +152,9 @@ export class ModalTicketFinalizadoComponent implements OnInit {
         presentacion: this.data.ticket._TipoPresentacionRubro.Descripcion,
         porcentajeHumedad: this.data.ticket.PorcentajeHumedad,
         porcentajeImpureza: this.data.ticket.PorcentajeImpureza,
+        vehiculo: this.data.ticket._Vehiculo
+          ? this.data.ticket._Vehiculo.Placa.toUpperCase()
+          : null,
       };
     }
 
@@ -158,11 +164,13 @@ export class ModalTicketFinalizadoComponent implements OnInit {
     ) {
       this.porCarro = false;
       this.porSaco = false;
+      this.placaCarro = false;
       this.medidaPesoNeto = "q";
     } else {
       this.data.ruta == "compra"
         ? (this.porCarro = false)
         : (this.porCarro = true);
+      this.placaCarro = true;
       this.porSaco = true;
       this.medidaPesoNeto = "kg";
     }

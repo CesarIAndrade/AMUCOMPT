@@ -14,6 +14,7 @@ import { ModalPersonaComponent } from "../modal-persona/modal-persona.component"
 import { ModalTicketFinalizadoComponent } from "../modal-ticket-finalizado/modal-ticket-finalizado.component";
 import { ConfirmDialogComponent } from "../confirm-dialog/confirm-dialog.component";
 import { openDialog } from "../../functions/global";
+import { ModalModificarDatosTicketVentaComponent } from "../modal-modificar-datos-ticket-venta/modal-modificar-datos-ticket-venta.component";
 
 @Component({
   selector: "app-venta-rubros-entrada",
@@ -147,17 +148,21 @@ export class VentaRubrosEntradaComponent implements OnInit {
   }
 
   async consultarVentasRubros() {
+    this.loading = true;
+    this.tickets.data = [];
     var respuesta = await this.rubrosService.consultarComprasOVentasRubros(
       "ConsultarTicketVentaFinalizados"
-    );
+    );    
+    console.log(respuesta);
+    
     if (respuesta["codigo"] == "200") {
       this.loading = false;
       var temp_respuesta: any = [];
-      respuesta["respuesta"].map((item) => {        
+      respuesta["respuesta"].map((item) => {
         item.Finalizado = true;
         temp_respuesta.push(item);
       });
-      this.tickets.data = temp_respuesta;      
+      this.tickets.data = temp_respuesta;
     }
   }
 
@@ -247,7 +252,7 @@ export class VentaRubrosEntradaComponent implements OnInit {
       // Saco
       this.myForm.get("_porcentajeImpureza").value,
       this.myForm.get("_porcentajeHumedad").value,
-      this.myForm.get("_precioPorQuintal").value,
+      this.myForm.get("_precioPorQuintal").value
     );
     if (respuesta["codigo"] == "200") {
       this.consultarPlacas();
@@ -277,7 +282,7 @@ export class VentaRubrosEntradaComponent implements OnInit {
       height: "auto",
       data: {
         mensaje: "",
-      }, 
+      },
     });
     dialogRef.afterClosed().subscribe(async (result) => {
       if (result) {
@@ -330,7 +335,7 @@ export class VentaRubrosEntradaComponent implements OnInit {
     });
   }
 
-  reimprimirComprobante(ticket){
+  reimprimirComprobante(ticket) {
     this.dialog.open(ModalTicketFinalizadoComponent, {
       width: "auto",
       height: "auto",
@@ -338,6 +343,21 @@ export class VentaRubrosEntradaComponent implements OnInit {
         ticket,
         ruta: "venta",
       },
+    });
+  }
+
+  modalModificarDatosTicketVenta(ticket) {
+    var dialogRef = this.dialog.open(ModalModificarDatosTicketVentaComponent, {
+      width: "500px",
+      height: "auto",
+      data: {
+        ticket,
+      },
+    });
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.consultarVentasRubros();
+      }
     });
   }
 

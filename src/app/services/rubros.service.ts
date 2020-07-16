@@ -344,8 +344,6 @@ export class RubrosService {
       .set("PorcentajeHumedad", porcentajeHumedad)
       .set("PrecioPorQuintal", precioPorQuintal)
       .set("encriptada", localStorage.getItem("token"));
-    console.log(body);
-    
     return new Promise((resolve, reject) => {
       this.http
         .post(apiUrl + "Rubros/IngresarVentaRubro", body.toString(), {
@@ -363,5 +361,38 @@ export class RubrosService {
           }
         );
     });
+  }
+
+  modalModificarDatosTicketVenta(
+    idTicket: string,
+    precioPorQuintal: string,
+    porcentajeHumedad: string,
+    porcentajeImpureza: string,
+    idAdministrador: string
+  ) {
+    const body = new HttpParams()
+    .set("IdTicketVenta", idTicket)
+    .set("IdAsignarTU", idAdministrador )
+    .set("PrecioPorQuintal", precioPorQuintal)
+    .set("PorcentajeImpureza", porcentajeImpureza)
+    .set("PorcentajeHumedad", porcentajeHumedad)
+    .set("encriptada", localStorage.getItem("token"));
+  return new Promise((resolve, reject) => {
+    this.http
+      .post(apiUrl + "Rubros/ModificarVentaRubro", body.toString(), {
+        headers: new HttpHeaders().set(
+          "Content-Type",
+          "application/x-www-form-urlencoded"
+        ),
+      })
+      .subscribe(
+        (res) => {
+          resolve(res);
+        },
+        (err) => {
+          reject(err);
+        }
+      );
+  });
   }
 }

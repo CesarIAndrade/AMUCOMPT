@@ -57,6 +57,7 @@ import { ComprasRubrosAnuladasComponent } from './components/compras-rubros-anul
 import { VentaRubrosEntradaComponent } from './components/venta-rubros-entrada/venta-rubros-entrada.component';
 import { VentaRubrosSalidaComponent } from './components/venta-rubros-salida/venta-rubros-salida.component';
 import { VentaRubrosComponent } from './components/venta-rubros/venta-rubros.component';
+import { ModalModificarDatosTicketVentaComponent } from './components/modal-modificar-datos-ticket-venta/modal-modificar-datos-ticket-venta.component';
 
 @NgModule({
   declarations: [
@@ -106,6 +107,7 @@ import { VentaRubrosComponent } from './components/venta-rubros/venta-rubros.com
     VentaRubrosEntradaComponent,
     VentaRubrosSalidaComponent,
     VentaRubrosComponent,
+    ModalModificarDatosTicketVentaComponent
   ],
   imports: [
     BrowserModule,
@@ -133,7 +135,8 @@ import { VentaRubrosComponent } from './components/venta-rubros/venta-rubros.com
     ModalReasignarClientesComponent,
     RealizarAbonoComponent,
     ConfirmDialogComponent,
-    ModalTicketFinalizadoComponent
+    ModalTicketFinalizadoComponent,
+    ModalModificarDatosTicketVentaComponent
   ],
   providers: [],
   bootstrap: [AppComponent],

@@ -335,7 +335,6 @@ export class VentaComponent implements OnInit {
           ? ""
           : this.myForm.get("_descuento").value
       );
-      console.log(respuesta);
       if (respuesta["codigo"] == "200") {
         this.buttonRealizarVenta = false;
         this.buttonGenerarFactura = false;
@@ -523,17 +522,13 @@ export class VentaComponent implements OnInit {
           this.dialog
         );
       } else {
-        console.log(this.siSePagaACredito);
-        
         var respuesta = await this.ventaService.crearConfiguracionVenta(
           this.myForm.get("_idCabecera").value,
           this.myForm.get("_idPersona").value,
           this.siSePagaACredito ? "0" : "1",
           this.validarFecha(),
           this.myForm.get("_aplicaSeguro").value ? "0" : "1"
-        );
-        console.log(respuesta);
-        
+        );        
         if (respuesta["codigo"] == "200") {
           this.realizarVenta();
         }
@@ -548,7 +543,6 @@ export class VentaComponent implements OnInit {
       this.myForm.get("_idCabecera").value,
       "Factura/FinalizarCabeceraFacturaVenta"
     )
-    console.log(respuesta);
     if (respuesta["codigo"] == "200") {
       openDialog("Venta realizada con éxito", "success", this.dialog);
       this.consultarFacturas(true);
@@ -585,7 +579,6 @@ export class VentaComponent implements OnInit {
           this.myForm.get("_idCabecera").value,
           result.idLocalidad
         );
-        console.log(respuesta);
         if (respuesta["codigo"] == "200") {
           this.comunidades.push({
             _id: result.idLocalidad,

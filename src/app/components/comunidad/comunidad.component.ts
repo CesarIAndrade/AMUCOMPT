@@ -161,16 +161,9 @@ export class ComunidadComponent implements OnInit {
           idComunidad
         );
         if (respuesta["codigo"] == "200") {
-          var comunidades: any = this.comunidades.data;
-          var comunidad = comunidades.find(
-            (comunidad) =>
-              comunidad["IdComunidad"] == this.myForm.get("_idComunidad").value
-          );
-          var index = comunidades.indexOf(comunidad);
-          comunidades.splice(index, 1);
-          this.comunidades.data = comunidades;
+          this.consultarComunidades();
           this.myForm.reset();
-          this.panelAdministracionService.refresh$.emit();
+          // this.panelAdministracionService.refresh$.emit();
           openSnackBar("Se eliminó correctamente", this.snackBar);
         } else if (respuesta["codigo"] == "400") {
           openDialog("Inténtalo de nuevo", "advertencia", this.dialog);

@@ -102,12 +102,10 @@ export class ProvinciaComponent implements OnInit {
     );
     if (respuesta["codigo"] == "200") {
       var provincias: any = this.provincias.data;
-      var provincia = provincias.filter(
+      provincias = provincias.filter(
         (provincia) =>
-          provincia["IdProvincia"] == this.myForm.get("_idProvincia").value
+          provincia["IdProvincia"] ===! this.myForm.get("_idProvincia").value
       );
-      var index = provincias.indexOf(provincia[0]);
-      provincias.splice(index, 1);
       provincias.push({
         IdProvincia: respuesta["respuesta"].IdProvincia,
         Descripcion: respuesta["respuesta"].Descripcion,
@@ -141,17 +139,15 @@ export class ProvinciaComponent implements OnInit {
         );
         if (respuesta["codigo"] == "200") {
           var provincias = this.provincias.data;
-          var provincia = provincias.filter(
-            (provincia) => provincia["IdProvincia"] == idProvincia
+          provincias = provincias.filter(
+            (provincia) => provincia["IdProvincia"] ===! idProvincia
           );
-          var index = provincias.indexOf(provincia[0]);
-          provincias.splice(index, 1);
           this.provincias.data = provincias;
           openSnackBar("Se eliminó correctamente", this.snackBar);
         } else if (respuesta["codigo"] == "400") {
           openDialog("Inténtalo de nuevo", "advertencia", this.dialog);
         } else if (respuesta["codigo"] == "418") {
-          openDialog(provincia["mensaje"], "advertencia", this.dialog);
+          openDialog(respuesta["mensaje"], "advertencia", this.dialog);
         } else if (respuesta["codigo"] == "500") {
           openDialog("Problemas con el servidor", "advertencia", this.dialog);
         }

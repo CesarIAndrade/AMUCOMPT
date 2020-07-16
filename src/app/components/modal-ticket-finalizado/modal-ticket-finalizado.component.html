@@ -10,12 +10,12 @@
 
   <div class="f-row mt-2">
     <div class="f-column ml-2">
-      <span>{{ tipoComprobante }} de Producto</span>
-      <span>Producto: {{ detalleTicket.rubros }}</span>
-      <span>Cédula: {{ detalleTicket.cedulaCliente }}</span>
-      <span *ngIf="porCarro">Cédula: {{ detalleTicket.cedulaChofer }}</span>
-      <span *ngIf="porCarro"
-        >Camión Placa Nro: {{ detalleTicket.vehiculo }}</span
+      <span>{{ tipoComprobante }} DE PRODUCTO</span>
+      <span>PRODUCTO: {{ detalleTicket.rubros }}</span>
+      <span>CÉDULA: {{ detalleTicket.cedulaCliente }}</span>
+      <span *ngIf="porCarro">CÉDULA: {{ detalleTicket.cedulaChofer }}</span>
+      <span *ngIf="placaCarro"
+        >CAMIÓN PLACA NRO: {{ detalleTicket.vehiculo }}</span
       >
     </div>
     <div class="f-column">
@@ -30,10 +30,10 @@
     <div class="f-column ml-2">
       <ng-container *ngIf="porSaco">
         <span
-          >Peso Bruto: {{ detalleTicket.pesoBruto }}{{ medidaPesoNeto }}</span
+          >PESO BRUT: {{ detalleTicket.pesoBruto }}{{ medidaPesoNeto }}</span
         >
-        <span>Peso Tara: {{ detalleTicket.pesoTara }}{{ medidaPesoNeto }}</span>
-        <span>Peso Neto: {{ detalleTicket.pesoNeto }}{{ medidaPesoNeto }}</span>
+        <span>PESO TARA: {{ detalleTicket.pesoTara }}{{ medidaPesoNeto }}</span>
+        <span>PESO NETO: {{ detalleTicket.pesoNeto }}{{ medidaPesoNeto }}</span>
         <span
           >{{ comprobanteVenta }} {{ detalleTicket.pesoSinImpurezas
           }}{{ medidaPesoSinImpureza }}</span>
@@ -41,27 +41,27 @@
     </div>
     <div class="f-column">
       <span class="f-column">
-        <span>Humedad: {{ detalleTicket.porcentajeHumedad }}%</span>
-        <span>Impureza: {{ detalleTicket.porcentajeImpureza }}%</span>
+        <span>HUMEDAD: {{ detalleTicket.porcentajeHumedad }}%</span>
+        <span>IMPUREZA: {{ detalleTicket.porcentajeImpureza }}%</span>
       </span>
       <span>--------------------------------------------</span>
-      <span>Equivalente a: {{ detalleTicket.peso }}q</span>
+      <span>EQUIVALENTE A: {{ detalleTicket.peso }}q</span>
     </div>
   </div>
 
   <div class="f-row mt-2">
     <div class="f-column">
       <span class="text-center"
-        >Precio qq: ${{ detalleTicket.precioPorQuintal }}</span
+        >PRECIO qq: ${{ detalleTicket.precioPorQuintal }}</span
       >
-      <span class="text-center mt-2">Entrada</span>
+      <span class="text-center mt-2">ENTRADA</span>
       <span class="text-center">{{ detalleTicket.entrada }}</span>
-      <span class="text-center mt-2">Venta Balanza</span>
+      <span class="text-center mt-2">{{balanza}}BALANZA</span>
       <input readonly type="text" />
     </div>
     <div class="f-column">
-      <span class="text-center">Total: ${{ detalleTicket.total }}</span>
-      <span class="text-center mt-2">Salida</span>
+      <span class="text-center">TOTAL: ${{ detalleTicket.total }}</span>
+      <span class="text-center mt-2">SALIDA</span>
       <span class="text-center">{{ detalleTicket.salida }}</span>
       <span class="text-center mt-2"> {{ tipoCliente }} </span>
       <input readonly type="text" />

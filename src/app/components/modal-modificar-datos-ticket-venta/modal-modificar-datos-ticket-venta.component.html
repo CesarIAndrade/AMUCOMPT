@@ -1,0 +1,58 @@
+<div class="container">
+  <div class="card-body">
+    <form
+      [formGroup]="myForm"
+      (ngSubmit)="modalModificarDatosTicketVenta()"
+      novalidate
+    >
+      <h5 style="text-align: center;">Modificar Ticket</h5>
+      <mat-form-field class="example-full-width">
+        <input
+          matInput
+          name="pesoBruto"
+          type="text"
+          placeholder="Precio Quintal"
+          formControlName="_precioPorQuintal"
+        />
+        <button disabled mat-button matPrefix mat-icon-button>
+          <mat-icon>*</mat-icon>
+        </button>
+      </mat-form-field>
+      <mat-form-field class="example-full-width">
+        <input
+          matInput
+          name="humedad"
+          type="text"
+          placeholder="% Humedad"
+          formControlName="_porcentajeHumedad"
+        />
+        <button disabled mat-button matPrefix mat-icon-button>
+          <mat-icon>*</mat-icon>
+        </button>
+      </mat-form-field>
+      <mat-form-field class="example-full-width">
+        <input
+          matInput
+          name="impureza"
+          type="text"
+          placeholder="% Impureza"
+          formControlName="_porcentajeImpureza"
+        />
+        <button disabled mat-button matPrefix mat-icon-button>
+          <mat-icon>*</mat-icon>
+        </button>
+      </mat-form-field>
+      <button
+        mat-button
+        type="submit"
+        [disabled]="myForm.invalid"
+        class="btn-outline-success btn-block"
+      >
+        Guardar
+      </button>
+      <a mat-button mat-dialog-close type="button" class="mt-2 btn-block">
+        Volver
+      </a>
+    </form>
+  </div>
+</div>

@@ -121,11 +121,9 @@ export class CantonComponent implements OnInit {
     );
     if (respuesta["codigo"] == "200") {
       var cantones: any = this.cantones.data;
-      var canton = cantones.filter(
-        (canton) => canton["IdCanton"] == this.myForm.get("_idCanton").value
+      cantones = cantones.filter(
+        (canton) => canton["IdCanton"] ===! this.myForm.get("_idCanton").value
       );
-      var index = cantones.indexOf(canton[0]);
-      cantones.splice(index, 1);
       cantones.push({
         IdProvincia: respuesta["respuesta"].Provincia.IdProvincia,
         Provincia: respuesta["respuesta"].Provincia.Descripcion,
@@ -161,14 +159,8 @@ export class CantonComponent implements OnInit {
           idCanton
         );
         if (respuesta["codigo"] == "200") {
-          var cantones = this.cantones.data;
-          var canton = cantones.filter(
-            (canton) => canton["IdCanton"] == idCanton
-          );
-          var index = cantones.indexOf(canton[0]);
-          cantones.splice(index, 1);
-          this.cantones.data = cantones;
-          this.panelAdministracionService.refresh$.emit();
+          this.consultarCantones();
+          // this.panelAdministracionService.refresh$.emit();
           openSnackBar("Se eliminó correctamente", this.snackBar);
         } else if (respuesta["codigo"] == "400") {
           openDialog("Inténtalo de nuevo", "advertencia", this.dialog);
