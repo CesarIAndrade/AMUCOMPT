@@ -254,6 +254,7 @@ export class VentaRubrosEntradaComponent implements OnInit {
       this.myForm.get("_porcentajeHumedad").value,
       this.myForm.get("_precioPorQuintal").value
     );
+    console.log(respuesta);
     if (respuesta["codigo"] == "200") {
       this.consultarPlacas();
       this.consultarTickets();

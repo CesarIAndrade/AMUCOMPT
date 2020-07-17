@@ -61,6 +61,27 @@
             <mat-form-field class="example-full-width">
               <input
                 matInput
+                formControlName="_placaVehiculo"
+                name="placaVehiculo"
+                type="text"
+                placeholder="Placa Vehiculo"
+                [matAutocomplete]="auto"
+              />
+              <button disabled matPrefix mat-icon-button>
+                <mat-icon>*</mat-icon>
+              </button>
+              <mat-autocomplete #auto="matAutocomplete">
+                <mat-option
+                  *ngFor="let option of filteredOptions | async"
+                  [value]="option.Placa"
+                >
+                  {{ option.Placa }}
+                </mat-option>
+              </mat-autocomplete>
+            </mat-form-field>
+            <mat-form-field class="example-full-width">
+              <input
+                matInput
                 type="text"
                 name="peso{{ tipoPeso }}"
                 placeholder="Peso {{ tipoPeso }}"
@@ -96,42 +117,39 @@
                 <mat-icon style="color: #f0ad4e;">person_add</mat-icon>
               </button>
             </mat-form-field>
-            <mat-form-field class="example-full-width">
-              <input
-                matInput
-                formControlName="_placaVehiculo"
-                name="placaVehiculo"
-                type="text"
-                placeholder="Placa Vehiculo"
-                [matAutocomplete]="auto"
-              />
-              <button disabled matPrefix mat-icon-button>
-                <mat-icon>*</mat-icon>
-              </button>
-              <mat-autocomplete #auto="matAutocomplete">
-                <mat-option
-                  *ngFor="let option of filteredOptions | async"
-                  [value]="option.Placa"
-                >
-                  {{ option.Placa }}
-                </mat-option>
-              </mat-autocomplete>
-            </mat-form-field>
           </ng-container>
 
           <ng-container *ngIf="ventaPorSaco">
-            <mat-form-field class="example-full-width">
-              <input
-                matInput
-                type="text"
-                name="porcentajeHumedad"
-                formControlName="_porcentajeHumedad"
-                placeholder="% Humedad"
-              />
-              <button disabled matPrefix mat-icon-button>
-                <mat-icon>*</mat-icon>
-              </button>
-            </mat-form-field>
+            <div class="row">
+              <div class="col-lg-6">
+                <mat-form-field class="example-full-width">
+                  <input
+                    matInput
+                    type="text"
+                    name="porcentajeHumedad"
+                    formControlName="_porcentajeHumedad"
+                    placeholder="% Humedad"
+                  />
+                  <button disabled matPrefix mat-icon-button>
+                    <mat-icon>*</mat-icon>
+                  </button>
+                </mat-form-field>
+              </div>
+              <div class="col-lg-6">
+                <mat-form-field class="example-full-width">
+                  <input
+                    matInput
+                    name="porcentajeImpureza"
+                    type="text"
+                    formControlName="_porcentajeImpureza"
+                    placeholder="% Impureza"
+                  />
+                  <button disabled matPrefix mat-icon-button>
+                    <mat-icon>*</mat-icon>
+                  </button>
+                </mat-form-field>
+              </div>
+            </div>
             <mat-form-field class="example-full-width">
               <input
                 matInput
@@ -139,18 +157,6 @@
                 name="precioPorQuintal"
                 formControlName="_precioPorQuintal"
                 placeholder="Precio Quintal"
-              />
-              <button disabled matPrefix mat-icon-button>
-                <mat-icon>*</mat-icon>
-              </button>
-            </mat-form-field>
-            <mat-form-field class="example-full-width">
-              <input
-                matInput
-                name="porcentajeImpureza"
-                type="text"
-                formControlName="_porcentajeImpureza"
-                placeholder="% Impureza"
               />
               <button disabled matPrefix mat-icon-button>
                 <mat-icon>*</mat-icon>

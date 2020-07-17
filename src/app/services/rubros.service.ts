@@ -344,6 +344,7 @@ export class RubrosService {
       .set("PorcentajeHumedad", porcentajeHumedad)
       .set("PrecioPorQuintal", precioPorQuintal)
       .set("encriptada", localStorage.getItem("token"));
+    console.log(body);
     return new Promise((resolve, reject) => {
       this.http
         .post(apiUrl + "Rubros/IngresarVentaRubro", body.toString(), {
