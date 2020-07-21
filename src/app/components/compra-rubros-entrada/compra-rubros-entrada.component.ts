@@ -51,7 +51,6 @@ export class CompraRubrosEntradaComponent implements OnInit {
 
   loading = true;
   compraPorSaco = false;
-  filterTicket = "";
   despuesDeSeleccionarPresentacion = false;
 
   // Para la paginacion
@@ -214,16 +213,7 @@ export class CompraRubrosEntradaComponent implements OnInit {
       .setValue(respuesta.Identificador);
   }
 
-  async crearTicket() { 
-
-    // this.dialog.open(ModalTicketFinalizadoComponent, {
-    //   width: "auto",
-    //   height: "auto",
-    //   data: {
-    //     ticket: "",
-    //   },
-    // });
-
+  async crearTicket() {
     this.loading = true;
     this.tickets.data = [];
     var respuesta = await this.rubrosService.crearTicket(
@@ -319,7 +309,7 @@ export class CompraRubrosEntradaComponent implements OnInit {
     });
   }
 
-  reimprimirComprobante(ticket){
+  reimprimirComprobante(ticket) {
     this.dialog.open(ModalTicketFinalizadoComponent, {
       width: "auto",
       height: "auto",
@@ -328,6 +318,12 @@ export class CompraRubrosEntradaComponent implements OnInit {
         ruta: "compra",
       },
     });
+  }
+
+  search(term: string) {
+    term = term.trim();
+    term = term.toUpperCase();
+    this.tickets.filter = term;
   }
 
   ngOnInit() {

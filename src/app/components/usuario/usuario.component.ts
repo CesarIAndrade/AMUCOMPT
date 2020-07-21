@@ -52,8 +52,8 @@ export class UsuarioComponent implements OnInit {
   botonInsertar = "insertar";
   inputType = "password";
   nuevoUsuario = "Nuevo Usuario";
-  filterUsuario = "";
   personas: any[] = [];
+  usuario: any;
 
   async consultarUsuarios() {
     var respuesta = await this.usuarioService.consultarUsuarios();
@@ -244,7 +244,12 @@ export class UsuarioComponent implements OnInit {
     this.myForm.reset();
   }
 
-  usuario: any;
+  search(term: string) {
+    term = term.trim();
+    term = term.toUpperCase();
+    this.usuarios.filter = term;
+  } 
+
   ngOnInit() {
     this.usuario = JSON.parse(localStorage.getItem("usuario"));
     this.consultarUsuarios();

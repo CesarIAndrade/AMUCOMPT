@@ -168,9 +168,8 @@
           <mat-form-field class="example-full-width">
             <input
               matInput
-              [(ngModel)]="filterTicket"
               name="buscarTicket"
-              [ngModelOptions]="{ standalone: true }"
+              (keyup)="search($event.target.value)"
               type="text"
               placeholder="Buscar Ticket"
             />

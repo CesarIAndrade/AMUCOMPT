@@ -142,9 +142,8 @@
                 <mat-form-field class="example-full-width">
                   <input
                     matInput
-                    [(ngModel)]="filter"
                     name="buscarConfiguracion"
-                    [ngModelOptions]="{ standalone: true }"
+                    (keyup)="search($event.target.value)"
                     type="text"
                     placeholder="Buscar {{ titulo }}"
                   />

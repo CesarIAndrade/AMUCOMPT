@@ -730,6 +730,12 @@ export class ConfiguracionProductoComponent implements OnInit {
     this.myForm.get("_tasaInteresMora").reset();
   }
 
+  search(term: string) {
+    term = term.trim();
+    term = term.toUpperCase();
+    this.dataSource.filter = term;
+  }
+
   ngOnInit() {
     this.myForm.get("_idCampo").setValue(this.opciones[0]._id);
     this.myForm.get("_interes").disable();

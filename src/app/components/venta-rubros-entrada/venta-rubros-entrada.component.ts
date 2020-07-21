@@ -244,7 +244,7 @@ export class VentaRubrosEntradaComponent implements OnInit {
       this.myForm.get("_idRubro").value,
       this.myForm.get("_idCliente").value,
       localStorage.getItem("miCuenta.idAsignacionTipoUsuario"),
-      this.myForm.get("_placaVehiculo").value ? "PesoTara" : "PesoNeto",
+      this.myForm.get("_idChofer").value ? "PesoTara" : "PesoNeto",
       this.myForm.get("_peso").value,
       // Carro
       this.myForm.get("_placaVehiculo").value,
@@ -254,14 +254,13 @@ export class VentaRubrosEntradaComponent implements OnInit {
       this.myForm.get("_porcentajeHumedad").value,
       this.myForm.get("_precioPorQuintal").value
     );
-    console.log(respuesta);
     if (respuesta["codigo"] == "200") {
       this.consultarPlacas();
       this.consultarTickets();
       this.ventaPorSaco = false;
       this.despuesDeSeleccionarPresentacion = false;
       this.carro = false;
-      if (!this.myForm.get("_placaVehiculo").value) {
+      if (!this.myForm.get("_idChofer").value) {
         this.dialog.open(ModalTicketFinalizadoComponent, {
           width: "auto",
           height: "auto",
@@ -360,6 +359,13 @@ export class VentaRubrosEntradaComponent implements OnInit {
         this.consultarVentasRubros();
       }
     });
+  }
+
+  
+  search(term: string) {
+    term = term.trim();
+    term = term.toUpperCase();
+    this.tickets.filter = term;
   }
 
   ngOnInit() {

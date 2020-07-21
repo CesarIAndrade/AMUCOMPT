@@ -2,10 +2,13 @@ import { Component, OnInit, Inject } from "@angular/core";
 import { MAT_DIALOG_DATA } from "@angular/material";
 import { imgUrl } from "../../functions/variables";
 
+import { reportsUrl } from "../../../environments/environment"
+
 import * as jsPdf from "jspdf";
 import html2canvas from "html2canvas";
 
 import * as html2pdf from "html2pdf.js";
+import { RubrosService } from "src/app/services/rubros.service";
 
 @Component({
   selector: "app-modal-ticket-finalizado",
@@ -13,7 +16,10 @@ import * as html2pdf from "html2pdf.js";
   styleUrls: ["./modal-ticket-finalizado.component.css"],
 })
 export class ModalTicketFinalizadoComponent implements OnInit {
-  constructor(@Inject(MAT_DIALOG_DATA) public data: any) {}
+  constructor(
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    private rubrosService: RubrosService
+  ) {}
 
   detalleTicket: any = {};
 
@@ -27,14 +33,17 @@ export class ModalTicketFinalizadoComponent implements OnInit {
   tipoComprobante = "";
   balanza: string;
 
-  imprimirComprobante(encabezado) {
-    const element: HTMLElement = document.getElementById("comprobante");
-    html2canvas(element, { scale: 4 }).then(function (canvas) {
-      var img = canvas.toDataURL("image/png");
-      var doc = new jsPdf("l", "mm", "a5");
-      doc.addImage(img, "PNG", 30, 5, 150, 130);
-      window.open(doc.output("bloburl"));
-    });
+  imprimirComprobante(idTicket: string) {
+    // const element: HTMLElement = document.getElementById("comprobante");
+    // html2canvas(element, { scale: 4 }).then(function (canvas) {
+    //   var img = canvas.toDataURL("image/png");
+    //   var doc = new jsPdf("l", "mm", "a5");
+    //   doc.addImage(img, "PNG", 30, 5, 150, 130);
+    //   window.open(doc.output("bloburl"));
+    // });
+
+    const { IdTicket } = this.data.ticket;
+    window.open(reportsUrl + `Reporte/Ticket?Ticket=${IdTicket}`);
 
     // const options = {
     //   filename: `${encabezado}.pdf`,
@@ -123,7 +132,7 @@ export class ModalTicketFinalizadoComponent implements OnInit {
       this.comprobanteVenta = "PESO PAGAR:";
       this.tipoCliente = "PROVEEDOR/CLIENTE";
       this.tipoComprobante = "COMPRA";
-      this.balanza = "COMPRADOR/"
+      this.balanza = "COMPRADOR/";
       this.detalleTicket = {
         codigo: this.data.ticket.Codigo,
         entrada: this.data.ticket.FechaIngreso,
@@ -160,11 +169,15 @@ export class ModalTicketFinalizadoComponent implements OnInit {
 
     if (
       !this.data.ticket._Vehiculo ||
-      this.data.ticket._Vehiculo.Placa == "null"
+      this.data.ticket._Vehiculo.Placa == "null" ||
+      this.data.ruta == "venta"
     ) {
+      this.data.ruta == "venta"
+        ? (this.placaCarro = true)
+        : (this.placaCarro = false);
       this.porCarro = false;
       this.porSaco = false;
-      this.placaCarro = false;
+      // this.placaCarro = false;
       this.medidaPesoNeto = "q";
     } else {
       this.data.ruta == "compra"

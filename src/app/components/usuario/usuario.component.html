@@ -123,9 +123,8 @@
           <mat-form-field class="example-full-width">
             <input
               matInput
-              [(ngModel)]="filterUsuario"
               name="buscarUsuario"
-              [ngModelOptions]="{ standalone: true }"
+              (keyup)="search($event.target.value)"
               type="text"
               placeholder="Buscar Usuario"
             />

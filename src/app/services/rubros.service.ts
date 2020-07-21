@@ -372,28 +372,28 @@ export class RubrosService {
     idAdministrador: string
   ) {
     const body = new HttpParams()
-    .set("IdTicketVenta", idTicket)
-    .set("IdAsignarTU", idAdministrador )
-    .set("PrecioPorQuintal", precioPorQuintal)
-    .set("PorcentajeImpureza", porcentajeImpureza)
-    .set("PorcentajeHumedad", porcentajeHumedad)
-    .set("encriptada", localStorage.getItem("token"));
-  return new Promise((resolve, reject) => {
-    this.http
-      .post(apiUrl + "Rubros/ModificarVentaRubro", body.toString(), {
-        headers: new HttpHeaders().set(
-          "Content-Type",
-          "application/x-www-form-urlencoded"
-        ),
-      })
-      .subscribe(
-        (res) => {
-          resolve(res);
-        },
-        (err) => {
-          reject(err);
-        }
-      );
-  });
+      .set("IdTicketVenta", idTicket)
+      .set("IdAsignarTU", idAdministrador)
+      .set("PrecioPorQuintal", precioPorQuintal)
+      .set("PorcentajeImpureza", porcentajeImpureza)
+      .set("PorcentajeHumedad", porcentajeHumedad)
+      .set("encriptada", localStorage.getItem("token"));
+    return new Promise((resolve, reject) => {
+      this.http
+        .post(apiUrl + "Rubros/ModificarVentaRubro", body.toString(), {
+          headers: new HttpHeaders().set(
+            "Content-Type",
+            "application/x-www-form-urlencoded"
+          ),
+        })
+        .subscribe(
+          (res) => {
+            resolve(res);
+          },
+          (err) => {
+            reject(err);
+          }
+        );
+    });
   }
 }

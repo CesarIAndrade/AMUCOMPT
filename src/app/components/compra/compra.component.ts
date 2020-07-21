@@ -59,7 +59,6 @@ export class CompraComponent implements OnInit {
   buttonSeleccionarProducto = true;
   loteEnDetalle = true;
   buttonSeleccionarLote = true;
-  buttonAgregarDetalle = true;
   clearFieldLote = true;
   clearFieldFecha = true;
 
@@ -139,7 +138,6 @@ export class CompraComponent implements OnInit {
       this.selectTipoCompra = false;
       this.buttonSeleccionarProducto = false;
       this.buttonGenerarFactura = true;
-      this.buttonAgregarDetalle = false;
     } else {
       openDialog("Problemas con el servidor", "advertencia", this.dialog);
     }
@@ -493,7 +491,6 @@ export class CompraComponent implements OnInit {
       this.seccionKit = true;
       this.selected = "Producto";
       this.buttonSeleccionarProducto = true;
-      this.buttonAgregarDetalle = true;
       this.listaProductosDeUnKit = [];
       this.myForm.reset();
       this.myForm.disable();
@@ -515,7 +512,6 @@ export class CompraComponent implements OnInit {
     this.buttonSeleccionarProducto = false;
     this.selectTipoCompra = false;
     this.buttonGenerarFactura = false;
-    this.buttonAgregarDetalle = false;
     this.consultarDetalleFactura();
   }
 
