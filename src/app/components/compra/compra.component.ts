@@ -103,7 +103,7 @@ export class CompraComponent implements OnInit {
   async consultarTipoTransaccion() {
     var respuesta = await this.facturaService.consultarTipoTransaccion();
     if (respuesta["codigo"] == "200") {
-      if (this.router.url === "/compras") {
+      if (this.router.url === "/dash/compras") {
         respuesta["respuesta"].map((item) => {
           if (item.Descripcion == "COMPRA") {
             localStorage.setItem("miCuenta.compras", item.IdTipoTransaccion);

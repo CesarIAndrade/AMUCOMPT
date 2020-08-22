@@ -137,11 +137,7 @@ export class ProvinciaComponent implements OnInit {
           idProvincia
         );
         if (respuesta["codigo"] == "200") {
-          var provincias = this.provincias.data;
-          provincias = provincias.filter(
-            (provincia) => provincia["IdProvincia"] ===! idProvincia
-          );
-          this.provincias.data = provincias;
+          this.consultarProvincias();
           openSnackBar("Se eliminó correctamente", this.snackBar);
         } else if (respuesta["codigo"] == "400") {
           openDialog("Inténtalo de nuevo", "advertencia", this.dialog);
