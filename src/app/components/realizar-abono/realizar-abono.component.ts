@@ -64,7 +64,6 @@ export class RealizarAbonoComponent implements OnInit {
             this.data.idConfigurarVenta,
             this.myForm.get("_monto").value
           );
-          console.log(respuesta);
           if (respuesta["codigo"] == "200") {
             this.seguimientoService.refresh$.emit();
             this.myForm.reset();

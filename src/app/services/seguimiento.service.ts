@@ -405,7 +405,6 @@ export class SeguimientoService {
     const body = new HttpParams()
       .set("IdAsignarTUTecnico", idTecnico)
       .set("encriptada", localStorage.getItem("token"));
-    console.log(body);
     return new Promise((resolve, reject) => {
       this.http
         .post(

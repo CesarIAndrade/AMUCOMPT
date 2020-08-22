@@ -324,7 +324,6 @@ export class VentaRubrosEntradaComponent implements OnInit {
           localStorage.getItem("miCuenta.idAsignacionTipoUsuario"),
           "AnularVentaRubro"
         );
-        console.log(respuesta);
         if (respuesta["codigo"] == "200") {
           this.loading = false;
           this.consultarVentasRubros();

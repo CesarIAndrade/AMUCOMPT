@@ -499,7 +499,6 @@ export class ConfiguracionProductoComponent implements OnInit {
           mostrar: true,
         });
       });
-      console.log(intereses);
       this.dataSource.data = intereses;
       this.dataSource.paginator = this.paginator;
     }
@@ -528,7 +527,6 @@ export class ConfiguracionProductoComponent implements OnInit {
       this.myForm.get("_idInteresMora").value,
       this.myForm.get("_tasaInteresMora").value
     );
-    console.log(respuesta);
     if (respuesta["codigo"] == "200") {
       openSnackBar("Se ingresó correctamente", this.snackBar);
       this.consultarIntereses();

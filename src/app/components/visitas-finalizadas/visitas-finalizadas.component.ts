@@ -117,7 +117,6 @@ export class VisitasFinalizadasComponent implements OnInit {
     var respuesta = await this.seguimientoService.consultarVisitasFinalizadas(
       localStorage.getItem("miCuenta.idAsignacionTipoUsuario")
     );    
-    console.log(respuesta);
     if (respuesta["codigo"] == "200") {
       this._database.recibirData(respuesta["respuesta"]);
     } else if (respuesta["codigo"] == "403") {

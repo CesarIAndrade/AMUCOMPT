@@ -45,7 +45,6 @@ export class ProvinciaComponent implements OnInit {
 
   async consultarProvincias() {
     var provincias = await this.panelAdministracionService.consultarProvincias();
-    console.log(provincias);
     if (provincias["codigo"] == "200") {
       this.loading = false;
       this.provincias.data = provincias["respuesta"];
@@ -156,8 +155,6 @@ export class ProvinciaComponent implements OnInit {
   }
 
   mostrarProvincia(provincia) {
-    console.log(provincia);
-
     this.myForm.get("_idProvincia").setValue(provincia.IdProvincia);
     this.myForm.get("_provincia").setValue(provincia.Descripcion);
     this.botonIngresar = "modificar";

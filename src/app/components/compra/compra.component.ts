@@ -341,7 +341,6 @@ export class CompraComponent implements OnInit {
       this.myForm.get("_cantidad").value,
       "0"
     );
-    console.log(respuesta);
     if (respuesta["codigo"] == "200") {
       openSnackBar("Se ingresó correctamente", this.snackBar);
       this.limpiarCampos();

@@ -120,7 +120,6 @@ export class ModalTicketFinalizadoComponent implements OnInit {
           : null,
       };
     }
-    console.log(this.data.ticket);
     if (
       !this.data.ticket._Vehiculo ||
       this.data.ticket._Vehiculo.Placa == "null"

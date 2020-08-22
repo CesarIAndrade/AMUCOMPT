@@ -45,7 +45,7 @@ export class LoginComponent implements OnInit {
       );
       if (login["codigo"] == "200") {
         this.seleccionarTipoUsuario = true;
-        this.loading = false; 
+        this.loading = false;
         this.loginForm = false;
         localStorage.setItem("usuario", JSON.stringify(login["respuesta"]));
         localStorage.setItem("token", login["Token"]);
@@ -81,35 +81,5 @@ export class LoginComponent implements OnInit {
     }
   }
 
-  async consultarTokens() {
-    var tokens = await this.seguridadService.consultarTokens();
-    console.log(tokens);
-
-    // .then((ok) => {
-    //   this.ingresarCredenciales = true;
-    //   this.seleccionarTipoUsuario = false;
-    //   localStorage.setItem(
-    //     "miCuenta.getToken",
-    //     ok["respuesta"]["ClaveGetEncrip"]
-    //   );
-    //   localStorage.setItem(
-    //     "miCuenta.postToken",
-    //     ok["respuesta"]["ClavePostEncrip"]
-    //   );
-    //   localStorage.setItem(
-    //     "miCuenta.putToken",
-    //     ok["respuesta"]["ClavePutEncrip"]
-    //   );
-    //   localStorage.setItem(
-    //     "miCuenta.deleteToken",
-    //     ok["respuesta"]["ClaveDeleteEncrip"]
-    //   );
-    // })
-    // .catch((error) => console.log(error));
-  }
-
-  ngOnInit() {
-
-
-  }
+  ngOnInit() {}
 }

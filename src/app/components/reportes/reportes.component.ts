@@ -13,7 +13,6 @@ export class ReportesComponent implements OnInit {
 
   ngOnInit() {
     var tipoUsuario: any = localStorage.getItem("miCuenta.tipoUsuario");
-    console.log(tipoUsuario);
     if (tipoUsuario == 2) {
       this.reportes = [
         {

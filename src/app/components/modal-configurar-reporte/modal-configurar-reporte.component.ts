@@ -34,9 +34,7 @@ export class ModalConfigurarReporteComponent implements OnInit {
   fechas: boolean;
 
   ngOnInit() {
-    this.consultarRubros();
-    console.log(this.data);
-    
+    this.consultarRubros();    
     if (this.data.rol == "secreteria") {
       if (this.data.id == 7) {
         this.requerirCliente();

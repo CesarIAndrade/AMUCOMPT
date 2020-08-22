@@ -224,7 +224,6 @@ export class ModalAsignacionConfiguracionProductoComponent implements OnInit {
       this.idKit,
       this.cantidad
     );
-    console.log(respuesta);
     if (respuesta["codigo"] == "200") {
       this.modalAsignacionConfiguracionProducto.close({ flag: true });
       this.buttonComprarKitCompleto = true;

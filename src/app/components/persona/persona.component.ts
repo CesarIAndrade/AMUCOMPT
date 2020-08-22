@@ -260,7 +260,6 @@ export class PersonaComponent implements OnInit {
         this.myForm.get("_parroquia").value,
         this.myForm.get("_referencia").value
       );
-      console.log(respuesta);
       if (respuesta["codigo"] == "200") {
         openSnackBar("Se ingresó correctamente", this.snackBar);
         this.personaService.refresh$.emit();
@@ -329,7 +328,6 @@ export class PersonaComponent implements OnInit {
   }
 
   mostrarPersona(persona) {
-    console.log(persona);
     this.myForm.reset();
     try {
       persona.ListaTelefono.map((telefono, index) => {
@@ -414,7 +412,6 @@ export class PersonaComponent implements OnInit {
         this.myForm.get("_parroquia").value,
         this.myForm.get("_referencia").value
       );
-      console.log(respuesta);
       if (respuesta["codigo"] == "200") {
         openSnackBar("Se actualizó correctamente", this.snackBar);
         this.personaService.refresh$.emit();

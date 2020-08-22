@@ -149,7 +149,6 @@ export class CreditosAbonosComponent implements OnInit {
     term = term.trim();
     term = term.toUpperCase();
     this.personas.filter = term;
-    console.log(this.personas.filter);
   }
 
   search(term: string) {

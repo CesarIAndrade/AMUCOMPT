@@ -669,7 +669,6 @@ export class InventarioService {
       .set("IdConfigurarProducto", idConfigurarProducto)
       .set("IdAsignarDescuentoKit", idAsignarDescuentoKit)
       .set("encriptada", localStorage.getItem("token"));
-    console.log(body);
     return new Promise((resolve, reject) => {
       this.http
         .post(
