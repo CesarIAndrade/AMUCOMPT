@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from "@angular/core";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { Router } from "@angular/router";
 import { salir, openDialog, openSnackBar } from "../../functions/global";
+import { reportsUrl } from '../../../environments/environment';
 
 // Components
 import { ModalAsignacionConfiguracionProductoComponent } from "../modal-asignacion-configuracion-producto/modal-asignacion-configuracion-producto.component";
@@ -52,9 +53,8 @@ export class VentaComponent implements OnInit {
     });
   }
 
-  nombres: string;
-
   myForm: FormGroup;
+  nombres: string;
   selected = "Producto";
   pago = "Efectivo";
   selectedTab = 0;
@@ -121,12 +121,12 @@ export class VentaComponent implements OnInit {
   facturasFinalizadas = new MatTableDataSource<Element[]>();
 
   async consultarTipoTransaccion() {
-    var respuesta = await this.facturaService.consultarTipoTransaccion();
+    var respuesta = await this.facturaService.consultarTipoTransaccion();    
     if (respuesta["codigo"] == "200") {
-      if (this.router.url === "/ventas") {
+      if (this.router.url === "/dash/ventas") {
         respuesta["respuesta"].map((item) => {
           if (item.Descripcion == "VENTA") {
-            localStorage.setItem("miCuenta.ventas", item.IdTipoTransaccion);
+            localStorage.setItem("miCuenta.ventas", item.IdTipoTransaccion);            
           }
         });
       }
@@ -547,6 +547,8 @@ export class VentaComponent implements OnInit {
       openDialog("Venta realizada con éxito", "success", this.dialog);
       this.consultarFacturas(true);
       this.myForm.reset();
+      this.nombres = "";
+      this.cedula = "";
       this.myForm.disable();
       this.detalleVenta.data = [];
       this.listaProductosDeUnKit = [];
@@ -685,6 +687,11 @@ export class VentaComponent implements OnInit {
     if (respuesta["codigo"] == "200") {
       this.consultarFacturas(false);
     }
+  }
+
+  verFactura(factura) {
+    var url = `reporte/factura?factura=${factura}`;
+    window.open(reportsUrl + url);
   }
 
   ngOnInit() {

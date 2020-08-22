@@ -48,7 +48,7 @@ export class LoadmoreDatabase {
   rootLevelNodes: string[] = [];
   dataMap = new Map<string, string[]>();
 
-  recibirData(clientes) {
+  recibirData(clientes) {    
     clientes.map((cliente) => {
       var comunidades = [];
       var visitas = [];
@@ -116,7 +116,8 @@ export class VisitasFinalizadasComponent implements OnInit {
   async consultarVisitasFinalizadas() {
     var respuesta = await this.seguimientoService.consultarVisitasFinalizadas(
       localStorage.getItem("miCuenta.idAsignacionTipoUsuario")
-    );
+    );    
+    console.log(respuesta);
     if (respuesta["codigo"] == "200") {
       this._database.recibirData(respuesta["respuesta"]);
     } else if (respuesta["codigo"] == "403") {

@@ -1,8 +1,7 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { Router } from "@angular/router";
 import { salir, openDialog } from "../../functions/global";
-
-import * as jsPdf from "jspdf";
+import { reportsUrl } from "../../../environments/environment";
 
 // Material
 import { MatPaginator, MatTableDataSource, MatDialog } from "@angular/material";
@@ -10,7 +9,6 @@ import { MatPaginator, MatTableDataSource, MatDialog } from "@angular/material";
 // Services
 import { InventarioService } from "src/app/services/inventario.service";
 import { RubrosService } from 'src/app/services/rubros.service';
-declare var xepOnline: any;
 
 @Component({
   selector: "app-stock",
@@ -30,9 +28,10 @@ export class StockComponent implements OnInit {
   listaProductosEnStock = new MatTableDataSource<Element[]>();
 
   loading = true;
+  secretaria: boolean;
 
-  imprimirComprobante() {
-    return xepOnline.Formatter.Format('stock', {render: 'download'})
+  imprimirComprobante() {    
+    window.open(reportsUrl + 'Reporte/Stock');
   }
 
   async consultarStock() {
@@ -152,8 +151,10 @@ export class StockComponent implements OnInit {
         "fechaCreacion",
         "cantidadRubro"
       ]
+      this.secretaria = false;
     } else {
       this.consultarStock();
+      this.secretaria = true;
     }
   }
 

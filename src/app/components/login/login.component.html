@@ -1,75 +1,78 @@
 <body>
-  <div class="login_form login_form_md">
-    <div class="card-body test">
-      <h3 class="amucomt">AMUCOMT</h3> 
-      <ng-container *ngIf="loginForm">
-        <form [formGroup]="myForm" (ngSubmit)="login()" novalidate>
-          <mat-form-field class="example-full-width">
-            <mat-label>Ingrese Usuario</mat-label>
-            <input
-              matInput
-              name="usuario"
-              formControlName="_usuario"
-              type="text"
-              style="color: #000"
-            />
-          </mat-form-field>
-          <mat-form-field class="example-full-width">
-            <mat-label>Ingrese Contraseña</mat-label>
-            <input
-              matInput
-              name="contrasena"
-              formControlName="_contrasena"
-              type="password"
-              style="color: #000"
-            />
-          </mat-form-field>
-          <div class="mt-3">
-            <button
-              type="submit"
-              mat-raised-button
-              [disabled]="myForm.invalid"
-              class="bg-warning mt-3 text-white btn-block"
-            >
-              Continuar
-            </button>
-          </div>
-        </form>
-      </ng-container>
-
-      <ng-container *ngIf="seleccionarTipoUsuario">
-        <form
-          [formGroup]="myForm"
-          (ngSubmit)="iniciarSesionSegunTipoUsuario()"
-          novalidate
-        >
-          <mat-form-field class="example-full-width">
-            <mat-label>Roles</mat-label>
-            <mat-select formControlName="_tipoUsuario">
-              <mat-option
-                *ngFor="let item of tipoUsuarios"
-                [value]="item.IdAsignacionTu"
+  <div class="row">
+    <div class="login_form col-lg-3 col-10">
+      <div class="card-body">
+        <h3 class="amucomt">AMUCOMT</h3> 
+        <ng-container *ngIf="loginForm">
+          <form [formGroup]="myForm" (ngSubmit)="login()" novalidate>
+            <mat-form-field class="example-full-width">
+              <mat-label>Ingrese Usuario</mat-label>
+              <input
+                matInput
+                name="usuario"
+                formControlName="_usuario"
+                type="text"
+                style="color: #000"
+              />
+            </mat-form-field>
+            <mat-form-field class="example-full-width">
+              <mat-label>Ingrese Contraseña</mat-label>
+              <input
+                matInput
+                name="contrasena"
+                formControlName="_contrasena"
+                type="password"
+                style="color: #000"
+              />
+            </mat-form-field>
+            <div class="mt-3">
+              <button
+                type="submit"
+                mat-raised-button
+                [disabled]="myForm.invalid"
+                class="bg-warning mt-3 text-white btn-block"
               >
-                {{ item.Descripcion }}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-          <div class="mt-3">
-            <button
-              type="submit"
-              mat-raised-button
-              [disabled]="myForm.invalid"
-              class="bg-danger mt-3 text-white btn-block"
-            >
-              Iniciar Sesion
-            </button>
-          </div>
-        </form>
-      </ng-container>
-
-      <div class="loading" *ngIf="loading">
-        <mat-spinner></mat-spinner>
+                Continuar
+              </button>
+            </div>
+          </form>
+        </ng-container>
+  
+        <ng-container *ngIf="seleccionarTipoUsuario">
+          <form
+            [formGroup]="myForm"
+            (ngSubmit)="iniciarSesionSegunTipoUsuario()"
+            novalidate
+          >
+            <mat-form-field class="example-full-width">
+              <mat-label>Roles</mat-label>
+              <mat-select formControlName="_tipoUsuario">
+                <mat-option
+                  *ngFor="let item of tipoUsuarios"
+                  [value]="item.IdAsignacionTu"
+                >
+                  {{ item.Descripcion }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <div class="mt-3">
+              <button
+                type="submit"
+                mat-raised-button
+                [disabled]="myForm.invalid"
+                class="bg-danger mt-3 text-white btn-block"
+              >
+                Iniciar Sesion
+              </button>
+            </div>
+          </form>
+        </ng-container>
+  
+        <div class="loading" *ngIf="loading">
+          <mat-spinner></mat-spinner>
+        </div>
       </div>
     </div>
   </div>
+
 </body>

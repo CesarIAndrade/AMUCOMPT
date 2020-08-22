@@ -58,6 +58,8 @@ import { VentaRubrosEntradaComponent } from './components/venta-rubros-entrada/v
 import { VentaRubrosSalidaComponent } from './components/venta-rubros-salida/venta-rubros-salida.component';
 import { VentaRubrosComponent } from './components/venta-rubros/venta-rubros.component';
 import { ModalModificarDatosTicketVentaComponent } from './components/modal-modificar-datos-ticket-venta/modal-modificar-datos-ticket-venta.component';
+import { ReportesComponent } from './components/reportes/reportes.component';
+import { ModalConfigurarReporteComponent } from './components/modal-configurar-reporte/modal-configurar-reporte.component';
 
 @NgModule({
   declarations: [
@@ -107,7 +109,9 @@ import { ModalModificarDatosTicketVentaComponent } from './components/modal-modi
     VentaRubrosEntradaComponent,
     VentaRubrosSalidaComponent,
     VentaRubrosComponent,
-    ModalModificarDatosTicketVentaComponent
+    ModalModificarDatosTicketVentaComponent,
+    ReportesComponent,
+    ModalConfigurarReporteComponent
   ],
   imports: [
     BrowserModule,
@@ -136,7 +140,8 @@ import { ModalModificarDatosTicketVentaComponent } from './components/modal-modi
     RealizarAbonoComponent,
     ConfirmDialogComponent,
     ModalTicketFinalizadoComponent,
-    ModalModificarDatosTicketVentaComponent
+    ModalModificarDatosTicketVentaComponent,
+    ModalConfigurarReporteComponent
   ],
   providers: [],
   bootstrap: [AppComponent],

@@ -642,7 +642,7 @@
                   </th>
                   <ng-container *matCellDef="let element">
                     <td mat-cell>
-                      <button mat-icon-button color="accent">
+                      <button (click)="verFactura(element.IdCabeceraFactura)" mat-icon-button color="accent">
                         <mat-icon>visibility</mat-icon>
                       </button>
                     </td>

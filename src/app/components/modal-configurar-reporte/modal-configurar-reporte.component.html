@@ -1,0 +1,58 @@
+<form [formGroup]="myForm" novalidate>
+  <mat-form-field class="example-full-width" *ngIf="general">
+    <mat-label>Presentación</mat-label>
+    <mat-select formControlName="_rubro">
+      <mat-option *ngFor="let item of rubros" [value]="item.Identificador">
+        {{ item.Descripcion }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field class="example-full-width" *ngIf="porCliente">
+    <input readonly matInput placeholder="Cliente" formControlName="_cliente" />
+    <button
+      tooltip="Seleccionar Cliente"
+      placement="top"
+      type="button"
+      mat-icon-button
+      matSuffix
+      (click)="seleccionarCliente()"
+    >
+      <mat-icon style="color: #f0ad4e;">person_add</mat-icon>
+    </button>
+  </mat-form-field>
+  <ng-container *ngIf="fechas">
+    <mat-form-field class="example-full-width">
+      <input
+        matInput
+        readonly
+        [matDatepicker]="pickerFI"
+        placeholder="Fecha Inicio"
+        formControlName="_fechaInicio"
+      />
+      <mat-datepicker #pickerFI></mat-datepicker>
+      <mat-datepicker-toggle matSuffix [for]="pickerFI">
+      </mat-datepicker-toggle>
+    </mat-form-field>
+    <mat-form-field class="example-full-width">
+      <input
+        matInput
+        readonly
+        [matDatepicker]="pickerFF"
+        placeholder="Fecha Fin"
+        formControlName="_fechaFin"
+      />
+      <mat-datepicker #pickerFF></mat-datepicker>
+      <mat-datepicker-toggle matSuffix [for]="pickerFF">
+      </mat-datepicker-toggle>
+    </mat-form-field>
+  </ng-container>
+
+  <button
+    mat-button
+    mat-dialog-close
+    class="bg-success text-white btn-block"
+    (click)="irAlReporte()"
+  >
+    Ver reporte
+  </button>
+</form>

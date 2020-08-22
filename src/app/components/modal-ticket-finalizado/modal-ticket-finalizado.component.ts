@@ -1,14 +1,6 @@
 import { Component, OnInit, Inject } from "@angular/core";
 import { MAT_DIALOG_DATA } from "@angular/material";
-import { imgUrl } from "../../functions/variables";
-
-import { reportsUrl } from "../../../environments/environment"
-
-import * as jsPdf from "jspdf";
-import html2canvas from "html2canvas";
-
-import * as html2pdf from "html2pdf.js";
-import { RubrosService } from "src/app/services/rubros.service";
+import { reportsUrl } from "../../../environments/environment";
 
 @Component({
   selector: "app-modal-ticket-finalizado",
@@ -18,11 +10,9 @@ import { RubrosService } from "src/app/services/rubros.service";
 export class ModalTicketFinalizadoComponent implements OnInit {
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private rubrosService: RubrosService
   ) {}
 
   detalleTicket: any = {};
-
   medidaPesoNeto = "kg";
   porCarro: boolean;
   porSaco: boolean;
@@ -32,55 +22,19 @@ export class ModalTicketFinalizadoComponent implements OnInit {
   tipoCliente = "";
   tipoComprobante = "";
   balanza: string;
+  tipoTransaccion: string;
 
-  imprimirComprobante(idTicket: string) {
-    // const element: HTMLElement = document.getElementById("comprobante");
-    // html2canvas(element, { scale: 4 }).then(function (canvas) {
-    //   var img = canvas.toDataURL("image/png");
-    //   var doc = new jsPdf("l", "mm", "a5");
-    //   doc.addImage(img, "PNG", 30, 5, 150, 130);
-    //   window.open(doc.output("bloburl"));
-    // });
-
-    const { IdTicket } = this.data.ticket;
-    window.open(reportsUrl + `Reporte/Ticket?Ticket=${IdTicket}`);
-
-    // const options = {
-    //   filename: `${encabezado}.pdf`,
-    //   image: { type: "jpeg" },
-    //   html2canvas: {},
-    //   jsPDF: { orientation: "l" },
-    // };
-
-    // html2pdf().from(document.getElementById("comprobante")).set(options).save();
-
-    // html2pdf()
-    // .from(document.getElementById("comprobante"))
-    // .set(options)
-    // .toPdf()
-    // .get('pdf')
-    // .then( async function (pdf) {
-    //   await window.open(pdf.output('bloburl'), '_blank');
-    // });
-
-    // var specialElementHandler = {
-    //   "#editor": function(element, renderer) {
-    //     return true;
-    //   }
-    // }
-    // const doc = new jsPdf("l", "mm", "a5");
-    // doc.setProperties({
-    //   title: `${encabezado}.pdf`,
-    // });
-    // // doc.fromHTML(document.getElementById("tabla"), 10, 45);
-    // doc.addImage(imgUrl, "JPEG", 25, 5, 160, 35);
-    // // doc.text(element, 10, 10)
-    // doc.output("dataurlnewwindow");
-    // // doc.save();
+  imprimirComprobante() {
+    if (this.data.ruta == "venta") {
+      const { IdTicketVenta } = this.data.ticket;
+      window.open(reportsUrl + `Reporte/Venta?Ticket=${IdTicketVenta}`);
+    } else {
+      const { IdTicket } = this.data.ticket;
+      window.open(reportsUrl + `Reporte/Ticket?Ticket=${IdTicket}`);
+    }
   }
 
   ngOnInit() {
-    console.log(this.data.ticket);
     if (this.data.ruta == "venta") {
       this.medidaPesoSinImpureza = "";
       this.tipoCliente = "CLIENTE";
@@ -166,26 +120,31 @@ export class ModalTicketFinalizadoComponent implements OnInit {
           : null,
       };
     }
-
+    console.log(this.data.ticket);
     if (
       !this.data.ticket._Vehiculo ||
-      this.data.ticket._Vehiculo.Placa == "null" ||
-      this.data.ruta == "venta"
+      this.data.ticket._Vehiculo.Placa == "null"
     ) {
       this.data.ruta == "venta"
         ? (this.placaCarro = true)
         : (this.placaCarro = false);
       this.porCarro = false;
       this.porSaco = false;
-      // this.placaCarro = false;
       this.medidaPesoNeto = "q";
+      this.tipoTransaccion = 'SACO';
     } else {
-      this.data.ruta == "compra"
-        ? (this.porCarro = false)
-        : (this.porCarro = true);
+      if (this.detalleTicket.cedulaChofer == this.detalleTicket.cedulaCliente) {
+        this.porCarro = false;
+      } else {
+        this.data.ruta == "compra"
+          ? (this.porCarro = false)
+          : (this.porCarro = true);
+      }
       this.placaCarro = true;
       this.porSaco = true;
       this.medidaPesoNeto = "kg";
+      this.tipoTransaccion = 'CARRO';
     }
   }
 }
+ 

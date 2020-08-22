@@ -65,9 +65,9 @@ export class ModalAsignacionConfiguracionProductoComponent implements OnInit {
   dataSource = new MatTableDataSource<Element[]>();
 
   agregarDetalle(producto) {
-    if (this.router.url == "/compras") {
+    if (this.router.url == "/dash/compras") {
       this.agregarDetalleParaCompra(producto);
-    } else if (this.router.url == "/ventas") {
+    } else if (this.router.url == "/dash/ventas") {
       this.agregarDetalleParaVenta(producto);
     }
   }
@@ -318,7 +318,7 @@ export class ModalAsignacionConfiguracionProductoComponent implements OnInit {
   }
 
   ngOnInit() {
-    if (this.router.url == "/ventas") {
+    if (this.router.url == "/dash/ventas") {
       if (this.data.listaProductosDeUnKit.length == 0) {
         this.consultarStock();
       } else {
@@ -337,7 +337,7 @@ export class ModalAsignacionConfiguracionProductoComponent implements OnInit {
           "venta"
         );
       }
-    } else if (this.router.url == "/compras") {
+    } else if (this.router.url == "/dash/compras") {
       try {
         this.nombreKit = this.data.listaProductosDeUnKit[0].Kit.Descripcion;
         this.idKit = this.data.listaProductosDeUnKit[0].Kit.IdKit;

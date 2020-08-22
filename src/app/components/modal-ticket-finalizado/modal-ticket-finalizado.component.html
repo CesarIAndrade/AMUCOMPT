@@ -20,7 +20,7 @@
     </div>
     <div class="f-column">
       <span>{{ detalleTicket.codigo }}</span>
-      <span>-</span>
+      <span> {{ tipoTransaccion }} </span>
       <span>{{ tipoCliente }}: {{ detalleTicket.cliente }}</span>
       <span *ngIf="porCarro">CHÓFER: {{ detalleTicket.chofer }}</span>
     </div>
@@ -36,7 +36,8 @@
         <span>PESO NETO: {{ detalleTicket.pesoNeto }}{{ medidaPesoNeto }}</span>
         <span
           >{{ comprobanteVenta }} {{ detalleTicket.pesoSinImpurezas
-          }}{{ medidaPesoSinImpureza }}</span>
+          }}{{ medidaPesoSinImpureza }}</span
+        >
       </ng-container>
     </div>
     <div class="f-column">
@@ -56,7 +57,7 @@
       >
       <span class="text-center mt-2">ENTRADA</span>
       <span class="text-center">{{ detalleTicket.entrada }}</span>
-      <span class="text-center mt-2">{{balanza}}BALANZA</span>
+      <span class="text-center mt-2">{{ balanza }}BALANZA</span>
       <input readonly type="text" />
     </div>
     <div class="f-column">
@@ -73,7 +74,7 @@
   <button
     class="mt-2"
     mat-raised-button
-    (click)="imprimirComprobante(detalleTicket.codigo)"
+    (click)="imprimirComprobante()"
     color="primary"
   >
     <mat-icon>print</mat-icon>

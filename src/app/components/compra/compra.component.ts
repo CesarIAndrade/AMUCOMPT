@@ -3,6 +3,7 @@ import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { Observable } from "rxjs";
 import { Router } from "@angular/router";
 import { salir, openDialog, openSnackBar} from '../../functions/global';
+import { reportsUrl } from '../../../environments/environment';
 
 // Material
 import { MatDialog, MatSnackBar } from "@angular/material";
@@ -564,6 +565,11 @@ export class CompraComponent implements OnInit {
     if (respuesta["codigo"] == "200") {
       this.consultarFacturas(false);
     }
+  }
+
+  verFactura(factura) {
+    var url = `reporte/factura?factura=${factura}`;
+    window.open(reportsUrl + url);
   }
 
   ngOnInit() {

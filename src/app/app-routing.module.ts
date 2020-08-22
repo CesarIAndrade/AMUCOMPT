@@ -24,18 +24,20 @@ import { RegistrarVisitaComponent } from "./components/registrar-visita/registra
 
 // Guards
 import { ValidarUsuarioGuard } from "src/app/guards/validar-usuario.guard";
-import { ComunidadComponent } from './components/comunidad/comunidad.component';
-import { ParroquiaComponent } from './components/parroquia/parroquia.component';
-import { CantonComponent } from './components/canton/canton.component';
-import { ProvinciaComponent } from './components/provincia/provincia.component';
-import { CompraVentaComponent } from './components/compra-venta/compra-venta.component';
-import { ComprasRubrosAnuladasComponent } from './components/compras-rubros-anuladas/compras-rubros-anuladas.component';
-import { VentaRubrosComponent } from './components/venta-rubros/venta-rubros.component';
+import { ComunidadComponent } from "./components/comunidad/comunidad.component";
+import { ParroquiaComponent } from "./components/parroquia/parroquia.component";
+import { CantonComponent } from "./components/canton/canton.component";
+import { ProvinciaComponent } from "./components/provincia/provincia.component";
+import { CompraVentaComponent } from "./components/compra-venta/compra-venta.component";
+import { ComprasRubrosAnuladasComponent } from "./components/compras-rubros-anuladas/compras-rubros-anuladas.component";
+import { VentaRubrosComponent } from "./components/venta-rubros/venta-rubros.component";
+import { ReportesComponent } from './components/reportes/reportes.component';
 
 var allRoutes = [
+  { path: "", redirectTo: "login", pathMatch: "full" },
   { path: "login", component: LoginComponent },
   {
-    path: "",
+    path: "dash",
     component: NavComponent,
     // canActivate: [ValidarUsuarioGuard],
     children: [
@@ -142,6 +144,11 @@ var allRoutes = [
       {
         path: "cuenta",
         component: CuentaComponent,
+        // canActivate: [ValidarUsuarioGuard]
+      },
+      {
+        path: "reportes",
+        component: ReportesComponent,
         // canActivate: [ValidarUsuarioGuard]
       },
     ],

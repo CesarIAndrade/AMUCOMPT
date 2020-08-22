@@ -43,7 +43,6 @@ export class LoginComponent implements OnInit {
         this.myForm.get("_usuario").value,
         this.myForm.get("_contrasena").value
       );
-      console.log(login);
       if (login["codigo"] == "200") {
         this.seleccionarTipoUsuario = true;
         this.loading = false; 
@@ -78,7 +77,7 @@ export class LoginComponent implements OnInit {
         tipoUsuario.Descripcion
       );
       localStorage.setItem("miCuenta.tipoUsuario", tipoUsuario.Identificacion);
-      this.router.navigateByUrl("/");
+      this.router.navigateByUrl("/dash");
     }
   }
 
@@ -109,5 +108,8 @@ export class LoginComponent implements OnInit {
     // .catch((error) => console.log(error));
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+
+
+  }
 }

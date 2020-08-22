@@ -1,6 +1,7 @@
 import { Component, OnInit, Inject, ViewChild } from "@angular/core";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { openDialog } from "../../functions/global";
+import { reportsUrl } from '../../../environments/environment';
 
 // Components
 import { ConfirmDialogComponent } from "../confirm-dialog/confirm-dialog.component";
@@ -91,9 +92,14 @@ export class RealizarAbonoComponent implements OnInit {
     }
   }
 
+  verComprobante(abono) {
+    var url = `reporte/Abono?Abono=${abono}`;
+    window.open(reportsUrl + url);    
+  }
+
   ngOnInit() {
     this.consultarAbonos();
   }
 
-  tablaAbonos = ["fechaRegistro", "monto"];
+  tablaAbonos = ["fechaRegistro", "monto", 'acciones'];
 }
