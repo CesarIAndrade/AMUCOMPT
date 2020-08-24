@@ -13,13 +13,13 @@ export class ValidarUsuarioGuard implements CanActivate, CanActivateChild, CanLo
     Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
       try {
         if (localStorage.getItem('miCuenta.nome_token')==null) {
-          this.router.navigateByUrl('login');
+          this.router.navigateByUrl('/login');
           return false;
         }else{
           return true;
         }
       } catch (error) {
-        this.router.navigateByUrl('login');
+        this.router.navigateByUrl('/login');
         return false;
       }
   }

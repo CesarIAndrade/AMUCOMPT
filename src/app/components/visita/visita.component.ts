@@ -53,7 +53,7 @@ export class VisitaComponent implements OnInit {
         data: { comunidades: comunidadesDeUnaPersona },
       });
     } else {
-      this.router.navigate(["/registrar-visita/", idComunidad]);
+      this.router.navigate(["/dash/registrar-visita/", idComunidad]);
     }
   }
 
