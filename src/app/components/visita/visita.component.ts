@@ -177,7 +177,7 @@ export class VisitaComponent implements OnInit {
     if (respuesta["codigo"] == "200") {
       var clientes = [];
       this.clientes.data = [];
-      respuesta["respuesta"].map((cliente) => {
+      respuesta["respuesta"].map((cliente) => {        
         clientes.push({
           _id: cliente.IdPersona,
           cedula: cliente.NumeroDocumento,
@@ -191,7 +191,7 @@ export class VisitaComponent implements OnInit {
             cliente.ApellidoMaterno,
           vivienda: cliente.AsignacionPersonaParroquia[0].Parroquia.Descripcion,
           telefono1: cliente.ListaTelefono[0].Numero,
-          telefono2: cliente.ListaTelefono[1].Numero,
+          telefono2: cliente.ListaTelefono[1] ? ' - '+cliente.ListaTelefono[1].Numero : '',
           comunidades: cliente._AsignarTecnicoPersonaComunidad,
         });
       });
