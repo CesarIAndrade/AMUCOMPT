@@ -29,9 +29,9 @@ export class ModalPersonaComponent implements OnInit {
   ngOnInit() {
 
     if (
-      this.router.url == "/ventas" ||
-      this.router.url == "/compras-rubros" ||
-      this.router.url == "/ventas-rubros"
+      this.router.url == "/dash/ventas" ||
+      this.router.url == "/dash/compras-rubros" ||
+      this.router.url == "/dash/ventas-rubros"
     ) {
       this.renderizarTablaOriginal = "false";
     } else {
