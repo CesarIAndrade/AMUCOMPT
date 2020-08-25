@@ -98,7 +98,7 @@ export class ReportesComponent implements OnInit {
           id: "1",
           rol: "administrador",
           descripcion: "Reporte general compra",
-          url: "reporte/FacturaCompras",
+          url: "reporte/Compra",
           // ?Inicio=01-01-2020&Fin=07-10-2020
         },
         {
