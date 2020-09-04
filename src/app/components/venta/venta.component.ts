@@ -121,12 +121,12 @@ export class VentaComponent implements OnInit {
   facturasFinalizadas = new MatTableDataSource<Element[]>();
 
   async consultarTipoTransaccion() {
-    var respuesta = await this.facturaService.consultarTipoTransaccion();    
+    var respuesta = await this.facturaService.consultarTipoTransaccion();
     if (respuesta["codigo"] == "200") {
       if (this.router.url === "/dash/ventas") {
         respuesta["respuesta"].map((item) => {
           if (item.Descripcion == "VENTA") {
-            localStorage.setItem("miCuenta.ventas", item.IdTipoTransaccion);            
+            localStorage.setItem("miCuenta.ventas", item.IdTipoTransaccion);
           }
         });
       }
@@ -209,6 +209,7 @@ export class VentaComponent implements OnInit {
       this.listaProductosDeUnKit = [];
       this.listaProductosDeUnKit =
         respuesta["respuesta"][0]["ListaAsignarProductoKit"];
+        console.log(respuesta["respuesta"])
       this.permitirAnadir = respuesta["respuesta"][0]["PermitirAnadir"];
       this.buttonSeleccionarProducto = false;
     }
@@ -322,7 +323,7 @@ export class VentaComponent implements OnInit {
     }
     this.myForm.get("_fechaFinalCredito").setValue("");
   }
- 
+
   async crearDetalleVenta() {
     if (this.myForm.valid) {
       var respuesta = await this.ventaService.crearDetalleFactura(
@@ -528,7 +529,7 @@ export class VentaComponent implements OnInit {
           this.siSePagaACredito ? "0" : "1",
           this.validarFecha(),
           this.myForm.get("_aplicaSeguro").value ? "0" : "1"
-        );        
+        );
         if (respuesta["codigo"] == "200") {
           this.realizarVenta();
         }

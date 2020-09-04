@@ -58,7 +58,7 @@ export class ModalAsignacionConfiguracionProductoComponent implements OnInit {
     flag: false,
   };
 
-  loading = true; 
+  loading = true;
 
   // Para la paginacion
   @ViewChild("paginator", { static: true }) paginator: MatPaginator;
@@ -286,7 +286,7 @@ export class ModalAsignacionConfiguracionProductoComponent implements OnInit {
           fechaExpiracion = item.Stock.AsignarProductoLote.FechaExpiracion;
         }
         cantidad = item.Stock.Cantidad;
-      }
+      }      
       var producto = {
         IdKit: item.Kit.IdKit,
         Kit: item.Kit.Descripcion,
@@ -298,7 +298,7 @@ export class ModalAsignacionConfiguracionProductoComponent implements OnInit {
         Lote: lote,
         FechaExpiracion: fechaExpiracion,
         Disponible: cantidad,
-        Cantidad: ''
+        Cantidad: item.Cantidad
       };
       listaProductosDeUnKit.push(producto);
     });
@@ -316,7 +316,7 @@ export class ModalAsignacionConfiguracionProductoComponent implements OnInit {
 
   search(term: string) {
     term = term.trim();
-    term = term.toUpperCase(); 
+    term = term.toUpperCase();
     this.dataSource.filter = term;
   }
 

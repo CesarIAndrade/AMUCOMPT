@@ -89,12 +89,13 @@ export class ArmarKitComponent implements OnInit {
             producto.ListaProductos.Medida.Descripcion,
           tipoProducto:
             producto.ListaProductos.Producto.TipoProducto.Descripcion,
-          cantidad: '',
+          cantidad: producto.Cantidad,
           usado: producto.ListaProductos.ConfigurarProductosUtilizado,
         });
       });
       this.listaProductosDeUnKit.data = data;
       this.listaProductosDeUnKit.paginator = this.paginator;
+      //console.log(this.listaProductosDeUnKit.data)
     }
   }
 
