@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
-import { FormGroup, FormControl } from "@angular/forms";
+import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { Router } from '@angular/router';
 import { salir, openDialog, openSnackBar } from '../../functions/global';
 
@@ -38,6 +38,7 @@ export class ArmarKitComponent implements OnInit {
     this.myForm = new FormGroup({
       _idKit: new FormControl(""),
       _idAsignarDescuentoKit: new FormControl(""),
+      _cantidad: new FormControl("", Validators.required),
     });
   }
 
@@ -88,6 +89,7 @@ export class ArmarKitComponent implements OnInit {
             producto.ListaProductos.Medida.Descripcion,
           tipoProducto:
             producto.ListaProductos.Producto.TipoProducto.Descripcion,
+          cantidad: '',
           usado: producto.ListaProductos.ConfigurarProductosUtilizado,
         });
       });
@@ -132,6 +134,13 @@ export class ArmarKitComponent implements OnInit {
     }
   }
 
+  validarFormulario(idProducto) {
+    if(this.myForm.valid) {
+      this.asignarProductoKit(idProducto);
+      this.myForm.get('_cantidad').reset();
+    }
+  }
+
   async asignarProductoKit(idProducto) {
     this.loadingP = true;
     this.loadingPK = true;
@@ -139,7 +148,8 @@ export class ArmarKitComponent implements OnInit {
     this.listaProductosDeUnKit.data = [];
     var producto = await this.inventarioService.asignarProductoKit(
       idProducto,
-      this.myForm.get("_idAsignarDescuentoKit").value
+      this.myForm.get("_idAsignarDescuentoKit").value,
+      this.myForm.get('_cantidad').value
     );
     if (producto["codigo"] == "200") {
       this.consultarKitsYSusProductos(this.myForm.get("_idKit").value);
@@ -179,5 +189,5 @@ export class ArmarKitComponent implements OnInit {
   }
 
   tablaProductos = ["codigo", "descripcion", "tipoProducto", "acciones"];
-  tablaProductosDeUnKit = ["codigo", "descripcion", "tipoProducto", "acciones"];
+  tablaProductosDeUnKit = ["codigo", "descripcion", "tipoProducto", "cantidad", "acciones"];
 }

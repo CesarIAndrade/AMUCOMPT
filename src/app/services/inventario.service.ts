@@ -663,33 +663,36 @@ export class InventarioService {
 
   asignarProductoKit(
     idConfigurarProducto: string,
-    idAsignarDescuentoKit: string
+    idAsignarDescuentoKit: string,
+    cantidad: string
   ) {
     const body = new HttpParams()
       .set("IdConfigurarProducto", idConfigurarProducto)
       .set("IdAsignarDescuentoKit", idAsignarDescuentoKit)
+      .set("Cantidad", cantidad)
       .set("encriptada", localStorage.getItem("token"));
-    return new Promise((resolve, reject) => {
-      this.http
-        .post(
-          apiUrl + "Inventario/IngresoAsignarProductoKit",
-          body.toString(),
-          {
-            headers: new HttpHeaders().set(
-              "Content-Type",
-              "application/x-www-form-urlencoded"
-            ),
-          }
-        )
-        .subscribe(
-          (res) => {
-            resolve(res);
-          },
-          (err) => {
-            reject(err);
-          }
-        );
-    });
+    console.log(body);
+    // return new Promise((resolve, reject) => {
+    //   this.http
+    //     .post(
+    //       apiUrl + "Inventario/IngresoAsignarProductoKit",
+    //       body.toString(),
+    //       {
+    //         headers: new HttpHeaders().set(
+    //           "Content-Type",
+    //           "application/x-www-form-urlencoded"
+    //         ),
+    //       }
+    //     )
+    //     .subscribe(
+    //       (res) => {
+    //         resolve(res);
+    //       },
+    //       (err) => {
+    //         reject(err);
+    //       }
+    //     );
+    // });
   }
 
   eliminarAsignacionProductoKit(idAsignarProductoKit: string) {

@@ -135,6 +135,7 @@ export class ModalAsignacionConfiguracionProductoComponent implements OnInit {
       "medida",
       "lote",
       "fechaExpiracion",
+      "cantidad",
       "disponible",
       "acciones",
     ];
@@ -207,7 +208,8 @@ export class ModalAsignacionConfiguracionProductoComponent implements OnInit {
           ContenidoNeto: contenidoNeto,
           Medida: medida,
           Porcentaje: porcentaje,
-          Precio: item.AsignarProductoLote.ValorUnitario
+          Precio: item.AsignarProductoLote.ValorUnitario,
+          Cantidad: ''
         };
         if (producto.Disponible != 0) {
           listaProductosEnStock.push(producto);
@@ -265,6 +267,7 @@ export class ModalAsignacionConfiguracionProductoComponent implements OnInit {
       "descripcion",
       "contenidoNeto",
       "medida",
+      "cantidad",
       "disponible",
     ]
     this.loading = false;
@@ -294,7 +297,8 @@ export class ModalAsignacionConfiguracionProductoComponent implements OnInit {
         IdLote: idLote,
         Lote: lote,
         FechaExpiracion: fechaExpiracion,
-        Disponible: cantidad
+        Disponible: cantidad,
+        Cantidad: ''
       };
       listaProductosDeUnKit.push(producto);
     });
