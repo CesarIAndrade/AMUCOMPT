@@ -135,7 +135,6 @@ export class ModalAsignacionConfiguracionProductoComponent implements OnInit {
       "medida",
       "lote",
       "fechaExpiracion",
-      "cantidad",
       "disponible",
       "acciones",
     ];
@@ -209,7 +208,6 @@ export class ModalAsignacionConfiguracionProductoComponent implements OnInit {
           Medida: medida,
           Porcentaje: porcentaje,
           Precio: item.AsignarProductoLote.ValorUnitario,
-          Cantidad: ''
         };
         if (producto.Disponible != 0) {
           listaProductosEnStock.push(producto);
