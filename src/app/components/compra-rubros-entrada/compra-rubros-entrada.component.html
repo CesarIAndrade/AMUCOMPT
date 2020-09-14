@@ -5,14 +5,8 @@
         <div class="col-lg-4 col-md-5">
           <mat-form-field class="example-full-width">
             <mat-label>Rubro</mat-label>
-            <mat-select
-              formControlName="_rubro"
-              (selectionChange)="selecionarRubro($event)"
-            >
-              <mat-option
-                *ngFor="let item of rubros"
-                [value]="item.IdTipoRubro"
-              >
+            <mat-select formControlName="_rubro" (selectionChange)="selecionarRubro($event)">
+              <mat-option *ngFor="let item of rubros" [value]="item.IdTipoRubro">
                 {{ item.Descripcion }}
               </mat-option>
             </mat-select>
@@ -22,14 +16,8 @@
           </mat-form-field>
           <mat-form-field class="example-full-width">
             <mat-label>Presentación</mat-label>
-            <mat-select
-              formControlName="_presentacionRubro"
-              (selectionChange)="seleccionarPresentacionRubros($event)"
-            >
-              <mat-option
-                *ngFor="let item of presentacionRubros"
-                [value]="item.IdTipoPresentacionRubro"
-              >
+            <mat-select formControlName="_presentacionRubro" (selectionChange)="seleccionarPresentacionRubros($event)">
+              <mat-option *ngFor="let item of presentacionRubros" [value]="item.IdTipoPresentacionRubro">
                 {{ item.Descripcion }}
               </mat-option>
             </mat-select>
@@ -39,54 +27,24 @@
           </mat-form-field>
           <ng-container *ngIf="despuesDeSeleccionarPresentacion">
             <mat-form-field class="example-full-width">
-              <input
-                readonly
-                matInput
-                type="text"
-                name="cliente"
-                placeholder="Cliente"
-                formControlName="_cliente"
-              />
-              <button
-                tooltip="Seleccionar Cliente"
-                mat-button
-                matSuffix
-                mat-icon-button
-                type="button"
-                (click)="seleccionarPersona()"
-              >
+              <input readonly matInput type="text" name="cliente" placeholder="Cliente" formControlName="_cliente" />
+              <button tooltip="Seleccionar Cliente" mat-button matSuffix mat-icon-button type="button" (click)="seleccionarPersona()">
                 <mat-icon style="color: #f0ad4e;">person_add</mat-icon>
               </button>
             </mat-form-field>
             <mat-form-field *ngIf="carro" class="example-full-width">
-              <input
-                matInput
-                formControlName="_placaVehiculo"
-                name="placaVehiculo"
-                type="text"
-                placeholder="Placa Vehiculo"
-                [matAutocomplete]="auto"
-              />
+              <input matInput formControlName="_placaVehiculo" name="placaVehiculo" type="text" placeholder="Placa Vehiculo" [matAutocomplete]="auto" />
               <button disabled matPrefix mat-icon-button>
                 <mat-icon>*</mat-icon>
               </button>
               <mat-autocomplete #auto="matAutocomplete">
-                <mat-option
-                  *ngFor="let option of filteredOptions | async"
-                  [value]="option.Placa"
-                >
+                <mat-option *ngFor="let option of filteredOptions | async" [value]="option.Placa">
                   {{ option.Placa }}
                 </mat-option>
               </mat-autocomplete>
             </mat-form-field>
             <mat-form-field class="example-full-width">
-              <input
-                matInput
-                type="text"
-                name="peso{{ tipoPeso }}"
-                placeholder="Peso {{ tipoPeso }}"
-                formControlName="_peso"
-              />
+              <input matInput type="text" name="peso{{ tipoPeso }}" placeholder="Peso {{ tipoPeso }}" formControlName="_peso" />
               <button disabled matPrefix mat-icon-button>
                 <mat-icon>*</mat-icon>
               </button>
@@ -100,13 +58,7 @@
             <div class="row">
               <div class="col-lg-6">
                 <mat-form-field class="example-full-width">
-                  <input
-                    matInput
-                    type="text"
-                    name="porcentajeHumedad"
-                    formControlName="_porcentajeHumedad"
-                    placeholder="% Humedad"
-                  />
+                  <input matInput type="text" name="porcentajeHumedad" formControlName="_porcentajeHumedad" placeholder="% Humedad" />
                   <button disabled matPrefix mat-icon-button>
                     <mat-icon>*</mat-icon>
                   </button>
@@ -114,13 +66,7 @@
               </div>
               <div class="col-lg-6">
                 <mat-form-field class="example-full-width">
-                  <input
-                    matInput
-                    name="porcentajeImpureza"
-                    type="text"
-                    formControlName="_porcentajeImpureza"
-                    placeholder="% Impureza"
-                  />
+                  <input matInput name="porcentajeImpureza" type="text" formControlName="_porcentajeImpureza" placeholder="% Impureza" />
                   <button disabled matPrefix mat-icon-button>
                     <mat-icon>*</mat-icon>
                   </button>
@@ -128,13 +74,7 @@
               </div>
             </div>
             <mat-form-field class="example-full-width">
-              <input
-                matInput
-                type="text"
-                name="precioPorQuintal"
-                formControlName="_precioPorQuintal"
-                placeholder="Precio Quintal"
-              />
+              <input matInput type="text" name="precioPorQuintal" formControlName="_precioPorQuintal" placeholder="Precio Quintal" />
               <button disabled matPrefix mat-icon-button>
                 <mat-icon>*</mat-icon>
               </button>
@@ -142,37 +82,18 @@
 
           </ng-container>
 
-          <button
-            mat-button
-            type="submit"
-            [disabled]="myForm.invalid"
-            class="btn-outline-success btn-block"
-          >
+          <button mat-button type="submit" [disabled]="myForm.invalid" class="btn-outline-success btn-block">
             Guardar
           </button>
         </div>
         <div class="col-lg-8 col-md-7">
-          <mat-radio-group
-            class="example-radio-group"
-            (change)="selecionarOpcion($event.value)"
-          >
-            <mat-radio-button
-              class="example-radio-button"
-              *ngFor="let opcion of opciones"
-              [value]="opcion"
-              [checked]="opcion.checked"
-            >
+          <mat-radio-group class="example-radio-group" (change)="selecionarOpcion($event.value)">
+            <mat-radio-button class="example-radio-button" *ngFor="let opcion of opciones" [value]="opcion" [checked]="opcion.checked">
               {{ opcion.descripcion }}
             </mat-radio-button>
           </mat-radio-group>
           <mat-form-field class="example-full-width">
-            <input
-              matInput
-              name="buscarTicket"
-              (keyup)="search($event.target.value)"
-              type="text"
-              placeholder="Buscar Ticket"
-            />
+            <input matInput name="buscarTicket" (keyup)="search($event.target.value)" type="text" placeholder="Buscar Ticket" />
             <button matPrefix mat-icon-button>
               <mat-icon>search</mat-icon>
             </button>
@@ -212,7 +133,7 @@
               <ng-container matColumnDef="pesoNeto">
                 <th mat-header-cell *matHeaderCellDef>Peso Neto</th>
                 <td mat-cell *matCellDef="let element">
-                  {{ element.PesoNeto }}q
+                  {{ element.PesoAPagar }}q
                 </td>
               </ng-container>
               <ng-container matColumnDef="total">
@@ -228,23 +149,14 @@
                 <ng-container *matCellDef="let element">
                   <ng-container *ngIf="!element.Finalizado">
                     <td mat-cell>
-                      <button
-                        type="button"
-                        mat-icon-button
-                        (click)="eliminarTicket(element.IdTicket)"
-                      >
+                      <button type="button" mat-icon-button (click)="eliminarTicket(element.IdTicket)">
                         <mat-icon style="color: #d9534f;">
                           delete_outline
                         </mat-icon>
                       </button>
                     </td>
                     <td mat-cell>
-                      <button
-                        type="button"
-                        mat-icon-button
-                        color="primary"
-                        (click)="finalizarTicket(element.IdTicket)"
-                      >
+                      <button type="button" mat-icon-button color="primary" (click)="finalizarTicket(element.IdTicket)">
                         <mat-icon>
                           done_all
                         </mat-icon>
@@ -253,23 +165,14 @@
                   </ng-container>
                   <ng-container *ngIf="element.Finalizado">
                     <td mat-cell>
-                      <button
-                        type="button"
-                        mat-icon-button
-                        (click)="anularCompra(element.IdTicket)"
-                      >
+                      <button type="button" mat-icon-button (click)="anularCompra(element.IdTicket)">
                         <mat-icon style="color: #d9534f;">
                           delete_outline
                         </mat-icon>
                       </button>
                     </td>
                     <td mat-cell>
-                      <button
-                        type="button"
-                        mat-icon-button
-                        (click)="reimprimirComprobante(element)"
-                        color="accent"
-                      >
+                      <button type="button" mat-icon-button (click)="reimprimirComprobante(element)" color="accent">
                         <mat-icon>
                           print
                         </mat-icon>
@@ -284,11 +187,7 @@
             <div class="spinner-container" *ngIf="loading">
               <mat-spinner></mat-spinner>
             </div>
-            <mat-paginator
-              #paginator
-              [pageSizeOptions]="[5]"
-              showFirstLastButtons
-            ></mat-paginator>
+            <mat-paginator #paginator [pageSizeOptions]="[5]" showFirstLastButtons></mat-paginator>
           </div>
         </div>
       </div>

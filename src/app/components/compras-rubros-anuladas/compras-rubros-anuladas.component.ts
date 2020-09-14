@@ -8,7 +8,7 @@ import { RubrosService } from "src/app/services/rubros.service";
   styleUrls: ["./compras-rubros-anuladas.component.css"],
 })
 export class ComprasRubrosAnuladasComponent implements OnInit {
-  constructor(private rubrosService: RubrosService) {}
+  constructor(private rubrosService: RubrosService) { }
 
   loading = true;
   transaccion = "Compra";
@@ -57,7 +57,7 @@ export class ComprasRubrosAnuladasComponent implements OnInit {
             item._PersonaQueDaAnular.ApellidoPaterno,
           Presentacion: item._TipoPresentacionRubro.Descripcion,
           Rubro: item._TipoRubro.Descripcion,
-          PesoNeto: item.PesoNeto,
+          PesoNeto: opcion == "1" ? item.PesoAPagar : item.PesoACobrar,
           Total: opcion == "1" ? item.TotalAPagar : item.TotalACobrar
         });
       });

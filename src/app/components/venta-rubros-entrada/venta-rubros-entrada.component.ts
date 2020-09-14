@@ -152,7 +152,7 @@ export class VentaRubrosEntradaComponent implements OnInit {
     this.tickets.data = [];
     var respuesta = await this.rubrosService.consultarComprasOVentasRubros(
       "ConsultarTicketVentaFinalizados"
-    );        
+    );
     if (respuesta["codigo"] == "200") {
       this.loading = false;
       var temp_respuesta: any = [];
@@ -358,7 +358,7 @@ export class VentaRubrosEntradaComponent implements OnInit {
     });
   }
 
-  
+
   search(term: string) {
     term = term.trim();
     term = term.toUpperCase();
