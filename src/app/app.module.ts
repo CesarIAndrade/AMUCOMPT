@@ -61,6 +61,8 @@ import { ModalModificarDatosTicketVentaComponent } from './components/modal-modi
 import { ReportesComponent } from './components/reportes/reportes.component';
 import { ModalConfigurarReporteComponent } from './components/modal-configurar-reporte/modal-configurar-reporte.component';
 
+import {LocationStrategy, HashLocationStrategy} from '@angular/common';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -143,7 +145,9 @@ import { ModalConfigurarReporteComponent } from './components/modal-configurar-r
     ModalModificarDatosTicketVentaComponent,
     ModalConfigurarReporteComponent
   ],
-  providers: [],
+  providers: [
+    {provide: LocationStrategy, useClass: HashLocationStrategy}
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

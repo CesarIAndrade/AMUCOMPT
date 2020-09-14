@@ -1,0 +1,6 @@
+ng build --prod --base-href="./"
+
+import {LocationStrategy, HashLocationStrategy} from '@angular/common';
+
+# add to providers
+{provide: LocationStrategy, useClass: HashLocationStrategy}
