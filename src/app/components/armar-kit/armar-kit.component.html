@@ -80,11 +80,10 @@
           <mat-form-field class="example-full-width">
             <input
               matInput
-              [(ngModel)]="filterProducto"
               name="buscarProducto"
-              [ngModelOptions]="{ standalone: true }"
               type="text"
               placeholder="Buscar Producto"
+              (keyup)="applyFilter($event.target.value)"
             />
             <button mat-button matPrefix mat-icon-button>
               <mat-icon>search</mat-icon>

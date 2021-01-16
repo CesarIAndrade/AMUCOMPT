@@ -39,7 +39,7 @@ export class ProductoComponent implements OnInit {
       _idConfiguracionProducto: new FormControl(""),
       _precio: new FormControl("", [Validators.required, Validators.pattern(/^[0-9]\d{0,9}(\.\d{1,3})?%?$/)]),
       _idPrecio: new FormControl(""),
-      _iva: new FormControl("", Validators.pattern(/^-?(0|[0-9]\d*)?$/)),
+      _iva: new FormControl("", Validators.pattern(/^[0-9]\d{0,9}(\.\d{1,3})?%?$/))
     });
   }
 

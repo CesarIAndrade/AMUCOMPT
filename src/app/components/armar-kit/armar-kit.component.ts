@@ -50,7 +50,6 @@ export class ArmarKitComponent implements OnInit {
   listaProductosDeUnKit = new MatTableDataSource<Element[]>();
 
   myForm: FormGroup;
-  filterProducto = "";
   kits: any[] = [];
   loadingP = false;
   loadingPK = false;
@@ -66,6 +65,25 @@ export class ArmarKitComponent implements OnInit {
       .setValue(kit[0].AsignarDescuentoKit.IdAsignarDescuentoKit);
     this.consultarKitsYSusProductos(idKit);
     this.consultarProductos(idKit);
+  }
+
+  filteresource = new MatTableDataSource<Element[]>();
+  applyFilter(term: string) {
+    if (term == "") {
+      this.productos.data = this.filteresource.data;
+    } else if (term != "") {
+      this.productos.data = this.filteresource.data.filter((e: any) =>
+        (
+          e.nombre.toLowerCase() +
+          " " +
+          e.descripcion.toLowerCase() +
+          " " +
+          e.tipoProducto.toLowerCase() +
+          " " +
+          e.codigo.toLowerCase()
+        ).includes(term.trim().toLowerCase())
+      );
+    }
   }
 
   async consultarKitsYSusProductos(idKit) {
@@ -132,6 +150,7 @@ export class ArmarKitComponent implements OnInit {
       });
       this.productos.data = data;
       this.productos.paginator = this.paginatorProductos;
+      this.filteresource.data = data;
     }
   }
 

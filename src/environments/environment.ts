@@ -5,9 +5,10 @@
 export const environment = {
   production: false
 };
-  // export const apiUrl = "http://localhost:49962/api/";
-export const apiUrl = "http://25.39.0.74:90/api/";
-export const reportsUrl = "http://25.39.0.74:90/";
+
+// export const apiUrl = "http://localhost:49962/api/";
+export const apiUrl = "http://26.175.169.125:90/api/";
+export const reportsUrl = "http://26.175.169.125:90/";
 
 /*
  * For easier debugging in development mode, you can import the following file

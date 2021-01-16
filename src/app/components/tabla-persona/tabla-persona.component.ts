@@ -48,16 +48,30 @@ export class TablaPersonaComponent implements OnInit {
       });
       this.personas.data = personas;
       this.personas.paginator = this.paginator;
+      this.filteresource.data = personas;
     } else if (respuesta["codigo"] == "403") {
       openDialog("Sesión Caducada", "advertencia", this.dialog);
       this.router.navigateByUrl(salir());
     }
   }
 
-  search(term: string) {
-    term = term.trim();
-    term = term.toUpperCase();
-    this.personas.filter = term;
+  filteresource = new MatTableDataSource<Element[]>();
+  applyFilter(term: string) {
+    if (term == "") {
+      this.personas.data = this.filteresource.data;
+    } else if (term != "") {
+      this.personas.data = this.filteresource.data.filter((e: any) =>
+        (
+          e.PrimerNombre.toLowerCase() +
+          " " +
+          e.SegundoNombre.toLowerCase() +
+          " " +
+          e.ApellidoPaterno.toLowerCase() +
+          " " +
+          e.ApellidoMaterno.toLowerCase()
+        ).includes(term.trim().toLowerCase())
+      );
+    }
   }
 
   @Output() obtenerPersona = new EventEmitter();
