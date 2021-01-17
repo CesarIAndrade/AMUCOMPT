@@ -82,7 +82,6 @@ export class ModalConfigurarReporteComponent implements OnInit {
           var fechaFin = this.getDate(this.myForm.get("_fechaFin").value);
           var url = `${this.data.url}?Inicio=${fechaInicio}&Fin=${fechaFin}`;
         }
-        alert(url)
         window.open(reportsUrl + url);
       } else {
         var fechaInicio = this.getDate(this.myForm.get("_fechaInicio").value);

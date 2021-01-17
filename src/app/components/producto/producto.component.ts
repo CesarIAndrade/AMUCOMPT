@@ -80,11 +80,8 @@ export class ProductoComponent implements OnInit {
     }
   }
 
-  async consultarConfiguracionProductoTodos() {
-    var respuesta = await this.inventarioService.consultarConfiguracionProductoTodos();
-  }
-
   async consultarProductos() {
+    this.productos.data = [];
     var respuesta = await this.inventarioService.consultarConfiguracionProducto();
     if (respuesta["codigo"] == "200") {
       var productos: any = [];
