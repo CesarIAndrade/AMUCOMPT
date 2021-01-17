@@ -28,13 +28,21 @@ export class ModalConfigurarReporteComponent implements OnInit {
     });
   }
 
-  rubros: any[] = [];
+  rubros: any[] = [
+    {
+      Identificador: '1',
+      Descripcion: 'Carro'
+    },
+    {
+      Identificador: '2',
+      Descripcion: 'Saco'
+    }
+  ];
   porCliente: boolean;
   general: boolean;
   fechas: boolean;
 
   ngOnInit() {
-    this.consultarRubros();    
     if (this.data.rol == "secreteria") {
       if (this.data.id == 7) {
         this.requerirCliente();
@@ -51,23 +59,6 @@ export class ModalConfigurarReporteComponent implements OnInit {
     } else if (this.data.rol == "gerente") {
       this.mostrarFechas();
     }
-  }
-
-  async consultarRubros() {
-    // var respuesta = await this.rubrosService.consultarRubros();
-    // if (respuesta["codigo"] == "200") {
-    //   this.rubros = respuesta["respuesta"];
-    // }
-    this.rubros = [
-      {
-        Identificador: '1',
-        Descripcion: 'Carro'
-      },
-      {
-        Identificador: '2',
-        Descripcion: 'Saco'
-      }
-    ]
   }
 
   irAlReporte() {
@@ -125,6 +116,8 @@ export class ModalConfigurarReporteComponent implements OnInit {
     }
     if (_fecha.getMonth() + 1 < 10) {
       mes = `0${_fecha.getMonth() + 1}`;
+    } else {
+      mes = `${_fecha.getMonth() + 1}`;
     }
     return `${mes}-${dia}-${_fecha.getFullYear()}`;
   }

@@ -108,7 +108,7 @@ export class InventarioService {
       .set("Nombre", nombre)
       .set("Descripcion", descripcion)
       .set("IdTipoProducto", idTipoProducto)
-      .set("encriptada", localStorage.getItem("token"));
+      .set("encriptada", localStorage.getItem("token"));    
     return new Promise((resolve, reject) => {
       this.http
         .post(apiUrl + "Inventario/IngresoProducto", body.toString(), {

@@ -82,7 +82,7 @@ export class ProductoComponent implements OnInit {
 
   async consultarProductos() {
     this.productos.data = [];
-    var respuesta = await this.inventarioService.consultarConfiguracionProducto();
+    var respuesta = await this.inventarioService.consultarConfiguracionProducto();    
     if (respuesta["codigo"] == "200") {
       var productos: any = [];
       respuesta["respuesta"].map((producto) => {
@@ -154,6 +154,8 @@ export class ProductoComponent implements OnInit {
         this.myForm.get("_tipoProducto").value
       );
       if (producto["codigo"] == "200") {
+        this.crearConfiguracionProducto(producto["respuesta"].IdProducto);
+      } else if (producto["codigo"] == "409") {
         this.crearConfiguracionProducto(producto["respuesta"].IdProducto);
       }
     } else {
