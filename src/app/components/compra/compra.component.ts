@@ -528,7 +528,9 @@ export class CompraComponent implements OnInit {
     if(flag) {
       var facturasFinalizadas = await this.facturaService.consultarFacturas(
         "Factura/ListaFacturasFinalizadas"
-      );
+      ).finally(() => {
+        this.loadingFF = false;
+      });
       if (facturasFinalizadas["codigo"] == "200") {
         this.loadingFF = false;
         this.facturasFinalizadas.data = facturasFinalizadas["respuesta"];
@@ -537,7 +539,9 @@ export class CompraComponent implements OnInit {
     }
     var facturasNoFinalizadas = await this.facturaService.consultarFacturas(
       "Factura/ListaFacturasNoFinalizadas"
-    );    
+    ).finally(() => {
+      this.loadingFnF = false;
+    });    
     if (facturasNoFinalizadas["codigo"] == "200") {
       this.loadingFnF = false;
       this.facturasNoFinalizadas.data = facturasNoFinalizadas["respuesta"];
