@@ -26,15 +26,6 @@
             placement="right"
             hide-delay="1"
             *ngFor="let option of filteredOptions | async | slice: 0:5"
-            [value]="
-              option.PrimerNombre +
-              ' ' +
-              option.SegundoNombre +
-              ' ' +
-              option.ApellidoPaterno +
-              ' ' +
-              option.ApellidoMaterno
-            "
           >
             {{ option.PrimerNombre }}
             {{ option.SegundoNombre }}

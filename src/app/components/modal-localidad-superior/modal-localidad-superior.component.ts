@@ -34,7 +34,6 @@ export class ModalLocalidadSuperiorComponent implements OnInit {
   }
 
   nombre_tabla = "";
-  filter_tabla = "";
   loading = true;
   datosLocalidad = {
     idLocalidad: "",
@@ -65,6 +64,12 @@ export class ModalLocalidadSuperiorComponent implements OnInit {
       this.lista_tabla.data = respuesta["respuesta"];
       this.lista_tabla.paginator = this.paginator;
     }
+  }
+
+  search(term: string) {
+    term = term.trim();
+    term = term.toUpperCase();
+    this.lista_tabla.filter = term;
   }
 
   async consultarParroquias() {

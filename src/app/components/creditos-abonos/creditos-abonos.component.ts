@@ -62,18 +62,17 @@ export class CreditosAbonosComponent implements OnInit {
   private _filter(value: string): string[] {
     if (value) {
       const filterValue = value.toLowerCase().trim();
-      return this._personas.filter((option) =>
-        (
-          option.PrimerNombre +
-          option.SegundoNombre +
-          option.ApellidoPaterno +
-          option.ApellidoMaterno +
-          option.NumeroDocumento
-        )
-          .trim()
-          .toLowerCase()
-          .includes(filterValue)
-      );
+      return this._personas.filter((e: any) =>
+      (
+        e.PrimerNombre.toLowerCase() +
+        " " +
+        e.SegundoNombre.toLowerCase() +
+        " " +
+        e.ApellidoPaterno.toLowerCase() +
+        " " +
+        e.ApellidoMaterno.toLowerCase()
+      ).includes(value.trim().toLowerCase())
+    );
     } else {
       return this._personas;
     }
