@@ -482,7 +482,7 @@ export class ConfiguracionProductoComponent implements OnInit {
   }
 
   async consultarIntereses() {
-    var respuesta = await this.inventarioService.consultarIntereses();
+    var respuesta = await this.inventarioService.consultarIntereses();    
     if (respuesta["codigo"] == "200") {
       var intereses: any = [];
       respuesta["respuesta"].map((interes) => {
@@ -553,6 +553,8 @@ export class ConfiguracionProductoComponent implements OnInit {
         var respuesta = await this.inventarioService.eliminarDeshabilitarInteres(
           idInteres
         );
+        console.log(respuesta);
+        
         if (respuesta["codigo"] == "200") {
           openSnackBar("Se deshabilitó correctamente", this.snackBar);
           this.consultarIntereses();
@@ -594,13 +596,13 @@ export class ConfiguracionProductoComponent implements OnInit {
         .get("_tasaInteres")
         .setValidators([
           Validators.required,
-          Validators.pattern(/^-?(1|[1-9]\d*)?$/),
+          Validators.pattern(/^[0-9]\d{0,9}(\.\d{1,3})?%?$/),
         ]);
       this.myForm
         .get("_tasaInteresMora")
         .setValidators([
           Validators.required,
-          Validators.pattern(/^-?(1|[1-9]\d*)?$/),
+          Validators.pattern(/^[0-9]\d{0,9}(\.\d{1,3})?%?$/),
         ]);
       this.myForm.get("_tasaInteres").updateValueAndValidity();
       this.myForm.get("_tasaInteresMora").updateValueAndValidity();

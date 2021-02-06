@@ -82,9 +82,7 @@ export class ProductoComponent implements OnInit {
 
   async consultarProductos() {
     this.productos.data = [];
-    var respuesta = await this.inventarioService.consultarConfiguracionProducto();    
-    console.log(respuesta);
-    
+    var respuesta = await this.inventarioService.consultarConfiguracionProducto();        
     if (respuesta["codigo"] == "200") {
       var productos: any = [];
       respuesta["respuesta"].map((producto) => {

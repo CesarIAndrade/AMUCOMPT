@@ -119,7 +119,7 @@ export class ModalConfigurarReporteComponent implements OnInit {
     } else {
       mes = `${_fecha.getMonth() + 1}`;
     }
-    return `${mes}-${dia}-${_fecha.getFullYear()}`;
+    return `${dia}-${mes}-${_fecha.getFullYear()}`;
   }
 
   mostrarFechas() {

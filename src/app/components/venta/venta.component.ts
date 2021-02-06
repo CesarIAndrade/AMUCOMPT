@@ -344,6 +344,7 @@ export class VentaComponent implements OnInit {
         this.selected = "Producto";
         this.inputDescuento = true;
         this.myForm.get("_checkedDescuento").disable();
+        this.buttonRealizarVenta = true;
         this.limpiarCampos();
         this.consultarDetalleFactura();
       } else if (respuesta["codigo"] == "500") {
@@ -446,6 +447,9 @@ export class VentaComponent implements OnInit {
         };
         detalleVenta.push(producto);
       });
+      if(detalleVenta.length < 0) {
+        this.buttonRealizarVenta = true;
+      }
       this.detalleVenta.data = detalleVenta;
       this.detalleVenta.paginator = this.paginator;
     }
@@ -565,6 +569,7 @@ export class VentaComponent implements OnInit {
       this.totalDescontado = "0'";
       this.totalIva = "0";
       this.totalFactura = "0";
+      this.buttonRealizarVenta = true;
     }
   }
 
@@ -698,8 +703,8 @@ export class VentaComponent implements OnInit {
   ngOnInit() {
     this.consultarTipoTransaccion();
     this.consultarFacturas(true);
-    this.myForm.disable();
     this.myForm.reset();
+    this.myForm.disable();
   }
 
   tablaDetalleCompra = [

@@ -780,6 +780,7 @@ export class InventarioService {
       .set("Capacidad", capacidad)
       .set("FechaExpiracion", fechaExpiracion)
       .set("encriptada", localStorage.getItem("token"));
+    console.log(body);
     return new Promise((resolve, reject) => {
       this.http
         .post(apiUrl + "Factura/IngresoLote", body.toString(), {

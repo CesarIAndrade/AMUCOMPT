@@ -104,6 +104,7 @@ export class CompraService {
       .set("Cantidad", cantidad)
       .set("Faltante", faltante)
       .set("encriptada", localStorage.getItem("token"));
+    console.log(body);
     return new Promise((resolve, reject) => {
       this.http
         .post(apiUrl + "Factura/IngresoDetalleFactura", body.toString(), {

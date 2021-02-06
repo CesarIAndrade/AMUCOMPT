@@ -307,7 +307,7 @@ export class CompraComponent implements OnInit {
   async crearLote(fechaExpiracion) {
     var lote = await this.inventarioService.crearLote(
       this.myForm.get("_lote").value,
-      this.myForm.get("_cantidad").value,
+      "0",
       fechaExpiracion
     );
     if (lote["codigo"] == "200") {
@@ -438,6 +438,9 @@ export class CompraComponent implements OnInit {
         };
         detalleCompra.push(producto);
       });
+      if(detalleCompra.length < 0) {
+        this.realizarCompraButton = true;
+      }
       this.detalleCompra.data = detalleCompra;
       this.detalleCompra.paginator = this.paginator;
     }
@@ -454,9 +457,12 @@ export class CompraComponent implements OnInit {
     } else if (respuesta["codigo"] == "201") {
       openSnackBar("Factura eliminada", this.snackBar);
       this.consultarFacturas(true);
-      this.myForm.reset();
       this.detalleCompra.data = [];
     }
+    this.selectTipoCompra = true;
+    this.buttonSeleccionarProducto = true;
+    this.myForm.reset();
+    this.myForm.disable();
   }
 
   async modificarCantidadDeProductoEnDetalle(
@@ -495,6 +501,7 @@ export class CompraComponent implements OnInit {
       this.myForm.reset();
       this.myForm.disable();
       this.detalleCompra.data = [];
+      this.realizarCompraButton = true;
     }
   }
 
