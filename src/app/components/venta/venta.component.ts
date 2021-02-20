@@ -209,7 +209,6 @@ export class VentaComponent implements OnInit {
       this.listaProductosDeUnKit = [];
       this.listaProductosDeUnKit =
         respuesta["respuesta"][0]["ListaAsignarProductoKit"];
-        console.log(respuesta["respuesta"])
       this.permitirAnadir = respuesta["respuesta"][0]["PermitirAnadir"];
       this.buttonSeleccionarProducto = false;
     }
@@ -344,7 +343,6 @@ export class VentaComponent implements OnInit {
         this.selected = "Producto";
         this.inputDescuento = true;
         this.myForm.get("_checkedDescuento").disable();
-        this.buttonRealizarVenta = true;
         this.limpiarCampos();
         this.consultarDetalleFactura();
       } else if (respuesta["codigo"] == "500") {
@@ -627,7 +625,6 @@ export class VentaComponent implements OnInit {
       .setValue(new Date(factura.FechaGeneracion).toJSON().split("T")[0]);
     this.buttonRealizarVenta = false;
     this.buttonSeleccionarProducto = false;
-    // this.buttonSeleccionarComunidad = false;
     this.buttonSeleccionarPersona = false;
     this.buttonAgregarDetalle = false;
     this.selectTipoCompra = false;
