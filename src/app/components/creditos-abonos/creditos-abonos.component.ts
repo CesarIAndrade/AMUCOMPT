@@ -2,8 +2,8 @@ import { Component, OnInit, ViewChild } from "@angular/core";
 import { FormGroup, FormControl } from "@angular/forms";
 import { Observable } from "rxjs";
 import { startWith, map } from "rxjs/operators";
-import { Router } from '@angular/router';
-import { salir, openDialog } from '../../functions/global';
+import { Router } from "@angular/router";
+import { salir, openDialog } from "../../functions/global";
 
 // Components
 import { RealizarAbonoComponent } from "../realizar-abono/realizar-abono.component";
@@ -55,24 +55,26 @@ export class CreditosAbonosComponent implements OnInit {
       );
     } else if (respuesta["codigo"] == "403") {
       openDialog("Sesión Caducada", "advertencia", this.dialog);
-      this.router.navigateByUrl(salir())
+      this.router.navigateByUrl(salir());
     }
   }
 
   private _filter(value: string): string[] {
+    if(value == '') {
+      this.dynamicLabel = "Buscar Cliente";
+    }    
     if (value) {
-      const filterValue = value.toLowerCase().trim();
       return this._personas.filter((e: any) =>
-      (
-        e.PrimerNombre.toLowerCase() +
-        " " +
-        e.SegundoNombre.toLowerCase() +
-        " " +
-        e.ApellidoPaterno.toLowerCase() +
-        " " +
-        e.ApellidoMaterno.toLowerCase()
-      ).includes(value.trim().toLowerCase())
-    );
+        (
+          e.PrimerNombre.toLowerCase() +
+          " " +
+          e.SegundoNombre.toLowerCase() +
+          " " +
+          e.ApellidoPaterno.toLowerCase() +
+          " " +
+          e.ApellidoMaterno.toLowerCase()
+        ).includes(value.trim().toLowerCase())
+      );
     } else {
       return this._personas;
     }
@@ -81,7 +83,10 @@ export class CreditosAbonosComponent implements OnInit {
   limpiarCampo() {
     this.myForm.get("_cliente").reset();
     this.facturas.data = [];
+    this.dynamicLabel = "Buscar Cliente";
   }
+
+  dynamicLabel = "Buscar Cliente";
 
   async seleccionarCliente(numeroDocumento) {
     this.myForm.get("_numeroDocumento").setValue(numeroDocumento);
@@ -90,13 +95,24 @@ export class CreditosAbonosComponent implements OnInit {
     var respuesta = await this.seguimientoService.consultarFacturasCliente(
       numeroDocumento
     );
+
+    var person = this._personas.find(
+      (person) => person.NumeroDocumento == numeroDocumento
+    );
+    this.dynamicLabel =
+      person.PrimerNombre +
+      " " +
+      person.SegundoNombre +
+      " " +
+      person.ApellidoPaterno +
+      " " +
+      person.ApellidoMaterno;
     if (respuesta["codigo"] == "200") {
       this.loading = false;
       var facturas: any = [];
       respuesta["respuesta"].map((factura) => {
         var p = 100;
         var fechaActual = new Date("2020-06-25T00:00:00");
-        // 2020-06-T09:08:30.79
         var fechaFactura = new Date(factura.FechaGeneracion);
         var fechaFinalCredito = new Date(
           factura.ConfigurarVenta.FechaFinalCredito

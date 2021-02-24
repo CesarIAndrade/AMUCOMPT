@@ -7,24 +7,23 @@
           name="buscarCliente"
           formControlName="_cliente"
           type="text"
-          placeholder="Buscar Cliente"
+          [placeholder]="dynamicLabel"
           [matAutocomplete]="auto"
         />
 
-        <button
-          type="button"
-          mat-button
-          matSuffix
-          mat-icon-button
-        >
+        <button type="button" mat-button matSuffix mat-icon-button>
           <mat-icon (click)="limpiarCampo()">clear</mat-icon>
         </button>
-        <mat-autocomplete #auto="matAutocomplete">
+        <mat-autocomplete
+          #auto="matAutocomplete"
+          (optionSelected)="seleccionarCliente($event.option.value)"
+          
+        >
           <mat-option
-            (onSelectionChange)="seleccionarCliente(option.NumeroDocumento)"
             tooltip="{{ option.NumeroDocumento }}"
             placement="right"
             hide-delay="1"
+            value="{{ option.NumeroDocumento }}"
             *ngFor="let option of filteredOptions | async | slice: 0:5"
           >
             {{ option.PrimerNombre }}
