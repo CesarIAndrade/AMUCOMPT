@@ -42,12 +42,28 @@ export class ModalConfigurarReporteComponent implements OnInit {
   general: boolean;
   fechas: boolean;
 
+  opciones = [
+    {
+      _id: "1",
+      descripcion: "General",
+      checked: true
+    },
+    {
+      _id: "2",
+      descripcion: "Por fecha",
+      checked: false
+    }
+  ];
+
+  selecionarOpcion(opcion) {
+    opcion['_id'] == "2" ? this.mostrarFechas() : this.ocultarFechas();
+  }
+
+
   ngOnInit() {
     if (this.data.rol == "secreteria") {
       if (this.data.id == 7) {
         this.requerirCliente();
-      } else {
-        this.mostrarFechas();
       }
     } else if (this.data.rol == "administrador") {
       this.mostrarFechas();
@@ -56,9 +72,10 @@ export class ModalConfigurarReporteComponent implements OnInit {
       } else if (this.data.id == 3) {
         this.requerirCliente();
       }
-    } else if (this.data.rol == "gerente") {
-      this.mostrarFechas();
-    }
+    } 
+    // else if (this.data.rol == "gerente") {
+    //   this.mostrarFechas();
+    // }
   }
 
   irAlReporte() {
@@ -68,10 +85,12 @@ export class ModalConfigurarReporteComponent implements OnInit {
           var url = `${this.data.url}?Persona=${this.myForm.get(
             "_idCliente"
           ).value}`;
+        } else if (!this.fechas) {
+          var url = `${this.data.url}?general=1`;
         } else {
           var fechaInicio = this.getDate(this.myForm.get("_fechaInicio").value);
           var fechaFin = this.getDate(this.myForm.get("_fechaFin").value);
-          var url = `${this.data.url}?Inicio=${fechaInicio}&Fin=${fechaFin}`;
+          var url = `${this.data.url}?Inicio=${fechaInicio}&Fin=${fechaFin}&general=0`;
         }
         window.open(reportsUrl + url);
       } else {
@@ -119,7 +138,8 @@ export class ModalConfigurarReporteComponent implements OnInit {
     } else {
       mes = `${_fecha.getMonth() + 1}`;
     }
-    return `${dia}-${mes}-${_fecha.getFullYear()}`;
+    // return `${dia}-${mes}-${_fecha.getFullYear()}`;
+    return `${_fecha.getFullYear()}-${mes}-${dia}`;
   }
 
   mostrarFechas() {
@@ -129,6 +149,16 @@ export class ModalConfigurarReporteComponent implements OnInit {
     this.myForm.get("_fechaFin").updateValueAndValidity();
     this.fechas = true;
   }
+
+  ocultarFechas() {
+    this.myForm.get("_fechaInicio").clearValidators();
+    this.myForm.get("_fechaInicio").updateValueAndValidity();
+    this.myForm.get("_fechaFin").clearValidators();
+    this.myForm.get("_fechaFin").updateValueAndValidity();
+    this.fechas = false;
+  }
+
+
 
   requerirCliente() {
     this.myForm.get("_cliente").setValidators([Validators.required]);

@@ -7,6 +7,22 @@
       </mat-option>
     </mat-select>
   </mat-form-field>
+
+  <mat-radio-group
+    *ngIf="!porCliente"
+    class="example-radio-group"
+    (change)="selecionarOpcion($event.value)"
+  >
+    <mat-radio-button
+      class="example-radio-button"
+      *ngFor="let opcion of opciones"
+      [value]="opcion"
+      [checked]="opcion.checked"
+    >
+      {{ opcion.descripcion }}
+    </mat-radio-button>
+  </mat-radio-group>
+
   <mat-form-field class="example-full-width" *ngIf="porCliente">
     <input readonly matInput placeholder="Cliente" formControlName="_cliente" />
     <button
@@ -17,7 +33,7 @@
       matSuffix
       (click)="seleccionarCliente()"
     >
-      <mat-icon style="color: #f0ad4e;">person_add</mat-icon>
+      <mat-icon style="color: #f0ad4e">person_add</mat-icon>
     </button>
   </mat-form-field>
   <ng-container *ngIf="fechas">
