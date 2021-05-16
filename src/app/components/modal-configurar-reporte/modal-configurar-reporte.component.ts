@@ -66,16 +66,12 @@ export class ModalConfigurarReporteComponent implements OnInit {
         this.requerirCliente();
       }
     } else if (this.data.rol == "administrador") {
-      this.mostrarFechas();
       if (this.data.id == 1) {
         this.especificarRubro();
       } else if (this.data.id == 3) {
         this.requerirCliente();
       }
-    } 
-    // else if (this.data.rol == "gerente") {
-    //   this.mostrarFechas();
-    // }
+    }
   }
 
   irAlReporte() {
@@ -92,18 +88,35 @@ export class ModalConfigurarReporteComponent implements OnInit {
           var fechaFin = this.getDate(this.myForm.get("_fechaFin").value);
           var url = `${this.data.url}?Inicio=${fechaInicio}&Fin=${fechaFin}&general=0`;
         }
-        window.open(reportsUrl + url);
       } else {
         var fechaInicio = this.getDate(this.myForm.get("_fechaInicio").value);
         var fechaFin = this.getDate(this.myForm.get("_fechaFin").value);
         if (this.myForm.get("_rubro").value) {
           var rubro = this.myForm.get("_rubro").value;
-          var url = `${this.data.url}?Identificador=${rubro}&Inicio=${fechaInicio}&Fin=${fechaFin}`;
+          if (!this.fechas) {
+            var url = `${this.data.url}?Identificador=${rubro}&general=1`;
+          } else {
+            var fechaInicio = this.getDate(this.myForm.get("_fechaInicio").value);
+            var fechaFin = this.getDate(this.myForm.get("_fechaFin").value);
+            var url = `${this.data.url}?Identificador=${rubro}&Inicio=${fechaInicio}&Fin=${fechaFin}&general=0`;
+          }
         } else if (this.myForm.get("_cedula").value) {
           var cliente = this.myForm.get("_cedula").value;
-          var url = `${this.data.url}?Identificacion=${cliente}&Inicio=${fechaInicio}&Fin=${fechaFin}`;
+          if (!this.fechas) {
+            var url = `${this.data.url}?Identificador=${cliente}&general=1`;
+          } else {
+            var fechaInicio = this.getDate(this.myForm.get("_fechaInicio").value);
+            var fechaFin = this.getDate(this.myForm.get("_fechaFin").value);
+            var url = `${this.data.url}?Identificador=${cliente}&Inicio=${fechaInicio}&Fin=${fechaFin}&general=0`;
+          }
         } else {
-          var url = `${this.data.url}?Inicio=${fechaInicio}&Fin=${fechaFin}`;
+          if (!this.fechas) {
+            var url = `${this.data.url}?general=1`;
+          } else {
+            var fechaInicio = this.getDate(this.myForm.get("_fechaInicio").value);
+            var fechaFin = this.getDate(this.myForm.get("_fechaFin").value);
+            var url = `${this.data.url}?Inicio=${fechaInicio}&Fin=${fechaFin}&general=0`;
+          }
         }
         window.open(reportsUrl + url);
       }
