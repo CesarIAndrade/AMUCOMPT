@@ -118,8 +118,8 @@ export class ModalConfigurarReporteComponent implements OnInit {
             var url = `${this.data.url}?Inicio=${fechaInicio}&Fin=${fechaFin}&general=0`;
           }
         }
-        window.open(reportsUrl + url);
       }
+      window.open(reportsUrl + url);
     }
   }
 
